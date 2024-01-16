@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('MenuBackground.jpg'),
+          image: AssetImage('assets/MenuBackground.jpg'),
           fit: BoxFit.cover,
         ),
       ),
