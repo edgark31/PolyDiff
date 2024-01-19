@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'chat_box.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -35,6 +37,11 @@ class HomePage extends StatelessWidget {
           image: AssetImage('assets/MenuBackground.jpg'),
           fit: BoxFit.cover,
         ),
+      ),
+      child: Column(
+        children: [
+          ChatBox(),
+        ],
       ),
     );
   }
