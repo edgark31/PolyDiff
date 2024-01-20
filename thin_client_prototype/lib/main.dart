@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'chat_box.dart';
 
+import 'chat_box.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,17 +31,25 @@ class MyAppState extends ChangeNotifier {}
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/MenuBackground.jpg'),
-          fit: BoxFit.cover,
+    return MaterialApp(
+      home: Scaffold(
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/MenuBackground.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: ChatBox(),
+              ),
+            ],
+          ),
         ),
-      ),
-      child: Column(
-        children: [
-          ChatBox(),
-        ],
       ),
     );
   }
