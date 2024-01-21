@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
+import 'classes.dart';
+
 class ChatBox extends StatefulWidget {
   @override
   State<ChatBox> createState() => _ChatBoxState();
 }
 
 class _ChatBoxState extends State<ChatBox> {
+  List<ChatMessage> messages = [
+    ChatMessage('sent', 'hello', 'mark', 'assets/dsdsd'),
+    ChatMessage('sent', 'hello', 'mark', 'assets/dsdsd'),
+    ChatMessage('sent', 'hello', 'James', 'assets/dsdsd')
+  ];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,9 +51,14 @@ class _ChatBoxState extends State<ChatBox> {
           Expanded(
             child: Container(
               padding: EdgeInsets.all(10),
-              child: Text(
-                "text1",
-                style: TextStyle(color: Colors.white),
+              child: ListView.builder(
+                itemCount: messages.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Text(
+                    '${messages[index].userName}: ${messages[index].message}',
+                    style: TextStyle(color: Colors.black),
+                  );
+                },
               ),
             ),
           ),
