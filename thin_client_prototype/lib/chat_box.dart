@@ -9,21 +9,22 @@ class ChatBox extends StatefulWidget {
 
 class _ChatBoxState extends State<ChatBox> {
   List<ChatMessage> messages = [
-    ChatMessage('sent', 'hello Zak', 'Mark', 'assets/dsdsd'),
+    ChatMessage('sent', 'hello Zak', 'Mark', '15:05:57'),
     ChatMessage(
         'sent',
         'wanted to test out that writing a super long message wouldnt ruin the display of these text messages. Sorry for bothering you right now, even though I know your probably having fun at home with your raccoon friends you little raccoon',
         'Mark',
-        'assets/dsdsd'),
-    ChatMessage('received', 'good day mate', 'Zak', 'assets/dsdsd'),
+        '15:07:10'),
+    ChatMessage('received', 'good day mate', 'Zak', '15:48:10'),
     ChatMessage(
         'received',
         'No worries bro I was testing it out myself over here. Did you buy yo mamas christmas gift? She precisely said that she wanted something for her kitchen, something expensive',
         'Zak',
-        'assets/dsdsd'),
+        '15:49:57'),
   ];
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
+  bool isTyping = false;
 
   @override
   void dispose() {
@@ -61,7 +62,7 @@ class _ChatBoxState extends State<ChatBox> {
       child: Column(
         children: [
           Container(
-            height: 100,
+            height: 80,
             color: Color(0xFF7DAF9C),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -85,18 +86,37 @@ class _ChatBoxState extends State<ChatBox> {
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
-                    child: Container(
-                      width: 250,
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: isSent ? Colors.blue : Colors.green,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        '${messages[index].userName}: ${messages[index].message}',
-                        style: TextStyle(color: Colors.black),
-                      ),
+                    child: Column(
+                      crossAxisAlignment: isSent
+                          ? CrossAxisAlignment.end
+                          : CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          messages[index].userName,
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Container(
+                          width: 250,
+                          margin: EdgeInsets.symmetric(vertical: 5),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: isSent ? Colors.blue : Colors.green,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            messages[index].message,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(bottom: 15),
+                          child: Text(
+                            messages[index].timestamp,
+                            style: TextStyle(color: Colors.black, fontSize: 12),
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },
@@ -110,8 +130,13 @@ class _ChatBoxState extends State<ChatBox> {
                 Expanded(
                   child: TextField(
                     controller: messageController,
+                    onChanged: (text) {
+                      setState(() {
+                        isTyping = text.isNotEmpty;
+                      });
+                    },
                     decoration: InputDecoration(
-                      hintText: "Type your message...",
+                      hintText: "Entrez un message...",
                       border: OutlineInputBorder(),
                       filled: true,
                       fillColor: Colors.white,
@@ -119,22 +144,23 @@ class _ChatBoxState extends State<ChatBox> {
                   ),
                 ),
                 SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    String message = messageController.text;
-                    if (message.isNotEmpty) {
-                      setState(() {
-                        messages.add(ChatMessage(
-                            'sent', message, 'Mark', 'assets/asdasa'));
-                      });
-                      messageController.clear();
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        scrollToBottom();
-                      });
-                    }
-                  },
-                  child: Text("Send"),
-                ),
+                if (isTyping)
+                  ElevatedButton(
+                    onPressed: () {
+                      String message = messageController.text;
+                      if (message.isNotEmpty) {
+                        setState(() {
+                          messages.add(
+                              ChatMessage('sent', message, 'Mark', 'test'));
+                        });
+                        messageController.clear();
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          scrollToBottom();
+                        });
+                      }
+                    },
+                    child: Text("Send"),
+                  ),
               ],
             ),
           ),
