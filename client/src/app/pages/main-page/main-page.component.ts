@@ -10,17 +10,13 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class MainPageComponent implements AfterViewInit, OnDestroy {
     messages: ChatMessage[];
-    readonly gameTitle: string;
-    readonly selectionRoute: string;
     private readonly gameManager: GameManagerService;
     private onDestroy$: Subject<void>;
 
     constructor() {
-        this.gameTitle = '7 Différences';
-        this.selectionRoute = '/selection';
         this.messages = [];
-        this.gameManager.manageSocket();
-        this.onDestroy$ = new Subject();
+        // this.gameManager.manageSocket();
+        // this.onDestroy$ = new Subject();
     }
 
     ngOnDestroy(): void {

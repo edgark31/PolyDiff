@@ -1,11 +1,12 @@
 <div class="container flex-column">
+    <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages"></app-chat-box>
     <header class="header">
-        <h1 class="header-item flex-column">{{ gameTitle }}</h1>
-    </header> 
+    </header>
     <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>   
     <section id="server-message" class="flex-column section">
     </section>
     <footer class="footer flex-column">
     </footer>
 </div>
+
 
