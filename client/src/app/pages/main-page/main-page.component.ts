@@ -1,23 +1,41 @@
-import { Component } from '@angular/core';
-
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
+import { MessageTag } from '@common/enums';
+import { ChatMessage } from '@common/game-interfaces';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
     selector: 'app-main-page',
     templateUrl: './main-page.component.html',
     styleUrls: ['./main-page.component.scss'],
 })
-export class MainPageComponent {
-    readonly gameTitle: string;
-    readonly selectionRoute: string;
-    readonly limitedRoute: string;
-    readonly configRoute: string;
-    readonly teamNumber: string;
-    readonly teammateNameList: string[];
+export class MainPageComponent implements AfterViewInit, OnDestroy {
+    messages: ChatMessage[];
+    private readonly gameManager: GameManagerService;
+    private onDestroy$: Subject<void>;
+
     constructor() {
-        this.gameTitle = '7 Différences';
-        this.selectionRoute = '/selection';
-        this.configRoute = '/config';
-        this.limitedRoute = '/limited';
-        this.teamNumber = "Présenté par l'équipe 101";
-        this.teammateNameList = ['Jeremy Ear,', 'Sulayman Hosna,', 'Edgar Kappauf,', 'Mathieu Prévost,', 'Zakaria Zair,', 'Abderrahim Zebiri'];
+        this.messages = [];
+        // this.gameManager.manageSocket();
+        // this.onDestroy$ = new Subject();
+    }
+
+    ngOnDestroy(): void {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
+
+    ngAfterViewInit(): void {
+        this.handleMessages();
+    }
+
+    addRightSideMessage(text: string) {
+        this.messages.push({ tag: MessageTag.Sent, message: text });
+        this.gameManager.sendMessage(text);
+    }
+
+    private handleMessages(): void {
+        this.gameManager.message$.pipe(takeUntil(this.onDestroy$)).subscribe((message: ChatMessage) => {
+            this.messages.push(message);
+        });
     }
 }
