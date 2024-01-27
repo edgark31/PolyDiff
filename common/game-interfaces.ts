@@ -130,3 +130,9 @@ export enum GameCardActions {
 }
 export { Coordinate };
 
+export interface ChatMessageGlobal {
+    tag: MessageTag;
+    message: string;
+    userName: string;
+    timestamp?: string;
+}

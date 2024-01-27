@@ -93,3 +93,8 @@ export enum GamePageEvent {
     EndGame = 'EndGame',
     Abandon = 'Abandon',
 }
+
+export enum ConnectionEvents {
+    UserConnectionRequest = 'UserConnectionRequest',
+    UserDeconnectionRequest = 'UserDeconnectionRequest',
+}
