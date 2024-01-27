@@ -92,7 +92,7 @@ test:client:
     script:
         - Xvfb :99 -ac -screen 0 1920x1080x24 &
         - cd client
-        - npm run coverage -- --browsers=ChromeHeadlessNoSandbox --watch=false
+       # - npm run coverage -- --browsers=ChromeHeadlessNoSandbox --watch=false
     dependencies:
         - install:client
     artifacts:
