@@ -7,7 +7,7 @@ import { GameAreaService } from '@app/services/game-area-service/game-area.servi
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, MessageEvents, MessageTag } from '@common/enums';
-import { ChatMessage, ClientSideGame, Differences, GameConfigConst, GameRoom, Players } from '@common/game-interfaces';
+import { ChatMessage, ChatMessageGlobal, ClientSideGame, Differences, GameConfigConst, GameRoom, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
 @Injectable({
     providedIn: 'root',
@@ -122,7 +122,7 @@ export class GameManagerService {
     sendMessage(textMessage: string): void {
         const newMessage = { tag: MessageTag.Received, message: textMessage };
         this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, { tag: MessageTag.Sent, message: textMessage } as ChatMessage);
-        this.clientSocket.send(MessageEvents.LocalMessage, newMessage);
+        this.clientSocket.send(MessageEvents.GlobalMessage, newMessage);
     }
 
     removeAllListeners() {
@@ -154,9 +154,11 @@ export class GameManagerService {
             this.endMessage.next(endGameMessage);
         });
 
-        this.clientSocket.on(MessageEvents.LocalMessage, (receivedMessage: ChatMessage) => {
-            this.message.next(receivedMessage);
-            this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, receivedMessage);
+        this.clientSocket.on(MessageEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
+            if (receivedMessage.userName !== 'monUserName') {
+                this.message.next(receivedMessage);
+            }
+            // this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, receivedMessage);
         });
 
         this.clientSocket.on(GameEvents.UpdateDifferencesFound, (differencesFound: number) => {
