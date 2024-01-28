@@ -6,12 +6,12 @@ class ConnectionForm extends StatefulWidget {
 }
 
 class _ConnectionFormState extends State<ConnectionForm> {
+  TextEditingController userNameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xFFE6EAEA),
-        borderRadius: BorderRadius.circular(10),
+        color: Color(0xFF7DAF9C),
       ),
       child: Row(
         children: [
@@ -25,11 +25,61 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   Text(
                     'Connexion',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  //TextFormField(),
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 210, right: 100),
+                      child: Text(
+                        "Entrez votre nom d'utilisateur",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 400,
+                    height: 63,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: TextField(
+                        controller: userNameController,
+                        decoration: InputDecoration(
+                          hintText: "Nom d'utilisateur",
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 430,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        String userName = userNameController.text;
+                        if (userName.isNotEmpty) {
+                          print(
+                              "Sending the server your username: " + userName);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        backgroundColor: Color.fromARGB(255, 31, 150, 104),
+                        foregroundColor: Colors.white,
+                      ),
+                      child: Text("Connexion"),
+                    ),
+                  ),
                 ],
               ),
             ),
