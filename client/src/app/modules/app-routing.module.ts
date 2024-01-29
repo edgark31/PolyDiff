@@ -17,7 +17,7 @@ export const routes: Routes = [
     { path: 'config', component: ConfigPageComponent },
     { path: 'login', component: LoginPageComponent },
     { path: 'limited', component: LimitedTimePageComponent },
-    { path: '**', redirectTo: '/home' },
+    { path: '**', redirectTo: '/login' },
 ];
 
 @NgModule({

@@ -10,6 +10,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class MainPageComponent implements AfterViewInit, OnDestroy {
     messages: ChatMessage[];
+
     private onDestroy$: Subject<void>;
 
     constructor(private readonly gameManager: GameManagerService) {

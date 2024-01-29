@@ -1,26 +1,9 @@
-<form [formGroup]="loginForm" autocomplete="new-password">
+<form [formGroup]="loginForm">
     <h1>Connexion</h1>
-    
     <div class="form-control">
-        <label for="email">Nom d'utilisateur</label>
-        <input
-        formControlName="email"
-        id="email"
-        autocomplete="new-password"
-        type="email"
-        />
+        <label for="username">Nom d'utilisateur</label>
+        <input formControlName="username" id="username"/>
     </div>
-    
-    <div class="form-control">
-        <label for="password">Mot de passe</label>
-        <input
-        formControlName="password"
-        id="password"
-        autocomplete="new-password"
-        type="password"
-        />
-    </div>
-    
-    <button type="submit">Connexion &#8594;</button>
+    <button type="submit" (click)="onSubmit()">Connexion</button>
 </form>
 <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>   

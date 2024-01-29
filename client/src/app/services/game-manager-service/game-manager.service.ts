@@ -16,6 +16,7 @@ export class GameManagerService {
     replayEventsSubject: Subject<ReplayEvent>;
     differences: Coordinate[][];
     gameConstants: GameConfigConst;
+    username: string | null | undefined;
     private timer: Subject<number>;
     private differencesFound: Subject<number>;
     private opponentDifferencesFound: Subject<number>;
@@ -155,7 +156,7 @@ export class GameManagerService {
         });
 
         this.clientSocket.on(MessageEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
-            if (receivedMessage.userName !== 'monUserName') {
+            if (receivedMessage.userName !== this.username) {
                 this.message.next(receivedMessage);
             }
             // this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, receivedMessage);

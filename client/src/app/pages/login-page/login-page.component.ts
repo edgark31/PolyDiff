@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
+import { ConnectionEvents } from '@common/enums';
 
 @Component({
     selector: 'app-login-page',
@@ -7,10 +11,25 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
     styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent {
-    title = 'PolyDiff';
-
     loginForm = new FormGroup({
-        email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl('', Validators.required),
+        username: new FormControl('', [Validators.required]),
     });
+
+    constructor(
+        private readonly gameManager: GameManagerService,
+        private readonly clientSocket: ClientSocketService,
+        private readonly router: Router,
+    ) {
+        this.gameManager.manageSocket();
+        this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
+            if (isConnected) {
+                this.router.navigate(['/home']);
+            }
+        });
+    }
+
+    onSubmit() {
+        this.clientSocket.send(ConnectionEvents.UserConnectionRequest, { name: this.loginForm.value.username });
+        this.gameManager.username = this.loginForm.value.username;
+    }
 }
