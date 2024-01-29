@@ -198,7 +198,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     @SubscribeMessage(ConnectionEvents.UserConnectionRequest)
-    processConnection(@ConnectedSocket() socket: Socket, @MessageBody('name') name: string) {
+    processConnection(@ConnectedSocket() socket: Socket, @MessageBody() name: string) {
         const canConnect = !Array.from(this.mapSocketWithName.values()).some((value) => value === name);
         socket.emit(ConnectionEvents.UserConnectionRequest, canConnect);
         if (canConnect) {
