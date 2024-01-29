@@ -8,6 +8,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
@@ -94,6 +95,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
         MatGridListModule,
         MatExpansionModule,
         MatSelectModule,
+        MatMenuModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
