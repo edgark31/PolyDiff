@@ -40,6 +40,7 @@ import { ReplayButtonsComponent } from './components/replay-buttons/replay-butto
 import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -73,6 +74,7 @@ import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time
         ConfigDialogComponent,
         NoGameAvailableDialogComponent,
         HistoryBoxComponent,
+        LoginPageComponent,
     ],
     imports: [
         AppMaterialModule,
