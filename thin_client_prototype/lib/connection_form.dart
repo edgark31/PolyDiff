@@ -98,8 +98,9 @@ class _ConnectionFormState extends State<ConnectionForm> {
                           );
                         } else {
                           setState(() {
-                            errorMessage =
-                                "Ce nom d'utilisateur existe présentement";
+                            errorMessage = userName.isEmpty
+                                ? "Votre nom ne peut pas être vide"
+                                : "Ce nom d'utilisateur existe présentement";
                           });
                         }
                       },

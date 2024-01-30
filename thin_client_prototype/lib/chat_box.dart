@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thin_client_prototype/main.dart';
 
 import 'classes.dart';
 
@@ -8,20 +9,7 @@ class ChatBox extends StatefulWidget {
 }
 
 class _ChatBoxState extends State<ChatBox> {
-  List<ChatMessage> messages = [
-    ChatMessage('sent', 'hello Zak', 'Mark', '15:05:57'),
-    ChatMessage(
-        'sent',
-        'wanted to test out that writing a super long message wouldnt ruin the display of these text messages. Sorry for bothering you right now, even though I know your probably having fun at home with your raccoon friends you little raccoon',
-        'Mark',
-        '15:07:10'),
-    ChatMessage('received', 'good day mate', 'Zak', '15:48:10'),
-    ChatMessage(
-        'received',
-        'No worries bro I was testing it out myself over here. Did you buy yo mamas christmas gift? She precisely said that she wanted something for her kitchen, something expensive',
-        'Zak',
-        '15:49:57'),
-  ];
+  List<ChatMessage> messages = [];
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
   bool isTyping = false;
@@ -68,9 +56,25 @@ class _ChatBoxState extends State<ChatBox> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Chat user #2",
+                  "ZONE DE CLAVARDAGE",
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 50),
+                  child: IconButton(
+                    icon: Icon(Icons.exit_to_app),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        ),
+                      );
+                    },
+                    iconSize: 30,
+                  ),
                 ),
               ],
             ),
@@ -145,13 +149,15 @@ class _ChatBoxState extends State<ChatBox> {
                 ),
                 SizedBox(width: 10),
                 if (isTyping)
-                  ElevatedButton(
+                  IconButton(
+                    icon: Icon(Icons.send),
                     onPressed: () {
                       String message = messageController.text;
                       if (message.isNotEmpty) {
                         setState(() {
                           messages.add(
                               ChatMessage('sent', message, 'Mark', 'test'));
+                          isTyping = false;
                         });
                         messageController.clear();
                         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -159,7 +165,6 @@ class _ChatBoxState extends State<ChatBox> {
                         });
                       }
                     },
-                    child: Text("Send"),
                   ),
               ],
             ),
