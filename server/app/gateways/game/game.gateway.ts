@@ -193,25 +193,21 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     @SubscribeMessage(GameEvents.RequestHint)
-    async requestHint(@ConnectedSocket() socket: Socket) {
-        await this.roomsManagerService.addHintPenalty(socket, this.server);
-    }
-
     @SubscribeMessage(ConnectionEvents.UserConnectionRequest)
     processConnection(@ConnectedSocket() socket: Socket, @MessageBody() name: string) {
         const canConnect = !Array.from(this.mapSocketWithName.values()).some((value) => value === name);
         socket.emit(ConnectionEvents.UserConnectionRequest, canConnect);
         if (canConnect) {
-            this.logger.log(`Connexion au chat acceptée pour ${name} avec id : ${socket.id}`);
+            this.logger.debug(`ACCEPT :: pour ${String(name)} avec id : ${socket.id}`);
             this.mapSocketWithName.set(socket.id, name);
         } else {
-            this.logger.log(`Connexion au chat refusée pour ${name} avec id : ${socket.id}`);
+            this.logger.error(`REFUS :: pour ${String(name)} avec id : ${socket.id}`);
         }
     }
 
     @SubscribeMessage(MessageEvents.GlobalMessage)
     processMessage(@MessageBody() dataMessage: ChatMessageGlobal) {
-        this.logger.log(`Message reçu : ${dataMessage.message} de la part de ${dataMessage.userName}`);
+        this.logger.log(`MESSAGE :::: ${dataMessage.userName} a dit ${dataMessage.message}`);
         dataMessage.timestamp = new Date().toLocaleTimeString();
         this.server.emit(MessageEvents.GlobalMessage, dataMessage);
     }
