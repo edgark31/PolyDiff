@@ -1,15 +1,15 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { MessageTag } from '@common/enums';
-import { ChatMessage } from '@common/game-interfaces';
-import { Subject, takeUntil } from 'rxjs';
+import { ChatMessageGlobal } from '@common/game-interfaces';
+import { Subject } from 'rxjs';
 @Component({
     selector: 'app-main-page',
     templateUrl: './main-page.component.html',
     styleUrls: ['./main-page.component.scss'],
 })
 export class MainPageComponent implements AfterViewInit, OnDestroy {
-    messages: ChatMessage[];
+    messages: ChatMessageGlobal[];
 
     private onDestroy$: Subject<void>;
 
@@ -29,13 +29,13 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     }
 
     addRightSideMessage(text: string) {
-        this.messages.push({ tag: MessageTag.Sent, message: text });
-        this.gameManager.sendMessage(text);
+        this.messages.push({ tag: MessageTag.Sent, message: text, userName: 'You', timestamp: new Date().toLocaleTimeString() });
+        this.gameManager.sendGlobalMessage(text);
     }
 
     private handleMessages(): void {
-        this.gameManager.message$.pipe(takeUntil(this.onDestroy$)).subscribe((message: ChatMessage) => {
-            this.messages.push(message);
+        this.gameManager.globalMessage$.subscribe((chatMessageGlobal: ChatMessageGlobal) => {
+            this.messages.push(chatMessageGlobal);
         });
     }
 }

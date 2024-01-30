@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ChatMessage } from '@common/game-interfaces';
+import { ChatMessageGlobal } from '@common/game-interfaces';
 
 @Component({
     selector: 'app-chat-box',
@@ -7,7 +7,7 @@ import { ChatMessage } from '@common/game-interfaces';
     styleUrls: ['./chat-box.component.scss'],
 })
 export class ChatBoxComponent {
-    @Input() messages: ChatMessage[];
+    @Input() messages: ChatMessageGlobal[];
     @Input() gameMode: string;
     @Input() isReplaying: boolean;
     @Output() private add: EventEmitter<string>;

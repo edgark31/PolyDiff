@@ -9,7 +9,7 @@ import { MainPageComponent } from '@app/pages/main-page/main-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'home', component: MainPageComponent },
     { path: 'game', component: GamePageComponent },
     { path: 'create', component: CreationPageComponent },

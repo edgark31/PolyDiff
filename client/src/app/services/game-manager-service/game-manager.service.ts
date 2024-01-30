@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Injectable } from '@angular/core';
 import { ReplayActions } from '@app/enum/replay-actions';
 import { ReplayEvent } from '@app/interfaces/replay-actions';
@@ -28,6 +29,7 @@ export class GameManagerService {
     private isFirstDifferencesFound: Subject<boolean>;
     private isGameModeChanged: Subject<boolean>;
     private isGamePageRefreshed: Subject<boolean>;
+    private globalMessage: Subject<ChatMessageGlobal>;
 
     // Service are needed to be used in this service
     // eslint-disable-next-line max-params
@@ -48,6 +50,7 @@ export class GameManagerService {
         this.isFirstDifferencesFound = new Subject<boolean>();
         this.isGameModeChanged = new Subject<boolean>();
         this.isGamePageRefreshed = new Subject<boolean>();
+        this.globalMessage = new Subject<ChatMessageGlobal>();
     }
 
     get currentGame$() {
@@ -88,6 +91,10 @@ export class GameManagerService {
         return this.isGamePageRefreshed.asObservable();
     }
 
+    get globalMessage$() {
+        return this.globalMessage.asObservable();
+    }
+
     setMessage(message: ChatMessage) {
         this.message.next(message);
     }
@@ -123,11 +130,16 @@ export class GameManagerService {
     sendMessage(textMessage: string): void {
         const newMessage = { tag: MessageTag.Received, message: textMessage };
         this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, { tag: MessageTag.Sent, message: textMessage } as ChatMessage);
-        this.clientSocket.send(MessageEvents.GlobalMessage, newMessage);
+        this.clientSocket.send(MessageEvents.LocalMessage, newMessage);
     }
 
     removeAllListeners() {
         this.clientSocket.socket.off();
+    }
+
+    sendGlobalMessage(textMessage: string): void {
+        const newMessage = { tag: MessageTag.Received, message: textMessage, userName: this.username };
+        this.clientSocket.send(MessageEvents.GlobalMessage, newMessage);
     }
 
     manageSocket(): void {
@@ -156,8 +168,9 @@ export class GameManagerService {
         });
 
         this.clientSocket.on(MessageEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
+            console.log(receivedMessage.userName, this.username);
             if (receivedMessage.userName !== this.username) {
-                this.message.next(receivedMessage);
+                this.globalMessage.next(receivedMessage);
             }
             // this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, receivedMessage);
         });
