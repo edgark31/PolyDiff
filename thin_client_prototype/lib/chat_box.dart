@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:thin_client_prototype/main.dart';
 
-import 'classes.dart';
+import 'common/enums.dart';
+import 'common/interfaces.dart';
 
 class ChatBox extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class ChatBox extends StatefulWidget {
 }
 
 class _ChatBoxState extends State<ChatBox> {
-  List<ChatMessage> messages = [];
+  List<ChatMessageGlobal> messages = [];
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
   bool isTyping = false;
@@ -86,7 +87,7 @@ class _ChatBoxState extends State<ChatBox> {
                 controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
-                  bool isSent = messages[index].tag == 'sent';
+                  bool isSent = messages[index].tag == MessageTag.Sent;
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
@@ -155,8 +156,8 @@ class _ChatBoxState extends State<ChatBox> {
                       String message = messageController.text;
                       if (message.isNotEmpty) {
                         setState(() {
-                          messages.add(
-                              ChatMessage('sent', message, 'Mark', 'test'));
+                          messages.add(ChatMessageGlobal(
+                              MessageTag.Sent, message, 'Mark', 'test'));
                           isTyping = false;
                         });
                         messageController.clear();
