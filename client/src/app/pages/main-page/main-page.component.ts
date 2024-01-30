@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { MessageTag } from '@common/enums';
 import { ChatMessageGlobal } from '@common/game-interfaces';
@@ -13,7 +14,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
 
     private onDestroy$: Subject<void>;
 
-    constructor(private readonly gameManager: GameManagerService) {
+    constructor(private readonly clientSocket: ClientSocketService, private readonly gameManager: GameManagerService) {
         this.messages = [];
         this.gameManager.manageSocket();
         this.onDestroy$ = new Subject();
@@ -22,7 +23,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     ngOnDestroy(): void {
         this.onDestroy$.next();
         this.onDestroy$.complete();
-        this.gameManager.removeAllListeners();
+        this.clientSocket.disconnect();
     }
 
     ngAfterViewInit(): void {

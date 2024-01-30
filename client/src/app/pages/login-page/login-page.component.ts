@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,7 +13,7 @@ import { ConnectionEvents } from '@common/enums';
 })
 export class LoginPageComponent {
     loginForm = new FormGroup({
-        username: new FormControl('', [Validators.required]),
+        username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
 
     constructor(
@@ -20,7 +21,6 @@ export class LoginPageComponent {
         private readonly clientSocket: ClientSocketService,
         private readonly router: Router,
     ) {
-        // this.gameManager.manageSocket();
         this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
             if (isConnected) {
                 this.router.navigate(['/home']);
@@ -29,7 +29,9 @@ export class LoginPageComponent {
     }
 
     onSubmit() {
-        this.clientSocket.send(ConnectionEvents.UserConnectionRequest, { name: this.loginForm.value.username });
-        this.gameManager.username = this.loginForm.value.username;
+        if (this.loginForm.value.username) {
+            this.clientSocket.send(ConnectionEvents.UserConnectionRequest, this.loginForm.value.username);
+            this.gameManager.username = this.loginForm.value.username;
+        }
     }
 }

@@ -3,6 +3,9 @@
         <div class="contact-profile">
             <img src="assets/raccoonChatAvatarOther.png" alt="raccoonAvatar" />
             <p class = "chat">Zone de clavardage</p>
+            <button mat-button (click)="onClose()">
+                <mat-icon class="small-icon">close</mat-icon>
+            </button>
         </div>
         <div class="messages">
             <ul>
@@ -17,7 +20,7 @@
             <div class="wrap">
                 <input id = "input" type="text" #inputText placeholder="Entrez un message" (keyup.enter)="onAdd(inputText)" maxlength="200" />
                 <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-                <button mat-button class="submit" (click)="onAdd(inputText)">
+                <button mat-button class="submit" (click)="onAdd(inputText)" [routerLink]="'/login'" routerLinkActive="router-link-active">
                     <mat-icon class="small-icon">near_me</mat-icon>
                 </button>
             </div>
