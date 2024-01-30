@@ -9,6 +9,20 @@ class ConnectionForm extends StatefulWidget {
 
 class _ConnectionFormState extends State<ConnectionForm> {
   TextEditingController userNameController = TextEditingController();
+  String errorMessage = "";
+
+  @override
+  void initState() {
+    super.initState();
+    userNameController.addListener(() {
+      if (userNameController.text.isEmpty) {
+        setState(() {
+          errorMessage = "";
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,12 +84,24 @@ class _ConnectionFormState extends State<ConnectionForm> {
                         if (userName.isNotEmpty) {
                           print(
                               "Sending the server your username: " + userName);
+                        } else {
+                          setState(() {
+                            errorMessage = "";
+                          });
                         }
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ChatPage(),
-                          ),
-                        );
+
+                        if (userName == "raccoon") {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ChatPage(),
+                            ),
+                          );
+                        } else {
+                          setState(() {
+                            errorMessage =
+                                "Ce nom d'utilisateur existe présentement";
+                          });
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -87,6 +113,13 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       child: Text("Connexion"),
                     ),
                   ),
+                  Text(
+                    errorMessage,
+                    style: TextStyle(
+                        color: const Color.fromARGB(255, 240, 16, 0),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  )
                 ],
               ),
             ),
