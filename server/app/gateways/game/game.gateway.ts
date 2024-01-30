@@ -193,6 +193,10 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     @SubscribeMessage(GameEvents.RequestHint)
+    async requestHint(@ConnectedSocket() socket: Socket) {
+        await this.roomsManagerService.addHintPenalty(socket, this.server);
+    }
+
     @SubscribeMessage(ConnectionEvents.UserConnectionRequest)
     processConnection(@ConnectedSocket() socket: Socket, @MessageBody() name: string) {
         const canConnect = !Array.from(this.mapSocketWithName.values()).some((value) => value === name);
