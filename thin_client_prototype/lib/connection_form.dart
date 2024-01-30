@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'chat_page.dart';
+
 class ConnectionForm extends StatefulWidget {
   @override
   State<ConnectionForm> createState() => _ConnectionFormState();
@@ -69,6 +71,11 @@ class _ConnectionFormState extends State<ConnectionForm> {
                           print(
                               "Sending the server your username: " + userName);
                         }
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ChatPage(),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
