@@ -22,6 +22,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     ngOnDestroy(): void {
         this.onDestroy$.next();
         this.onDestroy$.complete();
+        this.gameManager.removeAllListeners();
     }
 
     ngAfterViewInit(): void {

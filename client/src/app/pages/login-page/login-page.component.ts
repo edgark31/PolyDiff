@@ -20,7 +20,7 @@ export class LoginPageComponent {
         private readonly clientSocket: ClientSocketService,
         private readonly router: Router,
     ) {
-        this.gameManager.manageSocket();
+        // this.gameManager.manageSocket();
         this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
             if (isConnected) {
                 this.router.navigate(['/home']);
