@@ -112,9 +112,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                             errorMessage = "Votre nom ne peut pas être vide";
                           });
                         }
-
-                        // if (userName == "raccoon") {
-                        Future.delayed(Duration(seconds: 1), () {
+                        Future.delayed(Duration(milliseconds: 200), () {
                           if (socketService.connectionStatus) {
                             print("Connection approved");
                             Navigator.of(context).push(

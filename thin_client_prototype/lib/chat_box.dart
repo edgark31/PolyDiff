@@ -93,7 +93,11 @@ class _ChatBoxState extends State<ChatBox> {
                 controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
-                  bool isSent = messages[index].tag == MessageTag.Sent;
+                  // bool isSent = messages[index].tag == MessageTag.Sent;
+                  bool isSent = messages[index].userName == 'Mark';
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    scrollToBottom();
+                  });
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
@@ -161,11 +165,20 @@ class _ChatBoxState extends State<ChatBox> {
                     onPressed: () {
                       String message = messageController.text;
                       if (message.isNotEmpty) {
-                        setState(() {
-                          messages.add(ChatMessageGlobal(
-                              MessageTag.Sent, message, 'Mark', 'test'));
-                          isTyping = false;
-                        });
+                        // setState(() {
+                        //   messages.add(ChatMessageGlobal(
+                        //       MessageTag.Sent, message, 'Mark', 'test'));
+                        //   isTyping = false;
+                        // });
+                        socketService.sendMessage(
+                          ChatMessageGlobal(
+                            MessageTag.Sent,
+                            message,
+                            'Mark',
+                            'test',
+                          ),
+                        );
+                        setState(() {});
                         messageController.clear();
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           scrollToBottom();
@@ -173,27 +186,23 @@ class _ChatBoxState extends State<ChatBox> {
                       }
                     },
                   ),
-                Text(
-                  socketService.socketStatus ? 'Socket ON' : 'Socket OFF',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(width: 20),
-                Text(
-                  socketService.connectionStatus
-                      ? 'Username OK'
-                      : 'Disconnected',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    socketService.sendTestMessage();
-                  },
-                  child: Text("Recevoir message test"),
-                ),
               ],
             ),
+          ),
+          Text(
+            socketService.socketStatus ? 'Socket ON' : 'Socket OFF',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 20),
+          Text(
+            socketService.connectionStatus ? 'Username OK' : 'Disconnected',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              socketService.sendTestMessage();
+            },
+            child: Text("Recevoir message test"),
           ),
         ],
       ),
