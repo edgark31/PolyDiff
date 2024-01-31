@@ -20,16 +20,17 @@ export class LoginPageComponent {
         private readonly gameManager: GameManagerService,
         private readonly clientSocket: ClientSocketService,
         private readonly router: Router,
-    ) {
-        this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
-            if (isConnected) {
-                this.router.navigate(['/home']);
-            }
-        });
-    }
+    ) {}
 
     onSubmit() {
         if (this.loginForm.value.username) {
+            this.clientSocket.connect();
+            this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
+                if (isConnected) {
+                    this.router.navigate(['/home']);
+                }
+            });
+            this.gameManager.manageSocket();
             this.clientSocket.send(ConnectionEvents.UserConnectionRequest, this.loginForm.value.username);
             this.gameManager.username = this.loginForm.value.username;
         }

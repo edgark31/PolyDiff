@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { MessageTag } from '@common/enums';
@@ -14,19 +15,27 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
 
     private onDestroy$: Subject<void>;
 
-    constructor(private readonly clientSocket: ClientSocketService, private readonly gameManager: GameManagerService) {
+    constructor(
+        private readonly clientSocket: ClientSocketService,
+        private readonly gameManager: GameManagerService,
+        private readonly router: Router,
+    ) {
         this.messages = [];
-        this.gameManager.manageSocket();
         this.onDestroy$ = new Subject();
     }
 
     ngOnDestroy(): void {
         this.onDestroy$.next();
         this.onDestroy$.complete();
-        this.clientSocket.disconnect();
+        if (this.clientSocket.isSocketAlive() !== undefined) {
+            this.clientSocket.disconnect();
+        }
     }
 
     ngAfterViewInit(): void {
+        if (this.clientSocket.isSocketAlive() === undefined) {
+            this.router.navigate(['/login']);
+        }
         this.handleMessages();
     }
 

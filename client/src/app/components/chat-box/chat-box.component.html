@@ -12,6 +12,7 @@
                 <li [class]="messageItem.tag" *ngFor="let messageItem of messages">
                     <img *ngIf="messageItem.tag === 'Sent'" src="assets/raccoonChatAvatar.png" alt="raccoonAvatar" />
                     <img *ngIf="messageItem.tag === 'Received'" src="assets/raccoonChatAvatarOther.png" alt="raccoonAvatar" />
+                    <p>{{ messageItem.userName }}</p>
                     <p>{{ messageItem.message }}</p>
                 </li>
             </ul>
