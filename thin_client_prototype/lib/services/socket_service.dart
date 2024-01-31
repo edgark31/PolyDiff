@@ -8,7 +8,8 @@ class SocketService extends ChangeNotifier {
   // static const String serverIP = '127.0.0.1';
   // static const String serverIP = '34.118.190.227';
   static const String serverPort = '3000';
-  static IO.Socket socket = IO.io(serverURL, <String, dynamic>{
+  static IO.Socket socket =
+      IO.io('http://$serverIPInput:$serverPort', <String, dynamic>{
     'transports': ['websocket'],
     'autoConnect': false,
   });
@@ -19,7 +20,7 @@ class SocketService extends ChangeNotifier {
   static String serverIPInput = '';
   // static String connectionErrorMessage = '';
 
-  static String serverURL = 'http://$serverIPInput:$serverPort';
+  // static String serverURL = 'http://$serverIPInput:$serverPort';
 
   bool isConnectionApproved = false;
   bool isSocketConnected = false;
@@ -39,6 +40,7 @@ class SocketService extends ChangeNotifier {
       isSocketConnected = true;
       if (!connectedOnce) {
         connectedOnce = true;
+        print('Connection established for the first time');
       }
       // connectionErrorMessage = '';
       notifyListeners();
@@ -93,7 +95,7 @@ class SocketService extends ChangeNotifier {
   }
 
   void connect() {
-    print('Connecting to server on $serverURL');
+    print('Connecting to server on http://$serverIPInput:$serverPort');
     socket.connect();
     // messages.clear(); // TODO : Figure out if we need this
     // print('Socket connected');
