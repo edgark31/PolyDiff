@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'connection_form.dart';
+import 'services/socket_service.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
+      create: (context) => SocketService(),
       child: MaterialApp(
         title: 'PolyDiff',
         theme: ThemeData(
@@ -25,8 +26,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-class MyAppState extends ChangeNotifier {}
 
 class LoginPage extends StatelessWidget {
   @override

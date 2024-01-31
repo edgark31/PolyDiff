@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thin_client_prototype/main.dart';
 
 import 'common/enums.dart';
 import 'common/interfaces.dart';
+import 'services/socket_service.dart';
 
 class ChatBox extends StatefulWidget {
   @override
@@ -10,7 +12,7 @@ class ChatBox extends StatefulWidget {
 }
 
 class _ChatBoxState extends State<ChatBox> {
-  List<ChatMessageGlobal> messages = [];
+  // List<ChatMessageGlobal> messages = [];
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
   bool isTyping = false;
@@ -22,6 +24,7 @@ class _ChatBoxState extends State<ChatBox> {
   }
 
   void scrollToBottom() {
+    if (!scrollController.hasClients) return;
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
       duration: Duration(milliseconds: 180),
@@ -31,6 +34,8 @@ class _ChatBoxState extends State<ChatBox> {
 
   @override
   Widget build(BuildContext context) {
+    final socketService = context.watch<SocketService>();
+    final messages = socketService.allMessages;
     return Container(
       width: 500,
       height: 700,

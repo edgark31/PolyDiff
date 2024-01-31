@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'chat_page.dart';
+import 'services/socket_service.dart';
 
 class ConnectionForm extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
 
   @override
   Widget build(BuildContext context) {
+    final socketService = context.watch<SocketService>();
     return Container(
       decoration: BoxDecoration(
         color: Color(0xFF7DAF9C),
@@ -84,9 +87,10 @@ class _ConnectionFormState extends State<ConnectionForm> {
                         if (userName.isNotEmpty) {
                           print(
                               "Sending the server your username: " + userName);
+                          // socketService.checkName(userName);
                         } else {
                           setState(() {
-                            errorMessage = "";
+                            errorMessage = "Votre nom ne peut pas être vide";
                           });
                         }
 
@@ -96,11 +100,10 @@ class _ConnectionFormState extends State<ConnectionForm> {
                               builder: (context) => ChatPage(),
                             ),
                           );
-                        } else {
+                        } else if (userName.isNotEmpty) {
                           setState(() {
-                            errorMessage = userName.isEmpty
-                                ? "Votre nom ne peut pas être vide"
-                                : "Ce nom d'utilisateur existe présentement";
+                            errorMessage =
+                                "Ce nom d'utilisateur existe présentement";
                           });
                         }
                       },

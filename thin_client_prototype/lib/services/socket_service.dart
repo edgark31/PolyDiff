@@ -5,8 +5,8 @@ import '../common/enums.dart';
 import '../common/interfaces.dart';
 
 class SocketService extends ChangeNotifier {
-  // static const String serverIP = '127.0.0.1';
-  static const String serverIP = '34.118.190.227';
+  static const String serverIP = '127.0.0.1';
+  // static const String serverIP = '34.118.190.227';
   static const String serverPort = '3000';
   static const String serverURL = 'http://$serverIP:$serverPort';
   static IO.Socket socket = IO.io(serverURL, <String, dynamic>{
