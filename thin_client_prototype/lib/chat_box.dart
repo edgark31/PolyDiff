@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thin_client_prototype/main.dart';
+import 'package:thin_client_prototype/connection_form.dart';
 
 import 'common/enums.dart';
 import 'common/interfaces.dart';
@@ -76,7 +76,7 @@ class _ChatBoxState extends State<ChatBox> {
                       socketService.disconnect();
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(),
+                          builder: (context) => ConnectionForm(),
                         ),
                       );
                     },

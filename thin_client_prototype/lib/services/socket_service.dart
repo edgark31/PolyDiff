@@ -17,25 +17,37 @@ class SocketService extends ChangeNotifier {
   String approvedName = '';
   String inputName = '';
   static String serverIPInput = '';
+  // static String connectionErrorMessage = '';
 
   static String serverURL = 'http://$serverIPInput:$serverPort';
 
   bool isConnectionApproved = false;
   bool isSocketConnected = false;
+  bool connectedOnce = false;
 
+  // String get errorMessage => connectionErrorMessage;
   String get ip => serverIPInput;
   String get userName => approvedName;
   bool get connectionStatus => isConnectionApproved;
   bool get socketStatus => isSocketConnected;
+  bool get hasClientEverConnected => connectedOnce;
   List<ChatMessageGlobal> get allMessages => List.unmodifiable(messages);
 
   void setup() {
     socket.onConnect((_) {
       print('Connected to server on $serverIPInput:$serverPort');
       isSocketConnected = true;
+      if (!connectedOnce) {
+        connectedOnce = true;
+      }
+      // connectionErrorMessage = '';
       notifyListeners();
     });
-    socket.onConnectError((data) => print('Connection error: $data'));
+    socket.onConnectError((data) {
+      print('Connection error: $data');
+      // connectionErrorMessage = data.toString();
+      // notifyListeners();
+    });
     socket.onDisconnect((_) {
       print('Disconnected from server');
       isSocketConnected = false;
@@ -81,7 +93,7 @@ class SocketService extends ChangeNotifier {
   }
 
   void connect() {
-    print('Connecting to server on $serverIPInput:$serverPort');
+    print('Connecting to server on $serverURL');
     socket.connect();
     // messages.clear(); // TODO : Figure out if we need this
     // print('Socket connected');
@@ -89,8 +101,15 @@ class SocketService extends ChangeNotifier {
     // notifyListeners();
   }
 
-  void setIP(String ip) {
-    serverIPInput = ip;
+  void setIP(String ipReceived) {
+    serverIPInput = ipReceived;
+    print('IP set to $serverIPInput');
+    notifyListeners();
+  }
+
+  void clearIPAddress() {
+    serverIPInput = '';
+    print('IP cleared. IP is now $serverIPInput');
     notifyListeners();
   }
 
