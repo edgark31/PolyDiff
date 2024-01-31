@@ -67,12 +67,6 @@ class _ConnectionFormState extends State<ConnectionForm> {
                     },
                     child: Text("Se Déconnecter"),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      socketService.sendTestMessage();
-                    },
-                    child: Text("Recevoir message test"),
-                  ),
                   Center(
                     child: Padding(
                       padding: EdgeInsets.only(top: 210, right: 100),
@@ -120,19 +114,21 @@ class _ConnectionFormState extends State<ConnectionForm> {
                         }
 
                         // if (userName == "raccoon") {
-                        if (socketService.connectionStatus) {
-                          print("Connection approved");
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ChatPage(),
-                            ),
-                          );
-                        } else if (userName.isNotEmpty) {
-                          setState(() {
-                            errorMessage =
-                                "Ce nom d'utilisateur existe présentement";
-                          });
-                        }
+                        Future.delayed(Duration(seconds: 1), () {
+                          if (socketService.connectionStatus) {
+                            print("Connection approved");
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(),
+                              ),
+                            );
+                          } else if (userName.isNotEmpty) {
+                            setState(() {
+                              errorMessage =
+                                  "Ce nom d'utilisateur existe présentement";
+                            });
+                          }
+                        });
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
