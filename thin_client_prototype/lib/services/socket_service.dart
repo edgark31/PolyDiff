@@ -14,25 +14,7 @@ class SocketService extends ChangeNotifier {
     'autoConnect': false,
   });
 
-  final List<ChatMessageGlobal> messages = [
-    ChatMessageGlobal(
-      MessageTag.Sent,
-      'hello Zak',
-      'Mark',
-      '15:05:57',
-    ),
-    ChatMessageGlobal(
-        MessageTag.Sent,
-        'wanted to test out that writing a super long message wouldnt ruin the display of these text messages. Sorry for bothering you right now, even though I know your probably having fun at home with your raccoon friends you little raccoon',
-        'Mark',
-        '15:07:10'),
-    ChatMessageGlobal(MessageTag.Received, 'good day mate', 'Zak', '15:48:10'),
-    ChatMessageGlobal(
-        MessageTag.Received,
-        'No worries bro I was testing it out myself over here. Did you buy yo mamas christmas gift? She precisely said that she wanted something for her kitchen, something expensive',
-        'Zak',
-        '15:49:57'),
-  ];
+  final List<ChatMessageGlobal> messages = [];
 
   bool isConnectionApproved = false;
   bool isSocketConnected = false;

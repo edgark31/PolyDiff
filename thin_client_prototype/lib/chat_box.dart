@@ -68,6 +68,19 @@ class _ChatBoxState extends State<ChatBox> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20),
                 ),
+                Text(
+                  socketService.socketStatus ? 'Socket ON' : 'Socket OFF',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(width: 20),
+                Text(
+                  socketService.connectionStatus
+                      ? 'Username OK'
+                      : 'Disconnected',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 50),
                   child: IconButton(
