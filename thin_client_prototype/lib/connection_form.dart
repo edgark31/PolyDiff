@@ -11,7 +11,10 @@ class ConnectionForm extends StatefulWidget {
 
 class _ConnectionFormState extends State<ConnectionForm> {
   TextEditingController userNameController = TextEditingController();
+  TextEditingController ipAddressController = TextEditingController();
   String errorMessage = "";
+  final regexIP = RegExp(
+      r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}$'); // IP address regex
 
   @override
   void initState() {
@@ -40,6 +43,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
               padding: EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     'Connexion',
@@ -69,7 +73,90 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   ),
                   Center(
                     child: Padding(
-                      padding: EdgeInsets.only(top: 210, right: 100),
+                      padding: EdgeInsets.only(top: 20, right: 100),
+                      child: Text(
+                        "Entrez l'adresse IP du serveur (Adresse : ${socketService.ip})",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 400,
+                    height: 63,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: TextField(
+                        controller: ipAddressController,
+                        decoration: InputDecoration(
+                          hintText: "Adresse",
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 430,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        String ipAddress = ipAddressController.text;
+                        if (regexIP.hasMatch(ipAddress)) {
+                          print(
+                              "Sending the server the address : " + ipAddress);
+                          socketService.setIP(ipAddress);
+                        } else {
+                          setState(() {
+                            errorMessage =
+                                "Le format de l'adresse est invalide";
+                          });
+                        }
+                        // Future.delayed(Duration(milliseconds: 200), () {
+                        //   if (socketService.connectionStatus) {
+                        //     print("Connection approved");
+                        //     Navigator.of(context).push(
+                        //       MaterialPageRoute(
+                        //         builder: (context) => ChatPage(),
+                        //       ),
+                        //     );
+                        //   } else if (userName.isNotEmpty) {
+                        //     setState(() {
+                        //       errorMessage =
+                        //           "Ce compte est déjà connecté dans un autre client";
+                        //     });
+                        //   }
+                        // });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        backgroundColor: Color.fromARGB(255, 31, 150, 104),
+                        foregroundColor: Colors.white,
+                      ),
+                      child: Text("Entrer l'adresse IP"),
+                    ),
+                  ),
+                  Text(
+                    ipAddressController.text.isEmpty
+                        ? "Vous devez entrer une adresse IP"
+                        : regexIP.hasMatch(ipAddressController.text)
+                            ? ""
+                            : "Le format de l'adresse est invalide",
+                    style: TextStyle(
+                        color: const Color.fromARGB(255, 240, 16, 0),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 20, right: 100),
                       child: Text(
                         "Entrez votre nom d'utilisateur",
                         style: TextStyle(
@@ -103,13 +190,15 @@ class _ConnectionFormState extends State<ConnectionForm> {
                     child: ElevatedButton(
                       onPressed: () {
                         String userName = userNameController.text;
-                        if (userName.isNotEmpty) {
+                        if (userName.isNotEmpty &&
+                            socketService.ip.isNotEmpty) {
                           print(
                               "Sending the server your username: " + userName);
                           socketService.checkName(userName);
                         } else {
                           setState(() {
-                            errorMessage = "Votre nom ne peut pas être vide";
+                            errorMessage =
+                                "Votre nom ne peut pas être vide et vous devez entrer une adresse IP";
                           });
                         }
                         Future.delayed(Duration(milliseconds: 200), () {
