@@ -94,7 +94,8 @@ class _ChatBoxState extends State<ChatBox> {
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
                   // bool isSent = messages[index].tag == MessageTag.Sent;
-                  bool isSent = messages[index].userName == 'Mark';
+                  bool isSent =
+                      messages[index].userName == socketService.userName;
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     scrollToBottom();
                   });
@@ -164,7 +165,8 @@ class _ChatBoxState extends State<ChatBox> {
                     icon: Icon(Icons.send),
                     onPressed: () {
                       String message = messageController.text;
-                      if (message.isNotEmpty) {
+                      if (message.isNotEmpty &&
+                          socketService.connectionStatus) {
                         // setState(() {
                         //   messages.add(ChatMessageGlobal(
                         //       MessageTag.Sent, message, 'Mark', 'test'));
@@ -174,7 +176,7 @@ class _ChatBoxState extends State<ChatBox> {
                           ChatMessageGlobal(
                             MessageTag.Sent,
                             message,
-                            'Mark',
+                            socketService.userName,
                             'test',
                           ),
                         );
@@ -189,6 +191,7 @@ class _ChatBoxState extends State<ChatBox> {
               ],
             ),
           ),
+          // TODO : Remove tests messages + button
           Text(
             socketService.socketStatus ? 'Socket ON' : 'Socket OFF',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -196,6 +199,10 @@ class _ChatBoxState extends State<ChatBox> {
           SizedBox(width: 20),
           Text(
             socketService.connectionStatus ? 'Username OK' : 'Disconnected',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            'Username: ${socketService.userName}',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           ElevatedButton(

@@ -123,7 +123,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                           } else if (userName.isNotEmpty) {
                             setState(() {
                               errorMessage =
-                                  "Ce nom d'utilisateur existe présentement";
+                                  "Ce compte est déjà connecté dans un autre client";
                             });
                           }
                         });

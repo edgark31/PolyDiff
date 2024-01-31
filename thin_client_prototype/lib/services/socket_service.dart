@@ -15,10 +15,13 @@ class SocketService extends ChangeNotifier {
   });
 
   final List<ChatMessageGlobal> messages = [];
+  String approvedName = '';
+  String inputName = '';
 
   bool isConnectionApproved = false;
   bool isSocketConnected = false;
 
+  String get userName => approvedName;
   bool get connectionStatus => isConnectionApproved;
   bool get socketStatus => isSocketConnected;
   List<ChatMessageGlobal> get allMessages => List.unmodifiable(messages);
@@ -34,6 +37,7 @@ class SocketService extends ChangeNotifier {
       print('Disconnected from server');
       isSocketConnected = false;
       isConnectionApproved = false;
+
       notifyListeners();
     });
 
@@ -43,6 +47,10 @@ class SocketService extends ChangeNotifier {
       isConnectionApproved = data;
       if (!isConnectionApproved) {
         disconnect();
+      } else {
+        if (inputName != '') {
+          approvedName = inputName;
+        }
       }
       notifyListeners();
       // if (data) {
@@ -78,6 +86,8 @@ class SocketService extends ChangeNotifier {
   }
 
   void disconnect() {
+    approvedName = '';
+    inputName = '';
     socket.disconnect();
     // print('Socket disconnected');
     // isConnectionApproved = false;
@@ -117,5 +127,6 @@ class SocketService extends ChangeNotifier {
 
     print('Checking name : $name');
     socket.emit(ConnectionEvents.UserConnectionRequest.name, name);
+    inputName = name;
   }
 }
