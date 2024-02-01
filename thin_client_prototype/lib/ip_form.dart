@@ -97,27 +97,14 @@ class _IPForm extends State<IPForm> {
                                 "Le format de l'adresse est invalide";
                           });
                         } else {
+                          print(
+                              "Sending the server the address : " + ipAddress);
                           socketService.setIP(ipAddress);
-                          setState(() {
-                            errorMessage =
-                                "En attente de la réponse du serveur";
-                          });
-                          Future.delayed(Duration(milliseconds: 1000), () {
-                            if (socketService.hasClientEverConnected) {
-                              print(
-                                  "Sending the server the address : $ipAddress");
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ConnectionForm(),
-                                ),
-                              );
-                            } else {
-                              setState(() {
-                                errorMessage =
-                                    "La connexion n'a pas pu être établie. Veuillez réessayer une autre adresse.";
-                              });
-                            }
-                          });
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ConnectionForm(),
+                            ),
+                          );
                         }
                       },
                       style: ElevatedButton.styleFrom(
