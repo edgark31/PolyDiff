@@ -168,10 +168,12 @@ export class GameManagerService {
         });
 
         this.clientSocket.on(MessageEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
-            if (receivedMessage.userName !== this.username) {
+            if (receivedMessage.userName === this.username) {
+                receivedMessage.tag = MessageTag.Sent;
+            } else {
                 receivedMessage.tag = MessageTag.Received;
-                this.globalMessage.next(receivedMessage);
             }
+            this.globalMessage.next(receivedMessage);
             // this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, receivedMessage);
         });
 

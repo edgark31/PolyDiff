@@ -2,7 +2,6 @@ import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
-import { MessageTag } from '@common/enums';
 import { ChatMessageGlobal } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
 @Component({
@@ -40,7 +39,6 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     }
 
     addRightSideMessage(text: string) {
-        this.messages.push({ tag: MessageTag.Sent, message: text, userName: 'You', timestamp: new Date().toLocaleTimeString() });
         this.gameManager.sendGlobalMessage(text);
     }
 
