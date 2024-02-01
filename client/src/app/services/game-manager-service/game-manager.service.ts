@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Injectable } from '@angular/core';
 import { ReplayActions } from '@app/enum/replay-actions';
 import { ReplayEvent } from '@app/interfaces/replay-actions';
@@ -7,7 +8,7 @@ import { GameAreaService } from '@app/services/game-area-service/game-area.servi
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, MessageEvents, MessageTag } from '@common/enums';
-import { ChatMessage, ClientSideGame, Differences, GameConfigConst, GameRoom, Players } from '@common/game-interfaces';
+import { ChatMessage, ChatMessageGlobal, ClientSideGame, Differences, GameConfigConst, GameRoom, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
 @Injectable({
     providedIn: 'root',
@@ -16,6 +17,7 @@ export class GameManagerService {
     replayEventsSubject: Subject<ReplayEvent>;
     differences: Coordinate[][];
     gameConstants: GameConfigConst;
+    username: string | null | undefined;
     private timer: Subject<number>;
     private differencesFound: Subject<number>;
     private opponentDifferencesFound: Subject<number>;
@@ -27,6 +29,7 @@ export class GameManagerService {
     private isFirstDifferencesFound: Subject<boolean>;
     private isGameModeChanged: Subject<boolean>;
     private isGamePageRefreshed: Subject<boolean>;
+    private globalMessage: Subject<ChatMessageGlobal>;
 
     // Service are needed to be used in this service
     // eslint-disable-next-line max-params
@@ -47,6 +50,7 @@ export class GameManagerService {
         this.isFirstDifferencesFound = new Subject<boolean>();
         this.isGameModeChanged = new Subject<boolean>();
         this.isGamePageRefreshed = new Subject<boolean>();
+        this.globalMessage = new Subject<ChatMessageGlobal>();
     }
 
     get currentGame$() {
@@ -85,6 +89,10 @@ export class GameManagerService {
 
     get isGamePageRefreshed$() {
         return this.isGamePageRefreshed.asObservable();
+    }
+
+    get globalMessage$() {
+        return this.globalMessage.asObservable();
     }
 
     setMessage(message: ChatMessage) {
@@ -129,6 +137,11 @@ export class GameManagerService {
         this.clientSocket.socket.off();
     }
 
+    sendGlobalMessage(textMessage: string): void {
+        const newMessage = { tag: MessageTag.Received, message: textMessage, userName: this.username };
+        this.clientSocket.send(MessageEvents.GlobalMessage, newMessage);
+    }
+
     manageSocket(): void {
         this.clientSocket.on(GameEvents.GameStarted, (room: GameRoom) => {
             this.currentGame.next(room.clientGame);
@@ -154,9 +167,14 @@ export class GameManagerService {
             this.endMessage.next(endGameMessage);
         });
 
-        this.clientSocket.on(MessageEvents.LocalMessage, (receivedMessage: ChatMessage) => {
-            this.message.next(receivedMessage);
-            this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, receivedMessage);
+        this.clientSocket.on(MessageEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
+            if (receivedMessage.userName === this.username) {
+                receivedMessage.tag = MessageTag.Sent;
+            } else {
+                receivedMessage.tag = MessageTag.Received;
+            }
+            this.globalMessage.next(receivedMessage);
+            // this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, receivedMessage);
         });
 
         this.clientSocket.on(GameEvents.UpdateDifferencesFound, (differencesFound: number) => {

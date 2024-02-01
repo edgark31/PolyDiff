@@ -2,9 +2,8 @@ import { ClassicModeService } from '@app/services/classic-mode/classic-mode.serv
 import { LimitedModeService } from '@app/services/limited-mode/limited-mode.service';
 import { PlayersListManagerService } from '@app/services/players-list-manager/players-list-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
-import { Coordinate } from '@common/coordinate';
-import { GameCardEvents, GameEvents, MessageEvents, PlayerEvents, RoomEvents } from '@common/enums';
-import { ChatMessage, PlayerData } from '@common/game-interfaces';
+import { ConnectionEvents, GameCardEvents, GameEvents, MessageEvents, PlayerEvents, RoomEvents } from '@common/enums';
+import { ChatMessage, ChatMessageGlobal, Coordinate, PlayerData } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import {
     ConnectedSocket,
@@ -29,6 +28,7 @@ import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
 @Injectable()
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
     @WebSocketServer() private server: Server;
+    private mapSocketWithName = new Map<string, string>();
 
     // gateway needs to be injected all the services that it needs to use
     // eslint-disable-next-line max-params -- services are needed for the gateway
@@ -197,6 +197,25 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         await this.roomsManagerService.addHintPenalty(socket, this.server);
     }
 
+    @SubscribeMessage(ConnectionEvents.UserConnectionRequest)
+    processConnection(@ConnectedSocket() socket: Socket, @MessageBody('name') name: string) {
+        const canConnect = !Array.from(this.mapSocketWithName.values()).some((value) => value === name);
+        socket.emit(ConnectionEvents.UserConnectionRequest, canConnect);
+        if (canConnect) {
+            this.logger.log(`Connexion au chat acceptée pour ${name} avec id : ${socket.id}`);
+            this.mapSocketWithName.set(socket.id, name);
+        } else {
+            this.logger.log(`Connexion au chat refusée pour ${name} avec id : ${socket.id}`);
+        }
+    }
+
+    @SubscribeMessage(MessageEvents.GlobalMessage)
+    processMessage(@MessageBody() dataMessage: ChatMessageGlobal) {
+        this.logger.log(`Message reçu : ${dataMessage.message} de la part de ${dataMessage.userName}`);
+        dataMessage.timestamp = new Date().toLocaleTimeString();
+        this.server.emit(MessageEvents.GlobalMessage, dataMessage);
+    }
+
     afterInit() {
         setInterval(() => {
             this.roomsManagerService.updateTimers(this.server);
@@ -209,6 +228,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     async handleDisconnect(@ConnectedSocket() socket: Socket) {
         this.logger.log(`Déconnexion par l'utilisateur avec id : ${socket.id}`);
-        await this.classicModeService.handleSocketDisconnect(socket, this.server);
+        this.mapSocketWithName.delete(socket.id);
+        // await this.classicModeService.handleSocketDisconnect(socket, this.server);
     }
 }
