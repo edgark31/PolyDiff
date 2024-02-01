@@ -5,9 +5,10 @@ import '../common/enums.dart';
 import '../common/interfaces.dart';
 
 class SocketService extends ChangeNotifier {
-  // static const String serverIP = '127.0.0.1';
+  static const String serverIP = '127.0.0.1';
   // static const String serverIP = '34.118.190.227';
   static const String serverPort = '3000';
+  static const String serverURL = 'http://$serverIP:$serverPort';
   static IO.Socket socket = IO.io(serverURL, <String, dynamic>{
     'transports': ['websocket'],
     'autoConnect': false,
@@ -16,14 +17,10 @@ class SocketService extends ChangeNotifier {
   final List<ChatMessageGlobal> messages = [];
   String approvedName = '';
   String inputName = '';
-  static String serverIPInput = '';
-
-  static String serverURL = 'http://$serverIPInput:$serverPort';
 
   bool isConnectionApproved = false;
   bool isSocketConnected = false;
 
-  String get ip => serverIPInput;
   String get userName => approvedName;
   bool get connectionStatus => isConnectionApproved;
   bool get socketStatus => isSocketConnected;
@@ -31,7 +28,7 @@ class SocketService extends ChangeNotifier {
 
   void setup() {
     socket.onConnect((_) {
-      print('Connected to server on $serverIPInput:$serverPort');
+      print('Connected to server on $serverIP:$serverPort');
       isSocketConnected = true;
       notifyListeners();
     });
@@ -81,7 +78,6 @@ class SocketService extends ChangeNotifier {
   }
 
   void connect() {
-    print('Connecting to server on $serverIPInput:$serverPort');
     socket.connect();
     // messages.clear(); // TODO : Figure out if we need this
     // print('Socket connected');
@@ -89,15 +85,9 @@ class SocketService extends ChangeNotifier {
     // notifyListeners();
   }
 
-  void setIP(String ip) {
-    serverIPInput = ip;
-    notifyListeners();
-  }
-
   void disconnect() {
     approvedName = '';
     inputName = '';
-    // serverIPInput = '';
     socket.disconnect();
     // print('Socket disconnected');
     // isConnectionApproved = false;
