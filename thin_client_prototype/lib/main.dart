@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thin_client_prototype/ip_form.dart';
 
+import 'connection_form.dart';
 import 'services/socket_service.dart';
 
 void main() {
@@ -46,7 +46,7 @@ class LoginPage extends StatelessWidget {
           ),
           Expanded(
             child: Center(
-              child: IPForm(),
+              child: ConnectionForm(),
             ),
           ),
         ],
