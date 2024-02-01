@@ -54,7 +54,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       child: Text(
                         "Entrez votre nom d'utilisateur",
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -93,7 +93,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                             errorMessage = "Votre nom ne peut pas être vide";
                           });
                         }
-                        Future.delayed(Duration(milliseconds: 200), () {
+                        Future.delayed(Duration(milliseconds: 100), () {
                           if (socketService.connectionStatus) {
                             print("Connection approved");
                             Navigator.of(context).push(
@@ -104,7 +104,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                           } else if (userName.isNotEmpty) {
                             setState(() {
                               errorMessage =
-                                  "Ce compte est déjà connecté dans un autre client";
+                                  "Un client avec ce nom existe déjà";
                             });
                           }
                         });
