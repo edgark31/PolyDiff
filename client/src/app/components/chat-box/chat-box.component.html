@@ -1,7 +1,6 @@
 <div id="chat-box">
     <div class="content">
         <div class="contact-profile">
-            <img src="assets/raccoonChatAvatarOther.png" alt="raccoonAvatar" />
             <p class = "chat">Zone de clavardage</p>
             <button mat-button (click)="onClose()">
                 <mat-icon class="small-icon">close</mat-icon>
@@ -10,10 +9,9 @@
         <div class="messages">
             <ul>
                 <li [class]="messageItem.tag" *ngFor="let messageItem of messages">
-                    <img *ngIf="messageItem.tag === 'Sent'" src="assets/raccoonChatAvatar.png" alt="raccoonAvatar" />
-                    <img *ngIf="messageItem.tag === 'Received'" src="assets/raccoonChatAvatarOther.png" alt="raccoonAvatar" />
-                    <p>{{ messageItem.userName }}</p>
+                    <h4>{{ messageItem.userName }}</h4>
                     <p>{{ messageItem.message }}</p>
+                    <h4>{{ messageItem.timestamp }}</h4>
                 </li>
             </ul>
         </div>
@@ -21,7 +19,7 @@
             <div class="wrap">
                 <input id = "input" type="text" #inputText placeholder="Entrez un message" (keyup.enter)="onAdd(inputText)" maxlength="200" />
                 <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-                <button mat-button class="submit" (click)="onAdd(inputText)" [routerLink]="'/login'" routerLinkActive="router-link-active">
+                <button mat-button class="submit" (click)="onAdd(inputText)">
                     <mat-icon class="small-icon">near_me</mat-icon>
                 </button>
             </div>
