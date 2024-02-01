@@ -1,15 +1,17 @@
 <div id="chat-box">
     <div class="content">
         <div class="contact-profile">
-            <img src="assets/raccoonChatAvatarOther.png" alt="raccoonAvatar" />
             <p class = "chat">Zone de clavardage</p>
+            <button mat-button (click)="onClose()">
+                <mat-icon class="small-icon">close</mat-icon>
+            </button>
         </div>
         <div class="messages">
             <ul>
                 <li [class]="messageItem.tag" *ngFor="let messageItem of messages">
-                    <img *ngIf="messageItem.tag === 'Sent'" src="assets/raccoonChatAvatar.png" alt="raccoonAvatar" />
-                    <img *ngIf="messageItem.tag === 'Received'" src="assets/raccoonChatAvatarOther.png" alt="raccoonAvatar" />
+                    <h4>{{ messageItem.userName }}</h4>
                     <p>{{ messageItem.message }}</p>
+                    <h4>{{ messageItem.timestamp }}</h4>
                 </li>
             </ul>
         </div>

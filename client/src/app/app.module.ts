@@ -8,6 +8,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
@@ -40,6 +41,7 @@ import { ReplayButtonsComponent } from './components/replay-buttons/replay-butto
 import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -73,6 +75,7 @@ import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time
         ConfigDialogComponent,
         NoGameAvailableDialogComponent,
         HistoryBoxComponent,
+        LoginPageComponent,
     ],
     imports: [
         AppMaterialModule,
@@ -92,6 +95,7 @@ import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time
         MatGridListModule,
         MatExpansionModule,
         MatSelectModule,
+        MatMenuModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
