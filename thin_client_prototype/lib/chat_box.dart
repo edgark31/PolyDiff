@@ -12,7 +12,6 @@ class ChatBox extends StatefulWidget {
 }
 
 class _ChatBoxState extends State<ChatBox> {
-  // List<ChatMessageGlobal> messages = [];
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
   bool isTyping = false;
@@ -93,7 +92,6 @@ class _ChatBoxState extends State<ChatBox> {
                 controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
-                  // bool isSent = messages[index].tag == MessageTag.Sent;
                   bool isSent =
                       messages[index].userName == socketService.userName;
                   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -167,11 +165,6 @@ class _ChatBoxState extends State<ChatBox> {
                       String message = messageController.text;
                       if (message.isNotEmpty &&
                           socketService.connectionStatus) {
-                        // setState(() {
-                        //   messages.add(ChatMessageGlobal(
-                        //       MessageTag.Sent, message, 'Mark', 'test'));
-                        //   isTyping = false;
-                        // });
                         socketService.sendMessage(
                           ChatMessageGlobal(
                             MessageTag.Sent,

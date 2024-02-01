@@ -5,8 +5,7 @@ import '../common/enums.dart';
 import '../common/interfaces.dart';
 
 class SocketService extends ChangeNotifier {
-  static const String serverIP = '127.0.0.1';
-  // static const String serverIP = '34.118.190.227';
+  static const String serverIP = '34.118.163.79';
   static const String serverPort = '3000';
   static const String serverURL = 'http://$serverIP:$serverPort';
   static IO.Socket socket = IO.io(serverURL, <String, dynamic>{
@@ -41,21 +40,16 @@ class SocketService extends ChangeNotifier {
       notifyListeners();
     });
 
-    //event listeners
+    //Event listeners
     socket.on(ConnectionEvents.UserConnectionRequest.name, (data) {
       print('UserConnectionRequest: $data');
       isConnectionApproved = data;
       if (!isConnectionApproved) {
         disconnect();
-      } else {
-        if (inputName != '') {
-          approvedName = inputName;
-        }
+      } else if (inputName != '') {
+        approvedName = inputName;
       }
       notifyListeners();
-      // if (data) {
-      //   connect();
-      // }
     });
 
     socket.on(MessageEvents.GlobalMessage.name, (data) {
@@ -65,12 +59,7 @@ class SocketService extends ChangeNotifier {
       print('Tag: ${message.tag}');
       print('User: ${message.userName}');
       print('Timestamp: ${message.timestamp}');
-      // if (messages.contains(message)) {
-      //   print('Message already exists');
-      // } else {
-      //   print('Adding message to list');
       addMessage(message);
-      // }
       notifyListeners();
     });
 
@@ -79,20 +68,13 @@ class SocketService extends ChangeNotifier {
 
   void connect() {
     socket.connect();
-    // messages.clear(); // TODO : Figure out if we need this
-    // print('Socket connected');
-    // isSocketConnected = true;
-    // notifyListeners();
+    messages.clear(); // TODO : Figure out if we need this
   }
 
   void disconnect() {
     approvedName = '';
     inputName = '';
     socket.disconnect();
-    // print('Socket disconnected');
-    // isConnectionApproved = false;
-    // isSocketConnected = false;
-    // notifyListeners();
   }
 
   void sendTestMessage() {
@@ -112,15 +94,12 @@ class SocketService extends ChangeNotifier {
   }
 
   void addMessage(ChatMessageGlobal message) {
-    // if (!messages.contains(message)) {
     messages.add(message);
     notifyListeners();
     print(allMessages.length);
-    // }
   }
 
   void checkName(String name) {
-    // IO.cache.clear();
     socket.dispose();
     setup();
     connect();

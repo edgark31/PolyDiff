@@ -48,25 +48,6 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    socketService.socketStatus ? 'Socket ON' : 'Socket OFF',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(width: 20),
-                  Text(
-                    socketService.connectionStatus
-                        ? 'Username OK'
-                        : 'Disconnected',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      socketService.disconnect();
-                    },
-                    child: Text("Se Déconnecter"),
-                  ),
                   Center(
                     child: Padding(
                       padding: EdgeInsets.only(top: 210, right: 100),
