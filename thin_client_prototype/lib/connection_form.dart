@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'chat_page.dart';
@@ -67,6 +68,9 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       padding: EdgeInsets.only(left: 10),
                       child: TextField(
                         controller: userNameController,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(20),
+                        ],
                         decoration: InputDecoration(
                           hintText: "Nom d'utilisateur",
                           border: OutlineInputBorder(
