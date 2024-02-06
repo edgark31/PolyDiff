@@ -212,7 +212,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     @SubscribeMessage(MessageEvents.GlobalMessage)
     processMessage(@MessageBody() dataMessage: ChatMessageGlobal) {
         this.logger.log(`MESSAGE :::: ${dataMessage.userName} a dit ${dataMessage.message}`);
-        dataMessage.timestamp = new Date().toLocaleTimeString();
+        dataMessage.timestamp = new Date().toLocaleTimeString('en-US', {
+            timeZone: 'America/Toronto',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        });
         this.server.emit(MessageEvents.GlobalMessage, dataMessage);
     }
 

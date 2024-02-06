@@ -7,12 +7,12 @@ export interface Players {
 }
 
 export interface GameHistory {
-    date: string,
-    startingHour: string,
-    duration: number,
-    gameMode: string,
-    player1: PlayerInfo,
-    player2?: PlayerInfo,
+    date: string;
+    startingHour: string;
+    duration: number;
+    gameMode: string;
+    player1: PlayerInfo;
+    player2?: PlayerInfo;
 }
 
 export interface PlayerInfo {

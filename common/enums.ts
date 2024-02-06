@@ -27,7 +27,6 @@ export enum PlayerEvents {
     WaitingPlayerNameListUpdated = 'WaitingPlayerNameListUpdated',
 }
 
-
 export enum GameCardEvents {
     ResetTopTime = 'ResetTopTime',
     ResetAllTopTimes = 'ResetAllTopTimes',
@@ -37,11 +36,11 @@ export enum GameCardEvents {
     AllGamesDeleted = 'AllGamesDeleted',
     GameDeleted = 'GameDeleted',
     GameConstantsUpdated = 'GameConstantsUpdated',
-    GamesHistoryDeleted = "GamesHistoryDeleted"
+    GamesHistoryDeleted = 'GamesHistoryDeleted',
 }
 
 export enum HistoryEvents {
-    RequestReload = "RequestReload"
+    RequestReload = 'RequestReload',
 }
 
 export enum RoomEvents {
@@ -62,7 +61,7 @@ export enum RoomEvents {
     CheckIfAnyCoopRoomExists = 'CheckIfAnyCoopRoomExists',
     LimitedCoopRoomJoined = 'LimitedCoopRoomJoined',
     DeleteCreatedCoopRoom = 'DeleteCreatedCoopRoom',
-    NoGameAvailable = "NoGameAvailable"
+    NoGameAvailable = 'NoGameAvailable',
 }
 
 export enum PlayerStatus {
