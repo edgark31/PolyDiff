@@ -184,26 +184,6 @@ class _ChatBoxState extends State<ChatBox> {
               ],
             ),
           ),
-          // TODO : Remove tests messages + button
-          Text(
-            socketService.socketStatus ? 'Socket ON' : 'Socket OFF',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(width: 20),
-          Text(
-            socketService.connectionStatus ? 'Username OK' : 'Disconnected',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            'Username: ${socketService.userName}',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              socketService.sendTestMessage();
-            },
-            child: Text("Recevoir message test"),
-          ),
         ],
       ),
     );
