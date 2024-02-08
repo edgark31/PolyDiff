@@ -28,6 +28,8 @@ export class LoginPageComponent {
             this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
                 if (isConnected) {
                     this.router.navigate(['/home']);
+                } else {
+                    this.clientSocket.disconnect();
                 }
             });
             this.gameManager.manageSocket();
