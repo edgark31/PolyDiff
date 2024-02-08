@@ -51,7 +51,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   ),
                   Center(
                     child: Padding(
-                      padding: EdgeInsets.only(top: 210, right: 100),
+                      padding: EdgeInsets.only(top: 21, right: 100),
                       child: Text(
                         "Entrez votre nom d'utilisateur",
                         style: TextStyle(
@@ -97,8 +97,11 @@ class _ConnectionFormState extends State<ConnectionForm> {
                             errorMessage = "Votre nom ne peut pas être vide";
                           });
                         }
-                        Future.delayed(Duration(milliseconds: 100), () {
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          print(
+                              "Connection status: ${socketService.connectionStatus}");
                           if (socketService.connectionStatus) {
+                            print("We are in the connection status");
                             print("Connection approved");
                             Navigator.of(context).push(
                               MaterialPageRoute(

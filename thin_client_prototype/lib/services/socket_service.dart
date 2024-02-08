@@ -49,6 +49,9 @@ class SocketService extends ChangeNotifier {
       } else if (inputName != '') {
         approvedName = inputName;
       }
+      connectionStatus
+          ? print('Connection approved')
+          : print('Connection denied');
       notifyListeners();
     });
 

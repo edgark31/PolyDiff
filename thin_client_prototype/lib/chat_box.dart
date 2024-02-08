@@ -24,6 +24,7 @@ class _ChatBoxState extends State<ChatBox> {
 
   void scrollToBottom() {
     if (!scrollController.hasClients) return;
+    print("scrolling to bottom");
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
       duration: Duration(milliseconds: 180),
@@ -94,9 +95,9 @@ class _ChatBoxState extends State<ChatBox> {
                 itemBuilder: (BuildContext context, int index) {
                   bool isSent =
                       messages[index].userName == socketService.userName;
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    scrollToBottom();
-                  });
+                  // WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //   scrollToBottom();
+                  // });
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
