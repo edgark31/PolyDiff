@@ -12,6 +12,7 @@ class ConnectionForm extends StatefulWidget {
 
 class _ConnectionFormState extends State<ConnectionForm> {
   TextEditingController userNameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   String errorMessage = "";
 
   @override
@@ -53,7 +54,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                     child: Padding(
                       padding: EdgeInsets.only(top: 21, right: 100),
                       child: Text(
-                        "Entrez votre nom d'utilisateur",
+                        "Nom d'utilisateur ou courriel",
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -72,7 +73,6 @@ class _ConnectionFormState extends State<ConnectionForm> {
                           LengthLimitingTextInputFormatter(20),
                         ],
                         decoration: InputDecoration(
-                          hintText: "Nom d'utilisateur",
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black),
                           ),
@@ -82,48 +82,88 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 430,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        String userName = userNameController.text;
-                        if (userName.isNotEmpty) {
-                          print(
-                              "Sending the server your username: " + userName);
-                          socketService.checkName(userName);
-                        } else {
-                          setState(() {
-                            errorMessage = "Votre nom ne peut pas être vide";
-                          });
-                        }
-                        Future.delayed(Duration(milliseconds: 300), () {
-                          print(
-                              "Connection status: ${socketService.connectionStatus}");
-                          if (socketService.connectionStatus) {
-                            print("We are in the connection status");
-                            print("Connection approved");
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ChatPage(),
-                              ),
-                            );
-                          } else if (userName.isNotEmpty) {
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 21,
+                        right: 200,
+                      ),
+                      child: Text(
+                        "Mot de passe",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 400,
+                    height: 63,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: TextField(
+                        controller: passwordController,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(20),
+                        ],
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 21),
+                    child: SizedBox(
+                      width: 430,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // TODO: ajouter la vérification et l'envoit du mot de passe
+                          // TODO optionnel: rendre ca clean pas if if if if
+                          String userName = userNameController.text;
+                          if (userName.isNotEmpty) {
+                            print("Sending the server your username: " +
+                                userName);
+                            socketService.checkName(userName);
+                          } else {
                             setState(() {
-                              errorMessage =
-                                  "Un client avec ce nom existe déjà";
+                              errorMessage = "Votre nom ne peut pas être vide";
                             });
                           }
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
+                          Future.delayed(Duration(milliseconds: 300), () {
+                            print(
+                                "Connection status: ${socketService.connectionStatus}");
+                            if (socketService.connectionStatus) {
+                              print("We are in the connection status");
+                              print("Connection approved");
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ChatPage(),
+                                ),
+                              );
+                            } else if (userName.isNotEmpty) {
+                              setState(() {
+                                errorMessage =
+                                    "Un client avec ce nom existe déjà";
+                              });
+                            }
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                          backgroundColor: Color.fromARGB(255, 31, 150, 104),
+                          foregroundColor: Colors.white,
                         ),
-                        backgroundColor: Color.fromARGB(255, 31, 150, 104),
-                        foregroundColor: Colors.white,
+                        child: Text("Connexion"),
                       ),
-                      child: Text("Connexion"),
                     ),
                   ),
                   Text(
