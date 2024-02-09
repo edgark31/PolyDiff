@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/main.dart';
 import 'package:provider/provider.dart';
-import 'package:thin_client_prototype/main.dart';
 
 import 'common/enums.dart';
 import 'common/interfaces.dart';
