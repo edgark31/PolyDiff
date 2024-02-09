@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'connection_form.dart';
+import 'creation_form.dart';
 import 'services/socket_service.dart';
 
 void main() {
@@ -47,6 +48,37 @@ class LoginPage extends StatelessWidget {
           Expanded(
             child: Center(
               child: ConnectionForm(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CreationPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Row(
+        children: [
+          Flexible(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/MenuBackground.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 3,
+            child: Expanded(
+              child: Center(
+                child: CreationForm(),
+              ),
             ),
           ),
         ],

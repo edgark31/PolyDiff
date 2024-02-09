@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/main.dart';
 import 'package:provider/provider.dart';
 
 import 'chat_page.dart';
@@ -172,7 +173,27 @@ class _ConnectionFormState extends State<ConnectionForm> {
                         color: const Color.fromARGB(255, 240, 16, 0),
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
-                  )
+                  ),
+                  Center(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => CreationPage(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        child: Text(
+                          "S'inscrire",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
