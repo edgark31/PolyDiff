@@ -23,7 +23,7 @@ export class LoginPageComponent {
     ) {}
 
     onSubmit() {
-        if (this.loginForm.value.username) {
+        if (this.loginForm.value.username && this.loginForm.value.username.length <= 20 && this.loginForm.value.username.length > 0) {
             this.clientSocket.connect();
             this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
                 if (isConnected) {
