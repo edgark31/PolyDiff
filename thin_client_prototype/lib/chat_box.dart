@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:thin_client_prototype/main.dart';
 
@@ -25,6 +26,10 @@ class _ChatBoxState extends State<ChatBox> {
   void scrollToBottom() {
     if (!scrollController.hasClients) return;
     print("scrolling to bottom");
+    bool isUserScrolling =
+        scrollController.position.userScrollDirection != ScrollDirection.idle;
+    print("isUserScrolling: $isUserScrolling");
+    if (isUserScrolling) return;
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
       duration: Duration(milliseconds: 180),
