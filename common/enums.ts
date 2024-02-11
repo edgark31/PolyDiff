@@ -97,4 +97,5 @@ export enum GamePageEvent {
 export enum ConnectionEvents {
     UserConnectionRequest = 'UserConnectionRequest',
     UserDeconnectionRequest = 'UserDeconnectionRequest',
+    UserCreationRequest = 'UserCreationRequest',
 }
