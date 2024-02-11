@@ -14,6 +14,7 @@ import { ConnectionEvents } from '@common/enums';
 export class LoginPageComponent {
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
+        password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
 
     constructor(
@@ -23,7 +24,7 @@ export class LoginPageComponent {
     ) {}
 
     onSubmit() {
-        if (this.loginForm.value.username) {
+        if (this.loginForm.value.username && this.loginForm.value.password) {
             this.clientSocket.connect();
             this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
                 if (isConnected) {
@@ -32,6 +33,7 @@ export class LoginPageComponent {
             });
             this.gameManager.manageSocket();
             this.clientSocket.send(ConnectionEvents.UserConnectionRequest, this.loginForm.value.username);
+            this.clientSocket.send(ConnectionEvents.UserConnectionRequest, this.loginForm.value.password);
             this.gameManager.username = this.loginForm.value.username;
         }
     }
