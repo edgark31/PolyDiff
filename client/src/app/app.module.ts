@@ -42,6 +42,7 @@ import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -76,6 +77,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
         NoGameAvailableDialogComponent,
         HistoryBoxComponent,
         LoginPageComponent,
+        RegistrationPageComponent,
     ],
     imports: [
         AppMaterialModule,
