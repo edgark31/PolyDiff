@@ -1,3 +1,4 @@
+import { AccountManagerService } from '@app/services/account-manager/account-manager/account-manager.service';
 import { ClassicModeService } from '@app/services/classic-mode/classic-mode.service';
 import { LimitedModeService } from '@app/services/limited-mode/limited-mode.service';
 import { PlayersListManagerService } from '@app/services/players-list-manager/players-list-manager.service';
@@ -15,17 +16,22 @@ import {
     WebSocketGateway,
     WebSocketServer,
 } from '@nestjs/websockets';
+import { instrument } from '@socket.io/admin-ui';
 import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
-import { AccountManagerService } from '@app/services/account-manager/account-manager/account-manager.service';
 
-@WebSocketGateway(
-    WebSocketGateway({
-        cors: {
-            origin: '*',
+@WebSocketGateway({
+    cors: {
+        origin: (origin, callback) => {
+            if (origin === undefined || origin === 'https://admin.socket.io') {
+                callback(null, true);
+            } else {
+                callback(null, '*');
+            }
         },
-    }),
-)
+        credentials: true,
+    },
+})
 @Injectable()
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
     @WebSocketServer() private server: Server;
@@ -224,6 +230,10 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     afterInit() {
+        instrument(this.server, {
+            auth: false,
+            mode: 'development',
+        });
         setInterval(() => {
             this.roomsManagerService.updateTimers(this.server);
         }, DELAY_BEFORE_EMITTING_TIME);
