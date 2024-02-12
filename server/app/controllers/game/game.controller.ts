@@ -1,4 +1,4 @@
-import { Account } from '@app/model/database/account';
+import { Account, Credentials } from '@app/model/database/account';
 import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 import { GameConstantsDto } from '@app/model/dto/game/game-constants.dto';
 import { AccountManagerService } from '@app/services/account-manager/account-manager/account-manager.service';
@@ -111,18 +111,19 @@ export class GameController {
     async register(@Body() account: Account, @Res() response: Response) {
         try {
             await this.accountManager.register(account);
-            response.status(HttpStatus.OK).send(account);
+            response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).send(error.message);
         }
     }
 
     @Post('/account/login')
-    async login(@Body() account: Account, @Res() response: Response) {
+    async login(@Body() creds: Credentials, @Res() response: Response) {
         try {
-            response.status(HttpStatus.OK).send();
+            const accountFound = await this.accountManager.connexion(creds);
+            response.status(HttpStatus.OK).send(accountFound);
         } catch (error) {
-            response.status(HttpStatus.NO_CONTENT).send(error.message);
+            response.status(HttpStatus.UNAUTHORIZED).send(error.message);
         }
     }
 }

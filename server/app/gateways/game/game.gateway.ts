@@ -17,6 +17,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
+import { AccountManagerService } from '@app/services/account-manager/account-manager/account-manager.service';
 
 @WebSocketGateway(
     WebSocketGateway({
@@ -38,6 +39,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         private readonly playersListManagerService: PlayersListManagerService,
         private readonly roomsManagerService: RoomsManagerService,
         private readonly limitedModeService: LimitedModeService,
+        private readonly accountManager: AccountManagerService,
     ) {}
 
     @SubscribeMessage(GameEvents.StartGameByRoomId)
@@ -233,6 +235,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     async handleDisconnect(@ConnectedSocket() socket: Socket) {
         this.logger.log(`Déconnexion par l'utilisateur avec id : ${socket.id}`);
+        this.accountManager.deconnexion(this.mapSocketWithName.get(socket.id));
         this.mapSocketWithName.delete(socket.id);
         // await this.classicModeService.handleSocketDisconnect(socket, this.server);
     }

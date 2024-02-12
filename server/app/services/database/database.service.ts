@@ -1,6 +1,5 @@
 // Id comes from database to allow _id
 /* eslint-disable no-underscore-dangle */
-import { Account, AccountDocument } from '@app/model/database/account';
 import { Game, GameDocument } from '@app/model/database/game';
 import { GameCard, GameCardDocument } from '@app/model/database/game-card';
 import { GameConstants, GameConstantsDocument } from '@app/model/database/game-config-constants';
