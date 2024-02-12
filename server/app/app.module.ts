@@ -3,19 +3,21 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GameController } from './controllers/game/game.controller';
 import { GameGateway } from './gateways/game/game.gateway';
+import { AccountSchema, accountSchema } from './model/database/account';
 import { Game, gameSchema } from './model/database/game';
 import { GameCard, gameCardSchema } from './model/database/game-card';
+import { GameConstants, gameConstantsSchema } from './model/database/game-config-constants';
+import { GameHistory, gameHistorySchema } from './model/database/game-history';
+import { AccountManagerService } from './services/account-manager/account-manager/account-manager.service';
 import { ClassicModeService } from './services/classic-mode/classic-mode.service';
 import { DatabaseService } from './services/database/database.service';
 import { GameListsManagerService } from './services/game-lists-manager/game-lists-manager.service';
 import { GameService } from './services/game/game.service';
 import { HistoryService } from './services/history/history.service';
+import { LimitedModeService } from './services/limited-mode/limited-mode.service';
 import { MessageManagerService } from './services/message-manager/message-manager.service';
 import { PlayersListManagerService } from './services/players-list-manager/players-list-manager.service';
-import { GameConstants, gameConstantsSchema } from './model/database/game-config-constants';
 import { RoomsManagerService } from './services/rooms-manager/rooms-manager.service';
-import { LimitedModeService } from './services/limited-mode/limited-mode.service';
-import { GameHistory, gameHistorySchema } from './model/database/game-history';
 
 @Module({
     imports: [
@@ -28,6 +30,7 @@ import { GameHistory, gameHistorySchema } from './model/database/game-history';
             }),
         }),
         MongooseModule.forFeature([
+            { name: AccountSchema.name, schema: accountSchema },
             { name: Game.name, schema: gameSchema },
             { name: GameCard.name, schema: gameCardSchema },
             { name: GameConstants.name, schema: gameConstantsSchema },
@@ -48,6 +51,7 @@ import { GameHistory, gameHistorySchema } from './model/database/game-history';
         PlayersListManagerService,
         RoomsManagerService,
         LimitedModeService,
+        AccountManagerService,
     ],
 })
 export class AppModule {}

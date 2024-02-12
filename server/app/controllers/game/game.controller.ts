@@ -1,6 +1,8 @@
 import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 import { GameConstantsDto } from '@app/model/dto/game/game-constants.dto';
+import { AccountManagerService } from '@app/services/account-manager/account-manager/account-manager.service';
 import { GameService } from '@app/services/game/game.service';
+import { Account } from '@common/game-interfaces';
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -8,7 +10,7 @@ import { Response } from 'express';
 @ApiTags('Games')
 @Controller('games')
 export class GameController {
-    constructor(private readonly gameService: GameService) {}
+    constructor(private readonly gameService: GameService, private readonly accountManager: AccountManagerService) {}
 
     @Get('/constants')
     async getGameConstants(@Res() response: Response) {
@@ -99,6 +101,25 @@ export class GameController {
     async updateGameConstants(@Body() gameConstantsDto: GameConstantsDto, @Res() response: Response) {
         try {
             await this.gameService.updateGameConstants(gameConstantsDto);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.NO_CONTENT).send(error.message);
+        }
+    }
+
+    @Post('/account/register')
+    async register(@Body() account: Account, @Res() response: Response) {
+        try {
+            await this.accountManager.register(account);
+            response.status(HttpStatus.OK).send(account);
+        } catch (error) {
+            response.status(HttpStatus.CONFLICT).send(error.message);
+        }
+    }
+
+    @Post('/account/login')
+    async login(@Body() account: Account, @Res() response: Response) {
+        try {
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NO_CONTENT).send(error.message);
