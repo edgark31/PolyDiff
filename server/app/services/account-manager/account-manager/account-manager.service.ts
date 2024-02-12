@@ -12,7 +12,6 @@ export class AccountManagerService implements OnModuleInit {
     constructor(private readonly logger: Logger, @InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>) {}
 
     onModuleInit() {
-        // Put all the account.profile in the database in the connectedProfiles map
         this.accountModel.find().then((accounts) => {
             accounts.forEach((account) => {
                 this.connectedProfiles.set(account.credentials.username, account.profile);
