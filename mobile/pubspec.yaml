@@ -18,7 +18,9 @@ dependencies:
     mongo_dart: ^0.10.0
     camera: ^0.10.5+9
     path_provider: ^2.1.2
+    path:
 
+#-------------------- ./ PACKAGES END ----------------#
 dev_dependencies:
     flutter_test:
         sdk: flutter
@@ -27,5 +29,13 @@ dev_dependencies:
 
 flutter:
     uses-material-design: true
+
+    #-------------------- LOCAL ASSETS ----------------#
     assets:
-        - assets/
+        - assets/fonts/
+        - assets/icons/
+        - assets/images/
+        - assets/logos
+
+    #-------------------- LOCAL FONTS ----------------#
+    fonts:
