@@ -105,19 +105,19 @@ export class Credentials {
 export const credentialsSchema = SchemaFactory.createForClass(Credentials);
 
 @Schema()
-export class AccountSchema {
+export class Account {
     @ApiProperty()
     @Prop({ required: true })
     accountId: string;
 
     @ApiProperty()
     @Prop({ required: true, type: credentialsSchema })
-    credentials: Types.Subdocument;
+    credentials: Credentials;
 
     @ApiProperty()
     @Prop({ required: true, type: profileSchema })
-    profile: Types.Subdocument;
+    profile: Profile;
 }
 
-export type AccountDocument = AccountSchema & Document;
-export const accountSchema = SchemaFactory.createForClass(AccountSchema);
+export type AccountDocument = Account & Document;
+export const accountSchema = SchemaFactory.createForClass(Account);

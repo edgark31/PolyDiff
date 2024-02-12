@@ -1,5 +1,5 @@
-import { Coordinate } from './coordinate';
-import { GameModes, MessageTag } from './enums';
+import { Coordinate } from '@common/coordinate';
+import { GameModes, MessageTag } from '@common/enums';
 
 export interface Players {
     player1: Player;

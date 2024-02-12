@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GameController } from './controllers/game/game.controller';
 import { GameGateway } from './gateways/game/game.gateway';
-import { AccountSchema, accountSchema } from './model/database/account';
+import { Account, accountSchema } from './model/database/account';
 import { Game, gameSchema } from './model/database/game';
 import { GameCard, gameCardSchema } from './model/database/game-card';
 import { GameConstants, gameConstantsSchema } from './model/database/game-config-constants';
@@ -30,7 +30,7 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
             }),
         }),
         MongooseModule.forFeature([
-            { name: AccountSchema.name, schema: accountSchema },
+            { name: Account.name, schema: accountSchema },
             { name: Game.name, schema: gameSchema },
             { name: GameCard.name, schema: gameCardSchema },
             { name: GameConstants.name, schema: gameConstantsSchema },

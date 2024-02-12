@@ -1,8 +1,8 @@
+import { Account } from '@app/model/database/account';
 import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 import { GameConstantsDto } from '@app/model/dto/game/game-constants.dto';
 import { AccountManagerService } from '@app/services/account-manager/account-manager/account-manager.service';
 import { GameService } from '@app/services/game/game.service';
-import { Account } from '@common/game-interfaces';
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
