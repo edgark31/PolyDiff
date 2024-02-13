@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
         title: 'PolyDiff',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Color.fromARGB(255, 124, 163, 130)),
         ),
         home: LoginPage(),
       ),
@@ -32,6 +33,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Row(
         children: [
           Flexible(
@@ -60,6 +62,7 @@ class CreationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Row(
         children: [
           Flexible(
@@ -75,10 +78,8 @@ class CreationPage extends StatelessWidget {
           ),
           Flexible(
             flex: 3,
-            child: Expanded(
-              child: Center(
-                child: CreationForm(),
-              ),
+            child: Center(
+              child: CreationForm(),
             ),
           ),
         ],
