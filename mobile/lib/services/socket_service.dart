@@ -12,7 +12,7 @@ class SocketService extends ChangeNotifier {
     'autoConnect': false,
   });
 
-  final List<ChatMessageModel> messages = [];
+  final List<ChatMessage> messages = [];
   String approvedName = '';
   String inputName = '';
 
@@ -22,7 +22,7 @@ class SocketService extends ChangeNotifier {
   String get userName => approvedName;
   bool get connectionStatus => isConnectionApproved;
   bool get socketStatus => isSocketConnected;
-  List<ChatMessageModel> get allMessages => List.unmodifiable(messages);
+  List<ChatMessage> get allMessages => List.unmodifiable(messages);
 
   void setup() {
     socket.onConnect((_) {
@@ -56,7 +56,7 @@ class SocketService extends ChangeNotifier {
 
     socket.on(MessageEvents.GlobalMessage.name, (data) {
       print('GlobalMessage received: $data');
-      ChatMessageModel message = ChatMessageModel.fromJson(data);
+      ChatMessage message = ChatMessage.fromJson(data);
       print('Message: ${message.message}');
       print('Tag: ${message.tag}');
       print('User: ${message.userName}');
@@ -81,7 +81,7 @@ class SocketService extends ChangeNotifier {
 
   void sendTestMessage() {
     print('Sending test message');
-    final ChatMessageModel testMessage = ChatMessageModel(
+    final ChatMessage testMessage = ChatMessage(
       MessageTag.Sent,
       'test message',
       'Zooboomafoo',
@@ -90,12 +90,12 @@ class SocketService extends ChangeNotifier {
     socket.emit(MessageEvents.GlobalMessage.name, testMessage.toJson());
   }
 
-  void sendMessage(ChatMessageModel message) {
+  void sendMessage(ChatMessage message) {
     print('Sending message');
     socket.emit(MessageEvents.GlobalMessage.name, message.toJson());
   }
 
-  void addMessage(ChatMessageModel message) {
+  void addMessage(ChatMessage message) {
     messages.add(message);
     notifyListeners();
     print(allMessages.length);
