@@ -1,20 +1,12 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/login_page.dart';
-import 'package:mobile/widgets/camera_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'services/socket_service.dart';
 
-// Future<void> main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   cameras = await availableCameras();
-
-//   runApp(MyApp());
-// }
-
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MyApp());
 }
 
