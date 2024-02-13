@@ -1,11 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/camera_page.dart';
-import 'package:mongo_dart/mongo_dart.dart';
+import 'package:mobile/pages/login_page.dart';
+import 'package:mobile/screens/camera_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'connection_form.dart';
-import 'creation_form.dart';
 import 'services/socket_service.dart';
 
 Future<void> main() async {
@@ -30,65 +28,6 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         ),
         home: LoginPage(),
-      ),
-    );
-  }
-}
-
-class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
-        children: [
-          Flexible(
-            flex: 2,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/MenuBackground.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: ConnectionForm(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CreationPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
-        children: [
-          Flexible(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/MenuBackground.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          Flexible(
-            flex: 3,
-            child: Expanded(
-              child: Center(
-                child: CreationForm(),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
