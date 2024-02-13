@@ -5,12 +5,12 @@ import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
 
-class ChatBoxScreen extends StatefulWidget {
+class ChatBox extends StatefulWidget {
   @override
-  State<ChatBoxScreen> createState() => _ChatBoxState();
+  State<ChatBox> createState() => _ChatBoxState();
 }
 
-class _ChatBoxState extends State<ChatBoxScreen> {
+class _ChatBoxState extends State<ChatBox> {
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
   bool isTyping = false;

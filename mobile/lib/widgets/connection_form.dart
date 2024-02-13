@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/pages/chat_page.dart';
-import 'package:mobile/pages/creation_page.dart';
+import 'package:mobile/pages/signup_page.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
 
-class ConnectionFormScreen extends StatefulWidget {
+class ConnectionForm extends StatefulWidget {
   @override
-  State<ConnectionFormScreen> createState() => _ConnectionFormState();
+  State<ConnectionForm> createState() => _ConnectionFormState();
 }
 
-class _ConnectionFormState extends State<ConnectionFormScreen> {
+class _ConnectionFormState extends State<ConnectionForm> {
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String errorMessage = "";
@@ -178,7 +178,7 @@ class _ConnectionFormState extends State<ConnectionFormScreen> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => CreationPage(),
+                            builder: (context) => SignupPage(),
                           ),
                         );
                       },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/screens/creation_form_screen.dart';
+import 'package:mobile/widgets/signup_form.dart';
 
-class CreationPage extends StatelessWidget {
+class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

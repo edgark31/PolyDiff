@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/screens/chat_screen.dart';
+import 'package:mobile/widgets/chat_box.dart';
 
 class ChatPage extends StatelessWidget {
   @override
@@ -17,7 +17,7 @@ class ChatPage extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: ChatBoxScreen(),
+              child: ChatBox(),
             ),
           ],
         ),
