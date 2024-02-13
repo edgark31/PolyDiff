@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/screens/connection_form_screen.dart';
+import 'package:mobile/widgets/connection_form.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -20,7 +20,7 @@ class LoginPage extends StatelessWidget {
           ),
           Expanded(
             child: Center(
-              child: ConnectionFormScreen(),
+              child: ConnectionForm(),
             ),
           ),
         ],
