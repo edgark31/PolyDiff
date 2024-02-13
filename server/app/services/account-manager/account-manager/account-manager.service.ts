@@ -20,17 +20,17 @@ export class AccountManagerService implements OnModuleInit {
         // });
     }
 
-    async register(account: Account) {
+    async register(credentials: Credentials) {
         try {
             const accountFound = await this.accountModel.findOne({
-                'credentials.username': account.credentials.username,
+                'credentials.username': credentials.username,
             });
             if (accountFound) {
                 this.logger.error('Username already taken');
                 throw new Error('Username already taken');
             } else {
-                await this.accountModel.create(account);
-                this.logger.warn(`Account ${account.credentials.username} has been added to the database`);
+                await this.accountModel.create(credentials);
+                this.logger.warn(`Account ${credentials.username} has been added to the database`);
             }
         } catch (error) {
             return Promise.reject(`Failed to add account --> ${error}`);

@@ -1,4 +1,4 @@
-import { Account, Credentials } from '@app/model/database/account';
+import { Credentials } from '@app/model/database/account';
 import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 import { GameConstantsDto } from '@app/model/dto/game/game-constants.dto';
 import { AccountManagerService } from '@app/services/account-manager/account-manager/account-manager.service';
@@ -108,12 +108,15 @@ export class GameController {
     }
 
     @Post('/account/register')
-    async register(@Body() account: Account, @Res() response: Response) {
+    async register(@Body() credentials: Credentials, @Res() response: Response) {
+        console.log('register');
         try {
-            await this.accountManager.register(account);
+            await this.accountManager.register(credentials);
             response.status(HttpStatus.OK).send();
+            console.log('200 OK');
         } catch (error) {
             response.status(HttpStatus.CONFLICT).send(error.message);
+            console.log('409 OK');
         }
     }
 
