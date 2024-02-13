@@ -1,7 +1,5 @@
-import { Credentials } from '@app/model/database/account';
 import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 import { GameConstantsDto } from '@app/model/dto/game/game-constants.dto';
-import { AccountManagerService } from '@app/services/account-manager/account-manager/account-manager.service';
 import { GameService } from '@app/services/game/game.service';
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -10,7 +8,7 @@ import { Response } from 'express';
 @ApiTags('Games')
 @Controller('games')
 export class GameController {
-    constructor(private readonly gameService: GameService, private readonly accountManager: AccountManagerService) {}
+    constructor(private readonly gameService: GameService) {}
 
     @Get('/constants')
     async getGameConstants(@Res() response: Response) {
@@ -104,29 +102,6 @@ export class GameController {
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NO_CONTENT).send(error.message);
-        }
-    }
-
-    @Post('/account/register')
-    async register(@Body() credentials: Credentials, @Res() response: Response) {
-        console.log('register');
-        try {
-            await this.accountManager.register(credentials);
-            response.status(HttpStatus.OK).send();
-            console.log('200 OK');
-        } catch (error) {
-            response.status(HttpStatus.CONFLICT).send(error.message);
-            console.log('409 OK');
-        }
-    }
-
-    @Post('/account/login')
-    async login(@Body() creds: Credentials, @Res() response: Response) {
-        try {
-            const accountFound = await this.accountManager.connexion(creds);
-            response.status(HttpStatus.OK).send(accountFound);
-        } catch (error) {
-            response.status(HttpStatus.UNAUTHORIZED).send(error.message);
         }
     }
 }
