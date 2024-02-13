@@ -22,12 +22,19 @@ export class AccountManagerService implements OnModuleInit {
 
     async register(creds: Credentials) {
         try {
-            const accountFound = await this.accountModel.findOne({
+            const userFound = await this.accountModel.findOne({
                 'credentials.username': creds.username,
             });
 
-            if (accountFound) {
+            const emailFound = await this.accountModel.findOne({
+                'credentials.email': creds.email,
+            });
+
+            if (userFound) {
                 throw new Error('Username already taken');
+            }
+            if (emailFound) {
+                throw new Error('Email already taken');
             } else {
                 const newAccount: Account = {
                     credentials: creds,
@@ -52,9 +59,12 @@ export class AccountManagerService implements OnModuleInit {
     async connexion(creds: Credentials): Promise<Account> {
         try {
             const accountFound = await this.accountModel.findOne({
-                'credentials.username': creds.username,
-                'credentials.password': creds.password,
+                $or: [
+                    { 'credentials.username': creds.username, 'credentials.password': creds.password },
+                    { 'credentials.email': creds.email, 'credentials.password': creds.password },
+                ],
             });
+
             if (accountFound) {
                 if (!this.connectedProfiles.has(accountFound.credentials.username)) {
                     this.connectedProfiles.set(accountFound.credentials.username, accountFound.profile);
