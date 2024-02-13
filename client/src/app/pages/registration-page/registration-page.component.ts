@@ -29,21 +29,17 @@ export class RegistrationPageComponent {
 
     onSubmit() {
         if (this.loginForm.value.username && this.loginForm.value.email && this.loginForm.value.password) {
-            this.clientSocket.connect();
-            // this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
-            //     if (isConnected) {
-            //         this.router.navigate(['/home']);
-            //     }
-            // });
             this.userDetails = {
                 username: this.loginForm.value.username,
                 email: this.loginForm.value.email,
                 password: this.loginForm.value.password,
             };
-            this.gameManager.manageSocket();
-            this.communication.createUser(this.userDetails);
-            this.gameManager.username = this.loginForm.value.username;
-            this.router.navigate(['/home']);
+            this.communication.createUser(this.userDetails).subscribe(() => {
+                this.router.navigate(['/login']);
+                this.clientSocket.connect();
+                this.gameManager.manageSocket();
+                this.gameManager.username = this.loginForm.value.username;
+            });
         }
     }
 }

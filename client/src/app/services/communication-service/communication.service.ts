@@ -4,7 +4,7 @@ import { GameDetails } from '@app/interfaces/game-interfaces';
 import { UserDetails } from '@app/interfaces/user';
 import { CarouselPaginator, GameConfigConst, GameHistory } from '@common/game-interfaces';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -30,7 +30,11 @@ export class CommunicationService {
     }
 
     createUser(userData: UserDetails): Observable<void> {
-        return this.http.post<void>(`${this.accountUrl}`, userData).pipe(catchError(this.handleError<void>('createUser')));
+        return this.http.post<void>(`${this.accountUrl}`, userData).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {}),
+            catchError(this.handleError<void>('createUser')),
+        );
     }
 
     loadConfigConstants(): Observable<GameConfigConst> {
