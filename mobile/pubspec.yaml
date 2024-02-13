@@ -15,14 +15,30 @@ dependencies:
     english_words: ^4.0.0
     provider: ^6.0.0
     socket_io_client: ^2.0.0
+    mongo_dart: ^0.10.0
+    camera: ^0.10.5+9
+    path_provider: ^2.1.2
+    path:
+    image_picker: ^1.0.7
+    stacked: ^3.4.2
 
+#-------------------- ./ PACKAGES END ----------------#
 dev_dependencies:
     flutter_test:
         sdk: flutter
 
-    flutter_lints: ^2.0.0
+    flutter_lints: ^3.0.1
+    build_runner: ^2.1.4
+    stacked_generator: ^0.7.8
 
 flutter:
     uses-material-design: true
+
+    #-------------------- LOCAL ASSETS ----------------#
     assets:
-        - assets/
+        - assets/fonts/
+        - assets/icons/
+        - assets/images/
+        - assets/logos/
+
+    #-------------------- LOCAL FONTS ----------------#

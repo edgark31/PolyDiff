@@ -1,14 +1,14 @@
-import "enums.dart";
+import 'package:mobile/common/enums.dart';
 
-class ChatMessageGlobal {
+class ChatMessage {
   MessageTag tag;
   String message;
   String userName;
   String timestamp;
-  ChatMessageGlobal(this.tag, this.message, this.userName, this.timestamp);
+  ChatMessage(this.tag, this.message, this.userName, this.timestamp);
 
-  static ChatMessageGlobal fromJson(Map<String, dynamic> json) {
-    return ChatMessageGlobal(
+  static ChatMessage fromJson(Map<String, dynamic> json) {
+    return ChatMessage(
       MessageTag.values.firstWhere((element) => element.name == json['tag']),
       json['message'],
       json['userName'],

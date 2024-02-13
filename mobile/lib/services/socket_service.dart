@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/common/enums.dart';
+import 'package:mobile/models/chat_message_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-
-import '../common/enums.dart';
-import '../common/interfaces.dart';
 
 class SocketService extends ChangeNotifier {
   static const String serverIP = '34.118.163.79';
@@ -13,7 +12,7 @@ class SocketService extends ChangeNotifier {
     'autoConnect': false,
   });
 
-  final List<ChatMessageGlobal> messages = [];
+  final List<ChatMessage> messages = [];
   String approvedName = '';
   String inputName = '';
 
@@ -23,7 +22,7 @@ class SocketService extends ChangeNotifier {
   String get userName => approvedName;
   bool get connectionStatus => isConnectionApproved;
   bool get socketStatus => isSocketConnected;
-  List<ChatMessageGlobal> get allMessages => List.unmodifiable(messages);
+  List<ChatMessage> get allMessages => List.unmodifiable(messages);
 
   void setup() {
     socket.onConnect((_) {
@@ -57,7 +56,7 @@ class SocketService extends ChangeNotifier {
 
     socket.on(MessageEvents.GlobalMessage.name, (data) {
       print('GlobalMessage received: $data');
-      ChatMessageGlobal message = ChatMessageGlobal.fromJson(data);
+      ChatMessage message = ChatMessage.fromJson(data);
       print('Message: ${message.message}');
       print('Tag: ${message.tag}');
       print('User: ${message.userName}');
@@ -82,7 +81,7 @@ class SocketService extends ChangeNotifier {
 
   void sendTestMessage() {
     print('Sending test message');
-    final ChatMessageGlobal testMessage = ChatMessageGlobal(
+    final ChatMessage testMessage = ChatMessage(
       MessageTag.Sent,
       'test message',
       'Zooboomafoo',
@@ -91,12 +90,12 @@ class SocketService extends ChangeNotifier {
     socket.emit(MessageEvents.GlobalMessage.name, testMessage.toJson());
   }
 
-  void sendMessage(ChatMessageGlobal message) {
+  void sendMessage(ChatMessage message) {
     print('Sending message');
     socket.emit(MessageEvents.GlobalMessage.name, message.toJson());
   }
 
-  void addMessage(ChatMessageGlobal message) {
+  void addMessage(ChatMessage message) {
     messages.add(message);
     notifyListeners();
     print(allMessages.length);

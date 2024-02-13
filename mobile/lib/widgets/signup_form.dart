@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile/main.dart';
 import 'package:provider/provider.dart';
 
-import 'services/socket_service.dart';
+import '../pages/login_page.dart';
+import '../services/socket_service.dart';
 
-class CreationForm extends StatefulWidget {
+class SignUpForm extends StatefulWidget {
   @override
-  State<CreationForm> createState() => _CreationFormState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _CreationFormState extends State<CreationForm> {
+class _SignUpFormState extends State<SignUpForm> {
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();

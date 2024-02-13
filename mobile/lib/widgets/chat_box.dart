@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/main.dart';
+import 'package:mobile/common/enums.dart';
+import 'package:mobile/models/chat_message_model.dart';
+import 'package:mobile/pages/login_page.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
-
-import 'common/enums.dart';
-import 'common/interfaces.dart';
-import 'services/socket_service.dart';
 
 class ChatBox extends StatefulWidget {
   @override
@@ -167,7 +166,7 @@ class _ChatBoxState extends State<ChatBox> {
                       if (message.isNotEmpty &&
                           socketService.connectionStatus) {
                         socketService.sendMessage(
-                          ChatMessageGlobal(
+                          ChatMessage(
                             MessageTag.Sent,
                             message,
                             socketService.userName,

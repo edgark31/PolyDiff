@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'chat_box.dart';
+import 'package:mobile/widgets/chat_box.dart';
 
 class ChatPage extends StatelessWidget {
   @override
@@ -11,7 +10,7 @@ class ChatPage extends StatelessWidget {
         height: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/MenuBackground.jpg'),
+            image: AssetImage('assets/images/MenuBackground.jpg'),
             fit: BoxFit.cover,
           ),
         ),
