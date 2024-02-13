@@ -2,9 +2,10 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserDetails } from '@app/interfaces/user';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
-import { ConnectionEvents } from '@common/enums';
 
 @Component({
     selector: 'app-registration-page',
@@ -17,25 +18,32 @@ export class RegistrationPageComponent {
         email: new FormControl('', [Validators.required, Validators.email]),
         password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
+    userDetails: UserDetails;
 
     constructor(
         private readonly gameManager: GameManagerService,
         private readonly clientSocket: ClientSocketService,
+        private readonly communication: CommunicationService,
         private readonly router: Router,
     ) {}
 
     onSubmit() {
-        if (this.loginForm.value.username && this.loginForm.value.password) {
+        if (this.loginForm.value.username && this.loginForm.value.email && this.loginForm.value.password) {
             this.clientSocket.connect();
-            this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
-                if (isConnected) {
-                    this.router.navigate(['/home']);
-                }
-            });
+            // this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
+            //     if (isConnected) {
+            //         this.router.navigate(['/home']);
+            //     }
+            // });
+            this.userDetails = {
+                username: this.loginForm.value.username,
+                email: this.loginForm.value.email,
+                password: this.loginForm.value.password,
+            };
             this.gameManager.manageSocket();
-            this.clientSocket.send(ConnectionEvents.UserConnectionRequest, this.loginForm.value.username);
-            this.clientSocket.send(ConnectionEvents.UserConnectionRequest, this.loginForm.value.password);
+            this.communication.createUser(this.userDetails);
             this.gameManager.username = this.loginForm.value.username;
+            this.router.navigate(['/home']);
         }
     }
 }

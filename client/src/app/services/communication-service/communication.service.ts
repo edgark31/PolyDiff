@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameDetails } from '@app/interfaces/game-interfaces';
+import { UserDetails } from '@app/interfaces/user';
 import { CarouselPaginator, GameConfigConst, GameHistory } from '@common/game-interfaces';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -11,9 +12,11 @@ import { environment } from 'src/environments/environment';
 })
 export class CommunicationService {
     private readonly gameUrl: string;
+    private readonly accountUrl: string;
 
     constructor(private readonly http: HttpClient) {
         this.gameUrl = environment.serverUrl + '/games';
+        this.accountUrl = environment.serverUrl + '/account';
     }
 
     loadGameCarrousel(index: number): Observable<CarouselPaginator> {
@@ -24,6 +27,10 @@ export class CommunicationService {
 
     postGame(gameData: GameDetails): Observable<void> {
         return this.http.post<void>(`${this.gameUrl}`, gameData).pipe(catchError(this.handleError<void>('postGame')));
+    }
+
+    createUser(userData: UserDetails): Observable<void> {
+        return this.http.post<void>(`${this.accountUrl}`, userData).pipe(catchError(this.handleError<void>('createUser')));
     }
 
     loadConfigConstants(): Observable<GameConfigConst> {
