@@ -1,13 +1,11 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-
-List<CameraDescription> cameras;
+import 'package:mobile/screens/camera_screen.dart';
 
 class CameraPage extends StatelessWidget {
-  const CameraPage({Key key}) : super(key: key);
+  const CameraPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CameraSceen();
+    return CameraScreen();
   }
 }
