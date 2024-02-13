@@ -1,14 +1,21 @@
 import 'package:mobile/common/enums.dart';
 
-class ChatMessage {
+class ChatMessageModel {
   MessageTag tag;
   String message;
   String userName;
   String timestamp;
-  ChatMessage(this.tag, this.message, this.userName, this.timestamp);
+  ChatMessageModel(this.tag, this.message, this.userName, this.timestamp);
 
-  static ChatMessage fromJson(Map<String, dynamic> json) {
-    return ChatMessage(
+  // ChatMessageModel({
+  //   required this.tag,
+  //   required this.message,
+  //   required this.userName,
+  //   required this.timestamp,
+  // })
+
+  static ChatMessageModel fromJson(Map<String, dynamic> json) {
+    return ChatMessageModel(
       MessageTag.values.firstWhere((element) => element.name == json['tag']),
       json['message'],
       json['userName'],
