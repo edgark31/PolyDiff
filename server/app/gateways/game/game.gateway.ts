@@ -1,3 +1,4 @@
+import { AccountManagerService } from '@app/services/account-manager/account-manager/account-manager.service';
 import { ClassicModeService } from '@app/services/classic-mode/classic-mode.service';
 import { LimitedModeService } from '@app/services/limited-mode/limited-mode.service';
 import { PlayersListManagerService } from '@app/services/players-list-manager/players-list-manager.service';
@@ -15,16 +16,22 @@ import {
     WebSocketGateway,
     WebSocketServer,
 } from '@nestjs/websockets';
+import { instrument } from '@socket.io/admin-ui';
 import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
 
-@WebSocketGateway(
-    WebSocketGateway({
-        cors: {
-            origin: '*',
+@WebSocketGateway({
+    cors: {
+        origin: (origin, callback) => {
+            if (origin === undefined || origin === 'https://admin.socket.io') {
+                callback(null, true);
+            } else {
+                callback(null, '*');
+            }
         },
-    }),
-)
+        credentials: true,
+    },
+})
 @Injectable()
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
     @WebSocketServer() private server: Server;
@@ -38,6 +45,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         private readonly playersListManagerService: PlayersListManagerService,
         private readonly roomsManagerService: RoomsManagerService,
         private readonly limitedModeService: LimitedModeService,
+        private readonly accountManager: AccountManagerService,
     ) {}
 
     @SubscribeMessage(GameEvents.StartGameByRoomId)
@@ -198,25 +206,34 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     @SubscribeMessage(ConnectionEvents.UserConnectionRequest)
-    processConnection(@ConnectedSocket() socket: Socket, @MessageBody('name') name: string) {
+    processConnection(@ConnectedSocket() socket: Socket, @MessageBody() name: string) {
         const canConnect = !Array.from(this.mapSocketWithName.values()).some((value) => value === name);
         socket.emit(ConnectionEvents.UserConnectionRequest, canConnect);
         if (canConnect) {
-            this.logger.log(`Connexion au chat acceptée pour ${name} avec id : ${socket.id}`);
+            this.logger.debug(`ACCEPT :: pour ${String(name)} avec id : ${socket.id}`);
             this.mapSocketWithName.set(socket.id, name);
         } else {
-            this.logger.log(`Connexion au chat refusée pour ${name} avec id : ${socket.id}`);
+            this.logger.error(`REFUS :: pour ${String(name)} avec id : ${socket.id}`);
         }
     }
 
     @SubscribeMessage(MessageEvents.GlobalMessage)
     processMessage(@MessageBody() dataMessage: ChatMessageGlobal) {
-        this.logger.log(`Message reçu : ${dataMessage.message} de la part de ${dataMessage.userName}`);
-        dataMessage.timestamp = new Date().toLocaleTimeString();
+        this.logger.log(`MESSAGE :::: ${dataMessage.userName} a dit ${dataMessage.message}`);
+        dataMessage.timestamp = new Date().toLocaleTimeString('en-US', {
+            timeZone: 'America/Toronto',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        });
         this.server.emit(MessageEvents.GlobalMessage, dataMessage);
     }
 
     afterInit() {
+        instrument(this.server, {
+            auth: false,
+            mode: 'development',
+        });
         setInterval(() => {
             this.roomsManagerService.updateTimers(this.server);
         }, DELAY_BEFORE_EMITTING_TIME);
@@ -228,6 +245,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     async handleDisconnect(@ConnectedSocket() socket: Socket) {
         this.logger.log(`Déconnexion par l'utilisateur avec id : ${socket.id}`);
+        this.accountManager.deconnexion(this.mapSocketWithName.get(socket.id));
         this.mapSocketWithName.delete(socket.id);
         // await this.classicModeService.handleSocketDisconnect(socket, this.server);
     }
