@@ -14,6 +14,7 @@ import { ConnectionEvents } from '@common/enums';
 export class RegistrationPageComponent {
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
+        email: new FormControl('', [Validators.required, Validators.email]),
         password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
 
