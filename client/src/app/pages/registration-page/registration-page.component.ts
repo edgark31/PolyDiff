@@ -11,7 +11,7 @@ import { CommunicationService } from '@app/services/communication-service/commun
     styleUrls: ['./registration-page.component.scss'],
 })
 export class RegistrationPageComponent {
-    loginForm = new FormGroup({
+    registrationForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
         email: new FormControl('', [Validators.required, Validators.email]),
         password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
@@ -21,11 +21,11 @@ export class RegistrationPageComponent {
     constructor(private readonly communication: CommunicationService, private readonly router: Router) {}
 
     onSubmit() {
-        if (this.loginForm.value.username && this.loginForm.value.email && this.loginForm.value.password) {
+        if (this.registrationForm.value.username && this.registrationForm.value.email && this.registrationForm.value.password) {
             this.userDetails = {
-                username: this.loginForm.value.username,
-                email: this.loginForm.value.email,
-                password: this.loginForm.value.password,
+                username: this.registrationForm.value.username,
+                email: this.registrationForm.value.email,
+                password: this.registrationForm.value.password,
             };
             this.communication.createUser(this.userDetails).subscribe(() => {
                 this.router.navigate(['/login']);

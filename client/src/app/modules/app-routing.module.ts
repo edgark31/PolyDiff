@@ -6,6 +6,7 @@ import { GamePageComponent } from '@app/pages/game-page/game-page.component';
 import { LimitedTimePageComponent } from '@app/pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from '@app/pages/login-page/login-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
+import { RecoverPasswordPageComponent } from '@app/pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from '@app/pages/registration-page/registration-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
 
@@ -19,6 +20,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginPageComponent },
     { path: 'limited', component: LimitedTimePageComponent },
     { path: 'registration', component: RegistrationPageComponent },
+    { path: 'recover-password', component: RecoverPasswordPageComponent },
     { path: '**', redirectTo: '/login' },
 ];
 
