@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/widgets/signup_form.dart';
+import '../widgets/signup_form.dart';
 
-class SignupPage extends StatelessWidget {
+class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Row(
         children: [
           Flexible(
@@ -22,7 +23,7 @@ class SignupPage extends StatelessWidget {
             flex: 3,
             child: Expanded(
               child: Center(
-                child: CreationFormScreen(),
+                child: SignUpForm(),
               ),
             ),
           ),

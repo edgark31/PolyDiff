@@ -21,7 +21,8 @@ class MyApp extends StatelessWidget {
         title: 'PolyDiff',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Color.fromARGB(255, 124, 163, 130)),
         ),
         home: LoginPage(),
       ),

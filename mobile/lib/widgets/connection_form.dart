@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile/pages/chat_page.dart';
 import 'package:mobile/pages/signup_page.dart';
-import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
+
+import '../pages/chat_page.dart';
+import '../services/socket_service.dart';
 
 class ConnectionForm extends StatefulWidget {
   @override
@@ -128,8 +129,8 @@ class _ConnectionFormState extends State<ConnectionForm> {
                           // TODO optionnel: rendre ca clean pas if if if if
                           String userName = userNameController.text;
                           if (userName.isNotEmpty) {
-                            print(
-                                "Sending the server your username: $userName");
+                            print("Sending the server your username: " +
+                                userName);
                             socketService.checkName(userName);
                           } else {
                             setState(() {
@@ -178,7 +179,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => SignupPage(),
+                            builder: (context) => SignUpPage(),
                           ),
                         );
                       },
