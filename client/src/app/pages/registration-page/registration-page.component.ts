@@ -3,9 +3,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserDetails } from '@app/interfaces/user';
-import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
-import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 
 @Component({
     selector: 'app-registration-page',
@@ -20,12 +18,7 @@ export class RegistrationPageComponent {
     });
     userDetails: UserDetails;
 
-    constructor(
-        private readonly gameManager: GameManagerService,
-        private readonly clientSocket: ClientSocketService,
-        private readonly communication: CommunicationService,
-        private readonly router: Router,
-    ) {}
+    constructor(private readonly communication: CommunicationService, private readonly router: Router) {}
 
     onSubmit() {
         if (this.loginForm.value.username && this.loginForm.value.email && this.loginForm.value.password) {
@@ -36,9 +29,6 @@ export class RegistrationPageComponent {
             };
             this.communication.createUser(this.userDetails).subscribe(() => {
                 this.router.navigate(['/login']);
-                this.clientSocket.connect();
-                this.gameManager.manageSocket();
-                this.gameManager.username = this.loginForm.value.username;
             });
         }
     }

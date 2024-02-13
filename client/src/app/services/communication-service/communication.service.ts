@@ -32,7 +32,10 @@ export class CommunicationService {
     createUser(userData: UserDetails): Observable<void> {
         return this.http.post<void>(`${this.accountUrl}`, userData).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
-            tap(() => {}),
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('User created');
+            }),
             catchError(this.handleError<void>('createUser')),
         );
     }
