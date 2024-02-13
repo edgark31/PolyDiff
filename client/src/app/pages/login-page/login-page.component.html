@@ -1,0 +1,9 @@
+<form [formGroup]="loginForm">
+    <h1>Connexion</h1>
+    <div class="form-control">
+        <label for="username">Nom d'utilisateur</label>
+        <input formControlName="username" id="username"/>
+    </div>
+    <button type="submit" (click)="onSubmit()">Se connecter</button>
+</form>
+<img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>   
