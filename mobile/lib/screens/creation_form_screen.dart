@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile/main.dart';
+import 'package:mobile/pages/login_page.dart';
 import 'package:provider/provider.dart';
 
-import 'services/socket_service.dart';
+import '../services/socket_service.dart';
 
-class CreationForm extends StatefulWidget {
+class CreationFormScreen extends StatefulWidget {
   @override
-  State<CreationForm> createState() => _CreationFormState();
+  State<CreationFormScreen> createState() => _CreationFormState();
 }
 
-class _CreationFormState extends State<CreationForm> {
+class _CreationFormState extends State<CreationFormScreen> {
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -214,8 +214,8 @@ class _CreationFormState extends State<CreationForm> {
                             // TODO optionnel: rendre ca clean pas if if if if
                             String userName = userNameController.text;
                             if (userName.isNotEmpty) {
-                              print("Sending the server your username: " +
-                                  userName);
+                              print(
+                                  "Sending the server your username: $userName");
                               socketService.checkName(userName);
                             } else {
                               setState(() {
