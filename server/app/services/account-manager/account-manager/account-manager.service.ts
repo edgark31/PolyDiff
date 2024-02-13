@@ -61,7 +61,7 @@ export class AccountManagerService implements OnModuleInit {
             const accountFound = await this.accountModel.findOne({
                 $or: [
                     { 'credentials.username': creds.username, 'credentials.password': creds.password },
-                    { 'credentials.email': creds.email, 'credentials.password': creds.password },
+                    { 'credentials.email': creds.username, 'credentials.password': creds.password },
                 ],
             });
 
