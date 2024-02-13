@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameDetails } from '@app/interfaces/game-interfaces';
-import { UserDetails } from '@app/interfaces/user';
-import { CarouselPaginator, GameConfigConst, GameHistory } from '@common/game-interfaces';
+import { Account, CarouselPaginator, Credentials, GameConfigConst, GameHistory } from '@common/game-interfaces';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -29,14 +28,25 @@ export class CommunicationService {
         return this.http.post<void>(`${this.gameUrl}`, gameData).pipe(catchError(this.handleError<void>('postGame')));
     }
 
-    createUser(userData: UserDetails): Observable<void> {
-        return this.http.post<void>(`${this.accountUrl}/register`, userData).pipe(
+    createUser(creds: Credentials): Observable<void> {
+        return this.http.post<void>(`${this.accountUrl}/register`, creds).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
                 console.log('User created');
             }),
             catchError(this.handleError<void>('createUser')),
+        );
+    }
+
+    login(creds: Credentials): Observable<Account> {
+        return this.http.post<Account>(`${this.accountUrl}/login`, creds).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('logged in');
+            }),
+            catchError(this.handleError<Account>('login')),
         );
     }
 

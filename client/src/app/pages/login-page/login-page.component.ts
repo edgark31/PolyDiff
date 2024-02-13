@@ -3,8 +3,9 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
-import { ConnectionEvents } from '@common/enums';
+import { Account, Credentials } from '@common/game-interfaces';
 
 @Component({
     selector: 'app-login-page',
@@ -16,25 +17,27 @@ export class LoginPageComponent {
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
         password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
+    creds: Credentials;
 
     constructor(
         private readonly gameManager: GameManagerService,
         private readonly clientSocket: ClientSocketService,
+        private readonly communication: CommunicationService,
         private readonly router: Router,
     ) {}
 
     onSubmit() {
         if (this.loginForm.value.username && this.loginForm.value.password) {
-            this.clientSocket.connect();
-            this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
-                if (isConnected) {
-                    this.router.navigate(['/home']);
-                }
+            this.creds = {
+                username: this.loginForm.value.username,
+                password: this.loginForm.value.password,
+            };
+            this.communication.login(this.creds).subscribe((account: Account) => {
+                this.clientSocket.connect();
+                this.gameManager.manageSocket();
+                this.gameManager.username = account.credentials.username;
+                this.router.navigate(['/home']);
             });
-            this.gameManager.manageSocket();
-            this.clientSocket.send(ConnectionEvents.UserConnectionRequest, this.loginForm.value.username);
-            this.clientSocket.send(ConnectionEvents.UserConnectionRequest, this.loginForm.value.password);
-            this.gameManager.username = this.loginForm.value.username;
         }
     }
 }
