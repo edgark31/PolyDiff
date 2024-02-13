@@ -1,0 +1,121 @@
+#combined-canvas {
+    display: none;
+}
+
+*:not(#creation) {
+    z-index: 1;
+}
+
+p {
+    color: black;
+    font-weight: bold;
+}
+
+.users-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+#radio-buttons {
+    padding-right: 100px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#radio-buttons div {
+    margin: 5px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#radio-buttons #buttons {
+    padding-left: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+#radio-buttons p {
+    margin-right: 13px;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 13px;
+}
+
+#canvas-zone {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-direction: row;
+}
+
+#middle-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-direction: column;
+}
+
+#upload-btn {
+    display: none;
+}
+
+#creation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+#run {
+    width: 16%;
+    height: 16%;
+    position: absolute;
+    top: 70%;
+    animation-name: slide-right;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-direction: normal;
+    transform-style: preserve-3d;
+  }
+  
+  @keyframes slide-right {
+    0% {
+      left: 0%;
+      transform: scaleX(1);
+    }
+    49% {
+      left: 83%;
+      transform: scaleX(1);
+    }
+    50% {
+      left: 83%;
+      transform: scaleX(-1);
+      top: 80%
+    }
+    99% {
+      left: 0%;
+      transform: scaleX(-1);
+    }
+    100% {
+      left: 0%;
+      transform: scaleX(1);
+    }
+  }
+  
+  
+  
+ 
+  
