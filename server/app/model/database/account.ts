@@ -67,9 +67,6 @@ export const friendSchema = SchemaFactory.createForClass(Friend);
 @Schema()
 export class Profile {
     @Prop({ required: true })
-    pseudo: string;
-
-    @Prop({ required: true })
     avatar: string;
 
     @Prop({ type: [sessionLogSchema], default: [] })
@@ -106,10 +103,6 @@ export const credentialsSchema = SchemaFactory.createForClass(Credentials);
 
 @Schema()
 export class Account {
-    @ApiProperty()
-    @Prop({ required: true })
-    accountId: string;
-
     @ApiProperty()
     @Prop({ required: true, type: credentialsSchema })
     credentials: Credentials;

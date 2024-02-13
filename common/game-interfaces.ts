@@ -160,7 +160,6 @@ export interface Game {
 }
 
 export interface Account {
-    accountId: number;
     credentials: Credentials;
     profile: Profile;
 }
@@ -172,7 +171,6 @@ export interface Credentials {
 }
 
 export interface Profile {
-    pseudo: string;
     avatar: string;
     sessions: SessionLog[];
     connexions: ConnexionLog[];

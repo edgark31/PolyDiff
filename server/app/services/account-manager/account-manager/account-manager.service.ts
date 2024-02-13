@@ -27,16 +27,11 @@ export class AccountManagerService implements OnModuleInit {
             });
 
             if (accountFound) {
-                this.logger.error('Username already taken');
                 throw new Error('Username already taken');
             } else {
-                const r1 = 8;
-                const r2 = 4;
                 const newAccount: Account = {
-                    accountId: Math.random().toString(r1).substring(2, r2),
                     credentials: creds,
                     profile: {
-                        pseudo: 'LambdaLegend',
                         avatar: 'url',
                         sessions: [],
                         connexions: [],
@@ -46,7 +41,7 @@ export class AccountManagerService implements OnModuleInit {
                     },
                 };
                 await this.accountModel.create(newAccount);
-                this.logger.warn(`Account ${creds.username} has registered successfully`);
+                this.logger.verbose(`Account ${creds.username} has registered successfully`);
             }
         } catch (error) {
             this.logger.error(`Failed to add account --> ${error.message}`);
@@ -66,14 +61,13 @@ export class AccountManagerService implements OnModuleInit {
                     this.showProfiles();
                     return Promise.resolve(accountFound);
                 } else {
-                    this.logger.warn('Account already connected');
                     throw new Error('Account already connected');
                 }
             } else {
-                this.logger.error('Account not found');
                 throw new Error('Account not found');
             }
         } catch (error) {
+            this.logger.error(`Failed to connect account --> ${error.message}`);
             return Promise.reject(`Failed to connect account --> ${error}`);
         }
     }
@@ -84,9 +78,9 @@ export class AccountManagerService implements OnModuleInit {
     }
 
     showProfiles(): void {
-        this.logger.warn('Connected profiles: ');
+        this.logger.verbose('Connected profiles: ');
         this.connectedProfiles.forEach((value, key) => {
-            this.logger.warn(`${key}`);
+            this.logger.verbose(`${key}`);
         });
     }
 }
