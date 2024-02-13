@@ -6,11 +6,15 @@ import 'package:provider/provider.dart';
 
 import 'services/socket_service.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
 
-  cameras = await availableCameras();
+//   cameras = await availableCameras();
 
+//   runApp(MyApp());
+// }
+
+void main() {
   runApp(MyApp());
 }
 
