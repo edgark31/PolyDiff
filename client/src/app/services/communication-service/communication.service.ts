@@ -30,7 +30,7 @@ export class CommunicationService {
     }
 
     createUser(userData: UserDetails): Observable<void> {
-        return this.http.post<void>(`${this.accountUrl}`, userData).pipe(
+        return this.http.post<void>(`${this.accountUrl}/register`, userData).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
