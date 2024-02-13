@@ -166,7 +166,7 @@ class _ChatBoxState extends State<ChatBoxScreen> {
                       if (message.isNotEmpty &&
                           socketService.connectionStatus) {
                         socketService.sendMessage(
-                          ChatMessageModel(
+                          ChatMessage(
                             MessageTag.Sent,
                             message,
                             socketService.userName,
