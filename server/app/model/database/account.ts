@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 
 @Schema()
 export class SessionLog {
@@ -73,16 +73,16 @@ export class Profile {
     avatar: string;
 
     @Prop({ type: [sessionLogSchema], default: [] })
-    sessions: Types.Array<SessionLog>;
+    sessions: SessionLog[];
 
     @Prop({ type: [connexionLogSchema], default: [] })
-    connexions: Types.Array<ConnexionLog>;
+    connexions: ConnexionLog[];
 
     @Prop({ type: statisticsSchema, required: true })
     stats: Statistics;
 
     @Prop({ type: [friendSchema], default: [] })
-    friends: Types.Array<Friend>;
+    friends: Friend[];
 
     @Prop({ type: [String], default: [] })
     friendRequests: string[];

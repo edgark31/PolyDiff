@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
 import { Profile } from '@common/game-interfaces';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -20,19 +20,36 @@ export class AccountManagerService implements OnModuleInit {
         // });
     }
 
-    async register(credentials: Credentials) {
+    async register(creds: Credentials) {
         try {
             const accountFound = await this.accountModel.findOne({
-                'credentials.username': credentials.username,
+                'credentials.username': creds.username,
             });
+
             if (accountFound) {
                 this.logger.error('Username already taken');
                 throw new Error('Username already taken');
             } else {
-                await this.accountModel.create(credentials);
-                this.logger.warn(`Account ${credentials.username} has been added to the database`);
+                const r1 = 8;
+                const r2 = 4;
+                const newAccount: Account = {
+                    accountId: Math.random().toString(r1).substring(2, r2),
+                    credentials: creds,
+                    profile: {
+                        pseudo: 'LambdaLegend',
+                        avatar: 'url',
+                        sessions: [],
+                        connexions: [],
+                        stats: {} as Statistics,
+                        friends: [],
+                        friendRequests: [],
+                    },
+                };
+                await this.accountModel.create(newAccount);
+                this.logger.warn(`Account ${creds.username} has registered successfully`);
             }
         } catch (error) {
+            this.logger.error(`Failed to add account --> ${error.message}`);
             return Promise.reject(`Failed to add account --> ${error}`);
         }
     }

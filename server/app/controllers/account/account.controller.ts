@@ -9,7 +9,7 @@ import { Response } from 'express';
 export class AccountController {
     constructor(private readonly accountManager: AccountManagerService) {}
 
-    @Post('/register')
+    @Post('register')
     async register(@Body() creds: Credentials, @Res() response: Response) {
         try {
             await this.accountManager.register(creds);
@@ -19,7 +19,7 @@ export class AccountController {
         }
     }
 
-    @Post('/login')
+    @Post('login')
     async login(@Body() creds: Credentials, @Res() response: Response) {
         try {
             const accountFound = await this.accountManager.connexion(creds);

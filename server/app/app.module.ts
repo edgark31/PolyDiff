@@ -1,6 +1,7 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AccountController } from './controllers/account/account.controller';
 import { GameController } from './controllers/game/game.controller';
 import { GameGateway } from './gateways/game/game.gateway';
 import { Account, accountSchema } from './model/database/account';
@@ -37,7 +38,7 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
             { name: GameHistory.name, schema: gameHistorySchema },
         ]),
     ],
-    controllers: [GameController],
+    controllers: [GameController, AccountController],
     providers: [
         Logger,
         GameService,
