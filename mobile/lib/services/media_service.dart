@@ -8,7 +8,7 @@ class MediaService {
     final XFile? image = await _picker.pickImage(
       source: fromGallery ? ImageSource.gallery : ImageSource.camera,
     );
-    final File? file = File(image!.path);
+    final File file = File(image!.path);
     return file;
   }
 }

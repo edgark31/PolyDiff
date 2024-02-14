@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/common/enums.dart';
 import 'package:mobile/models/chat_message_model.dart';
+import 'package:mobile/views/common/enums.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends ChangeNotifier {
