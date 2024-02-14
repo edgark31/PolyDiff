@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,13 +19,16 @@ export class LoginPageComponent {
         password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
     creds: Credentials;
+    feedback: string;
 
     constructor(
         private readonly gameManager: GameManagerService,
         private readonly clientSocket: ClientSocketService,
         private readonly communication: CommunicationService,
         private readonly router: Router,
-    ) {}
+    ) {
+        this.feedback = '';
+    }
 
     onSubmit() {
         if (this.loginForm.value.username && this.loginForm.value.password) {
@@ -32,11 +36,16 @@ export class LoginPageComponent {
                 username: this.loginForm.value.username,
                 password: this.loginForm.value.password,
             };
-            this.communication.login(this.creds).subscribe((account: Account) => {
-                this.clientSocket.connect();
-                this.gameManager.manageSocket();
-                this.gameManager.username = account.credentials.username;
-                this.router.navigate(['/home']);
+            this.communication.login(this.creds).subscribe({
+                next: (account: Account) => {
+                    this.clientSocket.connect();
+                    this.gameManager.manageSocket();
+                    this.gameManager.username = account.credentials.username;
+                    this.router.navigate(['/home']);
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+                },
             });
         }
     }
