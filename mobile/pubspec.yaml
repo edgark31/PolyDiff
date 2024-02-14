@@ -20,6 +20,16 @@ dependencies:
     path_provider: ^2.1.2
     path:
     image_picker: ^1.0.7
+    dart_frog: ^1.1.0
+    crypto: ^3.0.3
+    jaguar_jwt: ^3.0.0
+    google_fonts: ^6.1.0
+    flutter_screenutil: ^5.9.0
+    get: ^4.6.6
+    shared_preferences: ^2.2.2
+    image_cropper: ^5.0.1
+    http: ^1.2.0
+    cupertino_icons: ^1.0.6
 
 #-------------------- ./ PACKAGES END ----------------#
 dev_dependencies:
