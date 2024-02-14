@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/common/enums.dart';
 import 'package:mobile/models/chat_message_model.dart';
-import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/services/socket_service.dart';
+import 'package:mobile/views/common/enums.dart';
+import 'package:mobile/views/ui/auth/login.dart';
 import 'package:provider/provider.dart';
 
 class ChatBoxScreen extends StatefulWidget {
