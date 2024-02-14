@@ -32,8 +32,7 @@ export class AccountManagerService implements OnModuleInit {
 
             if (userFound) {
                 throw new Error('Username already taken');
-            }
-            if (emailFound) {
+            } else if (emailFound) {
                 throw new Error('Email already taken');
             } else {
                 const newAccount: Account = {
@@ -52,7 +51,7 @@ export class AccountManagerService implements OnModuleInit {
             }
         } catch (error) {
             this.logger.error(`Failed to add account --> ${error.message}`);
-            return Promise.reject(`Failed to add account --> ${error}`);
+            return Promise.reject(`${error}`);
         }
     }
 
@@ -78,7 +77,7 @@ export class AccountManagerService implements OnModuleInit {
             }
         } catch (error) {
             this.logger.error(`Failed to connect account --> ${error.message}`);
-            return Promise.reject(`Failed to connect account --> ${error}`);
+            return Promise.reject(`${error}`);
         }
     }
 
@@ -92,5 +91,15 @@ export class AccountManagerService implements OnModuleInit {
         this.connectedProfiles.forEach((value, key) => {
             this.logger.verbose(`${key}`);
         });
+    }
+
+    async delete() {
+        try {
+            await this.accountModel.deleteMany({});
+            this.logger.verbose('All accounts have been deleted');
+        } catch (error) {
+            this.logger.error(`Failed to delete accounts --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
     }
 }

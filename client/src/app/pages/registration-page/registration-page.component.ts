@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -17,18 +18,27 @@ export class RegistrationPageComponent {
         password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
     creds: Credentials;
+    feedback: string;
 
-    constructor(private readonly communication: CommunicationService, private readonly router: Router) {}
+    constructor(private readonly communication: CommunicationService, private readonly router: Router) {
+        this.feedback = '';
+    }
 
     onSubmit() {
         if (this.registrationForm.value.username && this.registrationForm.value.email && this.registrationForm.value.password) {
+            this.feedback = '';
             this.creds = {
                 username: this.registrationForm.value.username,
                 email: this.registrationForm.value.email,
                 password: this.registrationForm.value.password,
             };
-            this.communication.createUser(this.creds).subscribe(() => {
-                this.router.navigate(['/login']);
+            this.communication.createUser(this.creds).subscribe({
+                next: () => {
+                    this.router.navigate(['/login']);
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+                },
             });
         }
     }

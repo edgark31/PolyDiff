@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameDetails } from '@app/interfaces/game-interfaces';
 import { Account, CarouselPaginator, Credentials, GameConfigConst, GameHistory } from '@common/game-interfaces';
-import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -19,13 +19,11 @@ export class CommunicationService {
     }
 
     loadGameCarrousel(index: number): Observable<CarouselPaginator> {
-        return this.http
-            .get<CarouselPaginator>(`${this.gameUrl}/carousel/${index}`)
-            .pipe(catchError(this.handleError<CarouselPaginator>('loadGameCarousel')));
+        return this.http.get<CarouselPaginator>(`${this.gameUrl}/carousel/${index}`);
     }
 
     postGame(gameData: GameDetails): Observable<void> {
-        return this.http.post<void>(`${this.gameUrl}`, gameData).pipe(catchError(this.handleError<void>('postGame')));
+        return this.http.post<void>(`${this.gameUrl}`, gameData);
     }
 
     createUser(creds: Credentials): Observable<void> {
@@ -35,7 +33,6 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('User created');
             }),
-            catchError(this.handleError<void>('createUser')),
         );
     }
 
@@ -46,39 +43,34 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('logged in');
             }),
-            catchError(this.handleError<Account>('login')),
         );
     }
 
     loadConfigConstants(): Observable<GameConfigConst> {
-        return this.http.get<GameConfigConst>(`${this.gameUrl}/constants`).pipe(catchError(this.handleError<GameConfigConst>('loadConfigConstants')));
+        return this.http.get<GameConfigConst>(`${this.gameUrl}/constants`);
     }
 
     loadGameHistory(): Observable<GameHistory[]> {
-        return this.http.get<GameHistory[]>(`${this.gameUrl}/history`).pipe(catchError(this.handleError<GameHistory[]>('loadGameHistory')));
+        return this.http.get<GameHistory[]>(`${this.gameUrl}/history`);
     }
 
     deleteGameById(id: string): Observable<void> {
-        return this.http.delete<void>(`${this.gameUrl}/${id}`).pipe(catchError(this.handleError<void>('deleteGameById')));
+        return this.http.delete<void>(`${this.gameUrl}/${id}`);
     }
 
     deleteAllGames(): Observable<void> {
-        return this.http.delete<void>(`${this.gameUrl}`).pipe(catchError(this.handleError<void>('deleteAllGames')));
+        return this.http.delete<void>(`${this.gameUrl}`);
     }
 
     deleteAllGamesHistory(): Observable<void> {
-        return this.http.delete<void>(`${this.gameUrl}/history`).pipe(catchError(this.handleError<void>('deleteAllGamesHistory')));
+        return this.http.delete<void>(`${this.gameUrl}/history`);
     }
 
     verifyIfGameExists(name: string): Observable<boolean> {
-        return this.http.get<boolean>(`${this.gameUrl}/?name=${name}`).pipe(catchError(this.handleError<boolean>('verifyIfGameExists')));
+        return this.http.get<boolean>(`${this.gameUrl}/?name=${name}`);
     }
 
     updateGameConstants(gameConstants: GameConfigConst): Observable<void> {
-        return this.http.put<void>(`${this.gameUrl}/constants`, gameConstants).pipe(catchError(this.handleError<void>('updateGameConstants')));
-    }
-
-    private handleError<T>(_request: string, result?: T): (error: Error) => Observable<T> {
-        return () => of(result as T);
+        return this.http.put<void>(`${this.gameUrl}/constants`, gameConstants);
     }
 }
