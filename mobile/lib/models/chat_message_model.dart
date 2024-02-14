@@ -1,4 +1,4 @@
-import 'package:mobile/common/enums.dart';
+import 'package:mobile/views/common/enums.dart';
 
 class ChatMessage {
   MessageTag tag;
