@@ -12,12 +12,7 @@ export class AccountManagerService implements OnModuleInit {
     constructor(private readonly logger: Logger, @InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>) {}
 
     onModuleInit() {
-        // this.accountModel.find().then((accounts) => {
-        //     accounts.forEach((account) => {
-        //         this.connectedProfiles.set(account.credentials.username, account.profile);
-        //     });
-        //     this.logger.warn(`Connected profiles: ${this.connectedProfiles}`);
-        // });
+        //
     }
 
     async register(creds: Credentials) {
@@ -71,11 +66,13 @@ export class AccountManagerService implements OnModuleInit {
 
     async changePseudo(oldPseudo: string, newPseudo: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({
-                'credentials.username': oldPseudo,
-            });
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldPseudo });
+
+            const pseudoFound = await this.accountModel.findOne({ 'credentials.username': newPseudo });
 
             if (!accountFound) throw new Error('Account not found');
+
+            if (pseudoFound) throw new Error('Username already taken');
 
             accountFound.credentials.username = newPseudo;
             await accountFound.save();
