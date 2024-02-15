@@ -29,6 +29,16 @@ export class AccountController {
         }
     }
 
+    @Post('pseudo')
+    async changePseudo(@Body('oldPseudo') oldPseudo: string, @Body('newPseudo') newPseudo: string, @Res() response: Response) {
+        try {
+            await this.accountManager.changePseudo(oldPseudo, newPseudo);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.CONFLICT).json(error);
+        }
+    }
+
     @Delete('delete')
     async delete(@Res() response: Response) {
         try {
