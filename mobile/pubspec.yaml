@@ -20,9 +20,7 @@ dependencies:
     path_provider: ^2.1.2
     path:
     image_picker: ^1.0.7
-    dart_frog: ^1.1.0
     crypto: ^3.0.3
-    jaguar_jwt: ^3.0.0
     google_fonts: ^6.1.0
     flutter_screenutil: ^5.9.0
     get: ^4.6.6
@@ -38,7 +36,6 @@ dev_dependencies:
         sdk: flutter
 
     flutter_lints: ^3.0.1
-
 
 flutter:
     uses-material-design: true
