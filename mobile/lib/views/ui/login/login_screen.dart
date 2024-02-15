@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_screen_scaler/flutter_screen_scaler.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/views/common/drawer/app_style.dart';
@@ -20,61 +20,91 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, designSize: const Size(360, 690));
+    ScreenScaler scaler = ScreenScaler()..init(context);
+    double screenHeight = MediaQuery.of(context).size.height;
+    double startingPoint = screenHeight * 0.5;
+
     return Scaffold(
-        body: Container(
-            width: width,
-            height: height,
-            color: Color(kLightGreen.value),
-            child: Column(
-              children: [
-                Image.asset("assets/images/MenuBackground.jpg"),
-                const HeightSpacer(size: 20),
-                ReusableText(
-                    text: "PolyDiff",
-                    style: appstyle(30, Color(kLight.value), FontWeight.w600)),
-                const HeightSpacer(size: 15),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
-                  child: Text(
-                    "Où la différence est la clé du succès !",
-                    textAlign: TextAlign.center,
-                    style: appstyle(14, Color(kLight.value), FontWeight.normal),
+      body: Container(
+        color: Color(kLightGreen.value),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Stack(
+                children: [
+                  Image.asset(
+                    "assets/images/MenuBackground.jpg",
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
                   ),
-                ),
-                HeightSpacer(size: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomOutlineBtn(
-                      onTap: () async {
-                        final SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        await prefs.setBool('entrypoint', true);
-                        Get.to(() => const LoginPage());
-                      },
-                      text: "Connexion",
-                      width: width * 0.4,
-                      height: height * 0.06,
-                      color1: Color(kLight.value),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(() => RegistrationPage());
-                      },
-                      child: Container(
-                        width: width * 0.4,
-                        height: height * 0.06,
-                        child: ReusableText(
-                          text: "Inscription",
+                  Padding(
+                    padding: EdgeInsets.only(top: startingPoint),
+                    child: Column(
+                      children: [
+                        ReusableText(
+                          text: "PolyDiff",
                           style: appstyle(
-                              16, Color(kLight.value), FontWeight.w600),
+                              30, Color(kLightOrange.value), FontWeight.w600),
                         ),
-                      ),
+                        HeightSpacer(size: 70),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomOutlineBtn(
+                              onTap: () async {
+                                final SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setBool('entrypoint', true);
+                                Get.to(() => const LoginPage());
+                              },
+                              text: "Connexion",
+                              width: scaler.getWidth(20),
+                              height: scaler.getHeight(10),
+                              color: Color(kLight.value),
+                              color2: Color(kMidGreen.value),
+                            ),
+                            // Padding between buttons
+                            SizedBox(width: 60),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => RegistrationPage());
+                              },
+                              child: CustomOutlineBtn(
+                                text: "Inscription",
+                                width: scaler.getWidth(20),
+                                height: scaler.getHeight(10),
+                                color: Color(kMidGreen.value),
+                                color2: Color(kLight.value),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 30),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding:
+                                EdgeInsets.all(10), // Ensure there's no padding
+                            child: ReusableText(
+                              text: "@ RACCOON VILLAGE ",
+                              style: appstyle(
+                                3,
+                                Color(kDarkGreen.value),
+                                FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                )
-              ],
-            )));
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

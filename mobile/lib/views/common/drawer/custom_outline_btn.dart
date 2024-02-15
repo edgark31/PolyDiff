@@ -9,7 +9,7 @@ class CustomOutlineBtn extends StatelessWidget {
     this.height,
     required this.text,
     this.onTap,
-    required this.color1,
+    required this.color,
     this.color2,
   });
 
@@ -17,7 +17,7 @@ class CustomOutlineBtn extends StatelessWidget {
   final double? height;
   final String text;
   final void Function()? onTap;
-  final Color color1;
+  final Color color;
   final Color? color2;
 
   @override
@@ -29,11 +29,12 @@ class CustomOutlineBtn extends StatelessWidget {
           height: height,
           decoration: BoxDecoration(
             color: color2,
-            border: Border.all(width: 1, color: color1),
+            border: Border.all(width: 4, color: color),
+            borderRadius: BorderRadius.circular(20), // make it round
           ),
           child: Center(
             child: ReusableText(
-                text: text, style: appstyle(16, color1, FontWeight.w600)),
+                text: text, style: appstyle(10, color, FontWeight.w600)),
           ),
         ));
   }

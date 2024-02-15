@@ -4,6 +4,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:mobile/controllers/image_provider.dart';
 import 'package:mobile/controllers/login_provider.dart';
 import 'package:mobile/views/ui/auth/update_user.dart';
+import 'package:mobile/views/ui/login/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,20 +40,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-        useInheritedMediaQuery: true,
-        designSize: const Size(375, 812),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (context, child) {
-          return GetMaterialApp(
-            title: 'PolyDiff',
-            theme: ThemeData(
-              useMaterial3: true,
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-            ),
-            home: const ProfileDetails(),
-          );
-        });
+    return ScreenUtilInit(builder: (context, child) {
+      return GetMaterialApp(
+        title: 'PolyDiff',
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+        ),
+        home: LoginScreen(),
+      );
+    });
   }
 }
