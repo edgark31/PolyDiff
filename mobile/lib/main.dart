@@ -4,20 +4,20 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/controllers/camera_image_provider.dart';
 import 'package:mobile/controllers/login_provider.dart';
-import 'package:mobile/pages/registration_page.dart';
-import 'package:mobile/views/ui/auth/update_profile_page.dart';
+import 'package:mobile/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'services/socket_service.dart';
 
-Widget defaultHome = const RegistrationPage();
+Widget defaultHome = const HomePage();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
+  // TODO : When connexion logic will be done
   // final entrypoint = prefs.getBool('entrypoint') ?? false;
   // final loggedIn = prefs.getBool('loggedIn') ?? false;
 
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           colorScheme:
               ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),
         ),
-        home: ProfileConfigurationPage(),
+        home: HomePage(),
       );
     });
   }
