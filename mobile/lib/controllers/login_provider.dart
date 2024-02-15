@@ -3,8 +3,8 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/requests/auth/login_model.dart';
+import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/services/helpers/auth_helper.dart';
-import 'package:mobile/views/ui/auth/login.dart';
 import 'package:mobile/views/ui/auth/update_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -68,7 +68,7 @@ class LoginNotifier extends ChangeNotifier {
   userLogin(LoginModel model) {
     AuthHelper.login(model).then((response) {
       if (response && firstTime) {
-        Get.off(() => const ProfileDetails());
+        Get.off(() => const ProfileConfigurationPage());
       } else if (response && !firstTime) {
         Get.off(() => LoginPage());
       } else if (!response) {

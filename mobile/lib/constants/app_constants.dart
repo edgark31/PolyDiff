@@ -11,6 +11,7 @@ const kDarkGreen = Color.fromARGB(255, 4, 41, 7);
 
 const kLightOrange = Color(0xFFEF6C00);
 
+// TODO : Constants of screen size, refractor with scaler package
 double height = 812.h;
 double width = 375.w;
 

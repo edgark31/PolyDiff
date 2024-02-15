@@ -1,3 +1,5 @@
+// TODO : Check flutter tutorial on persistance of app theme
+
 import 'package:flutter/material.dart';
 
 ThemeData lightTheme = ThemeData(

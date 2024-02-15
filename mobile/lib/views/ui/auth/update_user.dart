@@ -9,14 +9,15 @@ import 'package:mobile/views/common/drawer/height_spacer.dart';
 import 'package:mobile/views/common/drawer/reusable_text.dart';
 import 'package:provider/provider.dart';
 
-class ProfileDetails extends StatefulWidget {
-  const ProfileDetails({super.key});
+class ProfileConfigurationPage extends StatefulWidget {
+  const ProfileConfigurationPage({super.key});
 
   @override
-  State<ProfileDetails> createState() => _ProfileDetailsState();
+  State<ProfileConfigurationPage> createState() =>
+      _ProfileConfigurationPageState();
 }
 
-class _ProfileDetailsState extends State<ProfileDetails> {
+class _ProfileConfigurationPageState extends State<ProfileConfigurationPage> {
   final TextEditingController username = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
