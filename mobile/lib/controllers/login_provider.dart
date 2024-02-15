@@ -5,6 +5,8 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/requests/auth/login_model.dart';
 import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/services/helpers/auth_helper.dart';
+import 'package:mobile/views/ui/auth/login.dart';
+import 'package:mobile/views/ui/auth/update_profile_page.dart';
 import 'package:mobile/views/ui/auth/update_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
