@@ -38,7 +38,7 @@ export class LoginPageComponent {
             };
             this.communication.login(this.creds).subscribe({
                 next: (account: Account) => {
-                    this.clientSocket.connect();
+                    this.clientSocket.connect(account.credentials.username);
                     this.gameManager.manageSocket();
                     this.gameManager.username = account.credentials.username;
                     this.router.navigate(['/home']);
