@@ -3,19 +3,8 @@ import { ClassicModeService } from '@app/services/classic-mode/classic-mode.serv
 import { LimitedModeService } from '@app/services/limited-mode/limited-mode.service';
 import { PlayersListManagerService } from '@app/services/players-list-manager/players-list-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
-import { ConnectionEvents, MessageEvents } from '@common/enums';
-import { ChatMessageGlobal } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
-import {
-    ConnectedSocket,
-    MessageBody,
-    OnGatewayConnection,
-    OnGatewayDisconnect,
-    OnGatewayInit,
-    SubscribeMessage,
-    WebSocketGateway,
-    WebSocketServer,
-} from '@nestjs/websockets';
+import { ConnectedSocket, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { instrument } from '@socket.io/admin-ui';
 import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
@@ -205,29 +194,29 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     //     await this.roomsManagerService.addHintPenalty(socket, this.server);
     // }
 
-    @SubscribeMessage(ConnectionEvents.UserConnectionRequest)
-    processConnection(@ConnectedSocket() socket: Socket, @MessageBody() name: string) {
-        const canConnect = !Array.from(this.mapSocketWithName.values()).some((value) => value === name);
-        socket.emit(ConnectionEvents.UserConnectionRequest, canConnect);
-        if (canConnect) {
-            this.logger.debug(`ACCEPT :: pour ${String(name)} avec id : ${socket.id}`);
-            this.mapSocketWithName.set(socket.id, name);
-        } else {
-            this.logger.error(`REFUS :: pour ${String(name)} avec id : ${socket.id}`);
-        }
-    }
+    // @SubscribeMessage(ConnectionEvents.UserConnectionRequest)
+    // processConnection(@ConnectedSocket() socket: Socket, @MessageBody() name: string) {
+    //     const canConnect = !Array.from(this.mapSocketWithName.values()).some((value) => value === name);
+    //     socket.emit(ConnectionEvents.UserConnectionRequest, canConnect);
+    //     if (canConnect) {
+    //         this.logger.debug(`ACCEPT :: pour ${String(name)} avec id : ${socket.id}`);
+    //         this.mapSocketWithName.set(socket.id, name);
+    //     } else {
+    //         this.logger.error(`REFUS :: pour ${String(name)} avec id : ${socket.id}`);
+    //     }
+    // }
 
-    @SubscribeMessage(MessageEvents.GlobalMessage)
-    processMessage(@MessageBody() dataMessage: ChatMessageGlobal) {
-        this.logger.log(`MESSAGE :::: ${dataMessage.userName} a dit ${dataMessage.message}`);
-        dataMessage.timestamp = new Date().toLocaleTimeString('en-US', {
-            timeZone: 'America/Toronto',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-        });
-        this.server.emit(MessageEvents.GlobalMessage, dataMessage);
-    }
+    // @SubscribeMessage(MessageEvents.GlobalMessage)
+    // processMessage(@MessageBody() dataMessage: ChatMessageGlobal) {
+    //     this.logger.log(`MESSAGE :::: ${dataMessage.userName} a dit ${dataMessage.message}`);
+    //     dataMessage.timestamp = new Date().toLocaleTimeString('en-US', {
+    //         timeZone: 'America/Toronto',
+    //         hour: '2-digit',
+    //         minute: '2-digit',
+    //         second: '2-digit',
+    //     });
+    //     this.server.emit(MessageEvents.GlobalMessage, dataMessage);
+    // }
 
     afterInit() {
         instrument(this.server, {
@@ -240,7 +229,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`Connexion par l'utilisateur avec id : ${socket.id}`);
+        const userName = socket.handshake.query.name;
+        this.logger.log(`Connexion par l'utilisateur ${userName} avec id : ${socket.id}`);
     }
 
     async handleDisconnect(@ConnectedSocket() socket: Socket) {
