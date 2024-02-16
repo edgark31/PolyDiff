@@ -26,6 +26,7 @@ class _SignUpFormState extends State<SignUpForm> {
   String emailError = '';
   String passwordError = '';
   String confirmationError = '';
+  String passwordStrength = '';
 
   bool isUsernameValid(String username) {
     return username.isNotEmpty;
@@ -50,8 +51,22 @@ class _SignUpFormState extends State<SignUpForm> {
     return password == confirmation;
   }
 
-  bool isPasswordStrong(String password) {
-    return true;
+  void updatePasswordStrength(String password) {
+    String strength = '';
+    if (RegExp(r'[a-zA-Z0-9]').hasMatch(password) && password.length < 10) {
+      strength = 'Faible';
+    } else if (password.length >= 10 || RegExp(r'[$,!,&]').hasMatch(password)) {
+      if (password.length > 10 && RegExp(r'[$,!,&]').hasMatch(password)) {
+        strength = 'Élevé';
+      } else {
+        strength = 'Moyen';
+      }
+    } else {
+      strength = 'Faible';
+    }
+    setState(() {
+      passwordStrength = strength;
+    });
   }
 
   void updateButtonState() {
@@ -146,13 +161,15 @@ class _SignUpFormState extends State<SignUpForm> {
                                 LengthLimitingTextInputFormatter(20),
                               ],
                               decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black),
-                                ),
-                                helperText: 'non vide et unique',
-                                filled: true,
-                                fillColor: Colors.white,
-                              ),
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black),
+                                  ),
+                                  helperText: 'Non vide et unique',
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  helperStyle: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black)),
                             ),
                           ),
                         ),
@@ -162,17 +179,19 @@ class _SignUpFormState extends State<SignUpForm> {
                             child: TextField(
                               controller: emailController,
                               inputFormatters: [
-                                LengthLimitingTextInputFormatter(20),
+                                LengthLimitingTextInputFormatter(40),
                               ],
                               decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black),
-                                ),
-                                helperText:
-                                    'non vide et suivant le format: john.doe@gmail.com',
-                                filled: true,
-                                fillColor: Colors.white,
-                              ),
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black),
+                                  ),
+                                  helperText: 'Non vide',
+                                  hintText: 'ex: john.doe@gmail.com',
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  helperStyle: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black)),
                             ),
                           ),
                         ),
@@ -348,15 +367,22 @@ class _SignUpFormState extends State<SignUpForm> {
                             padding: EdgeInsets.only(left: 10),
                             child: TextField(
                               controller: passwordController,
+                              onChanged: (String newPassword) =>
+                                  updatePasswordStrength(newPassword),
                               inputFormatters: [
-                                LengthLimitingTextInputFormatter(20),
+                                LengthLimitingTextInputFormatter(40),
                               ],
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
                                 ),
+                                helperText:
+                                    'Force du mot de passe: $passwordStrength',
                                 filled: true,
                                 fillColor: Colors.white,
+                                helperStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
                               ),
                             ),
                           ),
@@ -367,14 +393,18 @@ class _SignUpFormState extends State<SignUpForm> {
                             child: TextField(
                               controller: confirmationController,
                               inputFormatters: [
-                                LengthLimitingTextInputFormatter(20),
+                                LengthLimitingTextInputFormatter(40),
                               ],
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
                                 ),
+                                helperText: 'Doit correspondre au mot de passe',
                                 filled: true,
                                 fillColor: Colors.white,
+                                helperStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
                               ),
                             ),
                           ),
