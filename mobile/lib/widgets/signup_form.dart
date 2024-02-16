@@ -21,6 +21,50 @@ class _SignUpFormState extends State<SignUpForm> {
   bool hasAnimalName = false;
   bool hasNumber = false;
 
+  bool isFormValid = false;
+  String usernameError = '';
+  String emailError = '';
+  String passwordError = '';
+  String confirmationError = '';
+
+  bool isUsernameValid(String username) {
+    return username.isNotEmpty;
+  }
+
+  bool isEmailValid(String email) {
+    RegExp emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+    if (!emailRegex.hasMatch(email)) {
+      setState(() {
+        emailError = "Le format de l'adresse e-mail est incorrect";
+      });
+      return false;
+    } else {
+      setState(() {
+        emailError = '';
+      });
+      return true;
+    }
+  }
+
+  bool arePasswordsMatching(String password, String confirmation) {
+    return password == confirmation;
+  }
+
+  bool isPasswordStrong(String password) {
+    return true;
+  }
+
+  void updateButtonState() {
+    bool isValidUsername = isUsernameValid(userNameController.text);
+    bool isValidEmail = isEmailValid(emailController.text);
+    bool isValidPassword = arePasswordsMatching(
+        passwordController.text, confirmationController.text);
+
+    setState(() {
+      isFormValid = isValidUsername && isValidEmail && isValidPassword;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -105,6 +149,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
                                 ),
+                                helperText: 'non vide et unique',
                                 filled: true,
                                 fillColor: Colors.white,
                               ),
@@ -123,6 +168,8 @@ class _SignUpFormState extends State<SignUpForm> {
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
                                 ),
+                                helperText:
+                                    'non vide et suivant le format: john.doe@gmail.com',
                                 filled: true,
                                 fillColor: Colors.white,
                               ),
@@ -341,39 +388,44 @@ class _SignUpFormState extends State<SignUpForm> {
                           width: 430,
                           height: 40,
                           child: ElevatedButton(
-                            onPressed: () {
-                              // TODO: ajouter la vérification
-                              // TODO optionnel: rendre ca clean pas if if if if
-                              String userName = userNameController.text;
-                              if (userName.isNotEmpty) {
-                                print("Sending the server your username: " +
-                                    userName);
-                                socketService.checkName(userName);
-                              } else {
-                                setState(() {
-                                  errorMessage =
-                                      "Votre nom ne peut pas être vide";
-                                });
-                              }
-                              Future.delayed(Duration(milliseconds: 300), () {
-                                print(
-                                    "Connection status: ${socketService.connectionStatus}");
-                                if (socketService.connectionStatus) {
-                                  print("We are in the connection status");
-                                  print("Connection approved");
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => LoginPage(),
-                                    ),
-                                  );
-                                } else if (userName.isNotEmpty) {
-                                  setState(() {
-                                    errorMessage =
-                                        "Un client avec ce nom existe déjà";
-                                  });
-                                }
-                              });
-                            },
+                            onPressed: isFormValid
+                                ? () {
+                                    // TODO: ajouter la vérification
+                                    // TODO optionnel: rendre ca clean pas if if if if
+                                    String userName = userNameController.text;
+                                    if (userName.isNotEmpty) {
+                                      print(
+                                          "Sending the server your username: " +
+                                              userName);
+                                      socketService.checkName(userName);
+                                    } else {
+                                      setState(() {
+                                        errorMessage =
+                                            "Votre nom ne peut pas être vide";
+                                      });
+                                    }
+                                    Future.delayed(Duration(milliseconds: 300),
+                                        () {
+                                      print(
+                                          "Connection status: ${socketService.connectionStatus}");
+                                      if (socketService.connectionStatus) {
+                                        print(
+                                            "We are in the connection status");
+                                        print("Connection approved");
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => LoginPage(),
+                                          ),
+                                        );
+                                      } else if (userName.isNotEmpty) {
+                                        setState(() {
+                                          errorMessage =
+                                              "Un client avec ce nom existe déjà";
+                                        });
+                                      }
+                                    });
+                                  }
+                                : null,
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
