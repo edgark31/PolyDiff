@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/login_page.dart';
+import '../services/name_generation_service.dart';
 import '../services/socket_service.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -35,6 +36,7 @@ class _SignUpFormState extends State<SignUpForm> {
   @override
   Widget build(BuildContext context) {
     final socketService = context.watch<SocketService>();
+    final nameGenerationService = NameGenerationService();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -246,7 +248,10 @@ class _SignUpFormState extends State<SignUpForm> {
                       IconButton(
                         icon: Icon(Icons.settings_suggest),
                         onPressed: () {
-                          userNameController.text = 'test';
+                          nameGenerationService.generateName(
+                              selectedLanguage, hasAnimalName, hasNumber);
+                          userNameController.text =
+                              nameGenerationService.generatedName;
                         },
                         iconSize: 50,
                       ),
