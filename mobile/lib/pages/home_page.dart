@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/pages/registration_page.dart';
-import 'package:mobile/views/common/drawer/app_style.dart';
-import 'package:mobile/views/common/drawer/custom_outline_btn.dart';
-import 'package:mobile/views/common/drawer/height_spacer.dart';
-import 'package:mobile/views/common/drawer/reusable_text.dart';
+import 'package:mobile/views/common/customs/app_style.dart';
+import 'package:mobile/views/common/customs/custom_btn.dart';
+import 'package:mobile/views/common/customs/height_spacer.dart';
+import 'package:mobile/views/common/customs/reusable_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {

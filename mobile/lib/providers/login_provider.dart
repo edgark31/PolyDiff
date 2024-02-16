@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:mobile/constants/app_constants.dart';
-import 'package:mobile/models/requests/auth/login_model.dart';
+import 'package:mobile/models/login_model.dart';
 import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';

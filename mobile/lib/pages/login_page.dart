@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/providers/login_provider.dart';
-import 'package:mobile/views/common/drawer/custom_app_bar.dart';
+import 'package:mobile/views/common/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 

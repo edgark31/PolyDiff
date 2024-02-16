@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:mobile/constants/config.dart';
-import 'package:mobile/models/requests/auth/login_model.dart';
-import 'package:mobile/models/responses/login_res_model.dart';
+import 'package:mobile/models/login_model.dart';
+import 'package:mobile/models/login_res_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {

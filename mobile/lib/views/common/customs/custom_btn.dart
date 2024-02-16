@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/views/common/drawer/app_style.dart';
-import 'package:mobile/views/common/drawer/reusable_text.dart';
+import 'package:mobile/views/common/customs/app_style.dart';
+import 'package:mobile/views/common/customs/reusable_text.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
