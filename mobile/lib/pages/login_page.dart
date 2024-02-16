@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
-import 'package:mobile/controllers/login_provider.dart';
-import 'package:mobile/views/common/drawer/app_bar.dart';
+import 'package:mobile/providers/login_provider.dart';
+import 'package:mobile/views/common/drawer/custom_app_bar.dart';
+import 'package:mobile/widgets/bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: CustomAppBar(
-            text: "Connexion",
+            text: "C O N N E X I O N",
             child: loginNotifier.entrypoint && !loginNotifier.loggedIn
                 ? GestureDetector(
                     onTap: () {
@@ -45,7 +46,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         body: Container(
-          color: Color(kMidGreen.value),
+          color: kLime,
+          child: BottomNavBar(),
         ),
       );
     });

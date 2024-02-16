@@ -34,9 +34,9 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Image.asset(
                     "assets/images/MenuBackground.jpg",
-                    fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: startingPoint),
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            CustomOutlineBtn(
+                            CustomButton(
                               onTap: () async {
                                 final SharedPreferences prefs =
                                     await SharedPreferences.getInstance();
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                               onTap: () {
                                 Get.to(() => RegistrationPage());
                               },
-                              child: CustomOutlineBtn(
+                              child: CustomButton(
                                 text: "Inscription",
                                 width: scaler.getWidth(20),
                                 height: scaler.getHeight(10),
