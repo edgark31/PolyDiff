@@ -35,7 +35,7 @@ export class NameGenerationService {
         for (let i = 0; i < nameComponents.length; i++) {
             nameComponents[i] = nameComponents[i].charAt(0).toUpperCase() + nameComponents[i].slice(1);
         }
-        nameComponents.sort(() => Math.random() - 0.5);
+        nameComponents.sort(() => Math.random());
         this.generatedName = nameComponents.join('');
     }
 }
