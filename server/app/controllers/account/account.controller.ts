@@ -1,6 +1,6 @@
 import { Credentials } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager/account-manager.service';
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, HttpStatus, Post, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
@@ -15,17 +15,37 @@ export class AccountController {
             await this.accountManager.register(creds);
             response.status(HttpStatus.OK).send();
         } catch (error) {
-            response.status(HttpStatus.CONFLICT).send(error.message);
+            response.status(HttpStatus.CONFLICT).json(error);
         }
     }
 
     @Post('login')
-    async login(@Body() creds: Credentials, @Res() response: Response) {
+    async connexion(@Body() creds: Credentials, @Res() response: Response) {
         try {
             const accountFound = await this.accountManager.connexion(creds);
             response.status(HttpStatus.OK).json(accountFound);
         } catch (error) {
-            response.status(HttpStatus.UNAUTHORIZED).send(error.message);
+            response.status(HttpStatus.UNAUTHORIZED).json(error);
+        }
+    }
+
+    @Post('pseudo')
+    async changePseudo(@Body('oldPseudo') oldPseudo: string, @Body('newPseudo') newPseudo: string, @Res() response: Response) {
+        try {
+            await this.accountManager.changePseudo(oldPseudo, newPseudo);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.CONFLICT).json(error);
+        }
+    }
+
+    @Delete('delete')
+    async delete(@Res() response: Response) {
+        try {
+            await this.accountManager.delete();
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.NOT_FOUND).json(error);
         }
     }
 }

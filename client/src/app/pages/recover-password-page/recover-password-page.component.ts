@@ -25,7 +25,7 @@ export class RecoverPasswordPageComponent {
 
     onSubmit() {
         if (this.recoverPasswordForm.value.username && this.recoverPasswordForm.value.password) {
-            this.clientSocket.connect();
+            this.clientSocket.connect(this.recoverPasswordForm.value.username);
             this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
                 if (isConnected) {
                     this.router.navigate(['/home']);

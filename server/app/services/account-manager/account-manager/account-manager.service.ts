@@ -12,47 +12,33 @@ export class AccountManagerService implements OnModuleInit {
     constructor(private readonly logger: Logger, @InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>) {}
 
     onModuleInit() {
-        // this.accountModel.find().then((accounts) => {
-        //     accounts.forEach((account) => {
-        //         this.connectedProfiles.set(account.credentials.username, account.profile);
-        //     });
-        //     this.logger.warn(`Connected profiles: ${this.connectedProfiles}`);
-        // });
+        //
     }
 
     async register(creds: Credentials) {
         try {
-            const userFound = await this.accountModel.findOne({
-                'credentials.username': creds.username,
-            });
+            const userFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
+            const emailFound = await this.accountModel.findOne({ 'credentials.email': creds.email });
 
-            const emailFound = await this.accountModel.findOne({
-                'credentials.email': creds.email,
-            });
+            if (userFound) throw new Error('Username already taken');
+            if (emailFound) throw new Error('Email already taken');
 
-            if (userFound) {
-                throw new Error('Username already taken');
-            }
-            if (emailFound) {
-                throw new Error('Email already taken');
-            } else {
-                const newAccount: Account = {
-                    credentials: creds,
-                    profile: {
-                        avatar: 'url',
-                        sessions: [],
-                        connexions: [],
-                        stats: {} as Statistics,
-                        friends: [],
-                        friendRequests: [],
-                    },
-                };
-                await this.accountModel.create(newAccount);
-                this.logger.verbose(`Account ${creds.username} has registered successfully`);
-            }
+            const newAccount: Account = {
+                credentials: creds,
+                profile: {
+                    avatar: 'url',
+                    sessions: [],
+                    connexions: [],
+                    stats: {} as Statistics,
+                    friends: [],
+                    friendRequests: [],
+                },
+            };
+            await this.accountModel.create(newAccount);
+            this.logger.verbose(`Account ${creds.username} has registered successfully`);
         } catch (error) {
             this.logger.error(`Failed to add account --> ${error.message}`);
-            return Promise.reject(`Failed to add account --> ${error}`);
+            return Promise.reject(`${error}`);
         }
     }
 
@@ -65,20 +51,35 @@ export class AccountManagerService implements OnModuleInit {
                 ],
             });
 
-            if (accountFound) {
-                if (!this.connectedProfiles.has(accountFound.credentials.username)) {
-                    this.connectedProfiles.set(accountFound.credentials.username, accountFound.profile);
-                    this.showProfiles();
-                    return Promise.resolve(accountFound);
-                } else {
-                    throw new Error('Account already connected');
-                }
-            } else {
-                throw new Error('Account not found');
-            }
+            if (!accountFound) throw new Error('Account not found');
+
+            if (this.connectedProfiles.has(accountFound.credentials.username)) throw new Error('Account already connected');
+
+            this.connectedProfiles.set(accountFound.credentials.username, accountFound.profile);
+            this.showProfiles();
+            return Promise.resolve(accountFound);
         } catch (error) {
             this.logger.error(`Failed to connect account --> ${error.message}`);
-            return Promise.reject(`Failed to connect account --> ${error}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async changePseudo(oldPseudo: string, newPseudo: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldPseudo });
+
+            const pseudoFound = await this.accountModel.findOne({ 'credentials.username': newPseudo });
+
+            if (!accountFound) throw new Error('Account not found');
+
+            if (pseudoFound) throw new Error('Username already taken');
+
+            accountFound.credentials.username = newPseudo;
+            await accountFound.save();
+            this.logger.verbose(`Account ${oldPseudo} has changed his username to ${newPseudo}`);
+        } catch (error) {
+            this.logger.error(`Failed to change pseudo --> ${error.message}`);
+            return Promise.reject(`${error}`);
         }
     }
 
@@ -92,5 +93,15 @@ export class AccountManagerService implements OnModuleInit {
         this.connectedProfiles.forEach((value, key) => {
             this.logger.verbose(`${key}`);
         });
+    }
+
+    async delete() {
+        try {
+            await this.accountModel.deleteMany({});
+            this.logger.verbose('All accounts have been deleted');
+        } catch (error) {
+            this.logger.error(`Failed to delete accounts --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
     }
 }

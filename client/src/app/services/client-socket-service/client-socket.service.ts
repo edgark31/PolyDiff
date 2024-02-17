@@ -17,8 +17,8 @@ export class ClientSocketService {
         return this.socket && this.socket.connected;
     }
 
-    connect() {
-        this.socket = io(this.baseUrl, { transports: ['websocket'], upgrade: false });
+    connect(userName: string) {
+        this.socket = io(this.baseUrl, { transports: ['websocket'], upgrade: false, query: { name: userName } });
     }
 
     disconnect() {
