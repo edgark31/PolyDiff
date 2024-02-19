@@ -26,7 +26,7 @@ export class AccountManagerService implements OnModuleInit {
             const newAccount: Account = {
                 credentials: creds,
                 profile: {
-                    avatar: 'url',
+                    avatar: 'base64encoded',
                     sessions: [],
                     connexions: [],
                     stats: {} as Statistics,
@@ -36,6 +36,7 @@ export class AccountManagerService implements OnModuleInit {
             };
             await this.accountModel.create(newAccount);
             this.logger.verbose(`Account ${creds.username} has registered successfully`);
+            return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to add account --> ${error.message}`);
             return Promise.reject(`${error}`);
@@ -64,21 +65,35 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async changePseudo(oldPseudo: string, newPseudo: string): Promise<void> {
+    async changePseudo(oldUsername: string, newUsername: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldPseudo });
-
-            const pseudoFound = await this.accountModel.findOne({ 'credentials.username': newPseudo });
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+            const pseudoFound = await this.accountModel.findOne({ 'credentials.username': newUsername });
 
             if (!accountFound) throw new Error('Account not found');
-
             if (pseudoFound) throw new Error('Username already taken');
 
-            accountFound.credentials.username = newPseudo;
+            accountFound.credentials.username = newUsername;
             await accountFound.save();
-            this.logger.verbose(`Account ${oldPseudo} has changed his username to ${newPseudo}`);
+            this.logger.verbose(`Account ${oldUsername} has changed his username to ${newUsername}`);
+            return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change pseudo --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async changeAvatar(username: string, avatar: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.avatar = avatar;
+            await accountFound.save();
+            this.logger.verbose(`Account ${avatar} has changed his avatar to ${avatar}`);
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change avatar --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
