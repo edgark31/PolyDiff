@@ -8,7 +8,7 @@ export const numbers: Array<number> = [
 ];
 
 export const colors: Map<number, Array<string>> = new Map([
-  [1, ['rouge', 'vert', 'bleu', 'jaune', 'orange', 'violet', 'rose', 'marron', 'cyan', 'magenta', 'sarcelle', 'citron vert', 'indigo', 'violet', 'marron foncé', 'olive']],
+  [1, ['rouge', 'vert', 'bleu', 'jaune', 'orange', 'violet', 'rose', 'marron', 'cyan', 'magenta', 'sarcelle', 'citronVert', 'indigo', 'violet', 'marronFoncé', 'olive']],
   [2, ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'pink', 'brown', 'cyan', 'magenta', 'teal', 'lime', 'indigo', 'violet', 'maroon', 'olive']]
 ]);
 
