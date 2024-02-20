@@ -9,14 +9,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  auth_header:
-    dependency: transitive
-    description:
-      name: auth_header
-      sha256: "0a3938128b6124530de93ce1a20ccb58639195fe7952f638248ea1bc0e5408eb"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.1"
   basic_utils:
     dependency: transitive
     description:
@@ -145,14 +137,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
-  dart_frog:
-    dependency: "direct main"
-    description:
-      name: dart_frog
-      sha256: a5da81b1ea4f3e8f03dfcd0bc9b44ba83a6576ce6dae1bb138a6a8f7b70fe727
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   decimal:
     dependency: transitive
     description:
@@ -270,6 +254,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.9.0"
+  flutter_staggered_grid_view:
+    dependency: "direct main"
+    description:
+      name: flutter_staggered_grid_view
+      sha256: "19e7abb550c96fbfeb546b23f3ff356ee7c59a019a651f8f102a4ba9b7349395"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -296,14 +288,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.0"
-  hotreloader:
-    dependency: transitive
+  google_nav_bar:
+    dependency: "direct main"
     description:
-      name: hotreloader
-      sha256: "728c0613556c1d153f7e7f4a367cffacc3f5a677d7f6497a1c2b35add4e6dacf"
+      name: google_nav_bar
+      sha256: "1c8e3882fa66ee7b74c24320668276ca23affbd58f0b14a24c1e5590f4d07ab0"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.6"
+    version: "5.0.6"
   http:
     dependency: "direct main"
     description:
@@ -312,14 +304,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  http_methods:
-    dependency: transitive
-    description:
-      name: http_methods
-      sha256: "6bccce8f1ec7b5d701e7921dca35e202d425b57e317ba1a37f2638590e29e566"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   http_parser:
     dependency: transitive
     description:
@@ -416,14 +400,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1+1"
-  jaguar_jwt:
-    dependency: "direct main"
-    description:
-      name: jaguar_jwt
-      sha256: c3ab24be5ba5f736f93eacfc94c4381bd93551a351ab5687e70c8d71a9916e8d
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
   js:
     dependency: transitive
     description:
@@ -712,30 +688,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
-  shelf:
-    dependency: transitive
-    description:
-      name: shelf
-      sha256: ad29c505aee705f41a4d8963641f91ac4cee3c8fad5947e033390a7bd8180fa4
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.1"
-  shelf_hotreload:
-    dependency: transitive
-    description:
-      name: shelf_hotreload
-      sha256: "5e7a68273d64a095384325d769c6a4885ea15c6aafee361098c0d8a5ecb5dcf6"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.0"
-  shelf_static:
-    dependency: transitive
-    description:
-      name: shelf_static
-      sha256: a41d3f53c4adf0f57480578c1d61d90342cd617de7fc8077b1304643c2d85c1e
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.2"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -853,14 +805,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  vm_service:
-    dependency: transitive
-    description:
-      name: vm_service
-      sha256: c538be99af830f478718b51630ec1b6bee5e74e52c8a802d328d9e71d35d2583
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.10.0"
   vy_string_utils:
     dependency: transitive
     description:
@@ -869,14 +813,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.5"
-  watcher:
-    dependency: transitive
-    description:
-      name: watcher
-      sha256: "3d2ad6751b3c16cf07c7fca317a1413b3f26530319181b37e3b9039b84fc01d8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   web:
     dependency: transitive
     description:
