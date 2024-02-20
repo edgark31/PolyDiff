@@ -22,27 +22,37 @@ class _SignUpFormState extends State<SignUpForm> {
   bool hasNumber = false;
 
   bool isFormValid = false;
-  String usernameError = '';
-  String emailError = '';
+  String usernameFormat = '';
+  String emailFormat = '';
   String passwordStrength = '';
   String passwordConfirmation = '';
 
   bool isUsernameValid(String username) {
-    return username.isNotEmpty;
+    if (username.isNotEmpty) {
+      setState(() {
+        usernameFormat = "Oui";
+      });
+      return true;
+    } else {
+      setState(() {
+        usernameFormat = "Non";
+      });
+      return false;
+    }
   }
 
   bool isEmailValid(String email) {
     RegExp emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
-    if (!emailRegex.hasMatch(email)) {
+    if (emailRegex.hasMatch(email) && email.isNotEmpty) {
       setState(() {
-        emailError = "Le format de l'adresse e-mail est incorrect";
-      });
-      return false;
-    } else {
-      setState(() {
-        emailError = '';
+        emailFormat = "Oui";
       });
       return true;
+    } else {
+      setState(() {
+        emailFormat = 'Non';
+      });
+      return false;
     }
   }
 
@@ -88,7 +98,6 @@ class _SignUpFormState extends State<SignUpForm> {
     bool isValidEmail = isEmailValid(emailController.text);
     bool isValidPassword = arePasswordsMatching(
         passwordController.text, confirmationController.text);
-
     setState(() {
       isFormValid = isValidUsername && isValidEmail && isValidPassword;
     });
@@ -171,6 +180,9 @@ class _SignUpFormState extends State<SignUpForm> {
                             padding: EdgeInsets.only(left: 10),
                             child: TextField(
                               controller: userNameController,
+                              onChanged: (username) =>
+                                  isUsernameValid(username),
+                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(20),
                               ],
@@ -178,7 +190,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.black),
                                   ),
-                                  helperText: 'Non vide',
+                                  helperText: 'Non vide: $usernameFormat',
                                   filled: true,
                                   fillColor: Colors.white,
                                   helperStyle: TextStyle(
@@ -192,6 +204,8 @@ class _SignUpFormState extends State<SignUpForm> {
                             padding: EdgeInsets.only(left: 10),
                             child: TextField(
                               controller: emailController,
+                              onChanged: (email) => isEmailValid(email),
+                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(40),
                               ],
@@ -199,7 +213,8 @@ class _SignUpFormState extends State<SignUpForm> {
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.black),
                                   ),
-                                  helperText: 'Non vide',
+                                  helperText:
+                                      'Non vide et suit le format: $emailFormat',
                                   hintText: 'ex: john.doe@gmail.com',
                                   filled: true,
                                   fillColor: Colors.white,
@@ -241,7 +256,6 @@ class _SignUpFormState extends State<SignUpForm> {
                               onChanged: (value) {
                                 setState(() {
                                   selectedLanguage = value!;
-                                  print("Button value: $selectedLanguage");
                                 });
                               },
                             ),
@@ -263,7 +277,6 @@ class _SignUpFormState extends State<SignUpForm> {
                               onChanged: (value) {
                                 setState(() {
                                   selectedLanguage = value!;
-                                  print("Button value: $selectedLanguage");
                                 });
                               },
                             ),
@@ -293,7 +306,6 @@ class _SignUpFormState extends State<SignUpForm> {
                                 if (value != null) {
                                   setState(() {
                                     hasAnimalName = value;
-                                    print(hasAnimalName);
                                   });
                                 }
                               });
@@ -318,7 +330,6 @@ class _SignUpFormState extends State<SignUpForm> {
                               if (value != null) {
                                 setState(() {
                                   hasNumber = value;
-                                  print(hasNumber);
                                 });
                               }
                             });
@@ -332,6 +343,8 @@ class _SignUpFormState extends State<SignUpForm> {
                               selectedLanguage, hasAnimalName, hasNumber);
                           userNameController.text =
                               nameGenerationService.generatedName;
+                          isUsernameValid(userNameController.text);
+                          updateButtonState();
                         },
                         iconSize: 50,
                       ),
@@ -383,6 +396,7 @@ class _SignUpFormState extends State<SignUpForm> {
                               controller: passwordController,
                               onChanged: (String newPassword) =>
                                   updatePasswordStrength(newPassword),
+                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(40),
                               ],
@@ -408,6 +422,7 @@ class _SignUpFormState extends State<SignUpForm> {
                               controller: confirmationController,
                               onChanged: (String confirmation) =>
                                   updateConfirmation(confirmation),
+                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(40),
                               ],
