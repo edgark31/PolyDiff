@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Injectable } from '@angular/core';
 import { animals, colors, dishes, numbers } from '@common/random-name-lists';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class NameGenerationService {
+    generatedNameObservable: Observable<string>;
     generatedName: string = '';
 
     generateName(languageIndex: number, hasAnimalName: boolean, hasNumber: boolean): void {
         const nameComponents: string[] = [];
-
         const colorList = colors.get(languageIndex);
         if (colorList) {
             const color = colorList[Math.floor(Math.random() * colorList.length)];
@@ -35,7 +36,9 @@ export class NameGenerationService {
         for (let i = 0; i < nameComponents.length; i++) {
             nameComponents[i] = nameComponents[i].charAt(0).toUpperCase() + nameComponents[i].slice(1);
         }
-        nameComponents.sort(() => Math.random());
+        while (nameComponents.length >= 20) {
+            nameComponents.sort(() => Math.random());
+        }
         this.generatedName = nameComponents.join('');
     }
 }

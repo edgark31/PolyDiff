@@ -1,0 +1,13 @@
+<img src="./assets/gameSheet.png" class="dialog-image" alt="dialogImage">
+<div mat-dialog-content>
+  <mat-radio-group class="radio-group">
+    <mat-radio-button class="radio-button" color="primary" *ngFor="let language of languages" [value]="language">
+      {{language}}
+    </mat-radio-button>
+  </mat-radio-group>
+  <div class="checkbox-group">
+    <mat-checkbox class="checkbox" color="primary" [(ngModel)]="containsAnimal" >Contient un animal </mat-checkbox> 
+    <mat-checkbox class="checkbox" color="primary" [(ngModel)]="containsNumber" >Contient un nombre </mat-checkbox>
+  </div>
+  <button mat-raised-button type="submit" (click)="onSubmit()">Generer un nom d'utilisateur</button>
+</div>

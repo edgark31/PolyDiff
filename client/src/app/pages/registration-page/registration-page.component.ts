@@ -2,8 +2,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { NameGenerationDialogComponent } from '@app/components/name-generation-dialog/name-generation-dialog.component';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
+import { NameGenerationService } from '@app/services/name-generation-service/name-generation-service.service';
 import { Credentials } from '@common/game-interfaces';
 
 @Component({
@@ -20,7 +23,12 @@ export class RegistrationPageComponent {
     creds: Credentials;
     feedback: string;
 
-    constructor(private readonly communication: CommunicationService, private readonly router: Router) {
+    constructor(
+        private readonly communication: CommunicationService,
+        private readonly router: Router,
+        private readonly dialog: MatDialog,
+        private readonly nameGeneration: NameGenerationService,
+    ) {
         this.feedback = '';
     }
 
@@ -41,5 +49,15 @@ export class RegistrationPageComponent {
                 },
             });
         }
+    }
+
+    openNameGenerationDialog() {
+        this.dialog
+            .open(NameGenerationDialogComponent, new MatDialogConfig())
+            .afterClosed()
+            .subscribe((username: string) => {
+                this.registrationForm.controls.username.setValue(username);
+                this.registrationForm.value.username = this.nameGeneration.generatedName;
+            });
     }
 }

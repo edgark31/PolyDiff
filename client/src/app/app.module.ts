@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,6 +36,7 @@ import { GamePageDialogComponent } from './components/game-page-dialog/game-page
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
 import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
+import { NameGenerationDialogComponent } from './components/name-generation-dialog/name-generation-dialog.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
@@ -80,6 +82,7 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
         LoginPageComponent,
         RegistrationPageComponent,
         RecoverPasswordPageComponent,
+        NameGenerationDialogComponent,
     ],
     imports: [
         AppMaterialModule,
@@ -100,6 +103,7 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
         MatExpansionModule,
         MatSelectModule,
         MatMenuModule,
+        MatCheckboxModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

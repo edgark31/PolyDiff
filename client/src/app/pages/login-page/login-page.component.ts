@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
-import { NameGenerationService } from '@app/services/name-generation-service/name-generation-service.service';
 import { Account, Credentials } from '@common/game-interfaces';
 
 @Component({
@@ -27,14 +26,11 @@ export class LoginPageComponent {
         private readonly clientSocket: ClientSocketService,
         private readonly communication: CommunicationService,
         private readonly router: Router,
-        private readonly nameGeneration: NameGenerationService,
     ) {
         this.feedback = '';
     }
 
     onSubmit() {
-        this.nameGeneration.generateName(1, true, false);
-        console.log(this.nameGeneration.generatedName);
         if (this.loginForm.value.username && this.loginForm.value.password) {
             this.creds = {
                 username: this.loginForm.value.username,

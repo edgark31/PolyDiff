@@ -17,6 +17,7 @@
         <input formControlName="password" id="password"/>
     </div>
     <button routerLink="/login">Revenir à la page de connexion</button>
+    <button type="submit" (click)="openNameGenerationDialog()">Generer un pseudonyme</button>
     <button type="submit" (click)="onSubmit()">Créer un compte</button>
     <p class="feedback" >{{ feedback }}</p>
 </form>
