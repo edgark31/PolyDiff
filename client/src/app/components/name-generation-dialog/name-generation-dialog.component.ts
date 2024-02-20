@@ -14,15 +14,14 @@ export class NameGenerationDialogComponent {
     containsAnimal: boolean;
     containsNumber: boolean;
 
-    constructor(private readonly nameGeneration: NameGenerationService, private readonly dialogRef: MatDialogRef<RegistrationPageComponent>) {
-        this.language = 'français';
-        this.containsAnimal = false;
-        this.containsNumber = false;
+    constructor(private readonly nameGeneration: NameGenerationService, private readonly dialogRef: MatDialogRef<RegistrationPageComponent>) {}
+
+    onLanguageChange(event: { value: string }): void {
+        this.language = event.value;
     }
 
     onSubmit(): void {
-        const languageIndex = this.language === 'francais' ? 0 : 1;
-        this.nameGeneration.generateName(languageIndex, this.containsAnimal, this.containsNumber);
+        this.nameGeneration.generateName(this.languages.indexOf(this.language), this.containsAnimal, this.containsNumber);
         this.dialogRef.close(this.nameGeneration.generatedName);
     }
 }

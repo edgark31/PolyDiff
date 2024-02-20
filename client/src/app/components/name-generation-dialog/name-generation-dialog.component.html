@@ -1,6 +1,6 @@
 <img src="./assets/gameSheet.png" class="dialog-image" alt="dialogImage">
 <div mat-dialog-content>
-  <mat-radio-group class="radio-group">
+  <mat-radio-group class="radio-group" (change)="onLanguageChange($event)">
     <mat-radio-button class="radio-button" color="primary" *ngFor="let language of languages" [value]="language">
       {{language}}
     </mat-radio-button>
