@@ -1,21 +1,28 @@
-import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import { ChannelEvents } from '@common/enums';
+import { Logger } from '@nestjs/common';
+import { ConnectedSocket, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
-    cors: {
-        origin: (origin, callback) => {
-            if (origin === undefined || origin === 'https://admin.socket.io') {
-                callback(null, true);
-            } else {
-                callback(null, '*');
-            }
-        },
-        credentials: true,
-    },
     namespace: '/chat',
 })
-export class ChatGateway {
-    @SubscribeMessage('message')
-    handleMessage(client: unknown, payload: unknown): string {
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+    @WebSocketServer() private server: Server;
+
+    constructor(private readonly logger: Logger) {
+        //
+    }
+
+    @SubscribeMessage(ChannelEvents.SendGlobalMessage)
+    handleGlobalMessage(@ConnectedSocket() socket: Socket): string {
         return 'Hello world!';
+    }
+
+    handleConnection(@ConnectedSocket() socket: Socket) {
+        this.logger.log(`Connexion par l'utilisateur avec id : ${socket.id}`);
+    }
+
+    handleDisconnect(@ConnectedSocket() socket: Socket) {
+        this.logger.log(`Déconnexion par l'utilisateur avec id : ${socket.id}`);
     }
 }
