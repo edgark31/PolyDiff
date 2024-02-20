@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../widgets/signup_form.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -21,10 +22,8 @@ class SignUpPage extends StatelessWidget {
           ),
           Flexible(
             flex: 3,
-            child: Expanded(
-              child: Center(
-                child: SignUpForm(),
-              ),
+            child: Center(
+              child: SignUpForm(),
             ),
           ),
         ],
