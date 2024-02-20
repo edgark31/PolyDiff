@@ -25,7 +25,7 @@ import { join } from 'path';
 @Module({
     imports: [
         ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '..', 'img'), // Serve static files from the 'public' directory
+            rootPath: join(__dirname, '..', 'assets'),
         }),
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRootAsync({

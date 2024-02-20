@@ -11,11 +11,7 @@ const bootstrap = async () => {
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ extended: true, limit: '5mB' }));
     app.enableCors();
-    const config = new DocumentBuilder()
-        .setTitle('Cadriciel Serveur')
-        .setDescription('Serveur du projet de base pour le cours de LOG2990')
-        .setVersion('1.0.0')
-        .build();
+    const config = new DocumentBuilder().setTitle('Cadriciel Serveur').setDescription('Serveur LOG3900').setVersion('2.0').build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api/docs', app, document);
     SwaggerModule.setup('', app, document);

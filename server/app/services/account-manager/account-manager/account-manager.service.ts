@@ -26,7 +26,7 @@ export class AccountManagerService implements OnModuleInit {
             const newAccount: Account = {
                 credentials: creds,
                 profile: {
-                    avatar: 'base64encoded',
+                    avatar: 'base64',
                     sessions: [],
                     connexions: [],
                     stats: {} as Statistics,
