@@ -24,9 +24,8 @@ class _SignUpFormState extends State<SignUpForm> {
   bool isFormValid = false;
   String usernameError = '';
   String emailError = '';
-  String passwordError = '';
-  String confirmationError = '';
   String passwordStrength = '';
+  String passwordConfirmation = '';
 
   bool isUsernameValid(String username) {
     return username.isNotEmpty;
@@ -48,7 +47,9 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   bool arePasswordsMatching(String password, String confirmation) {
-    return password == confirmation;
+    return (password == confirmation &&
+        password.isNotEmpty &&
+        confirmation.isNotEmpty);
   }
 
   void updatePasswordStrength(String password) {
@@ -67,6 +68,19 @@ class _SignUpFormState extends State<SignUpForm> {
     setState(() {
       passwordStrength = strength;
     });
+    updateConfirmation(confirmationController.text);
+  }
+
+  void updateConfirmation(String confirmation) {
+    if (arePasswordsMatching(passwordController.text, confirmation)) {
+      setState(() {
+        passwordConfirmation = 'Oui';
+      });
+    } else {
+      setState(() {
+        passwordConfirmation = 'Non';
+      });
+    }
   }
 
   void updateButtonState() {
@@ -164,7 +178,7 @@ class _SignUpFormState extends State<SignUpForm> {
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.black),
                                   ),
-                                  helperText: 'Non vide et unique',
+                                  helperText: 'Non vide',
                                   filled: true,
                                   fillColor: Colors.white,
                                   helperStyle: TextStyle(
@@ -392,6 +406,8 @@ class _SignUpFormState extends State<SignUpForm> {
                             padding: EdgeInsets.only(left: 10),
                             child: TextField(
                               controller: confirmationController,
+                              onChanged: (String confirmation) =>
+                                  updateConfirmation(confirmation),
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(40),
                               ],
@@ -399,7 +415,8 @@ class _SignUpFormState extends State<SignUpForm> {
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
                                 ),
-                                helperText: 'Doit correspondre au mot de passe',
+                                helperText:
+                                    'Correspondent et non-vide: $passwordConfirmation',
                                 filled: true,
                                 fillColor: Colors.white,
                                 helperStyle: TextStyle(

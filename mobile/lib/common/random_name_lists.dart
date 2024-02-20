@@ -91,10 +91,10 @@ final Map<int, List<String>> colors = {
     "cyan",
     "magenta",
     "sarcelle",
-    "citron vert",
+    "citronVert",
     "indigo",
     "violet",
-    "marron foncé",
+    "marronFoncé",
     "olive",
   ],
   2: [
