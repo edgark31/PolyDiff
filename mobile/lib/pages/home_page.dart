@@ -11,7 +11,7 @@ import 'package:mobile/views/common/customs/reusable_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -64,8 +64,9 @@ class _HomePageState extends State<HomePage> {
                               color: Color(kLight.value),
                               color2: Color(kMidGreen.value),
                             ),
-                            // Padding between buttons
-                            SizedBox(width: 60),
+                            Flexible(
+                              child: SizedBox(width: scaler.getWidth(5)),
+                            ),
                             GestureDetector(
                               onTap: () {
                                 Get.to(() => RegistrationPage());
@@ -83,16 +84,12 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(height: 30),
                         Align(
                           alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding:
-                                EdgeInsets.all(10), // Ensure there's no padding
-                            child: ReusableText(
-                              text: "@ RACCOON VILLAGE ",
-                              style: appstyle(
-                                3,
-                                Color(kDarkGreen.value),
-                                FontWeight.bold,
-                              ),
+                          child: ReusableText(
+                            text: "@ RACCOON VILLAGE ",
+                            style: appstyle(
+                              3,
+                              Color(kDarkGreen.value),
+                              FontWeight.bold,
                             ),
                           ),
                         ),
