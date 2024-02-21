@@ -11,9 +11,9 @@ Color kLightGreen = Colors.lightGreen.shade800;
 const kMidGreen = Color.fromRGBO(123, 142, 5, 1);
 const kDarkGreen = Color.fromARGB(255, 4, 41, 7);
 
-Color kLightOrange = Colors.orange.shade700;
-Color kMidOrange = Colors.orange.shade800;
-Color kDarkOrange = Colors.orange.shade900;
+const Color kLightOrange = Color.fromRGBO(245, 124, 0, 1);
+const Color kMidOrange = Color.fromRGBO(239, 108, 0, 1);
+const Color kDarkOrange = Color.fromRGBO(230, 81, 0, 1);
 
 // TODO : Constants of screen size, refractor with scaler package
 double height = 812.h;
