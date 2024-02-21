@@ -1,41 +1,42 @@
+/*
+  create constant color for the button and renamed as you want
+*/
 import 'package:flutter/material.dart';
-import 'package:mobile/views/common/customs/app_style.dart';
-import 'package:mobile/views/common/customs/reusable_text.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({
-    super.key,
-    this.width,
-    this.height,
-    required this.text,
-    this.onTap,
-    required this.color,
-    this.color2,
-  });
-
-  final double? width;
-  final double? height;
   final String text;
-  final void Function()? onTap;
-  final Color color;
-  final Color? color2;
+  final Function press;
+  final Color backgroundColor, textColor;
+  const CustomButton({
+    required this.text,
+    required this.press,
+    required this.backgroundColor,
+    this.textColor = Colors.white,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: color2,
-            border: Border.all(width: 4, color: color),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Center(
-            child: ReusableText(
-                text: text, style: appstyle(10, color, FontWeight.w600)),
-          ),
-        ));
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      width: size.width * 0.20,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(29),
+        child: ElevButton(),
+      ),
+    );
+  }
+
+  Widget ElevButton() {
+    return ElevatedButton(
+      onPressed: () => press(),
+      style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          textStyle: TextStyle(
+              color: textColor, fontSize: 15, fontWeight: FontWeight.w600)),
+      child: Text(text, style: TextStyle(color: textColor)),
+    );
   }
 }
+//
