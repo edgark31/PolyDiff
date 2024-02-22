@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/pages/home_page.dart';
+import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
-import 'package:mobile/widgets/profile.dart';
 import 'package:provider/provider.dart';
 
 import 'services/socket_service.dart';
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           colorScheme:
               ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),
         ),
-        home: Profile(),
+        home: ProfilePage(),
       );
     });
   }
