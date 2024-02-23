@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
                     padding: EdgeInsets.only(top: startingPoint),
                     child: Text(
                       "PolyDiff",
-                      style: appstyle(60, kLightOrange, FontWeight.w600),
+                      style: appstyle(60, kLightOrange, FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   ),

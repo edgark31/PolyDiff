@@ -31,7 +31,6 @@ class _ConnectionFormState extends State<ConnectionForm> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
     double bottomPadding = MediaQuery.of(context).viewInsets.bottom > 0
         ? 20
         : MediaQuery.of(context).size.height * 0.48;
@@ -187,7 +186,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                     },
                     child: Container(
                       child: Text(
-                        "S'inscrire",
+                        "S' I N S C R I R E",
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.black,
