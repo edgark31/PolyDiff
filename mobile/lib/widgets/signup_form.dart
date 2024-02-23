@@ -182,7 +182,6 @@ class _SignUpFormState extends State<SignUpForm> {
                               controller: userNameController,
                               onChanged: (username) =>
                                   isUsernameValid(username),
-                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(20),
                               ],
@@ -205,7 +204,6 @@ class _SignUpFormState extends State<SignUpForm> {
                             child: TextField(
                               controller: emailController,
                               onChanged: (email) => isEmailValid(email),
-                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(40),
                               ],
@@ -396,7 +394,6 @@ class _SignUpFormState extends State<SignUpForm> {
                               controller: passwordController,
                               onChanged: (String newPassword) =>
                                   updatePasswordStrength(newPassword),
-                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(40),
                               ],
@@ -422,7 +419,6 @@ class _SignUpFormState extends State<SignUpForm> {
                               controller: confirmationController,
                               onChanged: (String confirmation) =>
                                   updateConfirmation(confirmation),
-                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(40),
                               ],
