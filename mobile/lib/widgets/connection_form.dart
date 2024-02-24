@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/pages/chat_page.dart';
 import 'package:mobile/pages/signup_page.dart';
-import 'package:mobile/widgets/background_image.dart.dart';
+import 'package:mobile/views/common/customs/app_style.dart';
 import 'package:provider/provider.dart';
 
 import '../services/socket_service.dart';
@@ -37,7 +38,6 @@ class _ConnectionFormState extends State<ConnectionForm> {
     final socketService = context.watch<SocketService>();
     return Stack(
       children: [
-        BackgroundImage(),
         SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.only(
@@ -47,12 +47,11 @@ class _ConnectionFormState extends State<ConnectionForm> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'C O N N E X I O N',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  "PolyDiff",
+                  style: appstyle(60, kLightOrange, FontWeight.bold),
+                  textAlign: TextAlign.center,
                 ),
+                SizedBox(height: 50),
                 Center(
                   child: Padding(
                     padding: EdgeInsets.only(top: 21, right: 100),
@@ -164,7 +163,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                         backgroundColor: Color.fromARGB(255, 31, 150, 104),
                         foregroundColor: Colors.white,
                       ),
-                      child: Text("Connexion"),
+                      child: Text("C O N N E X I O N"),
                     ),
                   ),
                 ),
