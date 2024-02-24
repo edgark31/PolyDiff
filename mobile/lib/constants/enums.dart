@@ -16,3 +16,15 @@ enum MessageTag {
   Common,
   Global,
 }
+
+enum EmailStatus { unknown, valid, invalid }
+
+enum PasswordStatus { unknown, valid, invalid }
+
+enum FormStatus {
+  initial,
+  valid,
+  submissionInProgress,
+  submissionSuccess,
+  submissionFailure
+}
