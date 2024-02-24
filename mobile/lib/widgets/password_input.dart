@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
-import 'package:mobile/views/common/customs/app_style.dart';
+import 'package:mobile/widgets/customs/app_style.dart';
 
 class PasswordInput extends StatelessWidget {
   const PasswordInput({

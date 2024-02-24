@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/views/common/customs/app_style.dart';
+import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:provider/provider.dart';
 
 import '../services/socket_service.dart';

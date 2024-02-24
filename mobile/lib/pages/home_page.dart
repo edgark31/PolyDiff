@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/views/common/customs/app_style.dart';
-import 'package:mobile/views/common/customs/custom_btn.dart';
 import 'package:mobile/widgets/background_image.dart.dart';
+import 'package:mobile/widgets/customs/app_style.dart';
+import 'package:mobile/widgets/customs/custom_btn.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key});
