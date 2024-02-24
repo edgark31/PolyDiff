@@ -1,6 +1,3 @@
-/*
-  create constant color for the button and renamed as you want
-*/
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
