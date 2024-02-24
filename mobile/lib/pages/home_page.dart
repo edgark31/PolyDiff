@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
     double startingPoint = screenHeight * 0.5;
     return Stack(
       children: [
-        BackgroundImage(),
+        BackgroundContainer(),
         Scaffold(
           backgroundColor: Colors.transparent,
           body: SafeArea(

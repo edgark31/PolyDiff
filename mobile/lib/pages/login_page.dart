@@ -9,8 +9,9 @@ class LoginPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          BackgroundImage(),
-          ConnectionForm(),
+          BackgroundContainer(
+            child: ConnectionForm(),
+          )
         ],
       ),
     );

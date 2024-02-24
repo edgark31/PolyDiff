@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 
-class BackgroundImage extends StatelessWidget {
-  const BackgroundImage({super.key});
+class BackgroundContainer extends StatelessWidget {
+  const BackgroundContainer({
+    super.key,
+    this.padding,
+    this.margin,
+    this.child,
+  });
+
+  final EdgeInsets? padding;
+  final EdgeInsets? margin;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context)
-          .size
-          .height, // Ensure the image covers the full screen height
+      height: MediaQuery.of(context).size.height,
+      width: double.infinity,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/images/MenuBackground.jpg'),
           fit: BoxFit.cover,
         ),
       ),
+      child: child,
     );
   }
 }
