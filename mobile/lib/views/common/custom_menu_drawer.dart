@@ -23,22 +23,29 @@ class CustomMenuDrawer extends StatelessWidget {
               leading: Icon(Icons.account_circle),
               title: Text('Profile'),
               onTap: () => print('Profile')),
+          SizedBox(height: 10),
           ListTile(
               leading: Icon(Icons.message_rounded),
               title: Text('Message'),
               onTap: () => print('Message')),
+          SizedBox(height: 10),
           ListTile(
               leading: Icon(Icons.line_axis),
               title: Text('Statistiques'),
               onTap: () => print('Statistiques')),
+          SizedBox(height: 10),
           ListTile(
               leading: Icon(Icons.settings),
               title: Text('Réglages'),
               onTap: () => print('Réglages')),
+
+          SizedBox(height: 10),
+          Divider(),
           ListTile(
               leading: Icon(Icons.lock_person_rounded),
               title: Text('Admin'),
               onTap: () => print('Admin')),
+          SizedBox(height: 10),
           ListTile(
               leading: Icon(Icons.logout),
               title: Text('Déconnexion'),
