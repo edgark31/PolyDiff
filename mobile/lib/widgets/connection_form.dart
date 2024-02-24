@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/constants/app_constants.dart';
-import 'package:mobile/pages/chat_page.dart';
-import 'package:mobile/pages/signup_page.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/views/common/customs/app_style.dart';
 import 'package:provider/provider.dart';
 
@@ -143,11 +142,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                           if (socketService.connectionStatus) {
                             print("We are in the connection status");
                             print("Connection approved");
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ChatPage(),
-                              ),
-                            );
+                            Navigator.pushNamed(context, CHAT_ROUTE);
                           } else if (userName.isNotEmpty) {
                             setState(() {
                               errorMessage =
@@ -177,11 +172,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                 Center(
                   child: InkWell(
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => SignUpPage(),
-                        ),
-                      );
+                      Navigator.pushNamed(context, SIGNUP_ROUTE);
                     },
                     child: Container(
                       child: Text(

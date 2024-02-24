@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/pages/login_page.dart';
-import 'package:mobile/pages/signup_page.dart';
 import 'package:mobile/views/common/customs/app_style.dart';
 import 'package:mobile/views/common/customs/custom_btn.dart';
 import 'package:mobile/widgets/background_image.dart.dart';
@@ -48,11 +46,7 @@ class HomePage extends StatelessWidget {
                       CustomButton(
                         text: 'C O N N E X I O N',
                         press: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => LoginPage(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, LOGIN_ROUTE);
                         },
                         backgroundColor: kMidGreen,
                       ),
@@ -60,11 +54,7 @@ class HomePage extends StatelessWidget {
                       CustomButton(
                         text: "S' I N S C R I R E",
                         press: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => SignUpPage(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, SIGNUP_ROUTE);
                         },
                         backgroundColor: kLight,
                         textColor: kMidGreen,

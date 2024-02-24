@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:provider/provider.dart';
 
-import '../pages/login_page.dart';
 import '../services/name_generation_service.dart';
 import '../services/socket_service.dart';
 
@@ -474,11 +474,8 @@ class _SignUpFormState extends State<SignUpForm> {
                                         print(
                                             "We are in the connection status");
                                         print("Connection approved");
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) => LoginPage(),
-                                          ),
-                                        );
+                                        Navigator.pushNamed(
+                                            context, LOGIN_ROUTE);
                                       } else if (userName.isNotEmpty) {
                                         setState(() {
                                           errorMessage =
@@ -511,11 +508,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     Center(
                       child: InkWell(
                         onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => LoginPage(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, LOGIN_ROUTE);
                         },
                         child: Text(
                           "Se connecter",

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/views/common/custom_menu_drawer.dart';
+import 'package:mobile/views/common/customs/custom_menu_drawer.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});

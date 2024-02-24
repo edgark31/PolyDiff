@@ -2,9 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/home_page.dart';
+import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/pages/settings_page.dart';
+import 'package:mobile/pages/signup_page.dart';
 
 const String HOME_ROUTE = '/';
 const String LOGIN_ROUTE = '/login';
@@ -24,6 +26,12 @@ class AppRouter {
     switch (settings.name) {
       case '/':
         return HomePage.route();
+
+      case LoginPage.routeName:
+        return LoginPage.route();
+
+      case SignUpPage.routeName:
+        return SignUpPage.route();
 
       case DashboardPage.routeName:
         return DashboardPage.route();
