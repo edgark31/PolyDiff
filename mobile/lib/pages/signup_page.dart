@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
-
-import '../widgets/signup_form.dart';
+import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/widgets/signup_form.dart';
 
 class SignUpPage extends StatelessWidget {
+  static const routeName = SIGNUP_ROUTE;
+
+  static Route<dynamic> route() {
+    return MaterialPageRoute(
+      builder: (_) => SignUpPage(),
+      settings: RouteSettings(name: routeName),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

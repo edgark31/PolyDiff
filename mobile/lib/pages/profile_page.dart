@@ -1,9 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/widgets/avatar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  static const routeName = PROFILE_ROUTE;
+
+  static Route<dynamic> route() {
+    return MaterialPageRoute(
+      builder: (_) => ProfilePage(),
+      settings: RouteSettings(name: routeName),
+    );
+  }
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -18,11 +29,9 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           children: [
             const SizedBox(height: 40),
-            CircleAvatar(
+            Avatar(
+              imageUrl: 'assets/images/cuteRaccoon.pgn',
               radius: 70,
-              backgroundImage: AssetImage(
-                "assets/images/user.jpeg",
-              ),
             ),
             const SizedBox(height: 20),
             itemProfile('Cute raccoon', CupertinoIcons.person),

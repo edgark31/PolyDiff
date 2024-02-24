@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/pages/signup_page.dart';
 import 'package:mobile/views/common/customs/app_style.dart';
@@ -8,6 +9,15 @@ import 'package:mobile/widgets/background_image.dart.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key});
+
+  static const routeName = HOME_ROUTE;
+
+  static Route route() {
+    return MaterialPageRoute(
+      builder: (_) => HomePage(),
+      settings: RouteSettings(name: routeName),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile/constants/app_constants.dart';
-import 'package:mobile/pages/dashboard_page.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:provider/provider.dart';
@@ -13,18 +13,7 @@ Widget defaultHome = HomePage();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // TODO : When connexion logic will be done
-  // final entrypoint = prefs.getBool('entrypoint') ?? false;
-  // final loggedIn = prefs.getBool('loggedIn') ?? false;
-
-  // if (entrypoint & !loggedIn) {
-  //   defaultHome = const LoginPage();
-  // } else if (entrypoint && loggedIn) {
-  //   defaultHome = const HomePage();
-  // }
-
   runApp(MultiProvider(providers: [
-    // ChangeNotifierProvider(create: (context) => LoginNotifier()),
     ChangeNotifierProvider(create: (context) => CameraImageUploader()),
     ChangeNotifierProvider(create: (context) => SocketService()),
   ], child: const MyApp()));
@@ -43,7 +32,8 @@ class MyApp extends StatelessWidget {
           colorScheme:
               ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),
         ),
-        home: DashboardPage(),
+        onGenerateRoute: AppRouter.onGenerateRoute,
+        initialRoute: HomePage.routeName,
       );
     });
   }
