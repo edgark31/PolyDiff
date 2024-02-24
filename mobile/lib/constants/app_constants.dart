@@ -1,5 +1,9 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+const String BACKGROUND_PATH = 'assets/images/raccoon_background.jpg';
 
 Color kDark = Colors.black;
 const kLight = Color(0xFFFFFFFF);

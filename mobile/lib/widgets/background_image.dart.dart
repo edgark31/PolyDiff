@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_constants.dart';
 
 class BackgroundContainer extends StatelessWidget {
   const BackgroundContainer({
@@ -19,7 +20,7 @@ class BackgroundContainer extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/MenuBackground.jpg'),
+          image: AssetImage(BACKGROUND_PATH),
           fit: BoxFit.cover,
         ),
       ),
