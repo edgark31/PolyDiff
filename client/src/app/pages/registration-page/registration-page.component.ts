@@ -24,7 +24,9 @@ export class RegistrationPageComponent {
     creds: Credentials;
     feedback: string;
     password: string;
+    confirmedPassword: string;
     email: string;
+    username: string;
 
     constructor(
         private readonly communication: CommunicationService,
@@ -41,7 +43,6 @@ export class RegistrationPageComponent {
             this.registrationForm.value.username &&
             this.registrationForm.value.email &&
             this.validation.isEmailValid(this.email) &&
-            this.validation.passwordStrength === 'Élevé' &&
             this.registrationForm.value.password
         ) {
             this.feedback = '';

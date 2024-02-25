@@ -44,6 +44,14 @@ form {
         margin-top: 4px;
         margin-bottom: 0;
     }
+
+    .password-strength {
+        color: rgb(255, 255, 255);
+        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        font-size: 0.8rem;
+        margin-top: 4px;
+        margin-bottom: 0;
+    }
     
 }
 

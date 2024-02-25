@@ -2,22 +2,24 @@
     <h1>Inscription</h1>
     <div class="form-control">
         <label for="username">Nom d'utilisateur</label>
-        <input formControlName="username" id="username"/>
+        <input formControlName="username" id="username" [(ngModel)]="username"/>
+        <label *ngIf="!username" class="error">Le champ est vide</label>
     </div>
     <div class="form-control">
         <label for="email">Courriel</label>
         <input formControlName="email" id="email" [(ngModel)]="email"/>
-        <label *ngIf="validation.isEmailValid(email)" class="error">Le courriel est valide</label>
+        <label *ngIf="validation.isEmailValid(email)" class="password-strength">Le courriel est valide</label>
         <label *ngIf="!validation.isEmailValid(email)" class="error">Le courriel n'est pas valide</label>
     </div>
     <div class="form-control">
         <label for="password">Mot de passe</label>
         <input formControlName="password" type="password" id="password" [(ngModel)]="password" (input)="validation.updatePasswordStrength(password)"/>
-        <label for="password">Force du mot de passe : {{this.validation.passwordStrength}} </label>
+        <label for="password" class="password-strength">Force du mot de passe : {{this.validation.passwordStrength}} </label>
     </div>
     <div class="form-control">
         <label for="password">Confirmation du mot de passe</label>
-        <input formControlName="password" type="password" id="password"/>
+        <input formControlName="password" type="password" id="password" [(ngModel)]="confirmedPassword"/>
+        <label *ngIf="password !== confirmedPassword" class="error">Le mot de passe doit être similaire</label>
     </div>
     <button routerLink="/login">Revenir à la page de connexion</button>
     <button type="submit" (click)="openNameGenerationDialog()">Generer un nom d'utilisateur</button>
