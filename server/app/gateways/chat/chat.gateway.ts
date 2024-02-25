@@ -1,12 +1,20 @@
 import { ChannelEvents } from '@common/enums';
 import { Logger } from '@nestjs/common';
-import { ConnectedSocket, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import {
+    ConnectedSocket,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
+    OnGatewayInit,
+    SubscribeMessage,
+    WebSocketGateway,
+    WebSocketServer,
+} from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
     namespace: '/chat',
 })
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
     @WebSocketServer() private server: Server;
 
     constructor(private readonly logger: Logger) {
@@ -17,6 +25,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     handleGlobalMessage(@ConnectedSocket() socket: Socket): string {
         return 'Hello world!';
     }
+
+    afterInit() {}
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         this.logger.log(`Connexion par l'utilisateur avec id : ${socket.id}`);

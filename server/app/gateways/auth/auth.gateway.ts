@@ -1,5 +1,14 @@
+import { AccountEvents } from '@common/enums';
 import { Logger } from '@nestjs/common';
-import { ConnectedSocket, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import {
+    ConnectedSocket,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
+    OnGatewayInit,
+    SubscribeMessage,
+    WebSocketGateway,
+    WebSocketServer,
+} from '@nestjs/websockets';
 import { instrument } from '@socket.io/admin-ui';
 import { Server, Socket } from 'socket.io';
 
@@ -20,6 +29,11 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     constructor(private readonly logger: Logger) {
         //
+    }
+
+    @SubscribeMessage(AccountEvents.Update)
+    update(@ConnectedSocket() socket: Socket): string {
+        return 'Hello world!';
     }
 
     afterInit() {

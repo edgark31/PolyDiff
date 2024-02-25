@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ChatPageComponent } from '@app/pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from '@app/pages/config-page/config-page.component';
 import { CreationPageComponent } from '@app/pages/creation-page/creation-page.component';
 import { GamePageComponent } from '@app/pages/game-page/game-page.component';
@@ -13,6 +14,7 @@ import { SelectionPageComponent } from '@app/pages/selection-page/selection-page
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'home', component: MainPageComponent },
+    { path: 'chat', component: ChatPageComponent },
     { path: 'game', component: GamePageComponent },
     { path: 'create', component: CreationPageComponent },
     { path: 'selection', component: SelectionPageComponent },

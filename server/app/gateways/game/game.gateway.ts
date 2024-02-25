@@ -5,7 +5,6 @@ import { PlayersListManagerService } from '@app/services/players-list-manager/pl
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConnectedSocket, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { instrument } from '@socket.io/admin-ui';
 import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
 

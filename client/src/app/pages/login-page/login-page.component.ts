@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
@@ -13,7 +13,7 @@ import { Account, Credentials } from '@common/game-interfaces';
     templateUrl: './login-page.component.html',
     styleUrls: ['./login-page.component.scss'],
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements AfterViewInit {
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
         password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
@@ -28,6 +28,10 @@ export class LoginPageComponent {
         private readonly router: Router,
     ) {
         this.feedback = '';
+    }
+
+    ngAfterViewInit(): void {
+        this.clientSocket.disconnect();
     }
 
     onSubmit() {
