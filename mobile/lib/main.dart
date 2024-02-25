@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/pages/avatar_selection_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
               ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),
         ),
         onGenerateRoute: AppRouter.onGenerateRoute,
-        initialRoute: HomePage.routeName,
+        initialRoute: AvatarSelectionPage.routeName,
       );
     });
   }

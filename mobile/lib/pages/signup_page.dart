@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/widgets/signup_form.dart';
 
@@ -23,7 +24,7 @@ class SignUpPage extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/MenuBackground.jpg'),
+                  image: AssetImage(BACKGROUND_PATH),
                   fit: BoxFit.cover,
                 ),
               ),
