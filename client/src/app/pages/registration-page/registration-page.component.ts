@@ -24,6 +24,7 @@ export class RegistrationPageComponent {
     creds: Credentials;
     feedback: string;
     password: string;
+    email: string;
 
     constructor(
         private readonly communication: CommunicationService,
