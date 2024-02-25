@@ -19,9 +19,14 @@ import { LimitedModeService } from './services/limited-mode/limited-mode.service
 import { MessageManagerService } from './services/message-manager/message-manager.service';
 import { PlayersListManagerService } from './services/players-list-manager/players-list-manager.service';
 import { RoomsManagerService } from './services/rooms-manager/rooms-manager.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
     imports: [
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'assets'),
+        }),
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRootAsync({
             imports: [ConfigModule],

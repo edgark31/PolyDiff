@@ -30,9 +30,19 @@ export class AccountController {
     }
 
     @Post('pseudo')
-    async changePseudo(@Body('oldPseudo') oldPseudo: string, @Body('newPseudo') newPseudo: string, @Res() response: Response) {
+    async changePseudo(@Body('oldUsername') oldUsername: string, @Body('newUsername') newUsername: string, @Res() response: Response) {
         try {
-            await this.accountManager.changePseudo(oldPseudo, newPseudo);
+            await this.accountManager.changePseudo(oldUsername, newUsername);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.CONFLICT).json(error);
+        }
+    }
+
+    @Post('avatar')
+    async changeAvatar(@Body('username') username: string, @Body('avatar') avatar: string, @Res() response: Response) {
+        try {
+            await this.accountManager.changeAvatar(username, avatar);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);

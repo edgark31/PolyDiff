@@ -10,16 +10,7 @@ import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
 
 @WebSocketGateway({
-    cors: {
-        origin: (origin, callback) => {
-            if (origin === undefined || origin === 'https://admin.socket.io') {
-                callback(null, true);
-            } else {
-                callback(null, '*');
-            }
-        },
-        credentials: true,
-    },
+    namespace: '/game',
 })
 @Injectable()
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
@@ -219,17 +210,16 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     // }
 
     afterInit() {
-        instrument(this.server, {
-            auth: false,
-            mode: 'development',
-        });
         setInterval(() => {
             this.roomsManagerService.updateTimers(this.server);
         }, DELAY_BEFORE_EMITTING_TIME);
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
-        const userName = socket.handshake.query.name;
+        const userName = socket.handshake.query.name as string;
+        if (!this.accountManager.connectedProfiles.has(userName)) {
+            this.server.to(socket.id).emit('connexion', false);
+        }
         this.logger.log(`Connexion par l'utilisateur ${userName} avec id : ${socket.id}`);
     }
 
