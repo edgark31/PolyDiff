@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { NameGenerationDialogComponent } from '@app/components/name-generation-dialog/name-generation-dialog.component';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { NameGenerationService } from '@app/services/name-generation-service/name-generation-service.service';
+import { ValidationService } from '@app/services/validation-service/validation.service';
 import { Credentials } from '@common/game-interfaces';
 
 @Component({
@@ -22,12 +23,14 @@ export class RegistrationPageComponent {
     });
     creds: Credentials;
     feedback: string;
+    password: string;
 
     constructor(
         private readonly communication: CommunicationService,
         private readonly router: Router,
         private readonly dialog: MatDialog,
         private readonly nameGeneration: NameGenerationService,
+        readonly validation: ValidationService,
     ) {
         this.feedback = '';
     }

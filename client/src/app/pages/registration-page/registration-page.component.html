@@ -10,7 +10,8 @@
     </div>
     <div class="form-control">
         <label for="password">Mot de passe</label>
-        <input formControlName="password" id="password"/>
+        <input formControlName="password" id="password" [(ngModel)]="password" (input)="validation.updatePasswordStrength(password)"/>
+        <label for="password">Force du mot de passe : {{this.validation.passwordStrength}} </label>
     </div>
     <div class="form-control">
         <label for="password">Confirmation du mot de passe</label>
