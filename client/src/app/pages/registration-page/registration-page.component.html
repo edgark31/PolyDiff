@@ -7,8 +7,8 @@
     <div class="form-control">
         <label for="email">Courriel</label>
         <input formControlName="email" id="email" [(ngModel)]="email"/>
-        <p *ngIf="validation.isEmailValid(email)" class="feedback">Le courriel est valide</p>
-        <p *ngIf="!validation.isEmailValid(email)" class="feedback">Le courriel n'est pas valide</p>
+        <label *ngIf="validation.isEmailValid(email)">Le courriel est valide</label>
+        <label *ngIf="!validation.isEmailValid(email)">Le courriel n'est pas valide</label>
     </div>
     <div class="form-control">
         <label for="password">Mot de passe</label>
