@@ -37,7 +37,13 @@ export class RegistrationPageComponent {
     }
 
     onSubmit() {
-        if (this.registrationForm.value.username && this.registrationForm.value.email && this.registrationForm.value.password) {
+        if (
+            this.registrationForm.value.username &&
+            this.registrationForm.value.email &&
+            this.validation.isEmailValid(this.email) &&
+            this.validation.passwordStrength === 'Élevé' &&
+            this.registrationForm.value.password
+        ) {
             this.feedback = '';
             this.creds = {
                 username: this.registrationForm.value.username,

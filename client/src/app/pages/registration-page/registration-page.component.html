@@ -7,17 +7,17 @@
     <div class="form-control">
         <label for="email">Courriel</label>
         <input formControlName="email" id="email" [(ngModel)]="email"/>
-        <label *ngIf="validation.isEmailValid(email)">Le courriel est valide</label>
-        <label *ngIf="!validation.isEmailValid(email)">Le courriel n'est pas valide</label>
+        <label *ngIf="validation.isEmailValid(email)" class="error">Le courriel est valide</label>
+        <label *ngIf="!validation.isEmailValid(email)" class="error">Le courriel n'est pas valide</label>
     </div>
     <div class="form-control">
         <label for="password">Mot de passe</label>
-        <input formControlName="password" id="password" [(ngModel)]="password" (input)="validation.updatePasswordStrength(password)"/>
+        <input formControlName="password" type="password" id="password" [(ngModel)]="password" (input)="validation.updatePasswordStrength(password)"/>
         <label for="password">Force du mot de passe : {{this.validation.passwordStrength}} </label>
     </div>
     <div class="form-control">
         <label for="password">Confirmation du mot de passe</label>
-        <input formControlName="password" id="password"/>
+        <input formControlName="password" type="password" id="password"/>
     </div>
     <button routerLink="/login">Revenir à la page de connexion</button>
     <button type="submit" (click)="openNameGenerationDialog()">Generer un nom d'utilisateur</button>

@@ -36,6 +36,15 @@ form {
         border: 1px solid #000000;
         background-color: white;
     }
+
+    .error {
+        color: red;
+        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        font-size: 0.8rem;
+        margin-top: 4px;
+        margin-bottom: 0;
+    }
+    
 }
 
 button:hover {
