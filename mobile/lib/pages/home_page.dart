@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/widgets/background_container.dart.dart';
 import 'package:mobile/widgets/customs/app_style.dart';
+import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 
 class HomePage extends StatelessWidget {

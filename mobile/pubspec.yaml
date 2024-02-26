@@ -21,6 +21,10 @@ dependencies:
     path:
     image_picker: ^1.0.7
     stacked: ^3.4.2
+    flutter_screenutil: ^5.9.0
+    google_nav_bar: ^5.0.6
+    google_fonts: ^6.1.0
+    equatable: ^2.0.5
 
 #-------------------- ./ PACKAGES END ----------------#
 dev_dependencies:

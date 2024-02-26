@@ -21,7 +21,7 @@ class ChatPage extends StatelessWidget {
         height: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(BACKGROUND_PATH),
+            image: AssetImage(MENU_BACKGROUND_PATH),
             fit: BoxFit.cover,
           ),
         ),

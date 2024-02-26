@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/widgets/background_container.dart.dart'; // Make sure the path is correct
 import 'package:mobile/widgets/connection_form.dart';
+import 'package:mobile/widgets/customs/background_container.dart'; // Make sure the path is correct
 
 class LoginPage extends StatelessWidget {
   static const routeName = LOGIN_ROUTE;

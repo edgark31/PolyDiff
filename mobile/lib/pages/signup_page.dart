@@ -24,7 +24,7 @@ class SignUpPage extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(BACKGROUND_PATH),
+                  image: AssetImage(MENU_BACKGROUND_PATH),
                   fit: BoxFit.cover,
                 ),
               ),

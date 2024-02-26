@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/pages/avatar_selection_page.dart';
@@ -25,17 +24,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(builder: (context, child) {
-      return MaterialApp(
-        title: 'PolyDiff',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme:
-              ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),
-        ),
-        onGenerateRoute: AppRouter.onGenerateRoute,
-        initialRoute: AvatarSelectionPage.routeName,
-      );
-    });
+    return MaterialApp(
+      title: 'PolyDiff',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),
+      ),
+      onGenerateRoute: AppRouter.onGenerateRoute,
+      initialRoute: AvatarSelectionPage.routeName,
+    );
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 
 class BackgroundContainer extends StatelessWidget {
-
   const BackgroundContainer({
     super.key,
     this.padding,
@@ -18,7 +17,7 @@ class BackgroundContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String imagePath = backgroundImagePath ?? BACKGROUND_PATH;
+    final String imagePath = backgroundImagePath ?? MENU_BACKGROUND_PATH;
 
     return Container(
       height: MediaQuery.of(context).size.height,

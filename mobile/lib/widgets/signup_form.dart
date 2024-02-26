@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/services/services.dart';
 import 'package:provider/provider.dart';
-
-import '../services/name_generation_service.dart';
-import '../services/socket_service.dart';
 
 class SignUpForm extends StatefulWidget {
   @override

@@ -25,7 +25,7 @@ class AvatarSelectionPage extends StatefulWidget {
 
 class _AvatarSelectionPageState extends State<AvatarSelectionPage> {
   // Default raccoon avatar
-  ImageProvider? _selectedImage = AssetImage('assets/images/raccoon2.jpeg');
+  ImageProvider? _selectedImage = AssetImage('assets/images/sleepyRaccoon.jpg');
 
   Future<void> _pickImageFromCamera() async {
     final ImagePicker _picker = ImagePicker();
@@ -58,26 +58,28 @@ class _AvatarSelectionPageState extends State<AvatarSelectionPage> {
               SizedBox(width: 20),
               GestureDetector(
                 onTap: () => setState(() {
-                  _selectedImage = AssetImage('assets/images/cuteRaccoon.jpg');
+                  _selectedImage = AssetImage('assets/images/shookRaccoon.bmp');
                 }),
                 child: avatarContainer(
-                    AssetImage('assets/images/cuteRaccoon.jpg'), kLightGreen),
+                    AssetImage('assets/images/shookRaccoon.bmp'), kLightGreen),
               ),
               SizedBox(width: 20),
               GestureDetector(
                 onTap: () => setState(() {
-                  _selectedImage = AssetImage('assets/images/raccoon.webp');
+                  _selectedImage =
+                      AssetImage('assets/images/hallelujaRaccoon.jpeg');
                 }),
                 child: avatarContainer(
-                    AssetImage('assets/images/raccoon.webp'), kMidGreen),
+                    AssetImage('assets/images/hallelujaRaccoon.jpeg'),
+                    kMidGreen),
               ),
               SizedBox(width: 20),
               GestureDetector(
                 onTap: () => setState(() {
-                  _selectedImage = AssetImage('assets/images/raccoon2.jpeg');
+                  _selectedImage = AssetImage('assets/images/cuteRaccoon.bmp');
                 }),
                 child: avatarContainer(
-                    AssetImage('assets/images/raccoon2.jpeg'), kLightOrange),
+                    AssetImage('assets/images/cuteRaccoon.bmp'), kLightOrange),
               ),
               SizedBox(width: 20),
               GestureDetector(
