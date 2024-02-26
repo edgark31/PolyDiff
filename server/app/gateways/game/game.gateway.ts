@@ -226,7 +226,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.logger.log(`Connexion par l'utilisateur avec id : ${socket.id}`);
     }
 
-    // Test comm
+    // Test com
 
     async handleDisconnect(@ConnectedSocket() socket: Socket) {
         this.logger.log(`Déconnexion par l'utilisateur avec id : ${socket.id}`);
