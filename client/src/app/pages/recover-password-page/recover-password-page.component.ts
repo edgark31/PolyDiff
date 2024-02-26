@@ -32,8 +32,6 @@ export class RecoverPasswordPageComponent {
                 }
             });
             this.gameManager.manageSocket();
-            this.clientSocket.send(ConnectionEvents.UserConnectionRequest, this.recoverPasswordForm.value.username);
-            this.clientSocket.send(ConnectionEvents.UserConnectionRequest, this.recoverPasswordForm.value.password);
             this.gameManager.username = this.recoverPasswordForm.value.username;
         }
     }
