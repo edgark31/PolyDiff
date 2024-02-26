@@ -1,1 +1,0 @@
- C:\\Users\\jerem\\OneDrive\\Documents\\GitHub\\LOG3900-102\\thin_client_prototype\\.dart_tool\\flutter_build\\252a54333af3f6054cadaa5b31902125\\native_assets.yaml: 
