@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/common/enums.dart';
+import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/chat_message_model.dart';
-import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
 
@@ -73,11 +73,7 @@ class _ChatBoxState extends State<ChatBox> {
                     icon: Icon(Icons.exit_to_app),
                     onPressed: () {
                       socketService.disconnect();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
+                      Navigator.pushNamed(context, LOGIN_ROUTE);
                     },
                     iconSize: 30,
                   ),
