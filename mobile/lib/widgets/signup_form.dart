@@ -21,9 +21,8 @@ class _SignUpFormState extends State<SignUpForm> {
   bool hasAnimalName = false;
   bool hasNumber = false;
 
-  bool isFormValid = false;
-  String usernameFormat = '';
-  String emailFormat = '';
+  String usernameFormat = 'Non';
+  String emailFormat = 'Non';
   String passwordStrength = '';
   String passwordConfirmation = '';
 
@@ -93,14 +92,12 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  void updateButtonState() {
+  bool isFormValid() {
     bool isValidUsername = isUsernameValid(userNameController.text);
     bool isValidEmail = isEmailValid(emailController.text);
     bool isValidPassword = arePasswordsMatching(
         passwordController.text, confirmationController.text);
-    setState(() {
-      isFormValid = isValidUsername && isValidEmail && isValidPassword;
-    });
+    return isValidUsername && isValidEmail && isValidPassword;
   }
 
   @override
@@ -182,7 +179,6 @@ class _SignUpFormState extends State<SignUpForm> {
                               controller: userNameController,
                               onChanged: (username) =>
                                   isUsernameValid(username),
-                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(20),
                               ],
@@ -205,7 +201,6 @@ class _SignUpFormState extends State<SignUpForm> {
                             child: TextField(
                               controller: emailController,
                               onChanged: (email) => isEmailValid(email),
-                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(40),
                               ],
@@ -344,7 +339,6 @@ class _SignUpFormState extends State<SignUpForm> {
                           userNameController.text =
                               nameGenerationService.generatedName;
                           isUsernameValid(userNameController.text);
-                          updateButtonState();
                         },
                         iconSize: 50,
                       ),
@@ -396,7 +390,6 @@ class _SignUpFormState extends State<SignUpForm> {
                               controller: passwordController,
                               onChanged: (String newPassword) =>
                                   updatePasswordStrength(newPassword),
-                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(40),
                               ],
@@ -422,7 +415,6 @@ class _SignUpFormState extends State<SignUpForm> {
                               controller: confirmationController,
                               onChanged: (String confirmation) =>
                                   updateConfirmation(confirmation),
-                              onSubmitted: (value) => {updateButtonState()},
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(40),
                               ],
@@ -450,41 +442,16 @@ class _SignUpFormState extends State<SignUpForm> {
                           width: 430,
                           height: 40,
                           child: ElevatedButton(
-                            onPressed: isFormValid
-                                ? () {
-                                    // TODO: ajouter la vérification
-                                    // TODO optionnel: rendre ca clean pas if if if if
-                                    String userName = userNameController.text;
-                                    if (userName.isNotEmpty) {
-                                      print(
-                                          "Sending the server your username: " +
-                                              userName);
-                                      socketService.checkName(userName);
-                                    } else {
-                                      setState(() {
-                                        errorMessage =
-                                            "Votre nom ne peut pas être vide";
-                                      });
-                                    }
-                                    Future.delayed(Duration(milliseconds: 300),
-                                        () {
-                                      print(
-                                          "Connection status: ${socketService.connectionStatus}");
-                                      if (socketService.connectionStatus) {
-                                        print(
-                                            "We are in the connection status");
-                                        print("Connection approved");
-                                        Navigator.pushNamed(
-                                            context, LOGIN_ROUTE);
-                                      } else if (userName.isNotEmpty) {
-                                        setState(() {
-                                          errorMessage =
-                                              "Un client avec ce nom existe déjà";
-                                        });
-                                      }
-                                    });
-                                  }
-                                : null,
+                            onPressed: () {
+                              if (isFormValid()) {
+                                //Envoyer les informations
+                              } else {
+                                setState(() {
+                                  errorMessage =
+                                      "Une ou plusieurs entrée(s) est/sont incorrecte(s)";
+                                });
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
