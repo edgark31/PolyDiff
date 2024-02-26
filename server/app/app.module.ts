@@ -14,7 +14,7 @@ import { Game, gameSchema } from './model/database/game';
 import { GameCard, gameCardSchema } from './model/database/game-card';
 import { GameConstants, gameConstantsSchema } from './model/database/game-config-constants';
 import { GameHistory, gameHistorySchema } from './model/database/game-history';
-import { AccountManagerService } from './services/account-manager/account-manager/account-manager.service';
+import { AccountManagerService } from './services/account-manager/account-manager.service';
 import { ClassicModeService } from './services/classic-mode/classic-mode.service';
 import { DatabaseService } from './services/database/database.service';
 import { GameListsManagerService } from './services/game-lists-manager/game-lists-manager.service';

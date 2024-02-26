@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
+import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { Profile } from '@common/game-interfaces';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -9,7 +10,11 @@ import { Model } from 'mongoose';
 export class AccountManagerService implements OnModuleInit {
     connectedProfiles: Map<string, Profile> = new Map<string, Profile>();
 
-    constructor(private readonly logger: Logger, @InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>) {}
+    constructor(
+        private readonly logger: Logger,
+        @InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>,
+        private readonly imageManager: ImageManagerService,
+    ) {}
 
     onModuleInit() {
         //
