@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/pages/signup_page.dart';
+import 'package:mobile/widgets/admin_popup.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/chat_page.dart';
@@ -105,8 +106,9 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       padding: EdgeInsets.only(left: 10),
                       child: TextField(
                         controller: passwordController,
+                        obscureText: true,
                         inputFormatters: [
-                          LengthLimitingTextInputFormatter(20),
+                          LengthLimitingTextInputFormatter(40),
                         ],
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -191,6 +193,32 @@ class _ConnectionFormState extends State<ConnectionForm> {
                             color: Colors.black,
                           ),
                         ),
+                      ),
+                    ),
+                  ),
+                  //Temporaire pour tester la page d'admin
+                  Padding(
+                    padding: EdgeInsets.only(top: 21),
+                    child: SizedBox(
+                      width: 430,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AdminPopup();
+                            },
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                          backgroundColor: Color.fromARGB(255, 31, 150, 104),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: Text("Ouvrir le popup"),
                       ),
                     ),
                   ),
