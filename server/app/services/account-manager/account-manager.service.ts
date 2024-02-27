@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Statistics, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { Profile } from '@common/game-interfaces';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
@@ -33,10 +33,12 @@ export class AccountManagerService implements OnModuleInit {
                 profile: {
                     avatar: this.imageManager.convert('default.png'),
                     sessions: [],
-                    connexions: [],
+                    connections: [],
                     stats: {} as Statistics,
                     friends: [],
                     friendRequests: [],
+                    language: '',
+                    theme: {} as Theme,
                 },
             };
             await this.accountModel.create(newAccount);

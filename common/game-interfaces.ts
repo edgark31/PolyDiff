@@ -178,7 +178,7 @@ export interface Profile {
     friends: Friend[];
     friendRequests: string[];
     theme: Theme;
-    languages: string;
+    language: string;
 }
 
 export interface SessionLog {
@@ -212,7 +212,7 @@ export interface Score {
     mode: string;
     duration: number;
     diffFound: number;
-    difficultu: string;
+    difficulty: string;
 }
 
 export interface Chat {

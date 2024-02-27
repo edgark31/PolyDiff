@@ -1,4 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
+import { ConnectionLog } from '@common/game-interfaces';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
@@ -13,6 +14,23 @@ export class SessionLog {
 }
 
 export const sessionLogSchema = SchemaFactory.createForClass(SessionLog);
+
+@Schema()
+export class Theme {
+    @Prop({ required: true })
+    name: string;
+
+    @Prop({ required: false })
+    color: string;
+
+    @Prop({ required: false })
+    backgroundColor: string;
+
+    @Prop({ required: false })
+    buttonColor: string;
+}
+
+export const themeSchema = SchemaFactory.createForClass(Theme);
 
 @Schema()
 export class ConnexionLog {
@@ -73,7 +91,7 @@ export class Profile {
     sessions: SessionLog[];
 
     @Prop({ type: [connexionLogSchema], default: [] })
-    connexions: ConnexionLog[];
+    connections: ConnectionLog[];
 
     @Prop({ type: statisticsSchema, required: true })
     stats: Statistics;
@@ -83,6 +101,12 @@ export class Profile {
 
     @Prop({ type: [String], default: [] })
     friendRequests: string[];
+
+    @Prop({ required: false })
+    language: string;
+
+    @Prop({ type: themeSchema, required: false })
+    theme: Theme;
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);

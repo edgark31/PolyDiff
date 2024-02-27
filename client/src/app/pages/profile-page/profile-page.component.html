@@ -1,18 +1,20 @@
-<body >
-    <!-- [ngStyle]="{'background-color': (welcomeService.chooseTheme.BackgroundColor), 'color': (welcomeService.chooseTheme.ButtonColor)}" -->
-    <app-menu></app-menu>
-    <div class="container-information"> <div class="information">{{'profil.information' | translate }}</div></div>
-    <div class ="container">
+<body>
+  <!-- [ngStyle]="{'background-color': (welcomeService.chooseTheme.BackgroundColor), 'color': (welcomeService.chooseTheme.ButtonColor)}" -->
+  <app-menu></app-menu>
+  <div class="container-information">
+    <div class="information">{{'profil.information' | translate }}</div>
+  </div>
+  <div class="container">
     <div class="left">
       <div class="form-control">
         <label for="username">{{'profil.username' | translate }}</label>
         <div> {{ welcomeService.account.credentials.username }}</div>
-    </div>
+      </div>
 
-    <div class="form-avatar">
-      <label for="avatar">Avatar</label>
-      <img [src]="welcomeService.account.profile.avatar" alt="Image" style="width: 100px; height: 100px;">
-    </div>
+      <div class="form-avatar">
+        <label for="avatar">Avatar</label>
+        <img [src]="welcomeService.account.profile.avatar" alt="Image" style="width: 100px; height: 100px;">
+      </div>
 
 
       <div class="form-control">
@@ -20,53 +22,56 @@
         <div>{{ welcomeService.account.profile.theme.name }}</div>
       </div>
 
-    <div class="form-control">
+      <div class="form-control">
         <label for="Langage">{{'profil.language' | translate }}</label>
-        <div>{{ translateCharacter(welcomeService.account.profile.languages)  }}</div>
+        <div>{{ translateCharacter(welcomeService.account.profile.language) }}</div>
       </div>
     </div>
 
     <div class="right">
-            <div class="section">
-              <h1>{{'profil.statistic' | translate }}</h1>
-            </div>
-            <div class="form-control">
-            <label>{{'profil.gamePlayed' | translate }}: </label>
-            <p>0</p>
-        </div>
-            <div class="form-control">
-            <label>{{'profil.gameWin' | translate }}: </label>
-            <p>0</p>
-        </div>
-            <div class="form-control">
-            <label>{{'profil.gameAverage' | translate }}: </label>
-            <p>0</p>
-        </div>
-            <div class="form-control">
-            <label>{{'profil.gameAverageTime' | translate }}: </label>
-            <p>0</p>
-        </div>
-
-
-        </div>
-    </div>
-    <div class ="container">
-    <div class="left"><div class="section"> <h1> {{'profil.Connexion' | translate }}</h1></div>
-        <div> <button class="button-plus" (click)="toggleTable()"><mat-icon>history</mat-icon> </button> </div>
-    </div>
-        <div class="right">
-            <div class="section">
-                <h1>{{'profil.gameHistoric' | translate }} </h1>
-                <div> <button class="button-plus"><mat-icon>list</mat-icon> </button> </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="button-container">
-        <button type="submit"  (click)="onSubmitPersonnalization()" >{{'bouton.GoReglage' | translate }}</button>
-        <button type="submit" (click)="onSubmitHome()">{{'bouton.deconnexion' | translate }}</button>
+      <div class="section">
+        <h1>{{'profil.statistic' | translate }}</h1>
       </div>
-    </body>
+      <div class="form-control">
+        <label>{{'profil.gamePlayed' | translate }}: </label>
+        <p>0</p>
+      </div>
+      <div class="form-control">
+        <label>{{'profil.gameWin' | translate }}: </label>
+        <p>0</p>
+      </div>
+      <div class="form-control">
+        <label>{{'profil.gameAverage' | translate }}: </label>
+        <p>0</p>
+      </div>
+      <div class="form-control">
+        <label>{{'profil.gameAverageTime' | translate }}: </label>
+        <p>0</p>
+      </div>
 
-    <!-- <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>    -->
+
+    </div>
+  </div>
+  <div class="container">
+    <div class="left">
+      <div class="section">
+        <h1> {{'profil.Connexion' | translate }}</h1>
+      </div>
+      <div> <button class="button-plus" (click)="toggleTable()"><mat-icon>history</mat-icon> </button> </div>
+    </div>
+    <div class="right">
+      <div class="section">
+        <h1>{{'profil.gameHistoric' | translate }} </h1>
+        <div> <button class="button-plus"><mat-icon>list</mat-icon> </button> </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="button-container">
+    <button type="submit" (click)="onSubmitPersonnalization()">{{'bouton.GoReglage' | translate }}</button>
+    <button type="submit" (click)="onSubmitHome()">{{'bouton.deconnexion' | translate }}</button>
+  </div>
+</body>
+
+<!-- <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>    -->

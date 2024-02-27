@@ -51,7 +51,7 @@ export class PersonnalizationPageComponent implements OnInit {
         this.selectName = this.gameManager.username;
         this.welcomeService.selectAvatar = this.welcomeService.account.profile.avatar;
         this.selectTheme = this.welcomeService.account.profile.theme;
-        this.selectLangage = this.welcomeService.account.profile.languages;
+        this.selectLangage = this.welcomeService.account.profile.language;
     }
 
     useLanguage(language: string): void {
@@ -78,7 +78,7 @@ export class PersonnalizationPageComponent implements OnInit {
                 this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
                 this.welcomeService.account.credentials.password = this.selectPassword;
                 this.welcomeService.account.profile.theme = this.selectTheme;
-                this.welcomeService.account.profile.languages = this.selectLangage;
+                this.welcomeService.account.profile.language = this.selectLangage;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';
