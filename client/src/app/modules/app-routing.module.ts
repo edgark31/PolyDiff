@@ -27,7 +27,6 @@ export const routes: Routes = [
     { path: 'recover-password', component: RecoverPasswordPageComponent },
     { path: 'personalization', component: PersonnalizationPageComponent },
     { path: 'profil', component: ProfilPageComponent },
-    { path: '**', redirectTo: '/login' },
 ];
 
 @NgModule({

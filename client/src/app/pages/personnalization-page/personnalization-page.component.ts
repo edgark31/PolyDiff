@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LANGUAGES, THEME_PERSONNALIZATION } from './../../../../../common/constants';
-import { Theme, modifyProfile } from './../../../../../common/game-interfaces';
+import { Theme } from './../../../../../common/game-interfaces';
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -29,8 +29,6 @@ export class PersonnalizationPageComponent implements OnInit {
     selectLangage: string;
     langage = LANGUAGES;
     themePersonnalization = THEME_PERSONNALIZATION;
-    modifyProfile: modifyProfile;
-    oldProfile: modifyProfile;
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
