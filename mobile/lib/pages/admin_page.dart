@@ -14,8 +14,8 @@ class _AdminPageState extends State<AdminPage> {
     AdminGame('On se casse?', 'assets/images/admin raccoon.jpeg'),
     AdminGame('Krunker', 'assets/images/admin raccoon.jpeg'),
     AdminGame('Alien Swarm', 'assets/images/admin raccoon.jpeg'),
-    AdminGame('Bubble bash', 'assets/images/admin raccoon.jpeg'),
-    AdminGame('Cherche les diff', 'assets/images/admin raccoon.jpeg'),
+    AdminGame('Pain farci', 'assets/images/admin raccoon.jpeg'),
+    AdminGame('Les garrrrs', 'assets/images/admin raccoon.jpeg'),
     AdminGame('allo allo', 'assets/images/admin raccoon.jpeg'),
     AdminGame('a toute a lheure', 'assets/images/admin raccoon.jpeg'),
   ];
