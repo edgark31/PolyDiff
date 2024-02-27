@@ -29,7 +29,6 @@ export class RegistrationPageComponent {
     confirmedPassword: string;
     email: string;
     username: string;
-    avatar: string;
 
     constructor(
         private readonly communication: CommunicationService,
@@ -77,12 +76,11 @@ export class RegistrationPageComponent {
     }
 
     openAvatarDialog(choose: boolean) {
-        this.dialog.open(ImportDialogComponent, new MatDialogConfig());
-        // .afterClosed()
-        // .subscribe((username: string) => {
-        //     this.registrationForm.controls.username.setValue(username);
-        //     this.registrationForm.value.username = this.nameGeneration.generatedName;
-        // });
-        this.welcomeService.chooseImage = choose;
+        this.dialog
+            .open(ImportDialogComponent, new MatDialogConfig())
+            .afterClosed()
+            .subscribe(() => {
+                this.welcomeService.chooseImage = choose;
+            });
     }
 }
