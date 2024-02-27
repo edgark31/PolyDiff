@@ -49,7 +49,7 @@ export class LoginPageComponent implements AfterViewInit {
                     this.welcomeservice.account = account;
                     // this.gameManager.manageSocket();
                     this.gameManager.username = account.credentials.username;
-                    this.router.navigate(['/game']);
+                    this.router.navigate(['/home']);
                 },
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';

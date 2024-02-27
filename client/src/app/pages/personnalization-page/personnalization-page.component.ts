@@ -81,34 +81,30 @@ export class PersonnalizationPageComponent implements OnInit {
     }
 
     onUpdateAvatar() {
-        this.communication
-            .updateAvatar(this.gameManager.username, this.welcomeService.account.profile.avatar, this.welcomeService.selectAvatar)
-            .subscribe({
-                // discuter du fait d'envoyer tout le account
-                next: () => {
-                    this.router.navigate(['/profil']);
+        this.communication.updateAvatar(this.gameManager.username, this.welcomeService.selectAvatar).subscribe({
+            // discuter du fait d'envoyer tout le account
+            next: () => {
+                this.router.navigate(['/profil']);
 
-                    this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
-                },
-                error: (error: HttpErrorResponse) => {
-                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
-                },
-            });
+                this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
+            },
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
     }
 
     onChooseAvatar() {
-        this.communication
-            .chooseAvatar(this.gameManager.username, this.welcomeService.account.profile.avatar, this.welcomeService.selectAvatar)
-            .subscribe({
-                // discuter du fait d'envoyer tout le account
-                next: () => {
-                    this.router.navigate(['/profil']);
-                    this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
-                },
-                error: (error: HttpErrorResponse) => {
-                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
-                },
-            });
+        this.communication.chooseAvatar(this.gameManager.username, this.welcomeService.selectAvatar).subscribe({
+            // discuter du fait d'envoyer tout le account
+            next: () => {
+                this.router.navigate(['/profil']);
+                this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
+            },
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
     }
 
     onModifyPassword() {
