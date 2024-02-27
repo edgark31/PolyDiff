@@ -1,17 +1,20 @@
 <div class="container flex-column">
-    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>   
     <header class="header">
+        <h1 class="header-item flex-column"></h1>
     </header>
-    <div>
-        <h1>Menu</h1>
-        <button routerLink="/chat">Chat</button>
-        <button routerLink="/login">Login</button>
-        <button routerLink="/registration">Registration</button>
-        <button routerLink="/recover-password">Recover Password</button>
+    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>    
+    <div class="flex-row">
+        <button class="button" routerLink="/chat">
+            <span id = "classic">Chat</span>
+        </button>
+        <button class="button" routerLink="/lobby">
+            <span id = "limited">Lobby</span>
+        </button>
+        <button class="button" routerLink="/admin">
+            <span id = "config">Admin</span>
+        </button>
     </div>
 
     <footer class="footer flex-column">
     </footer>
 </div>
-
-
