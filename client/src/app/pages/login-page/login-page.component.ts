@@ -42,7 +42,7 @@ export class LoginPageComponent implements AfterViewInit {
             };
             this.communication.login(this.creds).subscribe({
                 next: (account: Account) => {
-                    this.clientSocket.connect(account.credentials.username);
+                    this.clientSocket.connect(account.credentials.username, 'auth');
                     this.gameManager.manageSocket();
                     this.gameManager.username = account.credentials.username;
                     this.router.navigate(['/home']);
