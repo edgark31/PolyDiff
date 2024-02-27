@@ -30,9 +30,8 @@ import { CreationPageComponent } from '@app/pages/creation-page/creation-page.co
 import { GamePageComponent } from '@app/pages/game-page/game-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { CanvasMiddleButtonsComponent } from './components/canvas-middle-buttons/canvas-middle-buttons.component';
 import { CanvasTopButtonsComponent } from './components/canvas-top-buttons/canvas-top-buttons.component';
 import { CanvasUnderButtonsComponent } from './components/canvas-under-buttons/canvas-under-buttons.component';
@@ -55,7 +54,7 @@ import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { PersonnalizationPageComponent } from './pages/personnalization-page/personnalization-page.component';
-import { ProfilPageComponent } from './pages/profil-Page/profil-page.component';
+import { ProfilPageComponent } from './pages/profile-page/profile-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 /**
@@ -134,10 +133,6 @@ export const createTranslateLoader = (http: HttpClient) => {
                 provide: TranslateLoader,
                 useFactory: createTranslateLoader,
                 deps: [HttpClient],
-            },
-            compiler: {
-                provide: TranslateCompiler,
-                useClass: TranslateMessageFormatCompiler,
             },
         }),
     ],

@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { LANGAGE, THEME_PERSONNALIZATION } from './../../../../../common/constants';
-import { Theme, modifYProfile } from './../../../../../common/game-interfaces';
+import { LANGUAGES, THEME_PERSONNALIZATION } from './../../../../../common/constants';
+import { Theme, modifyProfile } from './../../../../../common/game-interfaces';
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -26,10 +26,10 @@ export class PersonnalizationPageComponent implements OnInit {
     selectPassword: string;
     selectPasswordConfirm: string;
     selectLangage: string;
-    langage = LANGAGE;
+    langage = LANGUAGES;
     themePersonnalization = THEME_PERSONNALIZATION;
-    modifyProfile: modifYProfile;
-    oldProfile: modifYProfile;
+    modifyProfile: modifyProfile;
+    oldProfile: modifyProfile;
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
@@ -51,7 +51,7 @@ export class PersonnalizationPageComponent implements OnInit {
         this.selectName = this.gameManager.username;
         this.welcomeService.selectAvatar = this.welcomeService.account.profile.avatar;
         this.selectTheme = this.welcomeService.account.profile.theme;
-        this.selectLangage = this.welcomeService.account.profile.langage;
+        this.selectLangage = this.welcomeService.account.profile.languages;
     }
 
     useLanguage(language: string): void {
@@ -78,7 +78,7 @@ export class PersonnalizationPageComponent implements OnInit {
                 this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
                 this.welcomeService.account.credentials.password = this.selectPassword;
                 this.welcomeService.account.profile.theme = this.selectTheme;
-                this.welcomeService.account.profile.langage = this.selectLangage;
+                this.welcomeService.account.profile.languages = this.selectLangage;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';

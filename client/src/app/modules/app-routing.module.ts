@@ -8,7 +8,7 @@ import { LimitedTimePageComponent } from '@app/pages/limited-time-page/limited-t
 import { LoginPageComponent } from '@app/pages/login-page/login-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
 import { PersonnalizationPageComponent } from '@app/pages/personnalization-page/personnalization-page.component';
-import { ProfilPageComponent } from '@app/pages/profil-Page/profil-page.component';
+import { ProfilPageComponent } from '@app/pages/profile-page/profile-page.component';
 import { RecoverPasswordPageComponent } from '@app/pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from '@app/pages/registration-page/registration-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';

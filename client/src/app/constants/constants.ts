@@ -1,3 +1,4 @@
+
 export const WAITING_TIME = 1000;
 export const COUNTDOWN_TIME = 10;
 

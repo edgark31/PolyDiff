@@ -173,10 +173,12 @@ export interface Credentials {
 export interface Profile {
     avatar: string;
     sessions: SessionLog[];
-    connexions: ConnexionLog[];
+    connections: ConnectionLog[];
     stats: Statistics;
     friends: Friend[];
     friendRequests: string[];
+    theme: Theme;
+    languages: string;
 }
 
 export interface SessionLog {
@@ -184,7 +186,7 @@ export interface SessionLog {
     isWinner: boolean;
 }
 
-export interface ConnexionLog {
+export interface ConnectionLog {
     timestamp: string;
     isConnexion: boolean;
 }
@@ -229,4 +231,19 @@ export interface Replay {
     actions: string[];
     mode: string;
     timestamps: string;
+}
+
+export interface Theme {
+    name: string;
+    color: string;
+    backgroundColor: string;
+    buttonColor: string;
+}
+
+export interface modifyProfile {
+    avatar: string;
+    name: string;
+    theme: Theme;
+    language: string;
+    password: string;
 }
