@@ -100,55 +100,54 @@ export enum ConnectionEvents {
 }
 
 export enum LobbyEvents {
-    Create = "Create",
-    Join = "Join",
-    Leave = "Leave",
-    Kick = "Kick",
-    Lock = "Lock",
-    OptPlayer = "OptPlayer",
-    JoinAsObserver = "JoinAsObserver",
-    LeaveAsObserver = "LeaveAsObserver",
-    UpdateLobbys = "UpdateLobbys",
-    Start = "Start"
-  }
-  
-  export enum AccountEvents {
-    ChangePseudo = "ChangePseudo",
-    Update = "Update"
-  }
-  
-  export enum FriendEvents {
-    Invite = "Invite",
-    OptInvite = "OptInvite",
-    CancelInvite = "CancelInvite",
-    AddFavorite = "AddFavorite",
-    Update = "Update",
-    SendScore = "SendScore",
-    ShareScore = "ShareScore"
-  }
-  
-  export enum GameEvents {
-    Start = "Start",
-    UpdateTimer = "UpdateTimer",
+    Create = 'Create',
+    Join = 'Join',
+    Leave = 'Leave',
+    Kick = 'Kick',
+    Lock = 'Lock',
+    OptPlayer = 'OptPlayer',
+    JoinAsObserver = 'JoinAsObserver',
+    LeaveAsObserver = 'LeaveAsObserver',
+    UpdateLobbys = 'UpdateLobbys',
+    Start = 'Start',
+}
+
+export enum AccountEvents {
+    ChangePseudo = 'ChangePseudo',
+    Update = 'Update',
+}
+
+export enum FriendEvents {
+    Invite = 'Invite',
+    OptInvite = 'OptInvite',
+    CancelInvite = 'CancelInvite',
+    AddFavorite = 'AddFavorite',
+    Update = 'Update',
+    SendScore = 'SendScore',
+    ShareScore = 'ShareScore',
+}
+
+export enum GameEvents {
+    Start = 'Start',
+    UpdateTimer = 'UpdateTimer',
     // CheckStatus = "CheckStatus",
-    // RemoveDifference = "RemoveDifference", 
-    Next = "Next",
-    Leave = "Leave",
-    End = "End"
-  }
-  
-  export enum ChannelEvents {
-    SendLobbyMessage = "SendLobbyMessage",
-    LobbyMessage = "LobbyMessage",
-    SendLocalMessage = "SendLocalMessage",
-    LocalMessage = "LocalMessage",
-    SendGlobalMessage = "SendGlobalMessage",
-    GlobalMessage = "GlobalMessage",
-    Update = "Update",
-    FriendConnection = "FriendConnection"
-  }
-  
-  export enum RankingEvents {
-    Update = "Update"
-  }
-  
+    // RemoveDifference = "RemoveDifference",
+    Next = 'Next',
+    Leave = 'Leave',
+    End = 'End',
+}
+
+export enum ChannelEvents {
+    SendLobbyMessage = 'SendLobbyMessage',
+    LobbyMessage = 'LobbyMessage',
+    SendLocalMessage = 'SendLocalMessage',
+    LocalMessage = 'LocalMessage',
+    SendGlobalMessage = 'SendGlobalMessage',
+    GlobalMessage = 'GlobalMessage',
+    UpdateLog = 'UpdateLog',
+    FriendConnection = 'FriendConnection',
+}
+
+export enum RankingEvents {
+    Update = 'Update',
+}

@@ -14,7 +14,6 @@ import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
 @Injectable()
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
     @WebSocketServer() private server: Server;
-    private mapSocketWithName = new Map<string, string>();
 
     // gateway needs to be injected all the services that it needs to use
     // eslint-disable-next-line max-params -- services are needed for the gateway
@@ -216,13 +215,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         const userName = socket.handshake.query.name as string;
-        this.logger.log(`Connexion par l'utilisateur ${userName} avec id : ${socket.id}`);
+        socket.data.username = userName;
+        this.logger.log(`GAME ON de ${userName}`);
     }
 
     async handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`Déconnexion par l'utilisateur avec id : ${socket.id}`);
-        this.accountManager.deconnexion(this.mapSocketWithName.get(socket.id));
-        this.mapSocketWithName.delete(socket.id);
-        // await this.classicModeService.handleSocketDisconnect(socket, this.server);
+        this.accountManager.deconnexion(socket.data.username);
+        this.logger.log(`GAME OFF de ${socket.data.username}`);
     }
 }

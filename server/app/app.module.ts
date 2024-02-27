@@ -6,7 +6,6 @@ import { join } from 'path';
 import { AccountController } from './controllers/account/account.controller';
 import { GameController } from './controllers/game/game.controller';
 import { AuthGateway } from './gateways/auth/auth.gateway';
-import { ChatGateway } from './gateways/chat/chat.gateway';
 import { GameGateway } from './gateways/game/game.gateway';
 import { LobbyGateway } from './gateways/lobby/lobby.gateway';
 import { Account, accountSchema } from './model/database/account';
@@ -55,7 +54,6 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
         ConfigService,
         AuthGateway,
         GameGateway,
-        ChatGateway,
         LobbyGateway,
         ClassicModeService,
         GameListsManagerService,

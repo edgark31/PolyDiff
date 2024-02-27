@@ -1,6 +1,18 @@
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
+import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
+import { ChannelEvents } from '@common/enums';
+import { Chat, ChatLog } from '@common/game-interfaces';
 import { Logger } from '@nestjs/common';
-import { ConnectedSocket, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import {
+    ConnectedSocket,
+    MessageBody,
+    OnGatewayConnection,
+    OnGatewayDisconnect,
+    OnGatewayInit,
+    SubscribeMessage,
+    WebSocketGateway,
+    WebSocketServer,
+} from '@nestjs/websockets';
 import { instrument } from '@socket.io/admin-ui';
 import { Server, Socket } from 'socket.io';
 
@@ -18,9 +30,21 @@ import { Server, Socket } from 'socket.io';
 })
 export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
     @WebSocketServer() private server: Server;
+    globalChatLog: ChatLog;
 
-    constructor(private readonly logger: Logger, private readonly accountManager: AccountManagerService) {
-        //
+    constructor(
+        private readonly logger: Logger,
+        private readonly accountManager: AccountManagerService,
+        private readonly messageManager: MessageManagerService,
+    ) {
+        this.globalChatLog = { chat: [], channelName: 'Global' };
+    }
+
+    @SubscribeMessage(ChannelEvents.SendGlobalMessage)
+    handleGlobalMessage(@ConnectedSocket() socket: Socket, @MessageBody() message: string) {
+        const chat: Chat = this.messageManager.createMessage(socket.data.username, message);
+        this.globalChatLog.chat.push(chat);
+        this.server.emit(ChannelEvents.GlobalMessage, chat);
     }
 
     afterInit() {
@@ -32,12 +56,14 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         const userName = socket.handshake.query.name as string;
-        socket.data.userName = userName;
-        this.logger.log(`Auth de ${userName} avec id : ${socket.id}`);
+        socket.data.username = userName;
+
+        socket.emit(ChannelEvents.UpdateLog, this.globalChatLog);
+        this.logger.log(`AUTH de ${userName}`);
     }
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`Deauth de ${socket.data.username} avec id : ${socket.id}`);
-        this.accountManager.deconnexion(socket.id);
+        this.logger.log(`DEAUTH de ${socket.data.username}`);
+        this.accountManager.deconnexion(socket.data.username);
     }
 }

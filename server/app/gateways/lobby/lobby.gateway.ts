@@ -21,10 +21,11 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         const userName = socket.handshake.query.name as string;
-        this.logger.log(`Connexion par l'utilisateur ${userName} avec id : ${socket.id}`);
+        socket.data.username = userName;
+        this.logger.log(`LOBBY IN de ${userName}`);
     }
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`Déconnexion par l'utilisateur avec id : ${socket.id}`);
+        this.logger.log(`LOBBY OUT de ${socket.data.username}`);
     }
 }

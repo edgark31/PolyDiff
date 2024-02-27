@@ -215,8 +215,8 @@ export interface Score {
 
 export interface Chat {
     raw: string;
-    name: string;
-    timestamp: string;
+    name?: string;
+    timestamp?: string;
 }
 
 export interface ChatLog {
