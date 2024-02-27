@@ -240,10 +240,10 @@ export interface Theme {
     buttonColor: string;
 }
 
-export interface modifyProfile {
-    avatar: string;
-    name: string;
-    theme: Theme;
-    language: string;
-    password: string;
-}
+// export interface modifyProfile {
+//     avatar: string;
+//     name: string;
+//     theme: Theme;
+//     language: string;
+//     password: string;
+// }
