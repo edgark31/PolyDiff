@@ -93,10 +93,9 @@ export class PersonnalizationPageComponent implements OnInit {
     }
 
     onChooseAvatar() {
-        this.communication.chooseAvatar(this.gameManager.username, this.welcomeService.selectAvatar).subscribe({
+        this.communication.chooseAvatar(this.gameManager.username, this.welcomeService.selectLocal).subscribe({
             // discuter du fait d'envoyer tout le account
             next: () => {
-                this.router.navigate(['/profil']);
                 this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
             },
             error: (error: HttpErrorResponse) => {
@@ -148,11 +147,12 @@ export class PersonnalizationPageComponent implements OnInit {
         console.log(this.selectName);
 
         if (this.selectName !== this.gameManager.username) this.onModifyUser();
-        if (this.welcomeService.chooseImage && this.welcomeService.account.profile.avatar !== this.selectAvatar) this.onUpdateAvatar();
-        if (!this.welcomeService.chooseImage && this.welcomeService.account.profile.avatar !== this.selectAvatar) this.onChooseAvatar();
+        if (!this.welcomeService.chooseImage && this.welcomeService.account.profile.avatar !== this.selectAvatar) this.onUpdateAvatar();
+        if (this.welcomeService.chooseImage && this.welcomeService.account.profile.avatar !== this.welcomeService.selectLocal) this.onChooseAvatar();
         if (this.selectPassword !== this.welcomeService.account.credentials.password) this.onModifyPassword();
         if (this.selectTheme !== this.welcomeService.account.profile.theme) this.onModifyTheme();
         if (this.selectLangage !== this.welcomeService.account.profile.language) this.onModifyLangage();
+        console.log(this.welcomeService.account.profile.avatar + '      yyyyyyyyyyyyppppppppp');
 
         this.router.navigate(['/profil']);
 
