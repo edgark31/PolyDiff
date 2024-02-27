@@ -7,12 +7,12 @@ export interface Players {
 }
 
 export interface GameHistory {
-    date: string,
-    startingHour: string,
-    duration: number,
-    gameMode: string,
-    player1: PlayerInfo,
-    player2?: PlayerInfo,
+    date: string;
+    startingHour: string;
+    duration: number;
+    gameMode: string;
+    player1: PlayerInfo;
+    player2?: PlayerInfo;
 }
 
 export interface PlayerInfo {
@@ -136,3 +136,114 @@ export interface ChatMessageGlobal {
     userName: string;
     timestamp?: string;
 }
+
+export interface Lobby {
+    lobbyId: number;
+    gameId: number;
+    isAvailable: boolean;
+    players: Player[];
+    observers: Observers[];
+    isCheatEnabled: boolean;
+}
+
+export interface Observers {
+    name: string;
+}
+
+export interface Game {
+    gameId: number;
+    original: string;
+    modified: string;
+    mode: string;
+    difficulty: string;
+    differences: Coordinate[][];
+}
+
+export interface Account {
+    credentials: Credentials;
+    profile: Profile;
+}
+
+export interface Credentials {
+    username: string;
+    password: string;
+    email?: string;
+}
+
+export interface Profile {
+    avatar: string;
+    sessions: SessionLog[];
+    connections: ConnectionLog[];
+    stats: Statistics;
+    friends: Friend[];
+    friendRequests: string[];
+    theme: Theme;
+    language: string;
+}
+
+export interface SessionLog {
+    timestamp: string;
+    isWinner: boolean;
+}
+
+export interface ConnectionLog {
+    timestamp: string;
+    isConnexion: boolean;
+}
+
+export interface Statistics {
+    gamePlayed: number;
+    gameWon: number;
+    averageTime: number;
+    averageDifferences: number;
+}
+
+export interface Friend {
+    name: string;
+    avatar: string;
+    friendNames: string[];
+    commonFriendNames: string[];
+    isFavorite: boolean;
+    isOnline: boolean;
+}
+
+export interface Score {
+    value: number;
+    mode: string;
+    duration: number;
+    diffFound: number;
+    difficulty: string;
+}
+
+export interface Chat {
+    raw: string;
+    name?: string;
+    timestamp?: string;
+}
+
+export interface ChatLog {
+    chat: Chat[];
+    channelName: string;
+}
+
+export interface Replay {
+    name: string;
+    actions: string[];
+    mode: string;
+    timestamps: string;
+}
+
+export interface Theme {
+    name: string;
+    color: string;
+    backgroundColor: string;
+    buttonColor: string;
+}
+
+// export interface modifyProfile {
+//     avatar: string;
+//     name: string;
+//     theme: Theme;
+//     language: string;
+//     password: string;
+// }

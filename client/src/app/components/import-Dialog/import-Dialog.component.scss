@@ -1,0 +1,22 @@
+/* Dans le fichier CSS de votre composant dialog */
+::ng-deep .mat-dialog-container {
+    max-width: none !important; /* Permettre au dialogue d'avoir une largeur maximale illimitée */
+    width: 1400px; /* Définir une largeur fixe pour le dialogue */
+    height: 1100px; /* Définir une hauteur fixe pour le dialogue */
+}
+.dialog-content {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dialog-image {
+    width: 400px; /* Ajustez la largeur des images selon vos besoins */
+    height: 400px; /* Ajustez la hauteur des images selon vos besoins */
+    margin-right: 20px; /* Ajoutez une marge entre les images */
+    margin-bottom: 20px; /* Ajoutez une marge en bas des lignes d'images */
+}
+
+::ng-deep .mat-dialog-actions {
+    justify-content: flex-end; /* Aligner les boutons à droite */
+    margin-top: 20px; /* Ajouter une marge en haut des boutons */
+}
