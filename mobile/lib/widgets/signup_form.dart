@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/services/services.dart';
+import 'package:mobile/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -10,14 +10,12 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  final nameGenerationService = NameGenerationService();
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmationController = TextEditingController();
   String errorMessage = "";
-  int selectedLanguage = 1;
-  bool hasAnimalName = false;
-  bool hasNumber = false;
 
   String usernameFormat = 'Non';
   String emailFormat = 'Non';
@@ -113,382 +111,163 @@ class _SignUpFormState extends State<SignUpForm> {
   @override
   Widget build(BuildContext context) {
     final socketService = context.watch<SocketService>();
-    final nameGenerationService = NameGenerationService();
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        decoration: BoxDecoration(
-          color: Color(0xFF7DAF9C),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Container(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Inscription',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 21, right: 225),
-                              child: Text(
-                                "Nom d'utilisateur",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 21, right: 290),
-                              child: Text(
-                                "Courriel",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: TextField(
-                              controller: userNameController,
-                              onChanged: (username) =>
-                                  isUsernameValid(username),
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(20),
-                              ],
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black),
-                                  ),
-                                  helperText: 'Non vide: $usernameFormat',
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  helperStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black)),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: TextField(
-                              controller: emailController,
-                              onChanged: (email) => isEmailValid(email),
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(40),
-                              ],
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black),
-                                  ),
-                                  helperText:
-                                      'Non vide et suit le format: $emailFormat',
-                                  hintText: 'ex: john.doe@gmail.com',
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  helperStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black)),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: 70,
-                          ),
-                          child: Text(
-                            "Générer un nom d'utilisateur: ",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 200,
-                          child: ListTile(
-                            title: const Text(
-                              'En français',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            leading: Radio(
-                              value: 1,
-                              groupValue: selectedLanguage,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedLanguage = value!;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 200,
-                          child: ListTile(
-                            title: const Text(
-                              'En Anglais',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            leading: Radio(
-                              value: 2,
-                              groupValue: selectedLanguage,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedLanguage = value!;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: 100,
-                        ),
-                        child: SizedBox(
-                          width: 300,
-                          height: 50,
-                          child: CheckboxListTile(
-                            title: const Text(
-                              "Contenant le nom d'un animal",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            value: hasAnimalName,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                if (value != null) {
-                                  setState(() {
-                                    hasAnimalName = value;
-                                  });
-                                }
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 250,
-                        height: 50,
-                        child: CheckboxListTile(
-                          title: const Text(
-                            "Contenant des chiffres",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          value: hasNumber,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              if (value != null) {
-                                setState(() {
-                                  hasNumber = value;
-                                });
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.settings_suggest),
-                        onPressed: () {
-                          nameGenerationService.generateName(
-                              selectedLanguage, hasAnimalName, hasNumber);
-                          userNameController.text =
-                              nameGenerationService.generatedName;
-                          isUsernameValid(userNameController.text);
-                        },
-                        iconSize: 50,
-                      ),
-                    ]),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: 21,
-                                right: 250,
-                              ),
-                              child: Text(
-                                "Mot de passe",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: 21,
-                                right: 130,
-                              ),
-                              child: Text(
-                                "Confirmation du mot de passe",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: TextField(
-                              controller: passwordController,
-                              onChanged: (String newPassword) =>
-                                  updatePasswordStrength(newPassword),
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(40),
-                              ],
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black),
-                                ),
-                                helperText:
-                                    'Force du mot de passe: $passwordStrength',
-                                filled: true,
-                                fillColor: Colors.white,
-                                helperStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: TextField(
-                              controller: confirmationController,
-                              onChanged: (String confirmation) =>
-                                  updateConfirmation(confirmation),
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(40),
-                              ],
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black),
-                                ),
-                                helperText:
-                                    'Correspondent et non-vide: $passwordConfirmation',
-                                filled: true,
-                                fillColor: Colors.white,
-                                helperStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 21),
-                        child: SizedBox(
-                          width: 430,
-                          height: 40,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (isFormValid()) {
-                                //Envoyer les informations
-                              } else {
-                                setState(() {
-                                  errorMessage =
-                                      "Une ou plusieurs entrée(s) est/sont incorrecte(s)";
-                                });
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              backgroundColor:
-                                  Color.fromARGB(255, 31, 150, 104),
-                              foregroundColor: Colors.white,
-                            ),
-                            child: Text("Inscription"),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      errorMessage,
-                      style: TextStyle(
-                          color: const Color.fromARGB(255, 240, 16, 0),
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Center(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, LOGIN_ROUTE);
-                        },
-                        child: Text(
-                          "Se connecter",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Inscription',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: kMidOrange,
                 ),
               ),
+              SizedBox(height: 100),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: _buildTextInputField(
+                      label: "Nom d'utilisateur",
+                      controller: userNameController,
+                      hint: 'Entrez votre nom d\'utilisateur',
+                      maxLength: 20,
+                    ),
+                  ),
+                  SizedBox(width: 100),
+                  Flexible(
+                    child: _buildTextInputField(
+                      label: "Courriel",
+                      controller: emailController,
+                      hint: 'ex: john.doe@gmail.com',
+                      maxLength: 40,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 40),
+              Center(
+                child: UsernameGenerator(
+                  onUsernameGenerated: (generatedName) {
+                    userNameController.text = generatedName;
+                  },
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: _buildTextInputField(
+                      label: "Mot de passe",
+                      controller: passwordController,
+                      hint: 'Entrez votre mot de passe',
+                      maxLength: 40,
+                      isPassword: true,
+                    ),
+                  ),
+                  SizedBox(width: 100),
+                  Flexible(
+                    child: _buildTextInputField(
+                      label: "Confirmation du mot de passe",
+                      controller: confirmationController,
+                      hint: 'Confirmez votre mot de passe',
+                      maxLength: 40,
+                      isPassword: true,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 50),
+              _buildSubmitButton(),
+              if (errorMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    errorMessage,
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              _buildLoginLink(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextInputField(
+      {required String label,
+      required TextEditingController controller,
+      required String hint,
+      int maxLength = 20,
+      bool isPassword = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 400),
+        child: TextField(
+          controller: controller,
+          obscureText: isPassword,
+          maxLength: maxLength,
+          decoration: InputDecoration(
+            labelText: label,
+            hintText: hint,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30.0),
+              borderSide: BorderSide.none,
             ),
-          ],
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30.0),
+              borderSide: BorderSide(color: Colors.orange, width: 2.0),
+            ),
+            filled: true,
+            fillColor: Colors.grey[200],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          if (isFormValid()) {
+            // TODO: Send the new account created
+          } else {
+            setState(() => errorMessage =
+                "Une ou plusieurs entrée(s) est/sont incorrecte(s)");
+          }
+        },
+        child: Text('Inscription'),
+        style: ElevatedButton.styleFrom(
+          foregroundColor: kLight,
+          backgroundColor: kLightOrange,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginLink() {
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.only(top: 16),
+        child: InkWell(
+          onTap: () => Navigator.pushNamed(context, '/login'),
+          child: Text(
+            "Se connecter",
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: kMidGreen),
+          ),
         ),
       ),
     );

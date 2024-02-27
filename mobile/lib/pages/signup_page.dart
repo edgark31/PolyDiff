@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/signup_form.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -17,25 +18,12 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Row(
+      body: Stack(
         children: [
-          Flexible(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(MENU_BACKGROUND_PATH),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          Flexible(
-            flex: 3,
-            child: Center(
-              child: SignUpForm(),
-            ),
-          ),
+          BackgroundContainer(
+            backgroundImagePath: SELECTION_BACKGROUND_PATH,
+            child: SignUpForm(),
+          )
         ],
       ),
     );

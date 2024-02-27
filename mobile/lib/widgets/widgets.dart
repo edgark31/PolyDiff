@@ -4,3 +4,4 @@ export 'customs/background_container.dart';
 export 'password_input.dart';
 export 'signup_form.dart';
 export 'text_input.dart';
+export 'username_generator.dart';

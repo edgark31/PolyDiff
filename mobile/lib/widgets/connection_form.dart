@@ -32,7 +32,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
   Widget build(BuildContext context) {
     double bottomPadding = MediaQuery.of(context).viewInsets.bottom > 0
         ? 20
-        : MediaQuery.of(context).size.height * 0.48;
+        : MediaQuery.of(context).size.height * 0.3;
     final socketService = context.watch<SocketService>();
     return Stack(
       children: [
