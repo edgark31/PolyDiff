@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/pages/admin_page.dart';
 
 class AdminPopup extends StatefulWidget {
   @override
@@ -8,6 +9,19 @@ class AdminPopup extends StatefulWidget {
 
 class _AdminPopupState extends State<AdminPopup> {
   TextEditingController passwordController = TextEditingController();
+  String errorMessage = "";
+
+  @override
+  void initState() {
+    super.initState();
+    passwordController.addListener(() {
+      if (passwordController.text.isEmpty) {
+        setState(() {
+          errorMessage = "";
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +111,21 @@ class _AdminPopupState extends State<AdminPopup> {
                     width: 430,
                     height: 40,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        //Juste pour tester
+                        if (passwordController.text == "12345") {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => AdminPage(),
+                            ),
+                          );
+                        } else {
+                          setState(() {
+                            errorMessage =
+                                "Le mot de passe entré est incorrecte";
+                          });
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0),
@@ -108,6 +136,13 @@ class _AdminPopupState extends State<AdminPopup> {
                       child: Text("Connexion"),
                     ),
                   ),
+                ),
+                Text(
+                  errorMessage,
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 240, 16, 0),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
                 ),
               ],
             ),
