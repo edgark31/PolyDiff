@@ -4,10 +4,12 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
 import { NameGenerationDialogComponent } from '@app/components/name-generation-dialog/name-generation-dialog.component';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { NameGenerationService } from '@app/services/name-generation-service/name-generation-service.service';
 import { ValidationService } from '@app/services/validation-service/validation.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Credentials } from '@common/game-interfaces';
 
 @Component({
@@ -27,6 +29,7 @@ export class RegistrationPageComponent {
     confirmedPassword: string;
     email: string;
     username: string;
+    avatar: string;
 
     constructor(
         private readonly communication: CommunicationService,
@@ -34,6 +37,7 @@ export class RegistrationPageComponent {
         private readonly dialog: MatDialog,
         private readonly nameGeneration: NameGenerationService,
         readonly validation: ValidationService,
+        readonly welcomeService: WelcomeService,
     ) {
         this.feedback = '';
     }
@@ -72,13 +76,13 @@ export class RegistrationPageComponent {
             });
     }
 
-    openAvatarDialog() {
-        this.dialog
-            .open(NameGenerationDialogComponent, new MatDialogConfig())
-            .afterClosed()
-            .subscribe((username: string) => {
-                this.registrationForm.controls.username.setValue(username);
-                this.registrationForm.value.username = this.nameGeneration.generatedName;
-            });
+    openAvatarDialog(choose: boolean) {
+        this.dialog.open(ImportDialogComponent, new MatDialogConfig());
+        // .afterClosed()
+        // .subscribe((username: string) => {
+        //     this.registrationForm.controls.username.setValue(username);
+        //     this.registrationForm.value.username = this.nameGeneration.generatedName;
+        // });
+        this.welcomeService.chooseImage = choose;
     }
 }
