@@ -33,7 +33,7 @@ export class LoginPageComponent implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.clientSocket.disconnect();
+        // this.clientSocket.disconnect();
     }
 
     onSubmit() {
@@ -45,10 +45,11 @@ export class LoginPageComponent implements AfterViewInit {
             this.communication.login(this.creds).subscribe({
                 next: (account: Account) => {
                     this.clientSocket.connect(account.credentials.username, 'auth');
+                    console.log(account.credentials.username);
                     this.welcomeservice.account = account;
-                    this.gameManager.manageSocket();
+                    // this.gameManager.manageSocket();
                     this.gameManager.username = account.credentials.username;
-                    this.router.navigate(['/home']);
+                    this.router.navigate(['/game']);
                 },
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';

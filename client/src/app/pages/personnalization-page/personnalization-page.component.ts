@@ -7,13 +7,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { TranslateService } from '@ngx-translate/core';
-import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
 
 @Component({
     selector: 'app-personnalization-page',
@@ -68,23 +68,100 @@ export class PersonnalizationPageComponent implements OnInit {
         this.router.navigate(['/login']);
     }
 
-    onSubmitProfile() {
-        console.log(this.gameManager.username);
-        console.log(this.selectName);
+    onModifyUser() {
         this.communication.modifyUser(this.gameManager.username, this.selectName).subscribe({
             // discuter du fait d'envoyer tout le account
             next: () => {
-                this.router.navigate(['/profil']);
                 this.gameManager.username = this.selectName;
-                this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
-                this.welcomeService.account.credentials.password = this.selectPassword;
+            },
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
+    }
+
+    onUpdateAvatar() {
+        this.communication
+            .updateAvatar(this.gameManager.username, this.welcomeService.account.profile.avatar, this.welcomeService.selectAvatar)
+            .subscribe({
+                // discuter du fait d'envoyer tout le account
+                next: () => {
+                    this.router.navigate(['/profil']);
+
+                    this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+                },
+            });
+    }
+
+    onChooseAvatar() {
+        this.communication
+            .chooseAvatar(this.gameManager.username, this.welcomeService.account.profile.avatar, this.welcomeService.selectAvatar)
+            .subscribe({
+                // discuter du fait d'envoyer tout le account
+                next: () => {
+                    this.router.navigate(['/profil']);
+                    this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+                },
+            });
+    }
+
+    onModifyPassword() {
+        this.communication
+            .modifyPassword(this.gameManager.username, this.welcomeService.account.credentials.password, this.selectPassword)
+            .subscribe({
+                // discuter du fait d'envoyer tout le account
+                next: () => {
+                    this.welcomeService.account.credentials.password = this.selectPassword;
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+                },
+            });
+    }
+
+    onModifyTheme() {
+        this.communication.modifyTheme(this.gameManager.username, this.welcomeService.account.profile.theme, this.selectTheme).subscribe({
+            // discuter du fait d'envoyer tout le account
+            next: () => {
                 this.welcomeService.account.profile.theme = this.selectTheme;
+            },
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
+    }
+
+    onModifyLangage() {
+        this.communication.modifyLangage(this.gameManager.username, this.welcomeService.account.profile.language, this.selectLangage).subscribe({
+            // discuter du fait d'envoyer tout le account
+            next: () => {
                 this.welcomeService.account.profile.language = this.selectLangage;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';
             },
         });
+    }
+
+    onSubmitProfile() {
+        console.log(this.gameManager.username);
+        console.log(this.selectName);
+
+        if (this.selectName !== this.gameManager.username) this.onModifyUser();
+        if (this.welcomeService.chooseImage && this.welcomeService.account.profile.avatar !== this.selectAvatar) this.onUpdateAvatar();
+        if (!this.welcomeService.chooseImage && this.welcomeService.account.profile.avatar !== this.selectAvatar) this.onChooseAvatar();
+        if (this.selectPassword !== this.welcomeService.account.credentials.password) this.onModifyPassword();
+        if (this.selectTheme !== this.welcomeService.account.profile.theme) this.onModifyTheme();
+        if (this.selectLangage !== this.welcomeService.account.profile.language) this.onModifyLangage();
+
+        this.router.navigate(['/profil']);
+
         // this.oldProfile = {
         //     avatar: this.welcomeService.account.profile.avatar,
         //     name: this.gameManager.username,

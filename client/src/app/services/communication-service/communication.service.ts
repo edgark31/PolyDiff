@@ -4,7 +4,7 @@ import { GameDetails } from '@app/interfaces/game-interfaces';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Account, CarouselPaginator, Credentials, GameConfigConst, GameHistory } from './../../../../../common/game-interfaces';
+import { Account, CarouselPaginator, Credentials, GameConfigConst, GameHistory, Theme } from './../../../../../common/game-interfaces';
 
 @Injectable({
     providedIn: 'root',
@@ -57,6 +57,59 @@ export class CommunicationService {
         );
     }
 
+    updateAvatar(oldusername: string, oldavatar: string, newavatar: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { oldUsername: oldusername, oldAvatar: oldavatar, newAvatar: newavatar }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('avatar update');
+            }),
+            catchError(this.handleError<void>('updateAvatar')),
+        );
+    }
+    chooseAvatar(oldusername: string, oldavatar: string, newavatar: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/avatar/choose`, { oldUsername: oldusername, oldAvatar: oldavatar, newAvatar: newavatar }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('avatar choose');
+            }),
+            catchError(this.handleError<void>('chooseAvatar')),
+        );
+    }
+
+    modifyPassword(oldusername: string, oldpassword: string, newpassword: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/password`, { oldUsername: oldusername, oldpassword, newPassword: newpassword }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('password modify');
+            }),
+            catchError(this.handleError<void>('modifyPassword')),
+        );
+    }
+
+    modifyTheme(oldusername: string, oldtheme: Theme, newtheme: Theme): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/theme`, { oldUsername: oldusername, oldTheme: oldtheme, newTheme: newtheme }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('theme modify');
+            }),
+            catchError(this.handleError<void>('modifyTheme')),
+        );
+    }
+
+    modifyLangage(oldusername: string, oldlangage: string, newlangage: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/langage`, { oldUsername: oldusername, oldLangage: oldlangage, newLangage: newlangage }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('langage modify');
+            }),
+            catchError(this.handleError<void>('modifylangage')),
+        );
+    }
     // modifyProfile(oldprofil: modifYProfile, newprofile: modifYProfile): Observable<void> {
     //     return this.http.put<void>(`${this.accountUrl}/Profile`, { oldProfil: oldprofil, newProfile: newprofile }).pipe(
     //         // eslint-disable-next-line @typescript-eslint/no-empty-function

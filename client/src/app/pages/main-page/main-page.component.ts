@@ -36,9 +36,9 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        if (this.clientSocket.isSocketAlive() === undefined) {
-            this.router.navigate(['/login']);
-        }
+        // if (this.clientSocket.isSocketAlive() === undefined) {
+        //     this.router.navigate(['/login']);
+        // }
         this.handleMessages();
     }
 
