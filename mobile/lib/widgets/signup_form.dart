@@ -336,6 +336,11 @@ class _SignUpFormState extends State<SignUpForm> {
                         onPressed: () {
                           nameGenerationService.generateName(
                               selectedLanguage, hasAnimalName, hasNumber);
+                          while (
+                              nameGenerationService.generatedName.length > 20) {
+                            nameGenerationService.generateName(
+                                selectedLanguage, hasAnimalName, hasNumber);
+                          }
                           userNameController.text =
                               nameGenerationService.generatedName;
                           isUsernameValid(userNameController.text);
