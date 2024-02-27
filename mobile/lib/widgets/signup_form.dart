@@ -131,19 +131,21 @@ class _SignUpFormState extends State<SignUpForm> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Flexible(
-                    child: _buildTextInputField(
+                    child: CustomTextInputField(
                       label: "Nom d'utilisateur",
                       controller: userNameController,
-                      hint: 'Entrez votre nom d\'utilisateur',
+                      hint: "Entrez votre nom d'utilisateur",
+                      helperText: 'Non vide: $usernameFormat',
                       maxLength: 20,
                     ),
                   ),
                   SizedBox(width: 100),
                   Flexible(
-                    child: _buildTextInputField(
+                    child: CustomTextInputField(
                       label: "Courriel",
                       controller: emailController,
                       hint: 'ex: john.doe@gmail.com',
+                      helperText: 'Non vide et suit le format: $emailFormat',
                       maxLength: 40,
                     ),
                   ),
@@ -161,20 +163,23 @@ class _SignUpFormState extends State<SignUpForm> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Flexible(
-                    child: _buildTextInputField(
+                    child: CustomTextInputField(
                       label: "Mot de passe",
                       controller: passwordController,
                       hint: 'Entrez votre mot de passe',
+                      helperText: 'Force du mot de passe: $passwordStrength',
                       maxLength: 40,
                       isPassword: true,
                     ),
                   ),
                   SizedBox(width: 100),
                   Flexible(
-                    child: _buildTextInputField(
+                    child: CustomTextInputField(
                       label: "Confirmation du mot de passe",
                       controller: confirmationController,
-                      hint: 'Confirmez votre mot de passe',
+                      hint: "Confirmez votre mot de passe",
+                      helperText:
+                          'Correspondent et non-vide: $passwordConfirmation',
                       maxLength: 40,
                       isPassword: true,
                     ),
@@ -202,39 +207,6 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  Widget _buildTextInputField(
-      {required String label,
-      required TextEditingController controller,
-      required String hint,
-      int maxLength = 20,
-      bool isPassword = false}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Container(
-        constraints: BoxConstraints(maxWidth: 400),
-        child: TextField(
-          controller: controller,
-          obscureText: isPassword,
-          maxLength: maxLength,
-          decoration: InputDecoration(
-            labelText: label,
-            hintText: hint,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              borderSide: BorderSide(color: Colors.orange, width: 2.0),
-            ),
-            filled: true,
-            fillColor: Colors.grey[200],
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildSubmitButton() {
     return Center(
       child: ElevatedButton(
@@ -246,13 +218,13 @@ class _SignUpFormState extends State<SignUpForm> {
                 "Une ou plusieurs entrée(s) est/sont incorrecte(s)");
           }
         },
-        child: Text('Inscription'),
         style: ElevatedButton.styleFrom(
           foregroundColor: kLight,
           backgroundColor: kLightOrange,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
         ),
+        child: Text('Inscription'),
       ),
     );
   }
@@ -260,13 +232,13 @@ class _SignUpFormState extends State<SignUpForm> {
   Widget _buildLoginLink() {
     return Center(
       child: Padding(
-        padding: EdgeInsets.only(top: 16),
+        padding: EdgeInsets.only(top: 10),
         child: InkWell(
           onTap: () => Navigator.pushNamed(context, '/login'),
           child: Text(
             "Se connecter",
             style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.bold, color: kMidGreen),
+                fontSize: 20, fontWeight: FontWeight.bold, color: kDarkGreen),
           ),
         ),
       ),

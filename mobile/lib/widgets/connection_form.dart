@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/services/services.dart';
 import 'package:mobile/widgets/customs/app_style.dart';
+import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:mobile/widgets/customs/custom_text_input_field.dart';
 import 'package:provider/provider.dart';
 
 class ConnectionForm extends StatefulWidget {
@@ -50,116 +51,27 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 50),
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 21, right: 100),
-                    child: Text(
-                      "Nom d'utilisateur ou courriel",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                CustomTextInputField(
+                  label: 'Nom d\'utilisateur ou courriel',
+                  controller: userNameController,
+                  hint: 'Entrez votre nom d\'utilisateur',
+                  maxLength: 20,
+                  isPassword: false,
                 ),
-                SizedBox(
-                  width: 400,
-                  height: 63,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: TextField(
-                      controller: userNameController,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(20),
-                      ],
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                      ),
-                    ),
-                  ),
+                CustomTextInputField(
+                  label: 'Mot de passe',
+                  controller: passwordController,
+                  hint: 'Entrez votre mot de passe',
+                  maxLength: 20,
+                  isPassword: true,
                 ),
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: 21,
-                      right: 200,
-                    ),
-                    child: Text(
-                      "Mot de passe",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 400,
-                  height: 63,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: TextField(
-                      controller: passwordController,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(20),
-                      ],
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 21),
-                  child: SizedBox(
-                    width: 430,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // TODO: ajouter la vérification et l'envoit du mot de passe
-                        // TODO optionnel: rendre ca clean pas if if if if
-                        String userName = userNameController.text;
-                        if (userName.isNotEmpty) {
-                          print("Sending the server your username: $userName");
-                          socketService.checkName(userName);
-                        } else {
-                          setState(() {
-                            errorMessage = "Votre nom ne peut pas être vide";
-                          });
-                        }
-                        Future.delayed(Duration(milliseconds: 300), () {
-                          print(
-                              "Connection status: ${socketService.connectionStatus}");
-                          if (socketService.connectionStatus) {
-                            print("We are in the connection status");
-                            print("Connection approved");
-                            Navigator.pushNamed(context, CHAT_ROUTE);
-                          } else if (userName.isNotEmpty) {
-                            setState(() {
-                              errorMessage =
-                                  "Un client avec ce nom existe déjà";
-                            });
-                          }
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                        backgroundColor: Color.fromARGB(255, 31, 150, 104),
-                        foregroundColor: Colors.white,
-                      ),
-                      child: Text("C O N N E X I O N"),
-                    ),
-                  ),
+                CustomButton(
+                  press: () {
+                    // TODO: Handle connection logic here
+                  },
+                  backgroundColor: kMidOrange,
+                  textColor: kLight,
+                  text: 'C O N N E X I O N',
                 ),
                 Text(
                   errorMessage,
