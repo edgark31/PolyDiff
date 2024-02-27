@@ -36,6 +36,7 @@ export class ProfilPageComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
+        console.log(this.welcomeService.account.profile.avatar);
     }
 
     toggleTable() {

@@ -38,10 +38,12 @@ export class ImportDialogComponent {
 
     onImport(): void {
         this.welcomeService.selectAvatar = this.imageData;
+        console.log(this.welcomeService.selectAvatar + '      yyyyyyyyyyyyppppppppp');
         this.dialogRef.close();
     }
     chooseImage(id: string): void {
-        this.welcomeService.selectAvatar = id;
+        this.welcomeService.selectLocal = id;
+        this.welcomeService.selectAvatar = `http://localhost:3000/default${id}.png`;
         this.dialogRef.close();
     }
 }

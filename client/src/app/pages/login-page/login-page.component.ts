@@ -49,6 +49,7 @@ export class LoginPageComponent implements AfterViewInit {
                     this.welcomeservice.account = account;
                     // this.gameManager.manageSocket();
                     this.gameManager.username = account.credentials.username;
+                    this.welcomeservice.account.profile.avatar = `http://localhost:3000/${this.gameManager.username}.png`;
                     this.router.navigate(['/home']);
                 },
                 error: (error: HttpErrorResponse) => {
