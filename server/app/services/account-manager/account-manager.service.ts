@@ -65,6 +65,7 @@ export class AccountManagerService implements OnModuleInit {
 
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
             this.connectedUsers.set(accountFound.credentials.username, accountFound.profile);
+
             this.showProfiles();
             return Promise.resolve(accountFound);
         } catch (error) {
@@ -82,6 +83,7 @@ export class AccountManagerService implements OnModuleInit {
             if (pseudoFound) throw new Error('Username already taken');
 
             accountFound.credentials.username = newUsername;
+
             await accountFound.save();
             this.logger.verbose(`Account ${oldUsername} has changed his username to ${newUsername}`);
             return Promise.resolve();
@@ -91,17 +93,37 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async changeAvatar(username: string, avatar: string): Promise<void> {
+    async uploadAvatar(username: string, avatar: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');
 
+            this.imageManager.save(username, avatar);
             accountFound.profile.avatar = avatar;
+
             await accountFound.save();
-            this.logger.verbose(`Account ${avatar} has changed his avatar to ${avatar}`);
+            this.logger.log(`${username} has changed his avatar`);
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to change avatar --> ${error.message}`);
+            this.logger.error(`Failed to upload avatar --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async chooseAvatar(username: string, id: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+            if (!accountFound) throw new Error('Account not found');
+            console.log(`default${id}.png`);
+            const base64 = this.imageManager.convert(`default${id}.png`);
+            this.imageManager.save(username, base64);
+
+            accountFound.profile.avatar = base64;
+            await accountFound.save();
+            this.logger.log(`${username} has changed his avatar`);
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to choose avatar --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
