@@ -26,25 +26,40 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: CustomMenuDrawer(),
-      appBar: AppBar(
-        backgroundColor: kMidOrange,
-        title: const Text('R A C C O O N  V I L L A G E'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.home),
-            onPressed: () => _navigateTo(DASHBOARD_ROUTE),
-          ),
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () => _navigateTo(SEARCH_ROUTE),
-          ),
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () => _navigateTo(PROFILE_ROUTE),
-          ),
-        ],
+    return BackgroundContainer(
+      backgroundImagePath: SELECTION_BACKGROUND_PATH,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        drawer: CustomMenuDrawer(),
+        appBar: AppBar(
+          backgroundColor: kMidOrange,
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  right: 10.0), // Adjust the padding as needed
+              child: IconButton(
+                icon: const Icon(Icons.home),
+                onPressed: () => _navigateTo(DASHBOARD_ROUTE),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  right: 10.0), // Adjust the padding as needed
+              child: IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () => _navigateTo(SEARCH_ROUTE),
+              ),
+            ),
+            // No padding on the last item if you want it aligned to the edge
+            Padding(
+              padding: const EdgeInsets.only(right: 30.0),
+              child: IconButton(
+                icon: const Icon(Icons.person),
+                onPressed: () => _navigateTo(PROFILE_ROUTE),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

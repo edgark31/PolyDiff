@@ -19,6 +19,7 @@ const String CHAT_ROUTE = '/chat';
 const String SEARCH_ROUTE = '/search';
 const String PROFILE_ROUTE = '/profile';
 const String AVATAR_ROUTE = '/avatar';
+const String ADMIN_ROUTE = '/admin';
 const String ERROR_ROUTE = '/error';
 
 class AppRouter {
