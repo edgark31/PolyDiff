@@ -8,11 +8,4 @@ export class WelcomeService {
     selectAvatar: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
     chooseImage: boolean;
     constructor() {}
-    //  private readonly clientSocket: ClientSocketService
-
-    // configureBaseSocketFeatures() {
-    //     this.clientSocket.on<Account[]>('RecuperateProfile', (profiles: Account[]) => {
-    //         this.profile = [...profiles];
-    //     });
-    // }
 }

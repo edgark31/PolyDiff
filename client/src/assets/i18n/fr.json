@@ -20,7 +20,9 @@
         "gameAverage": "moyenne de différences trouvées par partie",
         "gameAverageTime": "temps moyen par partie",
         "Connexion": "Relevé de connexion",
-        "gameHistoric": "historique de parties"
+        "gameHistoric": "historique de parties",
+        "changePassword": "Changer le mot de passe",
+        "confirmPassword": "Confirmer le mot de passe"
     },
     "bouton": {
         "deconnexion": "Déconnexion",

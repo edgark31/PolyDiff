@@ -22,7 +22,9 @@
         "gameAverage": "average of differences found per part",
         "gameAverageTime": "average time per game",
         "Connexion": "Login statement",
-        "gameHistoric": "game history"
+        "gameHistoric": "game history",
+        "changePassword": "Change password",
+        "confirmePassword": "Confirm password"
     },
 
     "bouton": {
