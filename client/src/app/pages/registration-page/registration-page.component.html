@@ -1,5 +1,7 @@
 <form [formGroup]="registrationForm">
     <h1>Inscription</h1>
+    <button type="submit" (click)="openAvatarDialog()">Choisir un avatar</button>
+    <button type="submit" (click)="openNameGenerationDialog()">Generer un nom d'utilisateur</button>
     <div class="form-control">
         <label for="username">Nom d'utilisateur</label>
         <input formControlName="username" id="username" [(ngModel)]="username"/>
@@ -21,7 +23,6 @@
         <label *ngIf="password !== confirmedPassword" class="error">Le mot de passe doit être similaire</label>
     </div>
     <button routerLink="/login">Revenir à la page de connexion</button>
-    <button type="submit" (click)="openNameGenerationDialog()">Generer un nom d'utilisateur</button>
     <button type="submit" (click)="onSubmit()">Créer un compte</button>
     <p class="feedback" >{{ feedback }}</p>
 </form>

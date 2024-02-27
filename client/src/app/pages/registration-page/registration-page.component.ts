@@ -71,4 +71,14 @@ export class RegistrationPageComponent {
                 this.registrationForm.value.username = this.nameGeneration.generatedName;
             });
     }
+
+    openAvatarDialog() {
+        this.dialog
+            .open(NameGenerationDialogComponent, new MatDialogConfig())
+            .afterClosed()
+            .subscribe((username: string) => {
+                this.registrationForm.controls.username.setValue(username);
+                this.registrationForm.value.username = this.nameGeneration.generatedName;
+            });
+    }
 }
