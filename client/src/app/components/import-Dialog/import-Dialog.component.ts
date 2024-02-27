@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
-import Ajv from 'ajv';
-import addFormats from 'ajv-formats';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
 
-const ajv = new Ajv();
-addFormats(ajv);
 @Component({
     selector: 'app-import-Dialog',
     templateUrl: './import-Dialog.component.html',

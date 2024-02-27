@@ -2,7 +2,6 @@
 <mat-grid-list cols="2" rowHeight="200px" gutterSize="20px">
   <mat-dialog-content *ngIf="!welcomeService.chooseImage">
     <input type="file" (change)="onFileSelected($event)" />
-
 </mat-dialog-content>
 
 <mat-dialog-content *ngIf="welcomeService.chooseImage">
