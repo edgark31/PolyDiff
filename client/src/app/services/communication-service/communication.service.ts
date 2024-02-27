@@ -57,8 +57,8 @@ export class CommunicationService {
         );
     }
 
-    updateAvatar(oldusername: string, oldavatar: string, newavatar: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { oldUsername: oldusername, oldAvatar: oldavatar, newAvatar: newavatar }).pipe(
+    updateAvatar(oldusername: string, newavatar: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { oldUsername: oldusername, newAvatar: newavatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -67,8 +67,8 @@ export class CommunicationService {
             catchError(this.handleError<void>('updateAvatar')),
         );
     }
-    chooseAvatar(oldusername: string, oldavatar: string, newavatar: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/avatar/choose`, { oldUsername: oldusername, oldAvatar: oldavatar, newAvatar: newavatar }).pipe(
+    chooseAvatar(name: string, newavatar: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/avatar/choose`, { username: name, newAvatar: newavatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
