@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Importer une image</h2>
+<mat-grid-list cols="2" rowHeight="200px" gutterSize="20px">
+  <mat-dialog-content *ngIf="!welcomeService.chooseImage">
+    <input type="file" (change)="onFileSelected($event)" />
+</mat-dialog-content>
+
+<mat-dialog-content *ngIf="welcomeService.chooseImage">
+
+    <button mat-button (click)="chooseImage('cuteRaccoon.bmp')">
+        <img src="assets/cuteRaccoon.bmp" alt="cuteRaccoon" class="dialog-image">
+      </button>
+      <button mat-button (click)="chooseImage('hallelujaRaccoon.bmp')">
+        <img src="assets/hallelujaRaccoon.bmp" alt="hallelujaRaccoon" class="dialog-image">
+      </button>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Annuler</button>
+     <button mat-button (click)="onImport()">Importer</button>
+</mat-dialog-actions>

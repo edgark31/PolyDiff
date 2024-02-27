@@ -1,3 +1,4 @@
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component } from '@angular/core';
@@ -26,6 +27,7 @@ export class LoginPageComponent implements AfterViewInit {
         private readonly clientSocket: ClientSocketService,
         private readonly communication: CommunicationService,
         private readonly router: Router,
+        private readonly welcomeservice: WelcomeService,
     ) {
         this.feedback = '';
     }
@@ -43,6 +45,7 @@ export class LoginPageComponent implements AfterViewInit {
             this.communication.login(this.creds).subscribe({
                 next: (account: Account) => {
                     this.clientSocket.connect(account.credentials.username, 'auth');
+                    this.welcomeservice.account = account;
                     this.gameManager.manageSocket();
                     this.gameManager.username = account.credentials.username;
                     this.router.navigate(['/home']);
