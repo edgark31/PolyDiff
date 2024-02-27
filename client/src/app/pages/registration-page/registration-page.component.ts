@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { AvatarDialogComponent } from '@app/components/avatar-dialog/avatar-dialog.component';
 import { NameGenerationDialogComponent } from '@app/components/name-generation-dialog/name-generation-dialog.component';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { NameGenerationService } from '@app/services/name-generation-service/name-generation-service.service';
@@ -65,6 +66,16 @@ export class RegistrationPageComponent {
     openNameGenerationDialog() {
         this.dialog
             .open(NameGenerationDialogComponent, new MatDialogConfig())
+            .afterClosed()
+            .subscribe((username: string) => {
+                this.registrationForm.controls.username.setValue(username);
+                this.registrationForm.value.username = this.nameGeneration.generatedName;
+            });
+    }
+
+    openAvatarDialog() {
+        this.dialog
+            .open(AvatarDialogComponent, new MatDialogConfig())
             .afterClosed()
             .subscribe((username: string) => {
                 this.registrationForm.controls.username.setValue(username);
