@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CustomTextInputField extends StatelessWidget {
+class CustomTextInputField extends StatefulWidget {
+  final Function(String)? onInputTextChanged;
   final String label;
   final TextEditingController controller;
   final String hint;
@@ -8,8 +9,9 @@ class CustomTextInputField extends StatelessWidget {
   final int maxLength;
   final bool isPassword;
 
-  const CustomTextInputField({
+  CustomTextInputField({
     super.key,
+    this.onInputTextChanged,
     required this.label,
     required this.controller,
     required this.hint,
@@ -19,19 +21,27 @@ class CustomTextInputField extends StatelessWidget {
   });
 
   @override
+  State<CustomTextInputField> createState() => _CustomTextInputFieldState();
+}
+
+class _CustomTextInputFieldState extends State<CustomTextInputField> {
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Container(
         constraints: BoxConstraints(maxWidth: 400),
         child: TextField(
-          controller: controller,
-          obscureText: isPassword,
-          maxLength: maxLength,
+          controller: widget.controller,
+          obscureText: widget.isPassword,
+          maxLength: widget.maxLength,
+          onChanged: (value) {
+            widget.onInputTextChanged!(value);
+          },
           decoration: InputDecoration(
-            labelText: label,
-            hintText: hint,
-            helperText: helperText,
+            labelText: widget.label,
+            hintText: widget.hint,
+            helperText: widget.helperText,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30.0),
               borderSide: BorderSide.none,

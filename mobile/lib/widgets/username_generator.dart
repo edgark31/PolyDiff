@@ -4,7 +4,10 @@ import 'package:mobile/services/services.dart';
 class UsernameGenerator extends StatefulWidget {
   final Function(String) onUsernameGenerated;
 
-  UsernameGenerator({super.key, required this.onUsernameGenerated});
+  UsernameGenerator({
+    super.key,
+    required this.onUsernameGenerated,
+  });
 
   @override
   State<UsernameGenerator> createState() => _UsernameGeneratorState();

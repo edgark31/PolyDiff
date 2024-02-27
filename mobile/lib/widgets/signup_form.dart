@@ -36,6 +36,7 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
+  // TODO : create a service to reuse in connexion form
   bool isEmailValid(String email) {
     RegExp emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
     if (emailRegex.hasMatch(email) && email.isNotEmpty) {
@@ -135,6 +136,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       label: "Nom d'utilisateur",
                       controller: userNameController,
                       hint: "Entrez votre nom d'utilisateur",
+                      onInputTextChanged: isUsernameValid,
                       helperText: 'Non vide: $usernameFormat',
                       maxLength: 20,
                     ),
@@ -145,6 +147,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       label: "Courriel",
                       controller: emailController,
                       hint: 'ex: john.doe@gmail.com',
+                      onInputTextChanged: isEmailValid,
                       helperText: 'Non vide et suit le format: $emailFormat',
                       maxLength: 40,
                     ),
@@ -156,6 +159,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 child: UsernameGenerator(
                   onUsernameGenerated: (generatedName) {
                     userNameController.text = generatedName;
+                    isUsernameValid(userNameController.text);
                   },
                 ),
               ),
@@ -167,6 +171,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       label: "Mot de passe",
                       controller: passwordController,
                       hint: 'Entrez votre mot de passe',
+                      onInputTextChanged: updatePasswordStrength,
                       helperText: 'Force du mot de passe: $passwordStrength',
                       maxLength: 40,
                       isPassword: true,
@@ -178,6 +183,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       label: "Confirmation du mot de passe",
                       controller: confirmationController,
                       hint: "Confirmez votre mot de passe",
+                      onInputTextChanged: updateConfirmation,
                       helperText:
                           'Correspondent et non-vide: $passwordConfirmation',
                       maxLength: 40,
