@@ -1,6 +1,6 @@
 import { Credentials } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
-import { Body, Controller, Delete, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
+import { Body, Controller, Delete, HttpStatus, Post, Put, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 

@@ -114,7 +114,7 @@ export class AccountManagerService implements OnModuleInit {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');
-            console.log(`default${id}.png`);
+
             const base64 = this.imageManager.convert(`default${id}.png`);
             this.imageManager.save(username, base64);
 
