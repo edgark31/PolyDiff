@@ -45,6 +45,7 @@ export class LoginPageComponent implements AfterViewInit {
             this.communication.login(this.creds).subscribe({
                 next: (account: Account) => {
                     this.clientSocket.connect(account.credentials.username, 'auth');
+                    console.log(account.credentials.username);
                     this.welcomeservice.account = account;
                     // this.gameManager.manageSocket();
                     this.gameManager.username = account.credentials.username;

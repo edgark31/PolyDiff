@@ -40,8 +40,8 @@ export class ImportDialogComponent {
         this.welcomeService.selectAvatar = this.imageData;
         this.dialogRef.close();
     }
-    chooseImage(image: string): void {
-        this.welcomeService.selectAvatar = 'assets/' + image;
+    chooseImage(id: string): void {
+        this.welcomeService.selectAvatar = id;
         this.dialogRef.close();
     }
 }
