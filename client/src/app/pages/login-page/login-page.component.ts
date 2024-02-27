@@ -1,6 +1,7 @@
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
@@ -13,7 +14,7 @@ import { Account, Credentials } from '@common/game-interfaces';
     templateUrl: './login-page.component.html',
     styleUrls: ['./login-page.component.scss'],
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
         password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
@@ -26,8 +27,12 @@ export class LoginPageComponent {
         private readonly clientSocket: ClientSocketService,
         private readonly communication: CommunicationService,
         private readonly router: Router,
+        private readonly welcomeservice: WelcomeService,
     ) {
         this.feedback = '';
+    }
+    ngOnInit(): void {
+        this.clientSocket.disconnect();
     }
 
     onSubmit() {
@@ -39,6 +44,7 @@ export class LoginPageComponent {
             this.communication.login(this.creds).subscribe({
                 next: (account: Account) => {
                     this.clientSocket.connect(account.credentials.username);
+                    this.welcomeservice.account = account;
                     this.gameManager.manageSocket();
                     this.gameManager.username = account.credentials.username;
                     this.router.navigate(['/home']);

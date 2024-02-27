@@ -1,5 +1,5 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,9 +8,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,6 +30,9 @@ import { CreationPageComponent } from '@app/pages/creation-page/creation-page.co
 import { GamePageComponent } from '@app/pages/game-page/game-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { CanvasMiddleButtonsComponent } from './components/canvas-middle-buttons/canvas-middle-buttons.component';
 import { CanvasTopButtonsComponent } from './components/canvas-top-buttons/canvas-top-buttons.component';
 import { CanvasUnderButtonsComponent } from './components/canvas-under-buttons/canvas-under-buttons.component';
@@ -35,7 +42,9 @@ import { DeleteResetConfirmationDialogComponent } from './components/delete-rese
 import { GamePageDialogComponent } from './components/game-page-dialog/game-page-dialog.component';
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
+import { ImportDialogComponent } from './components/import-Dialog/import-Dialog.component';
 import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
+import { MenuComponent } from './components/menu/menu.component';
 import { NameGenerationDialogComponent } from './components/name-generation-dialog/name-generation-dialog.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
@@ -44,6 +53,8 @@ import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { PersonnalizationPageComponent } from './pages/personnalization-page/personnalization-page.component';
+import { ProfilPageComponent } from './pages/profil-Page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 /**
@@ -52,6 +63,10 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
  * Please do not move this module in the module folder.
  * Otherwise Angular Cli will not know in which module to put new component
  */
+export const createTranslateLoader = (http: HttpClient) => {
+    // return new TranslateHttpLoader(http, './assets/trad/', 'doc.json');
+    return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+};
 @NgModule({
     declarations: [
         AppComponent,
@@ -63,12 +78,14 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
         PlayerNameDialogBoxComponent,
         GameInfosComponent,
         ImageCanvasComponent,
+        ImportDialogComponent,
         ConfigPageComponent,
         CreationGameDialogComponent,
         CanvasUnderButtonsComponent,
         GamePageDialogComponent,
         WaitingForPlayerToJoinComponent,
         CanvasTopButtonsComponent,
+        MenuComponent,
         JoinedPlayerDialogComponent,
         NavBarComponent,
         ChatBoxComponent,
@@ -83,6 +100,8 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
         RegistrationPageComponent,
         RecoverPasswordPageComponent,
         NameGenerationDialogComponent,
+        PersonnalizationPageComponent,
+        ProfilPageComponent,
     ],
     imports: [
         AppMaterialModule,
@@ -104,6 +123,21 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
         MatSelectModule,
         MatMenuModule,
         MatCheckboxModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatToolbarModule,
+        MatIconModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: createTranslateLoader,
+                deps: [HttpClient],
+            },
+            compiler: {
+                provide: TranslateCompiler,
+                useClass: TranslateMessageFormatCompiler,
+            },
+        }),
     ],
     providers: [],
     bootstrap: [AppComponent],

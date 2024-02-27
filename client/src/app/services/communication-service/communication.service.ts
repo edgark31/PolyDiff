@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameDetails } from '@app/interfaces/game-interfaces';
-import { Account, CarouselPaginator, Credentials, GameConfigConst, GameHistory } from '@common/game-interfaces';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Account, CarouselPaginator, Credentials, GameConfigConst, GameHistory } from './../../../../../common/game-interfaces';
 
 @Injectable({
     providedIn: 'root',
@@ -46,6 +46,28 @@ export class CommunicationService {
         );
     }
 
+    modifyUser(oldusername: string, newusername: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/pseudo`, { oldUsername: oldusername, newUsername: newusername }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('User modify');
+            }),
+            catchError(this.handleError<void>('modifyUser')),
+        );
+    }
+
+    // modifyProfile(oldprofil: modifYProfile, newprofile: modifYProfile): Observable<void> {
+    //     return this.http.put<void>(`${this.accountUrl}/Profile`, { oldProfil: oldprofil, newProfile: newprofile }).pipe(
+    //         // eslint-disable-next-line @typescript-eslint/no-empty-function
+    //         tap(() => {
+    //             // eslint-disable-next-line no-console
+    //             console.log('User modify');
+    //         }),
+    //         catchError(this.handleError<void>('modifyUser')),
+    //     );
+    // }
+
     loadConfigConstants(): Observable<GameConfigConst> {
         return this.http.get<GameConfigConst>(`${this.gameUrl}/constants`);
     }
@@ -72,5 +94,9 @@ export class CommunicationService {
 
     updateGameConstants(gameConstants: GameConfigConst): Observable<void> {
         return this.http.put<void>(`${this.gameUrl}/constants`, gameConstants);
+    }
+
+    private handleError<T>(_request: string, result?: T): (error: Error) => Observable<T> {
+        return () => of(result as T);
     }
 }

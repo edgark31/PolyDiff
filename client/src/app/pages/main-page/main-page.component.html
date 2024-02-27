@@ -1,8 +1,9 @@
 <div class="container flex-column">
+    <app-menu></app-menu>
     <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages"></app-chat-box>
     <header class="header">
     </header>
-    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>   
+    <!-- <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/> -->
     <section id="server-message" class="flex-column section">
     </section>
     <footer class="footer flex-column">
