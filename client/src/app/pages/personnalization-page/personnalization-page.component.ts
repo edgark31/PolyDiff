@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LANGUAGES, THEME_PERSONNALIZATION } from './../../../../../common/constants';
 import { Theme, modifyProfile } from './../../../../../common/game-interfaces';
@@ -6,13 +7,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { ImportDialogComponent } from '@app/components/import-Dialog/import-Dialog.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { TranslateService } from '@ngx-translate/core';
+import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
 
 @Component({
     selector: 'app-personnalization-page',

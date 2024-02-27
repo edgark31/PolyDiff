@@ -1,12 +1,13 @@
+/* eslint-disable no-restricted-imports */
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
-import { WelcomeService } from './../../services/welcome-service/welcome.service';
+import { WelcomeService } from '../../services/welcome-service/welcome.service';
 
 @Component({
-    selector: 'app-import-Dialog',
-    templateUrl: './import-Dialog.component.html',
-    styleUrls: ['./import-Dialog.component.scss'],
+    selector: 'app-import-dialog',
+    templateUrl: './import-dialog.component.html',
+    styleUrls: ['./import-dialog.component.scss'],
 })
 export class ImportDialogComponent {
     imageData: string;

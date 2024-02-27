@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { CanvasTopButtonsComponent } from './import-Dialog.component';
+import { CanvasTopButtonsComponent } from './import-dialog.component';
 
 describe('CanvasTopButtonsComponent', () => {
     let component: CanvasTopButtonsComponent;
