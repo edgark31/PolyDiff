@@ -20,6 +20,7 @@ import { DatabaseService } from './services/database/database.service';
 import { GameListsManagerService } from './services/game-lists-manager/game-lists-manager.service';
 import { GameService } from './services/game/game.service';
 import { HistoryService } from './services/history/history.service';
+import { ImageManagerService } from './services/image-manager/image-manager.service';
 import { LimitedModeService } from './services/limited-mode/limited-mode.service';
 import { MessageManagerService } from './services/message-manager/message-manager.service';
 import { PlayersListManagerService } from './services/players-list-manager/players-list-manager.service';
@@ -64,6 +65,7 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
         RoomsManagerService,
         LimitedModeService,
         AccountManagerService,
+        ImageManagerService,
     ],
 })
 export class AppModule {}

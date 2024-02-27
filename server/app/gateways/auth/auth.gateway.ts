@@ -1,14 +1,6 @@
-import { AccountEvents } from '@common/enums';
+import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { Logger } from '@nestjs/common';
-import {
-    ConnectedSocket,
-    OnGatewayConnection,
-    OnGatewayDisconnect,
-    OnGatewayInit,
-    SubscribeMessage,
-    WebSocketGateway,
-    WebSocketServer,
-} from '@nestjs/websockets';
+import { ConnectedSocket, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { instrument } from '@socket.io/admin-ui';
 import { Server, Socket } from 'socket.io';
 
@@ -27,13 +19,8 @@ import { Server, Socket } from 'socket.io';
 export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
     @WebSocketServer() private server: Server;
 
-    constructor(private readonly logger: Logger) {
+    constructor(private readonly logger: Logger, private readonly accountManager: AccountManagerService) {
         //
-    }
-
-    @SubscribeMessage(AccountEvents.Update)
-    update(@ConnectedSocket() socket: Socket): string {
-        return 'Hello world!';
     }
 
     afterInit() {
@@ -44,10 +31,13 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`Auth par l'utilisateur avec id : ${socket.id}`);
+        const userName = socket.handshake.query.name as string;
+        socket.data.userName = userName;
+        this.logger.log(`Auth de ${userName} avec id : ${socket.id}`);
     }
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`Déconnexion par l'utilisateur avec id : ${socket.id}`);
+        this.logger.log(`Deauth de ${socket.data.username} avec id : ${socket.id}`);
+        this.accountManager.deconnexion(socket.id);
     }
 }

@@ -29,7 +29,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     afterInit() {}
 
     handleConnection(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`Connexion par l'utilisateur avec id : ${socket.id}`);
+        const userName = socket.handshake.query.name as string;
+        this.logger.log(`${userName} avec id : ${socket.id}`);
     }
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {

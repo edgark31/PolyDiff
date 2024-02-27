@@ -216,9 +216,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         const userName = socket.handshake.query.name as string;
-        if (!this.accountManager.connectedProfiles.has(userName)) {
-            this.server.to(socket.id).emit('connexion', false);
-        }
         this.logger.log(`Connexion par l'utilisateur ${userName} avec id : ${socket.id}`);
     }
 

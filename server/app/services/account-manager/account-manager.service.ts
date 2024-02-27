@@ -8,7 +8,7 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class AccountManagerService implements OnModuleInit {
-    connectedProfiles: Map<string, Profile> = new Map<string, Profile>();
+    connectedUsers: Map<string, Profile> = new Map<string, Profile>(); // Key is the userName :: ALWAYS USE THIS MAP TO GET THE CONNECTED USERS
 
     constructor(
         private readonly logger: Logger,
@@ -31,7 +31,7 @@ export class AccountManagerService implements OnModuleInit {
             const newAccount: Account = {
                 credentials: creds,
                 profile: {
-                    avatar: 'base64',
+                    avatar: this.imageManager.convert('default.png'),
                     sessions: [],
                     connexions: [],
                     stats: {} as Statistics,
@@ -59,9 +59,10 @@ export class AccountManagerService implements OnModuleInit {
 
             if (!accountFound) throw new Error('Account not found');
 
-            if (this.connectedProfiles.has(accountFound.credentials.username)) throw new Error('Account already connected');
+            if (this.connectedUsers.has(accountFound.credentials.username)) throw new Error('Account already connected');
 
-            this.connectedProfiles.set(accountFound.credentials.username, accountFound.profile);
+            this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
+            this.connectedUsers.set(accountFound.credentials.username, accountFound.profile);
             this.showProfiles();
             return Promise.resolve(accountFound);
         } catch (error) {
@@ -103,18 +104,6 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    deconnexion(name: string): void {
-        this.connectedProfiles.delete(name);
-        this.showProfiles();
-    }
-
-    showProfiles(): void {
-        this.logger.verbose('Connected profiles: ');
-        this.connectedProfiles.forEach((value, key) => {
-            this.logger.verbose(`${key}`);
-        });
-    }
-
     async delete() {
         try {
             await this.accountModel.deleteMany({});
@@ -123,5 +112,17 @@ export class AccountManagerService implements OnModuleInit {
             this.logger.error(`Failed to delete accounts --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
+    }
+
+    deconnexion(userName: string): void {
+        this.connectedUsers.delete(userName);
+        this.showProfiles();
+    }
+
+    showProfiles(): void {
+        this.logger.verbose('Connected profiles: ');
+        this.connectedUsers.forEach((value, key) => {
+            this.logger.verbose(`${key}`);
+        });
     }
 }
