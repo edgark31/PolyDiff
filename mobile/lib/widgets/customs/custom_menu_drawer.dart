@@ -13,7 +13,7 @@ class CustomMenuDrawer extends StatelessWidget {
             accountName: Text('Marie-Jade'),
             accountEmail: Text('marie-jade.marcil@polymtl.ca'),
             currentAccountPicture: Avatar(
-              imageUrl: 'assets/images/cuteRaccoon.jpg',
+              imageUrl: 'assets/images/hallelujaRaccoon.jpeg',
               radius: 20,
             ),
             decoration: BoxDecoration(color: kMidOrange),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
+import 'package:mobile/widgets/widgets.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -20,23 +20,32 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  void _navigateTo(String routeName) {
+    Navigator.pushNamed(context, routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CustomMenuDrawer(),
       appBar: AppBar(
-        title: const Text('R A C C O O N'),
         backgroundColor: kMidOrange,
-      ),
-      extendBodyBehindAppBar: true,
-      body: ListView(padding: EdgeInsets.zero, children: [
-        Container(
-          height: MediaQuery.of(context).size.height * 0.45,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+        title: const Text('R A C C O O N  V I L L A G E'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: () => _navigateTo(DASHBOARD_ROUTE),
           ),
-        ),
-      ]),
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () => _navigateTo(SEARCH_ROUTE),
+          ),
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () => _navigateTo(PROFILE_ROUTE),
+          ),
+        ],
+      ),
     );
   }
 }

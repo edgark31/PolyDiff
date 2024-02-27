@@ -30,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             const SizedBox(height: 40),
             Avatar(
-              imageUrl: 'assets/images/cuteRaccoon.pgn',
+              imageUrl: 'assets/images/sleepyRaccoon.jpg',
               radius: 70,
             ),
             const SizedBox(height: 20),
