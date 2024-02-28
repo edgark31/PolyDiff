@@ -38,7 +38,6 @@ export class ImportDialogComponent {
 
     onImport(): void {
         this.welcomeService.selectAvatar = this.imageData;
-        console.log(this.welcomeService.selectAvatar + '      yyyyyyyyyyyyppppppppp');
         this.dialogRef.close();
     }
     chooseImage(id: string): void {

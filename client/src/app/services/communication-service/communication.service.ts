@@ -26,8 +26,8 @@ export class CommunicationService {
         return this.http.post<void>(`${this.gameUrl}`, gameData);
     }
 
-    createUser(creds: Credentials): Observable<void> {
-        return this.http.post<void>(`${this.accountUrl}/register`, creds).pipe(
+    createUser(credentials: Credentials, idAvatar: string): Observable<void> {
+        return this.http.post<void>(`${this.accountUrl}/register`, { creds: credentials, id: idAvatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console

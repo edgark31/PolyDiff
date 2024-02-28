@@ -54,7 +54,7 @@ export class RegistrationPageComponent {
                 email: this.registrationForm.value.email,
                 password: this.registrationForm.value.password,
             };
-            this.communication.createUser(this.creds).subscribe({
+            this.communication.createUser(this.creds, this.welcomeService.selectLocal).subscribe({
                 next: () => {
                     this.router.navigate(['/login']);
                 },
@@ -79,8 +79,7 @@ export class RegistrationPageComponent {
         this.dialog
             .open(ImportDialogComponent, new MatDialogConfig())
             .afterClosed()
-            .subscribe(() => {
-                this.welcomeService.chooseImage = choose;
-            });
+            .subscribe(() => {});
+        this.welcomeService.chooseImage = choose;
     }
 }
