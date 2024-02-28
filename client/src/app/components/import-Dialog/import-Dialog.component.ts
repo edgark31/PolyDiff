@@ -1,8 +1,7 @@
-/* eslint-disable no-restricted-imports */
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
-import { WelcomeService } from '../../services/welcome-service/welcome.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 
 @Component({
     selector: 'app-import-dialog',

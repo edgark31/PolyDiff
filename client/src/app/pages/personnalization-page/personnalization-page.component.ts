@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LANGUAGES, THEME_PERSONNALIZATION } from './../../../../../common/constants';

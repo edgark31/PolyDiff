@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials, Statistics, Theme } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { THEME_PERSONNALIZATION } from '@common/constants';
 import { Profile } from '@common/game-interfaces';
