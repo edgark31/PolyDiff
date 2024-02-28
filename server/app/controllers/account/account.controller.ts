@@ -20,7 +20,7 @@ export class AccountController {
     }
 
     @Post('login')
-    async connexion(@Body('creds') creds: Credentials, @Res() response: Response) {
+    async connexion(@Body() creds: Credentials, @Res() response: Response) {
         try {
             const accountFound = await this.accountManager.connexion(creds);
             response.status(HttpStatus.OK).json(accountFound);

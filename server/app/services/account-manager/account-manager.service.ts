@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Account, AccountDocument, Credentials, Statistics, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
+import { THEME_PERSONNALIZATION } from '@common/constants';
 import { Profile } from '@common/game-interfaces';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -38,7 +39,7 @@ export class AccountManagerService implements OnModuleInit {
                     friends: [],
                     friendRequests: [],
                     language: '',
-                    theme: {} as Theme,
+                    theme: THEME_PERSONNALIZATION[0],
                 },
             };
             await this.accountModel.create(newAccount);
