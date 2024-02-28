@@ -1,6 +1,9 @@
 class Credentials {
-  String username;
-  String password;
-  String email;
-  Credentials(this.username, this.password, this.email);
+  final String username;
+  final String password;
+  final String email;
+  const Credentials(
+      {required this.username, required this.password, required this.email});
+
+  //factory Credentials.json
 }
