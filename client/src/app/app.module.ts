@@ -1,5 +1,5 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,8 +30,8 @@ import { CreationPageComponent } from '@app/pages/creation-page/creation-page.co
 import { GamePageComponent } from '@app/pages/game-page/game-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule } from '@ngx-translate/core';
+// import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CanvasMiddleButtonsComponent } from './components/canvas-middle-buttons/canvas-middle-buttons.component';
 import { CanvasTopButtonsComponent } from './components/canvas-top-buttons/canvas-top-buttons.component';
 import { CanvasUnderButtonsComponent } from './components/canvas-under-buttons/canvas-under-buttons.component';
@@ -63,10 +63,10 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
  * Please do not move this module in the module folder.
  * Otherwise Angular Cli will not know in which module to put new component
  */
-export const createTranslateLoader = (http: HttpClient) => {
-    // return new TranslateHttpLoader(http, './assets/trad/', 'doc.json');
-    return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
-};
+// export const createTranslateLoader = (http: HttpClient) => {
+//     // return new TranslateHttpLoader(http, './assets/trad/', 'doc.json');
+//     return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+// };
 @NgModule({
     declarations: [
         AppComponent,
@@ -129,11 +129,11 @@ export const createTranslateLoader = (http: HttpClient) => {
         MatToolbarModule,
         MatIconModule,
         TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: createTranslateLoader,
-                deps: [HttpClient],
-            },
+            // loader: {
+            //     provide: TranslateLoader,
+            //     useFactory: createTranslateLoader,
+            //     deps: [HttpClient],
+            // },
         }),
     ],
     providers: [],

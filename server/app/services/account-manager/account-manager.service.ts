@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials, Statistics, Theme } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
+import { THEME_PERSONNALIZATION } from '@common/constants';
 import { Profile } from '@common/game-interfaces';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -20,7 +21,7 @@ export class AccountManagerService implements OnModuleInit {
         //
     }
 
-    async register(creds: Credentials) {
+    async register(creds: Credentials, id: string) {
         try {
             const userFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
             const emailFound = await this.accountModel.findOne({ 'credentials.email': creds.email });
@@ -31,14 +32,14 @@ export class AccountManagerService implements OnModuleInit {
             const newAccount: Account = {
                 credentials: creds,
                 profile: {
-                    avatar: this.imageManager.convert('default.png'),
+                    avatar: this.imageManager.convert(`default${id}.png`),
                     sessions: [],
                     connections: [],
                     stats: {} as Statistics,
                     friends: [],
                     friendRequests: [],
                     language: '',
-                    theme: {} as Theme,
+                    theme: THEME_PERSONNALIZATION[0],
                 },
             };
             await this.accountModel.create(newAccount);

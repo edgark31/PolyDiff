@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
 import { NameGenerationDialogComponent } from '@app/components/name-generation-dialog/name-generation-dialog.component';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { NameGenerationService } from '@app/services/name-generation-service/name-generation-service.service';
 import { ValidationService } from '@app/services/validation-service/validation.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Credentials } from '@common/game-interfaces';
 
 @Component({
@@ -34,6 +37,7 @@ export class RegistrationPageComponent {
         private readonly dialog: MatDialog,
         private readonly nameGeneration: NameGenerationService,
         readonly validation: ValidationService,
+        readonly welcomeService: WelcomeService,
     ) {
         this.feedback = '';
     }
@@ -51,7 +55,7 @@ export class RegistrationPageComponent {
                 email: this.registrationForm.value.email,
                 password: this.registrationForm.value.password,
             };
-            this.communication.createUser(this.creds).subscribe({
+            this.communication.createUser(this.creds, this.welcomeService.selectLocal).subscribe({
                 next: () => {
                     this.router.navigate(['/login']);
                 },
@@ -72,13 +76,11 @@ export class RegistrationPageComponent {
             });
     }
 
-    openAvatarDialog() {
+    openAvatarDialog(choose: boolean) {
         this.dialog
-            .open(NameGenerationDialogComponent, new MatDialogConfig())
+            .open(ImportDialogComponent, new MatDialogConfig())
             .afterClosed()
-            .subscribe((username: string) => {
-                this.registrationForm.controls.username.setValue(username);
-                this.registrationForm.value.username = this.nameGeneration.generatedName;
-            });
+            .subscribe(() => {});
+        this.welcomeService.chooseImage = choose;
     }
 }
