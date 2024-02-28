@@ -20,7 +20,7 @@ export class AccountManagerService implements OnModuleInit {
         //
     }
 
-    async register(creds: Credentials) {
+    async register(creds: Credentials, id: string) {
         try {
             const userFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
             const emailFound = await this.accountModel.findOne({ 'credentials.email': creds.email });
@@ -31,7 +31,7 @@ export class AccountManagerService implements OnModuleInit {
             const newAccount: Account = {
                 credentials: creds,
                 profile: {
-                    avatar: this.imageManager.convert('default.png'),
+                    avatar: this.imageManager.convert(`default${id}.png`),
                     sessions: [],
                     connections: [],
                     stats: {} as Statistics,
