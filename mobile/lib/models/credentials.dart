@@ -5,5 +5,11 @@ class Credentials {
   const Credentials(
       {required this.username, required this.password, required this.email});
 
-  //factory Credentials.json
+  Map<String, dynamic> toJson() {
+    return {
+      'username': username,
+      'password': password,
+      'email': email,
+    };
+  }
 }

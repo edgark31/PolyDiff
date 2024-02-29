@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/models/credentials.dart';
+import 'package:mobile/services/form_service.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/login_page.dart';
@@ -12,6 +14,7 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  final FormService formService = FormService('http://localhost:3000');
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -447,9 +450,17 @@ class _SignUpFormState extends State<SignUpForm> {
                           width: 430,
                           height: 40,
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (isFormValid()) {
-                                //Envoyer les informations
+                                Credentials credentials = Credentials(
+                                  username: userNameController.text,
+                                  password: passwordController.text,
+                                  email: emailController.text,
+                                );
+                                await formService.register(credentials);
+                                setState(() {
+                                  errorMessage = "";
+                                });
                               } else {
                                 setState(() {
                                   errorMessage =
