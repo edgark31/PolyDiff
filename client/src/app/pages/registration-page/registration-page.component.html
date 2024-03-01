@@ -1,9 +1,22 @@
 <form [formGroup]="registrationForm">
     <h1>Inscription</h1>
-    <button type="submit" (click)="openAvatarDialog()">Choisir un avatar</button>
-    <button type="submit" (click)="openNameGenerationDialog()">Generer un nom d'utilisateur</button>
     <div class="form-control">
-        <label for="username">Nom d'utilisateur</label>
+        <label for="avatar">Avatar</label>
+        <div class="form-avatar">
+            <img [src]="welcomeService.selectAvatar" class="avatar" alt="image">
+              <button mat-icon-button class="photo_library" (click)="openAvatarDialog(true)">
+                <mat-icon>photo_library</mat-icon>
+              </button>
+              <!-- <button mat-icon-button class="file_upload" (click)="openAvatarDialog(false)">
+                <mat-icon>file_upload</mat-icon>
+              </button> -->
+        </div>
+    </div>
+    <div class="form-control">
+        <label for="username">
+            Nom d'utilisateur 
+            <mat-icon matTooltip="Génerer un nom d'utilisateur" (click)="openNameGenerationDialog()" class="icon">help</mat-icon>
+        </label>
         <input formControlName="username" id="username" [(ngModel)]="username"/>
         <label *ngIf="!username" class="error">Le champ est vide</label>
     </div>

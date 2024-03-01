@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
@@ -36,6 +37,7 @@ export class ProfilPageComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
+        console.log(this.welcomeService.account.profile.avatar);
     }
 
     toggleTable() {

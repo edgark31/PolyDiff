@@ -10,9 +10,9 @@ export class AccountController {
     constructor(private readonly accountManager: AccountManagerService) {}
 
     @Post('register')
-    async register(@Body() creds: Credentials, @Res() response: Response) {
+    async register(@Body('creds') creds: Credentials, @Body('id') id: string, @Res() response: Response) {
         try {
-            await this.accountManager.register(creds);
+            await this.accountManager.register(creds, id);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);

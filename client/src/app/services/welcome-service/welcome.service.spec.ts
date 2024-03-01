@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- needed to spy on private methods*/
 import { TestBed } from '@angular/core/testing';
 import { IMG_HEIGHT, IMG_TYPE, IMG_WIDTH } from '@app/constants/image';
-import { ValidationService } from './validation.service';
+import { ValidationService } from '@app/services/validation-service/validation.service';
 
 describe('ValidationService', () => {
     let service: ValidationService;
