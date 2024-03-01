@@ -4,29 +4,32 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/models/credentials.dart';
 
 class FormService {
-  final baseUrl = 'http://localhost:3000';
+  final baseUrl = 'http://localhost:3000/api';
 
   FormService(String baseUrl);
 
-  Future<void> register(Credentials credentials) async {
-    final url = '$baseUrl/api/account/register';
+  Future<String?> register(Credentials credentials, String id) async {
+    final url = '$baseUrl/account/register';
 
     try {
+      final requestBody = {
+        'creds': credentials.toJson(),
+        'id': id,
+      };
       final response = await http.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(credentials.toJson()),
+        body: jsonEncode(requestBody),
       );
 
       if (response.statusCode == 200) {
-        print('Registration successful');
-      } else if (response.statusCode == 409) {
-        print('Registration failed: Conflict');
+        return null;
       } else {
-        print('Registration failed with status code ${response.statusCode}');
+        final errorMessage = response.body;
+        return errorMessage;
       }
     } catch (error) {
-      print('Error during registration: $error');
+      return 'Error: $error';
     }
   }
 }

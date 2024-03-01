@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/models/credentials.dart';
@@ -14,6 +16,7 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final FormService formService = FormService('http://localhost:3000');
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -395,6 +398,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: TextField(
+                              obscureText: true,
                               controller: passwordController,
                               onChanged: (String newPassword) =>
                                   updatePasswordStrength(newPassword),
@@ -420,6 +424,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: TextField(
+                              obscureText: true,
                               controller: confirmationController,
                               onChanged: (String confirmation) =>
                                   updateConfirmation(confirmation),
@@ -457,10 +462,20 @@ class _SignUpFormState extends State<SignUpForm> {
                                   password: passwordController.text,
                                   email: emailController.text,
                                 );
-                                await formService.register(credentials);
-                                setState(() {
-                                  errorMessage = "";
-                                });
+                                //TODO: Change the id to the avatar's id when ready
+                                String? serverErrorMessage = await formService
+                                    .register(credentials, "1");
+                                if (serverErrorMessage == null) {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => LoginPage(),
+                                    ),
+                                  );
+                                } else {
+                                  setState(() {
+                                    errorMessage = serverErrorMessage;
+                                  });
+                                }
                               } else {
                                 setState(() {
                                   errorMessage =
