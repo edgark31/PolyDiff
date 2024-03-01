@@ -32,4 +32,24 @@ class FormService {
       return 'Error: $error';
     }
   }
+
+  Future<String?> connect(Credentials credentials) async {
+    final url = '$baseUrl/account/login';
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(credentials.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        return null;
+      } else {
+        final errorMessage = response.body;
+        return errorMessage;
+      }
+    } catch (error) {
+      return 'Error: $error';
+    }
+  }
 }

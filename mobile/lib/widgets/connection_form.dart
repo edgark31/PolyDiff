@@ -1,12 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/models/credentials.dart';
 import 'package:mobile/pages/password_reset_page.dart';
 import 'package:mobile/pages/signup_page.dart';
+import 'package:mobile/services/form_service.dart';
 import 'package:mobile/widgets/admin_popup.dart';
-import 'package:provider/provider.dart';
-
-import '../pages/chat_page.dart';
-import '../services/socket_service.dart';
 
 class ConnectionForm extends StatefulWidget {
   @override
@@ -14,6 +14,7 @@ class ConnectionForm extends StatefulWidget {
 }
 
 class _ConnectionFormState extends State<ConnectionForm> {
+  final FormService formService = FormService('http://localhost:3000');
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String errorMessage = "";
@@ -28,11 +29,23 @@ class _ConnectionFormState extends State<ConnectionForm> {
         });
       }
     });
+    passwordController.addListener(() {
+      if (passwordController.text.isEmpty) {
+        setState(() {
+          errorMessage = "";
+        });
+      }
+    });
+  }
+
+  bool isFormValid() {
+    bool isValidUsername = userNameController.text.isNotEmpty;
+    bool isValidPassword = passwordController.text.isNotEmpty;
+    return isValidUsername && isValidPassword;
   }
 
   @override
   Widget build(BuildContext context) {
-    final socketService = context.watch<SocketService>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -129,38 +142,32 @@ class _ConnectionFormState extends State<ConnectionForm> {
                         width: 430,
                         height: 40,
                         child: ElevatedButton(
-                          onPressed: () {
-                            // TODO: ajouter la vérification et l'envoit du mot de passe
-                            // TODO optionnel: rendre ca clean pas if if if if
-                            String userName = userNameController.text;
-                            if (userName.isNotEmpty) {
-                              print("Sending the server your username: " +
-                                  userName);
-                              socketService.checkName(userName);
+                          onPressed: () async {
+                            if (isFormValid()) {
+                              Credentials credentials = Credentials(
+                                username: userNameController.text,
+                                password: passwordController.text,
+                              );
+                              String? serverErrorMessage =
+                                  await formService.connect(credentials);
+                              if (serverErrorMessage == null) {
+                                //TODO: Change the PlaceHolder with home page when ready
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => Placeholder(),
+                                  ),
+                                );
+                              } else {
+                                setState(() {
+                                  errorMessage = serverErrorMessage;
+                                });
+                              }
                             } else {
                               setState(() {
                                 errorMessage =
-                                    "Votre nom ne peut pas être vide";
+                                    "Les entrées ne devraient pas être vides";
                               });
                             }
-                            Future.delayed(Duration(milliseconds: 300), () {
-                              print(
-                                  "Connection status: ${socketService.connectionStatus}");
-                              if (socketService.connectionStatus) {
-                                print("We are in the connection status");
-                                print("Connection approved");
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => ChatPage(),
-                                  ),
-                                );
-                              } else if (userName.isNotEmpty) {
-                                setState(() {
-                                  errorMessage =
-                                      "Un client avec ce nom existe déjà";
-                                });
-                              }
-                            });
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
