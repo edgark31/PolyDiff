@@ -1,0 +1,93 @@
+<body>
+  <!--     [ngStyle]="{'background-color': (welcomeService.chooseTheme.BackgroundColor), 'color': (welcomeService.chooseTheme.ButtonColor)}"> -->
+  <app-menu></app-menu>
+  <div class="information">{{'profil.information' | translate }}</div>
+  <div class="container">
+    <div class="left">
+      <div class="form-control">
+        <label for="username">{{'profil.username' | translate }}</label>
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="veuillez écrire votre nom" [(ngModel)]="selectName" required>
+        </mat-form-field>
+        <!-- <input type="text" formControlName="username" id="username"/> -->
+      </div>
+
+      <div class="form-control">
+        <label for="username"> {{'profil.changePassword' | translate }}</label>
+        <mat-form-field>
+          <mat-label>Mot de passe</mat-label>
+          <input matInput placeholder="veuillez écrire votre mot de passe" [(ngModel)]="selectPassword" required>
+        </mat-form-field>
+        <!-- <input type="text" formControlName="username" id="username"/> -->
+      </div>
+
+      <div class="form-control">
+        <label for="username"> {{'profil.confirmePassword' | translate }}</label>
+        <mat-form-field>
+          <mat-label>Mot de passe</mat-label>
+          <input matInput placeholder="veuillez ré-écrire votre mot de passe" [(ngModel)]="selectPasswordConfirm"
+            required>
+        </mat-form-field>
+        <!-- <input type="text" formControlName="username" id="username"/> -->
+      </div>
+
+
+      <div class="form-avatar">
+        <label for="avatar">Avatar</label>
+        <img [src]="welcomeService.selectAvatar" alt="Image" style="width: 100px; height: 100px;">
+        <div style="display: flex; justify-content: space-between;">
+          <button mat-icon-button (click)="importDialog(true)"
+            style="width: 50px; height: 50px;"><mat-icon>photo_library</mat-icon></button>
+          <button mat-icon-button (click)="importDialog(false)" aria-label="Import game"
+            style="width: 50px; height: 50px;">
+            <mat-icon>file_upload</mat-icon>
+          </button>
+        </div>
+        <!-- <input id='image' type="file" name="image" accept="image/*" style="width: 100px; height: 100px;" autofocus required><br> -->
+      </div>
+
+
+      <div class="form-control">
+
+
+        <div class="form-control section">
+          <label for="Theme">{{'profil.theme' | translate }}</label>
+          <mat-form-field>
+            <mat-label>{{'profil.theme' | translate }}</mat-label>
+            <mat-select [(value)]="selectTheme">
+              <mat-option [value]="themePersonnalization[0]">{{ themePersonnalization[0].name }}</mat-option>
+              <mat-option [value]="themePersonnalization[1]">{{ themePersonnalization[1].name }}</mat-option>
+              <mat-option [value]="themePersonnalization[2]">{{ themePersonnalization[2].name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+        <div class="form-control section"> <label for="Theme"> {{'profil.language' | translate }}</label>
+          <mat-form-field>
+            <mat-label>{{'profil.language' | translate }}</mat-label>
+            <mat-select [(value)]="selectLangage" (valueChange)="useLanguage(selectLangage)">
+              <mat-option [value]="langage[0]">{{'bouton.fr' | translate }}</mat-option>
+              <mat-option [value]="langage[1]">{{'bouton.en' | translate }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="right">
+
+    </div>
+  </div>
+
+
+
+  <div class="button-container">
+    <button type="submit" (click)="onSubmitProfile()">{{'bouton.returnProfil' | translate }}</button>
+    <button type="submit" (click)="onSubmitHome()">{{'bouton.deconnexion' | translate }}</button>
+  </div>
+
+</body>

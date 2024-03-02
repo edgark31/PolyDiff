@@ -1,24 +1,35 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { AccountController } from './controllers/account/account.controller';
 import { GameController } from './controllers/game/game.controller';
+import { AuthGateway } from './gateways/auth/auth.gateway';
 import { GameGateway } from './gateways/game/game.gateway';
+import { LobbyGateway } from './gateways/lobby/lobby.gateway';
+import { Account, accountSchema } from './model/database/account';
 import { Game, gameSchema } from './model/database/game';
 import { GameCard, gameCardSchema } from './model/database/game-card';
+import { GameConstants, gameConstantsSchema } from './model/database/game-config-constants';
+import { GameHistory, gameHistorySchema } from './model/database/game-history';
+import { AccountManagerService } from './services/account-manager/account-manager.service';
 import { ClassicModeService } from './services/classic-mode/classic-mode.service';
 import { DatabaseService } from './services/database/database.service';
 import { GameListsManagerService } from './services/game-lists-manager/game-lists-manager.service';
 import { GameService } from './services/game/game.service';
 import { HistoryService } from './services/history/history.service';
+import { ImageManagerService } from './services/image-manager/image-manager.service';
+import { LimitedModeService } from './services/limited-mode/limited-mode.service';
 import { MessageManagerService } from './services/message-manager/message-manager.service';
 import { PlayersListManagerService } from './services/players-list-manager/players-list-manager.service';
-import { GameConstants, gameConstantsSchema } from './model/database/game-config-constants';
 import { RoomsManagerService } from './services/rooms-manager/rooms-manager.service';
-import { LimitedModeService } from './services/limited-mode/limited-mode.service';
-import { GameHistory, gameHistorySchema } from './model/database/game-history';
 
 @Module({
     imports: [
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'assets'),
+        }),
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRootAsync({
             imports: [ConfigModule],
@@ -28,19 +39,22 @@ import { GameHistory, gameHistorySchema } from './model/database/game-history';
             }),
         }),
         MongooseModule.forFeature([
+            { name: Account.name, schema: accountSchema },
             { name: Game.name, schema: gameSchema },
             { name: GameCard.name, schema: gameCardSchema },
             { name: GameConstants.name, schema: gameConstantsSchema },
             { name: GameHistory.name, schema: gameHistorySchema },
         ]),
     ],
-    controllers: [GameController],
+    controllers: [GameController, AccountController],
     providers: [
         Logger,
         GameService,
         DatabaseService,
         ConfigService,
+        AuthGateway,
         GameGateway,
+        LobbyGateway,
         ClassicModeService,
         GameListsManagerService,
         MessageManagerService,
@@ -48,6 +62,8 @@ import { GameHistory, gameHistorySchema } from './model/database/game-history';
         PlayersListManagerService,
         RoomsManagerService,
         LimitedModeService,
+        AccountManagerService,
+        ImageManagerService,
     ],
 })
 export class AppModule {}

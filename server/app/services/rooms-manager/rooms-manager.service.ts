@@ -6,17 +6,7 @@ import { HistoryService } from '@app/services/history/history.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { CHARACTERS, DEFAULT_GAME_MODES, KEY_SIZE, MAX_BONUS_TIME_ALLOWED, NOT_FOUND } from '@common/constants';
 import { GameEvents, GameModes, MessageEvents, MessageTag, PlayerStatus } from '@common/enums';
-import {
-    ChatMessage,
-    ClientSideGame,
-    Coordinate,
-    Differences,
-    GameConfigConst,
-    GameRoom,
-    Player,
-    PlayerData,
-    TimerMode,
-} from '@common/game-interfaces';
+import { Chat, ClientSideGame, Coordinate, Differences, GameConfigConst, GameRoom, Player, PlayerData, TimerMode } from '@common/game-interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as fs from 'fs';
 import * as io from 'socket.io';
@@ -192,7 +182,7 @@ export class RoomsManagerService implements OnModuleInit {
         }
     }
 
-    private differenceFound(room: GameRoom, player: Player, index: number): ChatMessage {
+    private differenceFound(room: GameRoom, player: Player, index: number): Chat {
         this.addBonusTime(room);
         player.differenceData.differencesFound++;
         player.differenceData.currentDifference = room.originalDifferences[index];
@@ -201,13 +191,13 @@ export class RoomsManagerService implements OnModuleInit {
         return this.messageManager.getLocalMessage(room.clientGame.mode, true, player.name);
     }
 
-    private differenceNotFound(room: GameRoom, player: Player): ChatMessage {
+    private differenceNotFound(room: GameRoom, player: Player): Chat {
         player.differenceData.currentDifference = [];
         this.updateRoom(room);
         return this.messageManager.getLocalMessage(room.clientGame.mode, false, player.name);
     }
 
-    private handleCoopAbandon(player: Player, room: GameRoom, server: io.Server): ChatMessage {
+    private handleCoopAbandon(player: Player, room: GameRoom, server: io.Server): Chat {
         const opponent = this.getOpponent(room, player);
         server.to(opponent.playerId).emit(GameEvents.GameModeChanged);
         room.clientGame.mode = GameModes.LimitedSolo;
@@ -251,7 +241,7 @@ export class RoomsManagerService implements OnModuleInit {
         server.to(socket.id).emit(GameEvents.GamePageRefreshed);
     }
 
-    private async handleOneVsOneAbandon(player: Player, room: GameRoom, server: io.Server): Promise<ChatMessage> {
+    private async handleOneVsOneAbandon(player: Player, room: GameRoom, server: io.Server): Promise<Chat> {
         const opponent: Player = this.getOpponent(room, player);
         this.historyService.markPlayer(room.roomId, opponent?.name, PlayerStatus.Winner);
         room.endMessage = "L'adversaire a abandonné la partie!";

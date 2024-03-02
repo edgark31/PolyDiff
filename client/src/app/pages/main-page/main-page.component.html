@@ -1,12 +1,21 @@
 <div class="container flex-column">
-    <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages"></app-chat-box>
+    <app-menu>  </app-menu>
     <header class="header">
+        <h1 class="header-item flex-column"></h1>
     </header>
-    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>   
-    <section id="server-message" class="flex-column section">
-    </section>
+    <!-- <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>     -->
+    <div class="flex-row">
+        <button class="button" routerLink="/chat">
+            <span id = "classic">Chat</span>
+        </button>
+        <button class="button" routerLink="/lobby">
+            <span id = "limited">Lobby</span>
+        </button>
+        <button class="button" routerLink="/admin">
+            <span id = "config">Admin</span>
+        </button>
+    </div>
+
     <footer class="footer flex-column">
     </footer>
 </div>
-
-
