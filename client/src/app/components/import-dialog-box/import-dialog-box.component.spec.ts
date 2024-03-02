@@ -32,6 +32,8 @@ describe('CanvasTopButtonsComponent', () => {
         fixture.detectChanges();
     });
 
+    // test
+
     it('should create', () => {
         expect(component).toBeTruthy();
     });

@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
+import { ImportDialogComponent } from '@app/components/import-dialog-box/import-dialog-box.component';
 import { NameGenerationDialogComponent } from '@app/components/name-generation-dialog/name-generation-dialog.component';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { NameGenerationService } from '@app/services/name-generation-service/name-generation-service.service';
@@ -31,6 +31,7 @@ export class RegistrationPageComponent {
     email: string;
     username: string;
 
+    // eslint-disable-next-line max-params
     constructor(
         private readonly communication: CommunicationService,
         private readonly router: Router,

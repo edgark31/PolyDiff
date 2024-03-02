@@ -8,7 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
+import { ImportDialogComponent } from '@app/components/import-dialog-box/import-dialog-box.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
@@ -37,6 +37,8 @@ export class PersonnalizationPageComponent implements OnInit {
     messageBoxContent = marker(this.messagebox.t);
 
     feedback: string;
+
+    // eslint-disable-next-line max-params
     constructor(
         private readonly router: Router,
         public welcomeService: WelcomeService,

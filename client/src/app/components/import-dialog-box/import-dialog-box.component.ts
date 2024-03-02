@@ -4,9 +4,9 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 
 @Component({
-    selector: 'app-import-dialog',
-    templateUrl: './import-dialog.component.html',
-    styleUrls: ['./import-dialog.component.scss'],
+    selector: 'app-import-dialog-box',
+    templateUrl: './import-dialog-box.component.html',
+    styleUrls: ['./import-dialog-box.component.scss'],
 })
 export class ImportDialogComponent {
     imageData: string;
@@ -15,6 +15,8 @@ export class ImportDialogComponent {
         private dialogRef: MatDialogRef<ImportDialogComponent>,
         private clientSocket: ClientSocketService,
     ) {}
+
+    // test
 
     async onFileSelected(event: Event): Promise<void> {
         const inputElement = event.target as HTMLInputElement;

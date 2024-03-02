@@ -31,6 +31,7 @@ import { GamePageComponent } from '@app/pages/game-page/game-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
 // import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule } from '@ngx-translate/core';
 import { CanvasMiddleButtonsComponent } from './components/canvas-middle-buttons/canvas-middle-buttons.component';
 import { CanvasTopButtonsComponent } from './components/canvas-top-buttons/canvas-top-buttons.component';
 import { CanvasUnderButtonsComponent } from './components/canvas-under-buttons/canvas-under-buttons.component';
@@ -40,7 +41,7 @@ import { DeleteResetConfirmationDialogComponent } from './components/delete-rese
 import { GamePageDialogComponent } from './components/game-page-dialog/game-page-dialog.component';
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
-import { ImportDialogComponent } from './components/import-dialog/import-dialog.component';
+import { ImportDialogComponent } from './components/import-dialog-box/import-dialog-box.component';
 import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { NameGenerationDialogComponent } from './components/name-generation-dialog/name-generation-dialog.component';
@@ -56,7 +57,6 @@ import { PersonnalizationPageComponent } from './pages/personnalization-page/per
 import { ProfilPageComponent } from './pages/profile-page/profile-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
-import { TranslateModule } from '@ngx-translate/core';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
