@@ -1,0 +1,35 @@
+{
+    "demo": {
+        "greeting": "Bonjour {{name}}!",
+        "heading": "Démo de traduction d'applications",
+        "paragraph": "<strong>traduction</strong>",
+        "text": "Ce tutoriel explique comment vous pouvez facilement traduire votre application Angular.",
+        "hello": "salut"
+    },
+    "connexion": "connexion",
+    "username": "Nom d'utilisateur ou courriel",
+    "mdp": "Mot de passe",
+    "profil": {
+        "information": "Informations générales",
+        "username": "Nom d'utilisateur/pseudonyme",
+        "theme": "Thème actuel",
+        "language": "Language actuel",
+        "statistic": "Statistique",
+        "gamePlayed": "nombre de parties joués",
+        "gameWin": "nombre de parties gagnés",
+        "gameAverage": "moyenne de différences trouvées par partie",
+        "gameAverageTime": "temps moyen par partie",
+        "Connexion": "Relevé de connexion",
+        "gameHistoric": "historique de parties",
+        "changePassword": "Changer le mot de passe",
+        "confirmPassword": "Confirmer le mot de passe"
+    },
+    "bouton": {
+        "deconnexion": "Déconnexion",
+        "returnProfil": "revenir au profil",
+        "GoReglage": "Aller dans réglage",
+        "Reglage": "Réglages",
+        "fr": "français",
+        "en": "anglais"
+    }
+}

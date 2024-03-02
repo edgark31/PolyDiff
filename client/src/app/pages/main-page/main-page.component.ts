@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ChatMessageGlobal } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
@@ -15,7 +14,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     private onDestroy$: Subject<void>;
 
     constructor(
-        private readonly clientSocket: ClientSocketService,
+        // cprivate readonly clientSocket: ClientSocketService,
         private readonly gameManager: GameManagerService,
         private readonly router: Router,
     ) {
@@ -26,15 +25,19 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     ngOnDestroy(): void {
         this.onDestroy$.next();
         this.onDestroy$.complete();
-        if (this.clientSocket.isSocketAlive() !== undefined) {
-            this.clientSocket.disconnect();
-        }
+        // if (this.clientSocket.isSocketAlive() !== undefined) {
+        //     this.clientSocket.disconnect();
+        // }
+    }
+
+    personnalizationpage() {
+        this.router.navigate(['/personalization']);
     }
 
     ngAfterViewInit(): void {
-        if (this.clientSocket.isSocketAlive() === undefined) {
-            this.router.navigate(['/login']);
-        }
+        // if (this.clientSocket.isSocketAlive() === undefined) {
+        //     this.router.navigate(['/login']);
+        // }
         this.handleMessages();
     }
 

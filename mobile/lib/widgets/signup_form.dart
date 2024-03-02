@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/models/credentials.dart';
+import 'package:mobile/services/form_service.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/login_page.dart';
@@ -12,6 +16,8 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final FormService formService = FormService('http://localhost:3000');
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -336,6 +342,11 @@ class _SignUpFormState extends State<SignUpForm> {
                         onPressed: () {
                           nameGenerationService.generateName(
                               selectedLanguage, hasAnimalName, hasNumber);
+                          while (
+                              nameGenerationService.generatedName.length > 20) {
+                            nameGenerationService.generateName(
+                                selectedLanguage, hasAnimalName, hasNumber);
+                          }
                           userNameController.text =
                               nameGenerationService.generatedName;
                           isUsernameValid(userNameController.text);
@@ -387,6 +398,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: TextField(
+                              obscureText: true,
                               controller: passwordController,
                               onChanged: (String newPassword) =>
                                   updatePasswordStrength(newPassword),
@@ -412,6 +424,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: TextField(
+                              obscureText: true,
                               controller: confirmationController,
                               onChanged: (String confirmation) =>
                                   updateConfirmation(confirmation),
@@ -442,9 +455,27 @@ class _SignUpFormState extends State<SignUpForm> {
                           width: 430,
                           height: 40,
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (isFormValid()) {
-                                //Envoyer les informations
+                                Credentials credentials = Credentials(
+                                  username: userNameController.text,
+                                  password: passwordController.text,
+                                  email: emailController.text,
+                                );
+                                //TODO: Change the id to the avatar's id when ready
+                                String? serverErrorMessage = await formService
+                                    .register(credentials, "1");
+                                if (serverErrorMessage == null) {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => LoginPage(),
+                                    ),
+                                  );
+                                } else {
+                                  setState(() {
+                                    errorMessage = serverErrorMessage;
+                                  });
+                                }
                               } else {
                                 setState(() {
                                   errorMessage =

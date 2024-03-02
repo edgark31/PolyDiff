@@ -17,7 +17,7 @@ export class GameManagerService {
     replayEventsSubject: Subject<ReplayEvent>;
     differences: Coordinate[][];
     gameConstants: GameConfigConst;
-    username: string | null | undefined;
+    username: string;
     private timer: Subject<number>;
     private differencesFound: Subject<number>;
     private opponentDifferencesFound: Subject<number>;
