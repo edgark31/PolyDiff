@@ -30,7 +30,6 @@ import { CreationPageComponent } from '@app/pages/creation-page/creation-page.co
 import { GamePageComponent } from '@app/pages/game-page/game-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
-import { TranslateModule } from '@ngx-translate/core';
 // import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CanvasMiddleButtonsComponent } from './components/canvas-middle-buttons/canvas-middle-buttons.component';
 import { CanvasTopButtonsComponent } from './components/canvas-top-buttons/canvas-top-buttons.component';
@@ -57,6 +56,7 @@ import { PersonnalizationPageComponent } from './pages/personnalization-page/per
 import { ProfilPageComponent } from './pages/profile-page/profile-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
+import { TranslateModule } from '@ngx-translate/core';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
