@@ -3,7 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/models/credentials.dart';
+import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/services/form_service.dart';
+import 'package:mobile/services/name_generation_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -19,6 +22,10 @@ class _SignUpFormState extends State<SignUpForm> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmationController = TextEditingController();
   String errorMessage = "";
+  int selectedLanguage = 1;
+  bool hasAnimalName = false;
+  bool hasNumber = false;
+
 
   String usernameFormat = 'Non';
   String emailFormat = 'Non';
