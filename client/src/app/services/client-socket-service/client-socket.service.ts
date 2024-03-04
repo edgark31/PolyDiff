@@ -22,6 +22,9 @@ export class ClientSocketService {
 
     connect(userName: string, nameSpace: string) {
         switch (nameSpace) {
+            case 'lobby':
+                this.chatSocket = io(`${this.baseUrl}/${nameSpace}`, { transports: ['websocket'], upgrade: false, query: { name: userName } });
+                break;
             case 'game':
                 this.chatSocket = io(`${this.baseUrl}/${nameSpace}`, { transports: ['websocket'], upgrade: false, query: { name: userName } });
                 break;
