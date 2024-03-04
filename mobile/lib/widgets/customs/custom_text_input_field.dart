@@ -7,6 +7,7 @@ class CustomTextInputField extends StatefulWidget {
   final String hint;
   final String? helperText;
   final int maxLength;
+  final double width;
   final bool isPassword;
 
   CustomTextInputField({
@@ -16,6 +17,7 @@ class CustomTextInputField extends StatefulWidget {
     required this.controller,
     required this.hint,
     this.maxLength = 20,
+    this.width = 400,
     this.isPassword = false,
     this.helperText,
   });
@@ -30,7 +32,7 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Container(
-        constraints: BoxConstraints(maxWidth: 400),
+        constraints: BoxConstraints(maxWidth: widget.width),
         child: TextField(
           controller: widget.controller,
           obscureText: widget.isPassword,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/services/services.dart';
+import 'package:mobile/widgets/avatar_picker.dart';
 import 'package:mobile/widgets/widgets.dart';
-import 'package:provider/provider.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -11,6 +12,10 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final nameGenerationService = NameGenerationService();
+
+  final ImagePicker _picker = ImagePicker();
+  ImageProvider? _selectedAvatar;
+
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -111,105 +116,68 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    final socketService = context.watch<SocketService>();
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Inscription',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: kMidOrange,
-                ),
-              ),
-              SizedBox(height: 100),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: CustomTextInputField(
-                      label: "Nom d'utilisateur",
-                      controller: userNameController,
-                      hint: "Entrez votre nom d'utilisateur",
-                      onInputTextChanged: isUsernameValid,
-                      helperText: 'Non vide: $usernameFormat',
-                      maxLength: 20,
-                    ),
-                  ),
-                  SizedBox(width: 100),
-                  Flexible(
-                    child: CustomTextInputField(
-                      label: "Courriel",
-                      controller: emailController,
-                      hint: 'ex: john.doe@gmail.com',
-                      onInputTextChanged: isEmailValid,
-                      helperText: 'Non vide et suit le format: $emailFormat',
-                      maxLength: 40,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 40),
+            children: <Widget>[
               Center(
-                child: UsernameGenerator(
-                  onUsernameGenerated: (generatedName) {
-                    userNameController.text = generatedName;
-                    isUsernameValid(userNameController.text);
-                  },
+                child: Text(
+                  'Inscription',
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: kMidOrange),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: CustomTextInputField(
-                      label: "Mot de passe",
-                      controller: passwordController,
-                      hint: 'Entrez votre mot de passe',
-                      onInputTextChanged: updatePasswordStrength,
-                      helperText: 'Force du mot de passe: $passwordStrength',
-                      maxLength: 40,
-                      isPassword: true,
-                    ),
-                  ),
-                  SizedBox(width: 100),
-                  Flexible(
-                    child: CustomTextInputField(
-                      label: "Confirmation du mot de passe",
-                      controller: confirmationController,
-                      hint: "Confirmez votre mot de passe",
-                      onInputTextChanged: updateConfirmation,
-                      helperText:
-                          'Correspondent et non-vide: $passwordConfirmation',
-                      maxLength: 40,
-                      isPassword: true,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 50),
-              _buildSubmitButton(),
-              if (errorMessage.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    errorMessage,
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
+              SizedBox(height: 20),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    _buildSelectedAvatar(),
+                    SizedBox(width: 100),
+                    _buildAvatarPicker(),
+                  ],
                 ),
-              _buildLoginLink(),
+              ),
+              SizedBox(height: 20),
+              Center(child: _buildFieldsWithGenerator()),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildFieldsWithGenerator() {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 150.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildUsernameField(),
+              _buildEmailField(),
+              _buildPasswordField(),
+              _buildPasswordConfirmationField(),
+              _buildSubmitButton(),
+              _buildLoginLink(),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 20,
+          right: 250,
+          child: UsernameGenerator(onUsernameGenerated: (generatedName) {
+            userNameController.text = generatedName;
+            isUsernameValid(userNameController.text);
+          }),
+        ),
+      ],
     );
   }
 
@@ -235,6 +203,77 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
+  Widget _buildUsernameField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextInputField(
+          label: "Nom d'utilisateur",
+          controller: userNameController,
+          hint: "Entrez votre nom d'utilisateur",
+          onInputTextChanged: isUsernameValid,
+          helperText: 'Non vide: $usernameFormat',
+          maxLength: 20,
+        ),
+        SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget _buildEmailField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextInputField(
+          label: "Email",
+          controller: emailController,
+          hint: "ex: john.doe@gmail.com",
+          onInputTextChanged: isEmailValid,
+          helperText: 'Format valide requis: $emailFormat',
+          maxLength: 40,
+        ),
+        SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextInputField(
+          label: "Mot de passe",
+          controller: passwordController,
+          hint: "Entrez votre mot de passe",
+          onInputTextChanged: updatePasswordStrength,
+          helperText: 'Force du mot de passe: $passwordStrength',
+          maxLength: 40,
+          isPassword: true,
+        ),
+        SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget _buildPasswordConfirmationField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextInputField(
+          label: "Confirmation du mot de passe",
+          controller: confirmationController,
+          hint: "Confirmez votre mot de passe",
+          onInputTextChanged: updateConfirmation,
+          helperText:
+              'Doit correspondre au mot de passe: $passwordConfirmation',
+          maxLength: 40,
+          isPassword: true,
+        ),
+        SizedBox(height: 10),
+      ],
+    );
+  }
+
   Widget _buildLoginLink() {
     return Center(
       child: Padding(
@@ -248,6 +287,25 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSelectedAvatar() {
+    return CircleAvatar(
+      backgroundImage: _selectedAvatar,
+      radius: 50,
+      backgroundColor: Colors.grey.shade200,
+      child: _selectedAvatar == null ? Icon(Icons.person, size: 50) : null,
+    );
+  }
+
+  Widget _buildAvatarPicker() {
+    return AvatarPicker(
+      onAvatarSelected: (ImageProvider image) {
+        setState(() {
+          _selectedAvatar = image;
+        });
+      },
     );
   }
 }

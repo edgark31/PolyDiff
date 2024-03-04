@@ -1,6 +1,5 @@
 // ignore_for_file: constant_identifier_names
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/avatar_selection_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/login_page.dart';
@@ -35,9 +34,6 @@ class AppRouter {
 
       case SignUpPage.routeName:
         return SignUpPage.route();
-
-      case AvatarSelectionPage.routeName:
-        return AvatarSelectionPage.route();
 
       case DashboardPage.routeName:
         return DashboardPage.route();
