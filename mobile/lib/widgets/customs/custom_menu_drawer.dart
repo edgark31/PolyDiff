@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/widgets/avatar.dart';
 
 class CustomMenuDrawer extends StatelessWidget {
@@ -22,17 +23,17 @@ class CustomMenuDrawer extends StatelessWidget {
           ListTile(
               leading: Icon(Icons.account_circle),
               title: Text('Profile'),
-              onTap: () => print('Profile')),
+              onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE)),
           SizedBox(height: 10),
           ListTile(
               leading: Icon(Icons.message_rounded),
               title: Text('Message'),
-              onTap: () => print('Message')),
+              onTap: () => Navigator.pushNamed(context, CHAT_ROUTE)),
           SizedBox(height: 10),
           ListTile(
               leading: Icon(Icons.line_axis),
               title: Text('Statistiques'),
-              onTap: () => print('Statistiques')),
+              onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE)),
           SizedBox(height: 10),
           ListTile(
               leading: Icon(Icons.settings),

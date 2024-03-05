@@ -1,33 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
-import 'package:mobile/widgets/customs/app_style.dart';
-import 'package:mobile/widgets/customs/reusable_text.dart';
+import 'package:mobile/constants/app_routes.dart';
 
-class CustomAppBar extends StatelessWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     this.text,
-    required this.child,
     this.actions,
   });
 
   final String? text;
-  final Widget child;
   final List<Widget>? actions;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      iconTheme: const IconThemeData(),
-      backgroundColor: kLime,
-      elevation: 0,
-      automaticallyImplyLeading: false,
-      leading: child,
-      actions: actions,
-      centerTitle: true,
-      title: ReusableText(
-          text: text ?? "",
-          style: appstyle(16, Color(kLight.value), FontWeight.w600)),
+      backgroundColor: kMidOrange,
+      actions: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: () => Navigator.pushNamed(context, DASHBOARD_ROUTE),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () => Navigator.pushNamed(context, SEARCH_ROUTE),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: IconButton(
+            icon: const Icon(Icons.message_rounded),
+            onPressed: () => Navigator.pushNamed(context, CHAT_ROUTE),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 30.0),
+          child: IconButton(
+            icon: const Icon(Icons.account_circle),
+            onPressed: () => Navigator.pushNamed(context, PROFILE_ROUTE),
+          ),
+        ),
+      ],
     );
   }
 }
