@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/widgets.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -31,39 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         drawer: CustomMenuDrawer(),
-        appBar: AppBar(
-          backgroundColor: kMidOrange,
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: IconButton(
-                icon: const Icon(Icons.home),
-                onPressed: () => _navigateTo(DASHBOARD_ROUTE),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () => _navigateTo(SEARCH_ROUTE),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: IconButton(
-                icon: const Icon(Icons.message_rounded),
-                onPressed: () => _navigateTo(CHAT_ROUTE),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 30.0),
-              child: IconButton(
-                icon: const Icon(Icons.account_circle),
-                onPressed: () => _navigateTo(PROFILE_ROUTE),
-              ),
-            ),
-          ],
-        ),
+        appBar: CustomAppBar(),
       ),
     );
   }
