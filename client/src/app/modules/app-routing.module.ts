@@ -1,4 +1,4 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminPageComponent } from '@app/pages/admin-page/admin-page.component';
 import { ChatPageComponent } from '@app/pages/chat-page/chat-page.component';
@@ -13,7 +13,6 @@ import { ProfilPageComponent } from '@app/pages/profil-page/profil-page.componen
 import { RecoverPasswordPageComponent } from '@app/pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from '@app/pages/registration-page/registration-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
-import { AdminGuard } from '@app/services/admin-guard/admin.guard.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -29,7 +28,8 @@ export const routes: Routes = [
     { path: 'recover-password', component: RecoverPasswordPageComponent },
     { path: 'personalization', component: PersonnalizationPageComponent },
     { path: 'profil', component: ProfilPageComponent },
-    { path: 'admin', component: AdminPageComponent, canActivate: [() => inject(AdminGuard).canActivateFunc()] },
+    { path: 'admin', component: AdminPageComponent },
+    { path: '**', redirectTo: '/login' },
 ];
 
 @NgModule({

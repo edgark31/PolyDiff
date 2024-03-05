@@ -81,6 +81,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         PlayerNameDialogBoxComponent,
         GameInfosComponent,
         ImageCanvasComponent,
+        ImportDialogComponent,
         ConfigPageComponent,
         CreationGameDialogComponent,
         CanvasUnderButtonsComponent,
@@ -106,7 +107,6 @@ export const createTranslateLoader = (http: HttpClient) => {
         ProfilPageComponent,
         ModalAdminComponent,
         AdminPageComponent,
-        ImportDialogComponent,
     ],
     imports: [
         AppMaterialModule,

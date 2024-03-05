@@ -32,7 +32,6 @@ export class AccountController {
     @Post('admin')
     async connexionToAdmin(@Body('passwd') password: string, @Res() response: Response) {
         try {
-            console.log('password:', password);
             const accountFound = await this.accountManager.connexionToAdmin(password);
             response.status(HttpStatus.OK).json(accountFound);
         } catch (error) {

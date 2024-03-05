@@ -18,10 +18,12 @@ export class ModalAdminComponent {
     constructor(private welcomeService: WelcomeService, private router: Router, public dialogRef: MatDialogRef<ModalAdminComponent>) {}
 
     async onSubmit() {
+        console.log('password:', this.password);
         this.welcomeService.validate(this.password).then((isValid) => {
             if (isValid) {
                 this.isPasswordWrong = false;
                 this.router.navigate(['/admin']);
+                this.dialogRef.close();
             } else {
                 this.isPasswordWrong = true;
             }
