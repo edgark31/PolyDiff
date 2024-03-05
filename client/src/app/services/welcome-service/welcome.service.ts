@@ -32,6 +32,10 @@ export class WelcomeService {
         });
     }
 
+    getAccount(): Account | string {
+        return this.account ? this.account : 'test';
+    }
+
     setLoginState(state: boolean): void {
         localStorage.setItem('isLoggedIn', String(state));
         this.isLoggedIn = state;

@@ -54,6 +54,7 @@ import { NoGameAvailableDialogComponent } from './components/no-game-available-d
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
 import { AdminPageComponent } from './pages/admin-page/admin-page.component';
+import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
@@ -107,6 +108,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         ModalAdminComponent,
         AdminPageComponent,
         ImportDialogComponent,
+        ChatPageComponent,
     ],
     imports: [
         AppMaterialModule,

@@ -16,7 +16,7 @@ import { SelectionPageComponent } from '@app/pages/selection-page/selection-page
 import { AdminGuard } from '@app/services/admin-guard/admin.guard.service';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: '', redirectTo: '/chat', pathMatch: 'full' },
     { path: 'home', component: MainPageComponent },
     { path: 'chat', component: ChatPageComponent },
     { path: 'game', component: GamePageComponent },
