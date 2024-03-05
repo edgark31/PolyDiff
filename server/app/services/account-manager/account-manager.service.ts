@@ -79,9 +79,8 @@ export class AccountManagerService implements OnModuleInit {
 
     async connexionToAdmin(password: string): Promise<boolean> {
         try {
-            const passwordFound = await this.accountModel.findOne({ 'credentials.password': password });
-            if (passwordFound == null) throw new Error('Wrong password');
-            return Promise.resolve(passwordFound !== null);
+            if (password !== 'admin') throw new Error('Wrong password');
+            return Promise.resolve(password === 'admin');
         } catch (error) {
             this.logger.error(`Failed to connect --> ${error.message}`);
             return Promise.reject(`${error}`);

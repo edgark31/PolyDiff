@@ -124,10 +124,7 @@ export class CommunicationService {
     recuperatePassword(password: string): Observable<boolean> {
         return this.http.post<boolean>(`${this.accountUrl}/admin`, { passwd: password }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
-            tap(() => {
-                // eslint-disable-next-line no-console
-                console.log('logged in');
-            }),
+            tap(() => {}),
         );
     }
 
