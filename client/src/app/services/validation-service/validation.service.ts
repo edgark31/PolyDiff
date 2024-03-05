@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Injectable } from '@angular/core';
-import { IMG_HEIGHT, IMG_TYPE, IMG_WIDTH, VALID_BMP_SIZE } from '@app/constants/image';
+import { IMG_HEIGHT, IMG_TYPE_BMP, IMG_TYPE_JPEG, IMG_TYPE_JPG, IMG_TYPE_PNG, IMG_WIDTH, VALID_SIZE } from '@app/constants/image';
 
 @Injectable({
     providedIn: 'root',
@@ -10,7 +10,12 @@ export class ValidationService {
     passwordStrength: string = '';
 
     async isImageValid(file: File): Promise<boolean> {
-        return file.type === IMG_TYPE && (await this.isImageSizeValid(file)) && file.size === VALID_BMP_SIZE;
+        return (
+            (file.type === IMG_TYPE_BMP && (await this.isImageSizeValid(file)) && file.size === VALID_SIZE) ||
+            (file.type === IMG_TYPE_PNG && (await this.isImageSizeValid(file)) && file.size === VALID_SIZE) ||
+            (file.type === IMG_TYPE_JPG && (await this.isImageSizeValid(file)) && file.size === VALID_SIZE) ||
+            (file.type === IMG_TYPE_JPEG && (await this.isImageSizeValid(file)) && file.size === VALID_SIZE)
+        );
     }
 
     isEmailValid(email: string): boolean {
