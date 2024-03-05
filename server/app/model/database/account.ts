@@ -110,7 +110,6 @@ export class Profile {
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);
-
 @Schema()
 export class Credentials {
     @Prop({ required: true })

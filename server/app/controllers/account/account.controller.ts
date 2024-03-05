@@ -29,6 +29,17 @@ export class AccountController {
         }
     }
 
+    @Post('admin')
+    async connexionToAdmin(@Body('passwd') password: string, @Res() response: Response) {
+        try {
+            console.log('password:', password);
+            const accountFound = await this.accountManager.connexionToAdmin(password);
+            response.status(HttpStatus.OK).json(accountFound);
+        } catch (error) {
+            response.status(HttpStatus.UNAUTHORIZED).json(error);
+        }
+    }
+
     @Put('pseudo')
     async changePseudo(@Body('oldUsername') oldUsername: string, @Body('newUsername') newUsername: string, @Res() response: Response) {
         try {

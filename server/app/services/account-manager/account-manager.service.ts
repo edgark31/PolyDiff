@@ -77,6 +77,18 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
+    async connexionToAdmin(password: string): Promise<boolean> {
+        try {
+            const passwordFound = await this.accountModel.findOne({ 'credentials.password': password });
+            console.log(passwordFound);
+            if (passwordFound == null) throw new Error('Wrong password');
+            return Promise.resolve(passwordFound !== null);
+        } catch (error) {
+            this.logger.error(`Failed to connect --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
     async changePseudo(oldUsername: string, newUsername: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
