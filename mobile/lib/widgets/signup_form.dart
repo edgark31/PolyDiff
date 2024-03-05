@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/services/services.dart';
 import 'package:mobile/widgets/avatar_picker.dart';
@@ -13,7 +12,6 @@ class SignUpForm extends StatefulWidget {
 class _SignUpFormState extends State<SignUpForm> {
   final nameGenerationService = NameGenerationService();
 
-  final ImagePicker _picker = ImagePicker();
   ImageProvider? _selectedAvatar;
 
   TextEditingController userNameController = TextEditingController();
