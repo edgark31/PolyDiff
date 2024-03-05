@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { FormControl, FormGroup, Validators } from '@angular/forms';

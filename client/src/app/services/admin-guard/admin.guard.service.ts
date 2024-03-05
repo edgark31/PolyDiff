@@ -5,7 +5,7 @@ import { WelcomeService } from '@app/services/welcome-service/welcome.service';
     providedIn: 'root',
 })
 export class AdminGuard {
-    constructor( private welcomeService: WelcomeService) {}
+    constructor(private welcomeService: WelcomeService) {}
 
     canActivateFunc(): boolean {
         return this.welcomeService.getLoginState();

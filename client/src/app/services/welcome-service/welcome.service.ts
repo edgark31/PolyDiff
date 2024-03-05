@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { Account } from '@common/game-interfaces';
-import { CommunicationService } from '../communication-service/communication.service';
 @Injectable({
     providedIn: 'root',
 })

@@ -25,6 +25,10 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
         this.onDestroy$ = new Subject();
     }
 
+    manageGames(): void {
+        this.dialog.open(ModalAdminComponent);
+    }
+
     ngOnDestroy(): void {
         this.onDestroy$.next();
         this.onDestroy$.complete();
@@ -52,9 +56,5 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
         this.gameManager.globalMessage$.subscribe((chatMessageGlobal: ChatMessageGlobal) => {
             this.messages.push(chatMessageGlobal);
         });
-    }
-
-    manageGames(): void {
-        this.dialog.open(ModalAdminComponent);
     }
 }

@@ -44,7 +44,6 @@ import { DeleteResetConfirmationDialogComponent } from './components/delete-rese
 import { GamePageDialogComponent } from './components/game-page-dialog/game-page-dialog.component';
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
-import { ImportDialogComponent } from './components/import-dialog/import-dialog.component';
 import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { ModalAdminComponent } from './components/modal-admin/modal-admin.component';
@@ -53,7 +52,6 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
-import { AdminPageComponent } from './pages/admin-page/admin-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
@@ -61,6 +59,7 @@ import { PersonnalizationPageComponent } from './pages/personnalization-page/per
 import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
+import { AdminPageComponent } from './pages/admin-page/admin-page.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -81,7 +80,6 @@ export const createTranslateLoader = (http: HttpClient) => {
         PlayerNameDialogBoxComponent,
         GameInfosComponent,
         ImageCanvasComponent,
-        ImportDialogComponent,
         ConfigPageComponent,
         CreationGameDialogComponent,
         CanvasUnderButtonsComponent,
