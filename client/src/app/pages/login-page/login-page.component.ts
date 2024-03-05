@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -7,6 +6,7 @@ import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Account, Credentials } from '@common/game-interfaces';
 
 @Component({

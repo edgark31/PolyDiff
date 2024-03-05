@@ -16,7 +16,7 @@ import { SelectionPageComponent } from '@app/pages/selection-page/selection-page
 import { AdminGuard } from '@app/services/admin-guard/admin.guard.service';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/chat', pathMatch: 'full' },
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'home', component: MainPageComponent },
     { path: 'chat', component: ChatPageComponent },
     { path: 'game', component: GamePageComponent },
@@ -30,6 +30,7 @@ export const routes: Routes = [
     { path: 'personalization', component: PersonnalizationPageComponent },
     { path: 'profil', component: ProfilPageComponent },
     { path: 'admin', component: AdminPageComponent, canActivate: [() => inject(AdminGuard).canActivateFunc()] },
+    { path: '**', redirectTo: '/login' },
 ];
 
 @NgModule({
