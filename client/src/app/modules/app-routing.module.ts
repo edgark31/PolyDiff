@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminPageComponent } from '@app/pages/admin-page/admin-page.component';
 import { ChatPageComponent } from '@app/pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from '@app/pages/config-page/config-page.component';
 import { CreationPageComponent } from '@app/pages/creation-page/creation-page.component';
@@ -19,16 +18,15 @@ export const routes: Routes = [
     { path: 'home', component: MainPageComponent },
     { path: 'chat', component: ChatPageComponent },
     { path: 'game', component: GamePageComponent },
+    { path: 'admin', component: ConfigPageComponent },
     { path: 'create', component: CreationPageComponent },
     { path: 'selection', component: SelectionPageComponent },
-    { path: 'config', component: ConfigPageComponent },
     { path: 'login', component: LoginPageComponent },
     { path: 'limited', component: LimitedTimePageComponent },
     { path: 'registration', component: RegistrationPageComponent },
     { path: 'recover-password', component: RecoverPasswordPageComponent },
     { path: 'personalization', component: PersonnalizationPageComponent },
     { path: 'profil', component: ProfilPageComponent },
-    { path: 'admin', component: AdminPageComponent },
     { path: '**', redirectTo: '/login' },
 ];
 

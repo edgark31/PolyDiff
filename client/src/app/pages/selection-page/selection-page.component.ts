@@ -23,7 +23,7 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
     ) {
         this.gameCarrousel = { hasNext: false, hasPrevious: false, gameCards: [] };
         this.homeRoute = '/home';
-        this.configRoute = '/config';
+        this.configRoute = '/admin';
         this.index = 0;
         this.roomManagerService.handleRoomEvents();
     }

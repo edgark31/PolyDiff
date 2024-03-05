@@ -13,7 +13,7 @@ export class NavBarComponent {
 
     constructor() {
         this.selectionRoute = '/selection';
-        this.configRoute = '/config';
+        this.configRoute = '/admin';
         this.homeRoute = '/home';
         this.limitedRoute = '/limited';
     }

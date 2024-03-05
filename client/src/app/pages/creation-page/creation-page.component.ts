@@ -39,7 +39,7 @@ export class CreationPageComponent implements AfterViewInit {
         this.radius = DEFAULT_RADIUS;
         this.canvasPosition = CanvasPosition;
         this.canvasSizes = CANVAS_MEASUREMENTS;
-        this.configRoute = '/config';
+        this.configRoute = '/admin';
     }
 
     @HostListener('window:keydown', ['$event'])
@@ -80,7 +80,7 @@ export class CreationPageComponent implements AfterViewInit {
             .subscribe((game: GameDetails) => {
                 if (game) {
                     this.communicationService.postGame(game).subscribe(() => {
-                        this.router.navigate(['/config']);
+                        this.router.navigate(['/admin']);
                         this.roomManagerService.notifyGameCardCreated();
                     });
                 }
