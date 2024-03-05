@@ -3,12 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/models/credentials.dart';
+import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/services/form_service.dart';
+import 'package:mobile/services/name_generation_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
-
-import '../pages/login_page.dart';
-import '../services/name_generation_service.dart';
-import '../services/socket_service.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -26,6 +25,7 @@ class _SignUpFormState extends State<SignUpForm> {
   int selectedLanguage = 1;
   bool hasAnimalName = false;
   bool hasNumber = false;
+
 
   String usernameFormat = 'Non';
   String emailFormat = 'Non';
@@ -46,6 +46,7 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
+  // TODO : create a service to reuse in connexion form
   bool isEmailValid(String email) {
     RegExp emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
     if (emailRegex.hasMatch(email) && email.isNotEmpty) {
