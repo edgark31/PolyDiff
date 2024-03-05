@@ -9,6 +9,7 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class AccountManagerService implements OnModuleInit {
+    users: Map<string, Account> = new Map<string, Account>();
     connectedUsers: Map<string, Profile> = new Map<string, Profile>(); // Key is the userName :: ALWAYS USE THIS MAP TO GET THE CONNECTED USERS
 
     constructor(
@@ -18,7 +19,7 @@ export class AccountManagerService implements OnModuleInit {
     ) {}
 
     onModuleInit() {
-        //
+        this.fetchUsers();
     }
 
     async register(creds: Credentials, id: string) {
@@ -44,6 +45,7 @@ export class AccountManagerService implements OnModuleInit {
             };
             await this.accountModel.create(newAccount);
             this.logger.verbose(`Account ${creds.username} has registered successfully`);
+            await this.fetchUsers();
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to add account --> ${error.message}`);
@@ -137,6 +139,14 @@ export class AccountManagerService implements OnModuleInit {
             this.logger.error(`Failed to delete accounts --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
+    }
+
+    async fetchUsers() {
+        await this.accountModel.find().then((accounts) => {
+            accounts.forEach((account) => {
+                this.users.set(account.credentials.username, account);
+            });
+        });
     }
 
     deconnexion(userName: string): void {
