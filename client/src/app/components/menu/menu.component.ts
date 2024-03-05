@@ -13,7 +13,7 @@ export class MenuComponent {
     constructor(public welcomeService: WelcomeService, public clientsocket: ClientSocketService, public router: Router) {}
 
     onDeconnexion(): void {
-        this.clientsocket.disconnect();
+        this.clientsocket.disconnect('auth');
         this.router.navigate(['/login']);
     }
 }

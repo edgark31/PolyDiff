@@ -63,7 +63,7 @@ export class PersonnalizationPageComponent implements OnInit {
     }
 
     onSubmitHome() {
-        this.clientsocket.disconnect();
+        this.clientsocket.disconnect('auth');
         this.router.navigate(['/login']);
     }
 
