@@ -6,12 +6,11 @@ import { GameService } from '@app/services/game/game.service';
 import { HistoryService } from '@app/services/history/history.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 // import { KEY_SIZE, MAX_BONUS_TIME_ALLOWED, NOT_FOUND } from '@common/constants';
-import { GameEvents, GameModes, MessageEvents } from '@common/enums';
-import { ChatMessage, ClientSideGame, Coordinate, Differences, GameRoom } from '@common/game-interfaces';
+import { GameModes } from '@common/enums';
+import { ClientSideGame, Coordinate, Differences, GameRoom } from '@common/game-interfaces';
 import { Test, TestingModule } from '@nestjs/testing';
-import * as fs from 'fs';
-import { SinonStubbedInstance, createStubInstance, stub } from 'sinon';
-import { BroadcastOperator, Server, Socket } from 'socket.io';
+import { SinonStubbedInstance, createStubInstance } from 'sinon';
+import { Server, Socket } from 'socket.io';
 import { RoomsManagerService } from './rooms-manager.service';
 
 describe('RoomsManagerService', () => {
@@ -103,9 +102,9 @@ describe('RoomsManagerService', () => {
         service = module.get<RoomsManagerService>(RoomsManagerService);
     });
 
-    // it('should be defined', () => {
-    //     expect(service).toBeDefined();
-    // });
+    it('should be defined', () => {
+        expect(service).toBeDefined();
+    });
 
     // it('onModuleInit() should call getGameConstants()', async () => {
     //     const getGameConstantsSpy = jest.spyOn(service, 'getGameConstants');
