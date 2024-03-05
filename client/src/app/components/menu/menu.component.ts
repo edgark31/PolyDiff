@@ -1,4 +1,4 @@
-import { Component , Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
@@ -9,9 +9,10 @@ import { WelcomeService } from './../../services/welcome-service/welcome.service
     styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent {
+    @Output() manageGame: EventEmitter<void> = new EventEmitter();
     imageData: string;
     showFiller = false;
-    @Output() manageGame: EventEmitter<void> = new EventEmitter();
+
     constructor(public welcomeService: WelcomeService, public clientsocket: ClientSocketService, public router: Router) {}
 
     onDeconnexion(): void {
@@ -30,6 +31,4 @@ export class MenuComponent {
     // toggle() {
     //     this.sidenav.toggle();
     // }
-
-    
 }

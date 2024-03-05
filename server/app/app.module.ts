@@ -1,4 +1,5 @@
 import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -15,6 +16,7 @@ import { GameCard, gameCardSchema } from './model/database/game-card';
 import { GameConstants, gameConstantsSchema } from './model/database/game-config-constants';
 import { GameHistory, gameHistorySchema } from './model/database/game-history';
 import { AccountManagerService } from './services/account-manager/account-manager.service';
+import { AuthService } from './services/auth-manager/auth-manager.service';
 import { ClassicModeService } from './services/classic-mode/classic-mode.service';
 import { DatabaseService } from './services/database/database.service';
 import { GameListsManagerService } from './services/game-lists-manager/game-lists-manager.service';
@@ -22,22 +24,38 @@ import { GameService } from './services/game/game.service';
 import { HistoryService } from './services/history/history.service';
 import { ImageManagerService } from './services/image-manager/image-manager.service';
 import { LimitedModeService } from './services/limited-mode/limited-mode.service';
+import { MailService } from './services/mail-service/mail-service';
 import { MessageManagerService } from './services/message-manager/message-manager.service';
 import { PlayersListManagerService } from './services/players-list-manager/players-list-manager.service';
 import { RoomsManagerService } from './services/rooms-manager/rooms-manager.service';
 
 @Module({
     imports: [
-        MailerModule.forRoot({
-            transport: {
-                host: 'smtp.example.com', // Remplacez par votre serveur SMTP
-                port: 587,
-                secure: false, // true pour 465, false pour d'autres ports
-                auth: {
-                    user: 'your-email@example.com', // Remplacez par votre adresse e-mail
-                    pass: 'your-password', // Remplacez par votre mot de passe
+        MailerModule.forRootAsync({
+            // imports: [ConfigModule], // import module if not enabled globally
+            useFactory: async (config: ConfigService) => ({
+                // transport: config.get("MAIL_TRANSPORT"),
+                // or
+                transport: {
+                    host: config.get('MAIL_HOST'),
+                    secure: false,
+                    auth: {
+                        user: config.get('MAIL_USER'),
+                        pass: config.get('MAIL_PASSWORD'),
+                    },
                 },
-            },
+                defaults: {
+                    from: `"No Reply" <${config.get('MAIL_FROM')}>`,
+                },
+                template: {
+                    dir: join(__dirname, 'templates'),
+                    adapter: new HandlebarsAdapter(),
+                    options: {
+                        strict: true,
+                    },
+                },
+            }),
+            inject: [ConfigService],
         }),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'assets'),
@@ -76,6 +94,9 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
         LimitedModeService,
         AccountManagerService,
         ImageManagerService,
+        MailService,
+        AuthService,
     ],
+    exports: [MailService],
 })
 export class AppModule {}
