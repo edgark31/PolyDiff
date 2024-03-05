@@ -1,5 +1,5 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,9 +10,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -30,8 +32,9 @@ import { CreationPageComponent } from '@app/pages/creation-page/creation-page.co
 import { GamePageComponent } from '@app/pages/game-page/game-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
-import { TranslateModule } from '@ngx-translate/core';
-// import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { CanvasMiddleButtonsComponent } from './components/canvas-middle-buttons/canvas-middle-buttons.component';
 import { CanvasTopButtonsComponent } from './components/canvas-top-buttons/canvas-top-buttons.component';
 import { CanvasUnderButtonsComponent } from './components/canvas-under-buttons/canvas-under-buttons.component';
@@ -44,17 +47,18 @@ import { ImageCanvasComponent } from './components/image-canvas/image-canvas.com
 import { ImportDialogComponent } from './components/import-dialog/import-dialog.component';
 import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 import { MenuComponent } from './components/menu/menu.component';
+import { ModalAdminComponent } from './components/modal-admin/modal-admin.component';
 import { NameGenerationDialogComponent } from './components/name-generation-dialog/name-generation-dialog.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
-import { ChatPageComponent } from './pages/chat-page/chat-page.component';
+import { AdminPageComponent } from './pages/admin-page/admin-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { PersonnalizationPageComponent } from './pages/personnalization-page/personnalization-page.component';
-import { ProfilPageComponent } from './pages/profile-page/profile-page.component';
+import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 /**
@@ -63,10 +67,9 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
  * Please do not move this module in the module folder.
  * Otherwise Angular Cli will not know in which module to put new component
  */
-// export const createTranslateLoader = (http: HttpClient) => {
-//     // return new TranslateHttpLoader(http, './assets/trad/', 'doc.json');
-//     return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
-// };
+export const createTranslateLoader = (http: HttpClient) => {
+    return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+};
 @NgModule({
     declarations: [
         AppComponent,
@@ -102,7 +105,8 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
         NameGenerationDialogComponent,
         PersonnalizationPageComponent,
         ProfilPageComponent,
-        ChatPageComponent,
+        ModalAdminComponent,
+        AdminPageComponent,
     ],
     imports: [
         AppMaterialModule,
@@ -128,12 +132,18 @@ import { RegistrationPageComponent } from './pages/registration-page/registratio
         MatPaginatorModule,
         MatToolbarModule,
         MatIconModule,
+        MatSidenavModule,
+        MatListModule,
         TranslateModule.forRoot({
-            // loader: {
-            //     provide: TranslateLoader,
-            //     useFactory: createTranslateLoader,
-            //     deps: [HttpClient],
-            // },
+            loader: {
+                provide: TranslateLoader,
+                useFactory: createTranslateLoader,
+                deps: [HttpClient],
+            },
+            compiler: {
+                provide: TranslateCompiler,
+                useClass: TranslateMessageFormatCompiler,
+            },
         }),
     ],
     providers: [],

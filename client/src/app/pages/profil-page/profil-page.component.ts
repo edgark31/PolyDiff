@@ -13,9 +13,9 @@ import { ConnectionLog } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-profile-page',
-    templateUrl: './profile-page.component.html',
-    styleUrls: ['./profile-page.component.scss'],
+    selector: 'app-profil-page',
+    templateUrl: './profil-page.component.html',
+    styleUrls: ['./profil-page.component.scss'],
 })
 export class ProfilPageComponent implements AfterViewInit {
     selectedValue: string;
