@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 TextStyle appstyle(double size, Color color, FontWeight fontWeight) {
-  return GoogleFonts.poppins(
-      fontSize: size, color: color, fontWeight: fontWeight);
+  return TextStyle(fontSize: size, color: color, fontWeight: fontWeight);
+  // return GoogleFonts.poppins(
+  //     fontSize: size, color: color, fontWeight: fontWeight);
 }
 
 const TextStyle kHeading = TextStyle(
