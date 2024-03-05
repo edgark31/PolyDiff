@@ -1,3 +1,4 @@
+import { MailerModule } from '@nestjs-modules/mailer';
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -27,6 +28,17 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
 
 @Module({
     imports: [
+        MailerModule.forRoot({
+            transport: {
+                host: 'smtp.example.com', // Remplacez par votre serveur SMTP
+                port: 587,
+                secure: false, // true pour 465, false pour d'autres ports
+                auth: {
+                    user: 'your-email@example.com', // Remplacez par votre adresse e-mail
+                    pass: 'your-password', // Remplacez par votre mot de passe
+                },
+            },
+        }),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'assets'),
         }),
