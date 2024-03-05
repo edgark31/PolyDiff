@@ -9,12 +9,12 @@ export class NavBarComponent {
     readonly selectionRoute: string;
     readonly configRoute: string;
     readonly homeRoute: string;
-    readonly limitedRoute: string;
+    readonly chatRoute: string;
 
     constructor() {
         this.selectionRoute = '/selection';
         this.configRoute = '/admin';
         this.homeRoute = '/home';
-        this.limitedRoute = '/limited';
+        this.chatRoute = '/chat';
     }
 }
