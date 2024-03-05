@@ -17,7 +17,7 @@
         <label for="username"> {{'profil.changePassword' | translate }}</label>
         <mat-form-field>
           <mat-label>Mot de passe</mat-label>
-          <input matInput placeholder="veuillez écrire votre mot de passe" [(ngModel)]="selectPassword" required>
+          <input matInput type="password" placeholder="veuillez écrire votre mot de passe" [(ngModel)]="selectPassword" required>
         </mat-form-field>
         <!-- <input type="text" formControlName="username" id="username"/> -->
       </div>
@@ -26,7 +26,7 @@
         <label for="username"> {{'profil.confirmePassword' | translate }}</label>
         <mat-form-field>
           <mat-label>Mot de passe</mat-label>
-          <input matInput placeholder="veuillez ré-écrire votre mot de passe" [(ngModel)]="selectPasswordConfirm"
+          <input matInput type="password" placeholder="veuillez ré-écrire votre mot de passe" [(ngModel)]="selectPasswordConfirm"
             required>
         </mat-form-field>
         <!-- <input type="text" formControlName="username" id="username"/> -->
@@ -79,7 +79,26 @@
     </div>
 
     <div class="right">
+      <!-- <div class="form-control section"> <label for="Theme"> {{'profil.songError' | translate }}</label>
+        <mat-form-field>
+          <mat-label>{{'profil.songError' | translate }}</mat-label>
+          <mat-select [(value)]="selectSongError">
+            <mat-option [value]="langage[0]">{{'bouton.fr' | translate }}</mat-option>
+            <mat-option [value]="langage[1]">{{'bouton.en' | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
+
+      <div class="form-control section"> <label for="Theme"> {{'profil.songDifference' | translate }}</label>
+        <mat-form-field>
+          <mat-label>{{'profil.songDifference' | translate }}</mat-label>
+          <mat-select [(value)]="selectSongDifference">
+            <mat-option [value]="langage[0]">{{'bouton.fr' | translate }}</mat-option>
+            <mat-option [value]="langage[1]">{{'bouton.en' | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div> -->
     </div>
   </div>
 

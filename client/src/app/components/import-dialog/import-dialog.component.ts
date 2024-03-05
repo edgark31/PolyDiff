@@ -36,12 +36,15 @@ export class ImportDialogComponent {
     }
 
     onImport(): void {
-        this.welcomeService.selectAvatar = this.imageData;
+        if (this.welcomeService.chooseImage) this.welcomeService.selectAvatar = `http://localhost:3000/default${this.welcomeService.selectLocal}.png`;
+        else this.welcomeService.selectAvatar = this.imageData;
         this.dialogRef.close();
     }
     chooseImage(id: string): void {
         this.welcomeService.selectLocal = id;
-        this.welcomeService.selectAvatar = `http://localhost:3000/default${id}.png`;
-        this.dialogRef.close();
+    }
+
+    setUpColor(id: string): string {
+        return this.welcomeService.selectLocal === id ? 'red' : 'white';
     }
 }

@@ -1,5 +1,5 @@
 <div class="container flex-column">
-    <app-menu>  </app-menu>
+    <app-menu (manageGame)="manageGames()">  </app-menu>
     <header class="header">
         <h1 class="header-item flex-column"></h1>
     </header>
@@ -11,7 +11,7 @@
         <button class="button" routerLink="/lobby">
             <span id = "limited">Lobby</span>
         </button>
-        <button class="button" routerLink="/admin">
+        <button class="button" (click)="manageGames()">
             <span id = "config">Admin</span>
         </button>
     </div>
