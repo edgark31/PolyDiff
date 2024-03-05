@@ -6,18 +6,12 @@
 
   <mat-dialog-content *ngIf="welcomeService.chooseImage">
 
-    <button mat-button (click)="chooseImage('1')">
+    <button [style.background-color]="setUpColor('1')" mat-button (click)="chooseImage('1')">
       <img src="http://localhost:3000/default1.png" alt="cuteRaccoon" class="dialog-image">
     </button>
-    <button mat-button (click)="chooseImage('2')">
+    <button [style.background-color]="setUpColor('2')" mat-button (click)="chooseImage('2')">
       <img src="http://localhost:3000/default2.png" alt="hallelujaRaccoon" class="dialog-image">
     </button>
-    <!-- <button mat-button (click)="chooseImage('raccoonAdmin0.png')">
-      <img src="assets/raccoonAdmin0.png" alt="raccoonAdmin0" class="dialog-image">
-    </button>
-    <button mat-button (click)="chooseImage('raccoonAdmin1.png')">
-      <img src="assets/raccoonAdmin1.png" alt="raccoonAdmin1" class="dialog-image">
-    </button> -->
 
   </mat-dialog-content>
 

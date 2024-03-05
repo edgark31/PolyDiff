@@ -13,7 +13,6 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -33,8 +32,6 @@ export class PersonnalizationPageComponent implements OnInit {
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
-    messagebox = { t: 'warning' };
-    messageBoxContent = marker(this.messagebox.t);
 
     feedback: string;
     constructor(
@@ -56,10 +53,6 @@ export class PersonnalizationPageComponent implements OnInit {
 
     useLanguage(language: string): void {
         this.translate.use(language);
-        // this.translate.setTranslation('en', {
-        //     HELLO: 'hello {{value}}',
-        // });
-        // this.translate.setTranslation('en', { welcome: 'Hello, world!' });
     }
 
     onSubmitHome() {
@@ -69,7 +62,6 @@ export class PersonnalizationPageComponent implements OnInit {
 
     onModifyUser() {
         this.communication.modifyUser(this.gameManager.username, this.selectName).subscribe({
-            // discuter du fait d'envoyer tout le account
             next: () => {
                 this.gameManager.username = this.selectName;
             },
@@ -81,10 +73,7 @@ export class PersonnalizationPageComponent implements OnInit {
 
     onUpdateAvatar() {
         this.communication.updateAvatar(this.gameManager.username, this.welcomeService.selectAvatar).subscribe({
-            // discuter du fait d'envoyer tout le account
             next: () => {
-                this.router.navigate(['/profil']);
-
                 this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
             },
             error: (error: HttpErrorResponse) => {
@@ -95,7 +84,6 @@ export class PersonnalizationPageComponent implements OnInit {
 
     onChooseAvatar() {
         this.communication.chooseAvatar(this.gameManager.username, this.welcomeService.selectLocal).subscribe({
-            // discuter du fait d'envoyer tout le account
             next: () => {
                 this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
             },
@@ -109,7 +97,6 @@ export class PersonnalizationPageComponent implements OnInit {
         this.communication
             .modifyPassword(this.gameManager.username, this.welcomeService.account.credentials.password, this.selectPassword)
             .subscribe({
-                // discuter du fait d'envoyer tout le account
                 next: () => {
                     this.welcomeService.account.credentials.password = this.selectPassword;
                 },
@@ -121,7 +108,6 @@ export class PersonnalizationPageComponent implements OnInit {
 
     onModifyTheme() {
         this.communication.modifyTheme(this.gameManager.username, this.welcomeService.account.profile.theme, this.selectTheme).subscribe({
-            // discuter du fait d'envoyer tout le account
             next: () => {
                 this.welcomeService.account.profile.theme = this.selectTheme;
             },
@@ -133,7 +119,6 @@ export class PersonnalizationPageComponent implements OnInit {
 
     onModifyLangage() {
         this.communication.modifyLangage(this.gameManager.username, this.welcomeService.account.profile.language, this.selectLangage).subscribe({
-            // discuter du fait d'envoyer tout le account
             next: () => {
                 this.welcomeService.account.profile.language = this.selectLangage;
             },
@@ -142,6 +127,26 @@ export class PersonnalizationPageComponent implements OnInit {
             },
         });
     }
+
+    // onModifySongError() {
+    //     this.communication.modifySongError(this.gameManager.username, this.welcomeService.account.profile.songError, this.selectSongError).subscribe({
+    //         next: () => {
+    //         },
+    //         error: (error: HttpErrorResponse) => {
+    //             this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+    //         },
+    //     });
+    // }
+
+    // onModifySongDifference() {
+    //     this.communication.modifySongDifference(this.gameManager.username, this.welcomeService.account.profile.songDifference, this.songDifference).subscribe({
+    //         next: () => {
+    //         },
+    //         error: (error: HttpErrorResponse) => {
+    //             this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+    //         },
+    //     });
+    // }
 
     onSubmitProfile() {
         console.log(this.gameManager.username);
@@ -153,39 +158,8 @@ export class PersonnalizationPageComponent implements OnInit {
         if (this.selectPassword !== this.welcomeService.account.credentials.password) this.onModifyPassword();
         if (this.selectTheme !== this.welcomeService.account.profile.theme) this.onModifyTheme();
         if (this.selectLangage !== this.welcomeService.account.profile.language) this.onModifyLangage();
-        console.log(this.welcomeService.account.profile.avatar + '      yyyyyyyyyyyyppppppppp');
 
         this.router.navigate(['/profil']);
-
-        // this.oldProfile = {
-        //     avatar: this.welcomeService.account.profile.avatar,
-        //     name: this.gameManager.username,
-        //     theme: this.welcomeService.account.profile.theme,
-        //     language: this.welcomeService.account.profile.langage,
-        //     password: this.welcomeService.account.credentials.password,
-        // };
-
-        // this.modifyProfile = {
-        //     avatar: this.welcomeService.selectAvatar,
-        //     name: this.selectName,
-        //     theme: this.selectTheme,
-        //     language: this.selectLangage,
-        //     password: this.selectPassword,
-        // };
-        // this.communication.modifyProfile(this.oldProfile, this.modifyProfile).subscribe({
-        //     // discuter du fait d'envoyer tout le account
-        //     next: () => {
-        //         this.router.navigate(['/profil']);
-        //         this.gameManager.username = this.selectName;
-        //         this.welcomeService.account.profile.avatar = this.welcomeService.selectAvatar;
-        //         this.welcomeService.account.credentials.password = this.selectPassword;
-        //         this.welcomeService.account.profile.theme = this.selectTheme;
-        //         this.welcomeService.account.profile.langage = this.selectLangage;
-        //     },
-        //     error: (error: HttpErrorResponse) => {
-        //         this.feedback = error.error || 'An unexpected error occurred. Please try again.';
-        //     },
-        // });
     }
 
     importDialog(choose: boolean): void {
