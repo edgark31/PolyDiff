@@ -6,15 +6,14 @@ import { DEFAULT_PLAYERS, INPUT_TAG_NAME, SOLO_GAME_ID } from '@app/constants/co
 import { ASSETS_HINTS } from '@app/constants/hint';
 import { CANVAS_MEASUREMENTS } from '@app/constants/image';
 import { HintProximity } from '@app/enum/hint-proximity';
-import { CanvasMeasurements } from '@app/interfaces/game-interfaces';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { HintService } from '@app/services/hint-service/hint.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
 import { Coordinate } from '@common/coordinate';
-import { GameModes, GamePageEvent, MessageTag } from '@common/enums';
-import { ChatMessage, ClientSideGame, Players } from '@common/game-interfaces';
+import { GameEvents, GameModes, MessageTag } from '@common/enums';
+import { CanvasMeasurements, ChatMessage, ClientSideGame, Players } from '@common/game-interfaces';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -106,7 +105,7 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     }
     showAbandonDialog(): void {
         this.matDialog.open(GamePageDialogComponent, {
-            data: { action: GamePageEvent.Abandon, message: 'Êtes-vous certain de vouloir abandonner la partie ? ' },
+            data: { action: GameEvents.AbandonGame, message: 'Êtes-vous certain de vouloir abandonner la partie ? ' },
             disableClose: true,
             panelClass: 'dialog',
         });
@@ -150,7 +149,7 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
 
     private showEndGameDialog(endingMessage: string): void {
         this.matDialog.open(GamePageDialogComponent, {
-            data: { action: GamePageEvent.EndGame, message: endingMessage, isReplayMode: this.game?.mode.includes('Classic') },
+            data: { action: GameEvents.End, message: endingMessage, isReplayMode: this.game?.mode.includes('Classic') },
             disableClose: true,
             panelClass: 'dialog',
         });

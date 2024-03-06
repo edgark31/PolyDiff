@@ -5,7 +5,7 @@ import { CardManagerService } from '@app/services/card-manager/card-manager.serv
 import { HistoryService } from '@app/services/history/history.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { CHARACTERS, DEFAULT_GAME_MODES, KEY_SIZE, MAX_BONUS_TIME_ALLOWED, NOT_FOUND } from '@common/constants';
-import { GameEvents, GameModes, MessageEvents, MessageTag, PlayerStatus } from '@common/enums';
+import { ChannelEvents, GameEvents, GameModes, MessageTag, PlayerStatus } from '@common/enums';
 import { Chat, ClientSideGame, Coordinate, Differences, GameConfigConst, GameRoom, Player, PlayerData, TimerMode } from '@common/game-interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as fs from 'fs';
@@ -87,7 +87,7 @@ export class RoomsManagerService implements OnModuleInit {
         this.historyService.createEntry(room);
         socket.join(room.roomId);
         this.updateRoom(room);
-        server.to(room.roomId).emit(GameEvents.GameStarted, room);
+        server.to(room.roomId).emit(GameEvents.Start, room);
     }
 
     async loadNextGame(room: GameRoom, playedGameIds: string[]): Promise<string> {
@@ -116,7 +116,7 @@ export class RoomsManagerService implements OnModuleInit {
             currentDifference: player.differenceData.currentDifference,
             differencesFound: player.differenceData.differencesFound,
         } as Differences;
-        server.to(room.roomId).emit(MessageEvents.LocalMessage, localMessage);
+        server.to(room.roomId).emit(ChannelEvents.LocalMessage, localMessage);
         server
             .to(room.roomId)
             .emit(GameEvents.RemoveDifference, { differencesData, playerId: socket.id, cheatDifferences: room.originalDifferences });
@@ -145,7 +145,7 @@ export class RoomsManagerService implements OnModuleInit {
             const hintMessage = this.messageManager.createMessage(MessageTag.Common, 'Indice utilisé');
             room.timer += penaltyTime;
             this.rooms.set(room.roomId, room);
-            server.to(room.roomId).emit(MessageEvents.LocalMessage, hintMessage);
+            server.to(room.roomId).emit(ChannelEvents.LocalMessage, hintMessage);
             server.to(room.roomId).emit(GameEvents.TimerUpdate, room.timer);
         }
     }
@@ -168,21 +168,21 @@ export class RoomsManagerService implements OnModuleInit {
                 room.clientGame.mode === GameModes.ClassicOneVsOne
                     ? await this.handleOneVsOneAbandon(player, room, server)
                     : this.handleCoopAbandon(player, room, server);
-            server.to(room.roomId).emit(MessageEvents.LocalMessage, localMessage);
+            server.to(room.roomId).emit(ChannelEvents.LocalMessage, localMessage);
         } else {
-            await this.historyService.closeEntry(room.roomId, server);
+            // await this.historyService.closeEntry(room.roomId, server);
             this.deleteRoom(room.roomId);
         }
         socket.leave(room.roomId);
     }
 
-    async handleSoloModesDisconnect(room: GameRoom, server: io.Server): Promise<void> {
-        if (room && !room.player2) {
-            this.historyService.markPlayer(room.roomId, room.player1.name, PlayerStatus.Quitter);
-            await this.historyService.closeEntry(room.roomId, server);
-            this.deleteRoom(room.roomId);
-        }
-    }
+    // async handleSoloModesDisconnect(room: GameRoom, server: io.Server): Promise<void> {
+    //     if (room && !room.player2) {
+    //         this.historyService.markPlayer(room.roomId, room.player1.name, PlayerStatus.Quitter);
+    //         await this.historyService.closeEntry(room.roomId, server);
+    //         this.deleteRoom(room.roomId);
+    //     }
+    // }
 
     private differenceFound(room: GameRoom, player: Player, index: number): Chat {
         this.addBonusTime(room);
@@ -227,8 +227,8 @@ export class RoomsManagerService implements OnModuleInit {
 
     private async countdownOver(room: GameRoom, server: io.Server): Promise<void> {
         room.endMessage = 'Temps écoulé !';
-        server.to(room.roomId).emit(GameEvents.EndGame, room.endMessage);
-        await this.historyService.closeEntry(room.roomId, server);
+        server.to(room.roomId).emit(GameEvents.End, room.endMessage);
+        // await this.historyService.closeEntry(room.roomId, server);
         this.deleteRoom(room.roomId);
         this.leaveRoom(room, server);
     }
@@ -247,9 +247,9 @@ export class RoomsManagerService implements OnModuleInit {
         const opponent: Player = this.getOpponent(room, player);
         this.historyService.markPlayer(room.roomId, opponent?.name, PlayerStatus.Winner);
         room.endMessage = "L'adversaire a abandonné la partie!";
-        server.to(room.roomId).emit(GameEvents.EndGame, room.endMessage);
+        server.to(room.roomId).emit(GameEvents.End, room.endMessage);
         this.leaveRoom(room, server);
-        await this.historyService.closeEntry(room.roomId, server);
+        // await this.historyService.closeEntry(room.roomId, server);
         this.deleteRoom(room.roomId);
         return this.messageManager.getQuitMessage(player?.name);
     }

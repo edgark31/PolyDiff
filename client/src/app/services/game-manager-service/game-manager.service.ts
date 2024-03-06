@@ -7,7 +7,7 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { Coordinate } from '@common/coordinate';
-import { GameEvents, MessageEvents, MessageTag } from '@common/enums';
+import { GameEvents, ChannelEvents, MessageTag } from '@common/enums';
 import { ChatMessage, ChatMessageGlobal, ClientSideGame, Differences, GameConfigConst, GameRoom, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
 @Injectable({
@@ -139,7 +139,7 @@ export class GameManagerService {
     sendMessage(textMessage: string): void {
         const newMessage = { tag: MessageTag.Received, message: textMessage };
         this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, { tag: MessageTag.Sent, message: textMessage } as ChatMessage);
-        this.clientSocket.send('game', MessageEvents.LocalMessage, newMessage);
+        this.clientSocket.send('game', ChannelEvents.SendLocalMessage, newMessage);
     }
 
     removeAllListeners(nameSpace: string) {
@@ -160,11 +160,11 @@ export class GameManagerService {
 
     sendGlobalMessage(textMessage: string): void {
         const newMessage = { tag: MessageTag.Received, message: textMessage, userName: this.username };
-        this.clientSocket.send('game', MessageEvents.GlobalMessage, newMessage);
+        this.clientSocket.send('game', ChannelEvents.SendGlobalMessage, newMessage);
     }
 
     manageSocket(): void {
-        this.clientSocket.on('game', GameEvents.GameStarted, (room: GameRoom) => {
+        this.clientSocket.on('game', GameEvents.Start, (room: GameRoom) => {
             this.currentGame.next(room.clientGame);
             this.gameConstants = room.gameConstants;
             this.players.next({ player1: room.player1, player2: room.player2 });
@@ -185,11 +185,11 @@ export class GameManagerService {
             this.captureService.saveReplayEvent(ReplayActions.TimerUpdate, timer);
         });
 
-        this.clientSocket.on('game', GameEvents.EndGame, (endGameMessage: string) => {
+        this.clientSocket.on('game', GameEvents.Start, (endGameMessage: string) => {
             this.endMessage.next(endGameMessage);
         });
 
-        this.clientSocket.on('game', MessageEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
+        this.clientSocket.on('game', ChannelEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
             if (receivedMessage.userName === this.username) {
                 receivedMessage.tag = MessageTag.Sent;
             } else {

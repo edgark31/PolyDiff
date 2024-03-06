@@ -16,10 +16,10 @@ import * as fs from 'fs';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Connection, Model } from 'mongoose';
 import { SinonStubbedInstance, createStubInstance } from 'sinon';
-import { DatabaseService } from './card-manager.service';
+import { CardManagerService } from './card-manager.service';
 
 describe('DatabaseService', () => {
-    let dataBaseService: DatabaseService;
+    let dataBaseService: CardManagerService;
     let listsManagerService: SinonStubbedInstance<GameListsManagerService>;
     let gameModel: Model<GameDocument>;
     let gameCardModel: Model<GameCardDocument>;

@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GameDetails } from '@app/interfaces/game-interfaces';
+import { Account, CarouselPaginator, Credentials, GameConfigConst, GameDetails, GameHistory, Theme } from '@common/game-interfaces';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Account, CarouselPaginator, Credentials, GameConfigConst, GameHistory, Theme } from './../../../../../common/game-interfaces';
 
 @Injectable({
     providedIn: 'root',

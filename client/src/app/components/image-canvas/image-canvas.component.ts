@@ -2,10 +2,10 @@ import { AfterViewInit, Component, ElementRef, HostListener, Input, ViewChild } 
 import { LEFT_BUTTON } from '@app/constants/constants';
 import { IMG_HEIGHT, IMG_WIDTH } from '@app/constants/image';
 import { CanvasPosition } from '@app/enum/canvas-position';
-import { CanvasMeasurements } from '@app/interfaces/game-interfaces';
 import { DrawService } from '@app/services/draw-service/draw.service';
 import { ForegroundService } from '@app/services/foreground-service/foreground.service';
 import { ImageService } from '@app/services/image-service/image.service';
+import { CanvasMeasurements } from '@common/game-interfaces';
 
 @Component({
     selector: 'app-image-canvas',

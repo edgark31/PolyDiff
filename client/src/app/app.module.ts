@@ -24,7 +24,6 @@ import { RouterModule } from '@angular/router';
 import { CreationGameDialogComponent } from '@app/components/creation-game-dialog/creation-game-dialog.component';
 import { GameInfosComponent } from '@app/components/game-infos/game-infos.component';
 import { GameSheetComponent } from '@app/components/game-sheet/game-sheet.component';
-import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { AppRoutingModule } from '@app/modules/app-routing.module';
 import { AppMaterialModule } from '@app/modules/material.module';
 import { AppComponent } from '@app/pages/app/app.component';
@@ -77,7 +76,6 @@ export const createTranslateLoader = (http: HttpClient) => {
         SelectionPageComponent,
         GamePageComponent,
         GameSheetComponent,
-        PlayerNameDialogBoxComponent,
         GameInfosComponent,
         ImageCanvasComponent,
         ImportDialogComponent,

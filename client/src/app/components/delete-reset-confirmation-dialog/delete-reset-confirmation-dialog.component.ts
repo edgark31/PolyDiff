@@ -29,11 +29,11 @@ export class DeleteResetConfirmationDialogComponent {
         });
     }
 
-    deleteAllGamesHistory(): void {
-        this.communicationService.deleteAllGamesHistory().subscribe(() => {
-            this.roomManagerService.notifyGamesHistoryDeleted();
-        });
-    }
+    // deleteAllGamesHistory(): void {
+    //     this.communicationService.deleteAllGamesHistory().subscribe(() => {
+    //         this.roomManagerService.notifyGamesHistoryDeleted();
+    //     });
+    // }
 
     deleteGameCard() {
         this.communicationService.deleteGameById(this.data.gameId).subscribe(() => {
