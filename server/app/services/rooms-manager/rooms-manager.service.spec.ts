@@ -339,16 +339,6 @@ describe('RoomsManagerService', () => {
     //     expect(updateRoomSpy).not.toBeCalled();
     // });
 
-    // it('validateCoords should not call differenceFound or differenceNotFound dont emit on LocalMessage,RemoveDiff if the room is undefined', () => {
-    //     const getRoomIdFromSocketSpy = jest.spyOn(service, 'getRoomIdFromSocket').mockReturnValue(undefined);
-    //     service['differenceFound'] = jest.fn();
-    //     service['differenceNotFound'] = jest.fn();
-    //     service.validateCoords(socket, { x: 0, y: 0 }, server);
-    //     expect(getRoomIdFromSocketSpy).toBeCalled();
-    //     expect(service['differenceFound']).not.toBeCalled();
-    //     expect(service['differenceNotFound']).not.toBeCalled();
-    // });
-
     // it('validateCoords() should call  differenceFound and emit on LocalMessage,RemoveDiff if the coordinates are correct', () => {
     //     Object.defineProperty(socket, 'id', {
     //         value: fakeRoom.player1.playerId,

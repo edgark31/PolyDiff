@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminPageComponent } from '@app/pages/admin-page/admin-page.component';
 import { ChatPageComponent } from '@app/pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from '@app/pages/config-page/config-page.component';
 import { CreationPageComponent } from '@app/pages/creation-page/creation-page.component';
@@ -8,10 +9,11 @@ import { LimitedTimePageComponent } from '@app/pages/limited-time-page/limited-t
 import { LoginPageComponent } from '@app/pages/login-page/login-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
 import { PersonnalizationPageComponent } from '@app/pages/personnalization-page/personnalization-page.component';
-import { ProfilPageComponent } from '@app/pages/profile-page/profile-page.component';
+import { ProfilPageComponent } from '@app/pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from '@app/pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from '@app/pages/registration-page/registration-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
+import { AdminGuard } from '@app/services/admin-guard/admin.guard.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -27,6 +29,8 @@ export const routes: Routes = [
     { path: 'recover-password', component: RecoverPasswordPageComponent },
     { path: 'personalization', component: PersonnalizationPageComponent },
     { path: 'profil', component: ProfilPageComponent },
+    { path: 'admin', component: AdminPageComponent, canActivate: [() => inject(AdminGuard).canActivateFunc()] },
+    { path: '**', redirectTo: '/login' },
 ];
 
 @NgModule({

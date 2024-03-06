@@ -1,6 +1,0 @@
-{
-    "Home": {
-        "WelcomeText": "Bonjour cher inconnu",
-        "WelcomeTextValue": "Bonjour cher {{nomDeLaPersonne}}."
-    }
-}
