@@ -20,8 +20,12 @@
             <mat-icon [ngStyle]="{ color: drawColor }">line_weight</mat-icon>
         </mat-button-toggle>
         <mat-button-toggle [value]="canvasAction.Rectangle" (change)="setCanvasAction($event.value)"
-        matTooltip="Dessiner un rectangle (Vous pouvez faire un carré en appuyant sur la touche SHIFT)">
+        matTooltip="Dessiner un rectangle (Vous pouvez faire un carré en maintenant sur la touche SHIFT)">
             <mat-icon [ngStyle]="{ color: drawColor }">crop_square</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle [value]="canvasAction.Ellipse" (change)="setCanvasAction($event.value)"
+        matTooltip="Dessiner une ellipse (Vous pouvez faire un cercle en maintenant sur la touche SHIFT)">
+            <mat-icon [ngStyle]="{ color: drawColor }">circle</mat-icon>
         </mat-button-toggle>
         <mat-button-toggle [value]="canvasAction.Eraser" (change)="setCanvasAction($event.value)">
             <img src="./assets/eraser.svg" />

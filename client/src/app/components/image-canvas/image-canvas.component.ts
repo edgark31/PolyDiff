@@ -29,12 +29,20 @@ export class ImageCanvasComponent implements AfterViewInit {
 
     @HostListener('window:keydown.shift', ['$event'])
     onShiftDown() {
-        this.drawService.setSquareMode(true);
+        if (this.drawService.isCurrentActionRectangle()) {
+            this.drawService.setSquareMode(true);
+        } else if (this.drawService.isCurrentActionEllipse()) {
+            this.drawService.setCircleMode(true);
+        }
     }
 
     @HostListener('window:keyup.shift', ['$event'])
     onShiftUp() {
-        this.drawService.setSquareMode(false);
+        if (this.drawService.isCurrentActionRectangle()) {
+            this.drawService.setSquareMode(false);
+        } else if (this.drawService.isCurrentActionEllipse()) {
+            this.drawService.setCircleMode(false);
+        }
     }
 
     ngAfterViewInit(): void {
