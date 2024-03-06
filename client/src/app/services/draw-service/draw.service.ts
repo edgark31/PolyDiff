@@ -169,6 +169,7 @@ export class DrawService {
 
     private drawEllipse() {
         this.activeContext.clearRect(0, 0, IMG_WIDTH, IMG_HEIGHT);
+        this.activeContext.beginPath();
         if (this.isCircleModeOn) {
             const radius: number = Math.abs(this.clickPosition.x - this.ellipseCenter.x);
             this.activeContext.ellipse(this.ellipseCenter.x, this.ellipseCenter.y, radius, radius, 0, 0, 2 * Math.PI);
@@ -178,6 +179,7 @@ export class DrawService {
             this.activeContext.ellipse(this.ellipseCenter.x, this.ellipseCenter.y, radiusX, radiusY, 0, 0, 2 * Math.PI);
         }
         this.activeContext.fill();
+        this.activeContext.closePath();
     }
 
     private drawLine() {
