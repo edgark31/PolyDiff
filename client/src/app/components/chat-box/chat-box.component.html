@@ -9,7 +9,7 @@
         <div class="messages">
             <ul>
                 <li [class]="message.tag" *ngFor="let message of messages">
-                    <img src="{{'http://localhost:3000' + message.name}}" alt="avatar" />
+                    <img src="{{'http://localhost:3000/' + message.name + '.png'}}" alt="avatar" />
                     <h4>{{ message.name }}</h4>
                     <p>{{ message.raw }}</p>
                     <h4>{{ message.timestamp }}</h4>
