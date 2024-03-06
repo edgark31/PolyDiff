@@ -90,9 +90,6 @@ class _ChatBoxState extends State<ChatBox> {
                 itemBuilder: (BuildContext context, int index) {
                   bool isSent =
                       messages[index].userName == socketService.userName;
-                  // WidgetsBinding.instance.addPostFrameCallback((_) {
-                  //   scrollToBottom();
-                  // });
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
@@ -179,6 +176,26 @@ class _ChatBoxState extends State<ChatBox> {
                   ),
               ],
             ),
+          ),
+          // TODO : Remove tests messages + button
+          Text(
+            socketService.socketStatus ? 'Socket ON' : 'Socket OFF',
+            style: TextStyle(color: Colors.pink, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(width: 20),
+          Text(
+            socketService.connectionStatus ? 'Username OK' : 'Disconnected',
+            style: TextStyle(color: Colors.pink, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            'Username: ${socketService.userName}',
+            style: TextStyle(color: Colors.pink, fontWeight: FontWeight.bold),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              socketService.sendTestMessage();
+            },
+            child: Text("Recevoir message test"),
           ),
         ],
       ),
