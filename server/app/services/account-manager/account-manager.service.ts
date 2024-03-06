@@ -98,8 +98,6 @@ export class AccountManagerService implements OnModuleInit {
     async changePassword(oldUsername: string, newPasword: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
-            console.log(oldUsername + 'nom venant du courriel');
-            console.log(accountFound.credentials.password + 'passwoprd');
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.credentials.password = newPasword;
@@ -216,7 +214,6 @@ export class AccountManagerService implements OnModuleInit {
     // }
 
     connexionToAdmin(password: string): boolean {
-        console.log(password + 'qdsdss');
         return password === 'admin';
     }
 }

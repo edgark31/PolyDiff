@@ -32,6 +32,5 @@ export class RecoverPasswordPageComponent {
                 },
             });
         }
-        console.log(this.welcomeService.isLinkValid + 'scxsdqldjskj');
     }
 }

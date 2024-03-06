@@ -58,7 +58,6 @@ export class CommunicationService {
     }
 
     sendMail(mail: string): Observable<void> {
-        console.log('yooooooooooooooooooo');
         return this.http.put<void>(`${this.accountUrl}/mail`, { email: mail }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
@@ -123,7 +122,6 @@ export class CommunicationService {
         );
     }
     recuperatePassword(password: string): Observable<boolean> {
-        console.log('commu' + password);
         return this.http.post<{ success: boolean }>(`${this.accountUrl}/admin`, { Password: password }).pipe(
             map((response) => response.success),
             catchError(this.handleError<boolean>('Recuperate Password', false)),

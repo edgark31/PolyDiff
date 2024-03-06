@@ -28,7 +28,6 @@ export class ConfirmPasswordPageComponent implements OnInit {
 
     ngOnInit() {
         this.name = this.route.snapshot.queryParams['token'];
-        console.log(this.welcomeService.getlinkValid() + 'scxsdqldjskj');
     }
     onSubmit() {
         if (this.recoverPasswordForm.value.password === this.recoverPasswordForm.value.confirmPassword && this.recoverPasswordForm.value.password) {

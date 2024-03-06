@@ -86,6 +86,7 @@ export class WelcomeService {
 
     onModifyPassword() {
         this.communication.modifyPassword(this.gameManager.username, this.selectPassword).subscribe({
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             next: () => {},
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';

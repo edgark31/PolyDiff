@@ -54,6 +54,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     manageGames(): void {
         this.dialog.open(ModalAdminComponent);
     }

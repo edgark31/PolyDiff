@@ -14,7 +14,6 @@ export class MailService {
 
     async sendUserConfirmation(user: Account, token: string) {
         // const url = `example.com/auth/confirm?token=${token}`;
-        console.log('hjghvgcvghjhghgchhf' + user.credentials.email);
         await this.mailerService.sendMail({
             to: user.credentials.email,
             from: 'TeamRaccoon@polymtl.ca',
@@ -36,7 +35,7 @@ export class MailService {
 
             if (!accountFound) throw new Error('Account not found');
             const token = accountFound.credentials.username;
-            console.log('yooooo ' + token);
+
             // const token = Math.floor(1000 + Math.random() * 9000).toString();
             // await this.mailService.sendUserConfirmation(accountFound);
             await this.sendUserConfirmation(accountFound, token);

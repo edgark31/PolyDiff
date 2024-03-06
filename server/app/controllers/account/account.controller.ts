@@ -70,15 +70,6 @@ export class AccountController {
         }
     }
 
-    // @Post('admin')
-    // async connexionToAdmin(@Body('Password') password: string, @Res() response: Response) {
-    //     try {
-    //         const isValid = await this.accountManager.connexionToAdmin(password);
-    //         response.status(HttpStatus.OK).json(isValid);
-    //     } catch (error) {
-    //         response.status(HttpStatus.UNAUTHORIZED).json(error);
-    //     }
-    // }
     @Post('admin')
     connexionToAdmin(@Body('Password') password: string): { success: boolean } {
         const isValid = this.accountManager.connexionToAdmin(password);
