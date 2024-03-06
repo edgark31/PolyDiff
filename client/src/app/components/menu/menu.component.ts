@@ -12,11 +12,10 @@ export class MenuComponent {
     @Output() manageGame: EventEmitter<void> = new EventEmitter();
     imageData: string;
     showFiller = false;
-
     constructor(public welcomeService: WelcomeService, public clientsocket: ClientSocketService, public router: Router) {}
 
     onDeconnexion(): void {
-        this.clientsocket.disconnect();
+        this.clientsocket.disconnect('auth');
         this.router.navigate(['/login']);
     }
 

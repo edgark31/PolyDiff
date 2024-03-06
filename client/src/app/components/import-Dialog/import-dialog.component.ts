@@ -27,7 +27,7 @@ export class ImportDialogComponent {
                 this.imageData = imageBase64;
             };
             fileReader.readAsDataURL(selectedFile);
-            this.clientSocket.send('send-img', fileReader.result);
+            this.clientSocket.send('auth', 'send-img', fileReader.result);
         }
     }
 

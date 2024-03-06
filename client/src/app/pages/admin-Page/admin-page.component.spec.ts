@@ -8,10 +8,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NavBarComponent } from '@app/components/nav-bar/nav-bar.component';
 import { routes } from '@app/modules/app-routing.module';
+import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { BehaviorSubject, Subscription, of } from 'rxjs';
-import { SelectionPageComponent } from './selection-page.component';
 
 describe('SelectionPageComponent', () => {
     let component: SelectionPageComponent;

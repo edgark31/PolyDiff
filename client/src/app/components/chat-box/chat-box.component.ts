@@ -28,6 +28,6 @@ export class ChatBoxComponent {
 
     onClose(): void {
         this.router.navigate(['/login']);
-        this.clientSocket.disconnect();
+        this.clientSocket.disconnect('auth');
     }
 }

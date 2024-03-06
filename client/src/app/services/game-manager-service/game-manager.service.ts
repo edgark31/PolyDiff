@@ -99,28 +99,37 @@ export class GameManagerService {
         this.message.next(message);
     }
 
-    getSocketId(): string {
-        return this.clientSocket.socket.id;
+    getSocketId(nameSpace: string): string {
+        switch (nameSpace) {
+            case 'lobby':
+                return this.clientSocket.lobbySocket.id;
+            case 'game':
+                return this.clientSocket.gameSocket.id;
+            case 'auth':
+                return this.clientSocket.authSocket.id;
+            default:
+                throw new Error(`Unknown namespace: ${nameSpace}`);
+        }
     }
 
     startGame(): void {
-        this.clientSocket.send(GameEvents.StartGameByRoomId);
+        this.clientSocket.send('game', GameEvents.StartGameByRoomId);
     }
 
     startNextGame(): void {
-        this.clientSocket.send(GameEvents.StartNextGame);
+        this.clientSocket.send('game', GameEvents.StartNextGame);
     }
 
     requestVerification(coords: Coordinate): void {
-        this.clientSocket.send(GameEvents.RemoveDifference, coords);
+        this.clientSocket.send('game', GameEvents.RemoveDifference, coords);
     }
 
     abandonGame(): void {
-        this.clientSocket.send(GameEvents.AbandonGame);
+        this.clientSocket.send('game', GameEvents.AbandonGame);
     }
 
     requestHint(): void {
-        this.clientSocket.send(GameEvents.RequestHint);
+        this.clientSocket.send('game', GameEvents.RequestHint);
     }
 
     setIsLeftCanvas(isLeft: boolean): void {
@@ -130,20 +139,32 @@ export class GameManagerService {
     sendMessage(textMessage: string): void {
         const newMessage = { tag: MessageTag.Received, message: textMessage };
         this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, { tag: MessageTag.Sent, message: textMessage } as ChatMessage);
-        this.clientSocket.send(MessageEvents.LocalMessage, newMessage);
+        this.clientSocket.send('game', MessageEvents.LocalMessage, newMessage);
     }
 
-    removeAllListeners() {
-        this.clientSocket.socket.off();
+    removeAllListeners(nameSpace: string) {
+        switch (nameSpace) {
+            case 'lobby':
+                this.clientSocket.lobbySocket.off();
+                break;
+            case 'game':
+                this.clientSocket.gameSocket.off();
+                break;
+            case 'auth':
+                this.clientSocket.authSocket.off();
+                break;
+            default:
+                throw new Error(`Unknown namespace: ${nameSpace}`);
+        }
     }
 
     sendGlobalMessage(textMessage: string): void {
         const newMessage = { tag: MessageTag.Received, message: textMessage, userName: this.username };
-        this.clientSocket.send(MessageEvents.GlobalMessage, newMessage);
+        this.clientSocket.send('game', MessageEvents.GlobalMessage, newMessage);
     }
 
     manageSocket(): void {
-        this.clientSocket.on(GameEvents.GameStarted, (room: GameRoom) => {
+        this.clientSocket.on('game', GameEvents.GameStarted, (room: GameRoom) => {
             this.currentGame.next(room.clientGame);
             this.gameConstants = room.gameConstants;
             this.players.next({ player1: room.player1, player2: room.player2 });
@@ -152,22 +173,23 @@ export class GameManagerService {
         });
 
         this.clientSocket.on(
+            'game',
             GameEvents.RemoveDifference,
             (data: { differencesData: Differences; playerId: string; cheatDifferences: Coordinate[][] }) => {
                 this.handleRemoveDifference(data);
             },
         );
 
-        this.clientSocket.on(GameEvents.TimerUpdate, (timer: number) => {
+        this.clientSocket.on('game', GameEvents.TimerUpdate, (timer: number) => {
             this.timer.next(timer);
             this.captureService.saveReplayEvent(ReplayActions.TimerUpdate, timer);
         });
 
-        this.clientSocket.on(GameEvents.EndGame, (endGameMessage: string) => {
+        this.clientSocket.on('game', GameEvents.EndGame, (endGameMessage: string) => {
             this.endMessage.next(endGameMessage);
         });
 
-        this.clientSocket.on(MessageEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
+        this.clientSocket.on('game', MessageEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
             if (receivedMessage.userName === this.username) {
                 receivedMessage.tag = MessageTag.Sent;
             } else {
@@ -177,21 +199,21 @@ export class GameManagerService {
             // this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, receivedMessage);
         });
 
-        this.clientSocket.on(GameEvents.UpdateDifferencesFound, (differencesFound: number) => {
+        this.clientSocket.on('game', GameEvents.UpdateDifferencesFound, (differencesFound: number) => {
             this.differencesFound.next(differencesFound);
         });
 
-        this.clientSocket.on(GameEvents.GameModeChanged, () => {
+        this.clientSocket.on('game', GameEvents.GameModeChanged, () => {
             this.isGameModeChanged.next(true);
         });
 
-        this.clientSocket.on(GameEvents.GamePageRefreshed, () => {
+        this.clientSocket.on('game', GameEvents.GamePageRefreshed, () => {
             this.isGamePageRefreshed.next(true);
         });
     }
 
     private checkStatus(): void {
-        this.clientSocket.send(GameEvents.CheckStatus);
+        this.clientSocket.send('game', GameEvents.CheckStatus);
     }
 
     private replaceDifference(differences: Coordinate[], isPlayerIdMatch: boolean): void {
@@ -208,7 +230,7 @@ export class GameManagerService {
     }
 
     private handleRemoveDifference(data: { differencesData: Differences; playerId: string; cheatDifferences: Coordinate[][] }): void {
-        const isPlayerIdMatch = data.playerId === this.getSocketId();
+        const isPlayerIdMatch = data.playerId === this.getSocketId('game');
         if (isPlayerIdMatch) {
             this.replaceDifference(data.differencesData.currentDifference, isPlayerIdMatch);
             this.differencesFound.next(data.differencesData.differencesFound);

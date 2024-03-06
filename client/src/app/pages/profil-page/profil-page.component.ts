@@ -48,7 +48,7 @@ export class ProfilPageComponent implements AfterViewInit {
         return this.translate.instant(`bouton.${character}`);
     }
     onSubmitHome() {
-        this.clientsocket.disconnect();
+        this.clientsocket.disconnect('auth');
         this.router.navigate(['/login']);
     }
 
