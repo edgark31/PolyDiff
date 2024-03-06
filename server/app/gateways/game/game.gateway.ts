@@ -26,6 +26,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         private readonly accountManager: AccountManagerService,
     ) {}
 
+    // -------------------------- --- DÉMARRAGE DE PARTIE + GESTION DES LOBBYS
+
     // @SubscribeMessage(GameEvents.StartGameByRoomId)
     // startGame(@ConnectedSocket() socket: Socket) {
     //     this.roomsManagerService.startGame(socket, this.server);
@@ -51,6 +53,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     //     await this.limitedModeService.startNextGame(socket, this.server);
     // }
 
+    // -------------------------- --- DÉROULEMENT DE PARTIE
+
     // @SubscribeMessage(GameEvents.RemoveDifference)
     // validateCoords(@ConnectedSocket() socket: Socket, @MessageBody() coords: Coordinate) {
     //     this.roomsManagerService.validateCoords(socket, coords, this.server);
@@ -60,6 +64,13 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     // async checkStatus(@ConnectedSocket() socket: Socket) {
     //     await this.classicModeService.checkStatus(socket, this.server);
     // }
+
+    // @SubscribeMessage(GameEvents.AbandonGame)
+    // async abandonGame(@ConnectedSocket() socket: Socket) {
+    //     await this.roomsManagerService.abandonGame(socket, this.server);
+    // }
+
+    // -------------------------- --- GESTION DES LOBBYS
 
     // @SubscribeMessage(RoomEvents.UpdateRoomOneVsOneAvailability)
     // updateRoomOneVsOneAvailability(@ConnectedSocket() socket: Socket, @MessageBody() gameId: string) {
@@ -111,21 +122,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     //     this.playersListManagerService.deleteJoinedPlayersByGameId(data.gameId);
     // }
 
-    // @SubscribeMessage(PlayerEvents.CheckIfPlayerNameIsAvailable)
-    // checkIfPlayerNameIsAvailable(@MessageBody() playerPayLoad: PlayerData) {
-    //     this.playersListManagerService.checkIfPlayerNameIsAvailable(playerPayLoad, this.server);
-    // }
-
     // @SubscribeMessage(PlayerEvents.CancelJoining)
     // cancelJoining(@ConnectedSocket() socket: Socket, @MessageBody() gameId: string) {
     //     this.playersListManagerService.cancelJoiningByPlayerId(socket.id, gameId);
     //     const hostId = this.roomsManagerService.getHostIdByGameId(gameId);
     //     this.playersListManagerService.getWaitingPlayerNameList(hostId, gameId, this.server);
-    // }
-
-    // @SubscribeMessage(GameEvents.AbandonGame)
-    // async abandonGame(@ConnectedSocket() socket: Socket) {
-    //     await this.roomsManagerService.abandonGame(socket, this.server);
     // }
 
     // @SubscribeMessage(RoomEvents.CheckIfAnyCoopRoomExists)
@@ -139,6 +140,13 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     //     socket.broadcast.to(roomId).emit(MessageEvents.LocalMessage, data);
     // }
 
+    // -------------------------- --- GESTION DES FICHES (synchronisation, suppression, ajout)
+
+    // @SubscribeMessage(GameCardEvents.GameCardCreated)
+    // gameCardCreated() {
+    //     this.server.emit(GameCardEvents.RequestReload);
+    // }
+
     // @SubscribeMessage(GameCardEvents.GameCardDeleted)
     // gameCardDeleted(@MessageBody() gameId: string) {
     //     this.server.emit(GameCardEvents.RequestReload);
@@ -146,20 +154,17 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     //     this.limitedModeService.handleDeleteGame(gameId);
     // }
 
-    // @SubscribeMessage(GameCardEvents.GameCardCreated)
-    // gameCardCreated() {
-    //     this.server.emit(GameCardEvents.RequestReload);
-    // }
-
-    // @SubscribeMessage(GameCardEvents.ResetTopTime)
-    // resetTopTime(@MessageBody() gameId: string) {
-    //     this.playersListManagerService.resetTopTime(gameId, this.server);
-    // }
-
     // @SubscribeMessage(GameCardEvents.AllGamesDeleted)
     // allGamesDeleted() {
     //     this.server.emit(GameCardEvents.RequestReload);
     //     this.limitedModeService.handleDeleteAllGames();
+    // }
+
+    // -------------------------- --- UNDEFINED
+
+    // @SubscribeMessage(GameCardEvents.ResetTopTime)
+    // resetTopTime(@MessageBody() gameId: string) {
+    //     this.playersListManagerService.resetTopTime(gameId, this.server);
     // }
 
     // @SubscribeMessage(GameCardEvents.ResetAllTopTimes)
@@ -176,35 +181,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     // @SubscribeMessage(GameCardEvents.GamesHistoryDeleted)
     // gamesHistoryDeleted() {
     //     this.server.emit(GameCardEvents.RequestReload);
-    // }
-
-    // @SubscribeMessage(GameEvents.RequestHint)
-    // async requestHint(@ConnectedSocket() socket: Socket) {
-    //     await this.roomsManagerService.addHintPenalty(socket, this.server);
-    // }
-
-    // @SubscribeMessage(ConnectionEvents.UserConnectionRequest)
-    // processConnection(@ConnectedSocket() socket: Socket, @MessageBody() name: string) {
-    //     const canConnect = !Array.from(this.mapSocketWithName.values()).some((value) => value === name);
-    //     socket.emit(ConnectionEvents.UserConnectionRequest, canConnect);
-    //     if (canConnect) {
-    //         this.logger.debug(`ACCEPT :: pour ${String(name)} avec id : ${socket.id}`);
-    //         this.mapSocketWithName.set(socket.id, name);
-    //     } else {
-    //         this.logger.error(`REFUS :: pour ${String(name)} avec id : ${socket.id}`);
-    //     }
-    // }
-
-    // @SubscribeMessage(MessageEvents.GlobalMessage)
-    // processMessage(@MessageBody() dataMessage: ChatMessageGlobal) {
-    //     this.logger.log(`MESSAGE :::: ${dataMessage.userName} a dit ${dataMessage.message}`);
-    //     dataMessage.timestamp = new Date().toLocaleTimeString('en-US', {
-    //         timeZone: 'America/Toronto',
-    //         hour: '2-digit',
-    //         minute: '2-digit',
-    //         second: '2-digit',
-    //     });
-    //     this.server.emit(MessageEvents.GlobalMessage, dataMessage);
     // }
 
     afterInit() {
