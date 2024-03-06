@@ -5,7 +5,6 @@ export const IMG_TYPE_BMP = 'image/bmp';
 export const IMG_TYPE_PNG = 'image/bmp';
 export const IMG_TYPE_JPEG = 'image/jpeg';
 export const IMG_TYPE_JPG = 'image/jpg';
-export const VALID_SIZE = 921654;
 
 export const CANVAS_MEASUREMENTS: CanvasMeasurements = {
     width: IMG_WIDTH,
