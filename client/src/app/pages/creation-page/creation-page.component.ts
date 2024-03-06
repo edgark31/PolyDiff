@@ -6,12 +6,12 @@ import { LEFT_BUTTON } from '@app/constants/constants';
 import { DEFAULT_RADIUS, RADIUS_SIZES } from '@app/constants/difference';
 import { CANVAS_MEASUREMENTS } from '@app/constants/image';
 import { CanvasPosition } from '@app/enum/canvas-position';
-import { CanvasMeasurements, GameDetails } from '@app/interfaces/game-interfaces';
+import { CanvasMeasurements, GameDetails } from '@common/game-interfaces';
+import { CardManagerService } from '@app/services/card-manager-service/card-manager.service';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { ForegroundService } from '@app/services/foreground-service/foreground.service';
 import { ImageService } from '@app/services/image-service/image.service';
-import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 
 @Component({
@@ -33,11 +33,10 @@ export class CreationPageComponent implements AfterViewInit, OnDestroy {
         private readonly imageService: ImageService,
         private readonly foregroundService: ForegroundService,
         private readonly matDialog: MatDialog,
-        private readonly communicationService: CommunicationService,
         private readonly router: Router,
-        private readonly roomManagerService: RoomManagerService,
         private readonly clientSocket: ClientSocketService,
         private readonly welcomeService: WelcomeService,
+        private readonly cardManagerService: CardManagerService,
     ) {
         this.radiusSizes = RADIUS_SIZES;
         this.radius = DEFAULT_RADIUS;
@@ -84,10 +83,8 @@ export class CreationPageComponent implements AfterViewInit, OnDestroy {
             .afterClosed()
             .subscribe((game: GameDetails) => {
                 if (game) {
-                    this.communicationService.postGame(game).subscribe(() => {
-                        this.router.navigate(['/admin']);
-                        this.roomManagerService.notifyGameCardCreated();
-                    });
+                    this.cardManagerService.createCard(game);
+                    this.router.navigate(['/admin']);
                 }
             });
     }

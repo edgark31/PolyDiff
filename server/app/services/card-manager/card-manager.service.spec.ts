@@ -16,7 +16,7 @@ import * as fs from 'fs';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Connection, Model } from 'mongoose';
 import { SinonStubbedInstance, createStubInstance } from 'sinon';
-import { DatabaseService } from './database.service';
+import { DatabaseService } from './card-manager.service';
 
 describe('DatabaseService', () => {
     let dataBaseService: DatabaseService;

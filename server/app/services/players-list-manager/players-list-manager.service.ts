@@ -1,7 +1,7 @@
-import { GameService } from '@app/services/game/game.service';
+import { CardManagerService } from '@app/services/card-manager/card-manager.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { MAX_TIMES_INDEX, NOT_FOUND } from '@common/constants';
-import { GameCardEvents, MessageEvents, PlayerEvents, RoomEvents } from '@common/enums';
+import { MessageEvents, PlayerEvents, RoomEvents } from '@common/enums';
 import { Differences, GameRoom, NewRecord, Player, PlayerData, PlayerNameAvailability, PlayerTime } from '@common/game-interfaces';
 import { Injectable } from '@nestjs/common';
 import * as io from 'socket.io';
@@ -10,7 +10,7 @@ import * as io from 'socket.io';
 export class PlayersListManagerService {
     private joinedPlayersByGameId: Map<string, Player[]>;
 
-    constructor(private readonly gameService: GameService, private readonly messageManagerService: MessageManagerService) {
+    constructor(private readonly cardManagerService: CardManagerService, private readonly messageManagerService: MessageManagerService) {
         this.joinedPlayersByGameId = new Map<string, Player[]>();
     }
 
@@ -74,7 +74,7 @@ export class PlayersListManagerService {
     }
 
     async resetAllTopTime(server: io.Server): Promise<void> {
-        await this.gameService.resetAllTopTimes();
+        await this.cardManagerService.resetAllTopTimes();
         server.emit(GameCardEvents.RequestReload);
     }
 
@@ -83,17 +83,17 @@ export class PlayersListManagerService {
     }
 
     async resetTopTime(gameId: string, server: io.Server): Promise<void> {
-        await this.gameService.resetTopTimesGameById(gameId);
+        await this.cardManagerService.resetTopTimesGameById(gameId);
         server.emit(GameCardEvents.RequestReload);
     }
 
     async updateTopBestTime(room: GameRoom, playerName: string, server: io.Server): Promise<number> {
         const { clientGame, timer } = room;
-        if (!(await this.gameService.verifyIfGameExists(clientGame.name))) return;
-        const topTimes = await this.gameService.getTopTimesGameById(clientGame.id, clientGame.mode);
+        if (!(await this.cardManagerService.verifyIfGameExists(clientGame.name))) return;
+        const topTimes = await this.cardManagerService.getTopTimesGameById(clientGame.id, clientGame.mode);
         if (topTimes[MAX_TIMES_INDEX].time > timer) {
             const topTimeIndex = this.insertNewTopTime(playerName, timer, topTimes);
-            await this.gameService.updateTopTimesGameById(clientGame.id, clientGame.mode, topTimes);
+            await this.cardManagerService.updateTopTimesGameById(clientGame.id, clientGame.mode, topTimes);
             server.emit(GameCardEvents.RequestReload);
             const newRecord = { playerName, rank: topTimeIndex, gameName: clientGame.name, gameMode: clientGame.mode } as NewRecord;
             this.sendNewTopTimeMessage(newRecord, server);

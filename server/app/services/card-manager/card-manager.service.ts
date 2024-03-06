@@ -16,7 +16,7 @@ import * as fs from 'fs';
 import { Model } from 'mongoose';
 
 @Injectable()
-export class DatabaseService implements OnModuleInit {
+export class CardManagerService implements OnModuleInit {
     private defaultConstants: GameConstants = {
         countdownTime: DEFAULT_COUNTDOWN_VALUE,
         penaltyTime: DEFAULT_HINT_PENALTY,
@@ -58,6 +58,7 @@ export class DatabaseService implements OnModuleInit {
             return Promise.reject(`Failed to get top times: ${error}`);
         }
     }
+
     async getGameById(id: string): Promise<Game> {
         try {
             return await this.gameModel.findById(id, '-__v').exec();

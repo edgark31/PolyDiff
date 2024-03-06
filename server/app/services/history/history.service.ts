@@ -1,15 +1,15 @@
-import { GameService } from '@app/services/game/game.service';
 import { PADDING_N_DIGITS } from '@common/constants';
 import { HistoryEvents, PlayerStatus } from '@common/enums';
 import { GameHistory, GameRoom } from '@common/game-interfaces';
 import { Injectable } from '@nestjs/common';
 import * as io from 'socket.io';
+import { CardManagerService } from '@app/services/card-manager/card-manager.service';
 
 @Injectable()
 export class HistoryService {
     private pendingGames: Map<string, GameHistory>;
 
-    constructor(private readonly gameService: GameService) {
+    constructor(private readonly cardManagerService: CardManagerService) {
         this.pendingGames = new Map<string, GameHistory>();
     }
 
@@ -42,7 +42,7 @@ export class HistoryService {
         if (!gameHistory) return;
         gameHistory.duration = new Date().getTime() - gameHistory.duration;
         this.pendingGames.delete(roomId);
-        await this.gameService.saveGameHistory(gameHistory);
+        await this.cardManagerService.saveGameHistory(gameHistory);
         server.emit(HistoryEvents.RequestReload);
     }
 
