@@ -1,4 +1,5 @@
 import { CommunicationService } from '@app/services/communication-service/communication.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -18,16 +19,23 @@ export class ConfirmPasswordPageComponent implements OnInit {
         password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
 
-    constructor(private readonly communication: CommunicationService, private route: ActivatedRoute, private router: Router) {}
+    constructor(
+        private readonly communication: CommunicationService,
+        private route: ActivatedRoute,
+        private router: Router,
+        public welcomeService: WelcomeService,
+    ) {}
 
     ngOnInit() {
         this.name = this.route.snapshot.queryParams['token'];
+        console.log(this.welcomeService.getlinkValid() + 'scxsdqldjskj');
     }
     onSubmit() {
         if (this.recoverPasswordForm.value.password === this.recoverPasswordForm.value.confirmPassword && this.recoverPasswordForm.value.password) {
             this.communication.modifyPassword(this.name, this.recoverPasswordForm.value.password).subscribe({
                 next: () => {
                     this.router.navigate(['/login']);
+                    this.welcomeService.setlinkValid(false);
                 },
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';

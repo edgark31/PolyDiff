@@ -1,4 +1,4 @@
-import { Credentials } from '@app/model/database/account';
+import { Credentials, Theme } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MailService } from '@app/services/mail-service/mail-service';
 import { Body, Controller, Delete, HttpStatus, Post, Put, Res } from '@nestjs/common';
@@ -102,6 +102,26 @@ export class AccountController {
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NOT_FOUND).json(error);
+        }
+    }
+
+    @Put('theme')
+    async modifyTheme(@Body('oldUsername') oldUsername: string, @Body('newTheme') newtheme: Theme, @Res() response: Response) {
+        try {
+            await this.accountManager.modifyTheme(oldUsername, newtheme);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.CONFLICT).json(error);
+        }
+    }
+
+    @Put('langage')
+    async modifyLanguage(@Body('oldUsername') oldUsername: string, @Body('newLangage') newLangage: string, @Res() response: Response) {
+        try {
+            await this.accountManager.modifyLanguage(oldUsername, newLangage);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.CONFLICT).json(error);
         }
     }
 }

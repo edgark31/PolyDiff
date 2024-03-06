@@ -101,8 +101,8 @@ export class CommunicationService {
         );
     }
 
-    modifyTheme(oldusername: string, oldtheme: Theme, newtheme: Theme): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/theme`, { oldUsername: oldusername, oldTheme: oldtheme, newTheme: newtheme }).pipe(
+    modifyTheme(oldusername: string, newtheme: Theme): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/theme`, { oldUsername: oldusername, newTheme: newtheme }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -112,8 +112,8 @@ export class CommunicationService {
         );
     }
 
-    modifyLangage(oldusername: string, oldlangage: string, newlangage: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/langage`, { oldUsername: oldusername, oldLangage: oldlangage, newLangage: newlangage }).pipe(
+    modifyLangage(oldusername: string, newlangage: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/langage`, { oldUsername: oldusername, newLangage: newlangage }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -122,17 +122,6 @@ export class CommunicationService {
             catchError(this.handleError<void>('modifylangage')),
         );
     }
-    // modifyProfile(oldprofil: modifYProfile, newprofile: modifYProfile): Observable<void> {
-    //     return this.http.put<void>(`${this.accountUrl}/Profile`, { oldProfil: oldprofil, newProfile: newprofile }).pipe(
-    //         // eslint-disable-next-line @typescript-eslint/no-empty-function
-    //         tap(() => {
-    //             // eslint-disable-next-line no-console
-    //             console.log('User modify');
-    //         }),
-    //         catchError(this.handleError<void>('modifyUser')),
-    //     );
-    // }
-
     recuperatePassword(password: string): Observable<boolean> {
         console.log('commu' + password);
         return this.http.post<{ success: boolean }>(`${this.accountUrl}/admin`, { Password: password }).pipe(

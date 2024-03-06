@@ -1,3 +1,4 @@
+import { Theme } from './../../model/database/account';
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
@@ -38,7 +39,7 @@ export class AccountManagerService implements OnModuleInit {
                     stats: {} as Statistics,
                     friends: [],
                     friendRequests: [],
-                    language: '',
+                    language: 'en',
                     theme: THEME_PERSONNALIZATION[0],
                 },
             };
@@ -108,6 +109,40 @@ export class AccountManagerService implements OnModuleInit {
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change pseudo --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async modifyTheme(oldUsername: string, newTheme: Theme): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.theme = newTheme;
+
+            await accountFound.save();
+            this.logger.verbose('Theme change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change theme --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async modifyLanguage(oldUsername: string, newLanguage: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.language = newLanguage;
+
+            await accountFound.save();
+            this.logger.verbose('language change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change language --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }

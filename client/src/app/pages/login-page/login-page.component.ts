@@ -45,15 +45,6 @@ export class LoginPageComponent {
                     this.gameManager.username = account.credentials.username;
                     this.welcomeservice.account.profile.avatar = `http://localhost:3000/${this.gameManager.username}.png`;
                     this.router.navigate(['/home']);
-                    // const A = account;
-                    // A.credentials.email = 'gningmohamedlamine@gmail.com';
-                    // this.communication.sendMail(A).subscribe({
-                    //     // eslint-disable-next-line @typescript-eslint/no-empty-function
-                    //     next: () => {},
-                    //     error: (error: HttpErrorResponse) => {
-                    //         this.feedback = error.error || 'An unexpected error occurred. Please try again.';
-                    //     },
-                    // });
                 },
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';

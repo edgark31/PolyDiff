@@ -1,4 +1,5 @@
 import { CommunicationService } from '@app/services/communication-service/communication.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
@@ -17,27 +18,20 @@ export class RecoverPasswordPageComponent {
         email: new FormControl('', []),
     });
 
-    constructor(private readonly communication: CommunicationService) {}
+    constructor(private readonly communication: CommunicationService, private readonly welcomeService: WelcomeService) {}
 
     onSubmit() {
-        // if (this.recoverPasswordForm.value.username && this.recoverPasswordForm.value.password) {
-        //     this.clientSocket.connect(this.recoverPasswordForm.value.username, 'auth');
-        //     this.clientSocket.on(ConnectionEvents.UserConnectionRequest, (isConnected: boolean) => {
-        //         if (isConnected) {
-        //             this.router.navigate(['/home']);
-        //         }
-        //     });
-        //     this.gameManager.manageSocket();
-        //     this.gameManager.username = this.recoverPasswordForm.value.username;
-        // }
         if (this.recoverPasswordForm.value.email) {
             this.communication.sendMail(this.recoverPasswordForm.value.email).subscribe({
                 // eslint-disable-next-line @typescript-eslint/no-empty-function
-                next: () => {},
+                next: () => {
+                    this.welcomeService.setlinkValid(true);
+                },
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';
                 },
             });
         }
+        console.log(this.welcomeService.isLinkValid + 'scxsdqldjskj');
     }
 }
