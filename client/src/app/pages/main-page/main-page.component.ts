@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ChatMessageGlobal } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
+import { ModalAdminComponent } from './../../components/modal-admin/modal-admin.component';
 @Component({
     selector: 'app-main-page',
     templateUrl: './main-page.component.html',
@@ -17,9 +19,14 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
         // cprivate readonly clientSocket: ClientSocketService,
         private readonly gameManager: GameManagerService,
         private readonly router: Router,
+        private dialog: MatDialog,
     ) {
         this.messages = [];
         this.onDestroy$ = new Subject();
+    }
+
+    manageGames(): void {
+        this.dialog.open(ModalAdminComponent);
     }
 
     ngOnDestroy(): void {

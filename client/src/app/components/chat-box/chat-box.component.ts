@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
-import { ChatMessageGlobal } from '@common/game-interfaces';
+import { Chat } from '@common/game-interfaces';
 
 @Component({
     selector: 'app-chat-box',
@@ -9,7 +9,7 @@ import { ChatMessageGlobal } from '@common/game-interfaces';
     styleUrls: ['./chat-box.component.scss'],
 })
 export class ChatBoxComponent {
-    @Input() messages: ChatMessageGlobal[];
+    @Input() messages: Chat[];
     @Input() gameMode: string;
     @Input() isReplaying: boolean;
     @Output() private add: EventEmitter<string>;
@@ -28,6 +28,6 @@ export class ChatBoxComponent {
 
     onClose(): void {
         this.router.navigate(['/login']);
-        this.clientSocket.disconnect();
+        this.clientSocket.disconnect('auth');
     }
 }

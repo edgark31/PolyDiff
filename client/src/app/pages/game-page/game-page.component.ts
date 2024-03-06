@@ -141,7 +141,7 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
         this.onDestroy$.next();
         this.onDestroy$.complete();
         this.gameAreaService.resetCheatMode();
-        this.gameManager.removeAllListeners();
+        this.gameManager.removeAllListeners('game');
     }
 
     private isLimitedMode(): boolean {
@@ -206,9 +206,9 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     private getPlayers(): void {
         this.gameManager.players$.pipe(takeUntil(this.onDestroy$)).subscribe((players) => {
             this.players = players;
-            if (players.player1.playerId === this.gameManager.getSocketId()) {
+            if (players.player1.playerId === this.gameManager.getSocketId('game')) {
                 this.player = players.player1.name;
-            } else if (players.player2 && players.player2.playerId === this.gameManager.getSocketId()) {
+            } else if (players.player2 && players.player2.playerId === this.gameManager.getSocketId('game')) {
                 this.player = players.player2.name;
             }
         });
