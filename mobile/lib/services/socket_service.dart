@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/chat_message_model.dart';
+import 'package:mobile/pages/game_page.dart';
+import 'package:mobile/providers/room_data_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends ChangeNotifier {
@@ -109,5 +112,54 @@ class SocketService extends ChangeNotifier {
     print('Checking name : $name');
     socket.emit(ConnectionEvents.UserConnectionRequest.name, name);
     inputName = name;
+  }
+
+  // GAME EMITS
+  void createRoom(String gameId) {
+    socket.emit('createClassicRoom', {'gameId': gameId});
+  }
+
+  void joinRoom(String username, String roomId) {
+    if (username.isNotEmpty && roomId.isNotEmpty) {
+      socket.emit('joinRoom', {
+        'username': username,
+        'roomId': roomId,
+      });
+    }
+  }
+
+  //GAME LISTENERS
+  void createRoomSuccessListener(BuildContext context) {
+    socket.on('createClassicRoomSuccess', (room) {
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .updateRoomData(room);
+      Navigator.pushNamed(context, GamePage.routeName);
+    });
+  }
+
+  void joinRoomSuccessListener(BuildContext context) {
+    socket.on('joinClassicRoomSuccess', (room) {
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .updateRoomData(room);
+      Navigator.pushNamed(context, GamePage.routeName);
+    });
+  }
+
+  void errorOccuredListener(BuildContext context) {
+    socket.on('errorOccurred', (data) {
+      //
+    });
+  }
+
+  //FUNCTIONS
+  void updatePlayersState(BuildContext context) {
+    socket.on('updatePlayers', (playerData) {
+      Provider.of<RoomDataProvider>(context, listen: false).updatePlayer1(
+        playerData[0],
+      );
+      Provider.of<RoomDataProvider>(context, listen: false).updatePlayer2(
+        playerData[1],
+      );
+    });
   }
 }

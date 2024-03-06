@@ -3,6 +3,7 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
+import 'package:mobile/providers/room_data_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'services/socket_service.dart';
@@ -15,6 +16,7 @@ void main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageUploader()),
     ChangeNotifierProvider(create: (context) => SocketService()),
+    ChangeNotifierProvider(create: (context) => RoomDataProvider()),
   ], child: const MyApp()));
 }
 
