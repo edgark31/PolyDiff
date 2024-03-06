@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
-import 'package:mobile/models/chat_message_model.dart';
+import 'package:mobile/models/chat_message.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
 

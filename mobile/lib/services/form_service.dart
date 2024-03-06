@@ -1,20 +1,20 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:mobile/models/credentials.dart';
+import 'package:mobile/models/models.dart';
 
 class FormService {
-  final baseUrl = 'http://localhost:3000/api';
+  final String baseUrl = 'http://localhost:3000/api';
 
   FormService(String baseUrl);
 
-  Future<String?> register(Credentials credentials, String id) async {
+  Future<String?> register(Credentials credentials, String base64Image) async {
     final url = '$baseUrl/account/register';
 
     try {
       final requestBody = {
         'creds': credentials.toJson(),
-        'id': id,
+        'avatar': base64Image,
       };
       final response = await http.post(
         Uri.parse(url),
@@ -34,7 +34,7 @@ class FormService {
   }
 
   Future<String?> connect(Credentials credentials) async {
-    final url = '$baseUrl/account/login';
+    final String url = '$baseUrl/account/login';
     try {
       final response = await http.post(
         Uri.parse(url),
