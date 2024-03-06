@@ -1,15 +1,15 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LANGUAGES, THEME_PERSONNALIZATION } from './../../../../../common/constants';
 import { Theme } from './../../../../../common/game-interfaces';
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { ImportDialogComponent } from '@app/components/import-dialog-box/import-dialog-box.component';
+import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
