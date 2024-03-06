@@ -1,5 +1,6 @@
 import { Credentials } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
+import { MailService } from '@app/services/mail-service/mail-service';
 import { Body, Controller, Delete, HttpStatus, Post, Put, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -7,7 +8,7 @@ import { Response } from 'express';
 @ApiTags('Accounts')
 @Controller('account')
 export class AccountController {
-    constructor(private readonly accountManager: AccountManagerService) {}
+    constructor(private readonly accountManager: AccountManagerService, private readonly mailservice: MailService) {}
 
     @Post('register')
     async register(@Body('creds') creds: Credentials, @Body('id') id: string, @Res() response: Response) {
@@ -39,6 +40,16 @@ export class AccountController {
         }
     }
 
+    @Put('password')
+    async changePassword(@Body('oldUsername') oldUsername: string, @Body('newPassword') newpassword: string, @Res() response: Response) {
+        try {
+            await this.accountManager.changePassword(oldUsername, newpassword);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.CONFLICT).json(error);
+        }
+    }
+
     @Put('avatar/upload')
     async uploadAvatar(@Body('username') username: string, @Body('avatar') avatar: string, @Res() response: Response) {
         try {
@@ -59,10 +70,35 @@ export class AccountController {
         }
     }
 
+    // @Post('admin')
+    // async connexionToAdmin(@Body('Password') password: string, @Res() response: Response) {
+    //     try {
+    //         const isValid = await this.accountManager.connexionToAdmin(password);
+    //         response.status(HttpStatus.OK).json(isValid);
+    //     } catch (error) {
+    //         response.status(HttpStatus.UNAUTHORIZED).json(error);
+    //     }
+    // }
+    @Post('admin')
+    connexionToAdmin(@Body('Password') password: string): { success: boolean } {
+        const isValid = this.accountManager.connexionToAdmin(password);
+        // response.status(HttpStatus.OK).json({ success: isValid });
+        return { success: isValid };
+    }
     @Delete('delete')
     async delete(@Res() response: Response) {
         try {
             await this.accountManager.delete();
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.NOT_FOUND).json(error);
+        }
+    }
+
+    @Put('mail')
+    async sendMail(@Body('email') mail: string, @Res() response: Response) {
+        try {
+            await this.mailservice.signUp(mail);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NOT_FOUND).json(error);

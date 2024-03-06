@@ -1,5 +1,6 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ConfirmPasswordPageComponent } from '@app/pages/Confirm-password-page/confirm-password-page.component';
 import { AdminPageComponent } from '@app/pages/admin-page/admin-page.component';
 import { ChatPageComponent } from '@app/pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from '@app/pages/config-page/config-page.component';
@@ -13,7 +14,7 @@ import { ProfilPageComponent } from '@app/pages/profil-page/profil-page.componen
 import { RecoverPasswordPageComponent } from '@app/pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from '@app/pages/registration-page/registration-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
-import { AdminGuard } from '@app/services/admin-guard/admin.guard.service';
+import { AdminGuard } from '@app/services/adminguard/admin.guard.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -27,9 +28,10 @@ export const routes: Routes = [
     { path: 'limited', component: LimitedTimePageComponent },
     { path: 'registration', component: RegistrationPageComponent },
     { path: 'recover-password', component: RecoverPasswordPageComponent },
+    { path: 'confirm-password', component: ConfirmPasswordPageComponent },
     { path: 'personalization', component: PersonnalizationPageComponent },
     { path: 'profil', component: ProfilPageComponent },
-    { path: 'admin', component: AdminPageComponent, canActivate: [() => inject(AdminGuard).canActivateFunc()] },
+    { path: 'admin', component: AdminPageComponent, canActivate: [AdminGuard] },
 ];
 
 @NgModule({

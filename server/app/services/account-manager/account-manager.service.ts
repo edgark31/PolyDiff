@@ -10,7 +10,7 @@ import { Model } from 'mongoose';
 @Injectable()
 export class AccountManagerService implements OnModuleInit {
     connectedUsers: Map<string, Profile> = new Map<string, Profile>(); // Key is the userName :: ALWAYS USE THIS MAP TO GET THE CONNECTED USERS
-
+    password: string = 'y';
     constructor(
         private readonly logger: Logger,
         @InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>,
@@ -94,6 +94,24 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
+    async changePassword(oldUsername: string, newPasword: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+            console.log(oldUsername + 'nom venant du courriel');
+            console.log(accountFound.credentials.password + 'passwoprd');
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.credentials.password = newPasword;
+
+            await accountFound.save();
+            this.logger.verbose('Password change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change pseudo --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
     async uploadAvatar(username: string, avatar: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
@@ -150,4 +168,22 @@ export class AccountManagerService implements OnModuleInit {
             this.logger.verbose(`${key}`);
         });
     }
+
+    // async connexionToAdmin(password: string): Promise<boolean> {
+    //     try {
+    //         console.log(password + 'qdsdss');
+    //         if (password !== 'admin') throw new Error('Wrong password');
+    //         return Promise.resolve(password === 'admin');
+    //     } catch (error) {
+    //         this.logger.error(`Failed to connect --> ${error.message}`);
+    //         return Promise.reject(`${error}`);
+    //     }
+    // }
+
+    connexionToAdmin(password: string): boolean {
+        console.log(password + 'qdsdss');
+        return password === 'admin';
+    }
 }
+
+//

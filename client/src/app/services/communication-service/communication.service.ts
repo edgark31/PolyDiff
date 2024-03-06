@@ -57,6 +57,18 @@ export class CommunicationService {
         );
     }
 
+    sendMail(mail: string): Observable<void> {
+        console.log('yooooooooooooooooooo');
+        return this.http.put<void>(`${this.accountUrl}/mail`, { email: mail }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('mail modify');
+            }),
+            catchError(this.handleError<void>('modifyUser')),
+        );
+    }
+
     updateAvatar(oldusername: string, newavatar: string): Observable<void> {
         return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { oldUsername: oldusername, newAvatar: newavatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -78,8 +90,8 @@ export class CommunicationService {
         );
     }
 
-    modifyPassword(oldusername: string, oldpassword: string, newpassword: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/password`, { oldUsername: oldusername, oldpassword, newPassword: newpassword }).pipe(
+    modifyPassword(oldusername: string, newpassword: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/password`, { oldUsername: oldusername, newPassword: newpassword }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -122,9 +134,10 @@ export class CommunicationService {
     // }
 
     recuperatePassword(password: string): Observable<boolean> {
+        console.log('commu' + password);
         return this.http.post<{ success: boolean }>(`${this.accountUrl}/admin`, { Password: password }).pipe(
-            map((response) => response.success), // transform the response to boolean
-            catchError(this.handleError<boolean>('Recuperate Password', false)), // handle error and return false or some default value
+            map((response) => response.success),
+            catchError(this.handleError<boolean>('Recuperate Password', false)),
         );
     }
 

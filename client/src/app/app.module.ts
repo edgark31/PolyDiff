@@ -25,7 +25,7 @@ import { CreationGameDialogComponent } from '@app/components/creation-game-dialo
 import { GameInfosComponent } from '@app/components/game-infos/game-infos.component';
 import { GameSheetComponent } from '@app/components/game-sheet/game-sheet.component';
 import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
-import { AppRoutingModule } from '@app/modules/app-routing.module';
+import { AppRoutingModule, routes } from '@app/modules/app-routing.module';
 import { AppMaterialModule } from '@app/modules/material.module';
 import { AppComponent } from '@app/pages/app/app.component';
 import { CreationPageComponent } from '@app/pages/creation-page/creation-page.component';
@@ -53,6 +53,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
+import { ConfirmPasswordPageComponent } from './pages/Confirm-password-page/confirm-password-page.component';
 import { AdminPageComponent } from './pages/admin-page/admin-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
@@ -107,6 +108,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         ProfilPageComponent,
         ModalAdminComponent,
         AdminPageComponent,
+        ConfirmPasswordPageComponent,
     ],
     imports: [
         AppMaterialModule,
@@ -134,6 +136,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         MatIconModule,
         MatSidenavModule,
         MatListModule,
+        RouterModule.forRoot(routes),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

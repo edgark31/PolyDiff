@@ -94,16 +94,12 @@ export class PersonnalizationPageComponent implements OnInit {
     }
 
     onModifyPassword() {
-        this.communication
-            .modifyPassword(this.gameManager.username, this.welcomeService.account.credentials.password, this.selectPassword)
-            .subscribe({
-                next: () => {
-                    this.welcomeService.account.credentials.password = this.selectPassword;
-                },
-                error: (error: HttpErrorResponse) => {
-                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
-                },
-            });
+        this.communication.modifyPassword(this.gameManager.username, this.selectPassword).subscribe({
+            next: () => {},
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
     }
 
     onModifyTheme() {

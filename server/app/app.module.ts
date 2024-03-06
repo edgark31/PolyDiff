@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AccountController } from './controllers/account/account.controller';
+
 import { GameController } from './controllers/game/game.controller';
 import { AuthGateway } from './gateways/auth/auth.gateway';
 import { GameGateway } from './gateways/game/game.gateway';
@@ -16,7 +17,6 @@ import { GameCard, gameCardSchema } from './model/database/game-card';
 import { GameConstants, gameConstantsSchema } from './model/database/game-config-constants';
 import { GameHistory, gameHistorySchema } from './model/database/game-history';
 import { AccountManagerService } from './services/account-manager/account-manager.service';
-import { AuthService } from './services/auth-manager/auth-manager.service';
 import { ClassicModeService } from './services/classic-mode/classic-mode.service';
 import { DatabaseService } from './services/database/database.service';
 import { GameListsManagerService } from './services/game-lists-manager/game-lists-manager.service';
@@ -32,12 +32,10 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
 @Module({
     imports: [
         MailerModule.forRootAsync({
-            // imports: [ConfigModule], // import module if not enabled globally
             useFactory: async (config: ConfigService) => ({
-                // transport: config.get("MAIL_TRANSPORT"),
-                // or
                 transport: {
                     host: config.get('MAIL_HOST'),
+                    port: 587,
                     secure: false,
                     auth: {
                         user: config.get('MAIL_USER'),
@@ -48,7 +46,7 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
                     from: `"No Reply" <${config.get('MAIL_FROM')}>`,
                 },
                 template: {
-                    dir: join(__dirname, 'templates'),
+                    dir: join(__dirname, './templates'),
                     adapter: new HandlebarsAdapter(),
                     options: {
                         strict: true,
@@ -95,7 +93,6 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
         AccountManagerService,
         ImageManagerService,
         MailService,
-        AuthService,
     ],
     exports: [MailService],
 })
