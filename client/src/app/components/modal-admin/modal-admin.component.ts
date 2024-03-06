@@ -27,9 +27,8 @@ export class ModalAdminComponent {
         this.welcomeService.validate(this.password).then((isValid) => {
             if (isValid) {
                 this.isPasswordWrong = false;
-                this.clientSocketService.connect(this.welcomeService.account.credentials.username, 'lobby');
-                this.router.navigate(['/admin']);
                 this.dialogRef.close();
+                this.router.navigate(['/admin']);
             } else {
                 this.isPasswordWrong = true;
             }

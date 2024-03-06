@@ -4,9 +4,13 @@ import { LimitedModeService } from '@app/services/limited-mode/limited-mode.serv
 import { PlayersListManagerService } from '@app/services/players-list-manager/players-list-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { ConnectedSocket, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
+import { CardEvents } from '@common/enums';
+import { CardEvents } from '@common/enums';
+import { CardManagerService } from '@app/services/card-manager/card-manager.service';
+import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 
 @WebSocketGateway({
     namespace: '/game',
@@ -19,11 +23,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     // eslint-disable-next-line max-params -- services are needed for the gateway
     constructor(
         private readonly logger: Logger,
-        private readonly classicModeService: ClassicModeService,
-        private readonly playersListManagerService: PlayersListManagerService,
-        private readonly roomsManagerService: RoomsManagerService,
-        private readonly limitedModeService: LimitedModeService,
         private readonly accountManager: AccountManagerService,
+        private readonly cardManager: CardManagerService,
     ) {}
 
     // -------------------------- --- DÉMARRAGE DE PARTIE + GESTION DES LOBBYS
@@ -142,10 +143,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     // -------------------------- --- GESTION DES FICHES (synchronisation, suppression, ajout)
 
-    // @SubscribeMessage(GameCardEvents.GameCardCreated)
-    // gameCardCreated() {
-    //     this.server.emit(GameCardEvents.RequestReload);
-    // }
+    @SubscribeMessage(CardEvents.CardCreated)
+    handleCardCreation(@ConnectedSocket() socket: Socket, @MessageBody() card: CreateGameDto) {
+        this.cardManager.addGameInDb(card);
+        this.server.emit(CardEvents.RequestReload);
+    }
 
     // @SubscribeMessage(GameCardEvents.GameCardDeleted)
     // gameCardDeleted(@MessageBody() gameId: string) {
@@ -185,7 +187,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     afterInit() {
         setInterval(() => {
-            this.roomsManagerService.updateTimers(this.server);
+            // this.roomsManagerService.updateTimers(this.server);
         }, DELAY_BEFORE_EMITTING_TIME);
     }
 

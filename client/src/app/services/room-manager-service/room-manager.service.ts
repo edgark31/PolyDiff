@@ -223,13 +223,13 @@ export class RoomManagerService {
         //     this.refusedPlayerId.next(playerId);
         // });
 
-        this.clientSocket.on('lobby', CardEvents.GameDeleted, (gameId: string) => {
-            this.deletedGameId.next(gameId);
-        });
+        // this.clientSocket.on('lobby', CardEvents.GameDeleted, (gameId: string) => {
+        //     this.deletedGameId.next(gameId);
+        // });
 
-        this.clientSocket.on('lobby', CardEvents.RequestReload, () => {
-            this.isGameCardsReloadNeeded.next(true);
-        });
+        // this.clientSocket.on('lobby', CardEvents.RequestReload, () => {
+        //     this.isGameCardsReloadNeeded.next(true);
+        // });
 
         // this.clientSocket.on('lobby', HistoryEvents.RequestReload, () => {
         //     this.isGameHistoryReloadNeeded.next(true);
