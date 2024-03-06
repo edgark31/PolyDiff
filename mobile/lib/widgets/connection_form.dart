@@ -3,11 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/credentials.dart';
 import 'package:mobile/services/form_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
+import 'package:provider/provider.dart';
 
 class ConnectionForm extends StatefulWidget {
   @override
@@ -50,7 +53,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
     double bottomPadding = MediaQuery.of(context).viewInsets.bottom > 0
         ? 20
         : MediaQuery.of(context).size.height * 0.3;
-    //final socketService = context.watch<SocketService>();
+    final socketService = context.watch<SocketService>();
     return Stack(
       children: [
         SingleChildScrollView(
@@ -91,6 +94,10 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       String? serverErrorMessage =
                           await formService.connect(credentials);
                       if (serverErrorMessage == null) {
+                        // TODO: connect auth socket with username in query
+                        socketService.setName(userNameController.text);
+                        socketService.setup();
+                        socketService.connect(SocketType.Auth);
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       } else {
                         setState(() {

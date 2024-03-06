@@ -4,37 +4,22 @@ import 'package:mobile/models/chat_message_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends ChangeNotifier {
-  // TODO: fix singleton issue
-  static final SocketService _singleton = SocketService._internal();
-
-  factory SocketService() {
-    return _singleton;
-  }
-
-  SocketService._internal();
   static const String serverIP = '127.0.0.1';
   // static const String serverIP = '34.118.163.79';
   static const String serverPort = '3000';
   static const String serverURL = 'http://$serverIP:$serverPort';
   static final List<ChatMessage> messages = [];
-  // String approvedName = '';
-  // String inputName = '';
   String approvedName = 'admin'; // TODO: change to user input
-  String inputName = 'admin'; // TODO: change to user input
   static IO.Socket authSocket = IO.io(serverURL, <String, dynamic>{
     'transports': ['websocket'],
     'autoConnect': false,
     'query': 'name=admin' // TODO: change to user input
   });
 
-  // bool isConnectionApproved = false;
-  // bool isSocketConnected = false;
   bool isConnectionApproved = true; // TODO : connect with connection page
   bool isSocketConnected = true; // TODO : connect with connection page
 
   String get userName => approvedName;
-  bool get connectionStatus => isConnectionApproved;
-  bool get socketStatus => isSocketConnected;
   List<ChatMessage> get allMessages => List.unmodifiable(messages);
 
   void setup() {
@@ -53,19 +38,6 @@ class SocketService extends ChangeNotifier {
     });
 
     //Event listeners
-    authSocket.on(ConnectionEvents.UserConnectionRequest.name, (data) {
-      print('UserConnectionRequest: $data');
-      isConnectionApproved = data;
-      if (!isConnectionApproved) {
-        disconnect();
-      } else if (inputName != '') {
-        approvedName = inputName;
-      }
-      connectionStatus
-          ? print('Connection approved')
-          : print('Connection denied');
-      notifyListeners();
-    });
 
     authSocket.on(MessageEvents.GlobalMessage.name, (data) {
       print('GlobalMessage received: $data');
@@ -91,13 +63,12 @@ class SocketService extends ChangeNotifier {
       case SocketType.Game:
         break;
     }
-    messages.clear(); // TODO : Figure out if we need this
+    // messages.clear(); // TODO : Figure out if we need this
   }
 
   void disconnect() {
     print('disconnecting from socket_service');
     approvedName = '';
-    inputName = '';
     authSocket.disconnect();
   }
 
@@ -119,19 +90,13 @@ class SocketService extends ChangeNotifier {
 
   void addMessage(ChatMessage message) {
     print('Adding message${message.message}');
-
     messages.add(message);
     notifyListeners();
     print(allMessages.length);
   }
 
-  void checkName(String name) {
-    authSocket.dispose();
-    setup();
-    connect(SocketType.Auth);
-
-    print('Checking name : $name');
-    authSocket.emit(ConnectionEvents.UserConnectionRequest.name, name);
-    inputName = name;
+  void setName(String name) {
+    print('Setting name : $name');
+    approvedName = name;
   }
 }

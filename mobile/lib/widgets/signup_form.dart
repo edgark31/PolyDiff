@@ -5,11 +5,9 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/credentials.dart';
 import 'package:mobile/services/form_service.dart';
-import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/avatar_picker.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
 import 'package:mobile/widgets/username_generator.dart';
-import 'package:provider/provider.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -190,7 +188,6 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Widget _buildSubmitButton() {
-    final socketService = context.watch<SocketService>();
     return Center(
       child: Column(
         children: [

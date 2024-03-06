@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/credentials.dart';
-import 'package:mobile/services/socket_service.dart';
 
 class FormService {
   final baseUrl = 'http://localhost:3000/api';
@@ -37,7 +35,6 @@ class FormService {
 
   Future<String?> connect(Credentials credentials) async {
     final url = '$baseUrl/account/login';
-    final socketService = SocketService();
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -46,9 +43,6 @@ class FormService {
       );
 
       if (response.statusCode == 200) {
-        // TODO: connect auth socket with username in query
-        socketService.setup();
-        socketService.connect(SocketType.Auth);
         return null;
       } else {
         final errorMessage = response.body;

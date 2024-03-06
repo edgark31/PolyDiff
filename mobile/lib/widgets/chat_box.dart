@@ -156,8 +156,7 @@ class _ChatBoxState extends State<ChatBox> {
                     icon: Icon(Icons.send),
                     onPressed: () {
                       String message = messageController.text;
-                      if (message.isNotEmpty &&
-                          socketService.connectionStatus) {
+                      if (message.isNotEmpty) {
                         socketService.sendMessage(
                           ChatMessage(
                             MessageTag.Sent,
@@ -178,15 +177,6 @@ class _ChatBoxState extends State<ChatBox> {
             ),
           ),
           // TODO : Remove tests messages + button
-          Text(
-            socketService.socketStatus ? 'Socket ON' : 'Socket OFF',
-            style: TextStyle(color: Colors.pink, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(width: 20),
-          Text(
-            socketService.connectionStatus ? 'Username OK' : 'Disconnected',
-            style: TextStyle(color: Colors.pink, fontWeight: FontWeight.bold),
-          ),
           Text(
             'Username: ${socketService.userName}',
             style: TextStyle(color: Colors.pink, fontWeight: FontWeight.bold),
