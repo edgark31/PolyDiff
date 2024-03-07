@@ -36,6 +36,7 @@ export class DatabaseService implements OnModuleInit {
     }
     async onModuleInit() {
         await this.getAllGameIds();
+        await this.loadGamesInServer();
     }
 
     async loadGamesInServer(): Promise<void> {
@@ -43,7 +44,7 @@ export class DatabaseService implements OnModuleInit {
             // Delete les assets du server saud l'avatar bien sur
             fs.readdirSync('assets', { withFileTypes: true })
                 .filter((item) => item.isDirectory() && item.name !== 'avatar')
-                .forEach((item) => fs.rmdirSync(`assets/${item.name}, { recursive: true }`));
+                .forEach((item) => fs.rmdirSync(`assets/${item.name}`, { recursive: true }));
 
             // Database vers les assets du server
             const games = await this.gameModel.find().exec();
