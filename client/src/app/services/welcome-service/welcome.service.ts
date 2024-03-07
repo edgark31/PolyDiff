@@ -12,11 +12,11 @@ export class WelcomeService {
     selectAvatar: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
     chooseImage: boolean;
     feedback: string;
-    constructor(private communicationService: CommunicationService) {}
+    constructor(private communicationservice: CommunicationService) {}
 
     async validate(password: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this.communicationService.recuperatePassword(password).subscribe({
+            this.communicationservice.recuperatePassword(password).subscribe({
                 next: (success) => {
                     const response = success;
                     if (response) {

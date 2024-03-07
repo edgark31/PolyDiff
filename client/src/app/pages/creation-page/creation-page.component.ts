@@ -89,8 +89,6 @@ export class CreationPageComponent implements AfterViewInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if (this.clientSocket.isSocketAlive('game')) {
-            this.clientSocket.disconnect('game');
-        }
+        this.clientSocket.disconnect('game');
     }
 }

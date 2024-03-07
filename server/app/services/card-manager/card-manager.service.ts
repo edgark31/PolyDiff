@@ -14,7 +14,6 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as fs from 'fs';
 import { Model } from 'mongoose';
-import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 
 @Injectable()
 export class CardManagerService implements OnModuleInit {
@@ -32,7 +31,6 @@ export class CardManagerService implements OnModuleInit {
         @InjectModel(GameConstants.name) private readonly gameConstantsModel: Model<GameConstantsDocument>,
         @InjectModel(GameHistory.name) private readonly gameHistoryModel: Model<GameHistoryDocument>,
         private readonly gameListManager: GameListsManagerService,
-        private readonly imageManager: ImageManagerService,
     ) {
         this.gameIds = [];
     }
@@ -108,8 +106,8 @@ export class CardManagerService implements OnModuleInit {
                 nDifference: newGame.nDifference,
                 isHard: newGame.isHard,
             };
-            const id = (await this.gameModel.create(newGameInDB))._id.toString();
             this.saveFiles(newGame);
+            const id = (await this.gameModel.create(newGameInDB))._id.toString();
             this.gameIds.push(id);
             newGameInDB._id = id;
             const gameCard = this.gameListManager.buildGameCardFromGame(newGameInDB);
