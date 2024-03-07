@@ -47,23 +47,22 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             children: [Text('Clock')],
           ),
           SizedBox(height: 10),
-          AbsorbPointer(
-            child: FutureBuilder<CanvasModel>(
-              future: imagesFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ModifiedCanvas(snapshot.data, '123'),
-                      OriginalCanvas(snapshot.data, '123'),
-                    ],
-                  );
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            ),
+          FutureBuilder<CanvasModel>(
+            future: imagesFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ModifiedCanvas(snapshot.data, '123'),
+                    SizedBox(width: 50),
+                    OriginalCanvas(snapshot.data, '123'),
+                  ],
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
           ),
         ],
       ),
