@@ -22,6 +22,7 @@ export class ModalAdminComponent {
             if (isValid) {
                 this.isPasswordWrong = false;
                 this.router.navigate(['/admin']);
+                this.dialogRef.close();
             } else {
                 this.isPasswordWrong = true;
             }

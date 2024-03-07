@@ -57,6 +57,17 @@ export class CommunicationService {
         );
     }
 
+    sendMail(mail: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/mail`, { email: mail }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('mail modify');
+            }),
+            catchError(this.handleError<void>('modifyUser')),
+        );
+    }
+
     updateAvatar(oldusername: string, newavatar: string): Observable<void> {
         return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { oldUsername: oldusername, newAvatar: newavatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -78,8 +89,8 @@ export class CommunicationService {
         );
     }
 
-    modifyPassword(oldusername: string, oldpassword: string, newpassword: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/password`, { oldUsername: oldusername, oldpassword, newPassword: newpassword }).pipe(
+    modifyPassword(oldusername: string, newpassword: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/password`, { oldUsername: oldusername, newPassword: newpassword }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -89,8 +100,8 @@ export class CommunicationService {
         );
     }
 
-    modifyTheme(oldusername: string, oldtheme: Theme, newtheme: Theme): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/theme`, { oldUsername: oldusername, oldTheme: oldtheme, newTheme: newtheme }).pipe(
+    modifyTheme(oldusername: string, newtheme: Theme): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/theme`, { oldUsername: oldusername, newTheme: newtheme }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -100,8 +111,8 @@ export class CommunicationService {
         );
     }
 
-    modifyLangage(oldusername: string, oldlangage: string, newlangage: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/langage`, { oldUsername: oldusername, oldLangage: oldlangage, newLangage: newlangage }).pipe(
+    modifyLangage(oldusername: string, newlangage: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/langage`, { oldUsername: oldusername, newLangage: newlangage }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -110,21 +121,10 @@ export class CommunicationService {
             catchError(this.handleError<void>('modifylangage')),
         );
     }
-    // modifyProfile(oldprofil: modifYProfile, newprofile: modifYProfile): Observable<void> {
-    //     return this.http.put<void>(`${this.accountUrl}/Profile`, { oldProfil: oldprofil, newProfile: newprofile }).pipe(
-    //         // eslint-disable-next-line @typescript-eslint/no-empty-function
-    //         tap(() => {
-    //             // eslint-disable-next-line no-console
-    //             console.log('User modify');
-    //         }),
-    //         catchError(this.handleError<void>('modifyUser')),
-    //     );
-    // }
-
     recuperatePassword(password: string): Observable<boolean> {
-        return this.http.post<{ success: boolean }>(`${this.accountUrl}/password`, { passwd: password }).pipe(
-            map((response) => response.success), // transform the response to boolean
-            catchError(this.handleError<boolean>('Recuperate Password', false)), // handle error and return false or some default value
+        return this.http.post<{ success: boolean }>(`${this.accountUrl}/admin`, { pass: password }).pipe(
+            map((response) => response.success),
+            catchError(this.handleError<boolean>('Recuperate Password', false)),
         );
     }
 
