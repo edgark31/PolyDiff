@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ConfirmPasswordPageComponent } from '@app/pages/Confirm-password-page/confirm-password-page.component';
-import { AdminPageComponent } from '@app/pages/admin-page/admin-page.component';
+import { ConfirmPasswordPageComponent } from '@app/pages/confirm-password-page/confirm-password-page.component';
 import { ChatPageComponent } from '@app/pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from '@app/pages/config-page/config-page.component';
 import { CreationPageComponent } from '@app/pages/creation-page/creation-page.component';
@@ -23,7 +22,6 @@ export const routes: Routes = [
     { path: 'game', component: GamePageComponent },
     { path: 'create', component: CreationPageComponent },
     { path: 'selection', component: SelectionPageComponent },
-    { path: 'config', component: ConfigPageComponent },
     { path: 'login', component: LoginPageComponent },
     { path: 'limited', component: LimitedTimePageComponent },
     { path: 'registration', component: RegistrationPageComponent },
@@ -31,7 +29,8 @@ export const routes: Routes = [
     { path: 'confirm-password', component: ConfirmPasswordPageComponent },
     { path: 'personalization', component: PersonnalizationPageComponent },
     { path: 'profil', component: ProfilPageComponent },
-    { path: 'admin', component: AdminPageComponent, canActivate: [AdminGuard] },
+    { path: 'admin', component: ConfigPageComponent, canActivate: [AdminGuard] },
+    { path: '**', redirectTo: '/login' },
 ];
 
 @NgModule({

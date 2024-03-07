@@ -78,6 +78,16 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
+    async connexionToAdmin(password: string): Promise<boolean> {
+        try {
+            if (password !== 'admin') throw new Error('Wrong password');
+            return Promise.resolve(password === 'admin');
+        } catch (error) {
+            this.logger.error(`Failed to connect --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
     async changePseudo(oldUsername: string, newUsername: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
@@ -222,10 +232,4 @@ export class AccountManagerService implements OnModuleInit {
     //         return Promise.reject(`${error}`);
     //     }
     // }
-
-    connexionToAdmin(password: string): boolean {
-        return password === 'admin';
-    }
 }
-
-//

@@ -19,9 +19,9 @@ export class DeleteResetConfirmationDialogComponent {
         this.actions = Actions;
     }
 
-    // resetAllTopTimes() {
-    //     this.roomManagerService.notifyResetAllTopTimes();
-    // }
+    resetAllTopTimes() {
+        this.roomManagerService.notifyResetAllTopTimes();
+    }
 
     deleteAllGames() {
         this.communicationService.deleteAllGames().subscribe(() => {
@@ -41,7 +41,7 @@ export class DeleteResetConfirmationDialogComponent {
         });
     }
 
-    // resetTopTime() {
-    //     this.roomManagerService.notifyResetTopTime(this.data.gameId);
-    // }
+    resetTopTime() {
+        this.roomManagerService.notifyResetTopTime(this.data.gameId);
+    }
 }
