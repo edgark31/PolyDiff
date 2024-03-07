@@ -36,7 +36,7 @@ export class MailService {
             if (!accountFound) throw new Error('Account not found');
             const token = accountFound.credentials.username;
 
-            // const token = Math.floor(1000 + Math.random() * 9000).toString();
+            // const linked = Math.floor(1000 + Math.random() * 9000).toString();
             // await this.mailService.sendUserConfirmation(accountFound);
             await this.sendUserConfirmation(accountFound, token);
             await accountFound.save();

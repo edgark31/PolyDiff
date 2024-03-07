@@ -34,7 +34,6 @@ export class ConfirmPasswordPageComponent implements OnInit {
             this.communication.modifyPassword(this.name, this.recoverPasswordForm.value.password).subscribe({
                 next: () => {
                     this.router.navigate(['/login']);
-                    this.welcomeService.setlinkValid(false);
                 },
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';

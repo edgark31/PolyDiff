@@ -24,9 +24,7 @@ export class RecoverPasswordPageComponent {
         if (this.recoverPasswordForm.value.email) {
             this.communication.sendMail(this.recoverPasswordForm.value.email).subscribe({
                 // eslint-disable-next-line @typescript-eslint/no-empty-function
-                next: () => {
-                    this.welcomeService.setlinkValid(true);
-                },
+                next: () => {},
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';
                 },

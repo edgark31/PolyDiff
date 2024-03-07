@@ -12,13 +12,14 @@ export class WelcomeService {
     account: Account;
     selectLocal: string;
     selectAvatar: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
+    selectAvatarRegister: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
     chooseImage: boolean;
     feedback: string;
     selectName: string;
     selectTheme: Theme;
     selectPassword: string;
     selectPasswordConfirm: string;
-    isLinkValid = localStorage.getItem('linkValid') === 'true';
+    isLinkValid: boolean;
     selectLangage: string;
     langage = LANGUAGES;
     themePersonnalization = THEME_PERSONNALIZATION;
@@ -116,12 +117,13 @@ export class WelcomeService {
         });
     }
 
-    getlinkValid(): boolean {
+    getlinkValid(name: string): boolean {
+        this.isLinkValid = localStorage.getItem(name) === 'true';
         return this.isLinkValid;
     }
 
-    setlinkValid(value: boolean) {
-        localStorage.setItem('linkValid', String(value));
+    setlinkValid(name: string, value: boolean) {
+        localStorage.setItem(name, String(value));
         this.isLinkValid = value;
     }
 }

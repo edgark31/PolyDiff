@@ -30,6 +30,7 @@ export class RegistrationPageComponent {
     confirmedPassword: string;
     email: string;
     username: string;
+    selectAvatar: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
 
     constructor(
         private readonly communication: CommunicationService,
