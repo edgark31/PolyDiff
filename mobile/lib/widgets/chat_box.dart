@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/chat_message_model.dart';
 import 'package:mobile/services/socket_service.dart';
@@ -66,17 +65,6 @@ class _ChatBoxState extends State<ChatBox> {
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 20),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 50),
-                  child: IconButton(
-                    icon: Icon(Icons.exit_to_app),
-                    onPressed: () {
-                      socketService.disconnect();
-                      Navigator.pushNamed(context, LOGIN_ROUTE);
-                    },
-                    iconSize: 30,
-                  ),
                 ),
               ],
             ),
