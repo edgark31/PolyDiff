@@ -1,5 +1,4 @@
 import { CommunicationService } from '@app/services/communication-service/communication.service';
-import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
@@ -18,7 +17,7 @@ export class RecoverPasswordPageComponent {
         email: new FormControl('', []),
     });
 
-    constructor(private readonly communication: CommunicationService, private readonly welcomeService: WelcomeService) {}
+    constructor(private readonly communication: CommunicationService) {}
 
     onSubmit() {
         if (this.recoverPasswordForm.value.email) {
