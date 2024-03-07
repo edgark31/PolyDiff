@@ -218,6 +218,7 @@ export interface Score {
 export interface Chat {
     raw: string;
     name?: string;
+    tag?: MessageTag;
     timestamp?: string;
 }
 
