@@ -6,7 +6,7 @@ import 'package:mobile/widgets/game_canvas.dart';
 class ForegroundPtOriginal extends CustomPainter {
   final CanvasModel images;
 
-  ForegroundPtOriginal(this.images);
+  ForegroundPtOriginal(this.images); //
 
   @override
   void paint(Canvas canvas, Size size) {
