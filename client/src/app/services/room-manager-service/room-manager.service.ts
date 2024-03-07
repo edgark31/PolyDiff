@@ -151,7 +151,7 @@ export class RoomManagerService {
     }
 
     notifyGameCardDeleted(gameId: string) {
-        this.clientSocket.send('game', GameCardEvents.GameCardDeleted, gameId);
+        this.clientSocket.send(GameCardEvents.GameCardDeleted, gameId);
     }
 
     notifyAllGamesDeleted() {
