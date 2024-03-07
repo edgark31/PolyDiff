@@ -3,13 +3,13 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IMG_HEIGHT, IMG_WIDTH } from '@app/constants/image';
 import { CanvasPosition } from '@app/enum/canvas-position';
+import { GameDetails } from '@app/interfaces/game-interfaces';
 import { ImageSources } from '@app/interfaces/image-sources';
 import { CreationPageComponent } from '@app/pages/creation-page/creation-page.component';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { DifferenceService } from '@app/services/difference-service/difference.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { Coordinate } from '@common/coordinate';
-import { GameDetails } from '@common/game-interfaces';
 import { Observable, map } from 'rxjs';
 
 @Component({

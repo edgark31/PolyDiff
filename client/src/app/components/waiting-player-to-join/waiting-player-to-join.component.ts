@@ -1,8 +1,9 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { COUNTDOWN_TIME, WAITING_TIME } from '@app/constants/constants';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { GameCardActions } from '@common/game-interfaces';
+import { GameCardActions, PlayerData } from '@common/game-interfaces';
 import { Subscription, filter, interval, takeWhile } from 'rxjs';
 
 @Component({
@@ -24,7 +25,8 @@ export class WaitingForPlayerToJoinComponent implements OnInit, OnDestroy {
     constructor(
         @Inject(MAT_DIALOG_DATA) private data: { roomId: string; player: string; gameId: string; isLimited: boolean },
         private readonly roomManagerService: RoomManagerService,
-        private dialogRef: MatDialogRef<WaitingForPlayerToJoinComponent>, // private readonly router: Router,
+        private dialogRef: MatDialogRef<WaitingForPlayerToJoinComponent>,
+        private readonly router: Router,
     ) {
         this.playerNames = [];
         this.actions = GameCardActions;
@@ -36,25 +38,25 @@ export class WaitingForPlayerToJoinComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         if (!this.data?.gameId) return;
-        // this.roomManagerService.getJoinedPlayerNames(this.data.gameId);
+        this.roomManagerService.getJoinedPlayerNames(this.data.gameId);
         this.loadPlayerNamesList();
         this.handleGameCardDelete();
     }
 
-    // refusePlayer(playerName: string) {
-    //     const playerPayLoad = { gameId: this.data.gameId, playerName } as PlayerData;
-    //     this.roomManagerService.refusePlayer(playerPayLoad);
-    // }
+    refusePlayer(playerName: string) {
+        const playerPayLoad = { gameId: this.data.gameId, playerName } as PlayerData;
+        this.roomManagerService.refusePlayer(playerPayLoad);
+    }
 
-    // acceptPlayer(playerName: string) {
-    //     this.roomManagerService.acceptPlayer(this.data.gameId, this.data.roomId, playerName);
-    //     this.router.navigate(['/game']);
-    // }
+    acceptPlayer(playerName: string) {
+        this.roomManagerService.acceptPlayer(this.data.gameId, this.data.roomId, playerName);
+        this.router.navigate(['/game']);
+    }
 
-    // undoCreateOneVsOneRoom() {
-    //     if (this.data.player) this.roomManagerService.deleteCreatedOneVsOneRoom(this.data.roomId);
-    //     else if (!this.data.player) this.roomManagerService.deleteCreatedCoopRoom(this.data.roomId);
-    // }
+    undoCreateOneVsOneRoom() {
+        if (this.data.player) this.roomManagerService.deleteCreatedOneVsOneRoom(this.data.roomId);
+        else if (!this.data.player) this.roomManagerService.deleteCreatedCoopRoom(this.data.roomId);
+    }
 
     ngOnDestroy(): void {
         this.playerNamesSubscription?.unsubscribe();

@@ -6,12 +6,13 @@ import { LEFT_BUTTON } from '@app/constants/constants';
 import { DEFAULT_RADIUS, RADIUS_SIZES } from '@app/constants/difference';
 import { CANVAS_MEASUREMENTS } from '@app/constants/image';
 import { CanvasPosition } from '@app/enum/canvas-position';
+import { CanvasMeasurements, GameDetails } from '@common/game-interfaces';
 import { CardManagerService } from '@app/services/card-manager-service/card-manager.service';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { ForegroundService } from '@app/services/foreground-service/foreground.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { CanvasMeasurements, GameDetails } from '@common/game-interfaces';
 
 @Component({
     selector: 'app-root',

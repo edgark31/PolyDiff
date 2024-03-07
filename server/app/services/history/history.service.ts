@@ -1,8 +1,9 @@
-import { CardManagerService } from '@app/services/card-manager/card-manager.service';
 import { PADDING_N_DIGITS } from '@common/constants';
-import { PlayerStatus } from '@common/enums';
+import { HistoryEvents, PlayerStatus } from '@common/enums';
 import { GameHistory, GameRoom } from '@common/game-interfaces';
 import { Injectable } from '@nestjs/common';
+import * as io from 'socket.io';
+import { CardManagerService } from '@app/services/card-manager/card-manager.service';
 
 @Injectable()
 export class HistoryService {
@@ -36,14 +37,14 @@ export class HistoryService {
         this.pendingGames.set(room.roomId, gameHistory);
     }
 
-    // async closeEntry(roomId: string, server: io.Server) {
-    //     const gameHistory = this.pendingGames.get(roomId);
-    //     if (!gameHistory) return;
-    //     gameHistory.duration = new Date().getTime() - gameHistory.duration;
-    //     this.pendingGames.delete(roomId);
-    //     await this.cardManagerService.saveGameHistory(gameHistory);
-    //     server.emit(HistoryEvents.RequestReload);
-    // }
+    async closeEntry(roomId: string, server: io.Server) {
+        const gameHistory = this.pendingGames.get(roomId);
+        if (!gameHistory) return;
+        gameHistory.duration = new Date().getTime() - gameHistory.duration;
+        this.pendingGames.delete(roomId);
+        await this.cardManagerService.saveGameHistory(gameHistory);
+        server.emit(HistoryEvents.RequestReload);
+    }
 
     markPlayer(roomId: string, playerName: string, status: PlayerStatus) {
         const gameHistory = this.pendingGames.get(roomId);

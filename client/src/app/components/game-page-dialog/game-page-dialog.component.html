@@ -1,4 +1,4 @@
-    <!-- <p class = "abandon" *ngIf="data.action === 'Abandon'">{{ data.message }}</p>
+    <p class = "abandon" *ngIf="data.action === 'Abandon'">{{ data.message }}</p>
     <div class = "button1" *ngIf="data.action === 'Abandon'">
         <div class="button-container">
             <button class = "yesButton" mat-button *ngIf="data.action === 'Abandon'" mat-dialog-close (click)="abandonGame()" routerLink="/home"></button>
@@ -12,7 +12,7 @@
             <img src="./assets/icon/CreateButton.png" alt="notAbandonButton" >
             <div class="centered-no">Non</div>
         </div>
-    </div> -->
+    </div>
     <p class = "ending" *ngIf="data.action === 'EndGame'">{{ data.message }}</p>
     <div class = "button1" *ngIf="data.action === 'EndGame'">
         <div class="button-container">

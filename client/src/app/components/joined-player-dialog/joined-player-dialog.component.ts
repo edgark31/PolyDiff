@@ -34,9 +34,9 @@ export class JoinedPlayerDialogComponent implements OnInit, OnDestroy {
         this.handleCreateUndoCreation();
     }
 
-    // cancelJoining() {
-    //     this.roomManagerService.cancelJoining(this.data.gameId);
-    // }
+    cancelJoining() {
+        this.roomManagerService.cancelJoining(this.data.gameId);
+    }
 
     ngOnDestroy(): void {
         this.countdownSubscription?.unsubscribe();

@@ -46,9 +46,9 @@ export class ConfigDialogComponent implements OnInit, OnDestroy {
 
     saveGameConstants() {
         this.configConstants = this.configForm.value.valueOf();
-        // this.communicationService.updateGameConstants(this.configConstants).subscribe(() => {
-        //     this.roomManagerService.notifyGameConstantsUpdated();
-        // });
+        this.communicationService.updateGameConstants(this.configConstants).subscribe(() => {
+            this.roomManagerService.notifyGameConstantsUpdated();
+        });
     }
 
     resetConfigForm() {

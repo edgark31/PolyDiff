@@ -1,4 +1,4 @@
-import { CanvasMeasurements } from '@common/game-interfaces';
+import { CanvasMeasurements } from '@app/interfaces/game-interfaces';
 export const IMG_WIDTH = 640;
 export const IMG_HEIGHT = 480;
 export const IMG_TYPE_BMP = 'image/bmp';
