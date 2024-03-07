@@ -25,7 +25,6 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
         this.homeRoute = '/home';
         this.configRoute = '/admin';
         this.index = 0;
-        this.index = this.index;
         // this.roomManagerService.handleRoomEvents();
     }
 

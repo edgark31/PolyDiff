@@ -201,6 +201,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.logger.log(`GAME ON de ${userName}`);
     }
 
+    // Test com
+
     async handleDisconnect(@ConnectedSocket() socket: Socket) {
         this.accountManager.deconnexion(socket.data.username);
         this.logger.log(`GAME OFF de ${socket.data.username}`);
