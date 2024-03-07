@@ -7,7 +7,6 @@ import { GameHistory, GameHistoryDocument } from '@app/model/database/game-histo
 import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 import { GameConstantsDto } from '@app/model/dto/game/game-constants.dto';
 import { GameListsManagerService } from '@app/services/game-lists-manager/game-lists-manager.service';
-import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { DEFAULT_BEST_TIMES, DEFAULT_BONUS_TIME, DEFAULT_COUNTDOWN_VALUE, DEFAULT_HINT_PENALTY } from '@common/constants';
 import { GameModes } from '@common/enums';
 import { CarouselPaginator, PlayerTime } from '@common/game-interfaces';
@@ -15,6 +14,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as fs from 'fs';
 import { Model } from 'mongoose';
+import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 
 @Injectable()
 export class CardManagerService implements OnModuleInit {
@@ -102,15 +102,14 @@ export class CardManagerService implements OnModuleInit {
         try {
             const newGameInDB: Game = {
                 name: newGame.name,
-                originalImage: newGame.originalImage,
-                modifiedImage: newGame.modifiedImage,
-                differences: JSON.stringify(newGame.differences),
+                originalImage: `assets/${newGame.name}/original.bmp`,
+                modifiedImage: `assets/${newGame.name}/modified.bmp`,
+                differences: `assets/${newGame.name}/differences.json`,
                 nDifference: newGame.nDifference,
                 isHard: newGame.isHard,
             };
-            const id = (await this.gameModel.create(newGameInDB))._id.toString().then(() => {
-                this.saveFiles(newGame);
-            });
+            const id = (await this.gameModel.create(newGameInDB))._id.toString();
+            this.saveFiles(newGame);
             this.gameIds.push(id);
             newGameInDB._id = id;
             const gameCard = this.gameListManager.buildGameCardFromGame(newGameInDB);

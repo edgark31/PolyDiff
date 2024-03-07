@@ -1,20 +1,16 @@
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
-import { CardManagerService } from '@app/services/card-manager/card-manager.service';
-import { CardEvents } from '@common/enums';
-import { GameDetails } from '@common/game-interfaces';
+import { ClassicModeService } from '@app/services/classic-mode/classic-mode.service';
+import { LimitedModeService } from '@app/services/limited-mode/limited-mode.service';
+import { PlayersListManagerService } from '@app/services/players-list-manager/players-list-manager.service';
+import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { Injectable, Logger } from '@nestjs/common';
-import {
-    ConnectedSocket,
-    MessageBody,
-    OnGatewayConnection,
-    OnGatewayDisconnect,
-    OnGatewayInit,
-    SubscribeMessage,
-    WebSocketGateway,
-    WebSocketServer,
-} from '@nestjs/websockets';
+import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
+import { CardEvents } from '@common/enums';
+import { CardEvents } from '@common/enums';
+import { CardManagerService } from '@app/services/card-manager/card-manager.service';
+import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 
 @WebSocketGateway({
     namespace: '/game',
@@ -148,7 +144,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     // -------------------------- --- GESTION DES FICHES (synchronisation, suppression, ajout)
 
     @SubscribeMessage(CardEvents.CardCreated)
-    handleCardCreation(@ConnectedSocket() socket: Socket, @MessageBody() card: GameDetails) {
+    handleCardCreation(@ConnectedSocket() socket: Socket, @MessageBody() card: CreateGameDto) {
         this.cardManager.addGameInDb(card);
         this.server.emit(CardEvents.RequestReload);
     }
