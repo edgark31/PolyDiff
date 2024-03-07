@@ -30,6 +30,6 @@ describe('MainPageComponent', () => {
     });
 
     it("button 'Configuration' should redirect correctly", () => {
-        expect(component.configRoute).toEqual('/config');
+        expect(component.configRoute).toEqual('/admin');
     });
 });
