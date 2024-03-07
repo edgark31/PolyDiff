@@ -1,7 +1,7 @@
 // Id comes from database to allow _id
 /* eslint-disable no-underscore-dangle */
 import { Game } from '@app/model/database/game';
-import { CardManagerService } from '@app/services/card-manager/card-manager.service';
+import { GameService } from '@app/services/game/game.service';
 import { HistoryService } from '@app/services/history/history.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { CHARACTERS, DEFAULT_GAME_MODES, KEY_SIZE, MAX_BONUS_TIME_ALLOWED, NOT_FOUND } from '@common/constants';
@@ -18,7 +18,7 @@ export class RoomsManagerService implements OnModuleInit {
     private rooms: Map<string, GameRoom>;
 
     constructor(
-        private readonly cardManagerService: CardManagerService,
+        private readonly gameService: GameService,
         private readonly messageManager: MessageManagerService,
         private readonly historyService: HistoryService,
     ) {
@@ -31,15 +31,13 @@ export class RoomsManagerService implements OnModuleInit {
     }
 
     async createRoom(playerPayLoad: PlayerData): Promise<GameRoom> {
-        const game = !playerPayLoad.gameId
-            ? await this.cardManagerService.getRandomGame([])
-            : await this.cardManagerService.getGameById(playerPayLoad.gameId);
+        const game = !playerPayLoad.gameId ? await this.gameService.getRandomGame([]) : await this.gameService.getGameById(playerPayLoad.gameId);
         if (!game) return;
         return this.buildGameRoom(game, playerPayLoad);
     }
 
     async getGameConstants(): Promise<void> {
-        this.gameConstants = await this.cardManagerService.getGameConstants();
+        this.gameConstants = await this.gameService.getGameConstants();
     }
 
     getRoomById(roomId: string): GameRoom {
@@ -91,7 +89,7 @@ export class RoomsManagerService implements OnModuleInit {
     }
 
     async loadNextGame(room: GameRoom, playedGameIds: string[]): Promise<string> {
-        const game = await this.cardManagerService.getRandomGame(playedGameIds);
+        const game = await this.gameService.getRandomGame(playedGameIds);
         if (!game) return;
         const gameMode = room.clientGame.mode;
         room.clientGame = this.buildClientGameVersion(game);

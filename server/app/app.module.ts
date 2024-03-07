@@ -14,9 +14,10 @@ import { GameCard, gameCardSchema } from './model/database/game-card';
 import { GameConstants, gameConstantsSchema } from './model/database/game-config-constants';
 import { GameHistory, gameHistorySchema } from './model/database/game-history';
 import { AccountManagerService } from './services/account-manager/account-manager.service';
-import { DatabaseService } from './services/card-manager/card-manager.service';
 import { ClassicModeService } from './services/classic-mode/classic-mode.service';
+import { DatabaseService } from './services/database/database.service';
 import { GameListsManagerService } from './services/game-lists-manager/game-lists-manager.service';
+import { GameService } from './services/game/game.service';
 import { HistoryService } from './services/history/history.service';
 import { ImageManagerService } from './services/image-manager/image-manager.service';
 import { LimitedModeService } from './services/limited-mode/limited-mode.service';
@@ -48,6 +49,7 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
     controllers: [GameController, AccountController],
     providers: [
         Logger,
+        GameService,
         DatabaseService,
         ConfigService,
         AuthGateway,

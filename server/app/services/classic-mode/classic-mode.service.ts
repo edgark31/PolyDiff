@@ -6,7 +6,7 @@ import { HistoryService } from '@app/services/history/history.service';
 import { PlayersListManagerService } from '@app/services/players-list-manager/players-list-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { SCORE_POSITION } from '@common/constants';
-import { GameEvents, GameModes, PlayerStatus, RoomEvents } from '@common/enums';
+import { GameEvents, GameModes, PlayerEvents, PlayerStatus, RoomEvents } from '@common/enums';
 import { GameRoom, Player, PlayerData, RoomAvailability } from '@common/game-interfaces';
 import { Injectable } from '@nestjs/common';
 import * as io from 'socket.io';

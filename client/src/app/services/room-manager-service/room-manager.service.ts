@@ -146,6 +146,10 @@ export class RoomManagerService {
         this.clientSocket.send('game', RoomEvents.CheckIfAnyCoopRoomExists, playerPayLoad);
     }
 
+    notifyGameCardCreated() {
+        this.clientSocket.send('game', GameCardEvents.GameCardCreated);
+    }
+
     notifyGameCardDeleted(gameId: string) {
         this.clientSocket.send('game', GameCardEvents.GameCardDeleted, gameId);
     }
