@@ -32,7 +32,6 @@ export class CardManagerService implements OnModuleInit {
         @InjectModel(GameConstants.name) private readonly gameConstantsModel: Model<GameConstantsDocument>,
         @InjectModel(GameHistory.name) private readonly gameHistoryModel: Model<GameHistoryDocument>,
         private readonly gameListManager: GameListsManagerService,
-        private readonly imageManager: ImageManagerService,
     ) {
         this.gameIds = [];
     }
