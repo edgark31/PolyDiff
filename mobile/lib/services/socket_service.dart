@@ -25,7 +25,7 @@ class SocketService extends ChangeNotifier {
     authSocket = IO.io(serverURL, <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
-      'query': 'name=$userName' // TODO: change to user input
+      'query': 'name=$userName'
     });
 
     authSocket.onConnect((_) {
@@ -75,17 +75,6 @@ class SocketService extends ChangeNotifier {
     print('disconnecting from socket_service');
     approvedName = '';
     authSocket.disconnect();
-  }
-
-  void sendTestMessage() {
-    print('Sending test message');
-    final ChatMessage testMessage = ChatMessage(
-      MessageTag.Sent,
-      'test message',
-      'Zooboomafoo',
-      'test',
-    );
-    authSocket.emit(MessageEvents.GlobalMessage.name, testMessage.toJson());
   }
 
   void sendMessage(ChatMessage message) {

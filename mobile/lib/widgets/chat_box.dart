@@ -98,17 +98,13 @@ class _ChatBoxState extends State<ChatBox> {
                           ? CrossAxisAlignment.end
                           : CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    'http://127.0.0.1:3000/admin.png'),
-                                radius: 15.0),
-                            Text(
-                              messages[index].userName,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ],
+                        CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                'http://127.0.0.1:3000/${messages[index].userName}.png'),
+                            radius: 15.0),
+                        Text(
+                          messages[index].userName,
+                          style: TextStyle(color: Colors.black),
                         ),
                         Container(
                           width: 250,
@@ -188,12 +184,6 @@ class _ChatBoxState extends State<ChatBox> {
           Text(
             'Username: ${socketService.userName}',
             style: TextStyle(color: Colors.pink, fontWeight: FontWeight.bold),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              socketService.sendTestMessage();
-            },
-            child: Text("Recevoir message test"),
           ),
         ],
       ),
