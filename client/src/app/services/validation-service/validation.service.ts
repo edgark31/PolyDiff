@@ -45,7 +45,6 @@ export class ValidationService {
     }
 
     private async isImageSizeValid(file: File): Promise<boolean> {
-        console.log('oeoe');
         const image = await createImageBitmap(file);
         return image.width === IMG_WIDTH && image.height === IMG_HEIGHT;
     }

@@ -36,14 +36,29 @@ export class DatabaseService implements OnModuleInit {
     }
     async onModuleInit() {
         await this.getAllGameIds();
+        await this.loadGamesInServer();
     }
 
     async loadGamesInServer(): Promise<void> {
         try {
-            // const games = await this.gameModel.find().exec();
-            // games.forEach((game) => {
-            //     this.saveFiles(game);
-            // });
+            // Delete les assets du server saud l'avatar bien sur
+            fs.readdirSync('assets', { withFileTypes: true })
+                .filter((item) => item.isDirectory() && item.name !== 'avatar')
+                .forEach((item) => fs.rmdirSync(`assets/${item.name}`, { recursive: true }));
+
+            // Database vers les assets du server
+            const games = await this.gameModel.find().exec();
+            games.forEach((game) => {
+                const createGameDto: CreateGameDto = {
+                    name: game.name,
+                    originalImage: game.originalImage,
+                    modifiedImage: game.modifiedImage,
+                    nDifference: game.nDifference,
+                    differences: JSON.parse(game.differences),
+                    isHard: game.isHard,
+                };
+                this.saveFiles(createGameDto);
+            });
         } catch (error) {
             return Promise.reject(`Failed to load games in server: ${error}`);
         }
