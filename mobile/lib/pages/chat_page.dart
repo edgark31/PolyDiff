@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/widgets/chat_box.dart';
+import 'package:mobile/widgets/top_nav_bar.dart';
 
 class ChatPage extends StatelessWidget {
   static const routeName = CHAT_ROUTE;
@@ -27,6 +28,7 @@ class ChatPage extends StatelessWidget {
         ),
         child: Column(
           children: [
+            TopNavBar(),
             Expanded(
               child: ChatBox(),
             ),
