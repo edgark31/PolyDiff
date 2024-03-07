@@ -122,7 +122,7 @@ export class CommunicationService {
         );
     }
     recuperatePassword(password: string): Observable<boolean> {
-        return this.http.post<{ success: boolean }>(`${this.accountUrl}/admin`, { Password: password }).pipe(
+        return this.http.post<{ success: boolean }>(`${this.accountUrl}/admin`, { pass: password }).pipe(
             map((response) => response.success),
             catchError(this.handleError<boolean>('Recuperate Password', false)),
         );

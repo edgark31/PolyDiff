@@ -31,6 +31,7 @@ export class MailService {
 
     async signUp(mail: string) {
         try {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             const accountFound = await this.accountModel.findOne({ 'credentials.email': mail });
 
             if (!accountFound) throw new Error('Account not found');

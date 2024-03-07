@@ -2,7 +2,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LANGUAGES, THEME_PERSONNALIZATION } from '@common/constants';
 import { Account, Theme } from '@common/game-interfaces';
+// eslint-disable-next-line import/no-unresolved, no-restricted-imports
 import { CommunicationService } from '../communication-service/communication.service';
+// eslint-disable-next-line import/no-unresolved, no-restricted-imports
 import { GameManagerService } from '../game-manager-service/game-manager.service';
 @Injectable({
     providedIn: 'root',
@@ -117,13 +119,13 @@ export class WelcomeService {
         });
     }
 
-    getlinkValid(name: string): boolean {
-        this.isLinkValid = localStorage.getItem(name) === 'true';
-        return this.isLinkValid;
-    }
+    // getlinkValid(name: string): boolean {
+    //     this.isLinkValid = localStorage.getItem(name) === 'true';
+    //     return this.isLinkValid;
+    // }
 
-    setlinkValid(name: string, value: boolean) {
-        localStorage.setItem(name, String(value));
-        this.isLinkValid = value;
-    }
+    // setlinkValid(name: string, value: boolean) {
+    //     localStorage.setItem(name, String(value));
+    //     this.isLinkValid = value;
+    // }
 }

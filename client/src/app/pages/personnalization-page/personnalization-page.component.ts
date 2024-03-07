@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
@@ -18,6 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
     styleUrls: ['./personnalization-page.component.scss'],
 })
 export class PersonnalizationPageComponent implements OnInit {
+    @ViewChild(ImportDialogComponent) importDialogComponent: ImportDialogComponent;
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });

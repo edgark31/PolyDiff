@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -44,6 +45,7 @@ import { DeleteResetConfirmationDialogComponent } from './components/delete-rese
 import { GamePageDialogComponent } from './components/game-page-dialog/game-page-dialog.component';
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
+// eslint-disable-next-line import/no-unresolved
 import { ImportDialogComponent } from './components/import-dialog/import-dialog.component';
 import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 import { MenuComponent } from './components/menu/menu.component';

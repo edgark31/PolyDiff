@@ -71,7 +71,7 @@ export class AccountController {
     }
 
     @Post('admin')
-    connexionToAdmin(@Body('Password') password: string): { success: boolean } {
+    connexionToAdmin(@Body('pass') password: string): { success: boolean } {
         const isValid = this.accountManager.connexionToAdmin(password);
         // response.status(HttpStatus.OK).json({ success: isValid });
         return { success: isValid };
