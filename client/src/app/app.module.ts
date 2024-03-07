@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -25,7 +26,7 @@ import { CreationGameDialogComponent } from '@app/components/creation-game-dialo
 import { GameInfosComponent } from '@app/components/game-infos/game-infos.component';
 import { GameSheetComponent } from '@app/components/game-sheet/game-sheet.component';
 import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
-import { AppRoutingModule } from '@app/modules/app-routing.module';
+import { AppRoutingModule, routes } from '@app/modules/app-routing.module';
 import { AppMaterialModule } from '@app/modules/material.module';
 import { AppComponent } from '@app/pages/app/app.component';
 import { CreationPageComponent } from '@app/pages/creation-page/creation-page.component';
@@ -44,6 +45,7 @@ import { DeleteResetConfirmationDialogComponent } from './components/delete-rese
 import { GamePageDialogComponent } from './components/game-page-dialog/game-page-dialog.component';
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
+// eslint-disable-next-line import/no-unresolved
 import { ImportDialogComponent } from './components/import-dialog/import-dialog.component';
 import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 import { MenuComponent } from './components/menu/menu.component';
@@ -53,6 +55,8 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
+import { ConfirmPasswordPageComponent } from './pages/confirm-password-page/confirm-password-page.component';
+import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
@@ -105,6 +109,9 @@ export const createTranslateLoader = (http: HttpClient) => {
         PersonnalizationPageComponent,
         ProfilPageComponent,
         ModalAdminComponent,
+        ConfirmPasswordPageComponent,
+        ImportDialogComponent,
+        ChatPageComponent,
     ],
     imports: [
         AppMaterialModule,
@@ -132,6 +139,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         MatIconModule,
         MatSidenavModule,
         MatListModule,
+        RouterModule.forRoot(routes),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

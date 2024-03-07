@@ -12,8 +12,8 @@ import { Subscription } from 'rxjs';
 })
 export class SelectionPageComponent implements AfterViewInit, OnDestroy {
     gameCarrousel: CarouselPaginator;
-    readonly homeRoute: string;
-    readonly configRoute: string;
+    homeRoute: string;
+    configRoute: string;
     private index: number;
     private reloadSubscription: Subscription;
     constructor(

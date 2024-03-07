@@ -1,3 +1,4 @@
+import { Theme } from './../../model/database/account';
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
@@ -11,7 +12,7 @@ import { Model } from 'mongoose';
 export class AccountManagerService implements OnModuleInit {
     users: Map<string, Account> = new Map<string, Account>();
     connectedUsers: Map<string, Profile> = new Map<string, Profile>(); // Key is the userName :: ALWAYS USE THIS MAP TO GET THE CONNECTED USERS
-
+    password: string = 'y';
     constructor(
         private readonly logger: Logger,
         @InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>,
@@ -39,7 +40,7 @@ export class AccountManagerService implements OnModuleInit {
                     stats: {} as Statistics,
                     friends: [],
                     friendRequests: [],
-                    language: '',
+                    language: 'en',
                     theme: THEME_PERSONNALIZATION[0],
                 },
             };
@@ -102,6 +103,56 @@ export class AccountManagerService implements OnModuleInit {
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change pseudo --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async changePassword(oldUsername: string, newPasword: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.credentials.password = newPasword;
+
+            await accountFound.save();
+            this.logger.verbose('Password change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change pseudo --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async modifyTheme(oldUsername: string, newTheme: Theme): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.theme = newTheme;
+
+            await accountFound.save();
+            this.logger.verbose('Theme change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change theme --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async modifyLanguage(oldUsername: string, newLanguage: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.language = newLanguage;
+
+            await accountFound.save();
+            this.logger.verbose('language change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change language --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
@@ -170,4 +221,15 @@ export class AccountManagerService implements OnModuleInit {
             this.logger.verbose(`${key}`);
         });
     }
+
+    // async connexionToAdmin(password: string): Promise<boolean> {
+    //     try {
+    //         console.log(password + 'qdsdss');
+    //         if (password !== 'admin') throw new Error('Wrong password');
+    //         return Promise.resolve(password === 'admin');
+    //     } catch (error) {
+    //         this.logger.error(`Failed to connect --> ${error.message}`);
+    //         return Promise.reject(`${error}`);
+    //     }
+    // }
 }

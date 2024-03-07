@@ -44,6 +44,7 @@ export class ProfilPageComponent implements AfterViewInit {
         this.showTable = !this.showTable;
     }
     translateCharacter(character: string): string {
+        console.log(this.welcomeService.account.profile.language + 'csdj');
         return this.translate.instant(`bouton.${character}`);
     }
     onSubmitHome() {
