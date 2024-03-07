@@ -38,6 +38,17 @@ export class DatabaseService implements OnModuleInit {
         await this.getAllGameIds();
     }
 
+    async loadGamesInServer(): Promise<void> {
+        try {
+            // const games = await this.gameModel.find().exec();
+            // games.forEach((game) => {
+            //     this.saveFiles(game);
+            // });
+        } catch (error) {
+            return Promise.reject(`Failed to load games in server: ${error}`);
+        }
+    }
+
     async getGamesCarrousel(): Promise<CarouselPaginator[]> {
         if (this.gameListManager['carouselGames'].length === 0) {
             const gameCardsList: GameCard[] = await this.gameCardModel.find().exec();
@@ -99,9 +110,9 @@ export class DatabaseService implements OnModuleInit {
         try {
             const newGameInDB: Game = {
                 name: newGame.name,
-                originalImage: `assets/${newGame.name}/original.bmp`,
-                modifiedImage: `assets/${newGame.name}/modified.bmp`,
-                differences: `assets/${newGame.name}/differences.json`,
+                originalImage: newGame.originalImage,
+                modifiedImage: newGame.modifiedImage,
+                differences: JSON.stringify(newGame.differences),
                 nDifference: newGame.nDifference,
                 isHard: newGame.isHard,
             };
