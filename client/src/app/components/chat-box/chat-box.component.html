@@ -8,10 +8,11 @@
         </div>
         <div class="messages">
             <ul>
-                <li [class]="messageItem.tag" *ngFor="let messageItem of messages">
-                    <h4>{{ messageItem.userName }}</h4>
-                    <p>{{ messageItem.message }}</p>
-                    <h4>{{ messageItem.timestamp }}</h4>
+                <li [class]="message.tag" *ngFor="let message of messages">
+                    <img src="{{'http://localhost:3000' + message.name}}" alt="avatar" />
+                    <h4>{{ message.name }}</h4>
+                    <p>{{ message.raw }}</p>
+                    <h4>{{ message.timestamp }}</h4>
                 </li>
             </ul>
         </div>
