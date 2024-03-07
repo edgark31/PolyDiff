@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/models/canvas_model.dart';
+import 'package:mobile/services/image_converter_service.dart';
+import 'package:mobile/widgets/canvas.dart';
 
 class ClassicGamePage extends StatefulWidget {
   static const routeName = CLASSIC_ROUTE;
@@ -19,19 +22,22 @@ class ClassicGamePage extends StatefulWidget {
 }
 
 class _ClassicGamePageState extends State<ClassicGamePage> {
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  final ImageConverterService imageConverterService = ImageConverterService();
+  late Future<CanvasModel> imagesFuture;
 
   @override
   void initState() {
     super.initState();
+    imagesFuture = loadImage();
+  }
+
+  Future<CanvasModel> loadImage() async {
+    String imagePath = 'assets/images/raton-laveur.bmp';
+    return imageConverterService.fromImagePath(imagePath);
   }
 
   @override
   Widget build(BuildContext context) {
-    String title = 'Partie classique';
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -42,13 +48,21 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
           ),
           SizedBox(height: 10),
           AbsorbPointer(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //ModifiedCanvas(images, '123'),
-                SizedBox(width: 50),
-                //OriginalCanvas(images, '123'),
-              ],
+            child: FutureBuilder<CanvasModel>(
+              future: imagesFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ModifiedCanvas(snapshot.data, '123'),
+                      OriginalCanvas(snapshot.data, '123'),
+                    ],
+                  );
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
             ),
           ),
         ],

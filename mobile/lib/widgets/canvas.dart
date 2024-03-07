@@ -65,6 +65,7 @@ class ModifiedCanvas extends GameCanvas {
           ),
           child: GestureDetector(
             onTapUp: (details) {
+              print('canvas tapped');
               x.value = details.localPosition.dx.toDouble() /
                   GameCanvas.tabletScalingRatio;
               y.value = details.localPosition.dy.toDouble() /
