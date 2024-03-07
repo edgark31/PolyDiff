@@ -98,9 +98,17 @@ class _ChatBoxState extends State<ChatBox> {
                           ? CrossAxisAlignment.end
                           : CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          messages[index].userName,
-                          style: TextStyle(color: Colors.black),
+                        Row(
+                          children: [
+                            CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    'http://127.0.0.1:3000/admin.png'),
+                                radius: 15.0),
+                            Text(
+                              messages[index].userName,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
                         ),
                         Container(
                           width: 250,

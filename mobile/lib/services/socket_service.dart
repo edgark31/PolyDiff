@@ -9,11 +9,10 @@ class SocketService extends ChangeNotifier {
   static const String serverPort = '3000';
   static const String serverURL = 'http://$serverIP:$serverPort';
   static final List<ChatMessage> messages = [];
-  String approvedName = 'admin'; // TODO: change to user input
+  String approvedName = '';
   static IO.Socket authSocket = IO.io(serverURL, <String, dynamic>{
     'transports': ['websocket'],
     'autoConnect': false,
-    'query': 'name=admin' // TODO: change to user input
   });
 
   bool isConnectionApproved = true; // TODO : connect with connection page
@@ -23,11 +22,18 @@ class SocketService extends ChangeNotifier {
   List<ChatMessage> get allMessages => List.unmodifiable(messages);
 
   void setup() {
+    authSocket = IO.io(serverURL, <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': false,
+      'query': 'name=$userName' // TODO: change to user input
+    });
+
     authSocket.onConnect((_) {
       print('Connected to server on $serverIP:$serverPort');
       isSocketConnected = true;
       notifyListeners();
     });
+
     authSocket.onConnectError((data) => print('Connection error: $data'));
     authSocket.onDisconnect((_) {
       print('Disconnected from server');
@@ -38,7 +44,6 @@ class SocketService extends ChangeNotifier {
     });
 
     //Event listeners
-
     authSocket.on(MessageEvents.GlobalMessage.name, (data) {
       print('GlobalMessage received: $data');
       ChatMessage message = ChatMessage.fromJson(data);
