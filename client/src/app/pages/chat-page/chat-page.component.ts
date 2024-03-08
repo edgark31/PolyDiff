@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
 import { Chat } from '@common/game-interfaces';
 
@@ -11,19 +12,24 @@ import { Chat } from '@common/game-interfaces';
 export class ChatPageComponent implements AfterViewInit, OnDestroy {
     messages: Chat[] = [];
 
-    constructor(private readonly globalChatService: GlobalChatService, private readonly router: Router) {}
+    constructor(
+        private readonly clientSocketService: ClientSocketService,
+        private readonly globalChatService: GlobalChatService,
+        private readonly router: Router,
+    ) {}
 
     ngAfterViewInit(): void {
-        this.globalChatService.manage();
-        this.globalChatService.updateLog();
-        this.globalChatService.message$.subscribe((message: Chat) => {
-            this.receiveMessage(message);
-        });
+        if (this.clientSocketService.isSocketAlive('auth')) {
+            this.globalChatService.manage();
+            this.globalChatService.updateLog();
+            this.globalChatService.message$.subscribe((message: Chat) => {
+                this.receiveMessage(message);
+            });
+        }
     }
 
     back(): void {
         this.router.navigate(['/home']);
-        this.globalChatService.off();
     }
 
     sendMessage(message: string): void {
@@ -35,6 +41,8 @@ export class ChatPageComponent implements AfterViewInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.globalChatService.off();
+        if (this.clientSocketService.isSocketAlive('auth')) {
+            this.globalChatService.off();
+        }
     }
 }
