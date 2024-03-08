@@ -122,6 +122,7 @@ export enum GameCardActions {
     Create = 'create',
     Join = 'join',
 }
+
 export { Coordinate };
 
 export interface ChatMessageGlobal {
@@ -142,8 +143,8 @@ export interface Observers {
 }
 
 export interface Lobby {
-    lobbyId: number;
-    game: Game;
+    lobbyId?: string;
+    gameId: string;
     isAvailable: boolean;
     players: Player[];
     observers: Observers[];
@@ -152,7 +153,7 @@ export interface Lobby {
 }
 
 export interface Game {
-    gameId: number;
+    gameId?: string;
     original: string;
     modified: string;
     difficulty: string;

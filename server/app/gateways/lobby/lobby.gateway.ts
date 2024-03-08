@@ -12,15 +12,21 @@ export class LobbyGateway implements OnGatewayConnection {
     @WebSocketServer() private server: Server;
     private readonly lobbies = new Map<string, Lobby>();
 
-    constructor(private readonly logger: Logger, private readonly accountManager: AccountManagerService) {
-        //
-    }
+    constructor(private readonly logger: Logger, private readonly accountManager: AccountManagerService) {}
 
     @SubscribeMessage(LobbyEvents.Create)
-    create(@ConnectedSocket() socket: Socket): string {
-        socket.join(socket.data.id);
-        this.logger.log(`${socket.id} crée un lobby`);
-        return 'Hello world!';
+    async create(@ConnectedSocket() socket: Socket, lobby: Lobby) {
+        lobby.lobbyId = socket.data.id;
+        socket.join(lobby.lobbyId);
+        this.lobbies.set(lobby.lobbyId, lobby);
+        this.update();
+        this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.id)} crée un lobby`);
+    }
+
+    @SubscribeMessage(LobbyEvents.Join)
+    join(@ConnectedSocket() socket: Socket, lobbyId: string) {
+        socket.join(lobbyId);
+        this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.id)} rejoint le lobby ${lobbyId}`);
     }
 
     @SubscribeMessage(LobbyEvents.UpdateLobbys)
