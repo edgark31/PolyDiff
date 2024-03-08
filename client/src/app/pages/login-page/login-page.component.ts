@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
