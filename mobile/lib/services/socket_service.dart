@@ -10,22 +10,20 @@ class SocketService extends ChangeNotifier {
   static const String serverURL = 'http://$serverIP:$serverPort';
 
   static final List<ChatMessage> messages = [];
-  String approvedName = '';
   static late IO.Socket authSocket;
   static late IO.Socket lobbySocket;
   static late IO.Socket gameSocket;
 
-  String get userName => approvedName;
   List<ChatMessage> get allMessages => List.unmodifiable(messages);
 
-  void setup(SocketType type) {
-    print('setup ${type.name} started');
+  void setup(SocketType type, String name) {
+    print('Setup ${type.name} started for $name');
     switch (type) {
       case SocketType.Auth:
         authSocket = IO.io(serverURL, <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'name=$approvedName'
+          'query': 'name=$name'
         });
         setSocket(authSocket);
         setupEventListenersAuthSocket();
@@ -34,7 +32,7 @@ class SocketService extends ChangeNotifier {
         lobbySocket = IO.io("$serverURL/lobby", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'name=$approvedName'
+          'query': 'name=$name'
         });
         setSocket(lobbySocket);
         break;
@@ -42,12 +40,12 @@ class SocketService extends ChangeNotifier {
         gameSocket = IO.io("$serverURL/game", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'name=$approvedName'
+          'query': 'name=$name'
         });
         setSocket(gameSocket);
         break;
     }
-    print("Setup ${type.name} completed");
+    print("Setup $type.name completed for $name");
   }
 
   void setSocket(IO.Socket socket) {
@@ -80,9 +78,9 @@ class SocketService extends ChangeNotifier {
     });
   }
 
-  void connect(SocketType type) {
-    print("Connecting socket ${type.name}");
-    setup(type);
+  void connect(SocketType type, String name) {
+    print("Connecting socket $type.name for $name");
+    setup(type, name);
     switch (type) {
       case SocketType.Auth:
         authSocket.connect();
@@ -120,10 +118,5 @@ class SocketService extends ChangeNotifier {
     messages.add(message);
     notifyListeners();
     print(allMessages.length);
-  }
-
-  void setName(String name) {
-    print('Setting name : $name');
-    approvedName = name;
   }
 }

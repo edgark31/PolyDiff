@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/avatar.dart';
 import 'package:provider/provider.dart';
@@ -11,11 +12,12 @@ class CustomMenuDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final socketService = context.watch<SocketService>();
+    final infoService = context.watch<InfoService>();
     return Drawer(
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text('Marie-Jade'),
+            accountName: Text(infoService.name),
             accountEmail: Text('marie-jade.marcil@polymtl.ca'),
             currentAccountPicture: Avatar(
               imageUrl: 'assets/images/hallelujaRaccoon.jpeg',
