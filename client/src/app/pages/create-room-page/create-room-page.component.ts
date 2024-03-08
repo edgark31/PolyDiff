@@ -10,6 +10,7 @@ export class CreateRoomPageComponent {
     isCheatModeEnabled = false;
     gameMode = 'limited';
     time: number | null = 0;
+    password: string;
     constructor(private readonly roomManagerService: RoomManagerService) {
         this.gameMode = this.roomManagerService.gameMode;
     }
@@ -18,6 +19,10 @@ export class CreateRoomPageComponent {
         this.time = value;
         console.log('Time: ', this.time);
         return value + ' sec';
+    }
+
+    onSubmit() {
+        this.roomManagerService.password = this.password;
     }
 
 }

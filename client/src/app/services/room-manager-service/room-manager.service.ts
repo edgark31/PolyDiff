@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 })
 export class RoomManagerService {
     gameMode: string;
+    password: string;
     private joinedPlayerNames: Subject<string[]>;
     private playerNameAvailability: Subject<PlayerNameAvailability>;
     private rooms1V1AvailabilityByGameId: Subject<RoomAvailability>;
