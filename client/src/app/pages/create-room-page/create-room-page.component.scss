@@ -92,7 +92,27 @@ h1 {
     z-index: 1;
 }
 
-button:hover {
+.settings-button {
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    font-family: 'Troika', sans-serif;
+    font-size: 60px;
+    width: 30vw;
+    height: 80px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: rgba(253, 250, 151, 255);
+    border: none;
+    border-radius: 25px;
+    background-color: #e8a430;
+    animation: titleFadeIn 1.5s ease-in-out;
+    z-index: 1;
+}
+
+
+button .button:hover {
     background-color: #db9110;
     color: black;
     transform: scale(1.05);
