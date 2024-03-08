@@ -1,3 +1,4 @@
+import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { LobbyEvents } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 import { Logger } from '@nestjs/common';
@@ -11,12 +12,13 @@ export class LobbyGateway implements OnGatewayConnection {
     @WebSocketServer() private server: Server;
     private readonly lobbies = new Map<string, Lobby>();
 
-    constructor(private readonly logger: Logger) {
+    constructor(private readonly logger: Logger, private readonly accountManager: AccountManagerService) {
         //
     }
 
     @SubscribeMessage(LobbyEvents.Create)
     create(@ConnectedSocket() socket: Socket): string {
+        socket.join(socket.data.id);
         this.logger.log(`${socket.id} crée un lobby`);
         return 'Hello world!';
     }
@@ -27,11 +29,11 @@ export class LobbyGateway implements OnGatewayConnection {
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
-        const userName = socket.handshake.query.name as string;
-        socket.data.username = userName;
+        const userId = socket.handshake.query.id as string;
+        socket.data.id = userId;
         socket.on('disconnecting', () => {
-            this.logger.log(`LOBBY OUT de ${userName} : ${Array.from(socket.rooms)[0]}`);
+            this.logger.log(`LOBBY OUT de ${userId} : ${Array.from(socket.rooms)[0]}`);
         });
-        this.logger.log(`LOBBY IN de ${userName}`);
+        this.logger.log(`LOBBY IN de ${userId}`);
     }
 }
