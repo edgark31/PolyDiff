@@ -9,12 +9,13 @@ class GameAreaService extends ChangeNotifier {
   List<Coordinate> coordinates = [];
   Path? blinkingDifference;
   Paint defaultBlinkingColor = Paint()
-    ..color = Colors.yellow
+    ..color = Colors.green
     ..style = PaintingStyle.fill;
 
-  void showDifferenceFound(List<Coordinate> coordinates) {
+  void showDifferenceFound(List<Coordinate> newCoordinates) {
     // _soundService.playDifferenceFound();
-    coordinates.addAll(coordinates);
+    print('enters showDifferenceFound');
+    coordinates.addAll(newCoordinates);
     notifyListeners();
     startBlinking(coordinates);
   }
@@ -31,6 +32,7 @@ class GameAreaService extends ChangeNotifier {
   }*/
 
   void initDataToBlink(List<Coordinate> coords) {
+    print('enters initDataToBlink');
     final path = Path();
     for (var coord in coords) {
       path.addRect(Rect.fromPoints(
@@ -41,6 +43,7 @@ class GameAreaService extends ChangeNotifier {
   }
 
   Future<void> startBlinking(List<Coordinate> coords) async {
+    print('enters startBlinking');
     initDataToBlink(coords);
     if (blinkingDifference == null) return;
 
@@ -56,12 +59,14 @@ class GameAreaService extends ChangeNotifier {
   }
 
   Future<void> showDifferenceAndWait(Path difference, int waitingTimeMs) async {
+    print('enters showDifferenceAndWait');
     blinkingDifference = difference;
     notifyListeners();
     await Future.delayed(Duration(milliseconds: waitingTimeMs));
   }
 
   Future<void> hideDifference(int waitingTimeMs) async {
+    print('enters hideDifference');
     blinkingDifference = null;
     notifyListeners();
     await Future.delayed(Duration(milliseconds: waitingTimeMs));
