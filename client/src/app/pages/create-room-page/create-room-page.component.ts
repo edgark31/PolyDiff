@@ -9,11 +9,15 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 export class CreateRoomPageComponent {
     isCheatModeEnabled = false;
     gameMode = 'limited';
+    time: number | null = 0;
     constructor(private readonly roomManagerService: RoomManagerService) {
         this.gameMode = this.roomManagerService.gameMode;
     }
 
     formatLabel(value: number | null) {
+        this.time = value;
+        console.log('Time: ', this.time);
         return value + ' sec';
     }
+
 }
