@@ -10,6 +10,7 @@ import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 })
 export class ImportDialogComponent {
     imageData: string;
+    choice: string;
     constructor(
         public welcomeService: WelcomeService,
         private dialogRef: MatDialogRef<ImportDialogComponent>,
@@ -36,9 +37,15 @@ export class ImportDialogComponent {
     }
 
     onImport(): void {
-        if (this.welcomeService.chooseImage) this.welcomeService.selectAvatar = `http://localhost:3000/default${this.welcomeService.selectLocal}.png`;
-        else this.welcomeService.selectAvatar = this.imageData;
+        if (this.welcomeService.chooseImage) this.choice = `http://localhost:3000/default${this.welcomeService.selectLocal}.png`;
+        else this.choice = this.imageData;
         this.dialogRef.close();
+        this.verifyAccount();
+    }
+
+    verifyAccount(): void {
+        if (this.welcomeService.account) this.welcomeService.selectAvatarRegister = this.choice;
+        else this.welcomeService.selectAvatar = this.choice;
     }
     chooseImage(id: string): void {
         this.welcomeService.selectLocal = id;

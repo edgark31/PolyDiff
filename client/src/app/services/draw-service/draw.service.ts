@@ -12,7 +12,9 @@ export class DrawService {
     private activeCanvasPosition: CanvasPosition;
     private isMouseBeingDragged: boolean;
     private isSquareModeOn: boolean;
+    private isCircleModeOn: boolean;
     private rectangleTopCorner: Coordinate;
+    private ellipseCenter: Coordinate;
     private currentAction: CanvasAction;
     private clickPosition: Coordinate;
     private isMouseOutOfCanvas: boolean;
@@ -64,6 +66,10 @@ export class DrawService {
         return this.currentAction === CanvasAction.Rectangle;
     }
 
+    isCurrentActionEllipse(): boolean {
+        return this.currentAction === CanvasAction.Ellipse;
+    }
+
     isMouseDragged(): boolean {
         return this.isMouseBeingDragged;
     }
@@ -81,9 +87,12 @@ export class DrawService {
     startOperation() {
         this.isMouseBeingDragged = true;
         this.isSquareModeOn = false;
+        this.isCircleModeOn = false;
         this.setCanvasOperationStyle();
         if (this.isCurrentActionRectangle()) {
             this.rectangleTopCorner = this.clickPosition;
+        } else if (this.isCurrentActionEllipse()) {
+            this.ellipseCenter = this.clickPosition;
         } else {
             this.activeContext.beginPath();
             this.drawLine();
@@ -114,9 +123,18 @@ export class DrawService {
         }
     }
 
+    setCircleMode(isCircleModeOn: boolean) {
+        if (this.isMouseBeingDragged && this.isCurrentActionEllipse() && !this.isMouseOutOfCanvas) {
+            this.drawEllipse();
+            this.isCircleModeOn = isCircleModeOn;
+        }
+    }
+
     private drawCanvasOperation() {
         if (this.isCurrentActionRectangle()) {
             this.drawRectangle();
+        } else if (this.isCurrentActionEllipse()) {
+            this.drawEllipse();
         } else {
             this.drawLine();
         }
@@ -124,6 +142,9 @@ export class DrawService {
 
     private setCanvasOperationStyle() {
         if (this.isCurrentActionRectangle()) {
+            this.activeContext.globalCompositeOperation = 'source-over';
+            this.activeContext.fillStyle = this.drawingColor;
+        } else if (this.isCurrentActionEllipse()) {
             this.activeContext.globalCompositeOperation = 'source-over';
             this.activeContext.fillStyle = this.drawingColor;
         } else {
@@ -144,6 +165,21 @@ export class DrawService {
             rectangleHeight = -rectangleHeight;
         }
         this.activeContext.fillRect(this.rectangleTopCorner.x, this.rectangleTopCorner.y, rectangleWidth, rectangleHeight);
+    }
+
+    private drawEllipse() {
+        this.activeContext.clearRect(0, 0, IMG_WIDTH, IMG_HEIGHT);
+        this.activeContext.beginPath();
+        if (this.isCircleModeOn) {
+            const radius: number = Math.abs(this.clickPosition.x - this.ellipseCenter.x);
+            this.activeContext.ellipse(this.ellipseCenter.x, this.ellipseCenter.y, radius, radius, 0, 0, 2 * Math.PI);
+        } else {
+            const radiusX: number = Math.abs(this.clickPosition.x - this.ellipseCenter.x);
+            const radiusY: number = Math.abs(this.clickPosition.y - this.ellipseCenter.y);
+            this.activeContext.ellipse(this.ellipseCenter.x, this.ellipseCenter.y, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        }
+        this.activeContext.fill();
+        this.activeContext.closePath();
     }
 
     private drawLine() {
