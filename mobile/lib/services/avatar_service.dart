@@ -15,8 +15,6 @@ class AvatarServiceException implements Exception {
 }
 
 class AvatarService {
-  final String _baseUrl = BASE_URL;
-
   AvatarService();
 
   // Convert image data to Base64 string
@@ -33,7 +31,7 @@ class AvatarService {
 
   // If avatar is from camera or selected file
   Future<String?> uploadAvatar(String username, String base64Avatar) async {
-    const String url = '$BASE_URL/avatar/upload';
+    const String url = '$API_URL/avatar/upload';
 
     try {
       final response = await http.put(
@@ -52,9 +50,9 @@ class AvatarService {
     }
   }
 
-  // Send back the choosen predefined avatar
+  // If avatar is chosen from predefined avatar
   Future<String?> chooseAvatar(String username, String id) async {
-    const String url = '$BASE_URL/avatar/choose';
+    const String url = '$API_URL/avatar/choose';
 
     try {
       final response = await http.put(

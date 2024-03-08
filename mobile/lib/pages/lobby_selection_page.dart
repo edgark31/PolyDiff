@@ -37,7 +37,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
   @override
   void initState() {
     super.initState();
-    _gameCardProvider = GameCardProvider(baseUrl: BASE_URL);
+    _gameCardProvider = GameCardProvider(baseUrl: API_URL);
   }
 
   @override

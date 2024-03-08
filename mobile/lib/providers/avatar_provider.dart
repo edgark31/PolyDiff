@@ -3,14 +3,15 @@ import 'package:mobile/constants/app_routes.dart';
 class AvatarProvider {
   final String baseUrl;
 
-  AvatarProvider({this.baseUrl = BASE_URL});
+  AvatarProvider({this.baseUrl = API_URL});
 
   String getDefaultAvatarUrl(String id) {
-    print('$AVATAR_URL/default$id.png');
-    return '$AVATAR_URL/default$id.png';
+    // TODO : remove when completed
+    print('$BASE_URL/default$id.png');
+    return '$BASE_URL/default$id.png';
   }
 
   String getAccountAvatar(String username) {
-    return '$AVATAR_URL/$username.png';
+    return '$BASE_URL/$username.png';
   }
 }

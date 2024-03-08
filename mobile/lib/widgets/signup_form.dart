@@ -17,7 +17,9 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final FormService formService = FormService('http://localhost:3000');
+  final FormService formService = FormService(BASE_URL);
+
+  // Avatar
   final AvatarService _avatarService = AvatarService();
   ImageProvider? _selectedAvatar;
 

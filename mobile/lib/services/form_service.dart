@@ -7,7 +7,7 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/info_service.dart';
 
 class FormService {
-  final baseUrl = BASE_URL;
+  final baseUrl = API_URL;
   final InfoService infoService = Get.find();
 
   FormService(String baseUrl);

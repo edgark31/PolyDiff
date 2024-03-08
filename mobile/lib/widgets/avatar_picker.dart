@@ -19,8 +19,12 @@ class AvatarPicker extends StatefulWidget {
 }
 
 class _AvatarPickerState extends State<AvatarPicker> {
-  final AvatarProvider _avatarProvider = AvatarProvider(baseUrl: BASE_URL);
-  final CameraImageUploader _imageUploader = CameraImageUploader();
+  // Service to communicate with server
+  final AvatarService _avatarService = AvatarService();
+  // Providers
+  final AvatarProvider _avatarProvider = AvatarProvider(baseUrl: API_URL);
+  final CameraImageProvider _imageUploader = CameraImageProvider();
+
   ImageProvider? _selectedImage =
       AssetImage('assets/images/sleepyRaccoon.jpg'); // Placeholder image
 

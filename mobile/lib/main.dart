@@ -16,7 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => CameraImageUploader()),
+    ChangeNotifierProvider(create: (context) => CameraImageProvider()),
     ChangeNotifierProvider(create: (context) {
       SocketService socketService = Get.find();
       return socketService;

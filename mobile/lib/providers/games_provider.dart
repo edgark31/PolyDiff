@@ -7,7 +7,7 @@ import 'package:mobile/models/models.dart';
 class GameCardProvider {
   final String baseUrl;
 
-  GameCardProvider({this.baseUrl = BASE_URL});
+  GameCardProvider({this.baseUrl = API_URL});
 
   Future<GameCard> getById() async {
     final response = await http.get(Uri.parse('$baseUrl/games/carousel/0'));
