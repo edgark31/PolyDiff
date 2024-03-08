@@ -21,6 +21,10 @@ h1 {
     margin-top: 55px;
 }
 
+#title {
+    bottom: 30%;
+}
+
 .difficulty {
     position: absolute;
     transform: rotate(-13deg);
@@ -166,8 +170,8 @@ h3 {
 .createButton {
     width: 25%;
     height: 15%;
-    right: 22%;
-    bottom: 7%;
+    right: 37%;
+    bottom: 14%;
 }
 
 .playText {
@@ -182,8 +186,8 @@ h3 {
     position: absolute;
     font-size: 20px;
     color: #ffffff;
-    bottom: 12%;
-    left: 60%;
+    bottom: 18%;
+    left: 45%;
 }
 
 .deleteText {
