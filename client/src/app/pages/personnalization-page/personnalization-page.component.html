@@ -8,7 +8,7 @@
         <label for="username">{{'profil.username' | translate }}</label>
         <mat-form-field>
           <mat-label>Name</mat-label>
-          <input matInput placeholder="veuillez écrire votre nom" [(ngModel)]="selectName" required>
+          <input matInput placeholder="veuillez écrire votre nom" [(ngModel)]="welcomeService.selectName" required>
         </mat-form-field>
         <!-- <input type="text" formControlName="username" id="username"/> -->
       </div>
@@ -17,7 +17,7 @@
         <label for="username"> {{'profil.changePassword' | translate }}</label>
         <mat-form-field>
           <mat-label>Mot de passe</mat-label>
-          <input matInput type="password" placeholder="veuillez écrire votre mot de passe" [(ngModel)]="selectPassword" required>
+          <input matInput type="password" placeholder="veuillez écrire votre mot de passe" [(ngModel)]="welcomeService.selectPassword" required>
         </mat-form-field>
         <!-- <input type="text" formControlName="username" id="username"/> -->
       </div>
@@ -26,7 +26,7 @@
         <label for="username"> {{'profil.confirmePassword' | translate }}</label>
         <mat-form-field>
           <mat-label>Mot de passe</mat-label>
-          <input matInput type="password" placeholder="veuillez ré-écrire votre mot de passe" [(ngModel)]="selectPasswordConfirm"
+          <input matInput type="password" placeholder="veuillez ré-écrire votre mot de passe" [(ngModel)]="welcomeService.selectPasswordConfirm"
             required>
         </mat-form-field>
         <!-- <input type="text" formControlName="username" id="username"/> -->
@@ -55,10 +55,10 @@
           <label for="Theme">{{'profil.theme' | translate }}</label>
           <mat-form-field>
             <mat-label>{{'profil.theme' | translate }}</mat-label>
-            <mat-select [(value)]="selectTheme">
-              <mat-option [value]="themePersonnalization[0]">{{ themePersonnalization[0].name }}</mat-option>
-              <mat-option [value]="themePersonnalization[1]">{{ themePersonnalization[1].name }}</mat-option>
-              <mat-option [value]="themePersonnalization[2]">{{ themePersonnalization[2].name }}</mat-option>
+            <mat-select [(value)]="welcomeService.selectTheme">
+              <mat-option [value]="welcomeService.themePersonnalization[0]">{{ welcomeService.themePersonnalization[0].name }}</mat-option>
+              <mat-option [value]="welcomeService.themePersonnalization[1]">{{ welcomeService.themePersonnalization[1].name }}</mat-option>
+              <mat-option [value]="welcomeService.themePersonnalization[2]">{{ welcomeService.themePersonnalization[2].name }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -67,9 +67,9 @@
         <div class="form-control section"> <label for="Theme"> {{'profil.language' | translate }}</label>
           <mat-form-field>
             <mat-label>{{'profil.language' | translate }}</mat-label>
-            <mat-select [(value)]="selectLangage" (valueChange)="useLanguage(selectLangage)">
-              <mat-option [value]="langage[0]">{{'bouton.fr' | translate }}</mat-option>
-              <mat-option [value]="langage[1]">{{'bouton.en' | translate }}</mat-option>
+            <mat-select [(value)]="welcomeService.selectLangage" (valueChange)="useLanguage(welcomeService.selectLangage)">
+              <mat-option [value]="welcomeService.langage[0]">{{'bouton.fr' | translate }}</mat-option>
+              <mat-option [value]="welcomeService.langage[1]">{{'bouton.en' | translate }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>

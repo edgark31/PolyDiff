@@ -3,7 +3,7 @@
     <div class="form-control">
         <label for="avatar">Avatar</label>
         <div class="form-avatar">
-            <img [src]="welcomeService.selectAvatar" class="avatar" alt="image">
+            <img [src]="welcomeService.selectAvatarRegister" class="avatar" alt="image">
               <button mat-icon-button class="photo_library" (click)="openAvatarDialog(true)">
                 <mat-icon>photo_library</mat-icon>
               </button>
@@ -14,7 +14,7 @@
     </div>
     <div class="form-control">
         <label for="username">
-            Nom d'utilisateur 
+            Nom d'utilisateur
             <mat-icon matTooltip="Génerer un nom d'utilisateur" (click)="openNameGenerationDialog()" class="icon">help</mat-icon>
         </label>
         <input formControlName="username" id="username" [(ngModel)]="username"/>
@@ -39,4 +39,4 @@
     <button type="submit" (click)="onSubmit()">Créer un compte</button>
     <p class="feedback" >{{ feedback }}</p>
 </form>
-<img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>   
+<img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>

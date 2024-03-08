@@ -1,9 +1,12 @@
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AccountController } from './controllers/account/account.controller';
+
 import { GameController } from './controllers/game/game.controller';
 import { AuthGateway } from './gateways/auth/auth.gateway';
 import { GameGateway } from './gateways/game/game.gateway';
@@ -21,12 +24,37 @@ import { GameService } from './services/game/game.service';
 import { HistoryService } from './services/history/history.service';
 import { ImageManagerService } from './services/image-manager/image-manager.service';
 import { LimitedModeService } from './services/limited-mode/limited-mode.service';
+import { MailService } from './services/mail-service/mail-service';
 import { MessageManagerService } from './services/message-manager/message-manager.service';
 import { PlayersListManagerService } from './services/players-list-manager/players-list-manager.service';
 import { RoomsManagerService } from './services/rooms-manager/rooms-manager.service';
 
 @Module({
     imports: [
+        MailerModule.forRootAsync({
+            useFactory: async (config: ConfigService) => ({
+                transport: {
+                    host: config.get('MAIL_HOST'),
+                    port: 587,
+                    secure: false,
+                    auth: {
+                        user: config.get('MAIL_USER'),
+                        pass: config.get('MAIL_PASSWORD'),
+                    },
+                },
+                defaults: {
+                    from: `"No Reply" <${config.get('MAIL_FROM')}>`,
+                },
+                template: {
+                    dir: join(__dirname, './templates'),
+                    adapter: new HandlebarsAdapter(),
+                    options: {
+                        strict: true,
+                    },
+                },
+            }),
+            inject: [ConfigService],
+        }),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'assets'),
         }),
@@ -64,6 +92,8 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
         LimitedModeService,
         AccountManagerService,
         ImageManagerService,
+        MailService,
     ],
+    exports: [MailService],
 })
 export class AppModule {}
