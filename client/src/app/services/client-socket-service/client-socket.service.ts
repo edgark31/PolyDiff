@@ -29,16 +29,16 @@ export class ClientSocketService {
         }
     }
 
-    connect(userName: string, nameSpace: string) {
+    connect(userId: string, nameSpace: string) {
         switch (nameSpace) {
             case 'lobby':
-                this.lobbySocket = io(`${this.baseUrl}/${nameSpace}`, { transports: ['websocket'], upgrade: false, query: { name: userName } });
+                this.lobbySocket = io(`${this.baseUrl}/${nameSpace}`, { transports: ['websocket'], upgrade: false, query: { id: userId } });
                 break;
             case 'game':
-                this.gameSocket = io(`${this.baseUrl}/${nameSpace}`, { transports: ['websocket'], upgrade: false, query: { name: userName } });
+                this.gameSocket = io(`${this.baseUrl}/${nameSpace}`, { transports: ['websocket'], upgrade: false, query: { id: userId } });
                 break;
             case 'auth':
-                this.authSocket = io(this.baseUrl, { transports: ['websocket'], upgrade: false, query: { name: userName } });
+                this.authSocket = io(this.baseUrl, { transports: ['websocket'], upgrade: false, query: { id: userId } });
                 break;
             default:
                 throw new Error(`Unknown namespace: ${nameSpace}`);

@@ -68,12 +68,6 @@ export interface GameRoom {
     player1: Player;
 }
 
-export interface Player {
-    playerId?: string;
-    name: string;
-    differenceData: Differences;
-}
-
 export interface PlayerData {
     playerName: string;
     gameId: string;
@@ -128,6 +122,7 @@ export enum GameCardActions {
     Create = 'create',
     Join = 'join',
 }
+
 export { Coordinate };
 
 export interface ChatMessageGlobal {
@@ -137,24 +132,30 @@ export interface ChatMessageGlobal {
     timestamp?: string;
 }
 
-export interface Lobby {
-    lobbyId: number;
-    gameId: number;
-    isAvailable: boolean;
-    players: Player[];
-    observers: Observers[];
-    isCheatEnabled: boolean;
+export interface Player {
+    playerId?: string;
+    name: string;
+    differenceData: Differences;
 }
 
 export interface Observers {
     name: string;
 }
 
+export interface Lobby {
+    lobbyId?: string;
+    gameId: string;
+    isAvailable: boolean;
+    players: Player[];
+    observers: Observers[];
+    isCheatEnabled: boolean;
+    mode: string;
+}
+
 export interface Game {
-    gameId: number;
+    gameId?: string;
     original: string;
     modified: string;
-    mode: string;
     difficulty: string;
     differences: Coordinate[][];
 }
