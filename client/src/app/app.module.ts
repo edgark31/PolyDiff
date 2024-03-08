@@ -65,6 +65,7 @@ import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { GameModePageComponent } from './pages/game-mode-page/game-mode-page.component';
+import { CreateRoomnComponent } from './pages/create-roomn/create-roomn.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -114,6 +115,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         ImportDialogComponent,
         ChatPageComponent,
         GameModePageComponent,
+        CreateRoomnComponent,
     ],
     imports: [
         AppMaterialModule,
