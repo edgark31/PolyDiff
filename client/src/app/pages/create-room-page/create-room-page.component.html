@@ -1,6 +1,25 @@
-<mat-checkbox class="checkbox" color="primary" [(ngModel)]="isCheatModeEnabled" >Contient un animal </mat-checkbox>
-<mat-slider
-    [displayWith]="formatLabel"
-    tickInterval="1"
-    min="1"
-    max="120"></mat-slider>
+<div class="container flex-column">
+    <div>
+        <app-nav-bar> </app-nav-bar>
+    </div>
+    <!-- <header class="header">
+        <h1 class="header-item flex-column">Bienvenue</h1>
+    </header> -->
+    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/> 
+    <div class="flex-column">
+        <button class="button">
+            <span id = "classic"><mat-slider color="warn" thumbLabel [displayWith]="formatLabel" tickInterval="1" min="1" max="120"></mat-slider></span>
+        </button>
+        <button class="button">
+            <mat-checkbox id="config" color="warn" [(ngModel)]="isCheatModeEnabled"></mat-checkbox>
+            <span id = "classic">Mode triche</span>
+        </button>
+        <button class="button">
+            <span id = "classic">Mot de passe</span>
+            <input mat-input id="password" type="text" placeholder="Mot de passe">
+        </button>
+    </div>
+
+    <footer class="footer flex-column">
+    </footer>
+</div>
