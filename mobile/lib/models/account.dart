@@ -29,6 +29,14 @@ class Credentials {
   const Credentials(
       {required this.username, required this.password, this.email});
 
+  static Credentials fromJson(Map<String, dynamic> json) {
+    return Credentials(
+      username: json['username'],
+      password: json['password'],
+      email: json['email'],
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'username': username,

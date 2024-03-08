@@ -18,8 +18,9 @@ class CustomMenuDrawer extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(infoService.name),
-            accountEmail: Text('marie-jade.marcil@polymtl.ca'),
+            accountEmail: Text(infoService.email),
             currentAccountPicture: Avatar(
+              // TODO: Change avatar
               imageUrl: 'assets/images/hallelujaRaccoon.jpeg',
               radius: 20,
             ),

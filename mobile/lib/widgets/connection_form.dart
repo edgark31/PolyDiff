@@ -98,7 +98,6 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       String? serverErrorMessage =
                           await formService.connect(credentials);
                       if (serverErrorMessage == null) {
-                        infoService.setName(userNameController.text);
                         socketService.connect(
                             SocketType.Auth, infoService.name);
                         chatService.setListeners(); // TODO : move this (maybe)
