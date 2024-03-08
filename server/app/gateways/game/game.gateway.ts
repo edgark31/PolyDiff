@@ -4,7 +4,7 @@ import { LimitedModeService } from '@app/services/limited-mode/limited-mode.serv
 import { PlayersListManagerService } from '@app/services/players-list-manager/players-list-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { ConnectedSocket, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { ConnectedSocket, OnGatewayConnection, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
 
@@ -12,7 +12,7 @@ import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
     namespace: '/game',
 })
 @Injectable()
-export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
+export class GameGateway implements OnGatewayConnection, OnGatewayInit {
     @WebSocketServer() private server: Server;
 
     // gateway needs to be injected all the services that it needs to use
@@ -218,13 +218,10 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     handleConnection(@ConnectedSocket() socket: Socket) {
         const userName = socket.handshake.query.name as string;
         socket.data.username = userName;
+        socket.on('disconnecting', () => {
+            this.accountManager.deconnexion(socket.data.username);
+            this.logger.log(`LOBBY OUT de ${userName} : ${Array.from(socket.rooms)[0]}`);
+        });
         this.logger.log(`GAME ON de ${userName}`);
-    }
-
-    // Test com
-
-    async handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.accountManager.deconnexion(socket.data.username);
-        this.logger.log(`GAME OFF de ${socket.data.username}`);
     }
 }
