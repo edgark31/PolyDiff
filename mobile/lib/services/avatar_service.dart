@@ -52,6 +52,8 @@ class AvatarService {
 
   // If avatar is chosen from predefined avatar
   Future<String?> chooseAvatar(String username, String id) async {
+    print("id: $id");
+    print("username: $username");
     const String url = '$API_URL/avatar/choose';
 
     try {
@@ -62,6 +64,7 @@ class AvatarService {
       );
 
       if (response.statusCode == 200) {
+        print('no');
         return null;
       } else {
         return response.body;

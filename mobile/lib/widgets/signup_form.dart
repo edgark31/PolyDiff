@@ -17,11 +17,13 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final FormService formService = FormService(BASE_URL);
+  final FormService formService = FormService();
 
   // Avatar
   final AvatarService _avatarService = AvatarService();
   ImageProvider? _selectedAvatar;
+  String? _selectedAvatarId;
+  String? _selectedAvatarBase64;
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -112,15 +114,6 @@ class _SignUpFormState extends State<SignUpForm> {
     return isValidUsername && isValidEmail && isValidPassword;
   }
 
-  // avatar
-  dynamic _selectedAvatarData; // This could be a Base64 string or an avatar ID
-
-  void _handleAvatarSelected(dynamic avatarData) {
-    setState(() {
-      _selectedAvatarData = avatarData;
-    });
-  }
-
   Future<void> _registerUser() async {
     if (isFormValid()) {
       Credentials credentials = Credentials(
@@ -129,24 +122,19 @@ class _SignUpFormState extends State<SignUpForm> {
         email: emailController.text,
       );
 
-      String? serverErrorMessage = await formService.register(credentials);
-
+      // Handle avatar upload/selection based on the type of avatar data available
       String? avatarErrorMessage;
-      if (_selectedAvatarData != null) {
-        // Determine if _selectedAvatarData is a Base64 string or an ID
-        // Upload the avatar using the appropriate service method
-        if (_selectedAvatarData is String && _isBase64(_selectedAvatarData)) {
-          avatarErrorMessage = await _avatarService.uploadAvatar(
-            credentials.username,
-            _selectedAvatarData,
-          );
-        } else if (_selectedAvatarData is String) {
-          // If _selectedAvatarData is an ID or URL, use the method for selecting a predefined avatar
-          avatarErrorMessage = await _avatarService.chooseAvatar(
-            credentials.username,
-            _selectedAvatarData,
-          );
-        }
+      String? serverErrorMessage;
+      if (_selectedAvatarId != null) {
+        serverErrorMessage =
+            await formService.register(credentials, _selectedAvatarId!);
+        print("selected id : $_selectedAvatarId");
+      } else if (_selectedAvatarBase64 != null) {
+        // Camera image selected, call uploadAvatar
+        avatarErrorMessage = await _avatarService.uploadAvatar(
+          credentials.username,
+          _selectedAvatarBase64!,
+        );
       }
 
       if (serverErrorMessage == null && avatarErrorMessage == null) {
@@ -162,11 +150,6 @@ class _SignUpFormState extends State<SignUpForm> {
         errorMessage = "Une ou plusieurs entrée(s) est/sont incorrecte(s)";
       });
     }
-  }
-
-  bool _isBase64(String str) {
-    // Implement a method to determine if a string is a valid Base64
-    return RegExp(r'^[A-Za-z0-9+/=]+$').hasMatch(str);
   }
 
   @override
@@ -373,13 +356,22 @@ class _SignUpFormState extends State<SignUpForm> {
 
   Widget _buildAvatarPicker() {
     return AvatarPicker(
-      onAvatarSelected: (
-        ImageProvider image,
-      ) {
+      onAvatarSelected: (ImageProvider image, {String? id, String? base64}) {
+        if (id != null) {
+          // Predefined avatar selected
+          _handlePredefinedAvatarSelection(id);
+        } else if (base64 != null) {
+          // Camera image selected, handled similarly to previous examples
+        }
+        // Just update UI, no upload required
         setState(() {
           _selectedAvatar = image;
         });
       },
     );
+  }
+
+  void _handlePredefinedAvatarSelection(String id) {
+    _selectedAvatarId = id;
   }
 }

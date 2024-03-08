@@ -20,7 +20,7 @@ class ConnectionForm extends StatefulWidget {
 }
 
 class _ConnectionFormState extends State<ConnectionForm> {
-  final FormService formService = FormService('http://localhost:3000');
+  final FormService formService = FormService();
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String errorMessage = "";

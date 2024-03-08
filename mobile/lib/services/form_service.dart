@@ -7,17 +7,18 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/info_service.dart';
 
 class FormService {
-  final baseUrl = API_URL;
+  final baseUrl = BASE_URL;
   final InfoService infoService = Get.find();
 
-  FormService(String baseUrl);
+  FormService();
 
-  Future<String?> register(Credentials credentials) async {
+  Future<String?> register(Credentials credentials, String id) async {
     final url = '$baseUrl/account/register';
 
     try {
       final requestBody = {
         'creds': credentials.toJson(),
+        'id': id,
       };
       final response = await http.post(
         Uri.parse(url),
@@ -26,6 +27,7 @@ class FormService {
       );
 
       if (response.statusCode == 200) {
+        print('account sent');
         return null;
       } else {
         final errorMessage = response.body;

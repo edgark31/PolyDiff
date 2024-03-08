@@ -8,11 +8,13 @@ import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/services/avatar_service.dart';
 
-class AvatarPicker extends StatefulWidget {
-  final Function(ImageProvider) onAvatarSelected;
+typedef OnAvatarSelected = Function(ImageProvider image,
+    {String? id, String? base64});
 
-  const AvatarPicker({Key? key, required this.onAvatarSelected})
-      : super(key: key);
+class AvatarPicker extends StatefulWidget {
+  final OnAvatarSelected onAvatarSelected;
+
+  const AvatarPicker({super.key, required this.onAvatarSelected});
 
   @override
   State<AvatarPicker> createState() => _AvatarPickerState();
@@ -33,6 +35,15 @@ class _AvatarPickerState extends State<AvatarPicker> {
       _selectedImage = image;
     });
     widget.onAvatarSelected(image);
+  }
+
+  void _handlePredefinedAvatarSelection(String id) {
+    ImageProvider image =
+        NetworkImage(_avatarProvider.getDefaultAvatarUrl('1'));
+    setState(() {
+      _selectedImage = image;
+    });
+    widget.onAvatarSelected(image, id: id);
   }
 
   Future<void> _handleCameraImageSelection() async {
@@ -67,8 +78,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  _updateSelectedImage(
-                      NetworkImage(_avatarProvider.getDefaultAvatarUrl('1')));
+                  _handlePredefinedAvatarSelection('1');
                 },
                 child: avatarContainer(
                     NetworkImage(_avatarProvider.getDefaultAvatarUrl('1')),
