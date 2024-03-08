@@ -1,3 +1,39 @@
+@import url('https://fonts.cdnfonts.com/css/troika-2');
+
+.nav {
+    font-family: 'Troika', sans-serif;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+app-nav-bar {
+    font-family: 'Troika', sans-serif;
+    font-size: 25px;
+}
+
+button {
+    font-family: 'Troika', sans-serif;
+    font-size: 50px;
+    border: 5px solid #ffedb6;
+    background-color: #f5f5f5;
+    color: rgb(255, 251, 251);
+    -webkit-text-stroke: 4px black;
+    position: absolute;
+    left: 30px;
+    top: 20px;
+}
+
+button:hover {
+    background-color: #ffedb6;
+    color: #f5f5f5;
+}
+
+button:active {
+    background-color: #ffedb6;
+    color: #202020;
+}
+
 #background {
     background-color: #f5f5f5;
     height: 100%;
@@ -13,227 +49,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    width: 100%;
-}
-
-app-chat-box {
-    display: flex;
-    position: relative;
-    width: 80%;
-    height: 80%;
-    background: #e6eaea;
-    border-radius: 15px;
-}
-
-app-chat-box .content {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-}
-
-app-chat-box .content .contact-profile {
-    width: 100%;
-    height: 50px;
-    line-height: 60px;
-    background: #7daf9c;
-    margin-bottom: 15px;
-    border-radius: 15px;
-}
-app-chat-box .content .contact-profile img {
-    width: 40px;
-    border-radius: 50%;
-    float: left;
-    margin: 9px 12px 0 9px;
-}
-app-chat-box .content .contact-profile p {
-    float: left;
-    color: #eeee;
-    margin-left: 10px;
-}
-
-app-chat-box .content .messages {
-    position: relative;
-    bottom: 12px;
-    display: flex;
-    flex-direction: column-reverse;
-    height: auto;
-    min-height: calc(100% - 90px);
-    max-height: calc(100% - 93px);
-    overflow-y: scroll;
-    overflow-x: hidden;
-    width: calc(100% - 20px);
-    padding-right: 20px;
-}
-
-app-chat-box .content .messages ul {
-    padding-left: 0;
-}
-app-chat-box .content .messages ul li.Sent {
-    display: inline-block;
-    clear: both;
-    float: left;
-    padding-left: 250px;
-    margin: 15px 15px 15px 15px;
-    width: calc(100% - 25px);
-    font-size: 0.9em;
-}
-
-app-chat-box .content .messages ul li.Received {
-    display: inline-block;
-    clear: both;
-    float: left;
-    margin: 15px 15px 15px 15px;
-    width: calc(100% - 25px);
-    font-size: 0.9em;
-}
-
-app-chat-box .content .messages ul li.Common {
-    display: inline-block;
-    clear: both;
-    float: left;
-    text-align: center;
-    margin: 15px 15px 15px 15px;
-    width: calc(100% - 25px);
-    font-size: 0.9em;
-}
-
-app-chat-box .content .messages ul li img {
-    width: 40px;
-    border-radius: 50%;
-    float: left;
-}
-
-app-chat-box .content .messages ul li.Sent p {
-    display: inline-block;
-    padding: 10px 15px;
-    border-style: solid #1778f2;
-    color: white;
-    border-radius: 20px;
-    max-width: 200px;
-    line-height: 130%;
-    overflow-wrap: break-word;
-    font-size: 25px;
-    background-color: #1778f2;
-}
-
-app-chat-box .content .messages ul li.Received p {
-    display: inline-block;
-    padding: 10px 15px;
-    border-style: solid white;
-    color: black;
-    border-radius: 20px;
-    max-width: 200px;
-    line-height: 130%;
-    font-size: 25px;
-    overflow-wrap: break-word;
-    background-color: white;
-}
-
-app-chat-box .content .messages ul li.Common p {
-    display: inline-block;
-    color: rgb(224, 19, 19);
-    overflow-wrap: break-word;
-    font-weight: bold;
-    font-size: 25px;
-}
-
-app-chat-box .content .messages ul li.Global p {
-    display: inline-block;
-    color: rgb(8, 109, 11);
-    font-weight: bold;
-    overflow-wrap: break-word;
-    font-size: 25px;
-}
-
-app-chat-box .content .messages ul li.Global {
-    display: inline-block;
-    clear: both;
-    float: left;
-    text-align: center;
-    margin: 15px 15px 15px 15px;
-    width: calc(100% - 25px);
-    font-size: 0.9em;
-}
-
-app-chat-box .content .messages::-webkit-scrollbar {
-    width: 8px;
-    background: transparent;
-}
-app-chat-box .content .messages::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-app-chat-box .content .message-input {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    z-index: 99;
-}
-app-chat-box .content .message-input .wrap {
-    position: relative;
-}
-app-chat-box .content .message-input .wrap input {
-    font-family: sans-serif;
-    float: left;
-    border: none;
-    width: calc(100% - 105px);
-    padding: 11px 32px 15px 8px;
-    font-size: 0.8em;
-    color: #32465a;
-}
-
-app-chat-box .content .message-input .wrap input:focus {
-    outline: none;
-}
-app-chat-box .content .message-input .wrap .attachment {
-    position: absolute;
-    right: 60px;
-    z-index: 4;
-    margin-top: 10px;
-    font-size: 1.1em;
-    color: #435f7a;
-    opacity: 0.5;
-    cursor: pointer;
-}
-
-app-chat-box .content .message-input .wrap .attachment:hover {
-    opacity: 1;
-}
-app-chat-box .content .message-input .wrap button {
-    float: right;
-    border: none;
-    width: 15px;
-    padding-bottom: 2px;
-    cursor: pointer;
-    background: #7daf9c;
-    color: #f5f5f5;
-}
-
-app-chat-box .content .message-input .wrap button:hover {
-    background: #7daf9c;
-}
-app-chat-box .content .message-input .wrap button:focus {
-    outline: none;
-}
-
-app-chat-box .content .contact-profile button {
-    float: right;
-    border: none;
-    width: 14px;
-    padding-bottom: 14px;
-    cursor: pointer;
-    background: #7daf9c;
-    color: #f5f5f5;
+    height: 100vh;
+    width: 100vw;
 }
 
 .chat {
-    font-family: 'Troika', sans-serif;
-    font-size: 30px;
-    -webkit-text-stroke: 2px black;
-}
-
-#input {
-    font-size: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
 }
