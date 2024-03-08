@@ -44,7 +44,7 @@ export class LoginPageComponent {
                     this.clientSocket.connect(account.credentials.username, 'auth');
                     this.welcomeservice.account = account;
                     this.gameManager.username = account.credentials.username;
-                    this.welcomeservice.account.profile.avatar = `http://localhost:3000/${this.gameManager.username}.png`;
+                    this.welcomeservice.account.profile.avatar = `http://localhost:3000/avatar/${this.gameManager.username}.png`;
                     this.router.navigate(['/home']);
                 },
                 error: (error: HttpErrorResponse) => {
