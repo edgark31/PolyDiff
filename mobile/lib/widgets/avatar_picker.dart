@@ -41,7 +41,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
       String? uploadError =
           await AvatarService().uploadCameraImage('username', bytes);
       if (uploadError == null) {
-        // Success, notify the user or update the state as necessary
+        print('success avatar service uploadCameraImage');
         _updateSelectedImage(image);
       } else {
         print("erreur lors de envoie au serveur $uploadError");
