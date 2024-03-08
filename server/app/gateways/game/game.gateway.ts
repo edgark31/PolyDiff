@@ -38,12 +38,15 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         private readonly playersListManagerService: PlayersListManagerService,
         private readonly roomsManagerService: RoomsManagerService,
         private readonly limitedModeService: LimitedModeService,
+        private readonly accountManager: AccountManagerService,
     ) {}
 
-    @SubscribeMessage(GameEvents.StartGameByRoomId)
-    startGame(@ConnectedSocket() socket: Socket) {
-        this.roomsManagerService.startGame(socket, this.server);
-    }
+    // ------------------- -- LOGIC -- -------------------
+
+    // @SubscribeMessage(GameEvents.StartGameByRoomId)
+    // startGame(@ConnectedSocket() socket: Socket) {
+    //     this.roomsManagerService.startGame(socket, this.server);
+    // }
 
     @SubscribeMessage(RoomEvents.CreateClassicSoloRoom)
     async createSoloRoom(@ConnectedSocket() socket: Socket, @MessageBody() playerPayLoad: PlayerData) {

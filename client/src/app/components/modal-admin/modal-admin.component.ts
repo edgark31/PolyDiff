@@ -1,6 +1,8 @@
+/* eslint-disable max-params */
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 
 @Component({
@@ -15,13 +17,20 @@ export class ModalAdminComponent {
     isPasswordWrong: boolean = false;
     showModal: boolean = false;
 
-    constructor(private welcomeService: WelcomeService, private router: Router, public dialogRef: MatDialogRef<ModalAdminComponent>) {}
+    constructor(
+        private welcomeService: WelcomeService,
+        private router: Router,
+        public dialogRef: MatDialogRef<ModalAdminComponent>,
+        public clientSocketService: ClientSocketService,
+    ) {}
 
     async onSubmit() {
         this.welcomeService.validate(this.password).then((isValid) => {
             if (isValid) {
                 this.isPasswordWrong = false;
+                this.clientSocketService.connect(this.welcomeService.account.credentials.username, 'lobby');
                 this.router.navigate(['/admin']);
+                this.dialogRef.close();
             } else {
                 this.isPasswordWrong = true;
             }
