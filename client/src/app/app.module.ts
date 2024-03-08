@@ -55,8 +55,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
-import { ConfirmPasswordPageComponent } from './pages/Confirm-password-page/confirm-password-page.component';
-import { AdminPageComponent } from './pages/admin-page/admin-page.component';
+import { ConfirmPasswordPageComponent } from './pages/confirm-password-page/confirm-password-page.component';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
@@ -85,6 +84,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         PlayerNameDialogBoxComponent,
         GameInfosComponent,
         ImageCanvasComponent,
+        ImportDialogComponent,
         ConfigPageComponent,
         CreationGameDialogComponent,
         CanvasUnderButtonsComponent,
@@ -109,7 +109,6 @@ export const createTranslateLoader = (http: HttpClient) => {
         PersonnalizationPageComponent,
         ProfilPageComponent,
         ModalAdminComponent,
-        AdminPageComponent,
         ConfirmPasswordPageComponent,
         ImportDialogComponent,
         ChatPageComponent,

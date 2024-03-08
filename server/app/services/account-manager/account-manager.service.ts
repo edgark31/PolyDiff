@@ -1,18 +1,17 @@
-import { Song, Theme } from './../../model/database/account';
+import { Song } from './../../model/database/account';
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONNALIZATION } from '@common/constants';
-import { Profile } from '@common/game-interfaces';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 @Injectable()
 export class AccountManagerService implements OnModuleInit {
-    users: Map<string, Account> = new Map<string, Account>();
-    connectedUsers: Map<string, Profile> = new Map<string, Profile>(); // Key is the userName :: ALWAYS USE THIS MAP TO GET THE CONNECTED USERS
-    password: string = 'y';
+    users: Map<string, Account> = new Map<string, Account>(); // Key is the id :: ALWAYS USE THIS TO GET - USERS
+    connectedUsers: Map<string, Account> = new Map<string, Account>(); // Key is the id :: ALWAYS USE THIS TO GET - CONNECTED USERS
+
     constructor(
         private readonly logger: Logger,
         @InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>,
@@ -27,7 +26,6 @@ export class AccountManagerService implements OnModuleInit {
         try {
             const userFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
             const emailFound = await this.accountModel.findOne({ 'credentials.email': creds.email });
-
             if (userFound) throw new Error('Username already taken');
             if (emailFound) throw new Error('Email already taken');
 
@@ -48,7 +46,7 @@ export class AccountManagerService implements OnModuleInit {
             };
             await this.accountModel.create(newAccount);
             this.logger.verbose(`Account ${creds.username} has registered successfully`);
-            await this.fetchUsers();
+            this.fetchUsers();
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to add account --> ${error.message}`);
@@ -64,15 +62,17 @@ export class AccountManagerService implements OnModuleInit {
                     { 'credentials.email': creds.username, 'credentials.password': creds.password },
                 ],
             });
-
             if (!accountFound) throw new Error('Account not found');
-
             if (this.connectedUsers.has(accountFound.credentials.username)) throw new Error('Account already connected');
 
-            this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
-            this.connectedUsers.set(accountFound.credentials.username, accountFound.profile);
+            accountFound.id = accountFound._id.toString();
 
-            this.showProfiles();
+            this.imageManager.save(accountFound.id, accountFound.profile.avatar);
+            this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
+
+            accountFound.save();
+            this.connectedUsers.set(accountFound.id, accountFound);
+            this.fetchUsers();
             return Promise.resolve(accountFound);
         } catch (error) {
             this.logger.error(`Failed to connect account --> ${error.message}`);
@@ -84,14 +84,15 @@ export class AccountManagerService implements OnModuleInit {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
             const pseudoFound = await this.accountModel.findOne({ 'credentials.username': newUsername });
-
             if (!accountFound) throw new Error('Account not found');
             if (pseudoFound) throw new Error('Username already taken');
 
             accountFound.credentials.username = newUsername;
 
             await accountFound.save();
-            this.logger.verbose(`Account ${oldUsername} has changed his username to ${newUsername}`);
+            this.connectedUsers.set(accountFound.id, accountFound);
+            await this.fetchUsers();
+
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change pseudo --> ${error.message}`);
@@ -99,52 +100,60 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async changePassword(oldUsername: string, newPasword: string): Promise<void> {
+    async uploadAvatar(username: string, avatar: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.avatar = avatar;
+
+            this.imageManager.save(accountFound.id, accountFound.profile.avatar);
+            this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
+
+            await accountFound.save();
+            this.logger.log(`${username} has changed his avatar`);
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to upload avatar --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async chooseAvatar(username: string, id: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+            if (!accountFound) throw new Error('Account not found');
+
+            const base64 = this.imageManager.convert(`default${id}.png`);
+            accountFound.profile.avatar = base64;
+
+            this.imageManager.save(accountFound.id, accountFound.profile.avatar);
+            this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
+
+            await accountFound.save();
+            this.logger.log(`${username} has changed his avatar`);
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to choose avatar --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async changePassword(username: string, newPasword: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.credentials.password = newPasword;
 
             await accountFound.save();
-            this.logger.verbose('Password change');
+            this.connectedUsers.set(accountFound.id, accountFound);
+            await this.fetchUsers();
+
+            this.logger.verbose(`${username} has changed his password`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change pseudo --> ${error.message}`);
-            return Promise.reject(`${error}`);
-        }
-    }
-
-    async modifyTheme(oldUsername: string, newTheme: Theme): Promise<void> {
-        try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
-
-            if (!accountFound) throw new Error('Account not found');
-
-            accountFound.profile.theme = newTheme;
-
-            await accountFound.save();
-            this.logger.verbose('Theme change');
-            return Promise.resolve();
-        } catch (error) {
-            this.logger.error(`Failed to change theme --> ${error.message}`);
-            return Promise.reject(`${error}`);
-        }
-    }
-
-    async modifyLanguage(oldUsername: string, newLanguage: string): Promise<void> {
-        try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
-
-            if (!accountFound) throw new Error('Account not found');
-
-            accountFound.profile.language = newLanguage;
-
-            await accountFound.save();
-            this.logger.verbose('language change');
-            return Promise.resolve();
-        } catch (error) {
-            this.logger.error(`Failed to change language --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
@@ -182,43 +191,39 @@ export class AccountManagerService implements OnModuleInit {
             return Promise.reject(`${error}`);
         }
     }
-
-    async uploadAvatar(username: string, avatar: string): Promise<void> {
+    async modifyLanguage(username: string, newLanguage: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+
             if (!accountFound) throw new Error('Account not found');
 
-            this.imageManager.save(username, avatar);
-            accountFound.profile.avatar = avatar;
+            accountFound.profile.language = newLanguage;
 
             await accountFound.save();
-            this.logger.log(`${username} has changed his avatar`);
+            this.logger.verbose(`${username} has changed his theme`);
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to upload avatar --> ${error.message}`);
+            this.logger.error(`Failed to change language --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
 
-    async chooseAvatar(username: string, id: string): Promise<void> {
+    async deleteAccount(creds: Credentials) {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
             if (!accountFound) throw new Error('Account not found');
-
-            const base64 = this.imageManager.convert(`default${id}.png`);
-            this.imageManager.save(username, base64);
-
-            accountFound.profile.avatar = base64;
-            await accountFound.save();
-            this.logger.log(`${username} has changed his avatar`);
+            await this.accountModel.deleteOne({ 'credentials.username': creds.username });
+            if (!this.connectedUsers.delete(accountFound.id)) throw new Error('Account not connected');
+            this.fetchUsers();
+            this.logger.verbose(`Account ${creds.username} has been deleted`);
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to choose avatar --> ${error.message}`);
+            this.logger.error(`Failed to delete account --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
 
-    async delete() {
+    async deleteAccounts() {
         try {
             await this.accountModel.deleteMany({});
             this.logger.verbose('All accounts have been deleted');
@@ -236,16 +241,18 @@ export class AccountManagerService implements OnModuleInit {
         });
     }
 
-    deconnexion(userName: string): void {
-        this.connectedUsers.delete(userName);
-        this.showProfiles();
+    async connexionToAdmin(password: string): Promise<boolean> {
+        try {
+            if (password !== 'admin') throw new Error('Wrong password');
+            return Promise.resolve(password === 'admin');
+        } catch (error) {
+            this.logger.error(`Failed to connect --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
     }
 
-    showProfiles(): void {
-        this.logger.verbose('Connected profiles: ');
-        this.connectedUsers.forEach((value, key) => {
-            this.logger.verbose(`${key}`);
-        });
+    deconnexion(id: string): void {
+        this.connectedUsers.delete(id);
     }
 
     // async connexionToAdmin(password: string): Promise<boolean> {
@@ -258,10 +265,4 @@ export class AccountManagerService implements OnModuleInit {
     //         return Promise.reject(`${error}`);
     //     }
     // }
-
-    connexionToAdmin(password: string): boolean {
-        return password === 'admin';
-    }
 }
-
-//

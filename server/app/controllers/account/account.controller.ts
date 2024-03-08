@@ -31,6 +31,16 @@ export class AccountController {
         }
     }
 
+    @Post('admin')
+    async connexionToAdmin(@Body('passwd') password: string, @Res() response: Response) {
+        try {
+            const accountFound = await this.accountManager.connexionToAdmin(password);
+            response.status(HttpStatus.OK).json(accountFound);
+        } catch (error) {
+            response.status(HttpStatus.UNAUTHORIZED).json(error);
+        }
+    }
+
     @Put('pseudo')
     async changePseudo(@Body('oldUsername') oldUsername: string, @Body('newUsername') newUsername: string, @Res() response: Response) {
         try {
@@ -71,16 +81,10 @@ export class AccountController {
         }
     }
 
-    @Post('admin')
-    connexionToAdmin(@Body('pass') password: string): { success: boolean } {
-        const isValid = this.accountManager.connexionToAdmin(password);
-        // response.status(HttpStatus.OK).json({ success: isValid });
-        return { success: isValid };
-    }
     @Delete('delete')
     async delete(@Res() response: Response) {
         try {
-            await this.accountManager.delete();
+            await this.accountManager.deleteAccounts();
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NOT_FOUND).json(error);

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameDetails } from '@app/interfaces/game-interfaces';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Account, CarouselPaginator, Credentials, GameConfigConst, GameHistory, Song, Theme } from './../../../../../common/game-interfaces';
 
@@ -144,8 +144,11 @@ export class CommunicationService {
         );
     }
     recuperatePassword(password: string): Observable<boolean> {
-        return this.http.post<{ success: boolean }>(`${this.accountUrl}/admin`, { pass: password }).pipe(
-            map((response) => response.success),
+        return this.http.post<boolean>(`${this.accountUrl}/admin`, { passwd: password }).pipe(
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('langage modify');
+            }),
             catchError(this.handleError<boolean>('Recuperate Password', false)),
         );
     }

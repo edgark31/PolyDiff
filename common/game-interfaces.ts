@@ -160,6 +160,7 @@ export interface Game {
 }
 
 export interface Account {
+    id?: string;
     credentials: Credentials;
     profile: Profile;
 }

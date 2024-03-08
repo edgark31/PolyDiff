@@ -26,6 +26,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         private readonly accountManager: AccountManagerService,
     ) {}
 
+    // ------------------- -- LOGIC -- -------------------
+
     // @SubscribeMessage(GameEvents.StartGameByRoomId)
     // startGame(@ConnectedSocket() socket: Socket) {
     //     this.roomsManagerService.startGame(socket, this.server);
