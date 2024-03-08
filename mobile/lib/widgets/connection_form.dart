@@ -5,6 +5,7 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
@@ -56,6 +57,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
         : MediaQuery.of(context).size.height * 0.3;
     final socketService = context.watch<SocketService>();
     final infoService = context.watch<InfoService>();
+    final chatService = context.watch<ChatService>();
     return Stack(
       children: [
         SingleChildScrollView(
@@ -99,6 +101,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                         infoService.setName(userNameController.text);
                         socketService.connect(
                             SocketType.Auth, infoService.name);
+                        chatService.setListeners(); // TODO : move this (maybe)
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       } else {
                         setState(() {
