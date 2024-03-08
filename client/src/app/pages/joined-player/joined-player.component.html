@@ -6,16 +6,23 @@
     <div class="right">
         <div class="player-count"> 4/4 joueurs présents</div>
         <div class="element">
-            <div *ngFor="let player of players">
-                <div class="player">{{ player }}</div>
+            <div class = "players-list">
+                <div>
+                    <p class = "waiting-text"> Joueur(s) en attente : </p>
+                    <div class = "player-container">
+                        <div class = "players" *ngFor="let playerName of players">
+                            <p class = "player">Joueur: <span class = "player-name">{{ playerName }}</span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 </div>
 
 <div class="button-container">
     <button type="submit">Commencer la partie</button>
   </div>
+  <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
 
 <!-- <p id = "waiting" *ngIf="!refusedMessage">En attente d'etre accepté</p>
 <img class = "loading" *ngIf="!refusedMessage" src = "./assets/raccoonLoadingScreen.gif" alt="loadingGif"/>

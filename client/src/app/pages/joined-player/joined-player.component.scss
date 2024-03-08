@@ -25,26 +25,25 @@
 }
 
 .button-container button {
-    font-size: 100px;
-    margin-bottom: 200px;
-    margin-left: 1700px;
+    margin-bottom: 0; /* Ajustez cette valeur si nécessaire */
+    margin-left: 0; /* Ajustez cette valeur si nécessaire */
     background-color: rgb(158, 19, 19);
     color: #fff;
     padding: 8px 24px;
     border-radius: 4px;
     border: 1px solid #000000;
-    width: 100%;
     font-size: 2.8rem;
     cursor: pointer;
-}
-
-.left app-chat-box {
-    width: 500px; /* Ajustez la largeur selon vos besoins */
-    height: 300px; /* Ajustez la hauteur selon vos besoins */
+    width: auto; /*
 }
 
 button:hover {
     background: rgb(94, 8, 8);
+}
+
+.left app-chat-box {
+    width: 1500px !important;
+    height: 1500px !important;
 }
 
 // button {
@@ -54,17 +53,18 @@ button:hover {
 // }
 
 .player {
-    font-size: 20px; /* Ajustez cette valeur pour la taille du texte */
+    font-size: 60px; /* Ajustez cette valeur pour la taille du texte */
+    font-weight: bold;
 }
 
 .element {
     border: 3px #000000 solid;
-    padding: 100px;
+    padding: 160px;
     min-height: 200px;
 }
 
 .element div div {
-    margin-bottom: 30px; /* Ajustez cette valeur pour contrôler l'espace entre les joueurs */
+    margin-bottom: 70px; /* Ajustez cette valeur pour contrôler l'espace entre les joueurs */
 }
 .container {
     display: flex;
@@ -77,44 +77,17 @@ button:hover {
     margin-right: 300px;
 }
 
+#background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .right {
-}
-
-.dialog-image {
-    position: absolute;
-    left: 50%;
-    top: 55%;
-    transform: translate(-50%, -50%) scale(0);
-    z-index: 1;
-    width: 50%;
-    height: 30%;
-    animation: pop-in 0.5s ease-out forwards;
-}
-
-.dialog-image2 {
-    position: absolute;
-    left: 50%;
-    top: 55%;
-    transform: translate(-50%, -50%) scale(0);
-    z-index: 1;
-    width: 50%;
-    height: 50%;
-    animation: pop-in 0.5s ease-out forwards;
-}
-
-@keyframes pop-in {
-    0% {
-        transform: translate(-50%, -50%) scale(0);
-        opacity: 0;
-    }
-    50% {
-        transform: translate(-50%, -50%) scale(1.2);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-    }
 }
 
 #waiting {
@@ -140,18 +113,6 @@ button:hover {
     color: black;
 }
 
-.button1 {
-    position: absolute;
-    left: 57%;
-    bottom: 53%;
-}
-
-.button2 {
-    position: absolute;
-    left: 55%;
-    bottom: 35%;
-}
-
 .cancel {
     position: absolute;
     z-index: 2;
@@ -162,42 +123,49 @@ button:hover {
     opacity: 0;
 }
 
-.button-container {
-    position: relative;
-    width: 300px;
-    height: 150px;
-    margin-right: 40px;
-    z-index: 2;
-}
-
-.button-container img {
-    position: absolute;
-    top: 0;
-    left: 5%;
-    width: 70%;
-    height: 70%;
-    transition: all 0.3s ease;
-}
-
-.button-container:hover img {
-    filter: drop-shadow(10px 10px 10px black);
-}
-
-.button-container .centered-yes {
-    position: absolute;
-    font-size: 50px;
-    top: 50%;
-    left: 65%;
-    transform: translate(-66%, -150%);
-    text-align: center;
-    width: 450px;
-    color: white;
-    font-family: 'Troika', sans-serif;
-}
-
 .loading {
     position: absolute;
     z-index: 2;
     left: 38%;
     bottom: 24%;
+}
+
+.players-list {
+    position: absolute;
+    z-index: 2;
+    left: 57%;
+    bottom: 17%;
+    margin-top: 100px;
+}
+
+.waiting-text {
+    font-family: 'Troika', sans-serif;
+    font-size: 35px;
+    width: 600px;
+    color: black;
+}
+
+.player-name {
+    font-family: 'Troika', sans-serif;
+    font-size: 27px;
+    width: 600px;
+    color: white;
+    -webkit-text-stroke: 1px black;
+}
+
+.player {
+    font-family: 'Troika', sans-serif;
+    font-size: 27px;
+    width: 600px;
+}
+
+.player-container {
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 500px;
+    left: 25%;
+}
+
+.players {
+    width: 550px;
 }

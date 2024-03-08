@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
 import { GameModes } from '@common/enums';
-import { Chat, ClientSideGame } from '@common/game-interfaces';
+import { Chat, ClientSideGame, Player } from '@common/game-interfaces';
 
 @Component({
     selector: 'app-joined-player',
@@ -15,6 +15,8 @@ export class JoinedPlayersComponent implements AfterViewInit, OnDestroy {
     isReplayAvailable: boolean;
     gameMode: typeof GameModes;
     game: ClientSideGame;
+    playerss: Player[];
+
     players: string[] = ['Joueur1', 'joueur2', 'joueur3', 'joueur4'];
     // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
