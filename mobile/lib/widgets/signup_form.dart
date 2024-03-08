@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/services/avatar_service.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/widgets/avatar_picker.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
@@ -17,6 +18,7 @@ class SignUpForm extends StatefulWidget {
 class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final FormService formService = FormService('http://localhost:3000');
+  final AvatarService _avatarService = AvatarService();
   ImageProvider? _selectedAvatar;
 
   TextEditingController userNameController = TextEditingController();
@@ -106,6 +108,63 @@ class _SignUpFormState extends State<SignUpForm> {
     bool isValidPassword = arePasswordsMatching(
         passwordController.text, confirmationController.text);
     return isValidUsername && isValidEmail && isValidPassword;
+  }
+
+  // avatar
+  dynamic _selectedAvatarData; // This could be a Base64 string or an avatar ID
+
+  void _handleAvatarSelected(dynamic avatarData) {
+    setState(() {
+      _selectedAvatarData = avatarData;
+    });
+  }
+
+  Future<void> _registerUser() async {
+    if (isFormValid()) {
+      Credentials credentials = Credentials(
+        username: userNameController.text,
+        password: passwordController.text,
+        email: emailController.text,
+      );
+
+      String? serverErrorMessage = await formService.register(credentials);
+
+      String? avatarErrorMessage;
+      if (_selectedAvatarData != null) {
+        // Determine if _selectedAvatarData is a Base64 string or an ID
+        // Upload the avatar using the appropriate service method
+        if (_selectedAvatarData is String && _isBase64(_selectedAvatarData)) {
+          avatarErrorMessage = await _avatarService.uploadAvatar(
+            credentials.username,
+            _selectedAvatarData,
+          );
+        } else if (_selectedAvatarData is String) {
+          // If _selectedAvatarData is an ID or URL, use the method for selecting a predefined avatar
+          avatarErrorMessage = await _avatarService.chooseAvatar(
+            credentials.username,
+            _selectedAvatarData,
+          );
+        }
+      }
+
+      if (serverErrorMessage == null && avatarErrorMessage == null) {
+        Navigator.pushNamed(context, LOGIN_ROUTE);
+      } else {
+        setState(() {
+          errorMessage =
+              serverErrorMessage ?? avatarErrorMessage ?? "An error occurred";
+        });
+      }
+    } else {
+      setState(() {
+        errorMessage = "Une ou plusieurs entrée(s) est/sont incorrecte(s)";
+      });
+    }
+  }
+
+  bool _isBase64(String str) {
+    // Implement a method to determine if a string is a valid Base64
+    return RegExp(r'^[A-Za-z0-9+/=]+$').hasMatch(str);
   }
 
   @override
@@ -199,30 +258,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 fontWeight: FontWeight.bold),
           ),
           ElevatedButton(
-            onPressed: () async {
-              if (isFormValid()) {
-                Credentials credentials = Credentials(
-                  username: userNameController.text,
-                  password: passwordController.text,
-                  email: emailController.text,
-                );
-                //TODO: Change the id to the avatar's id when ready
-                String? serverErrorMessage =
-                    await formService.register(credentials, "1");
-                if (serverErrorMessage == null) {
-                  Navigator.pushNamed(context, LOGIN_ROUTE);
-                } else {
-                  setState(() {
-                    errorMessage = serverErrorMessage;
-                  });
-                }
-              } else {
-                setState(() {
-                  errorMessage =
-                      "Une ou plusieurs entrée(s) est/sont incorrecte(s)";
-                });
-              }
-            },
+            onPressed: () => _registerUser(),
             style: ElevatedButton.styleFrom(
               foregroundColor: kLight,
               backgroundColor: kLightOrange,
@@ -335,7 +371,9 @@ class _SignUpFormState extends State<SignUpForm> {
 
   Widget _buildAvatarPicker() {
     return AvatarPicker(
-      onAvatarSelected: (ImageProvider image) {
+      onAvatarSelected: (
+        ImageProvider image,
+      ) {
         setState(() {
           _selectedAvatar = image;
         });

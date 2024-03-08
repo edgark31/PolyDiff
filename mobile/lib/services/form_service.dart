@@ -12,13 +12,12 @@ class FormService {
 
   FormService(String baseUrl);
 
-  Future<String?> register(Credentials credentials, String base64Image) async {
+  Future<String?> register(Credentials credentials) async {
     final url = '$baseUrl/account/register';
 
     try {
       final requestBody = {
         'creds': credentials.toJson(),
-        'avatar': base64Image,
       };
       final response = await http.post(
         Uri.parse(url),

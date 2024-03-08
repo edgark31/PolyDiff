@@ -6,6 +6,7 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
+import 'package:mobile/services/avatar_service.dart';
 
 class AvatarPicker extends StatefulWidget {
   final Function(ImageProvider) onAvatarSelected;
@@ -30,6 +31,24 @@ class _AvatarPickerState extends State<AvatarPicker> {
     widget.onAvatarSelected(image);
   }
 
+  Future<void> _handleCameraImageSelection() async {
+    final String? base64Image = await _imageUploader.pickImageFromCamera();
+    if (base64Image != null) {
+      Uint8List bytes = base64Decode(base64Image);
+      ImageProvider image = MemoryImage(bytes);
+      _updateSelectedImage(image);
+
+      String? uploadError =
+          await AvatarService().uploadCameraImage('username', bytes);
+      if (uploadError == null) {
+        // Success, notify the user or update the state as necessary
+        _updateSelectedImage(image);
+      } else {
+        print("erreur lors de envoie au serveur $uploadError");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -43,22 +62,17 @@ class _AvatarPickerState extends State<AvatarPicker> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               GestureDetector(
-                onTap: () => _updateSelectedImage(
-                    NetworkImage(_avatarProvider.getDefaultAvatarUrl('1'))),
+                onTap: () {
+                  _updateSelectedImage(
+                      NetworkImage(_avatarProvider.getDefaultAvatarUrl('1')));
+                },
                 child: avatarContainer(
                     NetworkImage(_avatarProvider.getDefaultAvatarUrl('1')),
                     kLightGreen),
               ),
               SizedBox(width: 20),
               GestureDetector(
-                onTap: () async {
-                  final String? base64Image =
-                      await _imageUploader.pickImageFromCamera();
-                  if (base64Image != null) {
-                    Uint8List bytes = base64Decode(base64Image);
-                    _updateSelectedImage(MemoryImage(bytes));
-                  }
-                },
+                onTap: () => _handleCameraImageSelection(),
                 child: SizedBox(
                   width: 100.0,
                   child: CircleAvatar(
