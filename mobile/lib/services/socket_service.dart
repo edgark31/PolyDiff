@@ -28,7 +28,7 @@ class SocketService extends ChangeNotifier {
           'query': 'name=$approvedName'
         });
         setSocket(authSocket);
-        // setupEventListenersAuthSocket();
+        setupEventListenersAuthSocket();
         break;
       case SocketType.Lobby:
         lobbySocket = IO.io("$serverURL/lobby", <String, dynamic>{
@@ -68,7 +68,6 @@ class SocketService extends ChangeNotifier {
   }
 
   void setupEventListenersAuthSocket() {
-    //Event listeners
     authSocket.on(MessageEvents.GlobalMessage.name, (data) {
       print('GlobalMessage received: $data');
       ChatMessage message = ChatMessage.fromJson(data);
@@ -103,8 +102,10 @@ class SocketService extends ChangeNotifier {
         authSocket.disconnect();
         break;
       case SocketType.Lobby:
+        lobbySocket.disconnect();
         break;
       case SocketType.Game:
+        gameSocket.disconnect();
         break;
     }
   }
