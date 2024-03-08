@@ -3,10 +3,10 @@ import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/widgets/game_canvas.dart';
 
 //TODO: Make calls for validation
-class ForegroundPtOriginal extends CustomPainter {
+class ForegroundPtModified extends CustomPainter {
   final CanvasModel images;
 
-  ForegroundPtOriginal(this.images); //
+  ForegroundPtModified(this.images); //
 
   @override
   void paint(Canvas canvas, Size size) {

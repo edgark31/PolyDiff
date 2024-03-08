@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/temp_images.dart'; // TODO : replace with specific image when http is setup
 import 'package:mobile/models/canvas_model.dart';
+import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
 import 'package:mobile/widgets/canvas.dart';
 
@@ -24,6 +25,7 @@ class ClassicGamePage extends StatefulWidget {
 
 class _ClassicGamePageState extends State<ClassicGamePage> {
   final ImageConverterService imageConverterService = ImageConverterService();
+  final GameAreaService gameAreaService = GameAreaService();
   late Future<CanvasModel> imagesFuture;
 
   @override
@@ -69,6 +71,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
           ElevatedButton(
               onPressed: () {
                 print('Mode Triche');
+                gameAreaService.showDifferenceFound(differencesTemp[0]);
               },
               child: Text('Mode Triche')),
         ],

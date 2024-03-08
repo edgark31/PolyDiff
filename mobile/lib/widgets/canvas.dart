@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:mobile/painters/background_pt_modified.dart';
 import 'package:mobile/painters/background_pt_original.dart';
+import 'package:mobile/painters/foreground_pt_modified.dart';
 import 'package:mobile/painters/foreground_pt_original.dart';
+import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/widgets/game_canvas.dart';
+import 'package:provider/provider.dart';
 
 class OriginalCanvas extends GameCanvas {
   OriginalCanvas(images, this.gameId) : super(images);
@@ -11,6 +14,7 @@ class OriginalCanvas extends GameCanvas {
 
   @override
   Widget build(BuildContext context) {
+    final gameAreaService = Provider.of<GameAreaService>(context);
     return Column(
       children: <Widget>[
         Container(
@@ -36,7 +40,8 @@ class OriginalCanvas extends GameCanvas {
                   GameCanvas.tabletScalingRatio,
               child: CustomPaint(
                 painter: BackgroundPtOriginal(images),
-                foregroundPainter: ForegroundPtOriginal(images),
+                foregroundPainter:
+                    ForegroundPtOriginal(images, gameAreaService),
               ),
             ),
           ),
@@ -55,6 +60,7 @@ class ModifiedCanvas extends GameCanvas {
 
   @override
   Widget build(BuildContext context) {
+    //final gameAreaService = Provider.of<GameAreaService>(context);
     return Column(
       children: <Widget>[
         Container(
@@ -80,7 +86,7 @@ class ModifiedCanvas extends GameCanvas {
                   GameCanvas.tabletScalingRatio,
               child: CustomPaint(
                 painter: BackgroundPtModified(images),
-                foregroundPainter: ForegroundPtOriginal(images),
+                foregroundPainter: ForegroundPtModified(images),
               ),
             ),
           ),
