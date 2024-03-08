@@ -15,7 +15,7 @@ export class JoinedPlayersComponent implements AfterViewInit, OnDestroy {
     isReplayAvailable: boolean;
     gameMode: typeof GameModes;
     game: ClientSideGame;
-    players: string[] = ['yo1', 'yo2', 'yo3', 'yo4'];
+    players: string[] = ['Joueur1', 'joueur2', 'joueur3', 'joueur4'];
     // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
     constructor(private readonly globalChatService: GlobalChatService) {

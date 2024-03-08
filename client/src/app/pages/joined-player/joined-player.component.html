@@ -1,15 +1,21 @@
-
-<div class="left">
-    <app-chat-box (add)="sendMessage($event)" [messages]="messages"></app-chat-box>
+<app-nav-bar></app-nav-bar>
+<div class="container">
+    <div class="left">
+        <app-chat-box (add)="sendMessage($event)" [messages]="messages"></app-chat-box>
+    </div>
+    <div class="right">
+        <div class="player-count"> 4/4 joueurs présents</div>
+        <div class="element">
+            <div *ngFor="let player of players">
+                <div class="player">{{ player }}</div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div  class="right">
-    <div class="element">
-    <div  *ngFor="let player of players">
-        <div> {{player}}</div>
-</div>
-</div>
-</div>
+<div class="button-container">
+    <button type="submit">Commencer la partie</button>
+  </div>
 
 <!-- <p id = "waiting" *ngIf="!refusedMessage">En attente d'etre accepté</p>
 <img class = "loading" *ngIf="!refusedMessage" src = "./assets/raccoonLoadingScreen.gif" alt="loadingGif"/>
