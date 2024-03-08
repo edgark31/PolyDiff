@@ -11,10 +11,7 @@ class SocketService extends ChangeNotifier {
 
   static final List<ChatMessage> messages = [];
   String approvedName = '';
-  static IO.Socket authSocket = IO.io(serverURL, <String, dynamic>{
-    'transports': ['websocket'],
-    'autoConnect': false,
-  });
+  static late IO.Socket authSocket;
 
   String get userName => approvedName;
   List<ChatMessage> get allMessages => List.unmodifiable(messages);
@@ -62,13 +59,18 @@ class SocketService extends ChangeNotifier {
       case SocketType.Game:
         break;
     }
-    // messages.clear(); // TODO : Figure out if we need this
   }
 
-  void disconnect() {
-    print('disconnecting from socket_service');
-    approvedName = '';
-    authSocket.disconnect();
+  void disconnect(SocketType type) {
+    switch (type) {
+      case SocketType.Auth:
+        authSocket.disconnect();
+        break;
+      case SocketType.Lobby:
+        break;
+      case SocketType.Game:
+        break;
+    }
   }
 
   void sendMessage(ChatMessage message) {
