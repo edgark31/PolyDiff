@@ -19,6 +19,7 @@ class GameCard {
   String thumbnail;
   // TODO: get this info from with the lobby service
   int numbersOfPlayers;
+  List<String> playerUsernames;
 
   GameCard({
     required this.name,
@@ -27,6 +28,7 @@ class GameCard {
     required this.nDifferences,
     required this.numbersOfPlayers,
     required this.thumbnail,
+    required this.playerUsernames,
   });
 
   factory GameCard.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,8 @@ class GameCard {
       nDifferences: json['nDifferences'],
       numbersOfPlayers: json['numberOfPlayers'] ?? 0,
       thumbnail: json['thumbnail'],
+      playerUsernames: List<String>.from(
+          json['players'].map((player) => player['username'])),
     );
   }
 }

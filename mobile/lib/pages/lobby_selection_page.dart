@@ -10,8 +10,8 @@ class LobbySelectionPage extends StatefulWidget {
 
   static Route route() {
     return MaterialPageRoute(
-      builder: (_) => LobbySelectionPage(),
-      settings: RouteSettings(name: routeName),
+      builder: (_) => const LobbySelectionPage(),
+      settings: const RouteSettings(name: routeName),
     );
   }
 
@@ -21,10 +21,9 @@ class LobbySelectionPage extends StatefulWidget {
 
 class _LobbySelectionPageState extends State<LobbySelectionPage> {
   late GameCardProvider _gameCardProvider;
-  List<GameCard> _gameCards = [];
-  bool _isLoading = true;
 
-  // TODO: replace when sockets logic is done
+  bool _isLoading = false;
+
   GameCard defaultGameCard = GameCard(
     name: 'MASTER RACCOON',
     gameId: '1',
@@ -32,59 +31,79 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     nDifferences: 7,
     numbersOfPlayers: 2,
     thumbnail: 'assets/images/admin raccoon.jpeg',
+    playerUsernames: ["PlayerOne", "PlayerTwo"],
   );
 
   @override
   void initState() {
     super.initState();
     _gameCardProvider = GameCardProvider(baseUrl: BASE_URL);
-    // _fetchGameCards();
   }
-
-  // void _fetchGameCards() async {
-  //   try {
-  //     List<GameCard> gameCards = await _gameCardProvider.getAll();
-  //     setState(() {
-  //       _gameCards = gameCards;
-  //       _isLoading = false;
-  //     });
-  //   } catch (e) {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //     print("Failed to load game cards: $e");
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select a Lobby"),
+        title: const Text("Select a Lobby"),
       ),
       body: _isLoading
-          // Loading progress
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _gameCards.length,
-              itemBuilder: (context, index) {
-                final card = _gameCards[index];
-                return Card(
-                  child: ListTile(
-                    leading: Image.asset(defaultGameCard.thumbnail),
-                    title: Text(
-                        'Game ${defaultGameCard.gameId} - ${defaultGameCard.gameMode.toString().split('.').last}'),
-                    subtitle: Text(
-                        '${defaultGameCard.nDifferences} differences - ${defaultGameCard.numbersOfPlayers}/4 players'),
-                    onTap: () {
-                      // TODO: Handle lobby selection
-                      print(
-                          "Selected lobby with Game ID: ${defaultGameCard.gameId}");
-                    },
-                  ),
-                );
-              },
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  buildGameCard(context, defaultGameCard),
+                  // You can add more GameCard widgets here or iterate over a list of game cards
+                ],
+              ),
             ),
+    );
+  }
+
+  Widget buildGameCard(BuildContext context, GameCard card) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        elevation: 5,
+        child: Column(
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundImage:
+                    AssetImage(card.thumbnail), // Display game image
+                radius: 30,
+              ),
+              title: Text(card.name),
+              subtitle: Text(
+                  'Différences: ${card.nDifferences}, Nombre de joueurs: ${card.numbersOfPlayers}/4'),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text('Joueurs: ${card.playerUsernames.join(', ')}',
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+            ),
+            ButtonBar(
+              alignment: MainAxisAlignment.start,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle lobby selection
+                    print("Selected lobby with Game ID: ${card.gameId}");
+                  },
+                  child: const Text('Join Lobby'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
