@@ -11,33 +11,63 @@ class SocketService extends ChangeNotifier {
 
   static final List<ChatMessage> messages = [];
   String approvedName = '';
-  static IO.Socket authSocket = IO.io(serverURL, <String, dynamic>{
-    'transports': ['websocket'],
-    'autoConnect': false,
-  });
+  static late IO.Socket authSocket;
+  static late IO.Socket lobbySocket;
+  static late IO.Socket gameSocket;
 
   String get userName => approvedName;
   List<ChatMessage> get allMessages => List.unmodifiable(messages);
 
-  void setup() {
-    authSocket = IO.io(serverURL, <String, dynamic>{
-      'transports': ['websocket'],
-      'autoConnect': false,
-      'query': 'name=$approvedName'
-    });
+  void setup(SocketType type) {
+    print('setup ${type.name} started');
+    switch (type) {
+      case SocketType.Auth:
+        authSocket = IO.io(serverURL, <String, dynamic>{
+          'transports': ['websocket'],
+          'autoConnect': false,
+          'query': 'name=$approvedName'
+        });
+        setSocket(authSocket);
+        setupEventListenersAuthSocket();
+        break;
+      case SocketType.Lobby:
+        lobbySocket = IO.io("$serverURL/lobby", <String, dynamic>{
+          'transports': ['websocket'],
+          'autoConnect': false,
+          'query': 'name=$approvedName'
+        });
+        setSocket(lobbySocket);
+        break;
+      case SocketType.Game:
+        gameSocket = IO.io("$serverURL/game", <String, dynamic>{
+          'transports': ['websocket'],
+          'autoConnect': false,
+          'query': 'name=$approvedName'
+        });
+        setSocket(gameSocket);
+        break;
+    }
+    print("Setup ${type.name} completed");
+  }
 
-    authSocket.onConnect((_) {
+  void setSocket(IO.Socket socket) {
+    print('Initializing socket');
+
+    print('Calling onConnect socket');
+    socket.onConnect((_) {
       print('Connected to server on $serverIP:$serverPort');
-      notifyListeners();
     });
 
-    authSocket.onConnectError((data) => print('Connection error: $data'));
-    authSocket.onDisconnect((_) {
+    print('Calling onConnectError socket');
+    socket.onConnectError((data) => print('Connection error: $data'));
+
+    print('Calling onDisconnect socket');
+    socket.onDisconnect((_) {
       print('Disconnected from server');
-      notifyListeners();
     });
+  }
 
-    //Event listeners
+  void setupEventListenersAuthSocket() {
     authSocket.on(MessageEvents.GlobalMessage.name, (data) {
       print('GlobalMessage received: $data');
       ChatMessage message = ChatMessage.fromJson(data);
@@ -48,27 +78,36 @@ class SocketService extends ChangeNotifier {
       addMessage(message);
       notifyListeners();
     });
-
-    print('Socket setup complete');
   }
 
   void connect(SocketType type) {
+    print("Connecting socket ${type.name}");
+    setup(type);
     switch (type) {
       case SocketType.Auth:
         authSocket.connect();
         break;
       case SocketType.Lobby:
+        lobbySocket.connect();
         break;
       case SocketType.Game:
+        gameSocket.connect();
         break;
     }
-    // messages.clear(); // TODO : Figure out if we need this
   }
 
-  void disconnect() {
-    print('disconnecting from socket_service');
-    approvedName = '';
-    authSocket.disconnect();
+  void disconnect(SocketType type) {
+    switch (type) {
+      case SocketType.Auth:
+        authSocket.disconnect();
+        break;
+      case SocketType.Lobby:
+        lobbySocket.disconnect();
+        break;
+      case SocketType.Game:
+        gameSocket.disconnect();
+        break;
+    }
   }
 
   void sendMessage(ChatMessage message) {

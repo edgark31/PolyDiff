@@ -96,7 +96,6 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       if (serverErrorMessage == null) {
                         // TODO: connect auth socket with username in query
                         socketService.setName(userNameController.text);
-                        socketService.setup();
                         socketService.connect(SocketType.Auth);
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       } else {
