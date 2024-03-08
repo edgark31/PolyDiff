@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/pages/avatar_selection_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/home_page.dart';
+import 'package:mobile/pages/lobby_selection_page.dart';
 import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/search_page.dart';
@@ -25,6 +26,8 @@ const String PROFILE_ROUTE = '/profile';
 const String AVATAR_ROUTE = '/avatar';
 const String ADMIN_ROUTE = '/admin';
 const String ERROR_ROUTE = '/error';
+const String CLASSIC_LOBBY_ROUTE = '/lobby/classic';
+const String LIMITED_LOBBY_ROUTE = '/lobby/limited';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
@@ -54,6 +57,9 @@ class AppRouter {
 
       case SettingsPage.routeName:
         return SettingsPage.route();
+
+      case LobbySelectionPage.routeName:
+        return LobbySelectionPage.route();
 
       default:
         return _errorRoute();
