@@ -5,23 +5,24 @@
     <!-- <header class="header">
         <h1 class="header-item flex-column">Bienvenue</h1>
     </header> -->
-    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/> 
+    <img id = "background" src = "./assets/background/CreationBackground.jpg" alt="background"/> 
     <div class="flex-column">
         <button class="button" *ngIf="gameMode==='limited'">
-            <span id = "classic"><mat-slider color="warn" thumbLabel [displayWith]="formatLabel" tickInterval="1" min="1" max="120"></mat-slider></span>
+            <span id = "classic">Temps : </span>
+            <mat-slider color="warn" thumbLabel [displayWith]="formatLabel" tickInterval="1" min="1" max="120"></mat-slider>
         </button>
         <button class="button">
+            <span id = "classic">Mode triche : </span>
             <mat-checkbox id="config" color="warn" [(ngModel)]="isCheatModeEnabled"></mat-checkbox>
-            <span id = "classic">Mode triche</span>
         </button>
         <button class="button">
-            <span id = "classic">Mot de passe</span>
+            <span id = "classic">Mot de passe : </span>
             <input mat-input id="password" type="text" placeholder="Mot de passe">
         </button>
     </div>
     <footer class="footer flex-column">
         <button class="button">
-            <span id = "classic">Créer la salle</span>
+            <span id = "classic" routerLink="/waiting-room">Créer la salle</span>
         </button>
         <button class="button">
             <span id = "classic">Mode pratique</span>
