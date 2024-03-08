@@ -1,13 +1,13 @@
 <div *ngIf="game" class="gameSheet">
     <div class="gameContainer">
-        <img *ngIf="game.difficultyLevel === true" class="background"  alt="background-image" src="./assets/background/gameSheetDifficile.png" />
-        <img *ngIf="game.difficultyLevel === false" class="background"  alt="background-image" src="./assets/background/gameSheetFacile.png" />
+        <!-- <img *ngIf="game.difficultyLevel === true" class="background"  alt="background-image" src="./assets/background/gameSheet.png" /> -->
+        <img class="background"  alt="background-image" src="./assets/background/gameSheet.png" />
         <h1 class="title">{{ game.name }}</h1>
         <img class="thumbnail" [src]="url" alt="track" />
         <div class="gameInfo">
-            <div class="ranking">
+            <!-- <div class="ranking">
                 <div class="topThree section">
-                    <!-- <h3>Top Solo</h3>
+                    <h3>Top Solo</h3>
                     <div class="topText Solo" *ngFor="let player of game.soloTopTime; index as i">
                         <ng-container *ngIf="i === 0">
                             <img class="gold" alt="gold" src="./assets/icon/gold.png" />
@@ -20,15 +20,15 @@
                         </ng-container>
                         &nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;<strong>{{ player.name }}</strong>&nbsp;&nbsp; {{ player.time*1000|date:'mm:ss'}} &nbsp;&nbsp;
-                    </div> -->
+                    </div>
                 </div>
-                <!-- <div class="topThree section">
+                <div class="topThree section">
                     <h3>Top 1 Vs 1</h3>
                     <div class="topText OneVsOne" *ngFor="let player of game.oneVsOneTopTime">
                         <strong>{{ player.name }}</strong> &nbsp;&nbsp; {{ player.time*1000|date:'mm:ss'}}
                     </div>
-                </div> -->
-            </div>
+                </div>
+            </div> -->
         </div>
         <div class="buttonSection">
             <div class="button-container">
