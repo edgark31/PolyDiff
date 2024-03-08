@@ -19,6 +19,7 @@ import { Subscription, filter } from 'rxjs';
 })
 export class LimitedTimePageComponent implements OnDestroy, OnInit {
     gameModes: typeof GameModes;
+    gameMode: string;
     nPlayersConnected: number;
     private hasNoGameAvailableSubscription: Subscription;
     private roomIdSubscription: Subscription;
@@ -43,6 +44,10 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         // this.openDialog();
         this.handleJoinCoopRoom();
         this.handleNoGameAvailable();
+    }
+
+    setGameMode(): void {
+        this.roomManagerService.setGameMode('limited');
     }
 
     manageGames(): void {

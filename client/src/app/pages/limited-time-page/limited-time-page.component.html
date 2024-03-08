@@ -12,7 +12,7 @@
             <button mat-raised-button class="button" id="mode" (click)="playLimited(gameModes.LimitedSolo)">
                 <span id = "text-mode">Mode temps limté</span>
             </button>
-            <button mat-raised-button class="button" routerLink="/selection">
+            <button mat-raised-button class="button" routerLink="/selection" (click)="setGameMode()">
                 <span id = "solo">Créer une salle</span>
             </button>
             <button mat-raised-button  id="join" class="button" (click)="manageGames()">
