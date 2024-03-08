@@ -41,10 +41,10 @@ h2 {
     display: inline-block;
     text-align: center;
     font-family: 'Troika', sans-serif;
-    font-size: 80px;
+    font-size: 40px;
     margin: 0 20px 20px 20px;
-    width: 700px;
-    height: 200px;
+    width: 500px;
+    height: 150px;
     text-transform: uppercase;
     transition: 0.5s;
     color: rgba(253, 250, 151, 255);
@@ -56,8 +56,30 @@ h2 {
     z-index: 1;
 }
 
+#mode {
+    position: absolute;
+    z-index: 2;
+    left: 100px;
+    top: 200px;
+}
+
+#text-mode {
+    left: 100px;
+}
+
+#connected {
+    position: absolute;
+    z-index: 2;
+    left: 960px;
+    top: 200px;
+}
+
+#text-connected {
+    left: 100px;
+}
+
 #join {
-    width: 800px;
+    width: 500px;
 }
 
 #solo {

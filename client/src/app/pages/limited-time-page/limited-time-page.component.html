@@ -6,6 +6,12 @@
     <section id="server-message" class="flex-column section">
         <!-- <h2>Choisis ton mode de jeu en temps limité :</h2> -->
         <div class="flex-row">
+            <button mat-raised-button class="button" id="connected" (click)="playLimited(gameModes.LimitedSolo)">
+                <span id = "text-connected">Nombre de joueurs connectés : {{nPlayersConnected}}/4</span>
+            </button>
+            <button mat-raised-button class="button" id="mode" (click)="playLimited(gameModes.LimitedSolo)">
+                <span id = "text-mode">Mode temps limté</span>
+            </button>
             <button mat-raised-button class="button" (click)="playLimited(gameModes.LimitedSolo)">
                 <span id = "solo">Créer une salle</span>
             </button>

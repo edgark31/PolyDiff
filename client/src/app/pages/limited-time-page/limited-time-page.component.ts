@@ -18,6 +18,7 @@ import { Subscription, filter } from 'rxjs';
 })
 export class LimitedTimePageComponent implements OnDestroy, OnInit {
     gameModes: typeof GameModes;
+    nPlayersConnected: number;
     private hasNoGameAvailableSubscription: Subscription;
     private roomIdSubscription: Subscription;
     private isLimitedCoopRoomAvailableSubscription: Subscription;
@@ -32,6 +33,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     ) {
         this.gameModes = GameModes;
         this.isStartingGame = false;
+        this.nPlayersConnected = 0;
     }
 
     ngOnInit(): void {
