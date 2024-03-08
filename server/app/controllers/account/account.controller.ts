@@ -83,7 +83,7 @@ export class AccountController {
     @Delete('delete')
     async delete(@Res() response: Response) {
         try {
-            await this.accountManager.delete();
+            await this.accountManager.deleteAccounts();
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NOT_FOUND).json(error);
