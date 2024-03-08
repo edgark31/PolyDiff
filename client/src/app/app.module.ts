@@ -55,18 +55,17 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
-import { ConfirmPasswordPageComponent } from './pages/confirm-password-page/confirm-password-page.component';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
+import { ConfirmPasswordPageComponent } from './pages/confirm-password-page/confirm-password-page.component';
+import { CreateRoomPageComponent } from './pages/create-room-page/create-room-page.component';
+import { GameModePageComponent } from './pages/game-mode-page/game-mode-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { PersonnalizationPageComponent } from './pages/personnalization-page/personnalization-page.component';
 import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
-import { GameModePageComponent } from './pages/game-mode-page/game-mode-page.component';
-import { CreateRoomnComponent } from './pages/create-roomn/create-roomn.component';
-import { CreateRoomComponent } from './pages/create-room/create-room.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -116,8 +115,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         ImportDialogComponent,
         ChatPageComponent,
         GameModePageComponent,
-        CreateRoomnComponent,
-        CreateRoomComponent,
+        CreateRoomPageComponent,
     ],
     imports: [
         AppMaterialModule,
