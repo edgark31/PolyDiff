@@ -16,6 +16,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -45,7 +46,6 @@ import { DeleteResetConfirmationDialogComponent } from './components/delete-rese
 import { GamePageDialogComponent } from './components/game-page-dialog/game-page-dialog.component';
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
-// eslint-disable-next-line import/no-unresolved
 import { ImportDialogComponent } from './components/import-dialog/import-dialog.component';
 import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 import { MenuComponent } from './components/menu/menu.component';
@@ -143,6 +143,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         MatIconModule,
         MatSidenavModule,
         MatListModule,
+        MatSliderModule,
         RouterModule.forRoot(routes),
         TranslateModule.forRoot({
             loader: {
