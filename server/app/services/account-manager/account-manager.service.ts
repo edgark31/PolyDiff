@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import { Theme } from './../../model/database/account';
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Statistics, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { THEME_PERSONNALIZATION } from '@common/constants';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
@@ -64,11 +63,12 @@ export class AccountManagerService implements OnModuleInit {
             if (!accountFound) throw new Error('Account not found');
             if (this.connectedUsers.has(accountFound.credentials.username)) throw new Error('Account already connected');
 
-            accountFound.profile.avatar = '';
             accountFound.id = accountFound._id.toString();
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
+            this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
+            accountFound.save();
             this.connectedUsers.set(accountFound.id, accountFound);
             this.fetchUsers();
             return Promise.resolve(accountFound);
@@ -94,6 +94,45 @@ export class AccountManagerService implements OnModuleInit {
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change pseudo --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async uploadAvatar(username: string, avatar: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.avatar = avatar;
+
+            this.imageManager.save(accountFound.id, accountFound.profile.avatar);
+            this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
+
+            await accountFound.save();
+            this.logger.log(`${username} has changed his avatar`);
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to upload avatar --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async chooseAvatar(username: string, id: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+            if (!accountFound) throw new Error('Account not found');
+
+            const base64 = this.imageManager.convert(`default${id}.png`);
+            accountFound.profile.avatar = base64;
+
+            this.imageManager.save(accountFound.id, accountFound.profile.avatar);
+            this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
+
+            await accountFound.save();
+            this.logger.log(`${username} has changed his avatar`);
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to choose avatar --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
@@ -146,41 +185,6 @@ export class AccountManagerService implements OnModuleInit {
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change language --> ${error.message}`);
-            return Promise.reject(`${error}`);
-        }
-    }
-
-    async uploadAvatar(username: string, avatar: string): Promise<void> {
-        try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
-            if (!accountFound) throw new Error('Account not found');
-
-            this.imageManager.save(accountFound.id, avatar);
-            accountFound.profile.avatar = avatar;
-
-            await accountFound.save();
-            this.logger.log(`${username} has changed his avatar`);
-            return Promise.resolve();
-        } catch (error) {
-            this.logger.error(`Failed to upload avatar --> ${error.message}`);
-            return Promise.reject(`${error}`);
-        }
-    }
-
-    async chooseAvatar(username: string, id: string): Promise<void> {
-        try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
-            if (!accountFound) throw new Error('Account not found');
-
-            const base64 = this.imageManager.convert(`default${id}.png`);
-            this.imageManager.save(username, base64);
-            accountFound.profile.avatar = base64;
-
-            await accountFound.save();
-            this.logger.log(`${username} has changed his avatar`);
-            return Promise.resolve();
-        } catch (error) {
-            this.logger.error(`Failed to choose avatar --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
