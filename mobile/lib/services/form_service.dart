@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:mobile/models/credentials.dart';
+import 'package:mobile/models/models.dart';
 
 class FormService {
   final baseUrl = 'http://localhost:3000/api';

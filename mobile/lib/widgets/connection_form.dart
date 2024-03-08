@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
-import 'package:mobile/models/credentials.dart';
+import 'package:mobile/models/models.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/app_style.dart';
