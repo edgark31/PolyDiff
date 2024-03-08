@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
-import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { GameModes } from '@common/enums';
 import { Chat, ClientSideGame, Player } from '@common/game-interfaces';
 
@@ -8,7 +9,7 @@ import { Chat, ClientSideGame, Player } from '@common/game-interfaces';
     templateUrl: './joined-player.component.html',
     styleUrls: ['./joined-player.component.scss'],
 })
-export class JoinedPlayersComponent implements AfterViewInit, OnDestroy {
+export class JoinedPlayersComponent {
     countdown: number;
     refusedMessage: string;
     messages: Chat[];
@@ -18,13 +19,8 @@ export class JoinedPlayersComponent implements AfterViewInit, OnDestroy {
     playerss: Player[];
 
     players: string[] = ['Joueur1', 'joueur2', 'joueur3', 'joueur4'];
-    // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
-    constructor(private readonly globalChatService: GlobalChatService) {
-        this.messages = [];
-        this.gameMode = GameModes;
-        this.isReplayAvailable = false;
-    } // private data: { gameId: string; player: string },
+    constructor(public router: Router) {} // private data: { gameId: string; player: string },
 
     // ngOnInit(): void {
     //     this.handleRefusedPlayer();
@@ -33,24 +29,24 @@ export class JoinedPlayersComponent implements AfterViewInit, OnDestroy {
     //     this.handleCreateUndoCreation();
     // }
 
-    ngAfterViewInit(): void {
-        this.globalChatService.manage();
-        this.globalChatService.updateLog();
-        this.globalChatService.message$.subscribe((message: Chat) => {
-            this.receiveMessage(message);
-        });
-    }
-    sendMessage(message: string): void {
-        this.globalChatService.sendMessage(message);
-    }
+    // ngAfterViewInit(): void {
+    //     this.globalChatService.manage();
+    //     this.globalChatService.updateLog();
+    //     this.globalChatService.message$.subscribe((message: Chat) => {
+    //         this.receiveMessage(message);
+    //     });
+    // }
+    // sendMessage(message: string): void {
+    //     this.globalChatService.sendMessage(message);
+    // }
 
-    receiveMessage(chat: Chat): void {
-        this.messages.push(chat);
-    }
+    // receiveMessage(chat: Chat): void {
+    //     this.messages.push(chat);
+    // }
 
-    ngOnDestroy(): void {
-        this.globalChatService.off();
-    }
+    // ngOnDestroy(): void {
+    //     this.globalChatService.off();
+    // }
 
     // // cancelJoining() {
     // //     this.roomManagerService.cancelJoining(this.data.gameId);

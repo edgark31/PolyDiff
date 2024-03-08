@@ -9,9 +9,9 @@
 }
 
 .player-count {
-    font-size: 60px; /* Ajustez cette valeur pour la taille du texte */
+    font-size: 60px;
     font-weight: bold;
-    margin-bottom: 90px; /* Ajustez cette valeur pour l'espace vertical */
+    margin-bottom: 90px;
 }
 
 .button-container {
@@ -24,6 +24,29 @@
     bottom: 0;
 }
 
+.selectionComponent {
+    z-index: 1;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px;
+    z-index: 1;
+    font-size: 30px;
+    -webkit-text-stroke: 2px black;
+}
+
+h1 {
+    margin: auto;
+    padding-left: 500px;
+    text-align: center;
+    font-family: 'Troika', sans-serif;
+    color: white;
+    font-size: 40px;
+}
+
 .button-container button {
     margin-bottom: 0; /* Ajustez cette valeur si nécessaire */
     margin-left: 0; /* Ajustez cette valeur si nécessaire */
@@ -34,7 +57,11 @@
     border: 1px solid #000000;
     font-size: 2.8rem;
     cursor: pointer;
-    width: auto; /*
+    width: auto;
+}
+
+#nav-bar {
+    font-family: 'Troika', sans-serif;
 }
 
 button:hover {
