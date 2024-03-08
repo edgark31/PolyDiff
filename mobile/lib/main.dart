@@ -3,9 +3,9 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
+import 'package:mobile/services/info_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
-
-import 'services/socket_service.dart';
 
 Widget defaultHome = HomePage();
 
@@ -15,6 +15,7 @@ void main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageUploader()),
     ChangeNotifierProvider(create: (context) => SocketService()),
+    ChangeNotifierProvider(create: (context) => InfoService()),
   ], child: const MyApp()));
 }
 
