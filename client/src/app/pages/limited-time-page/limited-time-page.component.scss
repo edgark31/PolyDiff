@@ -43,8 +43,8 @@ h2 {
     font-family: 'Troika', sans-serif;
     font-size: 80px;
     margin: 0 20px 20px 20px;
-    width: 500px;
-    height: 500px;
+    width: 700px;
+    height: 200px;
     text-transform: uppercase;
     transition: 0.5s;
     color: rgba(253, 250, 151, 255);
@@ -56,18 +56,22 @@ h2 {
     z-index: 1;
 }
 
+#join {
+    width: 800px;
+}
+
 #solo {
     position: absolute;
     z-index: 2;
-    left: 165px;
-    top: 200px;
+    left: 75px;
+    top: 85px;
 }
 
 #coop {
     position: absolute;
     z-index: 2;
     left: 40px;
-    top: 200px;
+    top: 85px;
 }
 
 button:hover {

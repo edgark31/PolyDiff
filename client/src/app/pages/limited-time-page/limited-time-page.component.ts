@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NoGameAvailableDialogComponent } from '@app/components/no-game-available-dialog/no-game-available-dialog.component';
-import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
+// import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { WaitingForPlayerToJoinComponent } from '@app/components/waiting-player-to-join/waiting-player-to-join.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
@@ -37,7 +37,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     ngOnInit(): void {
         this.clientSocket.connect(this.gameManager.username, 'lobby');
         this.roomManagerService.handleRoomEvents();
-        this.openDialog();
+        // this.openDialog();
         this.handleJoinCoopRoom();
         this.handleNoGameAvailable();
     }
@@ -62,18 +62,18 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         this.roomManagerService.removeAllListeners();
     }
 
-    private openDialog() {
-        this.dialog
-            .open(PlayerNameDialogBoxComponent, { disableClose: true, panelClass: 'dialog' })
-            .afterClosed()
-            .subscribe((playerName) => {
-                if (playerName) {
-                    this.playerName = playerName;
-                } else {
-                    this.router.navigate(['/']);
-                }
-            });
-    }
+    // private openDialog() {
+    //     this.dialog
+    //         .open(PlayerNameDialogBoxComponent, { disableClose: true, panelClass: 'dialog' })
+    //         .afterClosed()
+    //         .subscribe((playerName) => {
+    //             if (playerName) {
+    //                 this.playerName = playerName;
+    //             } else {
+    //                 this.router.navigate(['/']);
+    //             }
+    //         });
+    // }
 
     private redirectToGamePage(gameMode: GameModes) {
         this.roomIdSubscription?.unsubscribe();
