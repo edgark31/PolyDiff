@@ -20,4 +20,8 @@ export class NavBarComponent {
         this.chatRoute = '/chat';
         this.profileRoute = '/profile';
     }
+
+    console(): void {
+        console.log('afficher');
+    }
 }
