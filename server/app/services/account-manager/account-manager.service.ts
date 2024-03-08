@@ -1,4 +1,4 @@
-import { Song } from './../../model/database/account';
+import { Song, Theme } from './../../model/database/account';
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
@@ -163,14 +163,13 @@ export class AccountManagerService implements OnModuleInit {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
 
             if (!accountFound) throw new Error('Account not found');
-            console.log(newSong);
             accountFound.profile.songDifference = newSong;
 
             await accountFound.save();
-            this.logger.verbose('language change');
+            this.logger.verbose('song change');
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to change language --> ${error.message}`);
+            this.logger.error(`Failed to change song --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
@@ -184,13 +183,31 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.profile.songError = newSong;
 
             await accountFound.save();
-            this.logger.verbose('language change');
+            this.logger.verbose('song change');
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to change language --> ${error.message}`);
+            this.logger.error(`Failed to change song --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
+
+    async modifyTheme(oldUsername: string, newTheme: Theme): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.theme = newTheme;
+
+            await accountFound.save();
+            this.logger.verbose('Theme change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change theme --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
     async modifyLanguage(username: string, newLanguage: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
