@@ -4,7 +4,7 @@ import { GameDetails } from '@app/interfaces/game-interfaces';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Account, CarouselPaginator, Credentials, GameConfigConst, GameHistory, Theme } from './../../../../../common/game-interfaces';
+import { Account, CarouselPaginator, Credentials, GameConfigConst, GameHistory, Song, Theme } from './../../../../../common/game-interfaces';
 
 @Injectable({
     providedIn: 'root',
@@ -108,6 +108,28 @@ export class CommunicationService {
                 console.log('theme modify');
             }),
             catchError(this.handleError<void>('modifyTheme')),
+        );
+    }
+
+    modifySongError(oldusername: string, newSongError: Song): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/song/error`, { oldUsername: oldusername, newSong: newSongError }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('song Error modify');
+            }),
+            catchError(this.handleError<void>('modifySongError')),
+        );
+    }
+
+    modifySongDifference(oldusername: string, newSongDifference: Song): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/song/difference`, { oldUsername: oldusername, newSong: newSongDifference }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('song Difference modify');
+            }),
+            catchError(this.handleError<void>('modifySongDifference')),
         );
     }
 

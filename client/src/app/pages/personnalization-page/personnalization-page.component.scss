@@ -90,7 +90,9 @@ h1 {
 button:hover {
     background: rgb(11, 145, 15);
 }
-
+.option-icon {
+    margin-right: 8px; /* ajustez la marge à votre convenance */
+}
 button {
     margin-bottom: 10px;
     background-color: rgb(8, 109, 11);

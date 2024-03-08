@@ -1,8 +1,8 @@
-import { Theme } from './../../model/database/account';
+import { Song, Theme } from './../../model/database/account';
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
-import { THEME_PERSONNALIZATION } from '@common/constants';
+import { SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONNALIZATION } from '@common/constants';
 import { Profile } from '@common/game-interfaces';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -42,6 +42,8 @@ export class AccountManagerService implements OnModuleInit {
                     friendRequests: [],
                     language: 'en',
                     theme: THEME_PERSONNALIZATION[0],
+                    songDifference: SONG_LIST_DIFFERENCE[0],
+                    songError: SONG_LIST_ERROR[0],
                 },
             };
             await this.accountModel.create(newAccount);
@@ -137,6 +139,40 @@ export class AccountManagerService implements OnModuleInit {
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.language = newLanguage;
+
+            await accountFound.save();
+            this.logger.verbose('language change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change language --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async modifySongError(oldUsername: string, newSong: Song): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+
+            if (!accountFound) throw new Error('Account not found');
+            console.log(newSong);
+            accountFound.profile.songDifference = newSong;
+
+            await accountFound.save();
+            this.logger.verbose('language change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change language --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async modifySongDifference(oldUsername: string, newSong: Song): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.songError = newSong;
 
             await accountFound.save();
             this.logger.verbose('language change');
