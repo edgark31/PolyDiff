@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 /* eslint-disable @typescript-eslint/no-magic-numbers */

@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';

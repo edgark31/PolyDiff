@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
 import { Chat } from '@common/game-interfaces';
 
@@ -10,7 +11,7 @@ import { Chat } from '@common/game-interfaces';
 export class ChatPageComponent implements AfterViewInit, OnDestroy {
     messages: Chat[] = [];
 
-    constructor(private readonly globalChatService: GlobalChatService) {}
+    constructor(private readonly globalChatService: GlobalChatService, private readonly router: Router) {}
 
     ngAfterViewInit(): void {
         this.globalChatService.manage();
@@ -18,6 +19,11 @@ export class ChatPageComponent implements AfterViewInit, OnDestroy {
         this.globalChatService.message$.subscribe((message: Chat) => {
             this.receiveMessage(message);
         });
+    }
+
+    back(): void {
+        this.router.navigate(['/home']);
+        this.globalChatService.off();
     }
 
     sendMessage(message: string): void {
