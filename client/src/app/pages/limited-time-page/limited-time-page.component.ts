@@ -5,8 +5,8 @@ import { NoGameAvailableDialogComponent } from '@app/components/no-game-availabl
 import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { WaitingForPlayerToJoinComponent } from '@app/components/waiting-player-to-join/waiting-player-to-join.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { GameModes } from '@common/enums';
 import { PlayerData } from '@common/game-interfaces';
 import { Subscription, filter } from 'rxjs';
@@ -28,14 +28,14 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         private readonly roomManagerService: RoomManagerService,
         private readonly dialog: MatDialog,
         private readonly clientSocket: ClientSocketService,
-        private readonly welcomeService: WelcomeService,
+        private readonly gameManager: GameManagerService,
     ) {
         this.gameModes = GameModes;
         this.isStartingGame = false;
     }
 
     ngOnInit(): void {
-        this.clientSocket.connect('lobby', this.welcomeService.account.credentials.username);
+        this.clientSocket.connect(this.gameManager.username, 'lobby');
         this.roomManagerService.handleRoomEvents();
         this.openDialog();
         this.handleJoinCoopRoom();
