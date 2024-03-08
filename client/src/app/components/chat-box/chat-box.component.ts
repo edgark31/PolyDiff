@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { Chat } from '@common/game-interfaces';
 
 @Component({
@@ -14,7 +13,7 @@ export class ChatBoxComponent {
     @Input() isReplaying: boolean;
     @Output() private add: EventEmitter<string>;
 
-    constructor(private readonly router: Router, private readonly clientSocket: ClientSocketService) {
+    constructor(private readonly router: Router) {
         this.messages = [];
         this.add = new EventEmitter<string>();
     }
@@ -27,7 +26,6 @@ export class ChatBoxComponent {
     }
 
     onClose(): void {
-        this.router.navigate(['/login']);
-        this.clientSocket.disconnect('auth');
+        this.router.navigate(['/home']);
     }
 }

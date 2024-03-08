@@ -94,7 +94,7 @@ export class ForegroundService {
         if (this.foregroundsStateStack.length === 0) {
             this.foregroundsStateStack.push(this.getForegroundsState());
         }
-        if (this.drawService.isCurrentActionRectangle()) {
+        if (this.drawService.isCurrentActionRectangle() || this.drawService.isCurrentActionEllipse()) {
             this.rightForegroundContext.globalCompositeOperation = 'source-over';
             this.leftForegroundContext.globalCompositeOperation = 'source-over';
         }
@@ -121,7 +121,7 @@ export class ForegroundService {
     }
 
     private saveDrawing() {
-        if (this.drawService.isCurrentActionRectangle()) {
+        if (this.drawService.isCurrentActionRectangle() || this.drawService.isCurrentActionEllipse()) {
             this.copyFrontCanvasToForeground(this.drawService.getActiveCanvasPosition());
         }
         this.saveCurrentForegroundsState();
@@ -143,10 +143,18 @@ export class ForegroundService {
     private setActiveContext(canvasPosition: CanvasPosition) {
         switch (canvasPosition) {
             case CanvasPosition.Left:
-                this.drawService.setActiveContext(this.drawService.isCurrentActionRectangle() ? this.leftFrontContext : this.leftForegroundContext);
+                this.drawService.setActiveContext(
+                    this.drawService.isCurrentActionRectangle() || this.drawService.isCurrentActionEllipse()
+                        ? this.leftFrontContext
+                        : this.leftForegroundContext,
+                );
                 break;
             case CanvasPosition.Right:
-                this.drawService.setActiveContext(this.drawService.isCurrentActionRectangle() ? this.rightFrontContext : this.rightForegroundContext);
+                this.drawService.setActiveContext(
+                    this.drawService.isCurrentActionRectangle() || this.drawService.isCurrentActionEllipse()
+                        ? this.rightFrontContext
+                        : this.rightForegroundContext,
+                );
                 break;
         }
     }

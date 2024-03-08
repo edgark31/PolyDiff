@@ -5,6 +5,7 @@
 export const environment = {
     production: false,
     serverUrl: 'http://localhost:3000/api',
+    avatarUrl: 'http://localhost:3000/avatar',
 };
 
 /*

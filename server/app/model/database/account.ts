@@ -110,7 +110,6 @@ export class Profile {
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);
-
 @Schema()
 export class Credentials {
     @Prop({ required: true })
@@ -127,6 +126,10 @@ export const credentialsSchema = SchemaFactory.createForClass(Credentials);
 
 @Schema()
 export class Account {
+    @ApiProperty()
+    @Prop()
+    id?: string;
+
     @ApiProperty()
     @Prop({ required: true, type: credentialsSchema })
     credentials: Credentials;

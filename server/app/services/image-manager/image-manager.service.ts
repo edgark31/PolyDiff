@@ -11,14 +11,14 @@ export class ImageManagerService {
     }
 
     convert(imageName: string): string {
-        const image = fs.readFileSync(`${this.assetsFolder}/${imageName}`);
+        const image = fs.readFileSync(`${this.assetsFolder}/avatar/${imageName}`);
         const base64Image = image.toString('base64');
         return base64Image;
     }
 
     save(imageName: string, base64: string): void {
         const image = Buffer.from(base64, 'base64');
-        fs.writeFileSync(`${this.assetsFolder}/${imageName}.png`, image);
+        fs.writeFileSync(`${this.assetsFolder}/avatar/${imageName}.png`, image);
     }
 
     deleteImage(imageName: string) {

@@ -158,13 +158,13 @@ export class RoomManagerService {
         this.clientSocket.send('game', GameCardEvents.AllGamesDeleted);
     }
 
-    // notifyResetTopTime(gameId: string) {
-    //     this.clientSocket.send(GameCardEvents.ResetTopTime, gameId);
-    // }
+    notifyResetTopTime(gameId: string) {
+        this.clientSocket.send('game', GameCardEvents.ResetTopTime, gameId);
+    }
 
-    // notifyResetAllTopTimes() {
-    //     this.clientSocket.send(GameCardEvents.ResetAllTopTimes);
-    // }
+    notifyResetAllTopTimes() {
+        this.clientSocket.send('game', GameCardEvents.ResetAllTopTimes);
+    }
 
     notifyGameConstantsUpdated() {
         this.clientSocket.send('game', GameCardEvents.GameConstantsUpdated);
