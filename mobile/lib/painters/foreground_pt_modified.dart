@@ -9,12 +9,7 @@ class ForegroundPtOriginal extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    /*if (diffService.blinkingDifference != null) {
-      canvas.scale(
-          GameVignette.tabletScalingRatio, GameVignette.tabletScalingRatio);
-      canvas.drawPath(
-          diffService.blinkingDifference!, diffService.defaultBlinkingColor);
-    }*/
+   
   }
 
   @override

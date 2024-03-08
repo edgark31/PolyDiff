@@ -65,6 +65,12 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
               }
             },
           ),
+          // TODO : Add if to only appear if cheating is enabled
+          ElevatedButton(
+              onPressed: () {
+                print('Mode Triche');
+              },
+              child: Text('Mode Triche')),
         ],
       ),
     );
