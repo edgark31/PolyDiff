@@ -17,12 +17,10 @@ export class CreateRoomPageComponent {
 
     formatLabel(value: number | null) {
         this.time = value;
-        console.log('Time: ', this.time);
         return value + ' sec';
     }
 
     onSubmit() {
         this.roomManagerService.password = this.password;
     }
-
 }
