@@ -14,6 +14,7 @@ import { RecoverPasswordPageComponent } from '@app/pages/recover-password-page/r
 import { RegistrationPageComponent } from '@app/pages/registration-page/registration-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
 import { AdminGuard } from '@app/services/adminguard/admin.guard.service';
+import { GameModePageComponent } from '@app/pages/game-mode-page/game-mode-page.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -28,6 +29,7 @@ export const routes: Routes = [
     { path: 'recover-password', component: RecoverPasswordPageComponent },
     { path: 'confirm-password', component: ConfirmPasswordPageComponent },
     { path: 'personalization', component: PersonnalizationPageComponent },
+    { path: 'game-mode', component: GameModePageComponent },
     { path: 'profil', component: ProfilPageComponent },
     { path: 'admin', component: ConfigPageComponent, canActivate: [AdminGuard] },
     { path: '**', redirectTo: '/login' },
