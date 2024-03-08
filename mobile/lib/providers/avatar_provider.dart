@@ -6,6 +6,11 @@ class AvatarProvider {
   AvatarProvider({this.baseUrl = BASE_URL});
 
   String getDefaultAvatarUrl(String id) {
-    return '$baseUrl/avatar/default$id.png';
+    print('$AVATAR_URL/default$id.png');
+    return '$AVATAR_URL/default$id.png';
+  }
+
+  String getAccountAvatar(String username) {
+    return '$AVATAR_URL/$username.png';
   }
 }

@@ -42,14 +42,13 @@ class _AvatarPickerState extends State<AvatarPicker> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              for (int id = 1; id <= 3; id++)
-                GestureDetector(
-                  onTap: () => _updateSelectedImage(
-                      NetworkImage(_avatarProvider.getDefaultAvatarUrl('$id'))),
-                  child: avatarContainer(
-                      NetworkImage(_avatarProvider.getDefaultAvatarUrl('$id')),
-                      kLightGreen),
-                ),
+              GestureDetector(
+                onTap: () => _updateSelectedImage(
+                    NetworkImage(_avatarProvider.getDefaultAvatarUrl('1'))),
+                child: avatarContainer(
+                    NetworkImage(_avatarProvider.getDefaultAvatarUrl('1')),
+                    kLightGreen),
+              ),
               SizedBox(width: 20),
               GestureDetector(
                 onTap: () async {

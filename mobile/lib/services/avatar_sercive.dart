@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:mobile/constants/app_routes.dart';
 
 class AvatarService {
-  final baseUrl = 'http://localhost:3000/api';
-
   AvatarService(String baseUrl);
 
+  // If avatar is from camera
   Future<String?> uploadAvatar(String username, String base64Avatar) async {
-    final String url = '$baseUrl/avatar/upload';
+    const String url = '$BASE_URL/avatar/upload';
 
     try {
       final response = await http.put(
@@ -32,8 +32,9 @@ class AvatarService {
     }
   }
 
+  // DEFAULT
   Future<String?> chooseAvatar(String username, String id) async {
-    final String url = '$baseUrl/avatar/choose';
+    const String url = '$BASE_URL/avatar/choose';
     try {
       final response = await http.put(
         Uri.parse(url),
