@@ -1,5 +1,5 @@
 <ul class="navBar">
-    <li class="navElement"><a [routerLink]="homeRoute"> <mat-icon>home</mat-icon>&nbsp;Accueil</a></li>
+    <li  class="navElement"><a (click)="console()" [routerLink]="homeRoute"> <mat-icon>home</mat-icon>&nbsp;Accueil</a></li>
     <li class="navElement"><a [routerLink]="chatRoute"><mat-icon>chat icon</mat-icon>&nbsp;Clavardage</a></li>
     <li class="navElement"><a [routerLink]="profileRoute"><mat-icon>person</mat-icon>&nbsp;Profil</a></li>
     <li class="navElement"><a [routerLink]="friendsRoute"><mat-icon>people</mat-icon>&nbsp;Amis</a></li>
