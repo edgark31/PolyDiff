@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/chat_message_model.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
-import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
 
 class ChatBox extends StatefulWidget {
@@ -33,10 +33,11 @@ class _ChatBoxState extends State<ChatBox> {
 
   @override
   Widget build(BuildContext context) {
-    final socketService = context.watch<SocketService>();
-    final messages = socketService.allMessages;
     final infoService = context.watch<InfoService>();
     final userName = infoService.name;
+    final chatService = context.watch<ChatService>();
+    final messages = chatService.messages;
+
     return Container(
       width: 500,
       height: 700,
@@ -151,7 +152,7 @@ class _ChatBoxState extends State<ChatBox> {
                     onPressed: () {
                       String message = messageController.text;
                       if (message.isNotEmpty) {
-                        socketService.sendMessage(
+                        chatService.sendMessage(
                           ChatMessage(
                             MessageTag.Sent,
                             message,
