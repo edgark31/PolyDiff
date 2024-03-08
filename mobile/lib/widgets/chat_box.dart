@@ -91,7 +91,7 @@ class _ChatBoxState extends State<ChatBox> {
                       children: [
                         CircleAvatar(
                             backgroundImage: NetworkImage(
-                                'http://127.0.0.1:3000/${messages[index].userName}.png'),
+                                'http://127.0.0.1:3000/avatar/${messages[index].userName}.png'),
                             radius: 15.0),
                         Text(
                           messages[index].userName,
