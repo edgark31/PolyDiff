@@ -68,6 +68,7 @@ import { PersonnalizationPageComponent } from './pages/personnalization-page/per
 import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
+import { RoomSheetComponent } from './components/room-sheet/room-sheet.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -121,6 +122,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         JoinedPlayersComponent,
         ModalAccessMatchComponent,
         LimitedTimePageComponent,
+        RoomSheetComponent,
     ],
     imports: [
         AppMaterialModule,
