@@ -49,6 +49,7 @@ import { ImageCanvasComponent } from './components/image-canvas/image-canvas.com
 import { ImportDialogComponent } from './components/import-dialog/import-dialog.component';
 import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 import { MenuComponent } from './components/menu/menu.component';
+import { ModalAccessMatchComponent } from './components/modal-access-match/modal-access-match.component';
 import { ModalAdminComponent } from './components/modal-admin/modal-admin.component';
 import { NameGenerationDialogComponent } from './components/name-generation-dialog/name-generation-dialog.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
@@ -60,6 +61,7 @@ import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { ConfirmPasswordPageComponent } from './pages/confirm-password-page/confirm-password-page.component';
 import { CreateRoomPageComponent } from './pages/create-room-page/create-room-page.component';
 import { GameModePageComponent } from './pages/game-mode-page/game-mode-page.component';
+import { JoinedPlayersComponent } from './pages/joined-player/joined-player.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { PersonnalizationPageComponent } from './pages/personnalization-page/personnalization-page.component';
@@ -116,6 +118,9 @@ export const createTranslateLoader = (http: HttpClient) => {
         ChatPageComponent,
         GameModePageComponent,
         CreateRoomPageComponent,
+        JoinedPlayersComponent,
+        ModalAccessMatchComponent,
+        LimitedTimePageComponent,
     ],
     imports: [
         AppMaterialModule,

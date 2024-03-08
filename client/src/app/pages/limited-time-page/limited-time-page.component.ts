@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
 import { NoGameAvailableDialogComponent } from '@app/components/no-game-available-dialog/no-game-available-dialog.component';
 // import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { WaitingForPlayerToJoinComponent } from '@app/components/waiting-player-to-join/waiting-player-to-join.component';
@@ -42,6 +43,10 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         // this.openDialog();
         this.handleJoinCoopRoom();
         this.handleNoGameAvailable();
+    }
+
+    manageGames(): void {
+        this.dialog.open(ModalAccessMatchComponent);
     }
 
     playLimited(gameMode: GameModes) {

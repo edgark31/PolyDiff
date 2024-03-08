@@ -127,10 +127,19 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('langage modify');
             }),
-            catchError(this.handleError<boolean>('Recuperate Password', false)),
+            catchError(this.handleError<boolean>('Recuperate Password')),
         );
     }
 
+    checkCode(code: string): Observable<boolean> {
+        return this.http.post<boolean>(`${this.gameUrl}/match/check/code`, { Code: code }).pipe(
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('code check');
+            }),
+            catchError(this.handleError<boolean>('checkcode')),
+        );
+    }
     loadConfigConstants(): Observable<GameConfigConst> {
         return this.http.get<GameConfigConst>(`${this.gameUrl}/constants`);
     }

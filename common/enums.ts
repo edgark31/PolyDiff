@@ -111,6 +111,11 @@ export enum LobbyEvents {
     UpdateLobbys = 'UpdateLobbys',
     Start = 'Start',
 }
+export enum MatchStatus {
+    waiting = 'waiting',
+    Starting = 'starting',
+    // finished = 'finished',
+}
 
 export enum AccountEvents {
     ChangePseudo = 'ChangePseudo',

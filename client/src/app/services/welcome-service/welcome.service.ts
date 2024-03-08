@@ -45,6 +45,22 @@ export class WelcomeService {
         });
     }
 
+    async validateAccess(password: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.communication.checkCode(password).subscribe({
+                // A modifier
+                next: (success) => {
+                    const response = success;
+                    resolve(response);
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred';
+                    reject(error);
+                },
+            });
+        });
+    }
+
     setLoginState(state: boolean): void {
         localStorage.setItem('isLoggedIn', String(state));
         this.isLoggedIn = state;
