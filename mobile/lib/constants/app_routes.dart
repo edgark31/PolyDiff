@@ -11,6 +11,8 @@ import 'package:mobile/pages/settings_page.dart';
 import 'package:mobile/pages/signup_page.dart';
 
 const String BASE_URL = 'http://localhost:3000/api';
+const String AVATAR_URL = 'http://localhost:3000';
+
 const String HOME_ROUTE = '/';
 const String LOGIN_ROUTE = '/login';
 const String SIGNUP_ROUTE = '/signup';
