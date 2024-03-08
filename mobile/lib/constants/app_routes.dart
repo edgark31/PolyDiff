@@ -61,6 +61,7 @@ class AppRouter {
 
       case LobbySelectionPage.routeName:
         return LobbySelectionPage.route();
+
       case ChatPage.routeName:
         return ChatPage.route();
 
