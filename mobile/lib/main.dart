@@ -12,14 +12,26 @@ import 'package:provider/provider.dart';
 Widget defaultHome = HomePage();
 
 void main() async {
+  initializeServices();
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageUploader()),
-    ChangeNotifierProvider(create: (context) => Get.put(SocketService())),
-    ChangeNotifierProvider(create: (context) => InfoService()),
+    ChangeNotifierProvider(create: (context) {
+      SocketService socketService = Get.find();
+      return socketService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      InfoService infoService = Get.find();
+      return infoService;
+    }),
     ChangeNotifierProvider(create: (context) => ChatService()),
   ], child: const MyApp()));
+}
+
+void initializeServices() {
+  Get.put(SocketService());
+  Get.put(InfoService());
 }
 
 class MyApp extends StatelessWidget {
