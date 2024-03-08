@@ -28,3 +28,9 @@ enum FormStatus {
   submissionSuccess,
   submissionFailure
 }
+
+enum SocketType {
+  Auth,
+  Lobby,
+  Game,
+}

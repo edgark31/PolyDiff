@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
-import 'package:mobile/models/chat_message.dart';
-import 'package:mobile/services/socket_service.dart';
+import 'package:mobile/models/chat_message_model.dart';
+import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:provider/provider.dart';
 
 class ChatBox extends StatefulWidget {
@@ -33,8 +33,11 @@ class _ChatBoxState extends State<ChatBox> {
 
   @override
   Widget build(BuildContext context) {
-    final socketService = context.watch<SocketService>();
-    final messages = socketService.allMessages;
+    final infoService = context.watch<InfoService>();
+    final userName = infoService.name;
+    final chatService = context.watch<ChatService>();
+    final messages = chatService.messages;
+
     return Container(
       width: 500,
       height: 700,
@@ -67,17 +70,6 @@ class _ChatBoxState extends State<ChatBox> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 50),
-                  child: IconButton(
-                    icon: Icon(Icons.exit_to_app),
-                    onPressed: () {
-                      socketService.disconnect();
-                      Navigator.pushNamed(context, LOGIN_ROUTE);
-                    },
-                    iconSize: 30,
-                  ),
-                ),
               ],
             ),
           ),
@@ -88,11 +80,7 @@ class _ChatBoxState extends State<ChatBox> {
                 controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
-                  bool isSent =
-                      messages[index].userName == socketService.userName;
-                  // WidgetsBinding.instance.addPostFrameCallback((_) {
-                  //   scrollToBottom();
-                  // });
+                  bool isSent = messages[index].userName == userName;
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
@@ -101,6 +89,10 @@ class _ChatBoxState extends State<ChatBox> {
                           ? CrossAxisAlignment.end
                           : CrossAxisAlignment.start,
                       children: [
+                        CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                'http://127.0.0.1:3000/${messages[index].userName}.png'),
+                            radius: 15.0),
                         Text(
                           messages[index].userName,
                           style: TextStyle(color: Colors.black),
@@ -159,13 +151,12 @@ class _ChatBoxState extends State<ChatBox> {
                     icon: Icon(Icons.send),
                     onPressed: () {
                       String message = messageController.text;
-                      if (message.isNotEmpty &&
-                          socketService.connectionStatus) {
-                        socketService.sendMessage(
+                      if (message.isNotEmpty) {
+                        chatService.sendMessage(
                           ChatMessage(
                             MessageTag.Sent,
                             message,
-                            socketService.userName,
+                            userName,
                             'test',
                           ),
                         );

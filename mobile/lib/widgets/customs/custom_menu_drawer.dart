@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
+import 'package:mobile/services/info_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/avatar.dart';
+import 'package:provider/provider.dart';
 
 class CustomMenuDrawer extends StatelessWidget {
   const CustomMenuDrawer({super.key});
   @override
   Widget build(BuildContext context) {
+    final socketService = context.watch<SocketService>();
+    final infoService = context.watch<InfoService>();
     return Drawer(
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text('Marie-Jade'),
-            accountEmail: Text('marie-jade.marcil@polymtl.ca'),
+            accountName: Text(infoService.name),
+            accountEmail: Text(infoService.email),
             currentAccountPicture: Avatar(
+              // TODO: Change avatar
               imageUrl: 'assets/images/hallelujaRaccoon.jpeg',
               radius: 20,
             ),
@@ -50,7 +57,11 @@ class CustomMenuDrawer extends StatelessWidget {
           ListTile(
               leading: Icon(Icons.logout),
               title: Text('Déconnexion'),
-              onTap: () => print('Déconnexion')),
+              onTap: () {
+                print('Déconnexion');
+                socketService.disconnect(SocketType.Auth);
+                Navigator.pushNamed(context, HOME_ROUTE);
+              }),
         ],
       ),
     );

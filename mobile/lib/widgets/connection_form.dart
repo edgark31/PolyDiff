@@ -3,11 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/form_service.dart';
+import 'package:mobile/services/info_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
+import 'package:provider/provider.dart';
 
 class ConnectionForm extends StatefulWidget {
   @override
@@ -50,7 +55,9 @@ class _ConnectionFormState extends State<ConnectionForm> {
     double bottomPadding = MediaQuery.of(context).viewInsets.bottom > 0
         ? 20
         : MediaQuery.of(context).size.height * 0.3;
-    //final socketService = context.watch<SocketService>();
+    final socketService = context.watch<SocketService>();
+    final infoService = context.watch<InfoService>();
+    final chatService = context.watch<ChatService>();
     return Stack(
       children: [
         SingleChildScrollView(
@@ -91,6 +98,9 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       String? serverErrorMessage =
                           await formService.connect(credentials);
                       if (serverErrorMessage == null) {
+                        socketService.connect(
+                            SocketType.Auth, infoService.name);
+                        chatService.setListeners(); // TODO : move this (maybe)
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       } else {
                         setState(() {

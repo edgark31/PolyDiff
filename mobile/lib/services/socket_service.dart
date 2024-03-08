@@ -1,113 +1,120 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/enums.dart';
-import 'package:mobile/models/chat_message.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends ChangeNotifier {
-  static const String serverIP = '34.118.163.79';
+  static const String serverIP = '127.0.0.1';
+  // static const String serverIP = '34.118.163.79';
   static const String serverPort = '3000';
   static const String serverURL = 'http://$serverIP:$serverPort';
-  static IO.Socket socket = IO.io(serverURL, <String, dynamic>{
-    'transports': ['websocket'],
-    'autoConnect': false,
-  });
 
-  final List<ChatMessage> messages = [];
-  String approvedName = '';
-  String inputName = '';
+  static late IO.Socket authSocket;
+  static late IO.Socket lobbySocket;
+  static late IO.Socket gameSocket;
 
-  bool isConnectionApproved = false;
-  bool isSocketConnected = false;
+  void setup(SocketType type, String name) {
+    print('Setup ${type.name} started for $name');
+    switch (type) {
+      case SocketType.Auth:
+        authSocket = IO.io(serverURL, <String, dynamic>{
+          'transports': ['websocket'],
+          'autoConnect': false,
+          'query': 'name=$name'
+        });
+        setSocket(authSocket);
+        break;
+      case SocketType.Lobby:
+        lobbySocket = IO.io("$serverURL/lobby", <String, dynamic>{
+          'transports': ['websocket'],
+          'autoConnect': false,
+          'query': 'name=$name'
+        });
+        setSocket(lobbySocket);
+        break;
+      case SocketType.Game:
+        gameSocket = IO.io("$serverURL/game", <String, dynamic>{
+          'transports': ['websocket'],
+          'autoConnect': false,
+          'query': 'name=$name'
+        });
+        setSocket(gameSocket);
+        break;
+    }
+    print("Setup $type.name completed for $name");
+  }
 
-  String get userName => approvedName;
-  bool get connectionStatus => isConnectionApproved;
-  bool get socketStatus => isSocketConnected;
-  List<ChatMessage> get allMessages => List.unmodifiable(messages);
+  void setSocket(IO.Socket socket) {
+    print('Initializing socket');
 
-  void setup() {
+    print('Calling onConnect socket');
     socket.onConnect((_) {
       print('Connected to server on $serverIP:$serverPort');
-      isSocketConnected = true;
-      notifyListeners();
     });
+
+    print('Calling onConnectError socket');
     socket.onConnectError((data) => print('Connection error: $data'));
+
+    print('Calling onDisconnect socket');
     socket.onDisconnect((_) {
       print('Disconnected from server');
-      isSocketConnected = false;
-      isConnectionApproved = false;
-
-      notifyListeners();
     });
-
-    //Event listeners
-    socket.on(ConnectionEvents.UserConnectionRequest.name, (data) {
-      print('UserConnectionRequest: $data');
-      isConnectionApproved = data;
-      if (!isConnectionApproved) {
-        disconnect();
-      } else if (inputName != '') {
-        approvedName = inputName;
-      }
-      connectionStatus
-          ? print('Connection approved')
-          : print('Connection denied');
-      notifyListeners();
-    });
-
-    socket.on(MessageEvents.GlobalMessage.name, (data) {
-      print('GlobalMessage received: $data');
-      ChatMessage message = ChatMessage.fromJson(data);
-      print('Message: ${message.message}');
-      print('Tag: ${message.tag}');
-      print('User: ${message.userName}');
-      print('Timestamp: ${message.timestamp}');
-      addMessage(message);
-      notifyListeners();
-    });
-
-    print('Socket setup complete');
   }
 
-  void connect() {
-    socket.connect();
-    messages.clear(); // TODO : Figure out if we need this
+  void send<T>(SocketType type, String event, [T? data]) {
+    switch (type) {
+      case SocketType.Auth:
+        authSocket.emit(event, data);
+        break;
+      case SocketType.Lobby:
+        lobbySocket.emit(event, data);
+        break;
+      case SocketType.Game:
+        gameSocket.emit(event, data);
+        break;
+    }
   }
 
-  void disconnect() {
-    approvedName = '';
-    inputName = '';
-    socket.disconnect();
+  void on<T>(SocketType type, String event, Function(T) action) {
+    switch (type) {
+      case SocketType.Auth:
+        authSocket.on(event, (data) => action(data as T));
+        break;
+      case SocketType.Lobby:
+        lobbySocket.on(event, (data) => action(data as T));
+        break;
+      case SocketType.Game:
+        gameSocket.on(event, (data) => action(data as T));
+        break;
+    }
   }
 
-  void sendTestMessage() {
-    print('Sending test message');
-    final ChatMessage testMessage = ChatMessage(
-      MessageTag.Sent,
-      'test message',
-      'Zooboomafoo',
-      'test',
-    );
-    socket.emit(MessageEvents.GlobalMessage.name, testMessage.toJson());
+  void connect(SocketType type, String name) {
+    print("Connecting socket $type.name for $name");
+    setup(type, name);
+    switch (type) {
+      case SocketType.Auth:
+        authSocket.connect();
+        break;
+      case SocketType.Lobby:
+        lobbySocket.connect();
+        break;
+      case SocketType.Game:
+        gameSocket.connect();
+        break;
+    }
   }
 
-  void sendMessage(ChatMessage message) {
-    print('Sending message');
-    socket.emit(MessageEvents.GlobalMessage.name, message.toJson());
-  }
-
-  void addMessage(ChatMessage message) {
-    messages.add(message);
-    notifyListeners();
-    print(allMessages.length);
-  }
-
-  void checkName(String name) {
-    socket.dispose();
-    setup();
-    connect();
-
-    print('Checking name : $name');
-    socket.emit(ConnectionEvents.UserConnectionRequest.name, name);
-    inputName = name;
+  void disconnect(SocketType type) {
+    switch (type) {
+      case SocketType.Auth:
+        authSocket.disconnect();
+        break;
+      case SocketType.Lobby:
+        lobbySocket.disconnect();
+        break;
+      case SocketType.Game:
+        gameSocket.disconnect();
+        break;
+    }
   }
 }

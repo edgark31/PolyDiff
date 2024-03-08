@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/services/info_service.dart';
 
 class FormService {
-  final String baseUrl = 'http://localhost:3000/api';
+  final baseUrl = BASE_URL;
+  final InfoService infoService = Get.find();
 
   FormService(String baseUrl);
 
@@ -43,6 +47,7 @@ class FormService {
       );
 
       if (response.statusCode == 200) {
+        infoService.setInfosOnConnection(response.body);
         return null;
       } else {
         final errorMessage = response.body;
