@@ -17,8 +17,8 @@
         </button>
         <button class="settings-button">
             <span id = "classic">Mot de passe : </span>
-            <input mat-input id="password" type="text" placeholder="Mot de passe">
-        </button>
+            <input matInput type="password" placeholder="Veuillez entrer votre mot de passe" (keyup.enter)="onSubmit()">
+        </button>    
     </div>
     <footer class="footer flex-column">
         <button class="button">
