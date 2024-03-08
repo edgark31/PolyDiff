@@ -96,7 +96,6 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       if (serverErrorMessage == null) {
                         // TODO: connect auth socket with username in query
                         socketService.setName(userNameController.text);
-                        socketService.setup();
                         socketService.connect(SocketType.Auth);
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       } else {
@@ -114,75 +113,6 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   backgroundColor: kMidOrange,
                   textColor: kLight,
                   text: 'C O N N E X I O N',
-                ),
-                CustomButton(
-                  press: () async {
-                    Credentials credentials = Credentials(
-                      username: 'admin',
-                      password: 'admin',
-                    );
-                    String? serverErrorMessage =
-                        await formService.connect(credentials);
-                    if (serverErrorMessage == null) {
-                      socketService.setName('admin');
-                      socketService.setup();
-                      socketService.connect(SocketType.Auth);
-                      Navigator.pushNamed(context, DASHBOARD_ROUTE);
-                    } else {
-                      setState(() {
-                        errorMessage = serverErrorMessage;
-                      });
-                    }
-                  },
-                  backgroundColor: kMidOrange,
-                  textColor: kLight,
-                  text: 'admin',
-                ),
-                CustomButton(
-                  press: () async {
-                    Credentials credentials = Credentials(
-                      username: 'test',
-                      password: 'test',
-                    );
-                    String? serverErrorMessage =
-                        await formService.connect(credentials);
-                    if (serverErrorMessage == null) {
-                      socketService.setName('test');
-                      socketService.setup();
-                      socketService.connect(SocketType.Auth);
-                      Navigator.pushNamed(context, DASHBOARD_ROUTE);
-                    } else {
-                      setState(() {
-                        errorMessage = serverErrorMessage;
-                      });
-                    }
-                  },
-                  backgroundColor: kMidOrange,
-                  textColor: kLight,
-                  text: 'test',
-                ),
-                CustomButton(
-                  press: () async {
-                    Credentials credentials = Credentials(
-                      username: 'avatar',
-                      password: 'avatar',
-                    );
-                    String? serverErrorMessage =
-                        await formService.connect(credentials);
-                    if (serverErrorMessage == null) {
-                      socketService.setName('avatar');
-                      socketService.setup();
-                      socketService.connect(SocketType.Auth);
-                      Navigator.pushNamed(context, DASHBOARD_ROUTE);
-                    } else {
-                      setState(() {
-                        errorMessage = serverErrorMessage;
-                      });
-                    }
-                  },
-                  backgroundColor: kMidOrange,
-                  textColor: kLight,
-                  text: 'avatar',
                 ),
                 Text(
                   errorMessage,
