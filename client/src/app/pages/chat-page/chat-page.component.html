@@ -1,11 +1,13 @@
-<div class="container flex-column">
-    
-    <app-chat-box (add)="sendMessage($event)" [messages]="messages"></app-chat-box>
-    <header class="header">
-    </header>
-    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>   
-    <section id="server-message" class="flex-column section">
-    </section>
-    <footer class="footer flex-column">
-    </footer>
+
+<div>
+    <button class="back-button" (click)="back()">Back</button>
+    <div class="container flex-column">
+        <div class="nav">
+            <app-nav-bar></app-nav-bar>
+        </div>
+        <div class="chat flex-column">
+            <app-chat-box (add)="sendMessage($event)" [messages]="messages"></app-chat-box>
+            <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/> 
+        </div> 
+    </div>
 </div>
