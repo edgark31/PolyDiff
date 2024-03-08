@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/widgets/chat_box.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
+import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 
 class ChatPage extends StatelessWidget {
   static const routeName = CHAT_ROUTE;
@@ -16,6 +18,8 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: CustomMenuDrawer(),
+      appBar: CustomAppBar(),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,
