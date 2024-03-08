@@ -1,8 +1,20 @@
-<app-nav-bar></app-nav-bar>
-<div>
-    <button routerLink="/limited">Mode temps limité</button>
-</div>
+<div class="container flex-column">
+    <div>
+        <app-nav-bar> </app-nav-bar>
+    </div>
+    <header class="header">
+        <h1 class="header-item flex-column">Choisis ton mode de jeu</h1>
+    </header>
+    <img id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/> 
+    <div class="flex-column">
+        <button class="button" routerLink="/lobby">
+            <span id = "limited">Mode temps limité</span>
+        </button>
+        <button class="button" routerLink="/chat">
+            <span id = "classic">Mode Classique</span>
+        </button>
+    </div>
 
-<div>
-    <button routerLink="/classic">Mode classique</button>
+    <footer class="footer flex-column">
+    </footer>
 </div>
