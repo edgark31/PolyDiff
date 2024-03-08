@@ -35,22 +35,19 @@ class _DashboardPageState extends State<DashboardPage> {
           backgroundColor: kMidOrange,
           actions: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(
-                  right: 10.0), // Adjust the padding as needed
+              padding: const EdgeInsets.only(right: 10.0),
               child: IconButton(
                 icon: const Icon(Icons.home),
                 onPressed: () => _navigateTo(DASHBOARD_ROUTE),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                  right: 10.0), // Adjust the padding as needed
+              padding: const EdgeInsets.only(right: 10.0),
               child: IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () => _navigateTo(SEARCH_ROUTE),
               ),
             ),
-            // No padding on the last item if you want it aligned to the edge
             Padding(
               padding: const EdgeInsets.only(right: 30.0),
               child: IconButton(
