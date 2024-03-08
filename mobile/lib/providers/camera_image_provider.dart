@@ -18,7 +18,7 @@ class CameraImageUploader extends ChangeNotifier {
         pickedImage.path,
         minWidth: 128,
         minHeight: 128,
-        quality: 80,
+        quality: 100,
       );
 
       if (resizedImage != null) {
