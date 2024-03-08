@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/temp_images.dart'; // TODO : replace with specific image when http is setup
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/services/image_converter_service.dart';
 import 'package:mobile/widgets/canvas.dart';
@@ -32,8 +33,8 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
   }
 
   Future<CanvasModel> loadImage() async {
-    String imagePath = 'assets/images/raton-laveur.bmp';
-    return imageConverterService.fromImagePath(imagePath);
+    return imageConverterService.fromImagesBase64(originalImageTempBase64,
+        modifiedImageTempBase64); // TODO : replace with specific image when http is setup
   }
 
   @override

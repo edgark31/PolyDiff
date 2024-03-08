@@ -1,19 +1,28 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:flutter/services.dart';
 import 'package:mobile/models/canvas_model.dart';
 
 class ImageConverterService {
-  ImageConverterService();
-  Future<CanvasModel> fromImagePath(String imagePath) async {
-    final ByteData data = await rootBundle.load(imagePath);
-    final Uint8List bytes = data.buffer.asUint8List();
-    final ui.Codec codec = await ui.instantiateImageCodec(bytes);
-    final ui.FrameInfo frameInfo = await codec.getNextFrame();
-    final ui.Image originalImage = frameInfo.image;
+  Uint8List uint8listFromBase64String(String base64String) {
+    int positionComma = base64String.indexOf(',');
+    return base64Decode(base64String.substring(positionComma + 1));
+  }
 
-    //temporaire
-    final ui.Image modifiedImage = frameInfo.image;
+  Future<ui.Image> imageFromBase64String(String base64String) async {
+    Uint8List data = uint8listFromBase64String(base64String);
+    ui.Codec codec = await ui.instantiateImageCodec(data);
+    ui.FrameInfo frameInfo = await codec.getNextFrame();
+    return frameInfo.image;
+  }
+
+  Future<CanvasModel> fromImagesBase64(
+      String originalImageBase64, String modifiedImageBase64) async {
+    final ui.Image originalImage =
+        await imageFromBase64String(originalImageBase64);
+    final ui.Image modifiedImage =
+        await imageFromBase64String(modifiedImageBase64);
 
     return CanvasModel(
       original: originalImage,
