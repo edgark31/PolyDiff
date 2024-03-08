@@ -27,7 +27,7 @@ const String CLASSIC_ROUTE = '/classic';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
-    print('the Route is: ${settings.name}');
+    //print('the Route is: ${settings.name}');
 
     switch (settings.name) {
       case '/':
