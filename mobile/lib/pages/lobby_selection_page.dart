@@ -3,14 +3,16 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/game_card_provider.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
+import 'package:provider/provider.dart';
 
 class LobbySelectionPage extends StatefulWidget {
   const LobbySelectionPage({Key? key});
 
-  static const routeName = CLASSIC_LOBBY_ROUTE;
+  static const routeName = LOBBY_ROUTE;
 
   static Route route() {
     return MaterialPageRoute(
@@ -46,6 +48,10 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final lobbyService = context.watch<LobbyService>();
+    String creationRoute = lobbyService.isGameTypeClassic()
+        ? CREATE_ROOM_CARD_ROUTE
+        : CREATE_ROOM_OPTIONS_ROUTE;
     return Scaffold(
       drawer: CustomMenuDrawer(),
       appBar: CustomAppBar(),
@@ -54,13 +60,12 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
           : SingleChildScrollView(
               child: Column(
                 children: [
-                  Text('Salles de jeu disponibles - Mode Classique'),
-                  CustomButton(
-                    text: 'Créer une salle',
-                    press: () => Navigator.pushNamed(context,
-                        CREATE_ROOM_CARD_ROUTE), // TODO : Change according to mode
-                    backgroundColor: kMidOrange,
-                  ),
+                  ElevatedButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, creationRoute),
+                      child: Text(
+                        'Créer une salle pour le mode ${lobbyService.gameTypeName}',
+                      )),
                   buildGameCard(context, defaultGameCard),
                   // You can add more GameCard widgets here or iterate over a list of game cards
                 ],

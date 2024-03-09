@@ -92,10 +92,9 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
               children: [
                 CustomButton(
                   press: () {
-                    // TODO: Handle lobby selection
-                    print("Selected lobby with Game ID: ${card.gameId}");
+                    Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
                   },
-                  text: 'Join Lobby',
+                  text: 'Choisir cette fiche',
                   backgroundColor: kMidOrange,
                 ),
               ],

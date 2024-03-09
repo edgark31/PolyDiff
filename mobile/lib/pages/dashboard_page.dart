@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -26,11 +29,14 @@ class _DashboardPageState extends State<DashboardPage> {
     Navigator.pushNamed(context, routeName);
   }
 
-  Widget _gameModeOption(
-      String title, IconData icon, String route, Color color) {
+  Widget _gameModeOption(GameType type, IconData icon, Color color) {
+    final lobbyService = context.watch<LobbyService>();
     return CustomButton(
-      text: title,
-      press: () => _navigateTo(route),
+      text: type == GameType.Classic ? 'Classique' : 'Temps limité',
+      press: () {
+        lobbyService.setGameType(type);
+        _navigateTo(LOBBY_ROUTE);
+      },
       backgroundColor: color,
       icon: icon,
       widthFactor: 0.30,
@@ -64,11 +70,17 @@ class _DashboardPageState extends State<DashboardPage> {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  _gameModeOption('Classique', Icons.class_,
-                      CLASSIC_LOBBY_ROUTE, kMidOrange),
+                  _gameModeOption(
+                    GameType.Classic,
+                    Icons.class_,
+                    kMidOrange,
+                  ),
                   SizedBox(height: 20), // Spacing between buttons
-                  _gameModeOption('Temps Limité', Icons.hourglass_bottom,
-                      DASHBOARD_ROUTE, kMidGreen),
+                  _gameModeOption(
+                    GameType.Limited,
+                    Icons.hourglass_bottom,
+                    kMidGreen,
+                  ),
                 ],
               ),
             ),

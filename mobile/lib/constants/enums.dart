@@ -34,3 +34,8 @@ enum SocketType {
   Lobby,
   Game,
 }
+
+enum GameType {
+  Classic,
+  Limited,
+}

@@ -8,6 +8,7 @@ import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/services/avatar_service.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +32,10 @@ void main() async {
       ChatService chatService = Get.find();
       return chatService;
     }),
-
+    ChangeNotifierProvider(create: (context) {
+      LobbyService lobbyService = Get.find();
+      return lobbyService;
+    }),
     // Avatar
     ChangeNotifierProvider(create: (context) => AvatarProvider()),
     Provider(create: (context) => AvatarService()),
@@ -42,6 +46,7 @@ void initializeServices() {
   Get.put(SocketService());
   Get.put(InfoService());
   Get.put(ChatService());
+  Get.put(LobbyService());
 }
 
 class MyApp extends StatelessWidget {
