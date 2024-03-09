@@ -28,6 +28,10 @@ export class LobbyGateway implements OnGatewayConnection {
     @SubscribeMessage(LobbyEvents.Join)
     join(@ConnectedSocket() socket: Socket, lobbyId: string) {
         socket.join(lobbyId);
+
+        this.lobbies.get(lobbyId).players.push(socket.data.id);
+
+        this.server.emit(LobbyEvents.UpdateLobbys, this.lobbies);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.id).credentials.username} rejoint le lobby ${lobbyId}`);
     }
 
@@ -44,4 +48,5 @@ export class LobbyGateway implements OnGatewayConnection {
         });
         this.logger.log(`LOBBY IN de ${userId}`);
     }
+
 }

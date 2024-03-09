@@ -150,6 +150,7 @@ export interface Lobby {
     observers: Observers[];
     isCheatEnabled: boolean;
     mode: string;
+    password?: string;
 }
 
 export interface Game {
