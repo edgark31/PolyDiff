@@ -1,10 +1,8 @@
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
-import { ClassicModeService } from '@app/services/classic-mode/classic-mode.service';
-import { LimitedModeService } from '@app/services/limited-mode/limited-mode.service';
-import { PlayersListManagerService } from '@app/services/players-list-manager/players-list-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
+import { Lobby } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
-import { ConnectedSocket, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { ConnectedSocket, OnGatewayConnection, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
 
@@ -12,21 +10,18 @@ import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
     namespace: '/game',
 })
 @Injectable()
-export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
+export class GameGateway implements OnGatewayConnection, OnGatewayInit {
     @WebSocketServer() private server: Server;
+    private readonly lobbies = new Map<string, Lobby>();
 
     // gateway needs to be injected all the services that it needs to use
     // eslint-disable-next-line max-params -- services are needed for the gateway
     constructor(
         private readonly logger: Logger,
-        private readonly classicModeService: ClassicModeService,
-        private readonly playersListManagerService: PlayersListManagerService,
         private readonly roomsManagerService: RoomsManagerService,
-        private readonly limitedModeService: LimitedModeService,
         private readonly accountManager: AccountManagerService,
     ) {}
 
-    // ------------------- -- LOGIC -- -------------------
 
     // @SubscribeMessage(GameEvents.StartGameByRoomId)
     // startGame(@ConnectedSocket() socket: Socket) {
@@ -185,30 +180,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     //     await this.roomsManagerService.addHintPenalty(socket, this.server);
     // }
 
-    // @SubscribeMessage(ConnectionEvents.UserConnectionRequest)
-    // processConnection(@ConnectedSocket() socket: Socket, @MessageBody() name: string) {
-    //     const canConnect = !Array.from(this.mapSocketWithName.values()).some((value) => value === name);
-    //     socket.emit(ConnectionEvents.UserConnectionRequest, canConnect);
-    //     if (canConnect) {
-    //         this.logger.debug(`ACCEPT :: pour ${String(name)} avec id : ${socket.id}`);
-    //         this.mapSocketWithName.set(socket.id, name);
-    //     } else {
-    //         this.logger.error(`REFUS :: pour ${String(name)} avec id : ${socket.id}`);
-    //     }
-    // }
-
-    // @SubscribeMessage(MessageEvents.GlobalMessage)
-    // processMessage(@MessageBody() dataMessage: ChatMessageGlobal) {
-    //     this.logger.log(`MESSAGE :::: ${dataMessage.userName} a dit ${dataMessage.message}`);
-    //     dataMessage.timestamp = new Date().toLocaleTimeString('en-US', {
-    //         timeZone: 'America/Toronto',
-    //         hour: '2-digit',
-    //         minute: '2-digit',
-    //         second: '2-digit',
-    //     });
-    //     this.server.emit(MessageEvents.GlobalMessage, dataMessage);
-    // }
-
     afterInit() {
         setInterval(() => {
             this.roomsManagerService.updateTimers(this.server);
@@ -216,15 +187,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
-        const userName = socket.handshake.query.name as string;
-        socket.data.username = userName;
-        this.logger.log(`GAME ON de ${userName}`);
-    }
-
-    // Test com
-
-    async handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.accountManager.deconnexion(socket.data.username);
-        this.logger.log(`GAME OFF de ${socket.data.username}`);
+        const userId = socket.handshake.query.id as string;
+        socket.data.id = userId;
+        socket.on('disconnecting', () => {
+            this.accountManager.deconnexion(socket.data.id);
+            this.logger.log(`LOBBY OUT de ${userId} : ${Array.from(socket.rooms)[0]}`);
+        });
+        this.logger.log(`GAME ON de ${userId}`);
     }
 }
