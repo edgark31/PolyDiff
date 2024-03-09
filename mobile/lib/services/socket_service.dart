@@ -44,7 +44,6 @@ class SocketService extends ChangeNotifier {
 
   void setSocket(IO.Socket socket) {
     print('Setting socket id : ${socket.id}');
-    socket.clearListeners();
 
     socket.onConnect((_) {
       print('Connected to server on $BASE_URL');
@@ -95,12 +94,15 @@ class SocketService extends ChangeNotifier {
     switch (type) {
       case SocketType.Auth:
         authSocket.disconnect();
+        authSocket.clearListeners();
         break;
       case SocketType.Lobby:
         lobbySocket.disconnect();
+        lobbySocket.clearListeners();
         break;
       case SocketType.Game:
         gameSocket.disconnect();
+        gameSocket.clearListeners();
         break;
     }
   }
