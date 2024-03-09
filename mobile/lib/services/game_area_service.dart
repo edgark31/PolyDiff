@@ -12,6 +12,19 @@ class GameAreaService extends ChangeNotifier {
     ..color = Colors.green
     ..style = PaintingStyle.fill;
 
+  void validateCoord(
+      Coordinate coord, List<Coordinate> coordList, bool isLeft) {
+    if (coordList.contains(coord)) {
+      showDifferenceFound(coordList);
+    } else {
+      if (isLeft) {
+        print("ERROR on left canvas");
+      } else {
+        print("ERROR on right canvas");
+      }
+    }
+  }
+
   void showDifferenceFound(List<Coordinate> newCoordinates) {
     // _soundService.playDifferenceFound();
     print('enters showDifferenceFound');
@@ -20,16 +33,9 @@ class GameAreaService extends ChangeNotifier {
     startBlinking(newCoordinates);
   }
 
-  /*void showDifferenceNotFound() {
-    _soundService.playDifferenceNotFound();
-    print("difference not found");
-  }*/
-
-  /*void showError(dynamic message) {
-    _soundService.playDifferenceNotFound();
-    print(message);
-    print("SocketEvent.error");
-  }*/
+  void showDifferenceNotFound() {
+    //_soundService.playDifferenceNotFound();
+  }
 
   void initDataToBlink(List<Coordinate> coords) {
     print('enters initDataToBlink');
