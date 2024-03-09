@@ -54,6 +54,7 @@ export class AccountManagerService implements OnModuleInit {
 
     async connexion(creds: Credentials): Promise<Account> {
         try {
+            this.logger.log(`Received connection request from ${creds.username} has connected with password ${creds.password}`);
             const accountFound = await this.accountModel.findOne({
                 $or: [
                     { 'credentials.username': creds.username, 'credentials.password': creds.password },
@@ -71,6 +72,8 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.save();
             this.connectedUsers.set(accountFound.id, accountFound);
             this.fetchUsers();
+            this.logger.log(`${accountFound.credentials.username} has connected with password ${accountFound.credentials.password}`);
+            this.showProfiles();
             return Promise.resolve(accountFound);
         } catch (error) {
             this.logger.error(`Failed to connect account --> ${error.message}`);
@@ -246,4 +249,11 @@ export class AccountManagerService implements OnModuleInit {
     //         return Promise.reject(`${error}`);
     //     }
     // }
+
+    showProfiles(): void {
+        this.logger.verbose('Connected profiles: ');
+        this.connectedUsers.forEach((value, key) => {
+            this.logger.verbose(`${key}`);
+        });
+    }
 }
