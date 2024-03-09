@@ -6,7 +6,6 @@ import { ReplayInterval } from '@app/interfaces/replay-interval';
 import { CaptureService } from '@app/services/capture-service/capture.service';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
-import { HintService } from '@app/services/hint-service/hint.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { ChatMessage, Coordinate, GameRoom } from '@common/game-interfaces';
@@ -36,7 +35,6 @@ export class ReplayService implements OnDestroy {
         private readonly gameManager: GameManagerService,
         private readonly soundService: SoundService,
         private readonly imageService: ImageService,
-        private readonly hintService: HintService,
         private readonly captureService: CaptureService,
     ) {
         this.addReplayEvent();
@@ -158,15 +156,6 @@ export class ReplayService implements OnDestroy {
             case ReplayActions.OpponentDifferencesFoundUpdate:
                 this.replayOpponentDifferencesFoundUpdate(replayData.data as ReplayPayload);
                 break;
-            case ReplayActions.UseHint:
-                this.replayUseHint(replayData.data as ReplayPayload);
-                break;
-            case ReplayActions.ActivateThirdHint:
-                this.replayActivateThirdHint(replayData.data as ReplayPayload);
-                break;
-            case ReplayActions.DeactivateThirdHint:
-                this.replayDeactivateThirdHint();
-                break;
         }
         this.currentReplayIndex++;
     }
@@ -232,7 +221,6 @@ export class ReplayService implements OnDestroy {
     }
 
     private replayGameStart(replayData: ReplayPayload): void {
-        this.hintService.resetHints();
         this.gameManager.differences = (replayData as GameRoom).originalDifferences;
         this.imageService.loadImage(this.gameAreaService.getOriginalContext(), (replayData as GameRoom).clientGame.original);
         this.imageService.loadImage(this.gameAreaService.getModifiedContext(), (replayData as GameRoom).clientGame.modified);
@@ -281,17 +269,5 @@ export class ReplayService implements OnDestroy {
 
     private replayOpponentDifferencesFoundUpdate(replayData: ReplayPayload): void {
         this.replayOpponentDifferenceFound.next(replayData as number);
-    }
-
-    private replayUseHint(replayData: ReplayPayload): void {
-        this.hintService.requestHint(replayData as Coordinate[], this.replaySpeed);
-    }
-
-    private replayActivateThirdHint(replayData: ReplayPayload): void {
-        this.hintService.switchProximity(replayData as number);
-    }
-
-    private replayDeactivateThirdHint(): void {
-        this.hintService.deactivateThirdHint();
     }
 }

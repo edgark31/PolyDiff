@@ -35,7 +35,6 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         this.gameModes = GameModes;
         this.isStartingGame = false;
         this.nPlayersConnected = 0;
-        this.roomManagerService.setGameMode('limited');
     }
 
     ngOnInit(): void {

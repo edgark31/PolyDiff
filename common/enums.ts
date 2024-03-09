@@ -103,7 +103,6 @@ export enum LobbyEvents {
     Create = 'Create',
     Join = 'Join',
     Leave = 'Leave',
-    Kick = 'Kick',
     Lock = 'Lock',
     OptPlayer = 'OptPlayer',
     JoinAsObserver = 'JoinAsObserver',

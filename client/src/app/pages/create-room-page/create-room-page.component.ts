@@ -12,7 +12,7 @@ export class CreateRoomPageComponent {
     time: number | null = 0;
     password: string;
     constructor(private readonly roomManagerService: RoomManagerService) {
-        this.gameMode = this.roomManagerService.gameMode;
+        this.gameMode = 'limited';
     }
 
     formatLabel(value: number | null) {

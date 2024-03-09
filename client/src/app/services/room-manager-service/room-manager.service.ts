@@ -8,7 +8,6 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class RoomManagerService {
-    gameMode: string;
     password: string;
     private joinedPlayerNames: Subject<string[]>;
     private playerNameAvailability: Subject<PlayerNameAvailability>;
@@ -90,10 +89,6 @@ export class RoomManagerService {
 
     get isGameHistoryReloadNeeded$() {
         return this.isGameHistoryReloadNeeded.asObservable();
-    }
-
-    setGameMode(gameMode: string) {
-        this.gameMode = gameMode;
     }
 
     createSoloRoom(playerPayLoad: PlayerData) {

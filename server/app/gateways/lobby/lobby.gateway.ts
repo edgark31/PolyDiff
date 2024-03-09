@@ -14,18 +14,21 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     @SubscribeMessage(LobbyEvents.Create)
-    createLobby(@ConnectedSocket() socket: Socket): string {
+    createLobby(@ConnectedSocket() socket: Socket) {
         this.logger.log(`${socket.id} crée un lobby`);
-        return 'Hello world!';
     }
 
+    @SubscribeMessage(LobbyEvents.Join)
     handleConnection(@ConnectedSocket() socket: Socket) {
+        socket.emit(LobbyEvents.Join);
         const userName = socket.handshake.query.name as string;
         socket.data.username = userName;
         this.logger.log(`LOBBY IN de ${userName}`);
     }
 
+    @SubscribeMessage(LobbyEvents.Leave)
     handleDisconnect(@ConnectedSocket() socket: Socket) {
+        socket.emit(LobbyEvents.Leave);
         this.logger.log(`LOBBY OUT de ${socket.data.username}`);
     }
 }
