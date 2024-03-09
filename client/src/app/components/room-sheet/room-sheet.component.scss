@@ -1,6 +1,126 @@
 .background {
     position: absolute;
-    top: 0;
-    z-index: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     object-fit: cover;
+}
+
+html,
+body {
+    height: 100vh; /* 100% de la hauteur de la fenêtre d'affichage */
+    width: 100vw; /* 100% de la largeur de la fenêtre d'affichage */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Cela empêchera le défilement si le contenu dépasse la hauteur du `body` */
+}
+
+body {
+    background-image: url('../../../assets/background/gameSheet.png');
+    background-size: cover; /* Cela garantit que l'image couvre tout l'écran */
+    background-position: center center; /* Cela centre l'image dans la page */
+    background-repeat: no-repeat; /* Cela empêche l'image de se répéter */
+    background-size: 36%;
+    background-position: center 30%;
+}
+.button-creer {
+    top: 380px;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    font-family: 'Troika', sans-serif;
+    font-size: 16px;
+    margin: 0 20px 20px 20px;
+    width: 150px;
+    height: 100px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: rgba(253, 250, 151, 255);
+    border: none;
+    border-radius: 40px;
+    border-color: #bf5c5c00;
+    background-color: #bf5c5c;
+    animation: titleFadeIn 1.5s ease-in-out;
+    margin-top: -270px;
+    margin-left: 970px;
+}
+
+.button-rejoign {
+    top: 20px;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    font-family: 'Troika', sans-serif;
+    font-size: 16px;
+    margin: 0 20px 20px 20px;
+    width: 170px;
+    height: 70px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: rgba(253, 250, 151, 255);
+    // border: none;
+    // border-radius: 40px;
+    border-color: #bf5c5c00;
+    background-color: #bf5c5c;
+    animation: titleFadeIn 1.5s ease-in-out;
+    margin-bottom: 90px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin-top: -80px;
+}
+
+.left {
+    margin-right: 40px;
+    font-size: 19px;
+    font-weight: bold;
+    transform: translateY(2px);
+}
+
+.space-below {
+    margin-bottom: 50px; /* Ajustez cette valeur selon l'espace désiré */
+}
+
+.space-below-limite {
+    margin-bottom: 50px; /* Ajustez cette valeur selon l'espace désiré */
+}
+
+.players-list {
+    position: absolute;
+    z-index: 2;
+    left: 55%;
+    bottom: 40%;
+    margin-top: 100px;
+}
+
+.waiting-text {
+    font-family: 'Troika', sans-serif;
+    font-size: 20px;
+    width: 600px;
+    color: black;
+}
+
+.player-count {
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 80px;
+}
+
+.center {
+    font-size: 19px;
+    font-weight: bold;
+    margin-right: 70px;
+    margin-bottom: 30px;
+}
+
+.right {
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 114px;
 }

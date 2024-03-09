@@ -6,6 +6,10 @@
     justify-content: center;
     align-items: center;
 }
+.button-creer {
+    width: 50px; /* Ajustez cette valeur pour diminuer la longueur */
+    margin-top: -70px; /* Ajustez cette valeur pour monter le bouton */
+}
 
 .flex-row {
     display: flex;
@@ -33,7 +37,14 @@ h2 {
     animation: titleFadeIn 0.5s ease-in-out;
 }
 
-.button {
+body {
+    background-image: url('../../../assets/LimitedTimeBackground.jpg');
+    background-size: cover; /* Cela garantit que l'image couvre tout l'écran */
+    background-position: center center; /* Cela centre l'image dans la page */
+    background-repeat: no-repeat; /* Cela empêche l'image de se répéter */
+}
+
+.button-creer {
     top: 500px;
     cursor: pointer;
     position: relative;
@@ -53,6 +64,7 @@ h2 {
     background-color: #5cbf99;
     animation: titleFadeIn 1.5s ease-in-out;
     z-index: 1;
+    margin-top: -400px;
 }
 
 #mode {
