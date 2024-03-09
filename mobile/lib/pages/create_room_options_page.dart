@@ -48,8 +48,8 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
                 : timeSelection(context),
             CustomButton(
               press: () {
-                // TODO: Make Waiting room page
-                print("Navigate to waiting room page");
+                // TODO: Add creating lobby logic
+                Navigator.pushNamed(context, LOBBY_ROUTE);
               },
               text: 'Créer la salle de jeu',
               backgroundColor: kMidOrange,

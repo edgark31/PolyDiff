@@ -118,6 +118,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                   press: () {
                     // TODO: Handle lobby selection
                     print("Selected lobby with Game ID: ${card.gameId}");
+                    Navigator.pushNamed(context, LOBBY_ROUTE);
                   },
                   text: 'Rejoindre cette salle d\'attente',
                   widthFactor: 1.5,

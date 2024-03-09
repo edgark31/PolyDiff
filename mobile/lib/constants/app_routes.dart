@@ -7,6 +7,7 @@ import 'package:mobile/pages/create_room_card_page.dart';
 import 'package:mobile/pages/create_room_options_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/home_page.dart';
+import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
 import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/pages/profile_page.dart';
@@ -37,6 +38,7 @@ const String PROFILE_ROUTE = '/profile';
 const String AVATAR_ROUTE = '/avatar';
 const String ADMIN_ROUTE = '/admin';
 const String ERROR_ROUTE = '/error';
+const String LOBBY_ROUTE = '/lobby';
 const String LOBBY_SELECTION_ROUTE = '/lobby-selection';
 const String CREATE_ROOM_CARD_ROUTE = '/create/card';
 const String CREATE_ROOM_OPTIONS_ROUTE = '/create/options';
@@ -72,6 +74,9 @@ class AppRouter {
 
       case LobbySelectionPage.routeName:
         return LobbySelectionPage.route();
+
+      case LobbyPage.routeName:
+        return LobbyPage.route();
 
       case ChatPage.routeName:
         return ChatPage.route();
