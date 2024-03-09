@@ -12,8 +12,15 @@ import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/pages/settings_page.dart';
 import 'package:mobile/pages/signup_page.dart';
 
-const String API_URL = 'http://localhost:3000/api';
+// Important if testing on a real device with a local server
+// Change the IP address to your local machine's IP address
+// Something like: http://192.168.0.100:3000
+// windows command : netsh interface ip show address | findstr "IP Address"
+
+// const String BASE_URL = 'http://http://192.168.0.100:3000'; // Local machine ip
+// const String BASE_URL = 'http://34.118.163.79:3000'; // Real server ip
 const String BASE_URL = 'http://localhost:3000';
+const String API_URL = '$BASE_URL/api';
 
 const String HOME_ROUTE = '/';
 const String LOGIN_ROUTE = '/login';
