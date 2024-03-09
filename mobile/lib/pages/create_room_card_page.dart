@@ -2,31 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
-import 'package:mobile/providers/game_card_provider.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 
-class LobbySelectionPage extends StatefulWidget {
-  const LobbySelectionPage({Key? key});
+class CreateRoomCardPage extends StatefulWidget {
+  const CreateRoomCardPage({Key? key});
 
-  static const routeName = CLASSIC_LOBBY_ROUTE;
+  static const routeName = CREATE_ROOM_CARD_ROUTE;
 
   static Route route() {
     return MaterialPageRoute(
-      builder: (_) => const LobbySelectionPage(),
+      builder: (_) => const CreateRoomCardPage(),
       settings: const RouteSettings(name: routeName),
     );
   }
 
   @override
-  State<LobbySelectionPage> createState() => _LobbySelectionPageState();
+  State<CreateRoomCardPage> createState() => _CreateRoomCardPageState();
 }
 
-class _LobbySelectionPageState extends State<LobbySelectionPage> {
-  late GameCardProvider _gameCardProvider;
-
-  bool _isLoading = false;
+class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _gameCardProvider = GameCardProvider(baseUrl: API_URL);
+  // }
 
   GameCard defaultGameCard = GameCard(
     name: 'MASTER RACCOON',
@@ -39,33 +40,20 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
   );
 
   @override
-  void initState() {
-    super.initState();
-    _gameCardProvider = GameCardProvider(baseUrl: API_URL);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CustomMenuDrawer(),
       appBar: CustomAppBar(),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text('Salles de jeu disponibles - Mode Classique'),
-                  CustomButton(
-                    text: 'Créer une salle',
-                    press: () => Navigator.pushNamed(context,
-                        CREATE_ROOM_CARD_ROUTE), // TODO : Change according to mode
-                    backgroundColor: kMidOrange,
-                  ),
-                  buildGameCard(context, defaultGameCard),
-                  // You can add more GameCard widgets here or iterate over a list of game cards
-                ],
-              ),
-            ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text('Création d\'une salle de jeu - Mode Classique'),
+            Text('Choississez une fiche'),
+            buildGameCard(context, defaultGameCard),
+            // You can add more GameCard widgets here or iterate over a list of game cards
+          ],
+        ),
+      ),
     );
   }
 

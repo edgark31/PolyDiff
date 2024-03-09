@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/avatar_selection_page.dart';
 import 'package:mobile/pages/chat_page.dart';
+import 'package:mobile/pages/create_room_card_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
@@ -37,6 +38,8 @@ const String ADMIN_ROUTE = '/admin';
 const String ERROR_ROUTE = '/error';
 const String CLASSIC_LOBBY_ROUTE = '/lobby/classic';
 const String LIMITED_LOBBY_ROUTE = '/lobby/limited';
+const String CREATE_ROOM_CARD_ROUTE = '/create/card';
+const String CREATE_ROOM_OPTIONS_ROUTE = '/create/options';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
@@ -72,6 +75,9 @@ class AppRouter {
 
       case ChatPage.routeName:
         return ChatPage.route();
+
+      case CreateRoomCardPage.routeName:
+        return CreateRoomCardPage.route();
 
       default:
         return _errorRoute();
