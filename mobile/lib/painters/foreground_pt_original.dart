@@ -11,6 +11,7 @@ class ForegroundPtOriginal extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    print('called paint in foreground');
     canvas.scale(GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
     final path = Path();
     for (var coord in gameAreaService.coordinates) {

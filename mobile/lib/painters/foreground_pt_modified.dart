@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/canvas_model.dart';
+import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/widgets/game_canvas.dart';
 
-//TODO: Make calls for validation
 class ForegroundPtModified extends CustomPainter {
+  final GameAreaService gameAreaService;
   final CanvasModel images;
 
-  ForegroundPtModified(this.images); //
+  ForegroundPtModified(this.images, this.gameAreaService);
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.scale(GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
+    if (gameAreaService.blinkingDifference != null) {
+      canvas.scale(
+          GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
+      canvas.drawPath(gameAreaService.blinkingDifference!,
+          gameAreaService.defaultBlinkingColor);
+    }
   }
 
   @override

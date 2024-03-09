@@ -57,9 +57,9 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ModifiedCanvas(snapshot.data, '123'),
-                    SizedBox(width: 50),
                     OriginalCanvas(snapshot.data, '123'),
+                    SizedBox(width: 50),
+                    ModifiedCanvas(snapshot.data, '123'),
                   ],
                 );
               } else {
@@ -68,12 +68,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             },
           ),
           // TODO : Add if to only appear if cheating is enabled
-          ElevatedButton(
-              onPressed: () {
-                print('Mode Triche');
-                gameAreaService.showDifferenceFound(differencesTemp[0]);
-              },
-              child: Text('Mode Triche')),
+          ElevatedButton(onPressed: () {}, child: Text('Mode Triche')),
         ],
       ),
     );

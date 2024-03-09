@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 import 'package:mobile/painters/background_pt_modified.dart';
 import 'package:mobile/painters/background_pt_original.dart';
 import 'package:mobile/painters/foreground_pt_modified.dart';
 import 'package:mobile/painters/foreground_pt_original.dart';
 import 'package:mobile/services/game_area_service.dart';
+import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/widgets/game_canvas.dart';
-import 'package:provider/provider.dart';
 
 class OriginalCanvas extends GameCanvas {
   OriginalCanvas(images, this.gameId) : super(images);
   final String gameId;
+  //
+  final tempGameManager = GameManagerService();
+  //tempGameManager.testConvert();
 
   @override
   Widget build(BuildContext context) {
-    final gameAreaService = Provider.of<GameAreaService>(context);
+    final GameAreaService gameAreaService = Get.put(GameAreaService());
     return Column(
       children: <Widget>[
         Container(
@@ -31,7 +34,8 @@ class OriginalCanvas extends GameCanvas {
                   GameCanvas.tabletScalingRatio;
               y.value = details.localPosition.dy.toDouble() /
                   GameCanvas.tabletScalingRatio;
-              // Send coords
+              gameAreaService
+                  .showDifferenceFound(tempGameManager.testConvert());
             },
             child: SizedBox(
               width: images.original.width.toDouble() *
@@ -60,7 +64,8 @@ class ModifiedCanvas extends GameCanvas {
 
   @override
   Widget build(BuildContext context) {
-    //final gameAreaService = Provider.of<GameAreaService>(context);
+    final tempGameManager = GameManagerService();
+    final GameAreaService gameAreaService = Get.put(GameAreaService());
     return Column(
       children: <Widget>[
         Container(
@@ -77,7 +82,8 @@ class ModifiedCanvas extends GameCanvas {
                   GameCanvas.tabletScalingRatio;
               y.value = details.localPosition.dy.toDouble() /
                   GameCanvas.tabletScalingRatio;
-              //Send coords
+              gameAreaService
+                  .showDifferenceFound(tempGameManager.testConvert2());
             },
             child: SizedBox(
               width: images.original.width.toDouble() *
@@ -86,7 +92,8 @@ class ModifiedCanvas extends GameCanvas {
                   GameCanvas.tabletScalingRatio,
               child: CustomPaint(
                 painter: BackgroundPtModified(images),
-                foregroundPainter: ForegroundPtModified(images),
+                foregroundPainter:
+                    ForegroundPtModified(images, gameAreaService),
               ),
             ),
           ),
