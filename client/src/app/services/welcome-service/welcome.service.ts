@@ -22,8 +22,8 @@ export class WelcomeService {
     selectPassword: string;
     selectPasswordConfirm: string;
     isLinkValid: boolean;
-    selectLangage: string;
-    langage = LANGUAGES;
+    selectLanguage: string;
+    language = LANGUAGES;
     themePersonnalization = THEME_PERSONNALIZATION;
     constructor(private communication: CommunicationService, public gameManager: GameManagerService) {}
 
@@ -124,10 +124,10 @@ export class WelcomeService {
         });
     }
 
-    onModifyLangage() {
-        this.communication.modifyLangage(this.gameManager.username, this.selectLangage).subscribe({
+    onModifyLanguage() {
+        this.communication.modifyLanguage(this.gameManager.username, this.selectLanguage).subscribe({
             next: () => {
-                this.account.profile.language = this.selectLangage;
+                this.account.profile.language = this.selectLanguage;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';

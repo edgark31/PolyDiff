@@ -111,8 +111,8 @@ export class CommunicationService {
         );
     }
 
-    modifyLangage(oldusername: string, newlangage: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/langage`, { oldUsername: oldusername, newLangage: newlangage }).pipe(
+    modifyLanguage(oldusername: string, newlanguage: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/langage`, { oldUsername: oldusername, newLanguage: newlanguage }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
