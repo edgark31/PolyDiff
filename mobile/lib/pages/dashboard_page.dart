@@ -64,8 +64,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  _gameModeOption(
-                      'Classique', Icons.class_, DASHBOARD_ROUTE, kMidOrange),
+                  _gameModeOption('Classique', Icons.class_,
+                      CLASSIC_LOBBY_ROUTE, kMidOrange),
                   SizedBox(height: 20), // Spacing between buttons
                   _gameModeOption('Temps Limité', Icons.hourglass_bottom,
                       DASHBOARD_ROUTE, kMidGreen),

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/game_card_provider.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
+import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 
 class LobbySelectionPage extends StatefulWidget {
   const LobbySelectionPage({Key? key});
@@ -43,9 +47,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Select a Lobby"),
-      ),
+      drawer: CustomMenuDrawer(),
+      appBar: CustomAppBar(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -92,12 +95,13 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
             ButtonBar(
               alignment: MainAxisAlignment.start,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle lobby selection
+                CustomButton(
+                  press: () {
+                    // TODO: Handle lobby selection
                     print("Selected lobby with Game ID: ${card.gameId}");
                   },
-                  child: const Text('Join Lobby'),
+                  text: 'Join Lobby',
+                  backgroundColor: kMidOrange, 
                 ),
               ],
             ),
