@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { Game } from '@common/game-interfaces';
 
 @Component({
     selector: 'app-room-sheet',
@@ -10,7 +9,6 @@ import { Game } from '@common/game-interfaces';
     styleUrls: ['./room-sheet.component.scss'],
 })
 export class RoomSheetComponent {
-    @Input() game: Game;
     gameMode: string = 'Mode';
     numberOfDifferences: number;
     connectedPlayers: number;
