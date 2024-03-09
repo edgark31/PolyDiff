@@ -1,35 +1,10 @@
-<!-- <div class="gameContainer">
-    <img alt="background-image" id="image" src="./assets/gameSheet.png"/>
-    <button mat-raised-button class="button-creer" routerLink="/selection">
-        <span id = "solo">Créer une salle</span>
-    </button>
-    <div class="container">
-        <div class="left">
-            <div class="space-below">Mode de jeu</div>
-        </div>
-        <div class="center">
-        <div>Nombre de différences : 6</div>
-        <button mat-raised-button class="button-rejoign" routerLink="/selection">
-            <span id = "solo">Rejoindre une salle</span>
-        </button>
-    </div>
-        <div class="right">
-        <div class="player-count"> {{connectedPlayers}}/4 joueurs présents</div>
-        <div class="element">
-            <div class = "players-list">
-                <div>
-                    <p class = "waiting-text"> Joueur(s) en attente : </p>
-                    <div class = "player-container">
-                        <div class = "players" *ngFor="let playerName of playerNames">
-                            <p class = "player">Joueur : <span class = "player-name">{{playerName}}</span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-</div> -->
-
 <img alt="background-image" id="image" src="./assets/gameSheet.png"/>
+<div *ngIf="gameMode==='limited'"class="game-mode-image">
+    <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png"/>
+</div>
+<div *ngIf="gameMode==='classic'"class="game-mode-image">
+    <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png"/>
+</div>
 <button mat-raised-button class="create-button" routerLink="/selection">
     <span>Créer une salle</span>
 </button>

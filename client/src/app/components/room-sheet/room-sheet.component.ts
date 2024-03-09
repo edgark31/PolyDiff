@@ -17,6 +17,7 @@ export class RoomSheetComponent {
 
     constructor(public router: Router) {
         this.playerNames = ['Player 1', 'Player 2', 'Player 3', 'Player 4'];
+        this.gameMode = 'limited';
     }
 
     isRoomFull(): boolean {
