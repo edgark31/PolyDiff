@@ -17,7 +17,7 @@ class GameAreaService extends ChangeNotifier {
     print('enters showDifferenceFound');
     coordinates.addAll(newCoordinates);
     notifyListeners();
-    startBlinking(coordinates);
+    startBlinking(newCoordinates);
   }
 
   /*void showDifferenceNotFound() {

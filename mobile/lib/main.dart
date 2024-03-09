@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/pages/home_page.dart';
-import 'package:mobile/providers/camera_image_provider.dart';
+import 'package:mobile/services/game_area_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
-
-import 'services/socket_service.dart';
 
 Widget defaultHome = HomePage();
 
 void main() async {
+  initializeServices();
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => CameraImageUploader()),
-    ChangeNotifierProvider(create: (context) => SocketService()),
+    ChangeNotifierProvider(create: (context) {
+      GameAreaService gameAreaService = Get.find();
+      return gameAreaService;
+    }),
   ], child: const MyApp()));
+}
+
+void initializeServices() {
+  Get.put(SocketService());
+  Get.put(GameAreaService());
 }
 
 class MyApp extends StatelessWidget {
@@ -30,7 +38,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),
       ),
       onGenerateRoute: AppRouter.onGenerateRoute,
-      initialRoute: CLASSIC_ROUTE,
+      initialRoute: HomePage.routeName,
     );
   }
 }

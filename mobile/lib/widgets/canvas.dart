@@ -7,17 +7,17 @@ import 'package:mobile/painters/foreground_pt_original.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/widgets/game_canvas.dart';
+import 'package:provider/provider.dart';
 
 class OriginalCanvas extends GameCanvas {
   OriginalCanvas(images, this.gameId) : super(images);
   final String gameId;
-  //
   final tempGameManager = GameManagerService();
-  //tempGameManager.testConvert();
+  final GameAreaService gameAreaService = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    final GameAreaService gameAreaService = Get.put(GameAreaService());
+    final gameAreaService = Provider.of<GameAreaService>(context);
     return Column(
       children: <Widget>[
         Container(
