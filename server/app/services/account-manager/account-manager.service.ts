@@ -65,6 +65,7 @@ export class AccountManagerService implements OnModuleInit {
             if (!accountFound) throw new Error('Account not found');
             if (this.connectedUsers.has(accountFound.credentials.username)) throw new Error('Account already connected');
 
+            // eslint-disable-next-line no-underscore-dangle
             accountFound.id = accountFound._id.toString();
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
