@@ -181,6 +181,8 @@ export interface Profile {
     friendRequests: string[];
     theme: Theme;
     language: string;
+    songDifference: Song;
+    songError: Song;
 }
 
 export interface SessionLog {
@@ -241,6 +243,11 @@ export interface Theme {
     color: string;
     backgroundColor: string;
     buttonColor: string;
+}
+
+export interface Song {
+    name: string;
+    link: string;
 }
 
 // export interface modifyProfile {

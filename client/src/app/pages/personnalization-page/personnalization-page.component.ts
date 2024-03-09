@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
+import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -30,6 +31,7 @@ export class PersonnalizationPageComponent implements OnInit {
         public welcomeService: WelcomeService,
         public dialog: MatDialog,
         public gameManager: GameManagerService,
+        public sound: SoundService,
 
         private translate: TranslateService,
         private clientsocket: ClientSocketService,
@@ -40,6 +42,9 @@ export class PersonnalizationPageComponent implements OnInit {
         this.welcomeService.selectAvatar = this.welcomeService.account.profile.avatar;
         this.welcomeService.selectTheme = this.welcomeService.account.profile.theme;
         this.welcomeService.selectLangage = this.welcomeService.account.profile.language;
+        this.sound.correctSoundEffect = this.welcomeService.account.profile.songDifference;
+        console.log(this.welcomeService.account.profile.songDifference.name + 'bbbbbbbbbb');
+        this.sound.incorrectSoundEffect = this.welcomeService.account.profile.songError;
     }
 
     useLanguage(language: string): void {
@@ -64,6 +69,8 @@ export class PersonnalizationPageComponent implements OnInit {
             this.welcomeService.onModifyPassword();
         if (this.welcomeService.selectTheme !== this.welcomeService.account.profile.theme) this.welcomeService.onModifyTheme();
         if (this.welcomeService.selectLangage !== this.welcomeService.account.profile.language) this.welcomeService.onModifyLangage();
+        if (this.sound.correctSoundEffect !== this.welcomeService.account.profile.songDifference) this.welcomeService.onModifySongDifference();
+        if (this.sound.incorrectSoundEffect !== this.welcomeService.account.profile.songError) this.welcomeService.onModifySongError();
 
         this.router.navigate(['/profil']);
     }

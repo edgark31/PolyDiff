@@ -22,7 +22,9 @@
         "Connexion": "Relevé de connexion",
         "gameHistoric": "historique de parties",
         "changePassword": "Changer le mot de passe",
-        "confirmPassword": "Confirmer le mot de passe"
+        "confirmPassword": "Confirmer le mot de passe",
+        "songError": "choisissez votre son pour erreur",
+        "songDifference": "choisissez votre son pour différence trouvé"
     },
     "bouton": {
         "deconnexion": "Déconnexion",

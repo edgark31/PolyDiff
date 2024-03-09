@@ -112,6 +112,10 @@ export enum LobbyEvents {
     Start = 'Start',
 }
 
+export enum statusMatch {
+    Waiting = 'waiting',
+}
+
 export enum AccountEvents {
     ChangePseudo = 'ChangePseudo',
     Update = 'Update',
