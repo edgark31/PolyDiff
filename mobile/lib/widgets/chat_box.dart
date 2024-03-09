@@ -96,7 +96,7 @@ class _ChatBoxState extends State<ChatBox> {
                           : CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                            backgroundImage: NetworkImage(avatarUrl),
+                            backgroundImage: NetworkImage(avatarUrl), // TODO : Also show avatar of sender
                             radius: 15.0),
                         Text(
                           messages[index].userName,
