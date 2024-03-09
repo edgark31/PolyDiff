@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends ChangeNotifier {
-  static const String serverIP = '127.0.0.1';
-  // static const String serverIP = '34.118.163.79';
-  static const String serverPort = '3000';
-  static const String serverURL = 'http://$serverIP:$serverPort';
-
   static late IO.Socket authSocket;
   static late IO.Socket lobbySocket;
   static late IO.Socket gameSocket;
@@ -16,7 +12,7 @@ class SocketService extends ChangeNotifier {
     print('Setup ${type.name} started for $name');
     switch (type) {
       case SocketType.Auth:
-        authSocket = IO.io(serverURL, <String, dynamic>{
+        authSocket = IO.io(BASE_URL, <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
           'query': 'name=$name'
@@ -24,7 +20,7 @@ class SocketService extends ChangeNotifier {
         setSocket(authSocket);
         break;
       case SocketType.Lobby:
-        lobbySocket = IO.io("$serverURL/lobby", <String, dynamic>{
+        lobbySocket = IO.io("$BASE_URL/lobby", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
           'query': 'name=$name'
@@ -32,7 +28,7 @@ class SocketService extends ChangeNotifier {
         setSocket(lobbySocket);
         break;
       case SocketType.Game:
-        gameSocket = IO.io("$serverURL/game", <String, dynamic>{
+        gameSocket = IO.io("$BASE_URL/game", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
           'query': 'name=$name'
@@ -48,7 +44,7 @@ class SocketService extends ChangeNotifier {
 
     print('Calling onConnect socket');
     socket.onConnect((_) {
-      print('Connected to server on $serverIP:$serverPort');
+      print('Connected to server on $BASE_URL');
     });
 
     print('Calling onConnectError socket');
@@ -56,7 +52,7 @@ class SocketService extends ChangeNotifier {
 
     print('Calling onDisconnect socket');
     socket.onDisconnect((_) {
-      print('Disconnected from server');
+      print('Disconnected from server on $BASE_URL');
     });
   }
 
@@ -89,7 +85,7 @@ class SocketService extends ChangeNotifier {
   }
 
   void connect(SocketType type, String name) {
-    print("Connecting socket $type.name for $name");
+    print("Connecting socket $type for $name");
     setup(type, name);
     switch (type) {
       case SocketType.Auth:
@@ -105,6 +101,7 @@ class SocketService extends ChangeNotifier {
   }
 
   void disconnect(SocketType type) {
+    print("Disconnecting socket $type");
     switch (type) {
       case SocketType.Auth:
         authSocket.disconnect();

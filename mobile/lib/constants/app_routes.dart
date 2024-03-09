@@ -17,9 +17,9 @@ import 'package:mobile/pages/signup_page.dart';
 // Something like: http://192.168.0.100:3000
 // windows command : netsh interface ip show address | findstr "IP Address"
 
-// const String BASE_URL = 'http://http://192.168.0.100:3000'; // Local machine ip
+// const String BASE_URL = 'http://http://192.168.0.100:3000'; // Local machine ip when Testing on real device
 // const String BASE_URL = 'http://34.118.163.79:3000'; // Real server ip
-const String BASE_URL = 'http://localhost:3000';
+const String BASE_URL = 'http://localhost:3000'; // Testing on chrome
 const String API_URL = '$BASE_URL/api';
 
 const String HOME_ROUTE = '/';
