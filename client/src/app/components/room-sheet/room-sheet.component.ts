@@ -13,13 +13,11 @@ export class RoomSheetComponent implements OnInit, OnDestroy {
     numberOfDifferences: number;
     playerNames: string[] = [];
     private playerNamesSubscription?: Subscription;
+    private data: { roomId: string; gameId: string; isLimited: boolean };
 
-    constructor(
-        private data: { roomId: string; player: string; gameId: string; isLimited: boolean },
-        public router: Router,
-        private readonly roomManagerService: RoomManagerService,
-    ) {
+    constructor(public router: Router, private readonly roomManagerService: RoomManagerService) {
         this.playerNames = [];
+        this.data = { roomId: '0', gameId: '', isLimited: true };
     }
 
     get isLimited(): boolean {
