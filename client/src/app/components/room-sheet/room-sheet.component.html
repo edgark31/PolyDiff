@@ -38,9 +38,10 @@
         Mode de jeu
     </div>
     <div class="difference-number">
-        Nombre de différences : 6
+        Nombre de différences : {{numberOfDifferences}}
     </div>
     <button mat-raised-button class="join-button" routerLink="/selection">
         <span id>Rejoindre</span>
     </button>
+    <div class="player-count">{{connectedPlayers}}/4 joueurs</div>
 </div>
