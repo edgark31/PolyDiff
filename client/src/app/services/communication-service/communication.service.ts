@@ -121,7 +121,7 @@ export class CommunicationService {
             catchError(this.handleError<void>('modifylangage')),
         );
     }
-    recuperatePassword(password: string): Observable<boolean> {
+    getPassword(password: string): Observable<boolean> {
         return this.http.post<boolean>(`${this.accountUrl}/admin`, { passwd: password }).pipe(
             tap(() => {
                 // eslint-disable-next-line no-console

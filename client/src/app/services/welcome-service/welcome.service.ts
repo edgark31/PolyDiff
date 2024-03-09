@@ -29,7 +29,7 @@ export class WelcomeService {
 
     async validate(password: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this.communication.recuperatePassword(password).subscribe({
+            this.communication.getPassword(password).subscribe({
                 next: (success) => {
                     const response = success;
                     if (response) {
