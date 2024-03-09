@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { Game } from '@common/game-interfaces';
 
 @Component({
@@ -15,9 +16,9 @@ export class RoomSheetComponent {
     connectedPlayers: number;
     playerNames: string[] = [];
 
-    constructor(public router: Router) {
+    constructor(public router: Router, private readonly roomManagerService: RoomManagerService) {
         this.playerNames = ['Player 1', 'Player 2', 'Player 3', 'Player 4'];
-        this.gameMode = 'limited';
+        this.gameMode = this.roomManagerService.gameMode;
     }
 
     isRoomFull(): boolean {
