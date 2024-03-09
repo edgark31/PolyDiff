@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/providers/avatar_provider.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/widgets/avatar.dart';
-import 'package:mobile/widgets/widgets.dart';
+import 'package:mobile/widgets/customs/background_container.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
+import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -23,7 +28,14 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final infoService = context.watch<InfoService>();
+
+    // user avatar
+    AvatarProvider.instance.setAccountAvatarUrl(infoService.username);
+    final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
     return Scaffold(
+      drawer: CustomMenuDrawer(),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -35,13 +47,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     const SizedBox(height: 40),
                     Avatar(
-                      imageUrl: 'assets/images/sleepyRaccoon.jpg',
+                      imageUrl: avatarUrl,
                       radius: 70,
                     ),
                     const SizedBox(height: 20),
-                    itemProfile('Cute raccoon', Icons.person),
+                    itemProfile(infoService.username, Icons.person),
                     const SizedBox(height: 20),
-                    itemProfile('ahadhashmideveloper@gmail.com', Icons.mail),
+                    itemProfile(infoService.email, Icons.mail),
                     const SizedBox(height: 20),
                     itemProfile('Reprises vidéo', Icons.video_collection),
                     const SizedBox(height: 20),

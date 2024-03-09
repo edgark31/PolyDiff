@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
+import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/widgets.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -10,7 +12,7 @@ class DashboardPage extends StatefulWidget {
 
   static Route<dynamic> route() {
     return MaterialPageRoute(
-      builder: (_) => DashboardPage(),
+      builder: (_) => const DashboardPage(),
       settings: RouteSettings(name: routeName),
     );
   }
@@ -24,6 +26,18 @@ class _DashboardPageState extends State<DashboardPage> {
     Navigator.pushNamed(context, routeName);
   }
 
+  Widget _gameModeOption(
+      String title, IconData icon, String route, Color color) {
+    return CustomButton(
+      text: title,
+      press: () => _navigateTo(route),
+      backgroundColor: color,
+      icon: icon,
+      widthFactor: 0.30,
+      height: 80,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BackgroundContainer(
@@ -31,34 +45,34 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         drawer: CustomMenuDrawer(),
-        appBar: AppBar(
-          backgroundColor: kMidOrange,
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  right: 10.0), // Adjust the padding as needed
-              child: IconButton(
-                icon: const Icon(Icons.home),
-                onPressed: () => _navigateTo(DASHBOARD_ROUTE),
+        appBar: CustomAppBar(),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 25.0, bottom: 20.0),
+                    child: Text(
+                      'SÉLECTIONNER UN MODE DE JEU',
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: kMidOrange,
+                          backgroundColor: kLight,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  _gameModeOption(
+                      'Classique', Icons.class_, DASHBOARD_ROUTE, kMidOrange),
+                  SizedBox(height: 20), // Spacing between buttons
+                  _gameModeOption('Temps Limité', Icons.hourglass_bottom,
+                      DASHBOARD_ROUTE, kMidGreen),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  right: 10.0), // Adjust the padding as needed
-              child: IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () => _navigateTo(SEARCH_ROUTE),
-              ),
-            ),
-            // No padding on the last item if you want it aligned to the edge
-            Padding(
-              padding: const EdgeInsets.only(right: 30.0),
-              child: IconButton(
-                icon: const Icon(Icons.person),
-                onPressed: () => _navigateTo(PROFILE_ROUTE),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

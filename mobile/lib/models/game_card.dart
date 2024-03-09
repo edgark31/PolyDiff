@@ -1,62 +1,46 @@
+enum GameMode {
+  practice,
+  classic,
+  limitedTime,
+}
+
+GameMode gameModeFromString(String modeString) {
+  return GameMode.values.firstWhere(
+    (mode) => mode.toString().split('.').last == modeString,
+    orElse: () => GameMode.practice, // Default value
+  );
+}
+
 class GameCard {
   String name;
+  String gameId;
+  GameMode gameMode;
+  int nDifferences;
   String thumbnail;
-  List<PlayerTime> oneVsOneTopTime;
-  List<PlayerTime> soloTopTime;
-  bool difficultyLevel;
-  String id;
+  // TODO: get this info from with the lobby service
+  int numbersOfPlayers;
+  List<String> playerUsernames;
 
   GameCard({
     required this.name,
+    required this.gameId,
+    required this.gameMode,
+    required this.nDifferences,
+    required this.numbersOfPlayers,
     required this.thumbnail,
-    required this.oneVsOneTopTime,
-    required this.soloTopTime,
-    required this.difficultyLevel,
-    required this.id,
+    required this.playerUsernames,
   });
 
   factory GameCard.fromJson(Map<String, dynamic> json) {
     return GameCard(
       name: json['name'],
+      gameId: json['gameId'],
+      gameMode: gameModeFromString(json['gameMode']),
+      nDifferences: json['nDifferences'],
+      numbersOfPlayers: json['numberOfPlayers'] ?? 0,
       thumbnail: json['thumbnail'],
-      oneVsOneTopTime: List<PlayerTime>.from(
-          json['oneVsOneTopTime'].map((model) => PlayerTime.fromJson(model))),
-      soloTopTime: List<PlayerTime>.from(
-          json['soloTopTime'].map((model) => PlayerTime.fromJson(model))),
-      difficultyLevel: json['difficultyLevel'],
-      id: json['_id'],
+      playerUsernames: List<String>.from(
+          json['players'].map((player) => player['username'])),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'thumbnail': thumbnail,
-      'oneVsOneTopTime': oneVsOneTopTime.map((e) => e.toJson()).toList(),
-      'soloTopTime': soloTopTime.map((e) => e.toJson()).toList(),
-      'difficultyLevel': difficultyLevel,
-      '_id': id,
-    };
-  }
-}
-
-class PlayerTime {
-  String name;
-  int time;
-
-  PlayerTime({required this.name, required this.time});
-
-  factory PlayerTime.fromJson(Map<String, dynamic> json) {
-    return PlayerTime(
-      name: json['name'],
-      time: json['time'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'time': time,
-    };
   }
 }

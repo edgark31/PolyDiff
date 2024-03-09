@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../models/admin_games_model.dart';
+import 'package:mobile/models/models.dart';
 
 class AdminPage extends StatefulWidget {
   @override

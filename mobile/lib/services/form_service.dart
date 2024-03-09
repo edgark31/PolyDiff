@@ -2,14 +2,15 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/info_service.dart';
 
 class FormService {
-  final baseUrl = 'http://localhost:3000/api';
+  final baseUrl = API_URL;
   final InfoService infoService = Get.find();
 
-  FormService(String baseUrl);
+  FormService();
 
   Future<String?> register(Credentials credentials, String id) async {
     final url = '$baseUrl/account/register';
@@ -26,6 +27,7 @@ class FormService {
       );
 
       if (response.statusCode == 200) {
+        print('account sent');
         return null;
       } else {
         final errorMessage = response.body;
@@ -37,7 +39,7 @@ class FormService {
   }
 
   Future<String?> connect(Credentials credentials) async {
-    final url = '$baseUrl/account/login';
+    final String url = '$baseUrl/account/login';
     try {
       final response = await http.post(
         Uri.parse(url),

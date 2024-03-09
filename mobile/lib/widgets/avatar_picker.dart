@@ -1,11 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/providers/camera_image_provider.dart';
+import 'package:mobile/services/avatar_service.dart';
+
+typedef OnAvatarSelected = Function(ImageProvider image,
+    {String? id, String? base64});
 
 class AvatarPicker extends StatefulWidget {
-  final Function(ImageProvider) onAvatarSelected;
+  final OnAvatarSelected onAvatarSelected;
 
   const AvatarPicker({super.key, required this.onAvatarSelected});
 
@@ -14,13 +16,41 @@ class AvatarPicker extends StatefulWidget {
 }
 
 class _AvatarPickerState extends State<AvatarPicker> {
-  ImageProvider? _selectedImage = AssetImage('assets/images/sleepyRaccoon.jpg');
+  // Service to communicate with server
+  final AvatarService _avatarService = AvatarService();
+  // Providers
+  final CameraImageProvider _imageProvider = CameraImageProvider();
 
+  ImageProvider? _selectedImage =
+      AssetImage('assets/images/sleepyRaccoon.jpg'); // Placeholder image
+
+  // selected avatar displayed but not uploaded
   void _updateSelectedImage(ImageProvider image) {
     setState(() {
       _selectedImage = image;
     });
     widget.onAvatarSelected(image);
+  }
+
+  void _handlePredefinedAvatarSelection(String id) {
+    ImageProvider image = NetworkImage(_avatarService.getDefaultAvatarUrl(id));
+    setState(() {
+      _selectedImage = image;
+    });
+    widget.onAvatarSelected(image, id: id);
+  }
+
+  Future<void> _handleCameraImageSelection() async {
+    final String? base64Image = await _imageProvider.pickImageFromCamera();
+
+    if (base64Image != null) {
+      ImageProvider image = _avatarService.base64ToImage(base64Image);
+      setState(() {
+        _selectedImage = image;
+      });
+
+      widget.onAvatarSelected(image, base64: base64Image);
+    }
   }
 
   @override
@@ -35,38 +65,17 @@ class _AvatarPickerState extends State<AvatarPicker> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(width: 10),
               GestureDetector(
-                onTap: () => _updateSelectedImage(
-                    AssetImage('assets/images/sleepyRaccoon.jpg')),
-                child: avatarContainer(
-                    AssetImage('assets/images/sleepyRaccoon.jpg'), kLightGreen),
-              ),
-              SizedBox(width: 20),
-              GestureDetector(
-                onTap: () => _updateSelectedImage(_selectedImage =
-                    AssetImage('assets/images/hallelujaRaccoon.jpeg')),
-                child: avatarContainer(
-                    AssetImage('assets/images/hallelujaRaccoon.jpeg'),
-                    kMidGreen),
-              ),
-              SizedBox(width: 20),
-              GestureDetector(
-                onTap: () => _updateSelectedImage(_selectedImage =
-                    AssetImage('assets/images/cuteRaccoon.bmp')),
-                child: avatarContainer(
-                    AssetImage('assets/images/cuteRaccoon.bmp'), kLightOrange),
-              ),
-              SizedBox(width: 20),
-              GestureDetector(
-                onTap: () async {
-                  final ImagePicker _picker = ImagePicker();
-                  final XFile? photo =
-                      await _picker.pickImage(source: ImageSource.camera);
-                  if (photo != null) {
-                    _updateSelectedImage(FileImage(File(photo.path)));
-                  }
+                onTap: () {
+                  _handlePredefinedAvatarSelection('1');
                 },
+                child: avatarContainer(
+                    NetworkImage(_avatarService.getDefaultAvatarUrl('1')),
+                    kLightGreen),
+              ),
+              SizedBox(width: 20),
+              GestureDetector(
+                onTap: () => _handleCameraImageSelection(),
                 child: SizedBox(
                   width: 100.0,
                   child: CircleAvatar(
@@ -84,6 +93,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
     );
   }
 
+  // TODO: remplace with reusable component
   Widget avatarContainer(ImageProvider image, Color backgroundColor) {
     return SizedBox(
       width: 100,
@@ -91,9 +101,9 @@ class _AvatarPickerState extends State<AvatarPicker> {
         backgroundColor: backgroundColor,
         radius: 50,
         child: CircleAvatar(
-          backgroundColor: backgroundColor,
+          backgroundColor: Colors.transparent,
           backgroundImage: image,
-          radius: 40,
+          radius: 48,
         ),
       ),
     );

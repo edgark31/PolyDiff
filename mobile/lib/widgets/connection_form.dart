@@ -20,7 +20,7 @@ class ConnectionForm extends StatefulWidget {
 }
 
 class _ConnectionFormState extends State<ConnectionForm> {
-  final FormService formService = FormService('http://localhost:3000');
+  final FormService formService = FormService();
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String errorMessage = "";
@@ -99,7 +99,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                           await formService.connect(credentials);
                       if (serverErrorMessage == null) {
                         socketService.connect(
-                            SocketType.Auth, infoService.name);
+                            SocketType.Auth, infoService.username);
                         chatService.setListeners(); // TODO : move this (maybe)
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       } else {
