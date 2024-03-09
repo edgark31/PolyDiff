@@ -1,16 +1,25 @@
+import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_routes.dart';
 
-class AvatarProvider {
-  final String baseUrl;
+// Singleton
+class AvatarProvider with ChangeNotifier {
+  static final AvatarProvider _instance = AvatarProvider._internal();
+  factory AvatarProvider() => _instance;
+  AvatarProvider._internal();
 
-  AvatarProvider({this.baseUrl = API_URL});
+  static AvatarProvider get instance => _instance;
 
-  String getDefaultAvatarUrl(String id) {
-    print('$BASE_URL/avatar/default$id.png');
-    return '$BASE_URL/avatar/default$id.png';
+  String _currentAvatarUrl = '';
+  String get currentAvatarUrl => _currentAvatarUrl;
+
+  void setAccountAvatarUrl(String username) {
+    _currentAvatarUrl = '$BASE_URL/avatar/$username.png';
+    notifyListeners();
   }
 
-  String getAccountAvatar(String username) {
-    return '$BASE_URL/avatar/$username.png';
+  static void setInitialAvatar() {
+    const String defaultId = '1';
+    _instance._currentAvatarUrl = '$BASE_URL/avatar/default$defaultId.png';
+    _instance.notifyListeners();
   }
 }

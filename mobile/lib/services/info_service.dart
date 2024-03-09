@@ -11,7 +11,7 @@ class InfoService extends ChangeNotifier {
       'temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar';
   static String _email = 'temp_email';
 
-  String get name => _name;
+  String get username => _name;
   String get id => _id;
   String get avatar => _avatar;
   String get email => _email;

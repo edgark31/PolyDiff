@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/providers/avatar_provider.dart';
 
 enum AvatarType { predefined, camera }
 
@@ -14,19 +16,26 @@ class AvatarServiceException implements Exception {
   String toString() => message;
 }
 
-class AvatarService {
-  AvatarService();
-
+class AvatarService with ChangeNotifier {
   // Convert image data to Base64 string
   String imageToBase64(Uint8List imageData) {
     return base64Encode(imageData);
   }
 
+  // Convert Base64 string to image avatar
+  ImageProvider base64ToImage(String base64Image) {
+    Uint8List bytes = base64Decode(base64Image);
+    return MemoryImage(bytes);
+  }
+
   // Upload avatar from camera
   Future<String?> uploadCameraImage(
-      String username, Uint8List imageData) async {
-    String base64Avatar = imageToBase64(imageData);
+      String username, String base64Avatar) async {
     return uploadAvatar(username, base64Avatar);
+  }
+
+  String getDefaultAvatarUrl(String id) {
+    return '$BASE_URL/avatar/default$id.png';
   }
 
   // If avatar is from camera or selected file
@@ -41,6 +50,7 @@ class AvatarService {
       );
 
       if (response.statusCode == 200) {
+        AvatarProvider.instance.setAccountAvatarUrl(username);
         return null;
       } else {
         return response.body;
@@ -65,6 +75,7 @@ class AvatarService {
 
       if (response.statusCode == 200) {
         print('no');
+        AvatarProvider.instance.setAccountAvatarUrl(username);
         return null;
       } else {
         return response.body;

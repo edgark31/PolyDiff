@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/avatar_service.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/widgets/avatar_picker.dart';
@@ -20,7 +21,7 @@ class _SignUpFormState extends State<SignUpForm> {
   final FormService formService = FormService();
 
   // Avatar
-  final AvatarService _avatarService = AvatarService();
+  AvatarService _avatarService = AvatarService();
   ImageProvider? _selectedAvatar;
   String? _selectedAvatarId;
   String? _selectedAvatarBase64;
@@ -131,7 +132,7 @@ class _SignUpFormState extends State<SignUpForm> {
         print("selected id : $_selectedAvatarId");
       } else if (_selectedAvatarBase64 != null) {
         // Camera image selected, call uploadAvatar
-        avatarErrorMessage = await _avatarService.uploadAvatar(
+        avatarErrorMessage = await _avatarService.uploadCameraImage(
           credentials.username,
           _selectedAvatarBase64!,
         );
@@ -161,6 +162,9 @@ class _SignUpFormState extends State<SignUpForm> {
           errorMessage = "";
         });
       }
+    });
+    Future.microtask(() {
+      AvatarProvider.setInitialAvatar();
     });
   }
 
@@ -358,12 +362,13 @@ class _SignUpFormState extends State<SignUpForm> {
     return AvatarPicker(
       onAvatarSelected: (ImageProvider image, {String? id, String? base64}) {
         if (id != null) {
-          // Predefined avatar selected
-          _handlePredefinedAvatarSelection(id);
+          // predefined avatar selected
+          _setPredefinedAvatarSelection(id);
         } else if (base64 != null) {
-          // Camera image selected, handled similarly to previous examples
+          // camera image selected
+          _setCameraAvatarSelection(base64);
         }
-        // Just update UI, no upload required
+        // update UI, no upload required
         setState(() {
           _selectedAvatar = image;
         });
@@ -371,7 +376,11 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  void _handlePredefinedAvatarSelection(String id) {
+  void _setPredefinedAvatarSelection(String id) {
     _selectedAvatarId = id;
+  }
+
+  void _setCameraAvatarSelection(String base64) {
+    _selectedAvatarBase64 = base64;
   }
 }

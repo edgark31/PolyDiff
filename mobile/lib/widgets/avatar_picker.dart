@@ -1,10 +1,5 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
-import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/services/avatar_service.dart';
 
@@ -24,12 +19,12 @@ class _AvatarPickerState extends State<AvatarPicker> {
   // Service to communicate with server
   final AvatarService _avatarService = AvatarService();
   // Providers
-  final AvatarProvider _avatarProvider = AvatarProvider(baseUrl: API_URL);
-  final CameraImageProvider _imageUploader = CameraImageProvider();
+  final CameraImageProvider _imageProvider = CameraImageProvider();
 
   ImageProvider? _selectedImage =
       AssetImage('assets/images/sleepyRaccoon.jpg'); // Placeholder image
 
+  // selected avatar displayed but not uploaded
   void _updateSelectedImage(ImageProvider image) {
     setState(() {
       _selectedImage = image;
@@ -38,8 +33,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
   }
 
   void _handlePredefinedAvatarSelection(String id) {
-    ImageProvider image =
-        NetworkImage(_avatarProvider.getDefaultAvatarUrl('1'));
+    ImageProvider image = NetworkImage(_avatarService.getDefaultAvatarUrl(id));
     setState(() {
       _selectedImage = image;
     });
@@ -47,20 +41,15 @@ class _AvatarPickerState extends State<AvatarPicker> {
   }
 
   Future<void> _handleCameraImageSelection() async {
-    final String? base64Image = await _imageUploader.pickImageFromCamera();
-    if (base64Image != null) {
-      Uint8List bytes = base64Decode(base64Image);
-      ImageProvider image = MemoryImage(bytes);
-      _updateSelectedImage(image);
+    final String? base64Image = await _imageProvider.pickImageFromCamera();
 
-      String? uploadError =
-          await AvatarService().uploadCameraImage('username', bytes);
-      if (uploadError == null) {
-        print('success avatar service uploadCameraImage');
-        _updateSelectedImage(image);
-      } else {
-        print("erreur lors de envoie au serveur $uploadError");
-      }
+    if (base64Image != null) {
+      ImageProvider image = _avatarService.base64ToImage(base64Image);
+      setState(() {
+        _selectedImage = image;
+      });
+
+      widget.onAvatarSelected(image, base64: base64Image);
     }
   }
 
@@ -81,7 +70,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                   _handlePredefinedAvatarSelection('1');
                 },
                 child: avatarContainer(
-                    NetworkImage(_avatarProvider.getDefaultAvatarUrl('1')),
+                    NetworkImage(_avatarService.getDefaultAvatarUrl('1')),
                     kLightGreen),
               ),
               SizedBox(width: 20),
@@ -104,6 +93,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
     );
   }
 
+  // TODO: remplace with reusable component
   Widget avatarContainer(ImageProvider image, Color backgroundColor) {
     return SizedBox(
       width: 100,
