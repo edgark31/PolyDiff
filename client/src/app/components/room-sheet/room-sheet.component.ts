@@ -18,8 +18,4 @@ export class RoomSheetComponent {
         this.playerNames = ['Player 1', 'Player 2', 'Player 3', 'Player 4'];
         this.gameMode = this.roomManagerService.gameMode;
     }
-
-    isRoomFull(): boolean {
-        return this.playerNames.length >= 4;
-    }
 }
