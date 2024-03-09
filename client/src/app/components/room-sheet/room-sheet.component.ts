@@ -15,7 +15,9 @@ export class RoomSheetComponent {
     connectedPlayers: number;
     playerNames: string[] = [];
 
-    constructor(public router: Router) {}
+    constructor(public router: Router) {
+        this.playerNames = ['Player 1', 'Player 2', 'Player 3', 'Player 4'];
+    }
 
     isRoomFull(): boolean {
         return this.playerNames.length >= 4;

@@ -45,3 +45,8 @@
     </button>
     <div class="player-count">{{connectedPlayers}}/4 joueurs</div>
 </div>
+<div class = "player-container">
+    <div class = "players" *ngFor="let playerName of playerNames">
+        <p class = "player"><span class = "player-name">{{playerName}}</span></p>
+    </div>
+</div>
