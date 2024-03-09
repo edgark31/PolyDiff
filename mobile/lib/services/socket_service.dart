@@ -17,6 +17,7 @@ class SocketService extends ChangeNotifier {
           'autoConnect': false,
           'query': 'name=$name'
         });
+        authSocket.connect();
         setSocket(authSocket);
         break;
       case SocketType.Lobby:
@@ -25,14 +26,16 @@ class SocketService extends ChangeNotifier {
           'autoConnect': false,
           'query': 'name=$name'
         });
+        lobbySocket.connect();
         setSocket(lobbySocket);
         break;
       case SocketType.Game:
         gameSocket = IO.io("$BASE_URL/game", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'name=$name'
+          'query': 'name=$name',
         });
+        gameSocket.connect();
         setSocket(gameSocket);
         break;
     }
@@ -40,19 +43,22 @@ class SocketService extends ChangeNotifier {
   }
 
   void setSocket(IO.Socket socket) {
-    print('Initializing socket');
+    print('Setting socket id : ${socket.id}');
+    socket.clearListeners();
 
-    print('Calling onConnect socket');
     socket.onConnect((_) {
       print('Connected to server on $BASE_URL');
+      print("Connected socket id : ${socket.id}");
     });
 
-    print('Calling onConnectError socket');
-    socket.onConnectError((data) => print('Connection error: $data'));
+    socket.onConnectError((data) {
+      print("Connection error for socket id : ${socket.id}");
+      print('Connection error: $data');
+    });
 
-    print('Calling onDisconnect socket');
     socket.onDisconnect((_) {
       print('Disconnected from server on $BASE_URL');
+      print("Disconnected socket id : ${socket.id}");
     });
   }
 
@@ -80,22 +86,6 @@ class SocketService extends ChangeNotifier {
         break;
       case SocketType.Game:
         gameSocket.on(event, (data) => action(data as T));
-        break;
-    }
-  }
-
-  void connect(SocketType type, String name) {
-    print("Connecting socket $type for $name");
-    setup(type, name);
-    switch (type) {
-      case SocketType.Auth:
-        authSocket.connect();
-        break;
-      case SocketType.Lobby:
-        lobbySocket.connect();
-        break;
-      case SocketType.Game:
-        gameSocket.connect();
         break;
     }
   }

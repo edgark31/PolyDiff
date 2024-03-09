@@ -27,9 +27,10 @@ void main() async {
       InfoService infoService = Get.find();
       return infoService;
     }),
-
-    // Chat
-    ChangeNotifierProvider(create: (context) => ChatService()),
+    ChangeNotifierProvider(create: (context) {
+      ChatService chatService = Get.find();
+      return chatService;
+    }),
 
     // Avatar
     ChangeNotifierProvider(create: (context) => AvatarProvider()),
@@ -40,6 +41,7 @@ void main() async {
 void initializeServices() {
   Get.put(SocketService());
   Get.put(InfoService());
+  Get.put(ChatService());
 }
 
 class MyApp extends StatelessWidget {
