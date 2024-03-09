@@ -48,7 +48,7 @@ class GameAreaService extends ChangeNotifier {
     if (blinkingDifference == null) return;
 
     final Path blinkingPath = blinkingDifference!;
-    const int timeToBlinkMs = 500;
+    const int timeToBlinkMs = 100;
 
     for (int i = 0; i < 3; i++) {
       await showDifferenceAndWait(blinkingPath, timeToBlinkMs);
@@ -74,42 +74,6 @@ class GameAreaService extends ChangeNotifier {
 
   void resetBlinkingDifference() {
     blinkingDifference = null;
-    notifyListeners();
-  }
-
-  void resetForNextGame() {
-    blinkingDifference = null;
-    coordinates = [];
-  }
-
-  /*bool validate(Vec2 mousePosition, String gameId, bool isOriginal) {
-    if (mousePosition.x < 0 || mousePosition.y < 0) return false;
-    try {
-      final data = DifferenceFoundRequest(
-          differenceCoord: mousePosition,
-          gameId: gameId,
-          isOriginal: isOriginal,
-          playerName: _gameManagerService.currentUser!.name);
-
-      _socket.send(SocketEvent.difference, data.toJson());
-    } catch (error) {
-      print('Error while sending the request: $error');
-    }
-    return true;
-  }*/
-
-  showDifference(Canvas canvas) {
-    final path = Path();
-    for (var coord in coordinates) {
-      path.addRect(Rect.fromPoints(
-          Offset(coord.x.toDouble(), coord.y.toDouble()),
-          Offset(coord.x + 1, coord.y + 1)));
-    }
-    canvas.clipPath(path);
-  }
-
-  void addNewCoords(List<Coordinate> coords) {
-    coordinates.addAll(coords);
     notifyListeners();
   }
 }

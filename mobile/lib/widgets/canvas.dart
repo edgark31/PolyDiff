@@ -65,7 +65,8 @@ class ModifiedCanvas extends GameCanvas {
   @override
   Widget build(BuildContext context) {
     final tempGameManager = GameManagerService();
-    final GameAreaService gameAreaService = Get.put(GameAreaService());
+    final GameAreaService gameAreaService =
+        Provider.of<GameAreaService>(context);
     return Column(
       children: <Widget>[
         Container(
