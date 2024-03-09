@@ -32,7 +32,7 @@
         </div>
         <div class="buttonSection">
             <div class="button-container">
-                <button mat-raised-button *ngIf="router.url === '/selection'" (click)="playSolo()">Jouer</button>
+                <button mat-raised-button *ngIf="router.url === '/selection'">Jouer</button>
                 <button mat-raised-button *ngIf="router.url === '/admin'" (click)="openConfirmationDialog(actions.DeleteGame)">Supprimer</button>
                 <!-- <img class="playButton" alt="button" src="./assets/icon/PlayButton.png"/> -->
                 <!-- <div class="playText" *ngIf="router.url === '/selection'">Jouer</div> -->

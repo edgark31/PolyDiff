@@ -20,6 +20,7 @@ export class CreateRoomPageComponent {
         return value + ' sec';
     }
 
+    // send password + isCheatModeEnabled? + gameMode + time to server
     onSubmit() {
         this.roomManagerService.password = this.password;
     }
