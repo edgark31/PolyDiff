@@ -23,8 +23,8 @@ class ForegroundPtOriginal extends CustomPainter {
     canvas.drawImage(images.modified, Offset.zero, Paint());
 
     if (gameAreaService.blinkingDifference != null) {
-      canvas.drawPath(gameAreaService.blinkingDifference!,
-          gameAreaService.defaultBlinkingColor);
+      canvas.drawPath(
+          gameAreaService.blinkingDifference!, gameAreaService.blinkingColor);
     }
   }
 

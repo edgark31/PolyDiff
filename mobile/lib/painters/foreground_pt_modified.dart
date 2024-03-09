@@ -15,7 +15,7 @@ class ForegroundPtModified extends CustomPainter {
       canvas.scale(
           GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
       canvas.drawPath(gameAreaService.blinkingDifference!,
-          gameAreaService.defaultBlinkingColor);
+          gameAreaService.blinkingColor);
     }
   }
 

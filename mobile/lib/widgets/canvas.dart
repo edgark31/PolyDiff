@@ -5,15 +5,15 @@ import 'package:mobile/painters/background_pt_modified.dart';
 import 'package:mobile/painters/background_pt_original.dart';
 import 'package:mobile/painters/foreground_pt_modified.dart';
 import 'package:mobile/painters/foreground_pt_original.dart';
+import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
-import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/widgets/game_canvas.dart';
 import 'package:provider/provider.dart';
 
 class OriginalCanvas extends GameCanvas {
   OriginalCanvas(images, this.gameId) : super(images);
   final String gameId;
-  final tempGameManager = GameManagerService();
+  final tempGameManager = CoordinateConversionService();
   final GameAreaService gameAreaService = Get.find();
 
   @override
@@ -67,7 +67,7 @@ class ModifiedCanvas extends GameCanvas {
 
   @override
   Widget build(BuildContext context) {
-    final tempGameManager = GameManagerService();
+    final tempGameManager = CoordinateConversionService();
     final GameAreaService gameAreaService =
         Provider.of<GameAreaService>(context);
     return Column(

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/services/sound_service.dart';
 
 class GameAreaService extends ChangeNotifier {
-  //final SoundService _soundService = Get.find();
-
+  final SoundService soundService = Get.put(SoundService());
   GameAreaService();
-
   List<Coordinate> coordinates = [];
   Path? blinkingDifference;
-  Paint defaultBlinkingColor = Paint()
+  Paint blinkingColor = Paint()
     ..color = Colors.green
     ..style = PaintingStyle.fill;
 
+  // This only validates that on the left canvas you're pressing the smile and that on the right canvas your're pressing the left circle
   void validateCoord(
       Coordinate coord, List<Coordinate> coordList, bool isLeft) {
     if (coordList.contains(coord)) {
@@ -19,61 +20,63 @@ class GameAreaService extends ChangeNotifier {
     } else {
       if (isLeft) {
         print("ERROR on left canvas");
+        showDifferenceNotFound();
       } else {
         print("ERROR on right canvas");
+        showDifferenceNotFound();
       }
     }
   }
 
   void showDifferenceFound(List<Coordinate> newCoordinates) {
-    // _soundService.playDifferenceFound();
-    print('enters showDifferenceFound');
+    soundService.playCorrectSound();
     coordinates.addAll(newCoordinates);
     notifyListeners();
     startBlinking(newCoordinates);
   }
 
   void showDifferenceNotFound() {
-    //_soundService.playDifferenceNotFound();
+    soundService.playErrorSound();
   }
 
-  void initDataToBlink(List<Coordinate> coords) {
-    print('enters initDataToBlink');
+  void initPath(List<Coordinate> coords) {
     final path = Path();
     for (var coord in coords) {
-      path.addRect(Rect.fromPoints(
-          Offset(coord.x.toDouble(), coord.y.toDouble()),
-          Offset(coord.x + 1, coord.y + 1)));
+      path.addRect(Rect.fromLTWH(
+        coord.x.toDouble(),
+        coord.y.toDouble(),
+        1,
+        1,
+      ));
     }
     blinkingDifference = path;
   }
 
   Future<void> startBlinking(List<Coordinate> coords) async {
-    print('enters startBlinking');
-    initDataToBlink(coords);
+    initPath(coords);
     if (blinkingDifference == null) return;
 
     final Path blinkingPath = blinkingDifference!;
     const int timeToBlinkMs = 100;
 
     for (int i = 0; i < 3; i++) {
-      await showDifferenceAndWait(blinkingPath, timeToBlinkMs);
-      await hideDifference(timeToBlinkMs);
+      await showDifferenceGreen(blinkingPath, timeToBlinkMs);
+      await showDifferenceYellow(blinkingPath, timeToBlinkMs);
     }
 
     resetBlinkingDifference();
   }
 
-  Future<void> showDifferenceAndWait(Path difference, int waitingTimeMs) async {
-    print('enters showDifferenceAndWait');
+  Future<void> showDifferenceGreen(Path difference, int waitingTimeMs) async {
+    blinkingColor.color = Colors.green;
     blinkingDifference = difference;
     notifyListeners();
     await Future.delayed(Duration(milliseconds: waitingTimeMs));
   }
 
-  Future<void> hideDifference(int waitingTimeMs) async {
-    print('enters hideDifference');
-    blinkingDifference = null;
+  Future<void> showDifferenceYellow(Path difference, int waitingTimeMs) async {
+    blinkingColor.color = Colors.yellow;
+    blinkingDifference = difference;
     notifyListeners();
     await Future.delayed(Duration(milliseconds: waitingTimeMs));
   }

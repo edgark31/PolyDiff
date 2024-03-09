@@ -11,7 +11,7 @@ environment:
 dependencies:
     flutter:
         sdk: flutter
-
+    audioplayers: ^5.2.0
     http: ^1.2.0
     get: ^4.6.6
     english_words: ^4.0.0
@@ -43,5 +43,6 @@ flutter:
     #-------------------- LOCAL ASSETS ----------------#
     assets:
         - assets/images/
+        - assets/sound/
 
     #-------------------- LOCAL FONTS ----------------#

@@ -1,7 +1,7 @@
 import 'package:mobile/constants/temp_images.dart';
 import 'package:mobile/models/models.dart';
 
-class GameManagerService {
+class CoordinateConversionService {
 // TODO : Implement GameManagerService
 
   List<Coordinate> testConvert() {
