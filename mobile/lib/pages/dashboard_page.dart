@@ -35,7 +35,7 @@ class _DashboardPageState extends State<DashboardPage> {
       text: type == GameType.Classic ? 'Classique' : 'Temps limité',
       press: () {
         lobbyService.setGameType(type);
-        _navigateTo(LOBBY_ROUTE);
+        _navigateTo(LOBBY_SELECTION_ROUTE);
       },
       backgroundColor: color,
       icon: icon,
@@ -75,11 +75,20 @@ class _DashboardPageState extends State<DashboardPage> {
                     Icons.class_,
                     kMidOrange,
                   ),
-                  SizedBox(height: 20), // Spacing between buttons
+                  SizedBox(height: 20),
                   _gameModeOption(
                     GameType.Limited,
                     Icons.hourglass_bottom,
                     kMidGreen,
+                  ),
+                  SizedBox(height: 50),
+                  CustomButton(
+                    text: 'Observer une parte',
+                    press: () {
+                      print(
+                          'Navigating to Observer Selection Page'); // TODO: Observer Selection Page
+                    },
+                    backgroundColor: kLime,
                   ),
                 ],
               ),

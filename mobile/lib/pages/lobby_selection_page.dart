@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 class LobbySelectionPage extends StatefulWidget {
   const LobbySelectionPage({Key? key});
 
-  static const routeName = LOBBY_ROUTE;
+  static const routeName = LOBBY_SELECTION_ROUTE;
 
   static Route route() {
     return MaterialPageRoute(
@@ -66,7 +66,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                       child: Text(
                         'Créer une salle pour le mode ${lobbyService.gameTypeName}',
                       )),
-                  buildGameCard(context, defaultGameCard),
+                  buildLobbyCard(context, defaultGameCard,
+                      lobbyService.isGameTypeClassic()),
                   // You can add more GameCard widgets here or iterate over a list of game cards
                 ],
               ),
@@ -74,7 +75,14 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     );
   }
 
-  Widget buildGameCard(BuildContext context, GameCard card) {
+  Widget buildLobbyCard(
+      BuildContext context, GameCard card, bool isClassicGame) {
+    String lobbyName = isClassicGame ? card.name : 'Temps limité';
+    String imagePath =
+        isClassicGame ? card.thumbnail : 'assets/images/limitedTime.png';
+    String differences =
+        isClassicGame ? 'Différences: ${card.nDifferences}, ' : '';
+    String nPlayers = 'Nombre de joueurs: ${card.numbersOfPlayers}/4';
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -83,13 +91,12 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
           children: [
             ListTile(
               leading: CircleAvatar(
-                backgroundImage:
-                    AssetImage(card.thumbnail), // Display game image
+                backgroundImage: AssetImage(imagePath),
                 radius: 30,
+                backgroundColor: kLight,
               ),
-              title: Text(card.name),
-              subtitle: Text(
-                  'Différences: ${card.nDifferences}, Nombre de joueurs: ${card.numbersOfPlayers}/4'),
+              title: Text(lobbyName),
+              subtitle: Text('$differences$nPlayers'),
             ),
             Padding(
               padding:
@@ -112,7 +119,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                     // TODO: Handle lobby selection
                     print("Selected lobby with Game ID: ${card.gameId}");
                   },
-                  text: 'Join Lobby',
+                  text: 'Rejoindre cette salle d\'attente',
+                  widthFactor: 1.5,
                   backgroundColor: kMidOrange,
                 ),
               ],

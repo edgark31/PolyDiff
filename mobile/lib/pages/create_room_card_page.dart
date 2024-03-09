@@ -35,7 +35,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     gameMode: GameMode.classic,
     nDifferences: 7,
     numbersOfPlayers: 2,
-    thumbnail: 'assets/images/admin raccoon.jpeg',
+    thumbnail: 'assets/images/placeholderThumbnail.bmp',
     playerUsernames: ["PlayerOne", "PlayerTwo"],
   );
 
@@ -50,7 +50,6 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
             Text('Création d\'une salle de jeu - Mode Classique'),
             Text('Choississez une fiche'),
             buildGameCard(context, defaultGameCard),
-            // You can add more GameCard widgets here or iterate over a list of game cards
           ],
         ),
       ),
@@ -65,27 +64,13 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
         child: Column(
           children: [
             ListTile(
-              leading: CircleAvatar(
-                backgroundImage:
-                    AssetImage(card.thumbnail), // Display game image
-                radius: 30,
+              leading: Image.asset(
+                card.thumbnail,
+                width: 100,
+                height: 100,
               ),
               title: Text(card.name),
-              subtitle: Text(
-                  'Différences: ${card.nDifferences}, Nombre de joueurs: ${card.numbersOfPlayers}/4'),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text('Joueurs: ${card.playerUsernames.join(', ')}',
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                ],
-              ),
+              subtitle: Text('Différences: ${card.nDifferences}'),
             ),
             ButtonBar(
               alignment: MainAxisAlignment.start,
