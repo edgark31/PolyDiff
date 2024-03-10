@@ -116,6 +116,10 @@ export enum MatchStatus {
     // finished = 'finished',
 }
 
+export enum statusMatch {
+    Waiting = 'waiting',
+}
+
 export enum AccountEvents {
     ChangePseudo = 'ChangePseudo',
     Update = 'Update',

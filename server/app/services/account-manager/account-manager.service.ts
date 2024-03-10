@@ -1,8 +1,8 @@
-/* eslint-disable no-underscore-dangle */
+import { Song, Theme } from './../../model/database/account';
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials, Statistics, Theme } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Statistics } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
-import { THEME_PERSONNALIZATION } from '@common/constants';
+import { SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONNALIZATION } from '@common/constants';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -40,6 +40,8 @@ export class AccountManagerService implements OnModuleInit {
                     friendRequests: [],
                     language: 'en',
                     theme: THEME_PERSONNALIZATION[0],
+                    songDifference: SONG_LIST_DIFFERENCE[0],
+                    songError: SONG_LIST_ERROR[0],
                 },
             };
             await this.accountModel.create(newAccount);
@@ -156,15 +158,49 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async modifyTheme(username: string, newTheme: Theme): Promise<void> {
+    async modifySongError(oldUsername: string, newSong: Song): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+
+            if (!accountFound) throw new Error('Account not found');
+            accountFound.profile.songDifference = newSong;
+
+            await accountFound.save();
+            this.logger.verbose('song change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change song --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async modifySongDifference(oldUsername: string, newSong: Song): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.songError = newSong;
+
+            await accountFound.save();
+            this.logger.verbose('song change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change song --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async modifyTheme(oldUsername: string, newTheme: Theme): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.theme = newTheme;
 
             await accountFound.save();
-            this.logger.verbose(`${username} has changed his theme`);
+            this.logger.verbose('Theme change');
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change theme --> ${error.message}`);
