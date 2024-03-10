@@ -206,10 +206,10 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     private getPlayers(): void {
         this.gameManager.players$.pipe(takeUntil(this.onDestroy$)).subscribe((players) => {
             this.players = players;
-            if (players.player1.playerId === this.gameManager.getSocketId('game')) {
-                this.player = players.player1.name;
-            } else if (players.player2 && players.player2.playerId === this.gameManager.getSocketId('game')) {
-                this.player = players.player2.name;
+            if (players.player1.socketId === this.gameManager.getSocketId('game')) {
+                this.player = players.player1.name ?? '';
+            } else if (players.player2 && players.player2.socketId === this.gameManager.getSocketId('game')) {
+                this.player = players.player2.name ?? '';
             }
         });
     }

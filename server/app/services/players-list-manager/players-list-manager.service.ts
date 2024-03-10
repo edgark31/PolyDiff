@@ -17,7 +17,7 @@ export class PlayersListManagerService {
     updateWaitingPlayerNameList(playerPayLoad: PlayerData, socket: io.Socket): void {
         const playerNames = this.joinedPlayersByGameId.get(playerPayLoad.gameId) ?? [];
         const differenceData = { currentDifference: [], differencesFound: 0 } as Differences;
-        const playerGuest = { name: playerPayLoad.playerName, differenceData, playerId: socket.id } as Player;
+        const playerGuest = { name: playerPayLoad.playerName, differenceData, socketId: socket.id } as Player;
         playerNames.push(playerGuest);
         this.joinedPlayersByGameId.set(playerPayLoad.gameId, playerNames);
     }
@@ -45,10 +45,10 @@ export class PlayersListManagerService {
         server.emit(PlayerEvents.PlayerNameTaken, playerNameAvailability);
     }
 
-    cancelJoiningByPlayerId(playerId: string, gameId: string): void {
+    cancelJoiningByPlayerId(socketId: string, gameId: string): void {
         const playerNames = this.joinedPlayersByGameId.get(gameId);
         if (!playerNames) return;
-        const index = playerNames.indexOf(playerNames.find((player) => player.playerId === playerId));
+        const index = playerNames.indexOf(playerNames.find((player) => player.socketId === socketId));
         if (index !== NOT_FOUND) playerNames.splice(index, 1);
         this.joinedPlayersByGameId.set(gameId, playerNames);
     }
@@ -59,16 +59,16 @@ export class PlayersListManagerService {
         });
     }
 
-    getGameIdByPlayerId(playerId: string): string {
+    getGameIdByPlayerId(socketId: string): string {
         return Array.from(this.joinedPlayersByGameId.keys()).find((gameId) =>
-            this.joinedPlayersByGameId.get(gameId).some((player) => player.playerId === playerId),
+            this.joinedPlayersByGameId.get(gameId).some((player) => player.socketId === socketId),
         );
     }
 
-    deleteJoinedPlayerByPlayerId(playerId: string, gameId: string) {
+    deleteJoinedPlayerByPlayerId(socketId: string, gameId: string) {
         const playerNames = this.joinedPlayersByGameId.get(gameId);
         if (!playerNames) return;
-        const playerIndex = playerNames.findIndex((player) => player.playerId === playerId);
+        const playerIndex = playerNames.findIndex((player) => player.socketId === socketId);
         if (playerIndex !== NOT_FOUND) playerNames.splice(playerIndex, 1);
         this.joinedPlayersByGameId.set(gameId, playerNames);
     }
@@ -102,15 +102,15 @@ export class PlayersListManagerService {
     }
 
     private cancelJoiningByPlayerName(playerName: string, gameId: string, server: io.Server): void {
-        const playerId = this.getPlayerIdByPlayerName(gameId, playerName);
-        if (!playerId) return;
-        this.cancelJoiningByPlayerId(playerId, gameId);
-        server.to(playerId).emit(PlayerEvents.PlayerRefused, playerId);
+        const socketId = this.getPlayerIdByPlayerName(gameId, playerName);
+        if (!socketId) return;
+        this.cancelJoiningByPlayerId(socketId, gameId);
+        server.to(socketId).emit(PlayerEvents.PlayerRefused, socketId);
         server.emit(RoomEvents.UndoRoomCreation, gameId);
     }
 
     private getPlayerIdByPlayerName(gameId: string, playerName: string): string {
-        return this.joinedPlayersByGameId.get(gameId)?.find((player) => player.name === playerName)?.playerId;
+        return this.joinedPlayersByGameId.get(gameId)?.find((player) => player.name === playerName)?.socketId;
     }
 
     private insertNewTopTime(playerName: string, timer: number, topTimes: PlayerTime[]): number {
