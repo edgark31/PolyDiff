@@ -11,11 +11,18 @@ class ForegroundPtOriginal extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print('called paint in foreground');
-    canvas.scale(GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
+    if (gameAreaService.blinkingDifference != null) {
+      canvas.scale(
+          GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
+
+      canvas.drawPath(
+          gameAreaService.blinkingDifference!, gameAreaService.blinkingColor);
+    }
+
     if (gameAreaService.leftErrorCoord.isNotEmpty) {
       print('called error');
-      print(gameAreaService.leftErrorCoord[0].x);
+      canvas.scale(
+          GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
       final textPainter = TextPainter(
         text: TextSpan(
           text: 'ERREUR',
@@ -32,20 +39,9 @@ class ForegroundPtOriginal extends CustomPainter {
         Offset(gameAreaService.leftErrorCoord[0].x - 40 as double,
             gameAreaService.leftErrorCoord[0].y as double),
       );
+      print(
+          'drawn: x: ${gameAreaService.leftErrorCoord[0].x} y:${gameAreaService.leftErrorCoord[0].y}');
       gameAreaService.leftErrorCoord = [];
-    }
-    final path = Path();
-    for (var coord in gameAreaService.coordinates) {
-      path.addRect(Rect.fromPoints(
-          Offset(coord.x.toDouble(), coord.y.toDouble()),
-          Offset(coord.x + 1, coord.y + 1)));
-    }
-    canvas.clipPath(path);
-    canvas.drawImage(images.modified, Offset.zero, Paint());
-
-    if (gameAreaService.blinkingDifference != null) {
-      canvas.drawPath(
-          gameAreaService.blinkingDifference!, gameAreaService.blinkingColor);
     }
   }
 

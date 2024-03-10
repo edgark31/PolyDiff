@@ -23,26 +23,4 @@ class SoundService {
   }
 }
 
-/* 
-import 'package:audioplayers/audio_cache.dart';
 
-class SoundService {
-  static final SoundService _singleton = SoundService._internal();
-
-  factory SoundService() {
-    return _singleton;
-  }
-
-  SoundService._internal();
-
-  late AudioCache _audioCache;
-
-  Future<void> init() async {
-    _audioCache = AudioCache(prefix: 'assets/sound/');
-    await _audioCache.load('example_sound.mp3'); // Replace example_sound.mp3 with your actual sound file name
-  }
-
-  Future<void> playSound() async {
-    await _audioCache.play('example_sound.mp3'); // Replace example_sound.mp3 with your actual sound file name
-  }
-}*/
