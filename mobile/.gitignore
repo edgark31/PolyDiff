@@ -116,3 +116,9 @@ app.*.map.json
 
 # macOS related
 /macos/
+
+# windows related
+/windows/
+
+# linux related
+/linux/
