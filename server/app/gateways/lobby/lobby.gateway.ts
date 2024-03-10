@@ -24,6 +24,7 @@ export class LobbyGateway implements OnGatewayConnection {
     // l'hôte crée le lobby
     @SubscribeMessage(LobbyEvents.Create)
     create(@ConnectedSocket() socket: Socket, @MessageBody() lobby: Lobby) {
+        console.log(socket.data.id);
         socket.data.state = LobbyState.Waiting;
         lobby.lobbyId = socket.data.id;
         socket.join(lobby.lobbyId);
