@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameDetails } from '@app/interfaces/game-interfaces';
@@ -133,7 +134,7 @@ export class CommunicationService {
         );
     }
 
-    modifyLangage(oldusername: string, newlangage: string): Observable<void> {
+    modifyLanguage(oldusername: string, newlangage: string): Observable<void> {
         return this.http.put<void>(`${this.accountUrl}/langage`, { oldUsername: oldusername, newLangage: newlangage }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
@@ -143,16 +144,25 @@ export class CommunicationService {
             catchError(this.handleError<void>('modifylangage')),
         );
     }
-    recuperatePassword(password: string): Observable<boolean> {
+    getPassword(password: string): Observable<boolean> {
         return this.http.post<boolean>(`${this.accountUrl}/admin`, { passwd: password }).pipe(
             tap(() => {
                 // eslint-disable-next-line no-console
                 console.log('langage modify');
             }),
-            catchError(this.handleError<boolean>('Recuperate Password', false)),
+            catchError(this.handleError<boolean>('Recuperate Password')),
         );
     }
 
+    checkCode(code: string): Observable<boolean> {
+        return this.http.post<boolean>(`${this.gameUrl}/match/check/code`, { Code: code }).pipe(
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('code check');
+            }),
+            catchError(this.handleError<boolean>('checkcode')),
+        );
+    }
     loadConfigConstants(): Observable<GameConfigConst> {
         return this.http.get<GameConfigConst>(`${this.gameUrl}/constants`);
     }

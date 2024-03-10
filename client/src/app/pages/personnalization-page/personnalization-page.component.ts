@@ -41,7 +41,7 @@ export class PersonnalizationPageComponent implements OnInit {
         this.welcomeService.selectName = this.gameManager.username;
         this.welcomeService.selectAvatar = this.welcomeService.account.profile.avatar;
         this.welcomeService.selectTheme = this.welcomeService.account.profile.theme;
-        this.welcomeService.selectLangage = this.welcomeService.account.profile.language;
+        this.welcomeService.selectLanguage = this.welcomeService.account.profile.language;
         this.sound.correctSoundEffect = this.welcomeService.account.profile.songDifference;
         console.log(this.welcomeService.account.profile.songDifference.name + 'bbbbbbbbbb');
         this.sound.incorrectSoundEffect = this.welcomeService.account.profile.songError;
@@ -68,7 +68,7 @@ export class PersonnalizationPageComponent implements OnInit {
         if (this.welcomeService.selectPassword !== this.welcomeService.account.credentials.password && this.welcomeService.selectPassword)
             this.welcomeService.onModifyPassword();
         if (this.welcomeService.selectTheme !== this.welcomeService.account.profile.theme) this.welcomeService.onModifyTheme();
-        if (this.welcomeService.selectLangage !== this.welcomeService.account.profile.language) this.welcomeService.onModifyLangage();
+        if (this.welcomeService.selectLanguage !== this.welcomeService.account.profile.language) this.welcomeService.onModifyLanguage();
         if (this.sound.correctSoundEffect !== this.welcomeService.account.profile.songDifference) this.welcomeService.onModifySongDifference();
         if (this.sound.incorrectSoundEffect !== this.welcomeService.account.profile.songError) this.welcomeService.onModifySongError();
 
