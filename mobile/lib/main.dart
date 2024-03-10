@@ -7,8 +7,8 @@ import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/services/avatar_service.dart';
 import 'package:mobile/services/chat_service.dart';
-import 'package:mobile/services/game_card_service.dart';
 import 'package:mobile/services/game_area_service.dart';
+import 'package:mobile/services/game_card_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
@@ -17,7 +17,6 @@ import 'package:provider/provider.dart';
 Widget defaultHome = HomePage();
 
 void main() async {
-  initializeServices();
   WidgetsFlutterBinding.ensureInitialized();
   initializeServices();
 

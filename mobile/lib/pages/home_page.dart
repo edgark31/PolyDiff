@@ -59,6 +59,16 @@ class HomePage extends StatelessWidget {
                         backgroundColor: kLight,
                         textColor: kMidGreen,
                       ),
+                      // TODO : Remove this button after testing canvas
+                      SizedBox(width: 125),
+                      CustomButton(
+                        text: "C~A~N~V~A~S",
+                        press: () {
+                          Navigator.pushNamed(context, CLASSIC_ROUTE);
+                        },
+                        backgroundColor: kLight,
+                        textColor: kMidGreen,
+                      ),
                     ],
                   ),
                 ],
