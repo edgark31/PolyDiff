@@ -133,9 +133,9 @@ export interface ChatMessageGlobal {
 }
 
 export interface Player {
-    playerId?: string;
-    name: string;
-    differenceData: Differences;
+    socketId?: string;
+    name?: string;
+    differenceData?: Differences;
 }
 
 export interface Observers {
@@ -144,16 +144,19 @@ export interface Observers {
 
 export interface Lobby {
     lobbyId?: string;
-    gameId: string;
+    gameId?: string;
     isAvailable: boolean;
     players: Player[];
     observers: Observers[];
     isCheatEnabled: boolean;
     mode: string;
     password?: string;
+    chatLog?: ChatLog;
+    nDifferences?: number;
 }
 
 export interface Game {
+    lobbyId: string;
     gameId?: string;
     original: string;
     modified: string;
