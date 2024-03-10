@@ -1,0 +1,55 @@
+<<<<<<< HEAD
+=======
+
+
+
+
+    <mat-toolbar color="primary">
+        <mat-toolbar-row class="custom-toolbar-row">
+
+          <span class="left-options"> menu
+            <button mat-icon-button  class="example-icon" aria-label="Example icon-button with menu icon">
+                <mat-icon>menu</mat-icon>
+            </button>
+          </span>
+
+          <span class="vertical-line"></span>
+          <span class="example-spacer"></span>
+          <span class="right-options">
+            <mat-icon inline style="font-size: 40px" routerLink="/home" class="right-accueil" aria-hidden="false" aria-label="Example home icon" fontIcon="home"></mat-icon>
+            <mat-icon inline style="font-size: 40px" routerLink="/group"class="right-friend"  aria-hidden="false" aria-label="Example group icon">group</mat-icon>
+            <mat-icon inline style="font-size: 40px" aria-hidden="false" class="right-chat" aria-label="Example chat icon" fontIcon="chat"></mat-icon>
+          <!-- <span routerLink="/profil" class="right-profil">profil</span> -->
+
+          <mat-menu #menu="matMenu" class="custom-menu">
+            <button mat-menu-item routerLink="/profil">Profil</button>
+            <button mat-menu-item routerLink="/personalization">{{'bouton.Reglage' | translate }}</button>
+            <button mat-menu-item (click)="onDeconnexion()">{{'bouton.deconnexion' | translate }}</button>
+            <button mat-menu-item (click)="onManageGames()">Administration</button>
+          </mat-menu>
+
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <img [src]="welcomeService.account.profile.avatar" alt="Image" style="width: 50px; height: 50px; margin-right: 8px;">
+            <mat-icon style="transform: rotate(180deg);">arrow_drop_up</mat-icon>
+          </button>
+        </span>
+        </mat-toolbar-row>
+      </mat-toolbar>
+
+      <!-- <mat-sidenav-container color="primary">
+        <mat-sidenav #sidenav>
+          <mat-nav-list>
+            <a mat-list-item routerLinkActive="active" [routerLink]="'/workout-overview'"> Admin </a>
+          </mat-nav-list>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+          <div style="height: 30vh; width:30vh">
+            <router-outlet></router-outlet>
+          </div>
+        </mat-sidenav-content>
+
+      </mat-sidenav-container> -->
+
+
+>>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8

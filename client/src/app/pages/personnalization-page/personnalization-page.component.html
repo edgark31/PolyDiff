@@ -1,0 +1,123 @@
+<body>
+  <!--     [ngStyle]="{'background-color': (welcomeService.chooseTheme.BackgroundColor), 'color': (welcomeService.chooseTheme.ButtonColor)}"> -->
+  <app-menu></app-menu>
+  <div class="information">{{'profil.information' | translate }}</div>
+  <div class="container">
+    <div class="left">
+      <div class="form-control">
+        <label for="username">{{'profil.username' | translate }}</label>
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="veuillez écrire votre nom" [(ngModel)]="welcomeService.selectName" required>
+        </mat-form-field>
+        <!-- <input type="text" formControlName="username" id="username"/> -->
+      </div>
+
+      <div class="form-control">
+        <label for="username"> {{'profil.changePassword' | translate }}</label>
+        <mat-form-field>
+          <mat-label>Mot de passe</mat-label>
+          <input matInput type="password" placeholder="veuillez écrire votre mot de passe" [(ngModel)]="welcomeService.selectPassword" required>
+        </mat-form-field>
+        <!-- <input type="text" formControlName="username" id="username"/> -->
+      </div>
+
+      <div class="form-control">
+        <label for="username"> {{'profil.confirmePassword' | translate }}</label>
+        <mat-form-field>
+          <mat-label>Mot de passe</mat-label>
+          <input matInput type="password" placeholder="veuillez ré-écrire votre mot de passe" [(ngModel)]="welcomeService.selectPasswordConfirm"
+            required>
+        </mat-form-field>
+        <!-- <input type="text" formControlName="username" id="username"/> -->
+      </div>
+
+
+      <div class="form-avatar">
+        <label for="avatar">Avatar</label>
+        <img [src]="welcomeService.selectAvatar" alt="Image" style="width: 100px; height: 100px;">
+        <div style="display: flex; justify-content: space-between;">
+          <button mat-icon-button (click)="importDialog(true)"
+            style="width: 50px; height: 50px;"><mat-icon>photo_library</mat-icon></button>
+          <button mat-icon-button (click)="importDialog(false)" aria-label="Import game"
+            style="width: 50px; height: 50px;">
+            <mat-icon>file_upload</mat-icon>
+          </button>
+        </div>
+        <!-- <input id='image' type="file" name="image" accept="image/*" style="width: 100px; height: 100px;" autofocus required><br> -->
+      </div>
+
+
+      <div class="form-control">
+
+
+        <div class="form-control section">
+          <label for="Theme">{{'profil.theme' | translate }}</label>
+          <mat-form-field>
+            <mat-label>{{'profil.theme' | translate }}</mat-label>
+            <mat-select [(value)]="welcomeService.selectTheme">
+              <mat-option [value]="welcomeService.themePersonnalization[0]">{{ welcomeService.themePersonnalization[0].name }}</mat-option>
+              <mat-option [value]="welcomeService.themePersonnalization[1]">{{ welcomeService.themePersonnalization[1].name }}</mat-option>
+              <mat-option [value]="welcomeService.themePersonnalization[2]">{{ welcomeService.themePersonnalization[2].name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+        <div class="form-control section"> <label for="Theme"> {{'profil.language' | translate }}</label>
+          <mat-form-field>
+            <mat-label>{{'profil.language' | translate }}</mat-label>
+            <mat-select [(value)]="welcomeService.selectLanguage" (valueChange)="useLanguage(welcomeService.selectLanguage)">
+              <mat-option [value]="welcomeService.language[0]">{{'bouton.fr' | translate }}</mat-option>
+              <mat-option [value]="welcomeService.language[1]">{{'bouton.en' | translate }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="right">
+       <div class="form-control section"> <label for="Theme"> {{'profil.songError' | translate }}</label>
+        <mat-form-field>
+          <mat-label>{{'profil.songError' | translate }}</mat-label>
+          <mat-select [(value)]="sound.correctSoundEffect">
+            <mat-option [value]="welcomeService.songListDifference[0]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[0])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[0])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[0].name }}</mat-option>
+            <mat-option [value]="welcomeService.songListDifference[1]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[1])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[1])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[1].name }}</mat-option>
+            <mat-option [value]="welcomeService.songListDifference[2]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[2])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[2])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[2].name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+      <div class="form-control section"> <label for="Theme"> {{'profil.songDifference' | translate }}</label>
+        <mat-form-field>
+          <mat-label>{{'profil.songDifference' | translate }}</mat-label>
+          <mat-select [(value)]="sound.incorrectSoundEffect">
+            <mat-option [value]="welcomeService.songListError[0]">
+                <mat-icon (mouseover)="sound.playIncorrectSound(welcomeService.songListError[0])" (mouseleave)="sound.stopIncorrectSound(welcomeService.songListError[0])" class="option-icon">headset</mat-icon>
+                {{ welcomeService.songListError[0].name }}
+              </mat-option>
+              <mat-option [value]="welcomeService.songListError[1]">
+                <mat-icon (mouseover)="sound.playIncorrectSound(welcomeService.songListError[1])" (mouseleave)="sound.stopIncorrectSound(welcomeService.songListError[1])" class="option-icon">headset</mat-icon>
+                {{ welcomeService.songListError[1].name }}
+              </mat-option>
+              <mat-option [value]="welcomeService.songListError[2]">
+                <mat-icon (mouseover)="sound.playIncorrectSound(welcomeService.songListError[2])" (mouseleave)="sound.stopIncorrectSound(welcomeService.songListError[2])" class="option-icon">headset</mat-icon>
+                {{ welcomeService.songListError[2].name }}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="button-container">
+    <button type="submit" (click)="onSubmitProfile()">{{'bouton.returnProfil' | translate }}</button>
+    <button type="submit" (click)="onSubmitHome()">{{'bouton.deconnexion' | translate }}</button>
+  </div>
+
+</body>

@@ -1,0 +1,43 @@
+<<<<<<< HEAD
+=======
+{
+    "demo": {
+        "greeting": "Hello {{name}}!",
+        "heading": "App Translation Demo",
+        "paragraph": "<strong>translation</strong>",
+        "text": "This tutorial explains, how you can easily translate your Angular app.",
+        "hello": "salut"
+    },
+    "connexion": "connection",
+    "username": "Username or email",
+    "mdp": "Password",
+    "profil": {
+        "information": "General informations",
+        "username": "Username or email",
+        "Password": "choose a password",
+        "confirmPassword": "Configuring a password        ",
+        "theme": "current theme",
+        "language": "current language",
+        "statistic": "statistical",
+        "gamePlayed": "number of games played",
+        "gameWin": "number of games won",
+        "gameAverage": "average of differences found per part",
+        "gameAverageTime": "average time per game",
+        "Connexion": "Login statement",
+        "gameHistoric": "game history",
+        "changePassword": "Change password",
+        "confirmePassword": "Confirm password",
+        "songDifference": "choose your sound for difference found",
+        "songError": "choose your sound for error"
+    },
+
+    "bouton": {
+        "deconnexion": "Disconnect",
+        "returnProfil": "return to profile",
+        "GoReglage": "Go to settings",
+        "Reglage": "Settings",
+        "fr": "french",
+        "en": "english"
+    }
+}
+>>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8

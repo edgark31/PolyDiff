@@ -55,7 +55,7 @@ export class ClassicModeService {
         const room = this.roomsManagerService.getRoomById(roomId);
         if (!room) return;
         const halfDifferences = Math.ceil(room.clientGame.differencesCount / 2);
-        const player: Player = room.player1.playerId === socket.id ? room.player1 : room.player2;
+        const player: Player = room.player1.socketId === socket.id ? room.player1 : room.player2;
         if (!player) return;
         if (room.clientGame.differencesCount === player.differenceData.differencesFound && room.clientGame.mode === GameModes.ClassicSolo) {
             await this.endGame(room, player, server);
@@ -97,11 +97,11 @@ export class ClassicModeService {
         const room = this.roomsManagerService.getRoomById(roomId);
         if (!room) return;
         this.roomsManagerService.addAcceptedPlayer(room, acceptedPlayer);
-        server.to(acceptedPlayer.playerId).emit(PlayerEvents.PlayerAccepted, true);
+        server.to(acceptedPlayer.socketId).emit(PlayerEvents.PlayerAccepted, true);
     }
 
     async handleSocketDisconnect(socket: io.Socket, server: io.Server): Promise<void> {
-        const room = this.roomsManagerService.getRoomByPlayerId(socket.id);
+        const room = this.roomsManagerService.getRoomBySocketId(socket.id);
         const createdGameId = this.playersListManagerService.getGameIdByPlayerId(socket.id);
         await this.roomsManagerService.handleSoloModesDisconnect(room, server);
         const joinable = this.roomAvailability.get(room?.clientGame.id)?.isAvailableToJoin;
@@ -137,7 +137,7 @@ export class ClassicModeService {
     private async createClassicRoom(socket: io.Socket, playerPayLoad: PlayerData): Promise<string> {
         const classicRoom = await this.roomsManagerService.createRoom(playerPayLoad);
         if (!classicRoom) return;
-        classicRoom.player1.playerId = socket.id;
+        classicRoom.player1.socketId = socket.id;
         this.roomsManagerService.updateRoom(classicRoom);
         return classicRoom.roomId;
     }
