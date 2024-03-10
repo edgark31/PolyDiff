@@ -29,6 +29,8 @@ export class RoomManagerService {
         // this.playerNameAvailability = new Subject<PlayerNameAvailability>();
         // this.roomOneVsOneId = new Subject<string>();
         // this.isPlayerAccepted = new Subject<boolean>();
+        this.lobby = new Subject<Lobby>();
+        this.lobbies = new Subject<Map<string, Lobby>>();
         this.joinedPlayerNames = new Subject<string[]>();
         // this.rooms1V1AvailabilityByGameId = new Subject<RoomAvailability>();
         this.deletedGameId = new Subject<string>();

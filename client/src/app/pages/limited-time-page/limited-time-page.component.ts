@@ -67,7 +67,6 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();
         this.hasNoGameAvailableSubscription?.unsubscribe();
-        this.roomManagerService.removeAllListeners();
     }
 
     // private openDialog() {
