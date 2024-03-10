@@ -47,6 +47,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
             CustomButton(
               press: () {
                 // TODO: Add creating lobby logic
+                lobbyService.setIsCreator(true);
                 Navigator.pushNamed(context, LOBBY_ROUTE);
               },
               text: 'Créer la salle de jeu',
@@ -54,8 +55,9 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
             ),
             CustomButton(
               press: () {
-                // TODO: Make Game Page
+                // TODO: Make sure the page does not count stats + no clock
                 print("Navigate to game page but stats do not count");
+                Navigator.pushNamed(context, CLASSIC_ROUTE);
               },
               text: 'Mode pratique',
               backgroundColor: kMidOrange,

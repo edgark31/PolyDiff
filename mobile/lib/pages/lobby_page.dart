@@ -32,8 +32,9 @@ class _LobbyPageState extends State<LobbyPage> {
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
-    bool isCreator =
-        true; // TODO : Implement logic to check if the user is the creator of the lobby
+    bool isCreator = lobbyService.isCreator;
+    bool canGameStart = true; // TODO: Replace with actual logic
+    bool canGameStartButtonBeVisible = isCreator && canGameStart;
     List<String> fakePlayerNames = [
       'Player1name',
       'Player2name',
@@ -59,12 +60,14 @@ class _LobbyPageState extends State<LobbyPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  isCreator
+                  canGameStartButtonBeVisible
                       ? CustomButton(
                           text: 'Commencer la partie',
                           press: () {
                             print('Navigating to GamePage');
                             // TODO: Implement logic when the game starts
+                            lobbyService.setIsCreator(false);
+                            Navigator.pushNamed(context, CLASSIC_ROUTE);
                           },
                           backgroundColor: kMidGreen,
                         )
@@ -72,7 +75,8 @@ class _LobbyPageState extends State<LobbyPage> {
                   CustomButton(
                     text: 'Quitter la salle d\'attente',
                     press: () {
-                      print('Navigating to Dashboard');
+                      print('Quitting lobby and navigating to Dashboard');
+                      lobbyService.setIsCreator(false);
                       Navigator.pushNamed(context, DASHBOARD_ROUTE);
                     },
                     backgroundColor: kMidOrange,
