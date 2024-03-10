@@ -43,8 +43,8 @@ export class GameController {
     @Get('/cards')
     async getGameCards(@Res() response: Response) {
         try {
-            const game = await this.gameService.getGamesCards();
-            response.status(HttpStatus.OK).json(game);
+            const cards = await this.gameService.getGamesCards();
+            response.status(HttpStatus.OK).json(cards);
         } catch (error) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message);
         }
