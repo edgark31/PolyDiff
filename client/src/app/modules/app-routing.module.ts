@@ -1,6 +1,6 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminPageComponent } from '@app/pages/admin-page/admin-page.component';
+import { ConfirmPasswordPageComponent } from '@app/pages/confirm-password-page/confirm-password-page.component';
 import { ChatPageComponent } from '@app/pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from '@app/pages/config-page/config-page.component';
 import { CreationPageComponent } from '@app/pages/creation-page/creation-page.component';
@@ -13,7 +13,7 @@ import { ProfilPageComponent } from '@app/pages/profil-page/profil-page.componen
 import { RecoverPasswordPageComponent } from '@app/pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from '@app/pages/registration-page/registration-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
-import { AdminGuard } from '@app/services/admin-guard/admin.guard.service';
+import { AdminGuard } from '@app/services/adminguard/admin.guard.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -22,14 +22,14 @@ export const routes: Routes = [
     { path: 'game', component: GamePageComponent },
     { path: 'create', component: CreationPageComponent },
     { path: 'selection', component: SelectionPageComponent },
-    { path: 'config', component: ConfigPageComponent },
     { path: 'login', component: LoginPageComponent },
     { path: 'limited', component: LimitedTimePageComponent },
     { path: 'registration', component: RegistrationPageComponent },
     { path: 'recover-password', component: RecoverPasswordPageComponent },
+    { path: 'confirm-password', component: ConfirmPasswordPageComponent },
     { path: 'personalization', component: PersonnalizationPageComponent },
     { path: 'profil', component: ProfilPageComponent },
-    { path: 'admin', component: AdminPageComponent, canActivate: [() => inject(AdminGuard).canActivateFunc()] },
+    { path: 'admin', component: ConfigPageComponent, canActivate: [AdminGuard] },
     { path: '**', redirectTo: '/login' },
 ];
 

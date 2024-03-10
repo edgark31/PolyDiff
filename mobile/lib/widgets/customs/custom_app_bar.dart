@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/providers/avatar_provider.dart';
+import 'package:mobile/services/info_service.dart';
+import 'package:mobile/widgets/avatar.dart';
+import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
@@ -17,6 +21,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final infoService = context.watch<InfoService>();
+
+    // user avatar
+    AvatarProvider.instance.setAccountAvatarUrl(infoService.username);
+    final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
     return AppBar(
       backgroundColor: kMidOrange,
       actions: <Widget>[
@@ -43,9 +52,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(right: 30.0),
-          child: IconButton(
-            icon: const Icon(Icons.account_circle),
-            onPressed: () => Navigator.pushNamed(context, PROFILE_ROUTE),
+          child: GestureDetector(
+            onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE),
+            child: Avatar(
+              imageUrl: avatarUrl,
+              radius: 15,
+            ),
           ),
         ),
       ],

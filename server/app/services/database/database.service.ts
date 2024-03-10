@@ -36,6 +36,32 @@ export class DatabaseService implements OnModuleInit {
     }
     async onModuleInit() {
         await this.getAllGameIds();
+        await this.loadGamesInServer();
+    }
+
+    async loadGamesInServer(): Promise<void> {
+        try {
+            // Delete les assets du server saud l'avatar bien sur
+            fs.readdirSync('assets', { withFileTypes: true })
+                .filter((item) => item.isDirectory() && item.name !== 'avatar')
+                .forEach((item) => fs.rmdirSync(`assets/${item.name}`, { recursive: true }));
+
+            // Database vers les assets du server
+            const games = await this.gameModel.find().exec();
+            games.forEach((game) => {
+                const createGameDto: CreateGameDto = {
+                    name: game.name,
+                    originalImage: game.originalImage,
+                    modifiedImage: game.modifiedImage,
+                    nDifference: game.nDifference,
+                    differences: JSON.parse(game.differences),
+                    isHard: game.isHard,
+                };
+                this.saveFiles(createGameDto);
+            });
+        } catch (error) {
+            return Promise.reject(`Failed to load games in server: ${error}`);
+        }
     }
 
     async getGamesCarrousel(): Promise<CarouselPaginator[]> {
@@ -99,9 +125,9 @@ export class DatabaseService implements OnModuleInit {
         try {
             const newGameInDB: Game = {
                 name: newGame.name,
-                originalImage: `assets/${newGame.name}/original.bmp`,
-                modifiedImage: `assets/${newGame.name}/modified.bmp`,
-                differences: `assets/${newGame.name}/differences.json`,
+                originalImage: newGame.originalImage,
+                modifiedImage: newGame.modifiedImage,
+                differences: JSON.stringify(newGame.differences),
                 nDifference: newGame.nDifference,
                 isHard: newGame.isHard,
             };

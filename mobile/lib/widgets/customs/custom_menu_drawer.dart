@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
+import 'package:mobile/providers/avatar_provider.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/avatar.dart';
 import 'package:provider/provider.dart';
@@ -11,19 +13,24 @@ class CustomMenuDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final socketService = context.watch<SocketService>();
+    final infoService = context.watch<InfoService>();
+
+    // user avatar
+    AvatarProvider.instance.setAccountAvatarUrl(infoService.username);
+    final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
     return Drawer(
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text('Marie-Jade'),
-            accountEmail: Text('marie-jade.marcil@polymtl.ca'),
+            accountName: Text(infoService.username),
+            accountEmail: Text(infoService.email),
             currentAccountPicture: Avatar(
-              imageUrl: 'assets/images/hallelujaRaccoon.jpeg',
+              // TODO: Change avatar
+              imageUrl: avatarUrl,
               radius: 20,
             ),
             decoration: BoxDecoration(color: kMidOrange),
           ),
-          // TODO: Insert the page routes
           ListTile(
               leading: Icon(Icons.account_circle),
               title: Text('Profile'),
@@ -42,14 +49,13 @@ class CustomMenuDrawer extends StatelessWidget {
           ListTile(
               leading: Icon(Icons.settings),
               title: Text('Réglages'),
-              onTap: () => print('Réglages')),
-
+              onTap: () => Navigator.pushNamed(context, SETTINGS_ROUTE)),
           SizedBox(height: 10),
           Divider(),
           ListTile(
               leading: Icon(Icons.lock_person_rounded),
               title: Text('Admin'),
-              onTap: () => print('Admin')),
+              onTap: () => Navigator.pushNamed(context, ADMIN_ROUTE)),
           SizedBox(height: 10),
           ListTile(
               leading: Icon(Icons.logout),

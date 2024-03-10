@@ -5,7 +5,9 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/form_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
@@ -18,7 +20,7 @@ class ConnectionForm extends StatefulWidget {
 }
 
 class _ConnectionFormState extends State<ConnectionForm> {
-  final FormService formService = FormService('http://localhost:3000');
+  final FormService formService = FormService();
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String errorMessage = "";
@@ -54,6 +56,8 @@ class _ConnectionFormState extends State<ConnectionForm> {
         ? 20
         : MediaQuery.of(context).size.height * 0.3;
     final socketService = context.watch<SocketService>();
+    final infoService = context.watch<InfoService>();
+    final chatService = context.watch<ChatService>();
     return Stack(
       children: [
         SingleChildScrollView(
@@ -94,9 +98,9 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       String? serverErrorMessage =
                           await formService.connect(credentials);
                       if (serverErrorMessage == null) {
-                        // TODO: connect auth socket with username in query
-                        socketService.setName(userNameController.text);
-                        socketService.connect(SocketType.Auth);
+                        socketService.connect(
+                            SocketType.Auth, infoService.username);
+                        chatService.setListeners(); // TODO : move this (maybe)
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       } else {
                         setState(() {

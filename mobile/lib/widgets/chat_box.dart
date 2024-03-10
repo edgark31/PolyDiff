@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/chat_message_model.dart';
-import 'package:mobile/services/socket_service.dart';
+import 'package:mobile/providers/avatar_provider.dart';
+import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:provider/provider.dart';
 
 class ChatBox extends StatefulWidget {
@@ -32,8 +34,16 @@ class _ChatBoxState extends State<ChatBox> {
 
   @override
   Widget build(BuildContext context) {
-    final socketService = context.watch<SocketService>();
-    final messages = socketService.allMessages;
+    final infoService = context.watch<InfoService>();
+    final username = infoService.username;
+    final chatService = context.watch<ChatService>();
+
+    // user avatar
+    AvatarProvider.instance.setAccountAvatarUrl(username);
+    final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
+
+    final messages = chatService.messages;
+
     return Container(
       width: 500,
       height: 700,
@@ -76,8 +86,7 @@ class _ChatBoxState extends State<ChatBox> {
                 controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
-                  bool isSent =
-                      messages[index].userName == socketService.userName;
+                  bool isSent = messages[index].userName == username;
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
@@ -87,8 +96,7 @@ class _ChatBoxState extends State<ChatBox> {
                           : CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                'http://127.0.0.1:3000/${messages[index].userName}.png'),
+                            backgroundImage: NetworkImage(avatarUrl), // TODO : Also show avatar of sender
                             radius: 15.0),
                         Text(
                           messages[index].userName,
@@ -149,11 +157,11 @@ class _ChatBoxState extends State<ChatBox> {
                     onPressed: () {
                       String message = messageController.text;
                       if (message.isNotEmpty) {
-                        socketService.sendMessage(
+                        chatService.sendMessage(
                           ChatMessage(
                             MessageTag.Sent,
                             message,
-                            socketService.userName,
+                            username,
                             'test',
                           ),
                         );
@@ -167,11 +175,6 @@ class _ChatBoxState extends State<ChatBox> {
                   ),
               ],
             ),
-          ),
-          // TODO : Remove tests messages + button
-          Text(
-            'Username: ${socketService.userName}',
-            style: TextStyle(color: Colors.pink, fontWeight: FontWeight.bold),
           ),
         ],
       ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/enums.dart';
-import 'package:mobile/models/chat_message_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends ChangeNotifier {
@@ -9,32 +8,26 @@ class SocketService extends ChangeNotifier {
   static const String serverPort = '3000';
   static const String serverURL = 'http://$serverIP:$serverPort';
 
-  static final List<ChatMessage> messages = [];
-  String approvedName = '';
   static late IO.Socket authSocket;
   static late IO.Socket lobbySocket;
   static late IO.Socket gameSocket;
 
-  String get userName => approvedName;
-  List<ChatMessage> get allMessages => List.unmodifiable(messages);
-
-  void setup(SocketType type) {
-    print('setup ${type.name} started');
+  void setup(SocketType type, String name) {
+    print('Setup ${type.name} started for $name');
     switch (type) {
       case SocketType.Auth:
         authSocket = IO.io(serverURL, <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'name=$approvedName'
+          'query': 'name=$name'
         });
         setSocket(authSocket);
-        setupEventListenersAuthSocket();
         break;
       case SocketType.Lobby:
         lobbySocket = IO.io("$serverURL/lobby", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'name=$approvedName'
+          'query': 'name=$name'
         });
         setSocket(lobbySocket);
         break;
@@ -42,12 +35,12 @@ class SocketService extends ChangeNotifier {
         gameSocket = IO.io("$serverURL/game", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'name=$approvedName'
+          'query': 'name=$name'
         });
         setSocket(gameSocket);
         break;
     }
-    print("Setup ${type.name} completed");
+    print("Setup $type.name completed for $name");
   }
 
   void setSocket(IO.Socket socket) {
@@ -67,22 +60,37 @@ class SocketService extends ChangeNotifier {
     });
   }
 
-  void setupEventListenersAuthSocket() {
-    authSocket.on(MessageEvents.GlobalMessage.name, (data) {
-      print('GlobalMessage received: $data');
-      ChatMessage message = ChatMessage.fromJson(data);
-      print('Message: ${message.message}');
-      print('Tag: ${message.tag}');
-      print('User: ${message.userName}');
-      print('Timestamp: ${message.timestamp}');
-      addMessage(message);
-      notifyListeners();
-    });
+  void send<T>(SocketType type, String event, [T? data]) {
+    switch (type) {
+      case SocketType.Auth:
+        authSocket.emit(event, data);
+        break;
+      case SocketType.Lobby:
+        lobbySocket.emit(event, data);
+        break;
+      case SocketType.Game:
+        gameSocket.emit(event, data);
+        break;
+    }
   }
 
-  void connect(SocketType type) {
-    print("Connecting socket ${type.name}");
-    setup(type);
+  void on<T>(SocketType type, String event, Function(T) action) {
+    switch (type) {
+      case SocketType.Auth:
+        authSocket.on(event, (data) => action(data as T));
+        break;
+      case SocketType.Lobby:
+        lobbySocket.on(event, (data) => action(data as T));
+        break;
+      case SocketType.Game:
+        gameSocket.on(event, (data) => action(data as T));
+        break;
+    }
+  }
+
+  void connect(SocketType type, String name) {
+    print("Connecting socket $type.name for $name");
+    setup(type, name);
     switch (type) {
       case SocketType.Auth:
         authSocket.connect();
@@ -108,22 +116,5 @@ class SocketService extends ChangeNotifier {
         gameSocket.disconnect();
         break;
     }
-  }
-
-  void sendMessage(ChatMessage message) {
-    print('Sending message');
-    authSocket.emit(MessageEvents.GlobalMessage.name, message.toJson());
-  }
-
-  void addMessage(ChatMessage message) {
-    print('Adding message${message.message}');
-    messages.add(message);
-    notifyListeners();
-    print(allMessages.length);
-  }
-
-  void setName(String name) {
-    print('Setting name : $name');
-    approvedName = name;
   }
 }
