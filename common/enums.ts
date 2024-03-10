@@ -103,13 +103,17 @@ export enum LobbyEvents {
     Create = 'Create',
     Join = 'Join',
     Leave = 'Leave',
-    Kick = 'Kick',
     Lock = 'Lock',
     OptPlayer = 'OptPlayer',
     JoinAsObserver = 'JoinAsObserver',
     LeaveAsObserver = 'LeaveAsObserver',
     UpdateLobbys = 'UpdateLobbys',
     Start = 'Start',
+}
+export enum MatchStatus {
+    waiting = 'waiting',
+    Starting = 'starting',
+    // finished = 'finished',
 }
 
 export enum statusMatch {

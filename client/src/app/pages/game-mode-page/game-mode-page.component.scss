@@ -57,6 +57,7 @@ h1 {
     color: #e8a430;
     animation: titleFadeIn 0.5s ease-in-out;
     -webkit-text-stroke: 2px black;
+    bottom: 30%;
 }
 
 .flex-column {
@@ -80,8 +81,8 @@ h1 {
     font-family: 'Troika', sans-serif;
     font-size: 60px;
     width: 40vw;
-    height: 80px;
-    margin-bottom: 20px;
+    height: 140px;
+    margin-bottom: 30px;
     text-transform: uppercase;
     transition: 0.5s;
     color: rgba(253, 250, 151, 255);

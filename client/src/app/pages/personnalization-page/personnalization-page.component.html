@@ -67,9 +67,9 @@
         <div class="form-control section"> <label for="Theme"> {{'profil.language' | translate }}</label>
           <mat-form-field>
             <mat-label>{{'profil.language' | translate }}</mat-label>
-            <mat-select [(value)]="welcomeService.selectLangage" (valueChange)="useLanguage(welcomeService.selectLangage)">
-              <mat-option [value]="welcomeService.langage[0]">{{'bouton.fr' | translate }}</mat-option>
-              <mat-option [value]="welcomeService.langage[1]">{{'bouton.en' | translate }}</mat-option>
+            <mat-select [(value)]="welcomeService.selectLanguage" (valueChange)="useLanguage(welcomeService.selectLanguage)">
+              <mat-option [value]="welcomeService.language[0]">{{'bouton.fr' | translate }}</mat-option>
+              <mat-option [value]="welcomeService.language[1]">{{'bouton.en' | translate }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
