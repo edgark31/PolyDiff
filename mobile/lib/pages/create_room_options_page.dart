@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/services/lobby_service.dart';
-import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
-import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:provider/provider.dart';
 
 class CreateRoomOptionsPage extends StatefulWidget {
@@ -31,8 +29,8 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     final lobbyService = context.watch<LobbyService>();
 
     return Scaffold(
-      appBar: CustomAppBar(),
-      drawer: CustomMenuDrawer(),
+      // appBar: CustomAppBar(),
+      // drawer: CustomMenuDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
