@@ -11,7 +11,7 @@ import { Server, Socket } from 'socket.io';
 })
 export class LobbyGateway implements OnGatewayConnection {
     @WebSocketServer() private server: Server;
-    private readonly lobbies = new Map<string, Lobby>();
+    private readonly lobbies = new Map<string, Lobby>(); // lobbies = salle d'attentes
 
     constructor(
         private readonly logger: Logger,
@@ -21,6 +21,7 @@ export class LobbyGateway implements OnGatewayConnection {
         this.lobbies = new Map<string, Lobby>();
     }
 
+    // l'hôte crée le lobby
     @SubscribeMessage(LobbyEvents.Create)
     create(@ConnectedSocket() socket: Socket, @MessageBody() lobby: Lobby) {
         socket.data.state = LobbyState.Waiting;
@@ -32,10 +33,12 @@ export class LobbyGateway implements OnGatewayConnection {
         };
         lobby.players.push(player);
         this.lobbies.set(lobby.lobbyId, lobby);
+        socket.emit(LobbyEvents.Create, this.lobbies.get(lobby.lobbyId));
         this.server.emit(LobbyEvents.UpdateLobbys, this.lobbies);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.id).credentials.username} crée le lobby ${lobby.lobbyId}`);
     }
 
+    // un joueur rejoint le lobby
     @SubscribeMessage(LobbyEvents.Join)
     join(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.data.state = LobbyState.Waiting;
@@ -49,6 +52,7 @@ export class LobbyGateway implements OnGatewayConnection {
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.id).credentials.username} rejoint le lobby ${lobbyId}`);
     }
 
+    // un joueur quitte le lobby intentionnellement
     @SubscribeMessage(LobbyEvents.Leave)
     leave(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.data.state = LobbyState.Idle;
@@ -58,9 +62,11 @@ export class LobbyGateway implements OnGatewayConnection {
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.id).credentials.username} quitte le lobby ${lobbyId}`);
     }
 
+    // l'hôte démmare le lobby et connecte le socket game - transfert vers game gateway
     @SubscribeMessage(LobbyEvents.Start)
     start(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.data.state = LobbyState.InGame;
+        this.lobbies.get(lobbyId).isAvailable = false;
         this.server.emit(LobbyEvents.UpdateLobbys, this.lobbies);
         socket.to(lobbyId).emit(LobbyEvents.Start, lobbyId);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.id).credentials.username} démarre le lobby ${lobbyId}`);
@@ -71,8 +77,8 @@ export class LobbyGateway implements OnGatewayConnection {
         const chat: Chat = this.messageManager.createMessage(socket.data.username, message);
         this.lobbies.get(lobbyId).chatLog.chat.push(chat);
 
-        socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Sent });
-        socket.broadcast.to(lobbyId).emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Received });
+        socket.emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Sent });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Received });
 
         this.server.emit(LobbyEvents.UpdateLobbys, this.lobbies);
         socket.to(lobbyId).emit(LobbyEvents.Start, lobbyId);
@@ -80,15 +86,14 @@ export class LobbyGateway implements OnGatewayConnection {
     }
 
     @SubscribeMessage(LobbyEvents.UpdateLobbys)
-    update() {
-        this.server.emit(LobbyEvents.UpdateLobbys, this.lobbies);
+    update(@ConnectedSocket() socket: Socket) {
+        socket.emit(LobbyEvents.UpdateLobbys, this.lobbies);
     }
 
-    @SubscribeMessage(LobbyEvents.Join)
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.id = socket.handshake.query.id as string;
         socket.data.state = LobbyState.Idle;
-        this.server.emit(LobbyEvents.UpdateLobbys, this.lobbies);
+        socket.emit(LobbyEvents.UpdateLobbys, this.lobbies);
 
         // HANDLE DISCONNECT-ING ***
         socket.on('disconnecting', () => {

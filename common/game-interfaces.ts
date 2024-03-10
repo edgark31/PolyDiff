@@ -156,6 +156,7 @@ export interface Lobby {
 }
 
 export interface Game {
+    lobbyId: string;
     gameId?: string;
     original: string;
     modified: string;

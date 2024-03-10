@@ -102,9 +102,9 @@ export enum ConnectionEvents {
 }
 
 export enum LobbyEvents {
-    Create = 'Create',
-    Join = 'Join',
-    Leave = 'Leave',
+    Create = 'LobbyCreate',
+    Join = 'LobbyJoin',
+    Leave = 'LobbyLeave',
     OptPlayer = 'OptPlayer',
     JoinAsObserver = 'JoinAsObserver',
     LeaveAsObserver = 'LeaveAsObserver',
