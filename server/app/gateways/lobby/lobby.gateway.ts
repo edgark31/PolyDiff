@@ -74,7 +74,7 @@ export class LobbyGateway implements OnGatewayConnection {
 
     @SubscribeMessage(ChannelEvents.SendLobbyMessage)
     handleMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
-        const chat: Chat = this.messageManager.createMessage(socket.data.username, message);
+        const chat: Chat = this.messageManager.createMessage(socket.data.id, message);
         this.lobbies.get(lobbyId).chatLog.chat.push(chat);
 
         socket.emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Sent });
