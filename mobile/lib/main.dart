@@ -19,6 +19,7 @@ Widget defaultHome = HomePage();
 void main() async {
   initializeServices();
   WidgetsFlutterBinding.ensureInitialized();
+  initializeServices();
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageProvider()),
