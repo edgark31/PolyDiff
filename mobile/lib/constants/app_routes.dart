@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/avatar_selection_page.dart';
 import 'package:mobile/pages/chat_page.dart';
+import 'package:mobile/pages/classic_game_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
@@ -27,12 +28,13 @@ const String PROFILE_ROUTE = '/profile';
 const String AVATAR_ROUTE = '/avatar';
 const String ADMIN_ROUTE = '/admin';
 const String ERROR_ROUTE = '/error';
+const String CLASSIC_ROUTE = '/classic';
 const String CLASSIC_LOBBY_ROUTE = '/lobby/classic';
 const String LIMITED_LOBBY_ROUTE = '/lobby/limited';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
-    print('the Route is: ${settings.name}');
+    //print('the Route is: ${settings.name}');
 
     switch (settings.name) {
       case '/':
@@ -65,6 +67,8 @@ class AppRouter {
       case ChatPage.routeName:
         return ChatPage.route();
 
+      case ClassicGamePage.routeName:
+        return ClassicGamePage.route();
       default:
         return _errorRoute();
     }
