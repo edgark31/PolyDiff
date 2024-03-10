@@ -99,7 +99,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                           await formService.connect(credentials);
                       if (serverErrorMessage == null) {
                         socketService.setup(
-                            SocketType.Auth, infoService.username);
+                            SocketType.Auth, infoService.id);
                         chatService.setListeners(); // TODO : move this (maybe)
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       } else {
