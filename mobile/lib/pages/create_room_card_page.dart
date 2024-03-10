@@ -3,6 +3,7 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/game_card_service.dart';
+import 'package:mobile/services/image_converter_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
 
@@ -61,9 +62,6 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
 
                 if (serverErrorMessage == null) {
                   print('Game cards fetched from server');
-                  // socketService.setup(SocketType.Auth, infoService.username);
-                  // chatService.setListeners(); // TODO : move this (maybe)
-                  // Navigator.pushNamed(context, DASHBOARD_ROUTE);
                 } else {
                   setState(() {
                     errorMessage = serverErrorMessage;
@@ -87,6 +85,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
   }
 
   Widget buildGameCard(BuildContext context, GameCard card) {
+    final imageConverterService = ImageConverterService();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -94,8 +93,8 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
         child: Column(
           children: [
             ListTile(
-              leading: Image.asset(
-                card.thumbnail,
+              leading: Image.memory(
+                imageConverterService.uint8listFromBase64String(card.thumbnail),
                 width: 100,
                 height: 100,
               ),
@@ -122,71 +121,3 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
 }
 
 
-// class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
-//   // @override
-//   // void initState() {
-//   //   super.initState();
-//   //   _gameCardProvider = GameCardProvider(baseUrl: API_URL);
-//   // }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final gameCardService = context.watch<GameCardService>();
-//     final gameCardsFromServer = gameCardService.gameCards;
-//     return Scaffold(
-//       drawer: CustomMenuDrawer(),
-//       appBar: CustomAppBar(),
-//       body: SingleChildScrollView(
-//         child: Column(
-//           children: [
-//             Text('Création d\'une salle de jeu - Mode Classique'),
-//             Text('Choississez une fiche'),
-//             buildGameCard(context, defaultGameCard),
-//             CustomButton(
-//               text: 'Obtenir les jeux du serveur',
-//               press: () async {
-//                 await gameCardService.getGameCards();
-//               },
-//               backgroundColor: kMidGreen,
-//               widthFactor: 0.5,
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget buildGameCard(BuildContext context, GameCard card) {
-//     return Padding(
-//       padding: const EdgeInsets.all(8.0),
-//       child: Card(
-//         elevation: 5,
-//         child: Column(
-//           children: [
-//             ListTile(
-//               leading: Image.asset(
-//                 card.thumbnail,
-//                 width: 100,
-//                 height: 100,
-//               ),
-//               title: Text(card.name),
-//               subtitle: Text('Différences: ${card.nDifferences}'),
-//             ),
-//             ButtonBar(
-//               alignment: MainAxisAlignment.start,
-//               children: [
-//                 CustomButton(
-//                   press: () {
-//                     Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
-//                   },
-//                   text: 'Choisir cette fiche',
-//                   backgroundColor: kMidOrange,
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
