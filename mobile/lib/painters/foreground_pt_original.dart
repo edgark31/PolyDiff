@@ -13,6 +13,27 @@ class ForegroundPtOriginal extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     print('called paint in foreground');
     canvas.scale(GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
+    if (gameAreaService.leftErrorCoord.isNotEmpty) {
+      print('called error');
+      print(gameAreaService.leftErrorCoord[0].x);
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: 'ERREUR',
+          style: TextStyle(
+            color: Colors.red,
+            fontSize: 30.0,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+      textPainter.paint(
+        canvas,
+        Offset(gameAreaService.leftErrorCoord[0].x - 40 as double,
+            gameAreaService.leftErrorCoord[0].y as double),
+      );
+      gameAreaService.leftErrorCoord = [];
+    }
     final path = Path();
     for (var coord in gameAreaService.coordinates) {
       path.addRect(Rect.fromPoints(

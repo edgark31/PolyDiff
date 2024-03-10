@@ -14,8 +14,31 @@ class ForegroundPtModified extends CustomPainter {
     if (gameAreaService.blinkingDifference != null) {
       canvas.scale(
           GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
-      canvas.drawPath(gameAreaService.blinkingDifference!,
-          gameAreaService.blinkingColor);
+
+      canvas.drawPath(
+          gameAreaService.blinkingDifference!, gameAreaService.blinkingColor);
+    }
+
+    if (gameAreaService.rightErrorCoord.isNotEmpty) {
+      print('called error');
+      print(gameAreaService.rightErrorCoord[0].x);
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: 'ERREUR',
+          style: TextStyle(
+            color: Colors.red,
+            fontSize: 30.0,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+      textPainter.paint(
+        canvas,
+        Offset(gameAreaService.rightErrorCoord[0].x - 40 as double,
+            gameAreaService.rightErrorCoord[0].y as double),
+      );
+      gameAreaService.rightErrorCoord = [];
     }
   }
 

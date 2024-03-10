@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/models/game.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/sound_service.dart';
 
 class GameAreaService extends ChangeNotifier {
   final SoundService soundService = Get.put(SoundService());
   GameAreaService();
+  Coordinate? currentCoord;
   List<Coordinate> coordinates = [];
+  List<Coordinate> leftErrorCoord = [];
+  List<Coordinate> rightErrorCoord = [];
   Path? blinkingDifference;
   Paint blinkingColor = Paint()
     ..color = Colors.green
@@ -15,15 +19,16 @@ class GameAreaService extends ChangeNotifier {
   // This only validates that on the left canvas you're pressing the smile and that on the right canvas your're pressing the left circle
   void validateCoord(
       Coordinate coord, List<Coordinate> coordList, bool isLeft) {
+    currentCoord = coord;
     if (coordList.contains(coord)) {
       showDifferenceFound(coordList);
     } else {
       if (isLeft) {
         print("ERROR on left canvas");
-        showDifferenceNotFound();
+        showDifferenceNotFoundLeft();
       } else {
         print("ERROR on right canvas");
-        showDifferenceNotFound();
+        showDifferenceNotFoundRight();
       }
     }
   }
@@ -35,8 +40,24 @@ class GameAreaService extends ChangeNotifier {
     startBlinking(newCoordinates);
   }
 
-  void showDifferenceNotFound() {
+  void showDifferenceNotFoundLeft() {
     soundService.playErrorSound();
+    leftErrorCoord.add(currentCoord!);
+    notifyListeners();
+    Future.delayed(Duration(seconds: 1), () {
+      leftErrorCoord = [];
+      notifyListeners();
+    });
+  }
+
+  showDifferenceNotFoundRight(){
+    soundService.playErrorSound();
+    rightErrorCoord.add(currentCoord!);
+    notifyListeners();
+    Future.delayed(Duration(seconds: 1), () {
+      rightErrorCoord = [];
+      notifyListeners();
+    });
   }
 
   void initPath(List<Coordinate> coords) {
