@@ -49,5 +49,4 @@ export class LobbyGateway implements OnGatewayConnection {
         });
         this.logger.log(`LOBBY IN de ${userId}`);
     }
-
 }
