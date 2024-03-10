@@ -4,9 +4,7 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/game_card_provider.dart';
 import 'package:mobile/services/lobby_service.dart';
-import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
-import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:provider/provider.dart';
 
 class LobbySelectionPage extends StatefulWidget {
@@ -53,8 +51,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
         ? CREATE_ROOM_CARD_ROUTE
         : CREATE_ROOM_OPTIONS_ROUTE;
     return Scaffold(
-      drawer: CustomMenuDrawer(),
-      appBar: CustomAppBar(),
+      // drawer: CustomMenuDrawer(),
+      // appBar: CustomAppBar(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -83,6 +81,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     String differences =
         isClassicGame ? 'Différences: ${card.nDifferences}, ' : '';
     String nPlayers = 'Nombre de joueurs: ${card.numbersOfPlayers}/4';
+    final lobbyService = context.watch<LobbyService>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -118,6 +117,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                   press: () {
                     // TODO: Handle lobby selection
                     print("Selected lobby with Game ID: ${card.gameId}");
+                    lobbyService.setIsCreator(false);
                     Navigator.pushNamed(context, LOBBY_ROUTE);
                   },
                   text: 'Rejoindre cette salle d\'attente',
