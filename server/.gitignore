@@ -37,3 +37,6 @@ lerna-debug.log*
 
 #.env key
 # *.env
+
+# assets
+/assets
