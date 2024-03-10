@@ -8,6 +8,7 @@ import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/services/avatar_service.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_card_service.dart';
+import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
@@ -24,6 +25,10 @@ void main() async {
     ChangeNotifierProvider(create: (context) {
       SocketService socketService = Get.find();
       return socketService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      GameAreaService gameAreaService = Get.find();
+      return gameAreaService;
     }),
     ChangeNotifierProvider(create: (context) {
       InfoService infoService = Get.find();
@@ -49,6 +54,7 @@ void main() async {
 
 void initializeServices() {
   Get.put(SocketService());
+  Get.put(GameAreaService());
   Get.put(InfoService());
   Get.put(ChatService());
   Get.put(LobbyService());

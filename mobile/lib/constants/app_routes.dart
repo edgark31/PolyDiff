@@ -5,6 +5,7 @@ import 'package:mobile/pages/avatar_selection_page.dart';
 import 'package:mobile/pages/chat_page.dart';
 import 'package:mobile/pages/create_room_card_page.dart';
 import 'package:mobile/pages/create_room_options_page.dart';
+import 'package:mobile/pages/classic_game_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
@@ -38,6 +39,7 @@ const String PROFILE_ROUTE = '/profile';
 const String AVATAR_ROUTE = '/avatar';
 const String ADMIN_ROUTE = '/admin';
 const String ERROR_ROUTE = '/error';
+const String CLASSIC_ROUTE = '/classic';
 const String LOBBY_ROUTE = '/lobby';
 const String LOBBY_SELECTION_ROUTE = '/lobby-selection';
 const String CREATE_ROOM_CARD_ROUTE = '/create/card';
@@ -45,7 +47,7 @@ const String CREATE_ROOM_OPTIONS_ROUTE = '/create/options';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
-    print('the Route is: ${settings.name}');
+    //print('the Route is: ${settings.name}');
 
     switch (settings.name) {
       case '/':
@@ -87,6 +89,8 @@ class AppRouter {
       case CreateRoomOptionsPage.routeName:
         return CreateRoomOptionsPage.route();
 
+      case ClassicGamePage.routeName:
+        return ClassicGamePage.route();
       default:
         return _errorRoute();
     }

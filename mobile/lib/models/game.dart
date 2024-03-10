@@ -66,7 +66,17 @@ class Coordinate {
   int x;
   int y;
 
+// To test canvas coordinate validation
   Coordinate({required this.x, required this.y});
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Coordinate && other.x == x && other.y == y;
+  }
+
+  @override
+  int get hashCode => Object.hash(x, y);
 
   factory Coordinate.fromJson(Map<String, dynamic> json) => Coordinate(
         x: json['x'],
