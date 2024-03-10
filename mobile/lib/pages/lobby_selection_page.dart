@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/game_card_provider.dart';
+import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
+import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
+import 'package:provider/provider.dart';
 
 class LobbySelectionPage extends StatefulWidget {
   const LobbySelectionPage({Key? key});
 
-  static const routeName = CLASSIC_LOBBY_ROUTE;
+  static const routeName = LOBBY_SELECTION_ROUTE;
 
   static Route route() {
     return MaterialPageRoute(
@@ -42,16 +48,26 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final lobbyService = context.watch<LobbyService>();
+    String creationRoute = lobbyService.isGameTypeClassic()
+        ? CREATE_ROOM_CARD_ROUTE
+        : CREATE_ROOM_OPTIONS_ROUTE;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Select a Lobby"),
-      ),
+      drawer: CustomMenuDrawer(),
+      appBar: CustomAppBar(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Column(
                 children: [
-                  buildGameCard(context, defaultGameCard),
+                  ElevatedButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, creationRoute),
+                      child: Text(
+                        'Créer une salle pour le mode ${lobbyService.gameTypeName}',
+                      )),
+                  buildLobbyCard(context, defaultGameCard,
+                      lobbyService.isGameTypeClassic()),
                   // You can add more GameCard widgets here or iterate over a list of game cards
                 ],
               ),
@@ -59,7 +75,14 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     );
   }
 
-  Widget buildGameCard(BuildContext context, GameCard card) {
+  Widget buildLobbyCard(
+      BuildContext context, GameCard card, bool isClassicGame) {
+    String lobbyName = isClassicGame ? card.name : 'Temps limité';
+    String imagePath =
+        isClassicGame ? card.thumbnail : 'assets/images/limitedTime.png';
+    String differences =
+        isClassicGame ? 'Différences: ${card.nDifferences}, ' : '';
+    String nPlayers = 'Nombre de joueurs: ${card.numbersOfPlayers}/4';
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -68,13 +91,12 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
           children: [
             ListTile(
               leading: CircleAvatar(
-                backgroundImage:
-                    AssetImage(card.thumbnail), // Display game image
+                backgroundImage: AssetImage(imagePath),
                 radius: 30,
+                backgroundColor: kLight,
               ),
-              title: Text(card.name),
-              subtitle: Text(
-                  'Différences: ${card.nDifferences}, Nombre de joueurs: ${card.numbersOfPlayers}/4'),
+              title: Text(lobbyName),
+              subtitle: Text('$differences$nPlayers'),
             ),
             Padding(
               padding:
@@ -92,12 +114,15 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
             ButtonBar(
               alignment: MainAxisAlignment.start,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle lobby selection
+                CustomButton(
+                  press: () {
+                    // TODO: Handle lobby selection
                     print("Selected lobby with Game ID: ${card.gameId}");
+                    Navigator.pushNamed(context, LOBBY_ROUTE);
                   },
-                  child: const Text('Join Lobby'),
+                  text: 'Rejoindre cette salle d\'attente',
+                  widthFactor: 1.5,
+                  backgroundColor: kMidOrange,
                 ),
               ],
             ),

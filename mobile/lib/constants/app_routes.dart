@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:mobile/pages/avatar_selection_page.dart';
 import 'package:mobile/pages/chat_page.dart';
 import 'package:mobile/pages/classic_game_page.dart';
+import 'package:mobile/pages/create_room_card_page.dart';
+import 'package:mobile/pages/create_room_options_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/home_page.dart';
+import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
 import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/pages/profile_page.dart';
@@ -13,8 +16,16 @@ import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/pages/settings_page.dart';
 import 'package:mobile/pages/signup_page.dart';
 
-const String API_URL = 'http://localhost:3000/api';
-const String BASE_URL = 'http://localhost:3000';
+// Important if testing on a real device with a local server
+// Change the IP address to your local machine's IP address
+// Something like: http://192.168.0.100:3000
+// windows command : netsh interface ip show address | findstr "IP Address"
+
+// Change this URL to your local machine's IP address when testing on tablet
+// const String BASE_URL = 'http://192.168.0.100:3000'; // Testing on tablet
+// const String BASE_URL = 'http://34.118.163.79:3000'; // Testing on real server
+const String BASE_URL = 'http://localhost:3000'; // Testing on chrome
+const String API_URL = '$BASE_URL/api';
 
 const String HOME_ROUTE = '/';
 const String LOGIN_ROUTE = '/login';
@@ -29,12 +40,14 @@ const String AVATAR_ROUTE = '/avatar';
 const String ADMIN_ROUTE = '/admin';
 const String ERROR_ROUTE = '/error';
 const String CLASSIC_ROUTE = '/classic';
-const String CLASSIC_LOBBY_ROUTE = '/lobby/classic';
-const String LIMITED_LOBBY_ROUTE = '/lobby/limited';
+const String LOBBY_ROUTE = '/lobby';
+const String LOBBY_SELECTION_ROUTE = '/lobby-selection';
+const String CREATE_ROOM_CARD_ROUTE = '/create/card';
+const String CREATE_ROOM_OPTIONS_ROUTE = '/create/options';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
-    //print('the Route is: ${settings.name}');
+    print('The Route is: ${settings.name}');
 
     switch (settings.name) {
       case '/':
@@ -64,8 +77,17 @@ class AppRouter {
       case LobbySelectionPage.routeName:
         return LobbySelectionPage.route();
 
+      case LobbyPage.routeName:
+        return LobbyPage.route();
+
       case ChatPage.routeName:
         return ChatPage.route();
+
+      case CreateRoomCardPage.routeName:
+        return CreateRoomCardPage.route();
+
+      case CreateRoomOptionsPage.routeName:
+        return CreateRoomOptionsPage.route();
 
       case ClassicGamePage.routeName:
         return ClassicGamePage.route();

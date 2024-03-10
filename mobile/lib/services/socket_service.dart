@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends ChangeNotifier {
-  static const String serverIP = '127.0.0.1';
-  // static const String serverIP = '34.118.163.79';
-  static const String serverPort = '3000';
-  static const String serverURL = 'http://$serverIP:$serverPort';
-
   static late IO.Socket authSocket;
   static late IO.Socket lobbySocket;
   static late IO.Socket gameSocket;
@@ -16,27 +12,30 @@ class SocketService extends ChangeNotifier {
     print('Setup ${type.name} started for $name');
     switch (type) {
       case SocketType.Auth:
-        authSocket = IO.io(serverURL, <String, dynamic>{
+        authSocket = IO.io(BASE_URL, <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
           'query': 'name=$name'
         });
+        authSocket.connect();
         setSocket(authSocket);
         break;
       case SocketType.Lobby:
-        lobbySocket = IO.io("$serverURL/lobby", <String, dynamic>{
+        lobbySocket = IO.io("$BASE_URL/lobby", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
           'query': 'name=$name'
         });
+        lobbySocket.connect();
         setSocket(lobbySocket);
         break;
       case SocketType.Game:
-        gameSocket = IO.io("$serverURL/game", <String, dynamic>{
+        gameSocket = IO.io("$BASE_URL/game", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'name=$name'
+          'query': 'name=$name',
         });
+        gameSocket.connect();
         setSocket(gameSocket);
         break;
     }
@@ -44,19 +43,21 @@ class SocketService extends ChangeNotifier {
   }
 
   void setSocket(IO.Socket socket) {
-    print('Initializing socket');
+    print('Setting socket id : ${socket.id}');
 
-    print('Calling onConnect socket');
     socket.onConnect((_) {
-      print('Connected to server on $serverIP:$serverPort');
+      print('Connected to server on $BASE_URL');
+      print("Connected socket id : ${socket.id}");
     });
 
-    print('Calling onConnectError socket');
-    socket.onConnectError((data) => print('Connection error: $data'));
+    socket.onConnectError((data) {
+      print("Connection error for socket id : ${socket.id}");
+      print('Connection error: $data');
+    });
 
-    print('Calling onDisconnect socket');
     socket.onDisconnect((_) {
-      print('Disconnected from server');
+      print('Disconnected from server on $BASE_URL');
+      print("Disconnected socket id : ${socket.id}");
     });
   }
 
@@ -88,32 +89,20 @@ class SocketService extends ChangeNotifier {
     }
   }
 
-  void connect(SocketType type, String name) {
-    print("Connecting socket $type.name for $name");
-    setup(type, name);
-    switch (type) {
-      case SocketType.Auth:
-        authSocket.connect();
-        break;
-      case SocketType.Lobby:
-        lobbySocket.connect();
-        break;
-      case SocketType.Game:
-        gameSocket.connect();
-        break;
-    }
-  }
-
   void disconnect(SocketType type) {
+    print("Disconnecting socket $type");
     switch (type) {
       case SocketType.Auth:
         authSocket.disconnect();
+        authSocket.clearListeners();
         break;
       case SocketType.Lobby:
         lobbySocket.disconnect();
+        lobbySocket.clearListeners();
         break;
       case SocketType.Game:
         gameSocket.disconnect();
+        gameSocket.clearListeners();
         break;
     }
   }

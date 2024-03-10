@@ -41,6 +41,7 @@ class AvatarService with ChangeNotifier {
   // If avatar is from camera or selected file
   Future<String?> uploadAvatar(String username, String base64Avatar) async {
     const String url = '$API_URL/avatar/upload';
+    // const String url = '$API_URL/account/avatar/upload';
 
     try {
       final response = await http.put(

@@ -8,15 +8,17 @@ import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/services/avatar_service.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_area_service.dart';
+import 'package:mobile/services/game_card_service.dart';
 import 'package:mobile/services/info_service.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
 
 Widget defaultHome = HomePage();
 
 void main() async {
-  initializeServices();
   WidgetsFlutterBinding.ensureInitialized();
+  initializeServices();
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageProvider()),
@@ -32,10 +34,18 @@ void main() async {
       InfoService infoService = Get.find();
       return infoService;
     }),
-
-    // Chat
-    ChangeNotifierProvider(create: (context) => ChatService()),
-
+    ChangeNotifierProvider(create: (context) {
+      ChatService chatService = Get.find();
+      return chatService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      LobbyService lobbyService = Get.find();
+      return lobbyService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      GameCardService gameCardService = Get.find();
+      return gameCardService;
+    }),
     // Avatar
     ChangeNotifierProvider(create: (context) => AvatarProvider()),
     Provider(create: (context) => AvatarService()),
@@ -46,6 +56,9 @@ void initializeServices() {
   Get.put(SocketService());
   Get.put(GameAreaService());
   Get.put(InfoService());
+  Get.put(ChatService());
+  Get.put(LobbyService());
+  Get.put(GameCardService());
 }
 
 class MyApp extends StatelessWidget {

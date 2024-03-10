@@ -28,8 +28,8 @@ class ForegroundPtModified extends CustomPainter {
       textPainter.layout();
       textPainter.paint(
         canvas,
-        Offset(gameAreaService.rightErrorCoord[0].x - 40 as double,
-            gameAreaService.rightErrorCoord[0].y as double),
+        Offset((gameAreaService.rightErrorCoord[0].x - 40).toDouble(),
+            (gameAreaService.rightErrorCoord[0].y).toDouble()),
       );
       gameAreaService.rightErrorCoord = [];
     }

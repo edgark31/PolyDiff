@@ -36,8 +36,8 @@ class ForegroundPtOriginal extends CustomPainter {
       textPainter.layout();
       textPainter.paint(
         canvas,
-        Offset(gameAreaService.leftErrorCoord[0].x - 40 as double,
-            gameAreaService.leftErrorCoord[0].y as double),
+        Offset((gameAreaService.leftErrorCoord[0].x - 40).toDouble(),
+            (gameAreaService.leftErrorCoord[0].y).toDouble()),
       );
       print(
           'drawn: x: ${gameAreaService.leftErrorCoord[0].x} y:${gameAreaService.leftErrorCoord[0].y}');

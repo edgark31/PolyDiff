@@ -98,7 +98,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       String? serverErrorMessage =
                           await formService.connect(credentials);
                       if (serverErrorMessage == null) {
-                        socketService.connect(
+                        socketService.setup(
                             SocketType.Auth, infoService.username);
                         chatService.setListeners(); // TODO : move this (maybe)
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);

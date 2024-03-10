@@ -36,7 +36,10 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
           obscureText: widget.isPassword,
           maxLength: widget.maxLength,
           onChanged: (value) {
+            if (widget.onInputTextChanged != null) {
             widget.onInputTextChanged!(value);
+            }
+
           },
           decoration: InputDecoration(
             labelText: widget.label,
