@@ -6,15 +6,16 @@ import { Component } from '@angular/core';
     styleUrls: ['./nav-bar.component.scss'],
 })
 export class NavBarComponent {
-    readonly selectionRoute: string;
     readonly configRoute: string;
     readonly homeRoute: string;
-    readonly limitedRoute: string;
+    readonly chatRoute: string;
+    readonly profileRoute: string;
+    readonly friendsRoute: string;
 
     constructor() {
-        this.selectionRoute = '/selection';
-        this.configRoute = '/config';
+        this.configRoute = '/admin';
         this.homeRoute = '/home';
-        this.limitedRoute = '/limited';
+        this.chatRoute = '/chat';
+        this.profileRoute = '/profile';
     }
 }

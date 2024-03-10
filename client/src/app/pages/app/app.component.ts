@@ -1,7 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-// import defaultLanguage from './i18n/en.json';
 
 @Component({
     selector: 'app-root',
@@ -10,7 +9,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent {
     constructor(private translate: TranslateService) {
-        // translate.setTranslation('en', defaultLanguage);
         translate.setDefaultLang('en');
         translate.use('en');
     }
