@@ -50,7 +50,7 @@ class GameAreaService extends ChangeNotifier {
     });
   }
 
-  showDifferenceNotFoundRight(){
+  showDifferenceNotFoundRight() {
     soundService.playErrorSound();
     rightErrorCoord.add(currentCoord!);
     notifyListeners();

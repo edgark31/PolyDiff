@@ -21,7 +21,8 @@ class ForegroundPtModified extends CustomPainter {
 
     if (gameAreaService.rightErrorCoord.isNotEmpty) {
       print('called error');
-      print(gameAreaService.rightErrorCoord[0].x);
+      canvas.scale(
+          GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
       final textPainter = TextPainter(
         text: TextSpan(
           text: 'ERREUR',
@@ -38,6 +39,8 @@ class ForegroundPtModified extends CustomPainter {
         Offset(gameAreaService.rightErrorCoord[0].x - 40 as double,
             gameAreaService.rightErrorCoord[0].y as double),
       );
+      print(
+          'drawn: x: ${gameAreaService.rightErrorCoord[0].x} y:${gameAreaService.rightErrorCoord[0].y}');
       gameAreaService.rightErrorCoord = [];
     }
   }

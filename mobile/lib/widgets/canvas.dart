@@ -90,6 +90,7 @@ class ModifiedCanvas extends GameCanvas {
                   Coordinate(x: x.value.toInt(), y: y.value.toInt()),
                   tempGameManager.testConvert2(),
                   false);
+              print('sent: x:${x.value.toInt()}, y:${y.value.toInt()}');
             },
             child: SizedBox(
               width: images.original.width.toDouble() *
