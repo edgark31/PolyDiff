@@ -12,7 +12,7 @@ export class AdminGuard {
         if (this.welcomeService.getLoginState()) {
             return true;
         } else {
-            this.router.navigate(['/']);
+            this.router.navigate(['/home']);
             return false;
         }
     }

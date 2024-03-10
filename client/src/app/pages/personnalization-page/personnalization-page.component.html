@@ -67,9 +67,9 @@
         <div class="form-control section"> <label for="Theme"> {{'profil.language' | translate }}</label>
           <mat-form-field>
             <mat-label>{{'profil.language' | translate }}</mat-label>
-            <mat-select [(value)]="welcomeService.selectLangage" (valueChange)="useLanguage(welcomeService.selectLangage)">
-              <mat-option [value]="welcomeService.langage[0]">{{'bouton.fr' | translate }}</mat-option>
-              <mat-option [value]="welcomeService.langage[1]">{{'bouton.en' | translate }}</mat-option>
+            <mat-select [(value)]="welcomeService.selectLanguage" (valueChange)="useLanguage(welcomeService.selectLanguage)">
+              <mat-option [value]="welcomeService.language[0]">{{'bouton.fr' | translate }}</mat-option>
+              <mat-option [value]="welcomeService.language[1]">{{'bouton.en' | translate }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -79,12 +79,13 @@
     </div>
 
     <div class="right">
-      <!-- <div class="form-control section"> <label for="Theme"> {{'profil.songError' | translate }}</label>
+       <div class="form-control section"> <label for="Theme"> {{'profil.songError' | translate }}</label>
         <mat-form-field>
           <mat-label>{{'profil.songError' | translate }}</mat-label>
-          <mat-select [(value)]="selectSongError">
-            <mat-option [value]="langage[0]">{{'bouton.fr' | translate }}</mat-option>
-            <mat-option [value]="langage[1]">{{'bouton.en' | translate }}</mat-option>
+          <mat-select [(value)]="sound.correctSoundEffect">
+            <mat-option [value]="welcomeService.songListDifference[0]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[0])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[0])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[0].name }}</mat-option>
+            <mat-option [value]="welcomeService.songListDifference[1]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[1])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[1])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[1].name }}</mat-option>
+            <mat-option [value]="welcomeService.songListDifference[2]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[2])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[2])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[2].name }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -93,12 +94,22 @@
       <div class="form-control section"> <label for="Theme"> {{'profil.songDifference' | translate }}</label>
         <mat-form-field>
           <mat-label>{{'profil.songDifference' | translate }}</mat-label>
-          <mat-select [(value)]="selectSongDifference">
-            <mat-option [value]="langage[0]">{{'bouton.fr' | translate }}</mat-option>
-            <mat-option [value]="langage[1]">{{'bouton.en' | translate }}</mat-option>
+          <mat-select [(value)]="sound.incorrectSoundEffect">
+            <mat-option [value]="welcomeService.songListError[0]">
+                <mat-icon (mouseover)="sound.playIncorrectSound(welcomeService.songListError[0])" (mouseleave)="sound.stopIncorrectSound(welcomeService.songListError[0])" class="option-icon">headset</mat-icon>
+                {{ welcomeService.songListError[0].name }}
+              </mat-option>
+              <mat-option [value]="welcomeService.songListError[1]">
+                <mat-icon (mouseover)="sound.playIncorrectSound(welcomeService.songListError[1])" (mouseleave)="sound.stopIncorrectSound(welcomeService.songListError[1])" class="option-icon">headset</mat-icon>
+                {{ welcomeService.songListError[1].name }}
+              </mat-option>
+              <mat-option [value]="welcomeService.songListError[2]">
+                <mat-icon (mouseover)="sound.playIncorrectSound(welcomeService.songListError[2])" (mouseleave)="sound.stopIncorrectSound(welcomeService.songListError[2])" class="option-icon">headset</mat-icon>
+                {{ welcomeService.songListError[2].name }}
+              </mat-option>
           </mat-select>
         </mat-form-field>
-      </div> -->
+      </div>
     </div>
   </div>
 

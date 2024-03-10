@@ -33,7 +33,6 @@ export class RegistrationPageComponent {
     email: string;
     username: string;
 
-    // eslint-disable-next-line max-params
     constructor(
         private readonly communication: CommunicationService,
         private readonly router: Router,

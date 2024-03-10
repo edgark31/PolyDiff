@@ -2,14 +2,12 @@ import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChil
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GamePageDialogComponent } from '@app/components/game-page-dialog/game-page-dialog.component';
-import { DEFAULT_PLAYERS, INPUT_TAG_NAME, SOLO_GAME_ID } from '@app/constants/constants';
+import { DEFAULT_PLAYERS, INPUT_TAG_NAME } from '@app/constants/constants';
 import { ASSETS_HINTS } from '@app/constants/hint';
 import { CANVAS_MEASUREMENTS } from '@app/constants/image';
-import { HintProximity } from '@app/enum/hint-proximity';
 import { CanvasMeasurements } from '@app/interfaces/game-interfaces';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
-import { HintService } from '@app/services/hint-service/hint.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
 import { Coordinate } from '@common/coordinate';
@@ -46,7 +44,6 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
         private readonly gameAreaService: GameAreaService,
         private readonly gameManager: GameManagerService,
         private readonly imageService: ImageService,
-        private readonly hintService: HintService,
         private readonly matDialog: MatDialog,
         private readonly replayService: ReplayService,
         private readonly router: Router,
@@ -65,14 +62,6 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
         this.onDestroy$ = new Subject();
     }
 
-    get proximity(): HintProximity {
-        return this.hintService.thirdHintProximity;
-    }
-
-    get isThirdHintActive(): boolean {
-        return this.hintService.isThirdHintActive;
-    }
-
     private get differences(): Coordinate[][] {
         return this.gameManager.differences;
     }
@@ -84,15 +73,12 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
             if (event.key === 't') {
                 const differencesCoordinates = ([] as Coordinate[]).concat(...this.differences);
                 this.gameAreaService.toggleCheatMode(differencesCoordinates);
-            } else if (event.key === 'i' && this.game.mode.includes(SOLO_GAME_ID)) {
-                this.hintService.requestHint();
             }
         }
     }
 
     ngAfterViewInit(): void {
         this.gameManager.startGame();
-        this.hintService.resetHints();
         this.getPlayers();
         this.setUpGame();
         this.setUpReplay();
@@ -114,18 +100,9 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
 
     mouseClickOnCanvas(event: MouseEvent, isLeft: boolean) {
         if (!this.gameAreaService.detectLeftClick(event)) return;
-        if (this.isThirdHintActive) {
-            this.hintService.deactivateThirdHint();
-        }
         this.gameAreaService.setAllData();
         this.gameManager.setIsLeftCanvas(isLeft);
         this.gameManager.requestVerification(this.gameAreaService.getMousePosition());
-    }
-
-    checkThirdHint(event: MouseEvent) {
-        if (this.hintService.nAvailableHints === 0 && !this.isReplayAvailable) {
-            this.hintService.checkThirdHintProximity({ x: event.offsetX, y: event.offsetY });
-        }
     }
 
     addRightSideMessage(text: string) {
@@ -206,10 +183,10 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     private getPlayers(): void {
         this.gameManager.players$.pipe(takeUntil(this.onDestroy$)).subscribe((players) => {
             this.players = players;
-            if (players.player1.playerId === this.gameManager.getSocketId('game')) {
-                this.player = players.player1.name;
-            } else if (players.player2 && players.player2.playerId === this.gameManager.getSocketId('game')) {
-                this.player = players.player2.name;
+            if (players.player1.socketId === this.gameManager.getSocketId('game')) {
+                this.player = players.player1.name ?? '';
+            } else if (players.player2 && players.player2.socketId === this.gameManager.getSocketId('game')) {
+                this.player = players.player2.name ?? '';
             }
         });
     }

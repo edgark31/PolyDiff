@@ -16,6 +16,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -45,25 +46,29 @@ import { DeleteResetConfirmationDialogComponent } from './components/delete-rese
 import { GamePageDialogComponent } from './components/game-page-dialog/game-page-dialog.component';
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
-// eslint-disable-next-line import/no-unresolved
 import { ImportDialogComponent } from './components/import-dialog/import-dialog.component';
 import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 import { MenuComponent } from './components/menu/menu.component';
+import { ModalAccessMatchComponent } from './components/modal-access-match/modal-access-match.component';
 import { ModalAdminComponent } from './components/modal-admin/modal-admin.component';
 import { NameGenerationDialogComponent } from './components/name-generation-dialog/name-generation-dialog.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
-import { ConfirmPasswordPageComponent } from './pages/confirm-password-page/confirm-password-page.component';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
+import { ConfirmPasswordPageComponent } from './pages/confirm-password-page/confirm-password-page.component';
+import { CreateRoomPageComponent } from './pages/create-room-page/create-room-page.component';
+import { GameModePageComponent } from './pages/game-mode-page/game-mode-page.component';
+import { JoinedPlayersComponent } from './pages/joined-player/joined-player.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { PersonnalizationPageComponent } from './pages/personnalization-page/personnalization-page.component';
 import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
+import { RoomSheetComponent } from './components/room-sheet/room-sheet.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -112,6 +117,12 @@ export const createTranslateLoader = (http: HttpClient) => {
         ConfirmPasswordPageComponent,
         ImportDialogComponent,
         ChatPageComponent,
+        GameModePageComponent,
+        CreateRoomPageComponent,
+        JoinedPlayersComponent,
+        ModalAccessMatchComponent,
+        LimitedTimePageComponent,
+        RoomSheetComponent,
     ],
     imports: [
         AppMaterialModule,
@@ -139,6 +150,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         MatIconModule,
         MatSidenavModule,
         MatListModule,
+        MatSliderModule,
         RouterModule.forRoot(routes),
         TranslateModule.forRoot({
             loader: {
