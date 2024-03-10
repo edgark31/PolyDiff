@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/avatar_selection_page.dart';
 import 'package:mobile/pages/chat_page.dart';
+import 'package:mobile/pages/classic_game_page.dart';
 import 'package:mobile/pages/create_room_card_page.dart';
 import 'package:mobile/pages/create_room_options_page.dart';
-import 'package:mobile/pages/classic_game_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
@@ -47,7 +47,7 @@ const String CREATE_ROOM_OPTIONS_ROUTE = '/create/options';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
-    //print('the Route is: ${settings.name}');
+    print('The Route is: ${settings.name}');
 
     switch (settings.name) {
       case '/':

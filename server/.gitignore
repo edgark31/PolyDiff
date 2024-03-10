@@ -35,8 +35,9 @@ lerna-debug.log*
 !.vscode/extensions.json
 !package-lock.json
 
-# assets
-/assets
-
 #.env key
-*.env
+# *.env
+
+# assets
+/assets/*
+!/assets/avatar/

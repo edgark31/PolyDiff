@@ -68,7 +68,7 @@ export class DatabaseService implements OnModuleInit {
         const originalGameCards = await this.gameCardModel.find().exec();
         const modifiedGameCards = originalGameCards.map((gameCard) => {
             const thumbnailBase64 = fs.readFileSync(gameCard.thumbnail, 'base64');
-            return { ...gameCard.toObject(), thumbnail: thumbnailBase64 } as GameCard; // Make sure to create a new object
+            return { ...gameCard.toObject(), thumbnail: thumbnailBase64 } as GameCard;
         });
         return modifiedGameCards;
     }

@@ -30,16 +30,6 @@ export class GameController {
         }
     }
 
-    @Get('/cards')
-    async getGameCards(@Res() response: Response) {
-        try {
-            const game = await this.gameService.getGamesCards();
-            response.status(HttpStatus.OK).json(game);
-        } catch (error) {
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message);
-        }
-    }
-
     @Get('carousel/:index')
     async getGameCarrousel(@Param('index') index: number, @Res() response: Response) {
         try {
@@ -47,6 +37,16 @@ export class GameController {
             response.status(HttpStatus.OK).json(gameCarrousel[+index]);
         } catch (error) {
             response.status(HttpStatus.NOT_FOUND).send(error.message);
+        }
+    }
+
+    @Get('/cards')
+    async getGameCards(@Res() response: Response) {
+        try {
+            const cards = await this.gameService.getGamesCards();
+            response.status(HttpStatus.OK).json(cards);
+        } catch (error) {
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message);
         }
     }
 
