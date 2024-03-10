@@ -193,5 +193,9 @@ export class RoomManagerService {
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Map<string, Lobby>) => {
             this.lobbies.next(lobbies);
         });
+
+        this.clientSocket.on('lobby', LobbyEvents.Join, (playerNames: string[]) => {
+            this.joinedPlayerNames.next(playerNames);
+        });
     }
 }
