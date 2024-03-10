@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/pages/classic_game_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/socket_service.dart';
@@ -16,6 +15,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) {
+      SocketService socketService = Get.find();
+      return socketService;
+    }),
     ChangeNotifierProvider(create: (context) {
       GameAreaService gameAreaService = Get.find();
       return gameAreaService;
@@ -41,7 +44,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),
       ),
       onGenerateRoute: AppRouter.onGenerateRoute,
-      initialRoute: ClassicGamePage.routeName,
+      initialRoute: HomePage.routeName,
     );
   }
 }
