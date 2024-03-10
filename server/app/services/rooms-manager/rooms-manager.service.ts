@@ -6,13 +6,26 @@ import { HistoryService } from '@app/services/history/history.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { CHARACTERS, DEFAULT_GAME_MODES, KEY_SIZE, MAX_BONUS_TIME_ALLOWED, NOT_FOUND } from '@common/constants';
 import { GameEvents, GameModes, MessageEvents, MessageTag, PlayerStatus } from '@common/enums';
-import { Chat, ClientSideGame, Coordinate, Differences, GameConfigConst, GameRoom, Player, PlayerData, TimerMode } from '@common/game-interfaces';
+import {
+    Chat,
+    ClientSideGame,
+    Coordinate,
+    Differences,
+    GameConfigConst,
+    GameRoom,
+    Lobby,
+    Player,
+    PlayerData,
+    TimerMode,
+} from '@common/game-interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as fs from 'fs';
 import * as io from 'socket.io';
 
 @Injectable()
 export class RoomsManagerService implements OnModuleInit {
+    lobbies = new Map<string, Lobby>();
+
     private gameConstants: GameConfigConst;
     private modeTimerMap: { [key: string]: TimerMode };
     private rooms: Map<string, GameRoom>;
@@ -22,6 +35,7 @@ export class RoomsManagerService implements OnModuleInit {
         private readonly messageManager: MessageManagerService,
         private readonly historyService: HistoryService,
     ) {
+
         this.rooms = new Map<string, GameRoom>();
         this.modeTimerMap = DEFAULT_GAME_MODES;
     }

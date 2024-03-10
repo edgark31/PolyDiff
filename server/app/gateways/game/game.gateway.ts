@@ -18,25 +18,24 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
     // eslint-disable-next-line max-params -- services are needed for the gateway
     constructor(
         private readonly logger: Logger,
-        private readonly roomsManagerService: RoomsManagerService,
+        private readonly roomsManager: RoomsManagerService,
         private readonly accountManager: AccountManagerService,
     ) {}
 
     afterInit() {
         setInterval(() => {
-            this.roomsManagerService.updateTimers(this.server);
+            this.roomsManager.updateTimers(this.server);
         }, DELAY_BEFORE_EMITTING_TIME);
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
-        const userId = socket.handshake.query.id as string;
+        socket.data.accountId = socket.handshake.query.id as string;
         const lobbyId = socket.handshake.query.lobbyId as string;
-        socket.data.id = userId;
         socket.join(lobbyId);
 
         socket.on('disconnecting', () => {
-            this.logger.log(`LOBBY OUT de ${userId}`);
+            this.logger.log(`LOBBY OUT de ${socket.data.accountId}`);
         });
-        this.logger.log(`GAME ON de ${userId}`);
+        this.logger.log(`GAME ON de ${socket.data.accountId}`);
     }
 }
