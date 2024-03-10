@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameDetails } from '@app/interfaces/game-interfaces';
@@ -133,7 +134,7 @@ export class CommunicationService {
         );
     }
 
-    modifyLangage(oldusername: string, newlangage: string): Observable<void> {
+    modifyLanguage(oldusername: string, newlangage: string): Observable<void> {
         return this.http.put<void>(`${this.accountUrl}/langage`, { oldUsername: oldusername, newLangage: newlangage }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
