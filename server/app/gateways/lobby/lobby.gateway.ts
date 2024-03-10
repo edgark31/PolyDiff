@@ -102,7 +102,6 @@ export class LobbyGateway implements OnGatewayConnection {
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
         socket.data.state = LobbyState.Idle;
-        socket.emit(LobbyEvents.UpdateLobbys, this.roomsManager.lobbies);
 
         // HANDLE DISCONNECT-ING ***
         socket.on('disconnecting', () => {
@@ -117,7 +116,6 @@ export class LobbyGateway implements OnGatewayConnection {
                     break;
             }
 
-            this.server.emit(LobbyEvents.UpdateLobbys, this.roomsManager.lobbies);
             this.logger.log(`LOBBY OUT de ${socket.data.accountId}`);
         });
         this.logger.log(`LOBBY IN de ${socket.data.accountId}`);

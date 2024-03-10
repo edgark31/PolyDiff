@@ -2,9 +2,10 @@ import { AccountManagerService } from '@app/services/account-manager/account-man
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { Game } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
-import { ConnectedSocket, OnGatewayConnection, OnGatewayInit, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { ConnectedSocket, OnGatewayConnection, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
+import { GameEvents, GameState } from '@common/enums';
 
 @WebSocketGateway({
     namespace: '/game',
@@ -22,6 +23,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         private readonly accountManager: AccountManagerService,
     ) {}
 
+    // @SubscribeMessage(GameEvents.Start)
+    // startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+
+    // }
+
     afterInit() {
         setInterval(() => {
             this.roomsManager.updateTimers(this.server);
@@ -30,10 +36,20 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
-        const lobbyId = socket.handshake.query.lobbyId as string;
-        socket.join(lobbyId);
+        socket.data.state = GameState.InMatch;
 
         socket.on('disconnecting', () => {
+            switch (socket.data.state) {
+                case GameState.InMatch:
+                    break;
+                case GameState.Abandoned:
+                    break;
+
+                case GameState.Left:
+                    break;
+                default:
+                    break;
+            }
             this.logger.log(`LOBBY OUT de ${socket.data.accountId}`);
         });
         this.logger.log(`GAME ON de ${socket.data.accountId}`);
