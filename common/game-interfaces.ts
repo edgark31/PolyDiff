@@ -133,9 +133,9 @@ export interface ChatMessageGlobal {
 }
 
 export interface Player {
-    playerId?: string;
-    name: string;
-    differenceData: Differences;
+    socketId?: string;
+    name?: string;
+    differenceData?: Differences;
 }
 
 export interface Observers {
@@ -151,7 +151,7 @@ export interface Lobby {
     isCheatEnabled: boolean;
     mode: string;
     password?: string;
-    chat: ChatLog;
+    chatLog?: ChatLog;
     nDifferences?: number;
 }
 

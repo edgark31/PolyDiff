@@ -1,7 +1,7 @@
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
-import { GameService } from '@app/services/game/game.service';
-import { LobbyEvents, LobbyState } from '@common/enums';
-import { Lobby } from '@common/game-interfaces';
+import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
+import { ChannelEvents, LobbyEvents, LobbyState, MessageTag } from '@common/enums';
+import { Chat, Lobby, Player } from '@common/game-interfaces';
 import { Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -13,16 +13,24 @@ export class LobbyGateway implements OnGatewayConnection {
     @WebSocketServer() private server: Server;
     private readonly lobbies = new Map<string, Lobby>();
 
-    constructor(private readonly logger: Logger, private readonly accountManager: AccountManagerService, private readonly gameService: GameService) {
+    constructor(
+        private readonly logger: Logger,
+        private readonly accountManager: AccountManagerService,
+        private readonly messageManager: MessageManagerService,
+    ) {
         this.lobbies = new Map<string, Lobby>();
     }
 
-    // quelqun crée le lobby et devient host
     @SubscribeMessage(LobbyEvents.Create)
     create(@ConnectedSocket() socket: Socket, @MessageBody() lobby: Lobby) {
         socket.data.state = LobbyState.Waiting;
         lobby.lobbyId = socket.data.id;
         socket.join(lobby.lobbyId);
+        const player: Player = {
+            socketId: socket.data.id,
+            name: this.accountManager.connectedUsers.get(socket.data.id).credentials.username,
+        };
+        lobby.players.push(player);
         this.lobbies.set(lobby.lobbyId, lobby);
         this.server.emit(LobbyEvents.UpdateLobbys, this.lobbies);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.id).credentials.username} crée le lobby ${lobby.lobbyId}`);
@@ -32,7 +40,11 @@ export class LobbyGateway implements OnGatewayConnection {
     join(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.data.state = LobbyState.Waiting;
         socket.join(lobbyId);
-        this.lobbies.get(lobbyId).players.push(socket.data.id);
+        const player: Player = {
+            socketId: socket.data.id,
+            name: this.accountManager.connectedUsers.get(socket.data.id).credentials.username,
+        };
+        this.lobbies.get(lobbyId).players.push(player);
         this.server.emit(LobbyEvents.UpdateLobbys, this.lobbies);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.id).credentials.username} rejoint le lobby ${lobbyId}`);
     }
@@ -52,6 +64,19 @@ export class LobbyGateway implements OnGatewayConnection {
         this.server.emit(LobbyEvents.UpdateLobbys, this.lobbies);
         socket.to(lobbyId).emit(LobbyEvents.Start, lobbyId);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.id).credentials.username} démarre le lobby ${lobbyId}`);
+    }
+
+    @SubscribeMessage(ChannelEvents.SendLobbyMessage)
+    handleMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
+        const chat: Chat = this.messageManager.createMessage(socket.data.username, message);
+        this.lobbies.get(lobbyId).chatLog.chat.push(chat);
+
+        socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Sent });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Received });
+
+        this.server.emit(LobbyEvents.UpdateLobbys, this.lobbies);
+        socket.to(lobbyId).emit(LobbyEvents.Start, lobbyId);
+        this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.id).credentials.username} envoie un message`);
     }
 
     @SubscribeMessage(LobbyEvents.UpdateLobbys)
