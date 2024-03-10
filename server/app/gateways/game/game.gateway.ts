@@ -22,7 +22,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         private readonly accountManager: AccountManagerService,
     ) {}
 
-
     // @SubscribeMessage(GameEvents.StartGameByRoomId)
     // startGame(@ConnectedSocket() socket: Socket) {
     //     this.roomsManagerService.startGame(socket, this.server);
@@ -190,8 +189,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         const userId = socket.handshake.query.id as string;
         socket.data.id = userId;
         socket.on('disconnecting', () => {
-            this.accountManager.deconnexion(socket.data.id);
-            this.logger.log(`LOBBY OUT de ${userId} : ${Array.from(socket.rooms)[0]}`);
+            this.logger.log(`LOBBY OUT de ${userId}`);
         });
         this.logger.log(`GAME ON de ${userId}`);
     }
