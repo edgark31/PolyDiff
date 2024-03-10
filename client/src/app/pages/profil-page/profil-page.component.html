@@ -15,12 +15,23 @@
       <div class="form-avatar">
         <label for="avatar">Avatar</label>
         <img [src]="welcomeService.account.profile.avatar" alt="Image" style="width: 100px; height: 100px;">
+        <span class="status-indicator"></span>
       </div>
 
 
       <div class="form-control">
         <label for="Theme">{{'profil.theme' | translate }}</label>
         <div>{{ welcomeService.account.profile.theme.name }}</div>
+      </div>
+
+      <div class="form-control">
+        <label for="Theme">{{'profil.songError' | translate }}</label>
+        <div>{{ welcomeService.account.profile.songError.name }}</div>
+      </div>
+
+      <div class="form-control">
+        <label for="Theme">{{'profil.songDifference' | translate }}</label>
+        <div>{{ welcomeService.account.profile.songDifference.name }}</div>
       </div>
 
       <div class="form-control">

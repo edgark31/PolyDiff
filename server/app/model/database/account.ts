@@ -33,6 +33,17 @@ export class Theme {
 export const themeSchema = SchemaFactory.createForClass(Theme);
 
 @Schema()
+export class Song {
+    @Prop({ required: true })
+    name: string;
+
+    @Prop({ required: false })
+    link: string;
+}
+
+export const songSchema = SchemaFactory.createForClass(Song);
+
+@Schema()
 export class ConnexionLog {
     @Prop({ required: true })
     timestamp: string;
@@ -107,6 +118,12 @@ export class Profile {
 
     @Prop({ type: themeSchema, required: false })
     theme: Theme;
+
+    @Prop({ type: songSchema, required: false })
+    songDifference: Song;
+
+    @Prop({ type: songSchema, required: false })
+    songError: Song;
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);

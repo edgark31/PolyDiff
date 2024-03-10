@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ConfirmPasswordPageComponent } from '@app/pages/confirm-password-page/confirm-password-page.component';
 import { ChatPageComponent } from '@app/pages/chat-page/chat-page.component';
 import { ConfigPageComponent } from '@app/pages/config-page/config-page.component';
+import { ConfirmPasswordPageComponent } from '@app/pages/confirm-password-page/confirm-password-page.component';
+import { CreateRoomPageComponent } from '@app/pages/create-room-page/create-room-page.component';
 import { CreationPageComponent } from '@app/pages/creation-page/creation-page.component';
+import { GameModePageComponent } from '@app/pages/game-mode-page/game-mode-page.component';
 import { GamePageComponent } from '@app/pages/game-page/game-page.component';
+import { JoinedPlayersComponent } from '@app/pages/joined-player/joined-player.component';
 import { LimitedTimePageComponent } from '@app/pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from '@app/pages/login-page/login-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
@@ -24,11 +27,14 @@ export const routes: Routes = [
     { path: 'selection', component: SelectionPageComponent },
     { path: 'login', component: LoginPageComponent },
     { path: 'limited', component: LimitedTimePageComponent },
+    { path: 'create-room', component: CreateRoomPageComponent },
     { path: 'registration', component: RegistrationPageComponent },
     { path: 'recover-password', component: RecoverPasswordPageComponent },
     { path: 'confirm-password', component: ConfirmPasswordPageComponent },
     { path: 'personalization', component: PersonnalizationPageComponent },
+    { path: 'game-mode', component: GameModePageComponent },
     { path: 'profil', component: ProfilPageComponent },
+    { path: 'waiting-room', component: JoinedPlayersComponent },
     { path: 'admin', component: ConfigPageComponent, canActivate: [AdminGuard] },
     { path: '**', redirectTo: '/login' },
 ];

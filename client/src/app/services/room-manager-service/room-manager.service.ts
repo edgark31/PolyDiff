@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class RoomManagerService {
+    password: string;
     private joinedPlayerNames: Subject<string[]>;
     private playerNameAvailability: Subject<PlayerNameAvailability>;
     private rooms1V1AvailabilityByGameId: Subject<RoomAvailability>;
