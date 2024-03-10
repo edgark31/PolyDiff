@@ -93,8 +93,16 @@ export class RoomManagerService {
         return this.isGameHistoryReloadNeeded.asObservable();
     }
 
+    get lobby$() {
+        return this.lobby.asObservable();
+    }
+
     createClassicRoom(roomPayload: Lobby) {
         this.clientSocket.send('lobby', LobbyEvents.Create, roomPayload);
+    }
+
+    joinRoom(lobbyId: string) {
+        this.clientSocket.send('lobby', LobbyEvents.Join, lobbyId);
     }
 
     createOneVsOneRoom(playerPayLoad: PlayerData): void {
@@ -194,8 +202,8 @@ export class RoomManagerService {
             this.lobbies.next(lobbies);
         });
 
-        this.clientSocket.on('lobby', LobbyEvents.Join, (playerNames: string[]) => {
-            this.joinedPlayerNames.next(playerNames);
-        });
+        // this.clientSocket.on('lobby', LobbyEvents.Join, (playerNames: string[]) => {
+        //     this.joinedPlayerNames.next(playerNames);
+        // });
     }
 }

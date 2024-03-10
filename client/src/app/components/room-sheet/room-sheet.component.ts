@@ -1,8 +1,8 @@
+/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { Subscription, filter } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-room-sheet',
@@ -15,7 +15,7 @@ export class RoomSheetComponent implements OnInit, OnDestroy {
     private playerNamesSubscription?: Subscription;
     private data: { roomId: string; gameId: string; isLimited: boolean };
 
-    constructor(public router: Router, private readonly roomManagerService: RoomManagerService) {
+    constructor(public router: Router) {
         this.playerNames = [];
         this.data = { roomId: '0', gameId: '', isLimited: true };
     }
@@ -25,19 +25,10 @@ export class RoomSheetComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.roomManagerService.getJoinedPlayerNames(this.data.gameId);
-        this.loadPlayerNamesList();
+        // this.roomManagerService.getJoinedPlayerNames(this.data.gameId);
     }
 
     ngOnDestroy(): void {
         this.playerNamesSubscription?.unsubscribe();
-    }
-
-    private loadPlayerNamesList(): void {
-        this.playerNamesSubscription = this.roomManagerService.joinedPlayerNamesByGameId$
-            .pipe(filter((playerNamesList) => !!playerNamesList))
-            .subscribe((playerNamesList) => {
-                this.playerNames = playerNamesList;
-            });
     }
 }

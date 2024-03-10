@@ -7,7 +7,6 @@ import { CreateRoomPageComponent } from '@app/pages/create-room-page/create-room
 import { CreationPageComponent } from '@app/pages/creation-page/creation-page.component';
 import { GameModePageComponent } from '@app/pages/game-mode-page/game-mode-page.component';
 import { GamePageComponent } from '@app/pages/game-page/game-page.component';
-import { JoinedPlayersComponent } from '@app/pages/joined-player/joined-player.component';
 import { LimitedTimePageComponent } from '@app/pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from '@app/pages/login-page/login-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
@@ -16,6 +15,7 @@ import { ProfilPageComponent } from '@app/pages/profil-page/profil-page.componen
 import { RecoverPasswordPageComponent } from '@app/pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from '@app/pages/registration-page/registration-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
+import { WaitingRoomComponent } from '@app/pages/waiting-room/waiting-room.component';
 import { AdminGuard } from '@app/services/adminguard/admin.guard.service';
 
 export const routes: Routes = [
@@ -34,7 +34,7 @@ export const routes: Routes = [
     { path: 'personalization', component: PersonnalizationPageComponent },
     { path: 'game-mode', component: GameModePageComponent },
     { path: 'profil', component: ProfilPageComponent },
-    { path: 'waiting-room', component: JoinedPlayersComponent },
+    { path: 'waiting-room', component: WaitingRoomComponent },
     { path: 'admin', component: ConfigPageComponent, canActivate: [AdminGuard] },
     { path: '**', redirectTo: '/login' },
 ];

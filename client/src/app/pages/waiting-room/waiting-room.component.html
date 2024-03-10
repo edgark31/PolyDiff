@@ -9,14 +9,14 @@
         <app-chat-box ></app-chat-box>
     </div>
     <div class="right">
-        <div class="player-count"> 4/4 joueurs présents</div>
+        <div class="player-count"> {{lobby.players.length}}/4 joueurs présents</div>
         <div class="element">
             <div class = "players-list">
                 <div>
                     <p class = "waiting-text"> Joueur(s) en attente : </p>
                     <div class = "player-container">
-                        <div class = "players" *ngFor="let playerName of players">
-                            <p class = "player">Joueur: <span class = "player-name">{{ playerName }}</span></p>
+                        <div class = "players" *ngFor="let playerName of lobby.players">
+                            <p class = "player">Joueur: <span class = "player-name">{{ playerName.name }}</span></p>
                         </div>
                     </div>
                 </div>
