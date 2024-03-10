@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
-import { GameCardEvents, HistoryEvents, PlayerEvents, RoomEvents } from '@common/enums';
-import { PlayerData, PlayerNameAvailability, RoomAvailability } from '@common/game-interfaces';
+import { GameCardEvents, HistoryEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
+import { Lobby, PlayerData, PlayerNameAvailability, RoomAvailability } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -91,16 +91,16 @@ export class RoomManagerService {
         return this.isGameHistoryReloadNeeded.asObservable();
     }
 
-    createSoloRoom(playerPayLoad: PlayerData) {
-        this.clientSocket.send('game', RoomEvents.CreateClassicSoloRoom, playerPayLoad);
+    createClassicRoom(roomPayload: Lobby) {
+        this.clientSocket.send('lobby', LobbyEvents.Create, roomPayload);
     }
 
     createOneVsOneRoom(playerPayLoad: PlayerData): void {
         this.clientSocket.send('game', RoomEvents.CreateOneVsOneRoom, playerPayLoad);
     }
 
-    createLimitedRoom(playerPayLoad: PlayerData): void {
-        this.clientSocket.send('game', RoomEvents.CreateLimitedRoom, playerPayLoad);
+    createLimitedRoom(roomPayload: Lobby): void {
+        this.clientSocket.send('lobby', LobbyEvents.Create, roomPayload);
     }
 
     updateRoomOneVsOneAvailability(gameId: string): void {

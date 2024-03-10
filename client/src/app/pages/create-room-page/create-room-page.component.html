@@ -15,9 +15,9 @@
             <span id = "classic">Mode triche : </span>
             <mat-checkbox id="config" color="warn" [(ngModel)]="isCheatModeEnabled"></mat-checkbox>
         </button>
-        <button class="settings-button">
+        <button class="settings-button" (key.enter)="onSubmit()" (click)="onSubmit()">
             <span id = "classic">Mot de passe : </span>
-            <input matInput type="password" placeholder="Veuillez entrer votre mot de passe" (keyup.enter)="onSubmit()">
+            <input matInput type="password" placeholder="Veuillez entrer votre mot de passe" [(ngModel)]="password">
         </button>    
     </div>
     <footer class="footer flex-column">
