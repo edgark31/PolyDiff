@@ -62,13 +62,12 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
-        const userId = socket.handshake.query.id as string;
-        socket.data.id = userId;
-        this.logger.log(`AUTH de ${userId}`);
+        socket.data.accountId = socket.handshake.query.id as string;
+        this.logger.log(`AUTH de ${socket.data.accountId}`);
     }
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`DEAUTH de ${socket.data.id}`);
-        this.accountManager.deconnexion(socket.data.id);
+        this.logger.log(`DEAUTH de ${socket.data.accountId}`);
+        this.accountManager.deconnexion(socket.data.accountId);
     }
 }
