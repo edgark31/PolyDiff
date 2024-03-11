@@ -38,7 +38,7 @@ export class LobbyGateway implements OnGatewayConnection {
         this.roomsManager.lobbies.set(lobby.lobbyId, lobby);
         socket.emit(LobbyEvents.Create, this.roomsManager.lobbies.get(lobby.lobbyId));
         const lobbies = Array.from(this.roomsManager.lobbies.values());
-        socket.emit(LobbyEvents.UpdateLobbys, lobbies);
+        this.server.emit(LobbyEvents.UpdateLobbys, lobbies);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} crée le lobby ${lobby.lobbyId}`);
     }
 
@@ -54,7 +54,7 @@ export class LobbyGateway implements OnGatewayConnection {
         this.roomsManager.lobbies.get(lobbyId).players.push(player);
         socket.emit(LobbyEvents.Join, this.roomsManager.lobbies.get(lobbyId));
         const lobbies = Array.from(this.roomsManager.lobbies.values());
-        socket.emit(LobbyEvents.UpdateLobbys, lobbies);
+        this.server.emit(LobbyEvents.UpdateLobbys, lobbies);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} rejoint le lobby ${lobbyId}`);
     }
 
@@ -67,7 +67,7 @@ export class LobbyGateway implements OnGatewayConnection {
             .get(lobbyId)
             .players.filter((player) => player !== socket.data.accountId);
         const lobbies = Array.from(this.roomsManager.lobbies.values());
-        socket.emit(LobbyEvents.UpdateLobbys, lobbies);
+        this.server.emit(LobbyEvents.UpdateLobbys, lobbies);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} quitte le lobby ${lobbyId}`);
     }
 
@@ -77,7 +77,7 @@ export class LobbyGateway implements OnGatewayConnection {
         socket.data.state = LobbyState.InGame;
         this.roomsManager.lobbies.get(lobbyId).isAvailable = false;
         const lobbies = Array.from(this.roomsManager.lobbies.values());
-        socket.emit(LobbyEvents.UpdateLobbys, lobbies);
+        this.server.emit(LobbyEvents.UpdateLobbys, lobbies);
         socket.to(lobbyId).emit(LobbyEvents.Start, lobbyId);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} démarre le lobby ${lobbyId}`);
     }
@@ -94,7 +94,7 @@ export class LobbyGateway implements OnGatewayConnection {
         socket.broadcast.to(lobbyId).emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Received });
 
         const lobbies = Array.from(this.roomsManager.lobbies.values());
-        socket.emit(LobbyEvents.UpdateLobbys, lobbies);
+        this.server.emit(LobbyEvents.UpdateLobbys, lobbies);
         socket.to(lobbyId).emit(LobbyEvents.Start, lobbyId);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} envoie un message`);
     }
@@ -109,8 +109,7 @@ export class LobbyGateway implements OnGatewayConnection {
         socket.data.accountId = socket.handshake.query.id as string;
         socket.data.state = LobbyState.Idle;
         const lobbies = Array.from(this.roomsManager.lobbies.values());
-        socket.emit(LobbyEvents.UpdateLobbys, lobbies);
-
+        this.server.emit(LobbyEvents.UpdateLobbys, lobbies);
         // HANDLE DISCONNECT-ING ***
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
