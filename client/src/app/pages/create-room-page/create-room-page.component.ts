@@ -37,7 +37,7 @@ export class CreateRoomPageComponent {
         if (this.gameMode === 'limited') {
             this.roomManagerService.createLimitedRoom(roomPayload);
         } else if (this.gameMode === 'classic') {
-            roomPayload.time = this.time as number;
+            //  roomPayload.time = this.time as number;
             this.roomManagerService.createClassicRoom(roomPayload);
         }
     }

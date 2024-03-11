@@ -55,8 +55,10 @@ import { NameGenerationDialogComponent } from './components/name-generation-dial
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
+import { RoomSheetComponent } from './components/room-sheet/room-sheet.component';
 import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
+import { ClassicTimePageComponent } from './pages/classic-time-page/classic-time-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { ConfirmPasswordPageComponent } from './pages/confirm-password-page/confirm-password-page.component';
 import { CreateRoomPageComponent } from './pages/create-room-page/create-room-page.component';
@@ -68,7 +70,6 @@ import { PersonnalizationPageComponent } from './pages/personnalization-page/per
 import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
-import { RoomSheetComponent } from './components/room-sheet/room-sheet.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -123,6 +124,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         ModalAccessMatchComponent,
         LimitedTimePageComponent,
         RoomSheetComponent,
+        ClassicTimePageComponent,
     ],
     imports: [
         AppMaterialModule,

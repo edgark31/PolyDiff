@@ -16,6 +16,7 @@ export class WelcomeService {
     songListDifference = SONG_LIST_DIFFERENCE;
     songListError = SONG_LIST_ERROR;
     account: Account;
+    isLimited: boolean;
     selectLocal: string;
     selectAvatar: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
     selectAvatarRegister: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ChatPageComponent } from '@app/pages/chat-page/chat-page.component';
+import { ClassicTimePageComponent } from '@app/pages/classic-time-page/classic-time-page.component';
 import { ConfigPageComponent } from '@app/pages/config-page/config-page.component';
 import { ConfirmPasswordPageComponent } from '@app/pages/confirm-password-page/confirm-password-page.component';
 import { CreateRoomPageComponent } from '@app/pages/create-room-page/create-room-page.component';
@@ -34,6 +35,8 @@ export const routes: Routes = [
     { path: 'personalization', component: PersonnalizationPageComponent },
     { path: 'game-mode', component: GameModePageComponent },
     { path: 'profil', component: ProfilPageComponent },
+    { path: 'classic', component: ClassicTimePageComponent },
+
     { path: 'waiting-room', component: JoinedPlayersComponent },
     { path: 'admin', component: ConfigPageComponent, canActivate: [AdminGuard] },
     { path: '**', redirectTo: '/login' },
