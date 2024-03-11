@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/constants/enums.dart';
-import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
-import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
 
@@ -31,8 +28,6 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
-    final socketService = context.watch<SocketService>();
-    final infoService = context.watch<InfoService>();
 
     return Scaffold(
       // appBar: CustomAppBar(),
@@ -47,9 +42,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
             ),
-            lobbyService.isGameModesClassic()
-                ? const SizedBox()
-                : timeSelection(context),
+            timeSelection(context),
             CustomButton(
               press: () {
                 lobbyService.setIsCheatEnabled(cheatMode);
