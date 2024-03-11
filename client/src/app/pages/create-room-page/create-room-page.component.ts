@@ -47,7 +47,6 @@ export class CreateRoomPageComponent implements AfterViewInit {
         if (this.mode === GameModes.Limited) {
             this.roomManagerService.createLimitedRoom(roomPayload);
         } else if (this.mode === GameModes.Classic) {
-            //  roomPayload.time = this.time as number;
             this.roomManagerService.createClassicRoom(roomPayload);
         }
     }

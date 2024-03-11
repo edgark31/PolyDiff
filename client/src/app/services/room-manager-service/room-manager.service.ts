@@ -216,26 +216,17 @@ export class RoomManagerService {
     }
 
     handleRoomEvents(): void {
-        console.log('aaa' + this.isOrganizer);
         if (this.isOrganizer) {
             this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby.next(lobby);
-                console.log('créer');
-                console.log('tu crées' + lobby.lobbyId);
             });
-            console.log('créer');
         } else if (this.wait === true) {
-            this.clientSocket.on('lobby', LobbyEvents.Join, (lobbyq: Lobby) => {
-                this.lobby.next(lobbyq);
+            this.clientSocket.on('lobby', LobbyEvents.Join, (lobbyJoin: Lobby) => {
+                this.lobby.next(lobbyJoin);
             });
-            console.log('tu rejoins');
         }
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });
-
-        // this.clientSocket.on('lobby', LobbyEvents.Join, (playerNames: string[]) => {
-        //     this.joinedPlayerNames.next(playerNames);
-        // });
     }
 }
