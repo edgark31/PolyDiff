@@ -16,12 +16,17 @@ class GameAreaService extends ChangeNotifier {
     ..color = Colors.green
     ..style = PaintingStyle.fill;
 
-  // This only validates that on the left canvas you're pressing the smile and that on the right canvas your're pressing the left circle
-  void validateCoord(
-      Coordinate coord, List<Coordinate> coordList, bool isLeft) {
+  // This only validates the smile and the left circle
+  // This won't be here when the connection between client and server is done
+  void validateCoord(Coordinate coord, List<Coordinate> coordList,
+      List<Coordinate> coordList2, bool isLeft) {
     currentCoord = coord;
-    if (coordList.contains(coord)) {
-      showDifferenceFound(coordList);
+    if (coordList.contains(coord) || coordList2.contains(coord)) {
+      if (coordList.contains(coord)) {
+        showDifferenceFound(coordList);
+      } else {
+        showDifferenceFound(coordList2);
+      }
     } else {
       if (isLeft) {
         print("ERROR on left canvas");
