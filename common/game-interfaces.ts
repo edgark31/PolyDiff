@@ -145,11 +145,12 @@ export interface Observers {
 export interface Lobby {
     lobbyId?: string;
     gameId?: string;
+    game?: Game;
     isAvailable: boolean;
     players: Player[];
     observers: Observers[];
     isCheatEnabled: boolean;
-    mode: string;
+    mode: GameModes;
     password?: string;
     chatLog?: ChatLog;
     nDifferences?: number;

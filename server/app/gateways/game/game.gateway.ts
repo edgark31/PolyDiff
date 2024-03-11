@@ -1,11 +1,19 @@
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
+import { GameEvents, GameState } from '@common/enums';
 import { Game } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
-import { ConnectedSocket, OnGatewayConnection, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import {
+    ConnectedSocket,
+    MessageBody,
+    OnGatewayConnection,
+    OnGatewayInit,
+    SubscribeMessage,
+    WebSocketGateway,
+    WebSocketServer,
+} from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
-import { GameEvents, GameState } from '@common/enums';
 
 @WebSocketGateway({
     namespace: '/game',
@@ -23,10 +31,10 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         private readonly accountManager: AccountManagerService,
     ) {}
 
-    // @SubscribeMessage(GameEvents.Start)
-    // startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-
-    // }
+    @SubscribeMessage(GameEvents.Start)
+    startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        // this.roomsManager.startGame(socket, lobbyId);
+    }
 
     afterInit() {
         setInterval(() => {
@@ -36,15 +44,14 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
-        socket.data.state = GameState.InMatch;
+        socket.data.state = GameState.InGame;
 
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
-                case GameState.InMatch:
+                case GameState.InGame:
                     break;
                 case GameState.Abandoned:
                     break;
-
                 case GameState.Left:
                     break;
                 default:

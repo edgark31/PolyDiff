@@ -43,6 +43,13 @@ export class RoomsManagerService implements OnModuleInit {
         await this.getGameConstants();
     }
 
+    // async get(lobbyId: string): Promise<GameRoom> {
+    //     if (this.lobbies.get(lobbyId).gameId) {
+    //         const game: Game = await this.gameService.getGameById(this.lobbies.get(lobbyId).gameId);
+    //         return this.buildGameRoom(game, this.lobbies.get(lobbyId).player);
+    //     }
+    // }
+
     async createRoom(playerPayLoad: PlayerData): Promise<GameRoom> {
         const game = !playerPayLoad.gameId ? await this.gameService.getRandomGame([]) : await this.gameService.getGameById(playerPayLoad.gameId);
         if (!game) return;
