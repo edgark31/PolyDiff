@@ -40,6 +40,16 @@ export class GameController {
         }
     }
 
+    @Get('/cards')
+    async getGameCards(@Res() response: Response) {
+        try {
+            const cards = await this.gameService.getGamesCards();
+            response.status(HttpStatus.OK).json(cards);
+        } catch (error) {
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message);
+        }
+    }
+
     @Get(':id')
     async gameById(@Param('id') id: string, @Res() response: Response) {
         try {

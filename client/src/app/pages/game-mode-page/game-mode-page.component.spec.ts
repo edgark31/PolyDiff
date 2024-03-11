@@ -3,21 +3,20 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameModePageComponent } from './game-mode-page.component';
 
 describe('GameModePageComponent', () => {
-  let component: GameModePageComponent;
-  let fixture: ComponentFixture<GameModePageComponent>;
+    let component: GameModePageComponent;
+    let fixture: ComponentFixture<GameModePageComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ GameModePageComponent ]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [GameModePageComponent],
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(GameModePageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(GameModePageComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });
