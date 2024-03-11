@@ -122,8 +122,8 @@ export class LobbyGateway implements OnGatewayConnection {
                 default:
                     break;
             }
-
-            this.server.emit(LobbyEvents.UpdateLobbys, this.roomsManager.lobbies);
+            const lobbiesFromManager = Array.from(this.roomsManager.lobbies.values());
+            this.server.emit(LobbyEvents.UpdateLobbys, lobbiesFromManager);
             this.logger.log(`LOBBY OUT de ${socket.data.accountId}`);
         });
         this.logger.log(`LOBBY IN de ${socket.data.accountId}`);
