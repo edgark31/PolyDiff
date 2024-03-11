@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/widgets.dart';
@@ -31,9 +33,14 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget _gameModeOption(GameModes type, IconData icon, Color color) {
     final lobbyService = context.watch<LobbyService>();
+    final socketService = context.watch<SocketService>();
+    final infoService = context.watch<InfoService>();
+
     return CustomButton(
       text: type == GameModes.Classic ? 'Classique' : 'Temps limité',
       press: () {
+        socketService.setup(SocketType.Lobby, infoService.id);
+        lobbyService.setListeners();
         lobbyService.setGameModes(type);
         _navigateTo(LOBBY_SELECTION_ROUTE);
       },

@@ -52,10 +52,8 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
                 : timeSelection(context),
             CustomButton(
               press: () {
-                socketService.setup(SocketType.Lobby, infoService.id);
                 lobbyService.setIsCheatEnabled(cheatMode);
                 lobbyService.setGameDuration(gameDuration.round());
-                lobbyService.setListeners();
                 lobbyService.createLobby();
                 Navigator.pushNamed(context, LOBBY_ROUTE);
               },
@@ -65,6 +63,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
             CustomButton(
               press: () {
                 // TODO: Make sure the page does not count stats + no clock
+                // TODO: Think if we need to disconnect the lobby socket
                 print("Navigate to game page but stats do not count");
                 Navigator.pushNamed(context, CLASSIC_ROUTE);
               },

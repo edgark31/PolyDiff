@@ -44,10 +44,8 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
             isLoading
                 ? Center(child: CircularProgressIndicator())
                 : ListView.builder(
-                    shrinkWrap:
-                        true, // Use this if inside a SingleChildScrollView
-                    physics:
-                        NeverScrollableScrollPhysics(), // to disable ListView's scrolling
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: gameCardsFromServer.length,
                     itemBuilder: (context, index) {
                       return buildGameCard(context, gameCardsFromServer[index]);
@@ -123,5 +121,3 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     );
   }
 }
-
-

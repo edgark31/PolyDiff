@@ -104,7 +104,11 @@ class LobbyService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void joinLobby(String joinedLobbyId) {
+  void joinLobby(String? joinedLobbyId) {
+    if (joinedLobbyId == null) {
+      print('No joined lobby id was provided (!)');
+      return;
+    }
     print('Joining lobby with id: $joinedLobbyId');
     socketService.send(
       SocketType.Lobby,
