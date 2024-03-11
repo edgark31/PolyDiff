@@ -1,5 +1,5 @@
-import 'package:mobile/models/game.dart';
 import 'package:mobile/constants/enums.dart';
+import 'package:mobile/models/game.dart';
 
 class Player {
   String? playerId;
@@ -21,16 +21,10 @@ class Player {
       };
 }
 
-// enum GameType { // TODO : fix GameType/GameModes confusion
-//   Practice,
-//   Classic,
-//   LimitedTime,
-// }
-
 class PlayerData {
   String username;
   String gameId;
-  GameType gameMode;
+  GameModes gameMode;
 
   PlayerData(
       {required this.username, required this.gameId, required this.gameMode});
@@ -38,8 +32,9 @@ class PlayerData {
   factory PlayerData.fromJson(Map<String, dynamic> json) => PlayerData(
         username: json['username'],
         gameId: json['gameId'],
-        gameMode: GameType.values
-            .firstWhere((e) => e.toString() == 'GameType.${json['gameMode']}'),
+        gameMode: GameModes.values.firstWhere((e) =>
+            e.toString() ==
+            'GameModes.${json['GameModes']}'), // TODO : confirm this logic of iterate enums
       );
 
   Map<String, dynamic> toJson() => {

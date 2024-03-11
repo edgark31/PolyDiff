@@ -70,7 +70,7 @@ class _LobbyPageState extends State<LobbyPage> {
           child: Column(
             children: [
               Text(
-                  'Salle d\'attente de la partie en ${lobbyService.gameTypeName}'),
+                  'Salle d\'attente de la partie en ${lobbyService.gameModesName}'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

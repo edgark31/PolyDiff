@@ -1,3 +1,4 @@
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
 
 class Lobby {
@@ -9,6 +10,7 @@ class Lobby {
   final bool isCheatEnabled;
   final GameModes mode;
   final String? password;
+  int time;
   ChatLog chatLog;
   final int nDifferences;
 
@@ -21,6 +23,7 @@ class Lobby {
     this.isCheatEnabled,
     this.mode,
     this.password,
+    this.time,
     this.chatLog,
     this.nDifferences,
   );
@@ -35,6 +38,7 @@ class Lobby {
       json['isCheatEnabled'],
       GameModes.values.firstWhere((element) => element.name == json['mode']),
       json['password'],
+      json['time'],
       ChatLog.fromJson(json['chatLog']),
       json['nDifferences'],
     );
@@ -50,6 +54,7 @@ class Lobby {
       'isCheatEnabled': isCheatEnabled,
       'mode': mode.name,
       'password': password,
+      'time': time,
       'chatLog': chatLog.toJson(),
       'nDifferences': nDifferences,
     };

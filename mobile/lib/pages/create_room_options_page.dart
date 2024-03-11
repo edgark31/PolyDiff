@@ -42,12 +42,12 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-                'Sélectionner les options de la salle de jeu en Mode ${lobbyService.gameTypeName}'),
+                'Sélectionner les options de la salle de jeu en Mode ${lobbyService.gameModesName}'),
             cheatSetting(context),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
             ),
-            lobbyService.isGameTypeClassic()
+            lobbyService.isGameModesClassic()
                 ? const SizedBox()
                 : timeSelection(context),
             CustomButton(

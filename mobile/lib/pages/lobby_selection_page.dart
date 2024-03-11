@@ -47,7 +47,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
-    String creationRoute = lobbyService.isGameTypeClassic()
+    String creationRoute = lobbyService.isGameModesClassic()
         ? CREATE_ROOM_CARD_ROUTE
         : CREATE_ROOM_OPTIONS_ROUTE;
     return Scaffold(
@@ -62,10 +62,10 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                       onPressed: () =>
                           Navigator.pushNamed(context, creationRoute),
                       child: Text(
-                        'Créer une salle pour le mode ${lobbyService.gameTypeName}',
+                        'Créer une salle pour le mode ${lobbyService.gameModesName}',
                       )),
                   buildLobbyCard(context, defaultGameCard,
-                      lobbyService.isGameTypeClassic()),
+                      lobbyService.isGameModesClassic()),
                   // You can add more GameCard widgets here or iterate over a list of game cards
                 ],
               ),

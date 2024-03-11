@@ -35,16 +35,10 @@ enum SocketType {
   Game,
 }
 
-enum GameType {
+enum GameModes {
   Classic,
   Limited,
 }
-
-enum GameModes {
-    Classic,
-    Limited,
-}
-
 
 enum ChannelEvents {
   SendLobbyMessage,

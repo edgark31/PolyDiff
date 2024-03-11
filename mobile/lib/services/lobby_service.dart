@@ -5,8 +5,8 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/socket_service.dart';
 
 class LobbyService extends ChangeNotifier {
-  static GameType _gameType = GameType.Classic;
-  static String _gameTypeName = 'Classique';
+  static GameModes _gameModes = GameModes.Classic;
+  static String _gameModesName = 'Classique';
   static bool _isCreator = false;
   static List<Lobby> _lobbies = [];
   static String _gameId = 'initial-game-id';
@@ -15,8 +15,8 @@ class LobbyService extends ChangeNotifier {
   late Lobby _lobby;
   static bool _isLobbyStarted = false;
 
-  GameType get gameType => _gameType;
-  String get gameTypeName => _gameTypeName;
+  GameModes get gameModes => _gameModes;
+  String get gameModesName => _gameModesName;
   bool get isCreator => _isCreator;
   List<Lobby> get lobbies => _lobbies;
   // String get gameId => _gameId;
@@ -43,11 +43,11 @@ class LobbyService extends ChangeNotifier {
 
   // Lobby Selection setters
 
-  void setGameType(GameType gameType) {
-    print('Setting game type to: $gameType');
-    _gameType = gameType;
-    _gameTypeName = isGameTypeClassic() ? 'Classique' : 'Temps limité';
-    print('Game type name is : $_gameTypeName');
+  void setGameModes(GameModes newGameModes) {
+    print('Setting game type to: $newGameModes');
+    _gameModes = newGameModes;
+    _gameModesName = isGameModesClassic() ? 'Classique' : 'Temps limité';
+    print('Game type name is : $_gameModesName');
     notifyListeners();
   }
 
@@ -57,8 +57,8 @@ class LobbyService extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool isGameTypeClassic() {
-    return _gameType == GameType.Classic;
+  bool isGameModesClassic() {
+    return _gameModes == GameModes.Classic;
   }
 
   void createLobby() {
@@ -66,15 +66,16 @@ class LobbyService extends ChangeNotifier {
     setIsCreator(true);
     Lobby lobbyCreated = Lobby(
       'initial-lobby-id', // Do not send lobbyId
-      _gameId, /// Do not send gameId
+      _gameId, // Do not send gameId
       false,
       [],
       [],
       _isCheatEnabled,
-      _gameType == GameType.Classic ? 'classic' : 'limited',
+      isGameModesClassic() ? GameModes.Classic : GameModes.Limited,
       '',
+      _gameDuration,
       ChatLog([], 'channel'), // Do not send chat log
-      0, // TODO : Get this from the game
+      0, // TODO : Get nDifferences from the game
     );
     socketService.send(
       SocketType.Lobby,
