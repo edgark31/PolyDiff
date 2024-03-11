@@ -68,8 +68,8 @@ class LobbyService extends ChangeNotifier {
     List<List<Coordinate>> emptyDifferences = [];
     Lobby lobbyCreated = Lobby(
       'initial-lobby-id', // Do not need send lobbyId
-      _gameId, // Do not send gameId
-      Game('', '', '', '', '', emptyDifferences), // Do not send gameId
+      _gameId,
+      Game('', '', '', '', '', emptyDifferences), // Do not need send game
       true, // isAvailable
       [], // players
       [], // observers
