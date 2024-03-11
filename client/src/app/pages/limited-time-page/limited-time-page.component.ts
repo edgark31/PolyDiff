@@ -51,7 +51,6 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
                 this.lobbies = lobbies;
-                console.log(lobbies);
             }
         });
         // this.openDialog();
