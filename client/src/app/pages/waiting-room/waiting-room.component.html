@@ -25,7 +25,7 @@
         </div>
 
         <div class="button-container">
-            <button type="submit">Commencer la partie</button>
+            <button *ngIf="roomManagerService.isOrganizer"type="submit">Commencer la partie</button>
         </div>
         <img id="background" src="./assets/background/MenuBackground.jpg" alt="background" />
 

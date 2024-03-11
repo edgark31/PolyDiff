@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
-import { Lobby, PlayerData } from '@common/game-interfaces';
+import { Lobby, Player, PlayerData } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -10,7 +10,10 @@ import { Subject } from 'rxjs';
 })
 export class RoomManagerService {
     password: string;
+    isOrganizer: boolean = false;
     private lobby: Subject<Lobby>;
+
+    private player: Player[];
     private lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
     // private playerNameAvailability: Subject<PlayerNameAvailability>;
@@ -121,6 +124,7 @@ export class RoomManagerService {
     }
 
     createLimitedRoom(roomPayload: Lobby): void {
+        this.isOrganizer = true;
         this.clientSocket.send('lobby', LobbyEvents.Create, roomPayload);
     }
 
@@ -204,10 +208,17 @@ export class RoomManagerService {
         this.clientSocket.lobbySocket.off();
     }
 
-    handleRoomEvents(): void {
+    setPlayers() {
         this.lobby$.subscribe((lobby: Lobby) => {
-            this.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
+            this.player = lobby.players;
         });
+    }
+
+    handleRoomEvents(): void {
+        if (this.player.length >= 1)
+            this.lobby$.subscribe((lobby: Lobby) => {
+                this.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
+            });
 
         this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
             this.lobby.next(lobby);

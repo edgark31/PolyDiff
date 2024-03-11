@@ -12,7 +12,7 @@ import { filter } from 'rxjs';
 export class WaitingRoomComponent implements OnInit {
     lobby: Lobby;
 
-    constructor(public router: Router, private readonly roomManagerService: RoomManagerService) {}
+    constructor(public router: Router, public roomManagerService: RoomManagerService) {}
 
     ngOnInit(): void {
         this.roomManagerService.lobby$.pipe(filter((lobby) => !!lobby)).subscribe((lobby) => {
