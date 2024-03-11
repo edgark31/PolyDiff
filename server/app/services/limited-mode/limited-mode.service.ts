@@ -22,7 +22,7 @@ export class LimitedModeService {
         socket.join(limitedRoom.roomId);
         server.to(limitedRoom.roomId).emit(RoomEvents.RoomLimitedCreated, limitedRoom.roomId);
         limitedRoom.clientGame.mode = playerPayLoad.gameMode;
-        limitedRoom.player1.socketId = socket.id;
+        limitedRoom.player1.accountId = socket.id;
         limitedRoom.timer = limitedRoom.gameConstants.countdownTime;
         this.roomsManagerService.updateRoom(limitedRoom);
     }
@@ -63,7 +63,7 @@ export class LimitedModeService {
         const room = this.roomsManagerService.getCreatedCoopRoom();
         if (!room) return;
         socket.join(room.roomId);
-        room.player2 = { name: playerPayLoad.playerName, socketId: socket.id, differenceData: room.player1.differenceData };
+        room.player2 = { name: playerPayLoad.playerName, accountId: socket.data.accountId, differenceData: room.player1.differenceData };
         this.roomsManagerService.updateRoom(room);
         server.to(room.roomId).emit(RoomEvents.LimitedCoopRoomJoined);
     }

@@ -48,7 +48,7 @@ export class PlayersListManagerService {
     cancelJoiningByPlayerId(socketId: string, gameId: string): void {
         const playerNames = this.joinedPlayersByGameId.get(gameId);
         if (!playerNames) return;
-        const index = playerNames.indexOf(playerNames.find((player) => player.socketId === socketId));
+        const index = playerNames.indexOf(playerNames.find((player) => player.accountId === socketId));
         if (index !== NOT_FOUND) playerNames.splice(index, 1);
         this.joinedPlayersByGameId.set(gameId, playerNames);
     }
@@ -61,14 +61,14 @@ export class PlayersListManagerService {
 
     getGameIdByPlayerId(socketId: string): string {
         return Array.from(this.joinedPlayersByGameId.keys()).find((gameId) =>
-            this.joinedPlayersByGameId.get(gameId).some((player) => player.socketId === socketId),
+            this.joinedPlayersByGameId.get(gameId).some((player) => player.accountId === socketId),
         );
     }
 
     deleteJoinedPlayerByPlayerId(socketId: string, gameId: string) {
         const playerNames = this.joinedPlayersByGameId.get(gameId);
         if (!playerNames) return;
-        const playerIndex = playerNames.findIndex((player) => player.socketId === socketId);
+        const playerIndex = playerNames.findIndex((player) => player.accountId === socketId);
         if (playerIndex !== NOT_FOUND) playerNames.splice(playerIndex, 1);
         this.joinedPlayersByGameId.set(gameId, playerNames);
     }
@@ -110,7 +110,7 @@ export class PlayersListManagerService {
     }
 
     private getPlayerIdByPlayerName(gameId: string, playerName: string): string {
-        return this.joinedPlayersByGameId.get(gameId)?.find((player) => player.name === playerName)?.socketId;
+        return this.joinedPlayersByGameId.get(gameId)?.find((player) => player.name === playerName)?.accountId;
     }
 
     private insertNewTopTime(playerName: string, timer: number, topTimes: PlayerTime[]): number {
