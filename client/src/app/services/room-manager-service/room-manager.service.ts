@@ -225,13 +225,8 @@ export class RoomManagerService {
             });
             console.log('créer');
         } else if (this.wait === true) {
-            this.lobby$.subscribe((lobby: Lobby) => {
-                console.log('tu rejoins' + lobby.lobbyId);
-                this.clientSocket.on('lobby', LobbyEvents.Join, (lobbyq: Lobby) => {
-                    this.lobby.next(lobbyq);
-                });
-
-                console.log('tu rejoins' + lobby.lobbyId);
+            this.clientSocket.on('lobby', LobbyEvents.Join, (lobbyq: Lobby) => {
+                this.lobby.next(lobbyq);
             });
             console.log('tu rejoins');
         }
