@@ -5,34 +5,37 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/socket_service.dart';
 
 class ChatService extends ChangeNotifier {
-  static final List<ChatMessage> _messages = [];
+  static final List<Chat> _globalMessages = [];
   final SocketService socketService = Get.find();
 
-  List<ChatMessage> get messages => List.unmodifiable(_messages);
+  List<Chat> get messages => List.unmodifiable(_globalMessages);
 
-  void sendMessage(ChatMessage message) {
+  void sendGlobalMessage(String message) {
     print('Sending message');
     socketService.send(
-        SocketType.Auth, MessageEvents.GlobalMessage.name, message.toJson());
+      SocketType.Auth,
+      ChannelEvents.SendGlobalMessage.name,
+      message,
+    );
   }
 
-  void addMessage(ChatMessage message) {
-    print('Adding message${message.message}');
-    _messages.add(message);
+  void addGlobalMessage(Chat message) {
+    print('Adding global message saying ${message.raw} from ${message.name}');
+    _globalMessages.add(message);
     notifyListeners();
-    print('Length of messages: ${_messages.length}');
+    print('Length of global messages: ${_globalMessages.length}');
   }
 
   void setListeners() {
-    socketService.on(SocketType.Auth, MessageEvents.GlobalMessage.name, (data) {
+    socketService.on(SocketType.Auth, ChannelEvents.GlobalMessage.name, (data) {
       print('GlobalMessage received: $data');
       if (data is Map<String, dynamic>) {
-        ChatMessage message = ChatMessage.fromJson(data);
-        print('Message: ${message.message}');
+        Chat message = Chat.fromJson(data);
+        print('Message: ${message.raw}');
         print('Tag: ${message.tag}');
-        print('User: ${message.userName}');
+        print('User: ${message.name}');
         print('Timestamp: ${message.timestamp}');
-        addMessage(message);
+        addGlobalMessage(message);
       } else {
         print('Received data is not a Map<String, dynamic>');
       }

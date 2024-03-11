@@ -1,26 +1,27 @@
 import 'package:mobile/constants/enums.dart';
 
-class ChatMessage {
+class Chat {
+  String raw;
+  String name;
   MessageTag tag;
-  String message;
-  String userName;
   String timestamp;
-  ChatMessage(this.tag, this.message, this.userName, this.timestamp);
+  Chat(this.raw, this.name, this.tag, this.timestamp);
 
-  static ChatMessage fromJson(Map<String, dynamic> json) {
-    return ChatMessage(
+  static Chat fromJson(Map<String, dynamic> json) {
+    print('Chat.fromJson: $json');
+    return Chat(
+      json['raw'],
+      json['name'],
       MessageTag.values.firstWhere((element) => element.name == json['tag']),
-      json['message'],
-      json['userName'],
       json['timestamp'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'raw': raw,
+      'name': name,
       'tag': tag.name,
-      'message': message,
-      'userName': userName,
       'timestamp': timestamp,
     };
   }

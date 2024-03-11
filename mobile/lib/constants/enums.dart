@@ -39,3 +39,14 @@ enum GameType {
   Classic,
   Limited,
 }
+
+enum ChannelEvents {
+  SendLobbyMessage,
+  LobbyMessage,
+  SendLocalMessage,
+  LocalMessage,
+  SendGlobalMessage,
+  GlobalMessage,
+  UpdateLog,
+  FriendConnection,
+}
