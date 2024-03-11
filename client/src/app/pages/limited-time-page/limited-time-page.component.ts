@@ -22,6 +22,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     lobbies: Lobby[];
     gameModes: typeof GameModes;
     nPlayersConnected: number;
+    private lobbiesSubscription: Subscription;
     private hasNoGameAvailableSubscription: Subscription;
     private roomIdSubscription: Subscription;
     private isLimitedCoopRoomAvailableSubscription: Subscription;
@@ -38,19 +39,18 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         // this.isStartingGame = false;
         this.nPlayersConnected = 0;
         this.lobbies = [];
+        this.clientSocket.connect(this.welcomeService.account.id as string, 'lobby');
+        this.roomManagerService.handleRoomEvents();
     }
 
     ngOnInit(): void {
-        this.clientSocket.connect(this.welcomeService.account.id as string, 'lobby');
-        this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         // this.roomManagerService.lobbies$.pipe(filter((lobbies) => !!lobbies)).subscribe((lobbies) => {
         //     this.lobbies = Array.from(lobbies.values());
         // });
-        this.roomManagerService.lobbies$.subscribe((lobbies) => {
-            if (lobbies.size) {
-                console.log(lobbies);
-                this.lobbies = Array.from(lobbies.values());
+        this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
+            if (lobbies.length > 0) {
+                this.lobbies = lobbies;
             }
         });
         // this.openDialog();
@@ -64,6 +64,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
 
     ngOnDestroy(): void {
         // this.clientSocket.disconnect('lobby');
+        this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();
         this.hasNoGameAvailableSubscription?.unsubscribe();

@@ -10,8 +10,8 @@
     <div class="game-mode">
         Mode de jeu
     </div>
-    <div class="difference-number">
-        Nombre de différences : {{numberOfDifferences}}
+    <div *ngIf="lobby.mode==='classic'" class="game-mode-image">
+        <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png" />
     </div>
     <button mat-raised-button class="join-button" routerLink="/selection">
         <span id>Rejoindre</span>
