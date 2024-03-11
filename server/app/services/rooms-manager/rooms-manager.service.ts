@@ -35,7 +35,6 @@ export class RoomsManagerService implements OnModuleInit {
         private readonly messageManager: MessageManagerService,
         private readonly historyService: HistoryService,
     ) {
-
         this.rooms = new Map<string, GameRoom>();
         this.modeTimerMap = DEFAULT_GAME_MODES;
     }

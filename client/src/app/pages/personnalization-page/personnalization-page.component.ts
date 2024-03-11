@@ -57,7 +57,6 @@ export class PersonnalizationPageComponent implements OnInit {
     }
 
     onSubmitProfile() {
-
         if (this.welcomeService.selectName !== this.gameManager.username) this.welcomeService.onModifyUser();
         if (!this.welcomeService.chooseImage && this.welcomeService.account.profile.avatar !== this.welcomeService.selectAvatar)
             this.welcomeService.onUpdateAvatar();
