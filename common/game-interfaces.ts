@@ -133,7 +133,7 @@ export interface ChatMessageGlobal {
 }
 
 export interface Player {
-    socketId?: string;
+    accountId?: string;
     name?: string;
     differenceData?: Differences;
 }
@@ -152,7 +152,7 @@ export interface Lobby {
     mode: string; // classique ou limited
     password?: string; // oui
     time?: number;
-    chatLog?: ChatLog; 
+    chatLog?: ChatLog;
     nDifferences?: number; // oui en classique
 }
 
