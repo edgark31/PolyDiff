@@ -10,9 +10,9 @@ import { Subject } from 'rxjs';
 })
 export class RoomManagerService {
     password: string;
-    isOrganizer: boolean = false;
+    isOrganizer: boolean;
     lobby: Subject<Lobby>;
-
+    wait: boolean;
     player: Player[];
     private lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
@@ -108,6 +108,7 @@ export class RoomManagerService {
     }
 
     createClassicRoom(roomPayload: Lobby) {
+        this.isOrganizer = true;
         this.clientSocket.send('lobby', LobbyEvents.Create, roomPayload);
     }
 
@@ -215,19 +216,28 @@ export class RoomManagerService {
     }
 
     handleRoomEvents(): void {
-        this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
-            this.lobby.next(lobby);
-        });
+        console.log('aaa' + this.isOrganizer);
+        if (this.isOrganizer) {
+            this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
+                this.lobby.next(lobby);
+                console.log('créer');
+                console.log('tu crées' + lobby.lobbyId);
+            });
+            console.log('créer');
+        } else if (this.wait === true) {
+            this.lobby$.subscribe((lobby: Lobby) => {
+                console.log('tu rejoins' + lobby.lobbyId);
+                this.clientSocket.on('lobby', LobbyEvents.Join, (lobbyq: Lobby) => {
+                    this.lobby.next(lobbyq);
+                });
 
+                console.log('tu rejoins' + lobby.lobbyId);
+            });
+            console.log('tu rejoins');
+        }
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });
-
-        this.setPlayers();
-        if (this.player?.length >= 1)
-            this.lobby$.subscribe((lobby: Lobby) => {
-                this.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
-            });
 
         // this.clientSocket.on('lobby', LobbyEvents.Join, (playerNames: string[]) => {
         //     this.joinedPlayerNames.next(playerNames);
