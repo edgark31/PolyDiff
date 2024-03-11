@@ -43,7 +43,7 @@ export class PersonnalizationPageComponent implements OnInit {
         this.welcomeService.selectTheme = this.welcomeService.account.profile.theme;
         this.welcomeService.selectLanguage = this.welcomeService.account.profile.language;
         this.sound.correctSoundEffect = this.welcomeService.account.profile.songDifference;
-        console.log(this.welcomeService.account.profile.songDifference.name + 'bbbbbbbbbb');
+
         this.sound.incorrectSoundEffect = this.welcomeService.account.profile.songError;
     }
 
@@ -57,8 +57,6 @@ export class PersonnalizationPageComponent implements OnInit {
     }
 
     onSubmitProfile() {
-        console.log(this.gameManager.username);
-        console.log(this.welcomeService.selectName);
 
         if (this.welcomeService.selectName !== this.gameManager.username) this.welcomeService.onModifyUser();
         if (!this.welcomeService.chooseImage && this.welcomeService.account.profile.avatar !== this.welcomeService.selectAvatar)
