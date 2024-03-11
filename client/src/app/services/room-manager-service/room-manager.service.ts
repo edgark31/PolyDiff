@@ -215,6 +215,7 @@ export class RoomManagerService {
     }
 
     handleRoomEvents(): void {
+        this.setPlayers();
         if (this.player.length >= 1)
             this.lobby$.subscribe((lobby: Lobby) => {
                 this.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');

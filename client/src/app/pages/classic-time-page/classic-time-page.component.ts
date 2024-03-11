@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 // import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
@@ -58,6 +59,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
         public router: Router,
         private readonly roomManagerService: RoomManagerService,
         private readonly dialog: MatDialog,
+        private readonly clientSocket: ClientSocketService,
         // private readonly clientSocket: ClientSocketService,
         // private readonly gameManager: GameManagerService,
         private readonly welcome: WelcomeService,
@@ -67,6 +69,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit(): void {
+        this.clientSocket.connect(this.welcome.account.id as string, 'lobby');
         console.log('ennnddddddd shhhhott' + this.lobbys);
         // this.clientSocket.connect(this.gameManager.username, 'lobby');
         this.updatePagedImages();
