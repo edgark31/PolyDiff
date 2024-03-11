@@ -65,9 +65,11 @@ class LobbyService extends ChangeNotifier {
   void createLobby() {
     print('Creating lobby');
     setIsCreator(true);
+    List<List<Coordinate>> emptyDifferences = [];
     Lobby lobbyCreated = Lobby(
       'initial-lobby-id', // Do not need send lobbyId
       _gameId, // Do not send gameId
+      Game('', '', '', '', '', emptyDifferences), // Do not send gameId
       true, // isAvailable
       [], // players
       [], // observers
