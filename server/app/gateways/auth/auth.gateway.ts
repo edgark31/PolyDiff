@@ -42,7 +42,6 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(ChannelEvents.SendGlobalMessage)
     handleGlobalMessage(@ConnectedSocket() socket: Socket, @MessageBody() message: string) {
-        this.logger.log(socket.data.accountId);
         const chat: Chat = this.messageManager.createMessage(
             this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
             message,
