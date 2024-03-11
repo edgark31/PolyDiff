@@ -11,9 +11,9 @@ import { Subject } from 'rxjs';
 export class RoomManagerService {
     password: string;
     isOrganizer: boolean = false;
-    private lobby: Subject<Lobby>;
+    lobby: Subject<Lobby>;
 
-    private player: Player[];
+    player: Player[];
     private lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
     // private playerNameAvailability: Subject<PlayerNameAvailability>;
@@ -208,19 +208,13 @@ export class RoomManagerService {
         this.clientSocket.lobbySocket.off();
     }
 
-    setPlayers() {
+    async setPlayers() {
         this.lobby$.subscribe((lobby: Lobby) => {
             this.player = lobby.players;
         });
     }
 
     handleRoomEvents(): void {
-        this.setPlayers();
-        if (this.player.length >= 1)
-            this.lobby$.subscribe((lobby: Lobby) => {
-                this.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
-            });
-
         this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
             this.lobby.next(lobby);
         });
@@ -228,6 +222,12 @@ export class RoomManagerService {
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });
+
+        this.setPlayers();
+        if (this.player?.length >= 1)
+            this.lobby$.subscribe((lobby: Lobby) => {
+                this.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
+            });
 
         // this.clientSocket.on('lobby', LobbyEvents.Join, (playerNames: string[]) => {
         //     this.joinedPlayerNames.next(playerNames);
