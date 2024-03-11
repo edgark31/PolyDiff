@@ -9,6 +9,7 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { GameModes } from '@common/enums';
+import { Lobby } from '@common/game-interfaces';
 // import { PlayerData } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
 
@@ -18,6 +19,7 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./limited-time-page.component.scss'],
 })
 export class LimitedTimePageComponent implements OnDestroy, OnInit {
+    lobbies: Lobby[];
     gameModes: typeof GameModes;
     nPlayersConnected: number;
     private hasNoGameAvailableSubscription: Subscription;
@@ -35,11 +37,22 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         this.gameModes = GameModes;
         // this.isStartingGame = false;
         this.nPlayersConnected = 0;
+        this.lobbies = [];
     }
 
     ngOnInit(): void {
         this.clientSocket.connect(this.welcomeService.account.id as string, 'lobby');
         this.roomManagerService.handleRoomEvents();
+        this.roomManagerService.retrieveLobbies();
+        // this.roomManagerService.lobbies$.pipe(filter((lobbies) => !!lobbies)).subscribe((lobbies) => {
+        //     this.lobbies = Array.from(lobbies.values());
+        // });
+        this.roomManagerService.lobbies$.subscribe((lobbies) => {
+            if (lobbies.size) {
+                console.log(lobbies);
+                this.lobbies = Array.from(lobbies.values());
+            }
+        });
         // this.openDialog();
         // this.handleJoinCoopRoom();
         // this.handleNoGameAvailable();

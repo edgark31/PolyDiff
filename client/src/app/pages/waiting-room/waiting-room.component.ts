@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { Lobby } from '@common/game-interfaces';
+import { filter } from 'rxjs';
 
 @Component({
     selector: 'app-waiting-room',
@@ -14,8 +15,9 @@ export class WaitingRoomComponent implements OnInit {
     constructor(public router: Router, private readonly roomManagerService: RoomManagerService) {}
 
     ngOnInit(): void {
-        this.roomManagerService.lobby$.subscribe((lobby) => {
+        this.roomManagerService.lobby$.pipe(filter((lobby) => !!lobby)).subscribe((lobby) => {
             this.lobby = lobby;
+            console.log(this.lobby);
         });
     }
 }

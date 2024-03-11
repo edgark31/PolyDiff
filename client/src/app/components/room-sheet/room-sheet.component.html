@@ -1,13 +1,10 @@
-<img alt="background-image" id="image" src="./assets/gameSheet.png"/>
-<div *ngIf="isLimited" class="game-mode-image">
-    <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png"/>
+<img alt="background-image" id="image" src="./assets/gameSheet.png" />
+<div *ngIf="lobby.mode==='limited'" class="game-mode-image">
+    <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png" />
 </div>
-<div *ngIf="!isLimited" class="game-mode-image">
-    <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png"/>
+<div *ngIf="lobby.mode==='classic'" class="game-mode-image">
+    <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png" />
 </div>
-<button mat-raised-button class="create-button" routerLink="/selection">
-    <span>Créer une salle</span>
-</button>
 <div class="container">
     <div class="game-mode">
         Mode de jeu
@@ -18,10 +15,9 @@
     <button mat-raised-button class="join-button" routerLink="/selection">
         <span id>Rejoindre</span>
     </button>
-    <div class="player-count">{{playerNames.length}}/4 joueurs</div>
+    <div class="player-count">{{lobby.players.length}}/4 joueurs</div>
 </div>
-<div class = "player-container">
-    <div class = "players" *ngFor="let playerName of playerNames">
-        <p class = "player"><span class = "player-name">{{playerName}}</span></p>
+<div class="lyer-container">
+    <div class="layers" *ngFor="let playerName of lobby.players">
+        <p class="player"><span class="player-name">{{playerName.name}}</span></p>
     </div>
-</div>

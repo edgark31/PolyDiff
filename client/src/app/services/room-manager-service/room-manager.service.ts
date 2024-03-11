@@ -99,8 +99,16 @@ export class RoomManagerService {
         return this.lobby.asObservable();
     }
 
+    get lobbies$() {
+        return this.lobbies.asObservable();
+    }
+
     createClassicRoom(roomPayload: Lobby) {
         this.clientSocket.send('lobby', LobbyEvents.Create, roomPayload);
+    }
+
+    retrieveLobbies() {
+        this.clientSocket.send('lobby', LobbyEvents.UpdateLobbys);
     }
 
     joinRoom(lobbyId: string) {
