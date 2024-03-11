@@ -42,7 +42,10 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(ChannelEvents.SendGlobalMessage)
     handleGlobalMessage(@ConnectedSocket() socket: Socket, @MessageBody() message: string) {
-        const chat: Chat = this.messageManager.createMessage(socket.data.username, message);
+        const chat: Chat = this.messageManager.createMessage(
+            this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+            message,
+        );
         this.globalChatLog.chat.push(chat);
 
         socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Sent });
@@ -62,13 +65,12 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
-        const userId = socket.handshake.query.id as string;
-        socket.data.id = userId;
-        this.logger.log(`AUTH de ${userId}`);
+        socket.data.accountId = socket.handshake.query.id as string;
+        this.logger.log(`AUTH de ${socket.data.accountId}`);
     }
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`DEAUTH de ${socket.data.id}`);
-        this.accountManager.deconnexion(socket.data.id);
+        this.logger.log(`DEAUTH de ${socket.data.accountId}`);
+        this.accountManager.deconnexion(socket.data.accountId);
     }
 }

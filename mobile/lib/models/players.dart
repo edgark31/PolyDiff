@@ -1,29 +1,23 @@
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/game.dart';
 
 class Player {
-  String? playerId;
-  String name;
-  Differences differenceData;
+  String? socketId;
+  String? name;
+  Differences? differenceData;
 
-  Player({this.playerId, required this.name, required this.differenceData});
+  Player({this.socketId, required this.name, required this.differenceData});
 
   factory Player.fromJson(Map<String, dynamic> json) => Player(
-        playerId: json['playerId'],
+        socketId: json['socketId'],
         name: json['name'],
-        differenceData: Differences.fromJson(json['differenceData']),
-      );
+        differenceData: json['differenceData'] != null ? Differences.fromJson(json['differenceData']) : null,      );
 
   Map<String, dynamic> toJson() => {
-        'playerId': playerId,
+        'socketId': socketId,
         'name': name,
-        'differenceData': differenceData.toJson(),
+        'differenceData': differenceData?.toJson(),
       };
-}
-
-enum GameModes {
-  Practice,
-  Classic,
-  LimitedTime,
 }
 
 class PlayerData {
@@ -37,8 +31,9 @@ class PlayerData {
   factory PlayerData.fromJson(Map<String, dynamic> json) => PlayerData(
         username: json['username'],
         gameId: json['gameId'],
-        gameMode: GameModes.values
-            .firstWhere((e) => e.toString() == 'GameModes.${json['gameMode']}'),
+        gameMode: GameModes.values.firstWhere((e) =>
+            e.toString() ==
+            'GameModes.${json['GameModes']}'), // TODO : confirm this logic of iterate enums
       );
 
   Map<String, dynamic> toJson() => {

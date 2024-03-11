@@ -4,6 +4,7 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/game_card_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
 
@@ -43,10 +44,8 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
             isLoading
                 ? Center(child: CircularProgressIndicator())
                 : ListView.builder(
-                    shrinkWrap:
-                        true, // Use this if inside a SingleChildScrollView
-                    physics:
-                        NeverScrollableScrollPhysics(), // to disable ListView's scrolling
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: gameCardsFromServer.length,
                     itemBuilder: (context, index) {
                       return buildGameCard(context, gameCardsFromServer[index]);
@@ -86,6 +85,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
 
   Widget buildGameCard(BuildContext context, GameCard card) {
     final imageConverterService = ImageConverterService();
+    final lobbyService = context.watch<LobbyService>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -106,6 +106,8 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
               children: [
                 CustomButton(
                   press: () {
+                    print('Selected game card with gameId: ${card.gameId}');
+                    lobbyService.setGameId(card.gameId);
                     Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
                   },
                   text: 'Choisir cette fiche',
@@ -119,5 +121,3 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     );
   }
 }
-
-

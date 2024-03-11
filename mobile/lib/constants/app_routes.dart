@@ -47,7 +47,7 @@ const String CREATE_ROOM_OPTIONS_ROUTE = '/create/options';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
-    print('The Route is: ${settings.name}');
+    // print('The Route is: ${settings.name}');
 
     switch (settings.name) {
       case '/':

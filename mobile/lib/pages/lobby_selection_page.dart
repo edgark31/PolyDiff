@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
-import 'package:mobile/providers/game_card_provider.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +24,6 @@ class LobbySelectionPage extends StatefulWidget {
 }
 
 class _LobbySelectionPageState extends State<LobbySelectionPage> {
-  late GameCardProvider _gameCardProvider;
-
   bool _isLoading = false;
 
   GameCard defaultGameCard = GameCard(
@@ -41,15 +39,17 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
   @override
   void initState() {
     super.initState();
-    _gameCardProvider = GameCardProvider(baseUrl: API_URL);
   }
 
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
-    String creationRoute = lobbyService.isGameTypeClassic()
+    String creationRoute = lobbyService.isGameModesClassic()
         ? CREATE_ROOM_CARD_ROUTE
         : CREATE_ROOM_OPTIONS_ROUTE;
+    final lobbiesFromServerOfSpecificMode = lobbyService.lobbies
+        .where((lobby) => lobby.mode == lobbyService.gameModes)
+        .toList();
     return Scaffold(
       // drawer: CustomMenuDrawer(),
       // appBar: CustomAppBar(),
@@ -62,25 +62,38 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                       onPressed: () =>
                           Navigator.pushNamed(context, creationRoute),
                       child: Text(
-                        'Créer une salle pour le mode ${lobbyService.gameTypeName}',
+                        'Créer une salle pour le mode ${lobbyService.gameModesName}',
                       )),
-                  buildLobbyCard(context, defaultGameCard,
-                      lobbyService.isGameTypeClassic()),
-                  // You can add more GameCard widgets here or iterate over a list of game cards
+                  lobbiesFromServerOfSpecificMode.isEmpty
+                      ? Text(
+                          'Aucune salle d\'attente disponible pour le Mode ${lobbyService.gameModes}')
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: lobbiesFromServerOfSpecificMode.length,
+                          itemBuilder: (context, index) {
+                            return buildLobbyCard(context,
+                                lobbiesFromServerOfSpecificMode[index]);
+                          },
+                        ),
                 ],
               ),
             ),
     );
   }
 
-  Widget buildLobbyCard(
-      BuildContext context, GameCard card, bool isClassicGame) {
-    String lobbyName = isClassicGame ? card.name : 'Temps limité';
-    String imagePath =
-        isClassicGame ? card.thumbnail : 'assets/images/limitedTime.png';
+  Widget buildLobbyCard(BuildContext context, Lobby lobby) {
+    bool isLobbyClassic = lobby.mode == GameModes.Classic;
+    String lobbyName = isLobbyClassic ? 'Classique' : 'Temps limité';
+    // TODO : add classic game card thumbnail from url with lobby.gameId
+    // Change 'assets/images/placeholderThumbnail.bmp' to dynamic path
+    String imagePath = isLobbyClassic
+        ? 'assets/images/placeholderThumbnail.bmp'
+        : 'assets/images/limitedTime.png';
     String differences =
-        isClassicGame ? 'Différences: ${card.nDifferences}, ' : '';
-    String nPlayers = 'Nombre de joueurs: ${card.numbersOfPlayers}/4';
+        isLobbyClassic ? 'Différences: ${lobby.nDifferences}, ' : '';
+    String nPlayers = 'Nombre de joueurs: ${lobby.players.length}/4';
+    String playerNames = lobby.players.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -104,7 +117,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Text('Joueurs: ${card.playerUsernames.join(', ')}',
+                    child: Text('Joueurs: $playerNames',
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ],
@@ -113,17 +126,29 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
             ButtonBar(
               alignment: MainAxisAlignment.start,
               children: [
-                CustomButton(
-                  press: () {
-                    // TODO: Handle lobby selection
-                    print("Selected lobby with Game ID: ${card.gameId}");
-                    lobbyService.setIsCreator(false);
-                    Navigator.pushNamed(context, LOBBY_ROUTE);
-                  },
-                  text: 'Rejoindre cette salle d\'attente',
-                  widthFactor: 1.5,
-                  backgroundColor: kMidOrange,
-                ),
+                lobby.isAvailable
+                    ? (lobby.players.length == 4
+                        ? const Text('Salle d\'attente pleine')
+                        : CustomButton(
+                            press: () {
+                              print("Selected lobby with id: ${lobby.lobbyId}");
+                              lobbyService.setIsCreator(false);
+                              lobbyService.joinLobby(lobby.lobbyId);
+                              Navigator.pushNamed(context, LOBBY_ROUTE);
+                            },
+                            text: 'Rejoindre cette salle d\'attente',
+                            widthFactor: 1.5,
+                            backgroundColor: kMidOrange,
+                          ))
+                    : CustomButton(
+                        text: 'Observer cette partie',
+                        press: () {
+                          // TODO : Add join as Observer logic
+                          print(
+                              'Player is joining as observer in lobby ${lobby.lobbyId}');
+                        },
+                        backgroundColor: kMidGreen,
+                      ),
               ],
             ),
           ],
