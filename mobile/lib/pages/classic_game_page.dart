@@ -6,9 +6,7 @@ import 'package:mobile/constants/temp_images.dart'; // TODO : replace with speci
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
-import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/canvas.dart';
-import 'package:provider/provider.dart';
 
 class ClassicGamePage extends StatefulWidget {
   static const routeName = CLASSIC_ROUTE;
@@ -43,7 +41,6 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
 
   @override
   Widget build(BuildContext context) {
-    final lobbyService = context.watch<LobbyService>();
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -72,13 +69,6 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
           ),
           // TODO : Add if to only appear if cheating is enabled
           ElevatedButton(onPressed: () {}, child: Text('Mode Triche')),
-          // TODO : Remove after testing lobby socket
-          ElevatedButton(
-              onPressed: () {
-                lobbyService.endLobby();
-                Navigator.pushNamed(context, DASHBOARD_ROUTE);
-              },
-              child: Text('Fin de la partie')),
         ],
       ),
     );
