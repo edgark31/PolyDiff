@@ -133,7 +133,7 @@ export interface ChatMessageGlobal {
 }
 
 export interface Player {
-    socketId?: string;
+    accountId?: string;
     name?: string;
     differenceData?: Differences;
 }
