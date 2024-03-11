@@ -27,6 +27,28 @@ class _LobbyPageState extends State<LobbyPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final lobbyService = context.read<LobbyService>();
+      if (lobbyService.isLobbyStarted) {
+        print('Navigating to GamePage from initState');
+        Navigator.pushNamed(context, CLASSIC_ROUTE);
+      }
+      lobbyService.addListener(_checkLobbyStart);
+    });
+  }
+
+  @override
+  void dispose() {
+    context.read<LobbyService>().removeListener(_checkLobbyStart);
+    super.dispose();
+  }
+
+  void _checkLobbyStart() {
+    final lobbyService = context.read<LobbyService>();
+    if (lobbyService.isLobbyStarted) {
+      print('Navigating to GamePage from _checkLobbyStart');
+      Navigator.pushNamed(context, CLASSIC_ROUTE);
+    }
   }
 
   @override
@@ -80,7 +102,15 @@ class _LobbyPageState extends State<LobbyPage> {
                       Navigator.pushNamed(context, DASHBOARD_ROUTE);
                     },
                     backgroundColor: kMidOrange,
-                  )
+                  ),
+                  // TODO : Remove Start Lobby button when the game starts
+                  CustomButton(
+                    text: 'Start Lobby',
+                    press: () {
+                      lobbyService.startLobby();
+                    },
+                    backgroundColor: kMidOrange,
+                  ),
                 ],
               ),
               // You can add more GameCard widgets here or iterate over a list of game cards

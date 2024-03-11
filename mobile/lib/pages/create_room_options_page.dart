@@ -52,11 +52,11 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
                 : timeSelection(context),
             CustomButton(
               press: () {
-                // TODO: Add creating lobby logic
                 socketService.setup(SocketType.Lobby, infoService.id);
                 lobbyService.setIsCheatEnabled(cheatMode);
                 lobbyService.setGameDuration(gameDuration.round());
-                lobbyService.startLobby();
+                lobbyService.setListeners();
+                lobbyService.createLobby();
                 Navigator.pushNamed(context, LOBBY_ROUTE);
               },
               text: 'Créer la salle de jeu',
