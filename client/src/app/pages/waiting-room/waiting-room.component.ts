@@ -17,7 +17,6 @@ export class WaitingRoomComponent implements OnInit {
     ngOnInit(): void {
         this.roomManagerService.lobby$.pipe(filter((lobby) => !!lobby)).subscribe((lobby) => {
             this.lobby = lobby;
-            console.log(this.lobby);
         });
     }
 }

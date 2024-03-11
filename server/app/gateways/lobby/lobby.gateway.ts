@@ -96,7 +96,8 @@ export class LobbyGateway implements OnGatewayConnection {
 
     @SubscribeMessage(LobbyEvents.UpdateLobbys)
     update(@ConnectedSocket() socket: Socket) {
-        socket.emit(LobbyEvents.UpdateLobbys, this.roomsManager.lobbies);
+        const lobbies = Array.from(this.roomsManager.lobbies.values());
+        socket.emit(LobbyEvents.UpdateLobbys, lobbies);
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
