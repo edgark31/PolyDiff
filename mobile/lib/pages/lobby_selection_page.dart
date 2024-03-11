@@ -116,8 +116,9 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                 CustomButton(
                   press: () {
                     // TODO: Handle lobby selection
-                    print("Selected lobby with Game ID: ${card.gameId}");
+                    print("Selected lobby with LobbyId: ${card.gameId}");
                     lobbyService.setIsCreator(false);
+                    lobbyService.joinLobby('test-lobby-id');
                     Navigator.pushNamed(context, LOBBY_ROUTE);
                   },
                   text: 'Rejoindre cette salle d\'attente',

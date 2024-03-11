@@ -108,6 +108,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
               children: [
                 CustomButton(
                   press: () {
+                    print('Selected game card with gameId: ${card.gameId}');
                     lobbyService.setGameId(card.gameId);
                     Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
                   },

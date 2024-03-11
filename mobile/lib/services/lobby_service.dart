@@ -65,18 +65,22 @@ class LobbyService extends ChangeNotifier {
     print('Creating lobby');
     setIsCreator(true);
     Lobby lobbyCreated = Lobby(
-      'initial-lobby-id', // Do not send lobbyId
+      'initial-lobby-id', // Do not need send lobbyId
       _gameId, // Do not send gameId
-      false,
-      [],
-      [],
+      false, // isAvailable
+      [], // players
+      [], // observers
       _isCheatEnabled,
       isGameModesClassic() ? GameModes.Classic : GameModes.Limited,
-      '',
+      '', // Do not send password
       _gameDuration,
       ChatLog([], 'channel'), // Do not send chat log
       0, // TODO : Get nDifferences from the game
     );
+    print('GameId Lobby Sent: ${lobbyCreated.gameId}');
+    print('IsCheatEnabled Lobby Sent: ${lobbyCreated.isCheatEnabled}');
+    print('Mode Lobby Sent: ${lobbyCreated.mode}');
+    print('Time Lobby Sent: ${lobbyCreated.time}');
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Create.name,
@@ -100,6 +104,15 @@ class LobbyService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void joinLobby(String joinedLobbyId) {
+    print('Joining lobby with id: $joinedLobbyId');
+    socketService.send(
+      SocketType.Lobby,
+      LobbyEvents.Join.name,
+      joinedLobbyId,
+    );
+  }
+
   void setListeners() {
     socketService.on(SocketType.Lobby, LobbyEvents.Create.name, (data) {
       print('Lobbies received from LobbyEvents.Create : $data');
@@ -112,6 +125,7 @@ class LobbyService extends ChangeNotifier {
         print('Observers: ${lobbyCreated.observers}');
         print('IsCheatEnabled: ${lobbyCreated.isCheatEnabled}');
         print('Mode: ${lobbyCreated.mode}');
+        print('Time: ${lobbyCreated.time}');
         print('Password: ${lobbyCreated.password}');
         print('ChatLog: ${lobbyCreated.chatLog}');
         print('NDifferences: ${lobbyCreated.nDifferences}');
@@ -124,17 +138,16 @@ class LobbyService extends ChangeNotifier {
 
     socketService.on(SocketType.Lobby, LobbyEvents.UpdateLobbys.name, (data) {
       print('Lobbies were updated');
-      if (data is Map<String, dynamic>) {
-        print(
-            'Lobbies received from LobbyEvents.UpdateLobbys : $data'); // TODO: Check structure of received data
-        List<Lobby> updatedLobbies = data['lobbies']
-            .map<Lobby>((lobby) => Lobby.fromJson(lobby))
-            .toList(); // TODO: Check if this works
-        print('nlobbies LobbyEvents.Create : ${updatedLobbies.length}');
+      print('Lobbies received from LobbyEvents.UpdateLobbys : $data');
+      if (data is List) {
+        List<Lobby> updatedLobbies = data.map<Lobby>((lobbyData) {
+          return Lobby.fromJson(lobbyData as Map<String, dynamic>);
+        }).toList();
+        print('Number of lobbies updated: ${updatedLobbies.length}');
         _lobbies = updatedLobbies;
         notifyListeners();
       } else {
-        print('Received data is not a Map<String, dynamic>');
+        print('Received data is not a List');
       }
     });
 
