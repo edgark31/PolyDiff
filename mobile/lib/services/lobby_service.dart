@@ -1,14 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/enums.dart';
+import 'package:mobile/models/models.dart';
+import 'package:mobile/services/socket_service.dart';
 
 class LobbyService extends ChangeNotifier {
   static GameType _gameType = GameType.Classic;
   static String _gameTypeName = 'Classique';
   static bool _isCreator = false;
+  static List<Lobby> _lobbies = [];
+  static String _gameId = 'initial-game-id';
+  static bool _isCheatEnabled = false;
+  static int _gameDuration = 0;
 
   GameType get gameType => _gameType;
   String get gameTypeName => _gameTypeName;
   bool get isCreator => _isCreator;
+  List<Lobby> get lobbies => _lobbies;
+  // String get gameId => _gameId;
+
+  final SocketService socketService = Get.find();
+
+  // New Lobby setters
+  void setGameId(String newGameId) {
+    print('Setting game id from $_gameId to $newGameId');
+    _gameId = newGameId;
+  }
+
+  void setIsCheatEnabled(bool newIsCheatEnabled) {
+    print('Setting isCheatEnabled from $_isCheatEnabled to $newIsCheatEnabled');
+    _isCheatEnabled = newIsCheatEnabled;
+  }
+
+  void setGameDuration(int newGameDuration) {
+    print('Setting game duration from $_gameDuration to $newGameDuration');
+    _gameDuration = newGameDuration;
+  }
+
+  // Lobby Selection setters
 
   void setGameType(GameType gameType) {
     print('Setting game type to: $gameType');
@@ -27,6 +56,21 @@ class LobbyService extends ChangeNotifier {
   bool isGameTypeClassic() {
     return _gameType == GameType.Classic;
   }
+
+  void createLobby() {
+    setIsCreator(true);
+    print('Creating lobby');
+    // _lobbies.add(Lobby());
+    // notifyListeners();
+  }
+
+  void startLobby() {
+    // _lobbies.add(Lobby());
+    // notifyListeners();
+  }
+
+  // void setListeners() {
+  //   socketService.on
 
   //   void addPlayer(Player player) {
   //   if (!isGameStarted &&

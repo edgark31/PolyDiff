@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
 
@@ -23,10 +26,13 @@ class CreateRoomOptionsPage extends StatefulWidget {
 
 class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
   bool cheatMode = false;
-  double time = 20;
+  double gameDuration = 30;
+
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
+    final socketService = context.watch<SocketService>();
+    final infoService = context.watch<InfoService>();
 
     return Scaffold(
       // appBar: CustomAppBar(),
@@ -47,7 +53,10 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
             CustomButton(
               press: () {
                 // TODO: Add creating lobby logic
-                lobbyService.setIsCreator(true);
+                socketService.setup(SocketType.Lobby, infoService.id);
+                lobbyService.setIsCheatEnabled(cheatMode);
+                lobbyService.setGameDuration(gameDuration.round());
+                lobbyService.startLobby();
                 Navigator.pushNamed(context, LOBBY_ROUTE);
               },
               text: 'Créer la salle de jeu',
@@ -91,14 +100,14 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
       children: [
         Text('Temps initial de la partie (en secondes)'),
         Slider(
-          value: time,
-          min: 0,
+          value: gameDuration,
+          min: 30,
           max: 60,
           divisions: 60,
-          label: time.round().toString(),
+          label: gameDuration.round().toString(),
           onChanged: (double newValue) {
             setState(() {
-              time = newValue;
+              gameDuration = newValue;
             });
           },
         ),
