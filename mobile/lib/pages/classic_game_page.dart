@@ -109,8 +109,8 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                       print('Abandonner button pressed');
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF2D1E16),
-                      onPrimary: Color(0xFFEF6151),
+                      foregroundColor: Color(0xFFEF6151),
+                      backgroundColor: Color(0xFF2D1E16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
                       ),
