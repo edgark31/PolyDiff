@@ -1,9 +1,9 @@
 <div *ngIf="lobby">
     <img alt="background-image" id="image" src="./assets/gameSheet.png" />
-    <div *ngIf="lobby.mode==='limited'" class="game-mode-image">
+    <div *ngIf="lobby.mode===gameModes.Limited" class="game-mode-image">
         <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png" />
     </div>
-    <div *ngIf="lobby.mode==='classic'" class="game-mode-image">
+    <div *ngIf="lobby.mode===gameModes.Classic" class="game-mode-image">
         <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png" />
     </div>
     <div class="container">

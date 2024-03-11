@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 
 @Component({
@@ -12,6 +13,7 @@ import { Lobby } from '@common/game-interfaces';
 export class RoomSheetComponent {
     @Input() lobby: Lobby;
     numberOfDifferences: number;
+    gameModes: typeof GameModes = GameModes;
 
     constructor(public router: Router) {
         this.numberOfDifferences = 0;

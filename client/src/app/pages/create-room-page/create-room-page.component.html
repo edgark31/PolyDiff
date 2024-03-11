@@ -7,7 +7,7 @@
     </header> -->
     <img id = "background" src = "./assets/background/CreationBackground.jpg" alt="background"/> 
     <div class="flex-column">
-        <button class="settings-button" *ngIf="gameMode==='limited'">
+        <button class="settings-button" *ngIf="mode===gameModes.Classic">
             <span id = "classic">Temps : </span>
             <mat-slider color="warn" thumbLabel [displayWith]="formatLabel" tickInterval="1" min="1" max="120"></mat-slider>
         </button>
