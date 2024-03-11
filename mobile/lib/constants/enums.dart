@@ -40,6 +40,12 @@ enum GameType {
   Limited,
 }
 
+enum GameModes {
+    Classic,
+    Limited,
+}
+
+
 enum ChannelEvents {
   SendLobbyMessage,
   LobbyMessage,
