@@ -118,16 +118,6 @@ export enum LobbyState {
     InGame = 'LobbyInGame',
 }
 
-export enum MatchStatus {
-    waiting = 'waiting',
-    Starting = 'starting',
-    // finished = 'finished',
-}
-
-export enum statusMatch {
-    Waiting = 'waiting',
-}
-
 export enum AccountEvents {
     ChangePseudo = 'ChangePseudo',
     Update = 'Update',
@@ -154,7 +144,7 @@ export enum GameEvents {
 }
 
 export enum GameState {
-    InMatch = 'GameInMatch',
+    InGame = 'GameInGame',
     Left = 'GameHasLeft',
     Abandoned = 'GameHasAbandoned',
 }

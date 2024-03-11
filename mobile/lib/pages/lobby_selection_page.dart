@@ -26,16 +26,6 @@ class LobbySelectionPage extends StatefulWidget {
 class _LobbySelectionPageState extends State<LobbySelectionPage> {
   bool _isLoading = false;
 
-  GameCard defaultGameCard = GameCard(
-    name: 'MASTER RACCOON',
-    gameId: '1',
-    gameMode: GameMode.classic,
-    nDifferences: 7,
-    numbersOfPlayers: 2,
-    thumbnail: 'assets/images/admin raccoon.jpeg',
-    playerUsernames: ["PlayerOne", "PlayerTwo"],
-  );
-
   @override
   void initState() {
     super.initState();
@@ -48,7 +38,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
         ? CREATE_ROOM_CARD_ROUTE
         : CREATE_ROOM_OPTIONS_ROUTE;
     final lobbiesFromServerOfSpecificMode = lobbyService.lobbies
-        .where((lobby) => lobby.mode == lobbyService.gameModes)
+        .where((lobby) =>
+            lobby.mode == lobbyService.gameModes && lobby.players.isNotEmpty)
         .toList();
     return Scaffold(
       // drawer: CustomMenuDrawer(),
@@ -87,6 +78,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     String lobbyName = isLobbyClassic ? 'Classique' : 'Temps limité';
     // TODO : add classic game card thumbnail from url with lobby.gameId
     // Change 'assets/images/placeholderThumbnail.bmp' to dynamic path
+    // Dynamic path should be from server '$BASE_URL/$gameId/original.png';
     String imagePath = isLobbyClassic
         ? 'assets/images/placeholderThumbnail.bmp'
         : 'assets/images/limitedTime.png';

@@ -51,12 +51,6 @@ enum ChannelEvents {
   FriendConnection,
 }
 
-enum LobbyState {
-  Idle,
-  Waiting,
-  InGame,
-}
-
 enum LobbyEvents {
   Create,
   Join,

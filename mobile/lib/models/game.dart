@@ -1,45 +1,39 @@
 class Game {
-  String name;
-  String originalImage;
-  String modifiedImage;
-  int nDifference;
-  String differences;
-  bool isHard;
-  String? id;
+  String lobbyId;
+  String? gameId;
+  String original;
+  String modified;
+  String difficulty;
+  List<List<Coordinate>> differences;
+  Game(
+    this.lobbyId,
+    this.gameId,
+    this.original,
+    this.modified,
+    this.difficulty,
+    this.differences,
+  );
 
-  Game({
-    required this.name,
-    required this.originalImage,
-    required this.modifiedImage,
-    required this.nDifference,
-    required this.differences,
-    required this.isHard,
-    this.id,
-  });
+  factory Game.fromJson(Map<String, dynamic> json) => Game(
+        json['lobbyId'],
+        json['gameId'],
+        json['original'],
+        json['modified'],
+        json['difficulty'],
+        List<List<Coordinate>>.from(json['differences'].map((x) =>
+            List<Coordinate>.from(
+                x.map((x) => Coordinate.fromJson(x)).toList()))),
+      );
 
-  factory Game.fromJson(Map<String, dynamic> json) {
-    return Game(
-      name: json['name'],
-      originalImage: json['originalImage'],
-      modifiedImage: json['modifiedImage'],
-      nDifference: json['nDifference'],
-      differences: json['differences'],
-      isHard: json['isHard'],
-      id: json['_id'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'originalImage': originalImage,
-      'modifiedImage': modifiedImage,
-      'nDifference': nDifference,
-      'differences': differences,
-      'isHard': isHard,
-      '_id': id,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'lobbyId': lobbyId,
+        'gameId': gameId,
+        'original': original,
+        'modified': modified,
+        'difficulty': difficulty,
+        'differences': List<dynamic>.from(differences
+            .map((x) => List<dynamic>.from(x.map((x) => x.toJson())))),
+      };
 }
 
 class Differences {

@@ -12,10 +12,13 @@ class SocketService extends ChangeNotifier {
     print('Setup ${type.name} started for $id');
     switch (type) {
       case SocketType.Auth:
+        String query = 'id=$id';
+        print('Sending a query as $query');
         authSocket = IO.io(BASE_URL, <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'id=$id'
+          'forceNew': true,
+          'query': query
         });
         authSocket.connect();
         setSocket(authSocket);
@@ -24,6 +27,7 @@ class SocketService extends ChangeNotifier {
         lobbySocket = IO.io("$BASE_URL/lobby", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
+          'forceNew': true,
           'query': 'id=$id'
         });
         lobbySocket.connect();
@@ -33,6 +37,7 @@ class SocketService extends ChangeNotifier {
         gameSocket = IO.io("$BASE_URL/game", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
+          'forceNew': true,
           'query': 'id=$id',
         });
         gameSocket.connect();

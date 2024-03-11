@@ -2,19 +2,22 @@ import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/game.dart';
 
 class Player {
-  String? socketId;
+  String? accountId;
   String? name;
   Differences? differenceData;
 
-  Player({this.socketId, required this.name, required this.differenceData});
+  Player({this.accountId, required this.name, required this.differenceData});
 
   factory Player.fromJson(Map<String, dynamic> json) => Player(
-        socketId: json['socketId'],
+        accountId: json['accountId'],
         name: json['name'],
-        differenceData: json['differenceData'] != null ? Differences.fromJson(json['differenceData']) : null,      );
+        differenceData: json['differenceData'] != null
+            ? Differences.fromJson(json['differenceData'])
+            : null,
+      );
 
   Map<String, dynamic> toJson() => {
-        'socketId': socketId,
+        'accountId': accountId,
         'name': name,
         'differenceData': differenceData?.toJson(),
       };

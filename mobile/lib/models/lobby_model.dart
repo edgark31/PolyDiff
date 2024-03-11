@@ -4,6 +4,7 @@ import 'package:mobile/models/models.dart';
 class Lobby {
   String? lobbyId;
   String? gameId;
+  Game? game;
   bool isAvailable;
   List<Player> players;
   final List<Observers> observers;
@@ -17,6 +18,7 @@ class Lobby {
   Lobby(
     this.lobbyId,
     this.gameId,
+    this.game,
     this.isAvailable,
     this.players,
     this.observers,
@@ -35,9 +37,11 @@ class Lobby {
     if (json['players'] == []) {
       json['players'] = List<Player>.empty();
     }
+    Game? game = json['game'] != null ? Game.fromJson(json['game']) : null;
     return Lobby(
       json['lobbyId'],
       json['gameId'],
+      game,
       json['isAvailable'],
       json['players'].map<Player>((player) => Player.fromJson(player)).toList(),
       json['observers']
@@ -56,6 +60,7 @@ class Lobby {
     return {
       'lobbyId': lobbyId,
       'gameId': gameId,
+      'game': game?.toJson(),
       'isAvailable': isAvailable,
       'players': players.map((player) => player.toJson()).toList(),
       'observers': observers.map((observer) => observer.toJson()).toList(),
