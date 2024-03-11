@@ -126,20 +126,28 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
             ButtonBar(
               alignment: MainAxisAlignment.start,
               children: [
-                lobby.players.length == 4
-                    ? const Text('Salle d\'attente pleine')
+                lobby.isAvailable
+                    ? (lobby.players.length == 4
+                        ? const Text('Salle d\'attente pleine')
+                        : CustomButton(
+                            press: () {
+                              print("Selected lobby with id: ${lobby.lobbyId}");
+                              lobbyService.setIsCreator(false);
+                              lobbyService.joinLobby(lobby.lobbyId);
+                              Navigator.pushNamed(context, LOBBY_ROUTE);
+                            },
+                            text: 'Rejoindre cette salle d\'attente',
+                            widthFactor: 1.5,
+                            backgroundColor: kMidOrange,
+                          ))
                     : CustomButton(
+                        text: 'Observer cette partie',
                         press: () {
-                          // TODO: Handle lobby selection
+                          // TODO : Add join as Observer logic
                           print(
-                              "Selected lobby with LobbyId: ${lobby.lobbyId}");
-                          lobbyService.setIsCreator(false);
-                          lobbyService.joinLobby(lobby.lobbyId);
-                          Navigator.pushNamed(context, LOBBY_ROUTE);
+                              'Player is joining as observer in lobby ${lobby.lobbyId}');
                         },
-                        text: 'Rejoindre cette salle d\'attente',
-                        widthFactor: 1.5,
-                        backgroundColor: kMidOrange,
+                        backgroundColor: kMidGreen,
                       ),
               ],
             ),

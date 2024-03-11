@@ -14,6 +14,7 @@ class LobbyService extends ChangeNotifier {
   static int _gameDuration = 0;
   late Lobby _lobby;
   static bool _isLobbyStarted = false;
+  static bool _isPlayerinLobbyPage = false;
 
   GameModes get gameModes => _gameModes;
   String get gameModesName => _gameModesName;
@@ -67,15 +68,15 @@ class LobbyService extends ChangeNotifier {
     Lobby lobbyCreated = Lobby(
       'initial-lobby-id', // Do not need send lobbyId
       _gameId, // Do not send gameId
-      false, // isAvailable
+      true, // isAvailable
       [], // players
       [], // observers
       _isCheatEnabled,
       isGameModesClassic() ? GameModes.Classic : GameModes.Limited,
-      '', // Do not send password
+      '', // Do not need send password
       _gameDuration,
       ChatLog([], 'channel'), // Do not send chat log
-      0, // TODO : Get nDifferences from the game
+      0, // TODO : Get nDifferences from the game ? (not needed for now)
     );
     print('GameId Lobby Sent: ${lobbyCreated.gameId}');
     print('IsCheatEnabled Lobby Sent: ${lobbyCreated.isCheatEnabled}');
@@ -86,15 +87,29 @@ class LobbyService extends ChangeNotifier {
       LobbyEvents.Create.name,
       lobbyCreated.toJson(),
     );
+    print('Setting _isPlayerinLobbyPage to true');
+    _isPlayerinLobbyPage = true;
     // _lobbies.add(Lobby());
     // notifyListeners();
   }
 
   void startLobby() {
-    print('Starting lobby');
-    _isLobbyStarted = true;
-    print('_isLobbyStarted is now : $_isLobbyStarted');
-    notifyListeners();
+    print('Starting lobby and telling the server');
+    setIsCreator(false);
+    // _isLobbyStarted = true;
+    // print('_isLobbyStarted is now : $_isLobbyStarted');
+    // notifyListeners();
+    String? startedLobbyId = _lobby.lobbyId;
+    if (startedLobbyId == null) {
+      print('No started lobby id was provided (!)');
+      return;
+    }
+    print('Starting lobby with id: $startedLobbyId');
+    socketService.send(
+      SocketType.Lobby,
+      LobbyEvents.Start.name,
+      startedLobbyId,
+    );
   }
 
   void endLobby() {
@@ -102,6 +117,7 @@ class LobbyService extends ChangeNotifier {
     _isLobbyStarted = false;
     print('_isLobbyStarted is now : $_isLobbyStarted');
     notifyListeners();
+    socketService.disconnect(SocketType.Lobby);
   }
 
   void joinLobby(String? joinedLobbyId) {
@@ -109,12 +125,34 @@ class LobbyService extends ChangeNotifier {
       print('No joined lobby id was provided (!)');
       return;
     }
+    _lobby = _lobbies.firstWhere((lobby) => lobby.lobbyId == joinedLobbyId);
+    print('Setting _isPlayerinLobbyPage to true');
+    _isPlayerinLobbyPage = true;
+    notifyListeners();
     print('Joining lobby with id: $joinedLobbyId');
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Join.name,
       joinedLobbyId,
     );
+  }
+
+  void leaveLobby() {
+    String? leftLobbyId = _lobby.lobbyId;
+    if (leftLobbyId == null) {
+      print('No left lobby id was provided (!)');
+      return;
+    }
+    print('Leaving lobby with id: ${leftLobbyId}');
+    setIsCreator(false);
+    socketService.send(
+      SocketType.Lobby,
+      LobbyEvents.Leave.name,
+      leftLobbyId,
+    );
+    socketService.disconnect(SocketType.Lobby);
+    print('Setting _isPlayerinLobbyPage to false');
+    _isPlayerinLobbyPage = false;
   }
 
   void setListeners() {
@@ -149,6 +187,11 @@ class LobbyService extends ChangeNotifier {
         }).toList();
         print('Number of lobbies updated: ${updatedLobbies.length}');
         _lobbies = updatedLobbies;
+        if (_isPlayerinLobbyPage) {
+          print('Player is in lobby page, updating the main lobby');
+          _lobby =
+              _lobbies.firstWhere((lobby) => lobby.lobbyId == _lobby.lobbyId);
+        }
         notifyListeners();
       } else {
         print('Received data is not a List');
@@ -156,10 +199,16 @@ class LobbyService extends ChangeNotifier {
     });
 
     socketService.on(SocketType.Lobby, LobbyEvents.Start.name, (data) {
+      // Lobby the client was waiting in was started
       print('Lobby with id $data was started');
       String startedLobbyId = data as String;
       if (startedLobbyId == _lobby.lobbyId) {
-        startLobby();
+        // startLobby();
+        _isLobbyStarted = true;
+        print('_isLobbyStarted is now : $_isLobbyStarted');
+        print('Setting _isPlayerinLobbyPage to false');
+        _isPlayerinLobbyPage = false;
+        notifyListeners();
       }
     });
   }

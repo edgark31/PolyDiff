@@ -55,13 +55,12 @@ class _LobbyPageState extends State<LobbyPage> {
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
     bool isCreator = lobbyService.isCreator;
-    bool canGameStart = true; // TODO: Replace with actual logic
-    bool canGameStartButtonBeVisible = isCreator && canGameStart;
-    List<String> fakePlayerNames = [
-      'Player1name',
-      'Player2name',
-      'Player3name'
-    ]; // TODO: Replace with actual data source
+    int nPlayers = lobbyService.lobby.players.length;
+    bool canGameStart = nPlayers >= 2 && nPlayers <= 4;
+    List<String> playerNames = lobbyService.lobby.players.map((e) {
+      return e.name ?? '';
+    }).toList();
+
     return BackgroundContainer(
       backgroundImagePath:
           SELECTION_BACKGROUND_PATH, // TODO : fix white background
@@ -74,46 +73,40 @@ class _LobbyPageState extends State<LobbyPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // TODO: Add looby + game specific chat logic
+                  // TODO: Add lobby + game specific chat logic
                   ChatBox(),
-                  playersInfos(context, playerNames: fakePlayerNames),
+                  playersInfos(context, playerNames: playerNames),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  canGameStartButtonBeVisible
-                      ? CustomButton(
-                          text: 'Commencer la partie',
-                          press: () {
-                            print('Navigating to GamePage');
-                            // TODO: Implement logic when the game starts
-                            lobbyService.setIsCreator(false);
-                            Navigator.pushNamed(context, CLASSIC_ROUTE);
-                          },
-                          backgroundColor: kMidGreen,
-                        )
+                  isCreator
+                      ? (canGameStart
+                          ? CustomButton(
+                              text: 'Commencer la partie',
+                              press: () {
+                                print(
+                                    'Starting the game Navigating to GamePage');
+                                lobbyService.startLobby();
+                                Navigator.pushNamed(context, CLASSIC_ROUTE);
+                              },
+                              backgroundColor: kMidGreen,
+                            )
+                          : Text(
+                              'Vous devez être entre 2 et 4 joueurs pour commencer la partie'))
                       : Text('En attente du début de la partie...'),
                   CustomButton(
                     text: 'Quitter la salle d\'attente',
                     press: () {
                       print('Quitting lobby and navigating to Dashboard');
-                      lobbyService.setIsCreator(false);
+                      lobbyService.leaveLobby();
                       Navigator.pushNamed(context, DASHBOARD_ROUTE);
-                    },
-                    backgroundColor: kMidOrange,
-                  ),
-                  // TODO : Remove Start Lobby button when the game starts
-                  CustomButton(
-                    text: 'Start Lobby',
-                    press: () {
-                      lobbyService.startLobby();
                     },
                     backgroundColor: kMidOrange,
                   ),
                 ],
               ),
-              // You can add more GameCard widgets here or iterate over a list of game cards
             ],
           ),
         ),
