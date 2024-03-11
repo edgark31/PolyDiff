@@ -153,7 +153,7 @@ export interface Lobby {
     mode: GameModes; // classique ou limited
     password?: string; // oui
     time?: number;
-    chatLog?: ChatLog; 
+    chatLog?: ChatLog;
     nDifferences?: number; // oui en classique
 }
 
