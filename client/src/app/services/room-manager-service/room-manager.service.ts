@@ -205,6 +205,10 @@ export class RoomManagerService {
     }
 
     handleRoomEvents(): void {
+        this.lobby$.subscribe((lobby: Lobby) => {
+            this.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
+        });
+
         this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
             this.lobby.next(lobby);
         });

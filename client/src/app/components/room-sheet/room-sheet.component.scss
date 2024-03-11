@@ -1,166 +1,11 @@
-// #image {
-//     position: absolute;
-//     top: 220px;
-//     left: 50.7%;
-//     transform: translateX(-50%);
-//     width: 65%;
-//     height: 50%;
-// }
-
-// .create-button {
-//     top: 100px;
-//     cursor: pointer;
-//     position: relative;
-//     text-align: center;
-//     font-family: 'Troika', sans-serif;
-//     font-size: 40px;
-//     width: auto;
-//     height: auto;
-//     margin-bottom: 40px;
-//     text-transform: uppercase;
-//     transition: 0.5s;
-//     color: rgba(253, 250, 151, 255);
-//     border: none;
-//     border-radius: 25px;
-//     background-color: #e8a430;
-//     animation: titleFadeIn 1.5s ease-in-out;
-//     z-index: 1;
-// }
-
-.create-button:hover {
-    background-color: #db9110;
-    color: black;
-    transform: scale(1.05);
-}
-
-// .join-button {
-//     top: 220px;
-//     left: 10px;
-//     cursor: pointer;
-//     position: relative;
-//     text-align: center;
-//     font-family: 'Troika', sans-serif;
-//     font-size: 50px;
-//     width: 280px;
-//     height: 280px;
-//     margin-bottom: 40px;
-//     text-transform: uppercase;
-//     transition: 0.5s;
-//     color: rgba(253, 250, 151, 255);
-//     border: none;
-//     border-radius: 5px;
-//     background-color: #e8a430;
-//     animation: titleFadeIn 1.5s ease-in-out;
-//     z-index: 1;
-// }
-
-.join-button:hover {
-    background-color: #db9110;
-    color: black;
-    transform: scale(1.05);
-}
-
-// .difference-number {
-//     top: 200px;
-//     font-weight: bold;
-//     position: relative;
-//     text-align: center;
-//     animation: titleFadeIn 1s ease-in-out;
-//     z-index: 1;
-//     color: white;
-//     font-size: 30px;
-//     font-family: 'Troika', sans-serif;
-//     -webkit-text-stroke: 1px black;
-// }
-
-// .game-mode {
-//     top: 220px;
-//     right: 350px;
-//     font-weight: bold;
-//     position: relative;
-//     text-align: center;
-//     animation: titleFadeIn 1s ease-in-out;
-//     z-index: 1;
-//     color: white;
-//     font-size: 30px;
-//     font-family: 'Troika', sans-serif;
-//     -webkit-text-stroke: 1px black;
-// }
-
-.player-count {
-    bottom: -6px;
-    left: 250px;
-    font-weight: bold;
-    position: relative;
-    text-align: center;
-    animation: titleFadeIn 1s ease-in-out;
-    z-index: 1;
-    color: white;
-    font-size: 15px;
-    font-family: 'Troika', sans-serif;
-    -webkit-text-stroke: 1px black;
-}
-
-// .player-container {
-//     bottom: 100px;
-//     left: 350px;
-//     font-weight: bold;
-//     position: relative;
-//     text-align: center;
-//     animation: titleFadeIn 1s ease-in-out;
-//     z-index: 1;
-//     color: white;
-//     font-size: 30px;
-//     font-family: 'Troika', sans-serif;
-//     -webkit-text-stroke: 1px black;
-// }
-
-// .player {
-//     padding: 15px;
-// }
-
-// .game-mode-image {
-//     position: relative;
-//     right: 330px;
-//     top: 320px;
-//     width: 1px;
-//     height: 1px;
-//     z-index: 2;
-//     object-fit: cover;
-// }
-
 #image {
     position: absolute;
-    margin-bottom: 70px;
+    top: 220px;
     left: 50.7%;
     transform: translateX(-50%);
-    width: 32.5%;
-    height: 25%;
+    width: 65%;
+    height: 50%;
 }
-
-#image:first-child {
-    top: 100px;
-}
-
-#image:nth-child(2) {
-    top: 150px; /* Augmente de 50px par rapport au premier enfant */
-}
-
-#image:nth-child(3) {
-    top: 200px; /* Encore 50px plus bas que le deuxième enfant, et ainsi de suite */
-}
-
-// .image {
-//     position: absolute;
-
-//     left: 50.7%;
-//     transform: translateX(-50%);
-//     width: 32.5%;
-//     height: 25%;
-//     background-image: url('../../../assets/gameSheet.png');
-//     background-size: cover;
-//     background-repeat: no-repeat;
-// }
 
 .create-button {
     top: 100px;
@@ -168,7 +13,7 @@
     position: relative;
     text-align: center;
     font-family: 'Troika', sans-serif;
-    font-size: 20px;
+    font-size: 40px;
     width: auto;
     height: auto;
     margin-bottom: 40px;
@@ -182,6 +27,12 @@
     z-index: 1;
 }
 
+.create-button:hover {
+    background-color: #db9110;
+    color: black;
+    transform: scale(1.05);
+}
+
 .join-button {
     top: 220px;
     left: 10px;
@@ -189,9 +40,9 @@
     position: relative;
     text-align: center;
     font-family: 'Troika', sans-serif;
-    font-size: 25px;
-    width: 140px;
-    height: 140px;
+    font-size: 50px;
+    width: 280px;
+    height: 280px;
     margin-bottom: 40px;
     text-transform: uppercase;
     transition: 0.5s;
@@ -203,6 +54,12 @@
     z-index: 1;
 }
 
+.join-button:hover {
+    background-color: #db9110;
+    color: black;
+    transform: scale(1.05);
+}
+
 .difference-number {
     top: 200px;
     font-weight: bold;
@@ -211,49 +68,63 @@
     animation: titleFadeIn 1s ease-in-out;
     z-index: 1;
     color: white;
-    font-size: 15px;
+    font-size: 30px;
     font-family: 'Troika', sans-serif;
-    -webkit-text-stroke: 0.5px black;
+    -webkit-text-stroke: 1px black;
 }
 
 .game-mode {
     top: 220px;
-    right: 230px;
+    right: 350px;
     font-weight: bold;
     position: relative;
     text-align: center;
     animation: titleFadeIn 1s ease-in-out;
     z-index: 1;
     color: white;
-    font-size: 15px;
+    font-size: 30px;
     font-family: 'Troika', sans-serif;
-    -webkit-text-stroke: 0.5px black;
+    -webkit-text-stroke: 1px black;
+}
+
+.player-count {
+    bottom: 138px;
+    left: 350px;
+    font-weight: bold;
+    position: relative;
+    text-align: center;
+    animation: titleFadeIn 1s ease-in-out;
+    z-index: 1;
+    color: white;
+    font-size: 30px;
+    font-family: 'Troika', sans-serif;
+    -webkit-text-stroke: 1px black;
 }
 
 .player-container {
-    bottom: -28px;
-    left: 250px;
+    bottom: 100px;
+    left: 350px;
     font-weight: bold;
     position: relative;
     text-align: center;
     animation: titleFadeIn 1s ease-in-out;
     z-index: 1;
     color: white;
-    font-size: 15px;
+    font-size: 30px;
     font-family: 'Troika', sans-serif;
-    -webkit-text-stroke: 0.5px black;
+    -webkit-text-stroke: 1px black;
 }
 
 .player {
-    padding: 7.5px;
+    padding: 15px;
 }
 
 .game-mode-image {
     position: relative;
-    right: 160px;
-    top: 300px;
-    width: 0.5px;
-    height: 0.5px;
+    right: 330px;
+    top: 320px;
+    width: 1px;
+    height: 1px;
     z-index: 2;
     object-fit: cover;
 }

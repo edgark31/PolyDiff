@@ -17,7 +17,8 @@ import { RecoverPasswordPageComponent } from '@app/pages/recover-password-page/r
 import { RegistrationPageComponent } from '@app/pages/registration-page/registration-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
 import { AdminGuard } from '@app/services/adminguard/admin.guard.service';
-import { JoinedPlayersComponent } from './../pages/joined-player/joined-player.component';
+
+import { WaitingRoomComponent } from '@app/pages/waiting-room/waiting-room.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -37,7 +38,7 @@ export const routes: Routes = [
     { path: 'profil', component: ProfilPageComponent },
     { path: 'classic', component: ClassicTimePageComponent },
 
-    { path: 'waiting-room', component: JoinedPlayersComponent },
+    { path: 'waiting-room', component: WaitingRoomComponent },
     { path: 'admin', component: ConfigPageComponent, canActivate: [AdminGuard] },
     { path: '**', redirectTo: '/login' },
 ];

@@ -3,13 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
-import { NoGameAvailableDialogComponent } from '@app/components/no-game-available-dialog/no-game-available-dialog.component';
 // import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
-import { Subscription, filter } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-classic-time-page',
@@ -28,7 +27,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
             observers: [],
             isAvailable: true,
             isCheatEnabled: true,
-            mode: 'classic',
+            mode: GameModes.Classic,
         },
         {
             lobbyId: '123',
@@ -37,7 +36,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
             observers: [],
             isAvailable: true,
             isCheatEnabled: true,
-            mode: 'classic',
+            mode: GameModes.Classic,
         },
         {
             lobbyId: '123',
@@ -46,7 +45,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
             observers: [],
             isAvailable: true,
             isCheatEnabled: true,
-            mode: 'classic',
+            mode: GameModes.Classic,
         },
     ];
     totalPages: number;
@@ -76,8 +75,8 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
 
         // this.totalPages = Math.ceil(this.lobbys.length / this.pageSize);
         // this.openDialog();
-        this.handleJoinCoopRoom();
-        this.handleNoGameAvailable();
+        // this.handleJoinCoopRoom();
+        // this.handleNoGameAvailable();
     }
 
     previousPage() {
@@ -144,18 +143,18 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
     //         });
     // }
 
-    private handleJoinCoopRoom() {
-        this.isLimitedCoopRoomAvailableSubscription = this.roomManagerService.isLimitedCoopRoomAvailable$
-            .pipe(filter((isRoomAvailable) => isRoomAvailable))
-            .subscribe(() => {
-                this.router.navigate(['/game']);
-                this.dialog.closeAll();
-            });
-    }
+    // private handleJoinCoopRoom() {
+    //     this.isLimitedCoopRoomAvailableSubscription = this.roomManagerService.isLimitedCoopRoomAvailable$
+    //         .pipe(filter((isRoomAvailable) => isRoomAvailable))
+    //         .subscribe(() => {
+    //             this.router.navigate(['/game']);
+    //             this.dialog.closeAll();
+    //         });
+    // }
 
-    private handleNoGameAvailable() {
-        this.hasNoGameAvailableSubscription = this.roomManagerService.hasNoGameAvailable$.subscribe((hasNoGameAvailable) => {
-            if (hasNoGameAvailable) this.dialog.open(NoGameAvailableDialogComponent, { disableClose: true, panelClass: 'dialog' });
-        });
-    }
+    // private handleNoGameAvailable() {
+    //     this.hasNoGameAvailableSubscription = this.roomManagerService.hasNoGameAvailable$.subscribe((hasNoGameAvailable) => {
+    //         if (hasNoGameAvailable) this.dialog.open(NoGameAvailableDialogComponent, { disableClose: true, panelClass: 'dialog' });
+    //     });
+    // }
 }

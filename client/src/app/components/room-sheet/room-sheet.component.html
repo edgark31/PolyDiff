@@ -1,36 +1,29 @@
 <img alt="background-image" id="image" src="./assets/gameSheet.png"/>
-<div *ngIf="welcome.isLimited" class="game-mode-image">
+<div *ngIf="lobby.mode===gameModes.Limited" class="game-mode-image">
     <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png"/>
 </div>
-<div *ngIf="!welcome.isLimited" class="game-mode-image">
-    <img alt="image" id="game-mode-image" src="./assets/LimitedTimeBack.png"/>
+<div *ngIf="lobby.mode===gameModes.Classic"class="game-mode-image">
+    <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png"/>
 </div>
 
 <div class="container">
     <div class="game-mode">
         Mode de jeu
     </div>
-    <div *ngIf="lobby.mode==='classic'" class="game-mode-image">
-        <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png" />
+    <div class="difference-number">
+        Nombre de différences : {{numberOfDifferences}}
     </div>
-    <button mat-raised-button class="join-button" routerLink="/selection">
+    <button mat-raised-button class="join-button" (click)="manageGames(lobby)">
         <span id>Rejoindre</span>
     </button>
-     <div class="player-count">{{lobby.players.length}}/4 joueurs</div>
+    <div class="player-count">{{lobby.players.length}}/4 joueurs</div>
 </div>
 <div class = "player-container">
-    <div class = "players"  *ngFor="let playerName of lobby.players">
+    <div class = "players" *ngFor="let playerName of lobby.players">
         <p class = "player"><span class = "player-name">{{playerName.name}}</span></p>
     </div>
 </div>
 
-<div class="image"></div>
-<div *ngIf="welcome.isLimited" class="game-mode-image">
-    <img alt="image" id="game-mode-image" src="./assets/LimitedTime.png"/>
-</div>
-<div *ngIf="!welcome.isLimited" class="game-mode-image">
-    <img alt="image" id="game-mode-image" src="./assets/LimitedTimeBack.png"/>
-</div>
 
 <!-- <div class="container">
     <div class="game-mode">

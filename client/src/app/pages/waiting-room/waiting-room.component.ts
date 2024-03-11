@@ -18,5 +18,7 @@ export class WaitingRoomComponent implements OnInit {
         this.roomManagerService.lobby$.pipe(filter((lobby) => !!lobby)).subscribe((lobby) => {
             this.lobby = lobby;
         });
+
+        this.roomManagerService.handleRoomEvents();
     }
 }
