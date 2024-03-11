@@ -149,7 +149,7 @@ export interface Lobby {
     players: Player[];
     observers: Observers[];
     isCheatEnabled: boolean;
-    mode: string;
+    mode: GameModes;
     password?: string;
     chatLog?: ChatLog;
     nDifferences?: number;
