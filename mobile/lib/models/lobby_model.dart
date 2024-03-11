@@ -37,10 +37,11 @@ class Lobby {
     if (json['players'] == []) {
       json['players'] = List<Player>.empty();
     }
+    Game? game = json['game'] != null ? Game.fromJson(json['game']) : null;
     return Lobby(
       json['lobbyId'],
       json['gameId'],
-      json['game'],
+      game,
       json['isAvailable'],
       json['players'].map<Player>((player) => Player.fromJson(player)).toList(),
       json['observers']
