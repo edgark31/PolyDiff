@@ -89,7 +89,7 @@ class ModifiedCanvas extends GameCanvas {
                   GameCanvas.tabletScalingRatio;
               gameAreaService.validateCoord(
                   Coordinate(x: x.value.toInt(), y: y.value.toInt()),
-                  tempGameManager.testConvert2(),
+                  tempGameManager.testConvert(),
                   tempGameManager.testConvert2(),
                   false);
               print('sent: x:${x.value.toInt()}, y:${y.value.toInt()}');
