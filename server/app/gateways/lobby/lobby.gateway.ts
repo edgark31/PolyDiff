@@ -29,10 +29,11 @@ export class LobbyGateway implements OnGatewayConnection {
         socket.data.state = LobbyState.Waiting;
         lobby.lobbyId = socket.data.accountId;
         socket.join(lobby.lobbyId);
-        lobby.players.push({
+        const player: Player = {
             accountId: socket.data.accountId,
             name: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
-        } as Player);
+        };
+        lobby.players.push(player);
         lobby.chatLog = { chat: [], channelName: 'lobby' } as ChatLog;
         this.roomsManager.lobbies.set(lobby.lobbyId, lobby);
         socket.emit(LobbyEvents.Create, this.roomsManager.lobbies.get(lobby.lobbyId));
@@ -46,10 +47,11 @@ export class LobbyGateway implements OnGatewayConnection {
     join(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.data.state = LobbyState.Waiting;
         socket.join(lobbyId);
-        this.roomsManager.lobbies.get(lobbyId).players.push({
+        const player: Player = {
             accountId: socket.data.accountId,
             name: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
-        } as Player);
+        };
+        this.roomsManager.lobbies.get(lobbyId).players.push(player);
         socket.emit(LobbyEvents.Join, this.roomsManager.lobbies.get(lobbyId));
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} rejoint le lobby ${lobbyId}`);
@@ -57,12 +59,25 @@ export class LobbyGateway implements OnGatewayConnection {
 
     // un joueur quitte le lobby intentionnellement
     @SubscribeMessage(LobbyEvents.Leave)
-    leave(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+    async leave(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.data.state = LobbyState.Idle;
+        // Si t'es le host
+        if (socket.data.accountId === this.roomsManager.lobbies.get(lobbyId).players[0].accountId) {
+            const sockets = await this.server.in(lobbyId).fetchSockets();
+            for (const clientSocket of sockets) {
+                clientSocket.leave(lobbyId);
+                clientSocket.emit(LobbyEvents.Leave);
+            }
+            this.roomsManager.lobbies.delete(lobbyId);
+            this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
+            this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} supprime le lobby ${lobbyId}`);
+            return;
+        }
         socket.leave(lobbyId);
         this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
             .get(lobbyId)
             .players.filter((player) => player.accountId !== socket.data.accountId);
+        socket.emit(LobbyEvents.Leave);
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} quitte le lobby ${lobbyId}`);
     }
