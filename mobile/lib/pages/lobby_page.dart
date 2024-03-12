@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/chat_box.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
@@ -24,6 +26,7 @@ class LobbyPage extends StatefulWidget {
 }
 
 class _LobbyPageState extends State<LobbyPage> {
+  final ChatService chatService = Get.find();
   @override
   void initState() {
     super.initState();
@@ -42,6 +45,7 @@ class _LobbyPageState extends State<LobbyPage> {
   void _checkLobbyState() {
     final lobbyService = context.read<LobbyService>();
     if (lobbyService.isLobbyStarted) {
+      chatService.clearLobbyMessages();
       print('Navigating to GamePage from _checkLobbyStart');
       Navigator.pushNamed(context, CLASSIC_ROUTE);
     } else if (!lobbyService.isCurrentLobbyInLobbies()) {
