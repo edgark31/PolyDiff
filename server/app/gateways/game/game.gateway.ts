@@ -37,6 +37,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         private readonly limitedMode: LimitedModeService,
     ) {}
 
+    // -------------------------- CLASSIC MODE && LIMITED MODE --------------------------
     @SubscribeMessage(GameEvents.Start)
     async startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         // this.roomsManager.startGame(socket, lobbyId);
@@ -57,12 +58,16 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
                         differences: JSON.parse(game.differences) as Coordinate[][],
                     };
                 });
-                this.server.to(lobbyId).emit(GameEvents.Start, this.roomsManager.lobbies.get(lobbyId).game);
+                this.server.to(lobbyId).emit(GameEvents.Start, this.roomsManager.lobbies.get(lobbyId));
+                this.logger.log(`Game started in lobby ${lobbyId}`);
+            } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
+                // Start Limited Mode
+                this.logger.log('Not implemented yet, sorry... Please dont hurt me 😭');
             }
         }
     }
 
-    // Juste pour limited
+    // -------------------------- LIMITED MODE --------------------------
     @SubscribeMessage(GameEvents.Start)
     nextGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {}
 
