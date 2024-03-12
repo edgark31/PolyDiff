@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -33,3 +35,4 @@ describe('MainPageComponent', () => {
         expect(component.configRoute).toEqual('/admin');
     });
 });
+>>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8
