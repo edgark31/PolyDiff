@@ -34,7 +34,7 @@ export class ModalAccessMatchComponent {
 
     onSubmitAccess() {
         this.isAccessPassInvalid = false;
-        this.dialogRef.close();
+        // rajouter le socket
         this.router.navigate(['/waiting-room']);
     }
 
