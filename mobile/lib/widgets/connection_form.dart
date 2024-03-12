@@ -100,7 +100,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       if (serverErrorMessage == null) {
                         socketService.setup(
                             SocketType.Auth, infoService.id);
-                        chatService.setListeners(); // TODO : move this (maybe)
+                        chatService.setGlobalChatListeners(); // TODO : move this (maybe)
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       } else {
                         setState(() {

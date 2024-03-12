@@ -77,7 +77,7 @@ class LobbyService extends ChangeNotifier {
       isGameModesClassic() ? GameModes.Classic : GameModes.Limited,
       '', // Do not need send password
       _gameDuration,
-      ChatLog([], 'channel'), // Do not send chat log
+      null, // Do not send chat log
       0, // TODO : Get nDifferences from the game ? (not needed for now)
     );
     print('GameId Lobby Sent: ${lobbyCreated.gameId}');

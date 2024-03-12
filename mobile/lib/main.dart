@@ -35,12 +35,12 @@ void main() async {
       return infoService;
     }),
     ChangeNotifierProvider(create: (context) {
-      ChatService chatService = Get.find();
-      return chatService;
-    }),
-    ChangeNotifierProvider(create: (context) {
       LobbyService lobbyService = Get.find();
       return lobbyService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      ChatService chatService = Get.find();
+      return chatService;
     }),
     ChangeNotifierProvider(create: (context) {
       GameCardService gameCardService = Get.find();
@@ -56,8 +56,8 @@ void initializeServices() {
   Get.put(SocketService());
   Get.put(GameAreaService());
   Get.put(InfoService());
-  Get.put(ChatService());
   Get.put(LobbyService());
+  Get.put(ChatService());
   Get.put(GameCardService());
 }
 

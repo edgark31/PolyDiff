@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
@@ -39,9 +40,14 @@ class _ChatBoxState extends State<ChatBox> {
     // user avatar
     AvatarProvider.instance.setAccountAvatarUrl(username);
     final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
-
-    final messages = chatService.messages;
-
+    String? route = ModalRoute.of(context)?.settings.name;
+    bool isGlobalChat = true;
+    if (route != null) {
+      isGlobalChat = route == CHAT_ROUTE;
+    }
+    print('Current page is $route');
+    final messages =
+        isGlobalChat ? chatService.globalMessages : chatService.lobbyMessages;
     return Container(
       width: 500,
       height: 700,
@@ -70,9 +76,10 @@ class _ChatBoxState extends State<ChatBox> {
                 Text(
                   "ZONE DE CLAVARDAGE",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
               ],
             ),
@@ -94,9 +101,10 @@ class _ChatBoxState extends State<ChatBox> {
                           : CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                avatarUrl), // TODO : Also show avatar of sender
-                            radius: 15.0),
+                          backgroundImage: NetworkImage(
+                              avatarUrl), // TODO : Also show avatar of sender
+                          radius: 15.0,
+                        ),
                         Text(
                           messages[index].name,
                           style: TextStyle(color: Colors.black),
@@ -156,7 +164,11 @@ class _ChatBoxState extends State<ChatBox> {
                     onPressed: () {
                       String message = messageController.text;
                       if (message.isNotEmpty) {
-                        chatService.sendGlobalMessage(message);
+                        if (isGlobalChat) {
+                          chatService.sendGlobalMessage(message);
+                        } else {
+                          chatService.sendLobbyMessage(message);
+                        }
                         setState(() {});
                         messageController.clear();
                         WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -21,7 +21,7 @@ class GameCardService extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         String gameCardsServerString = response.body;
-        List<dynamic> gameCardsJson = jsonDecode(response.body);
+        List<dynamic> gameCardsJson = jsonDecode(gameCardsServerString);
         _gameCards = gameCardsJson
             .map((gameCardJson) => GameCard.fromJson(gameCardJson))
             .toList();
