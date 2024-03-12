@@ -122,12 +122,13 @@ export class RoomManagerService {
     off(): void {
         this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
         this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
-        this.message.unsubscribe();
+        // this.message.unsubscribe();
     }
 
     updateLog() {
         this.lobby$.pipe(filter((lobby) => !!lobby)).subscribe((lobby: Lobby) => {
             if (lobby.chatLog) lobby.chatLog.chat = this.retrieveMessage();
+            this.clientSocket.send('lobby', LobbyEvents.UpdateLobbys);
         });
     }
 
@@ -136,8 +137,12 @@ export class RoomManagerService {
         this.messages.subscribe((messages: Chat[]) => {
             chats = messages;
         });
-        console.log("chatttttttttttttt"+ chats)
-        return chats;
+
+        chats.forEach((chat) => {
+            console.log("chatttttttttttttt"+ chat.raw)
+        });
+
+      return chats;
     }
     sendMessage(lobbyId: string | undefined, message: string): void {
         this.clientSocket.send('lobby', ChannelEvents.SendLobbyMessage, { lobbyId, message });
