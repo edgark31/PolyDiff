@@ -46,6 +46,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         this.nPlayersConnected = 0;
         this.lobbies = [];
         this.clientSocket.connect(this.welcomeService.account.id as string, 'lobby');
+        console.log(welcomeService.account.credentials.username + 'est connecté');
         this.roomManagerService.handleRoomEvents();
     }
 

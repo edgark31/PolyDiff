@@ -5,6 +5,7 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 import { LobbyEvents } from '@common/enums';
 import { Chat, Lobby } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
+import { WelcomeService } from './../../services/welcome-service/welcome.service';
 @Component({
     selector: 'app-waiting-room',
     templateUrl: './waiting-room.component.html',
@@ -15,7 +16,12 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     messages: Chat[] = [];
     chatSubscription: Subscription;
     lobbySubscription: Subscription;
-    constructor(public router: Router, public roomManagerService: RoomManagerService, private clientSocketService: ClientSocketService) {}
+    constructor(
+        public router: Router,
+        public roomManagerService: RoomManagerService,
+        private clientSocketService: ClientSocketService,
+        public welcome: WelcomeService,
+    ) {}
 
     ngOnInit(): void {
         this.roomManagerService.retrieveLobbies();
@@ -30,7 +36,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
                 this.receiveMessage(message);
             });
             this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {
-                this.router.navigate(['/game-mode']);
+                this.router.navigate(['/limited']);
             });
         }
         this.roomManagerService.handleRoomEvents();
@@ -52,11 +58,12 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         if (this.clientSocketService.isSocketAlive('lobby')) {
             this.roomManagerService.off();
             this.clientSocketService.disconnect('lobby');
-            cons;
+            console.log(this.welcome.account.credentials.username + 'est déconnecté');
+            this.lobbySubscription?.unsubscribe();
+            this.chatSubscription?.unsubscribe();
         }
-        this.lobbySubscription?.unsubscribe();
-        this.chatSubscription?.unsubscribe();
-
+        if (this.roomManagerService.isOrganizer) this.clientSocketService.lobbySocket.off(LobbyEvents.Create);
+        else this.clientSocketService.lobbySocket.off(LobbyEvents.Join);
         this.roomManagerService.wait = false;
     }
 }
