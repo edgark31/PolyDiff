@@ -29,6 +29,9 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.chatSubscription = this.roomManagerService.message$.subscribe((message: Chat) => {
                 this.receiveMessage(message);
             });
+            this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {
+                this.router.navigate(['/game-mode']);
+            });
         }
         this.roomManagerService.handleRoomEvents();
     }
