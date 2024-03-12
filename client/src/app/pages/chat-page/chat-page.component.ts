@@ -23,6 +23,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         if (this.clientSocketService.isSocketAlive('auth')) {
             this.globalChatService.manage();
+            this.globalChatService.updateLog();
             this.chatSubscription = this.globalChatService.message$.subscribe((message: Chat) => {
                 this.receiveMessage(message);
             });
