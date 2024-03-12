@@ -18,7 +18,6 @@ class ForegroundPtModified extends CustomPainter {
     }
     if (gameAreaService.rightErrorCoord.isNotEmpty) {
       print('called error');
-      print(gameAreaService.rightErrorCoord[0].x);
       final textPainter = TextPainter(
         text: TextSpan(
           text: 'ERREUR',

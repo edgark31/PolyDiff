@@ -9,7 +9,6 @@ class GameAreaService extends ChangeNotifier {
   GameAreaService();
   Coordinate? currentCoord;
   List<Coordinate> coordinates = [];
-  List<Coordinate> cheatCoordinates = [];
   List<Coordinate> leftErrorCoord = [];
   List<Coordinate> rightErrorCoord = [];
   Path? blinkingDifference;
@@ -17,6 +16,7 @@ class GameAreaService extends ChangeNotifier {
   Paint blinkingColor = Paint()
     ..color = Colors.green
     ..style = PaintingStyle.fill;
+  bool isCheatMode = false;
 
   // This only validates the smile and the left circle
   // This won't be here when the connection between client and server is done
@@ -129,21 +129,27 @@ class GameAreaService extends ChangeNotifier {
   }
 
   Future<void> toggleCheatMode(List<Coordinate> coords) async {
-    cheatCoordinates.addAll(coords);
-    notifyListeners();
     print('Enter toggleCheatMode');
-    initCheatPath(coords);
-    if (cheatBlinkingDifference == null) return;
+    isCheatMode = !isCheatMode;
+    if (isCheatMode) {
+      initCheatPath(coords);
+      if (cheatBlinkingDifference == null) return;
 
-    final Path blinkingCheatPath = cheatBlinkingDifference!;
-    const int timeToBlinkMs = 150;
-    const int cheatModeWaitMs = 250;
+      final Path blinkingCheatPath = cheatBlinkingDifference!;
+      const int timeToBlinkMs = 150;
+      const int cheatModeWaitMs = 250;
 
-    for (int i = 0; i < 10; i++) {
-      await showCheatDifference(blinkingCheatPath, timeToBlinkMs);
-      await hideCheatDifference(cheatModeWaitMs);
+      while (isCheatMode) {
+        await showCheatDifference(blinkingCheatPath, timeToBlinkMs);
+        await hideCheatDifference(cheatModeWaitMs);
+        if (!isCheatMode) {
+          break;
+        }
+      }
+    } else {
+      resetCheatBlinkingDifference();
+      return;
     }
-
     resetCheatBlinkingDifference();
   }
 
