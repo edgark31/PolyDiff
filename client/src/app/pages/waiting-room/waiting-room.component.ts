@@ -36,7 +36,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     onQuit(): void {
         this.router.navigate(['/limited']);
         this.roomManagerService.onQuit(this.lobby);
-        alert("l'organisareur a quitté la room!!");
     }
 
     receiveMessage(chat: Chat): void {

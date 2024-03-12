@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 /* eslint-disable import/no-unresolved */
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -41,7 +39,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { CanvasMiddleButtonsComponent } from './components/canvas-middle-buttons/canvas-middle-buttons.component';
 import { CanvasTopButtonsComponent } from './components/canvas-top-buttons/canvas-top-buttons.component';
-import { CanvasUnderButtonsComponent } from './components/canvas-under-buttons/canvas-under-buttons.component';
 import { ChatBoxComponent } from './components/chat-box/chat-box.component';
 import { ConfigDialogComponent } from './components/config-dialog/config-dialog.component';
 import { DeleteResetConfirmationDialogComponent } from './components/delete-reset-confirmation-dialog/delete-reset-confirmation-dialog.component';
@@ -70,7 +67,6 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { PersonnalizationPageComponent } from './pages/personnalization-page/personnalization-page.component';
 import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
-import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { WaitingRoomComponent } from './pages/waiting-room/waiting-room.component';
 /**
  * Main module that is used in main.ts.
@@ -95,7 +91,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         ImportDialogComponent,
         ConfigPageComponent,
         CreationGameDialogComponent,
-        CanvasUnderButtonsComponent,
+
         GamePageDialogComponent,
         WaitingForPlayerToJoinComponent,
         CanvasTopButtonsComponent,
@@ -111,7 +107,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         NoGameAvailableDialogComponent,
         HistoryBoxComponent,
         LoginPageComponent,
-        RegistrationPageComponent,
+
         RecoverPasswordPageComponent,
         NameGenerationDialogComponent,
         PersonnalizationPageComponent,
@@ -172,4 +168,3 @@ export const createTranslateLoader = (http: HttpClient) => {
     bootstrap: [AppComponent],
 })
 export class AppModule {}
->>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8

@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 export enum GameEvents {
     ValidateCoords = 'ValidateCoords',
     CheckStatus = 'CheckStatus',
@@ -76,8 +74,8 @@ export enum GameModes {
     ClassicOneVsOne = 'Classic->OneVsOne',
     LimitedSolo = 'Limited->Solo',
     LimitedCoop = 'Limited->Coop',
-    Classic = "Classic",
-    Limited = "Limited",
+    Classic = 'Classic',
+    Limited = 'Limited',
 }
 
 export enum MessageEvents {
@@ -112,6 +110,7 @@ export enum LobbyEvents {
     LeaveAsObserver = 'LeaveAsObserver',
     UpdateLobbys = 'UpdateLobbys',
     Start = 'Start',
+    LeaveRoom = 'LeaveRoom',
 }
 
 export enum LobbyState {
@@ -165,4 +164,3 @@ export enum ChannelEvents {
 export enum RankingEvents {
     Update = 'Update',
 }
->>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8
