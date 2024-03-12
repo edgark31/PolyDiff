@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
@@ -8,9 +6,11 @@ import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
 import 'package:mobile/widgets/canvas.dart';
+import 'package:mobile/widgets/chat_box.dart';
 
 class ClassicGamePage extends StatefulWidget {
   static const routeName = CLASSIC_ROUTE;
+
   ClassicGamePage();
 
   @override
@@ -28,6 +28,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
   final ImageConverterService imageConverterService = ImageConverterService();
   final GameAreaService gameAreaService = GameAreaService();
   late Future<CanvasModel> imagesFuture;
+  bool isChatBoxVisible = false;
 
   @override
   void initState() {
@@ -43,92 +44,111 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(GAME_BACKGROUND_PATH),
-            fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(GAME_BACKGROUND_PATH),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.vpn_key),
-                  iconSize: 40.0,
-                  color: Colors.black,
-                  onPressed: () {
-                    print('Activate Cheat');
-                  },
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.vpn_key),
+                    iconSize: 40.0,
+                    color: Colors.black,
+                    onPressed: () {
+                      print('Activate Cheat');
+                    },
+                  ),
+                  SizedBox(
+                    height: 200,
+                    width: 1000,
+                    // TODO: Place game info widget as a child here when ready
+                  ),
+                ],
+              ),
+              FutureBuilder<CanvasModel>(
+                future: imagesFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        OriginalCanvas(snapshot.data, '123'),
+                        SizedBox(width: 50),
+                        ModifiedCanvas(snapshot.data, '123'),
+                      ],
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
+              ),
+            ],
+          ),
+          if (isChatBoxVisible)
+            Positioned(
+              top: 50,
+              left: 0,
+              right: 0,
+              height: 550,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: AnimatedOpacity(
+                  opacity: 1.0,
+                  duration: Duration(milliseconds: 500),
+                  child: Transform.scale(
+                    scale: 1.0,
+                    child: ChatBox(),
+                  ),
                 ),
-                SizedBox(
-                  height: 200,
-                  width: 1000,
-                  //child:
-                ), // TODO: Add game infos as a child in the SizedBox when ready
-              ],
+              ),
             ),
-            FutureBuilder<CanvasModel>(
-              future: imagesFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      OriginalCanvas(snapshot.data, '123'),
-                      SizedBox(width: 50),
-                      ModifiedCanvas(snapshot.data, '123'),
-                    ],
-                  );
-                } else {
-                  return CircularProgressIndicator();
-                }
+          Positioned(
+            left: 8.0,
+            bottom: 8.0,
+            child: ElevatedButton(
+              onPressed: () {
+                print('Abandon');
               },
-            ),
-            Stack(
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: IconButton(
-                    icon: Icon(Icons.wechat_sharp),
-                    iconSize: 45.0,
-                    color: Colors.white,
-                    onPressed: () {
-                      print('Chat icon pressed');
-                    },
-                  ),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Color(0xFFEF6151),
+                backgroundColor: Color(0xFF2D1E16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
                 ),
-                Positioned(
-                  left: 8.0,
-                  top: 0,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      print('Abandonner button pressed');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF2D1E16),
-                      onPrimary: Color(0xFFEF6151),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    ),
-                    child: Text(
-                      'Abandonner',
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              ),
+              child: Text(
+                'Abandonner',
+                style: TextStyle(fontSize: 20),
+              ),
             ),
-          ],
-        ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: IconButton(
+                icon: Icon(Icons.wechat_sharp),
+                iconSize: 45.0,
+                color: Colors.white,
+                onPressed: () {
+                  setState(() {
+                    isChatBoxVisible = !isChatBoxVisible;
+                  });
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
