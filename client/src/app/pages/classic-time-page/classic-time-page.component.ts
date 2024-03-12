@@ -17,71 +17,44 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./classic-time-page.component.scss'],
 })
 export class ClassicTimePageComponent implements OnDestroy, OnInit {
+    lobbies: Lobby[];
     pageSize = 2;
     currentPage = 0;
     pagedLobby: Lobby[] = [];
-    lobbys: Lobby[] = [
-        {
-            lobbyId: '123',
-            gameId: '65ea441aeb239647b3c747a8',
-            players: [{ name: 'yoyoyoy' }],
-            observers: [],
-            isAvailable: true,
-            isCheatEnabled: true,
-            mode: GameModes.Classic,
-        },
-        {
-            lobbyId: '123',
-            gameId: '65ea441aeb239647b3c747a8',
-            players: [{ name: 'yayaya' }],
-            observers: [],
-            isAvailable: true,
-            isCheatEnabled: true,
-            mode: GameModes.Classic,
-        },
-        {
-            lobbyId: '123',
-            gameId: '65ea441aeb239647b3c747a8',
-            players: [{ name: 'sallluuuu' }],
-            observers: [],
-            isAvailable: true,
-            isCheatEnabled: true,
-            mode: GameModes.Classic,
-        },
-    ];
-    totalPages: number;
     gameModes: typeof GameModes;
     nPlayersConnected: number;
+    private lobbiesSubscription: Subscription;
     private hasNoGameAvailableSubscription: Subscription;
     private roomIdSubscription: Subscription;
     private isLimitedCoopRoomAvailableSubscription: Subscription;
+    // private playerName: string;
+    // private isStartingGame: boolean;
     constructor(
         public router: Router,
         private readonly roomManagerService: RoomManagerService,
         private readonly dialog: MatDialog,
         private readonly clientSocket: ClientSocketService,
-        // private readonly clientSocket: ClientSocketService,
-        // private readonly gameManager: GameManagerService,
-        private readonly welcome: WelcomeService,
+        private readonly welcomeService: WelcomeService,
     ) {
         this.gameModes = GameModes;
+        // this.isStartingGame = false;
         this.nPlayersConnected = 0;
+        this.lobbies = [];
+        this.clientSocket.connect(this.welcomeService.account.id as string, 'lobby');
+        this.roomManagerService.handleRoomEvents();
     }
 
     ngOnInit(): void {
-        this.clientSocket.connect(this.welcome.account.id as string, 'lobby');
-        console.log('ennnddddddd shhhhott' + this.lobbys);
-        // this.clientSocket.connect(this.gameManager.username, 'lobby');
-        this.updatePagedImages();
-        this.roomManagerService.handleRoomEvents();
-        this.welcome.isLimited = true;
+        this.roomManagerService.retrieveLobbies();
+        // this.roomManagerService.lobbies$.pipe(filter((lobbies) => !!lobbies)).subscribe((lobbies) => {
+        //     this.lobbies = Array.from(lobbies.values());
+        // });
 
-        // this.totalPages = Math.ceil(this.lobbys.length / this.pageSize);
+        this.updatePagedImages();
         // this.openDialog();
         // this.handleJoinCoopRoom();
         // this.handleNoGameAvailable();
     }
-
     previousPage() {
         if (this.currentPage > 0) {
             this.currentPage--;
@@ -96,7 +69,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
     // }
 
     nextPage() {
-        const v = this.lobbys.length / this.pageSize - 1;
+        const v = this.lobbies.length / this.pageSize - 1;
         console.log(v > this.currentPage);
         if (v > this.currentPage) {
             this.currentPage++;
@@ -105,59 +78,30 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
     }
 
     updatePagedImages() {
-        const startIndex = this.currentPage * this.pageSize;
-        const endIndex = startIndex + this.pageSize;
-        console.log(`Updating images for page ${this.currentPage}: startIndex=${startIndex}, endIndex=${endIndex}`);
-        console.log(this.lobbys.length);
-        console.log(this.pageSize - 1);
-        console.log(this.currentPage);
-        console.log(this.lobbys.length / this.pageSize - 1 > this.currentPage);
-        this.pagedLobby = this.lobbys.slice(startIndex, endIndex);
-        console.log('Paged images:', this.lobbys);
+        this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
+            if (lobbies.length > 0) {
+                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
+                // this.lobbies = lobbies;
+                const startIndex = this.currentPage * this.pageSize;
+                const endIndex = startIndex + this.pageSize;
+                this.pagedLobby = this.lobbies.slice(startIndex, endIndex);
+            }
+        });
     }
 
     handlePageEvent(event: PageEvent) {
         this.currentPage = event.pageIndex;
         this.updatePagedImages();
     }
-
     manageGames(): void {
         this.dialog.open(ModalAccessMatchComponent);
     }
 
     ngOnDestroy(): void {
         // this.clientSocket.disconnect('lobby');
+        this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();
         this.hasNoGameAvailableSubscription?.unsubscribe();
-        this.roomManagerService.removeAllListeners();
     }
-
-    // private openDialog() {
-    //     this.dialog
-    //         .open(PlayerNameDialogBoxComponent, { disableClose: true, panelClass: 'dialog' })
-    //         .afterClosed()
-    //         .subscribe((playerName) => {
-    //             if (playerName) {
-    //                 this.playerName = playerName;
-    //             } else {
-    //                 this.router.navigate(['/']);
-    //             }
-    //         });
-    // }
-
-    // private handleJoinCoopRoom() {
-    //     this.isLimitedCoopRoomAvailableSubscription = this.roomManagerService.isLimitedCoopRoomAvailable$
-    //         .pipe(filter((isRoomAvailable) => isRoomAvailable))
-    //         .subscribe(() => {
-    //             this.router.navigate(['/game']);
-    //             this.dialog.closeAll();
-    //         });
-    // }
-
-    // private handleNoGameAvailable() {
-    //     this.hasNoGameAvailableSubscription = this.roomManagerService.hasNoGameAvailable$.subscribe((hasNoGameAvailable) => {
-    //         if (hasNoGameAvailable) this.dialog.open(NoGameAvailableDialogComponent, { disableClose: true, panelClass: 'dialog' });
-    //     });
-    // }
 }

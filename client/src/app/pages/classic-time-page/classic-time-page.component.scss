@@ -37,11 +37,13 @@ h2 {
     animation: titleFadeIn 0.5s ease-in-out;
 }
 
-body {
-    background-image: url('../../../assets/LimitedTimeBackground.jpg');
-    background-size: cover; /* Cela garantit que l'image couvre tout l'écran */
-    background-position: center center; /* Cela centre l'image dans la page */
-    background-repeat: no-repeat; /* Cela empêche l'image de se répéter */
+#image {
+    position: absolute;
+    top: 220px;
+    left: 50.7%;
+    transform: translateX(-50%);
+    width: 32.5%; /* Réduit de moitié */
+    height: 25%; /* Réduit de moitié */
 }
 
 .create-button {

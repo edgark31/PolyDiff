@@ -37,11 +37,39 @@ h2 {
     animation: titleFadeIn 0.5s ease-in-out;
 }
 
+#image {
+    position: absolute;
+    top: 220px;
+    left: 50.7%;
+    transform: translateX(-50%);
+    width: 32.5%; /* Réduit de moitié */
+    height: 25%; /* Réduit de moitié */
+}
 body {
     background-image: url('../../../assets/LimitedTimeBackground.jpg');
     background-size: cover; /* Cela garantit que l'image couvre tout l'écran */
     background-position: center center; /* Cela centre l'image dans la page */
     background-repeat: no-repeat; /* Cela empêche l'image de se répéter */
+}
+
+.create-button {
+    top: 100px;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    font-family: 'Troika', sans-serif;
+    font-size: 40px;
+    width: auto;
+    height: auto;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: rgba(253, 250, 151, 255);
+    border: none;
+    border-radius: 25px;
+    background-color: #e8a430;
+    animation: titleFadeIn 1.5s ease-in-out;
+    z-index: 1;
 }
 
 .button-creer {
@@ -65,32 +93,6 @@ body {
     animation: titleFadeIn 1.5s ease-in-out;
     z-index: 1;
     margin-top: -400px;
-}
-
-.create-button {
-    top: 100px;
-    cursor: pointer;
-    position: relative;
-    text-align: center;
-    font-family: 'Troika', sans-serif;
-    font-size: 40px;
-    width: auto;
-    height: auto;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-    transition: 0.5s;
-    color: rgba(253, 250, 151, 255);
-    border: none;
-    border-radius: 25px;
-    background-color: #e8a430;
-    animation: titleFadeIn 1.5s ease-in-out;
-    z-index: 1;
-}
-
-.create-button:hover {
-    background-color: #db9110;
-    color: black;
-    transform: scale(1.05);
 }
 
 #mode {
@@ -146,4 +148,31 @@ button:hover {
     z-index: 1;
     font-size: 30px;
     margin-right: 20px;
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100vh;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+.button-container button {
+    margin-bottom: 0; /* Ajustez cette valeur si nécessaire */
+    margin-left: 0; /* Ajustez cette valeur si nécessaire */
+    background-color: rgb(158, 19, 19);
+    color: #fff;
+    padding: 8px 24px;
+    border-radius: 4px;
+    border: 1px solid #000000;
+    font-size: 2.8rem;
+    cursor: pointer;
+    width: auto;
+    z-index: 100000000000000000000000000000000000000000;
+}
+
+button:hover {
+    background: rgb(94, 8, 8);
 }
