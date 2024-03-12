@@ -99,9 +99,6 @@ class LobbyService extends ChangeNotifier {
   void startLobby() {
     print('Starting lobby and telling the server');
     setIsCreator(false);
-    // _isLobbyStarted = true;
-    // print('_isLobbyStarted is now : $_isLobbyStarted');
-    // notifyListeners();
     String? startedLobbyId = _lobby.lobbyId;
     if (startedLobbyId == null) {
       print('No started lobby id was provided (!)');
@@ -113,6 +110,9 @@ class LobbyService extends ChangeNotifier {
       LobbyEvents.Start.name,
       startedLobbyId,
     );
+    _isLobbyStarted = true;
+    print('_isLobbyStarted is now : $_isLobbyStarted');
+    notifyListeners();
   }
 
   void endLobby() {
@@ -202,7 +202,6 @@ class LobbyService extends ChangeNotifier {
             print('Setting _isPlayerinLobbyPage to false');
             _isPlayerInLobbyPage = false;
           } else {
-            print('Player is in lobby page, updating the main lobby');
             _lobby = getLobbyFromLobbies();
           }
         }
