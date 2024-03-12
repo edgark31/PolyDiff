@@ -139,7 +139,7 @@ export class RoomManagerService {
     }
 
     joinRoom(lobbyId: string) {
-        this.clientSocket.send('lobby', LobbyEvents.Join, lobbyId);
+        this.clientSocket.send('lobby', LobbyEvents.Join, { lobbyId });
     }
 
     createOneVsOneRoom(playerPayLoad: PlayerData): void {
