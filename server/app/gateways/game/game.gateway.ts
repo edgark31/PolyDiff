@@ -37,16 +37,17 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         private readonly limitedMode: LimitedModeService,
     ) {}
 
+    // -------------------------- CLASSIC MODE && LIMITED MODE --------------------------
     @SubscribeMessage(GameEvents.Start)
-    startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+    async startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         // this.roomsManager.startGame(socket, lobbyId);
         socket.data.state = GameState.InGame;
         socket.join(lobbyId);
 
         // Pour démarrer tout le monde en même temps
-        if (Array.from(socket.rooms)[1].length === this.roomsManager.lobbies.get(lobbyId).players.length) {
+        if (Array.from(await this.server.in(lobbyId).fetchSockets()).length === this.roomsManager.lobbies.get(lobbyId).players.length) {
             if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
-                this.gameService.getGameById(this.roomsManager.lobbies.get(lobbyId).gameId).then((game) => {
+                await this.gameService.getGameById(this.roomsManager.lobbies.get(lobbyId).gameId).then((game) => {
                     // Mettre une copie de game(db) vers game(lobby) et l'identifier par le lobbyId
                     this.roomsManager.lobbies.get(lobbyId).game = {
                         lobbyId,
@@ -57,12 +58,16 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
                         differences: JSON.parse(game.differences) as Coordinate[][],
                     };
                 });
-                socket.to(lobbyId).emit(GameEvents.Start, this.roomsManager.lobbies.get(lobbyId).game);
+                this.server.to(lobbyId).emit(GameEvents.Start, this.roomsManager.lobbies.get(lobbyId));
+                this.logger.log(`Game started in lobby ${lobbyId}`);
+            } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
+                // Start Limited Mode
+                this.logger.log('Not implemented yet, sorry... Please dont hurt me 😭');
             }
         }
     }
 
-    // Juste pour limited
+    // -------------------------- LIMITED MODE --------------------------
     @SubscribeMessage(GameEvents.Start)
     nextGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {}
 

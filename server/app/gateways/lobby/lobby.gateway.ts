@@ -76,6 +76,7 @@ export class LobbyGateway implements OnGatewayConnection {
             this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} supprime le lobby ${lobbyId}`);
             return;
         }
+        // Si t'es un guest
         socket.leave(lobbyId);
         this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
             .get(lobbyId)
@@ -128,6 +129,7 @@ export class LobbyGateway implements OnGatewayConnection {
                 case LobbyState.Idle:
                     break;
                 case LobbyState.Waiting: // ta deja rejoint une room
+                    socket.data.state = LobbyState.Idle;
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
                     break;
