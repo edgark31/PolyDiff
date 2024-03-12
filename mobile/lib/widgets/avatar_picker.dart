@@ -21,8 +21,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
   // Providers
   final CameraImageProvider _imageProvider = CameraImageProvider();
 
-  ImageProvider? _selectedImage =
-      AssetImage('assets/images/sleepyRaccoon.jpg'); // Placeholder image
+  ImageProvider? _selectedImage; // Placeholder image
 
   // selected avatar displayed but not uploaded
   void _updateSelectedImage(ImageProvider image) {
@@ -48,6 +47,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
       setState(() {
         _selectedImage = image;
       });
+      print("hiiiiiiiiiiii $base64Image");
 
       widget.onAvatarSelected(image, base64: base64Image);
     }
@@ -65,6 +65,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              // First predefined avatar container
               GestureDetector(
                 onTap: () {
                   _handlePredefinedAvatarSelection('1');
@@ -74,6 +75,18 @@ class _AvatarPickerState extends State<AvatarPicker> {
                     kLightGreen),
               ),
               SizedBox(width: 20),
+              // Second predefined avatar container
+              GestureDetector(
+                onTap: () {
+                  _handlePredefinedAvatarSelection('2');
+                },
+                child: avatarContainer(
+                    NetworkImage(_avatarService.getDefaultAvatarUrl('2')),
+                    kLightGreen),
+              ),
+              SizedBox(width: 20),
+              // TODO: Third predefined avatar container
+              // Tablet camera image container
               GestureDetector(
                 onTap: () => _handleCameraImageSelection(),
                 child: SizedBox(
