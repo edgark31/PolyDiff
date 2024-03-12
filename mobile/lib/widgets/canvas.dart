@@ -38,6 +38,7 @@ class OriginalCanvas extends GameCanvas {
               gameAreaService.validateCoord(
                   Coordinate(x: x.value.toInt(), y: y.value.toInt()),
                   tempGameManager.testConvert(),
+                  tempGameManager.testConvert2(),
                   true);
             },
             child: SizedBox(
@@ -88,6 +89,7 @@ class ModifiedCanvas extends GameCanvas {
                   GameCanvas.tabletScalingRatio;
               gameAreaService.validateCoord(
                   Coordinate(x: x.value.toInt(), y: y.value.toInt()),
+                  tempGameManager.testConvert(),
                   tempGameManager.testConvert2(),
                   false);
               print('sent: x:${x.value.toInt()}, y:${y.value.toInt()}');
