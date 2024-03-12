@@ -25,13 +25,44 @@ class CreateRoomCardPage extends StatefulWidget {
 }
 
 class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
+  bool _isFetchingGameCards = false;
   bool isLoading = false;
-  String errorMessage = "ho";
+  String errorMessage = "";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isFetchingGameCards) {
+      _isFetchingGameCards = true;
+      _fetchGameCards();
+    }
+  }
+
+  Future<void> _fetchGameCards() async {
+    setState(() => isLoading = true);
+    final gameCardService =
+        Provider.of<GameCardService>(context, listen: false);
+    String? serverErrorMessage = await gameCardService.getGameCards();
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+        if (serverErrorMessage != null) {
+          errorMessage = serverErrorMessage;
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final gameCardService = context.watch<GameCardService>();
     final gameCardsFromServer = gameCardService.gameCards;
+    // TODO : Reload game cards if new games are added to the server
 
     return Scaffold(
       // drawer: CustomMenuDrawer(),
@@ -51,25 +82,6 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
                       return buildGameCard(context, gameCardsFromServer[index]);
                     },
                   ),
-            CustomButton(
-              text: 'Obtenir les jeux du serveur',
-              press: () async {
-                setState(() => isLoading = true);
-                String? serverErrorMessage =
-                    await gameCardService.getGameCards();
-                setState(() => isLoading = false);
-
-                if (serverErrorMessage == null) {
-                  print('Game cards fetched from server');
-                } else {
-                  setState(() {
-                    errorMessage = serverErrorMessage;
-                  });
-                }
-              },
-              backgroundColor: kMidGreen,
-              widthFactor: 0.5,
-            ),
             Text(
               errorMessage,
               style: TextStyle(
