@@ -37,7 +37,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     }
 
     onQuit(): void {
-        this.router.navigate(['/limited']);
         this.roomManagerService.onQuit(this.lobby);
     }
 
@@ -52,11 +51,12 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         if (this.clientSocketService.isSocketAlive('lobby')) {
             this.roomManagerService.off();
+            this.clientSocketService.disconnect('lobby');
+            cons;
         }
         this.lobbySubscription?.unsubscribe();
         this.chatSubscription?.unsubscribe();
-        if (this.roomManagerService.isOrganizer) this.clientSocketService.lobbySocket.off(LobbyEvents.Create);
-        else this.clientSocketService.lobbySocket.off(LobbyEvents.Join);
+
         this.roomManagerService.wait = false;
     }
 }
