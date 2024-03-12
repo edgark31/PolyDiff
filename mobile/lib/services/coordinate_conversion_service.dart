@@ -2,7 +2,7 @@ import 'package:mobile/constants/temp_images.dart';
 import 'package:mobile/models/models.dart';
 
 class CoordinateConversionService {
-// TODO : Implement GameManagerService
+// TODO : Implement CoordinateConversionService
 
   List<Coordinate> testConvert() {
     List<Coordinate> coordinates = [];
@@ -20,5 +20,12 @@ class CoordinateConversionService {
       coordinates.add(Coordinate.fromJson(temp[i]));
     }
     return coordinates;
+  }
+
+  List<List<Coordinate>> testCheat() {
+    List<List<Coordinate>> cheatCoordinates = [];
+    cheatCoordinates.add(testConvert());
+    cheatCoordinates.add(testConvert2());
+    return cheatCoordinates;
   }
 }

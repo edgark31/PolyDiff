@@ -12,9 +12,12 @@ class ForegroundPtModified extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.scale(GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
+    if (gameAreaService.cheatBlinkingDifference != null) {
+      canvas.drawPath(gameAreaService.cheatBlinkingDifference!,
+          gameAreaService.blinkingColor);
+    }
     if (gameAreaService.rightErrorCoord.isNotEmpty) {
       print('called error');
-      print(gameAreaService.rightErrorCoord[0].x);
       final textPainter = TextPainter(
         text: TextSpan(
           text: 'ERREUR',

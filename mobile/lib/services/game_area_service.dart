@@ -12,9 +12,11 @@ class GameAreaService extends ChangeNotifier {
   List<Coordinate> leftErrorCoord = [];
   List<Coordinate> rightErrorCoord = [];
   Path? blinkingDifference;
+  Path? cheatBlinkingDifference;
   Paint blinkingColor = Paint()
     ..color = Colors.green
     ..style = PaintingStyle.fill;
+  bool isCheatMode = false;
 
   // This only validates the smile and the left circle
   // This won't be here when the connection between client and server is done
@@ -41,6 +43,8 @@ class GameAreaService extends ChangeNotifier {
   void showDifferenceFound(List<Coordinate> newCoordinates) {
     soundService.playCorrectSound();
     coordinates.addAll(newCoordinates);
+    isCheatMode = false;
+    resetCheatBlinkingDifference();
     notifyListeners();
     startBlinking(newCoordinates);
   }
@@ -109,6 +113,67 @@ class GameAreaService extends ChangeNotifier {
 
   void resetBlinkingDifference() {
     blinkingDifference = null;
+    notifyListeners();
+  }
+
+  void initCheatPath(List<Coordinate> coords) {
+    print('Enter initcheatpath');
+    final cheatPath = Path();
+    for (var coord in coords) {
+      cheatPath.addRect(Rect.fromLTWH(
+        coord.x.toDouble(),
+        coord.y.toDouble(),
+        1,
+        1,
+      ));
+    }
+    cheatBlinkingDifference = cheatPath;
+  }
+
+  Future<void> toggleCheatMode(List<Coordinate> coords) async {
+    print('Enter toggleCheatMode');
+    isCheatMode = !isCheatMode;
+    if (isCheatMode) {
+      initCheatPath(coords);
+      if (cheatBlinkingDifference == null) return;
+
+      final Path blinkingCheatPath = cheatBlinkingDifference!;
+      const int timeToBlinkMs = 150;
+      const int cheatModeWaitMs = 250;
+
+      while (isCheatMode) {
+        await showCheatDifference(blinkingCheatPath, timeToBlinkMs);
+        await hideCheatDifference(cheatModeWaitMs);
+        if (!isCheatMode) {
+          break;
+        }
+      }
+    } else {
+      resetCheatBlinkingDifference();
+      return;
+    }
+    resetCheatBlinkingDifference();
+  }
+
+  Future<void> showCheatDifference(Path difference, int waitingTimeMs) async {
+    print('Enter showcheat');
+    blinkingColor.color = Colors.red;
+    cheatBlinkingDifference = difference;
+    notifyListeners();
+    await Future.delayed(Duration(milliseconds: waitingTimeMs));
+  }
+
+  Future<void> hideCheatDifference(int waitingTimeMs) async {
+    print('Enter hidecheat');
+    blinkingColor.color = Colors.red;
+    cheatBlinkingDifference = null;
+    notifyListeners();
+    await Future.delayed(Duration(milliseconds: waitingTimeMs));
+  }
+
+  void resetCheatBlinkingDifference() {
+    print('Enter resetcheat');
+    cheatBlinkingDifference = null;
     notifyListeners();
   }
 }
