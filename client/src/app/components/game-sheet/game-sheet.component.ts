@@ -8,7 +8,7 @@ import { DeleteResetConfirmationDialogComponent } from '@app/components/delete-r
 import { Actions } from '@app/enum/delete-reset-actions';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GameCard } from '@common/game-interfaces';
-import { Subscription, filter } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-game-sheet',
@@ -37,11 +37,11 @@ export class GameSheetComponent implements OnDestroy, OnInit {
     ngOnInit(): void {
         this.url = this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + this.game.thumbnail);
         this.roomManagerService.checkRoomOneVsOneAvailability(this.game._id);
-        this.roomAvailabilitySubscription = this.roomManagerService.oneVsOneRoomsAvailabilityByRoomId$
-            .pipe(filter((data) => data.gameId === this.game._id))
-            .subscribe((data) => {
-                this.isAvailable = data.isAvailableToJoin;
-            });
+        // this.roomAvailabilitySubscription = this.roomManagerService.oneVsOneRoomsAvailabilityByRoomId$
+        //     .pipe(filter((data) => data.gameId === this.game._id))
+        //     .subscribe((data) => {
+        //         this.isAvailable = data.isAvailableToJoin;
+        //     });
     }
 
     // playSolo(): void {

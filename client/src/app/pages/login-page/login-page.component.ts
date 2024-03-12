@@ -41,7 +41,7 @@ export class LoginPageComponent {
             };
             this.communication.login(this.creds).subscribe({
                 next: (account: Account) => {
-                    this.clientSocket.connect(account.credentials.username, 'auth');
+                    this.clientSocket.connect(account.id as string, 'auth');
                     this.welcomeservice.account = account;
                     this.gameManager.username = account.credentials.username;
                     this.welcomeservice.account.profile.avatar = `http://localhost:3000/avatar/${this.gameManager.username}.png`;

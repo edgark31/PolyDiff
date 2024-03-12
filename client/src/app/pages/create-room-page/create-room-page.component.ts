@@ -1,18 +1,31 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
+import { GameModes } from '@common/enums';
+import { Lobby } from '@common/game-interfaces';
 
 @Component({
     selector: 'app-create-room-page',
     templateUrl: './create-room-page.component.html',
     styleUrls: ['./create-room-page.component.scss'],
 })
-export class CreateRoomPageComponent {
+export class CreateRoomPageComponent implements AfterViewInit {
     isCheatModeEnabled = false;
-    gameMode = 'limited';
-    time: number | null = 0;
+    gameModes: typeof GameModes = GameModes;
+    mode: GameModes;
+    time: number | null;
     password: string;
+    nDifferences: number;
+    lobby: Lobby;
     constructor(private readonly roomManagerService: RoomManagerService) {
-        this.gameMode = 'limited';
+        this.mode = GameModes.Classic;
+        this.time = 0;
+        this.nDifferences = 0;
+    }
+
+    ngAfterViewInit(): void {
+        this.roomManagerService.lobby$.subscribe((lobby) => {
+            this.lobby = lobby;
+        });
     }
 
     formatLabel(value: number | null) {
@@ -20,8 +33,21 @@ export class CreateRoomPageComponent {
         return value + ' sec';
     }
 
-    // send password + isCheatModeEnabled? + gameMode + time to server
     onSubmit() {
-        this.roomManagerService.password = this.password;
+        const roomPayload: Lobby = {
+            isAvailable: true,
+            players: [],
+            observers: [],
+            isCheatEnabled: this.isCheatModeEnabled,
+            mode: this.mode,
+            password: this.password,
+            nDifferences: this.nDifferences,
+        };
+        if (this.mode === GameModes.Limited) {
+            this.roomManagerService.createLimitedRoom(roomPayload);
+        } else if (this.mode === GameModes.Classic) {
+            roomPayload.time = this.time as number;
+            this.roomManagerService.createClassicRoom(roomPayload);
+        }
     }
 }
