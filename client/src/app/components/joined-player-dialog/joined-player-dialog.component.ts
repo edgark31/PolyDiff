@@ -31,7 +31,7 @@ export class JoinedPlayerDialogComponent implements OnInit, OnDestroy {
         this.handleRefusedPlayer();
         this.handleAcceptedPlayer();
         this.handleGameCardDelete();
-        this.handleCreateUndoCreation();
+        // this.handleCreateUndoCreation();
     }
 
     cancelJoining() {
@@ -81,11 +81,11 @@ export class JoinedPlayerDialogComponent implements OnInit, OnDestroy {
         });
     }
 
-    private handleCreateUndoCreation() {
-        this.roomAvailabilitySubscription = this.roomManagerService.oneVsOneRoomsAvailabilityByRoomId$
-            .pipe(filter((roomAvailability) => roomAvailability.gameId === this.data.gameId && !roomAvailability.isAvailableToJoin))
-            .subscribe(() => {
-                this.countDownBeforeClosing('Vous avez été refusé');
-            });
-    }
+    // private handleCreateUndoCreation() {
+    //     this.roomAvailabilitySubscription = this.roomManagerService.oneVsOneRoomsAvailabilityByRoomId$
+    //         .pipe(filter((roomAvailability) => roomAvailability.gameId === this.data.gameId && !roomAvailability.isAvailableToJoin))
+    //         .subscribe(() => {
+    //             this.countDownBeforeClosing('Vous avez été refusé');
+    //         });
+    // }
 }
