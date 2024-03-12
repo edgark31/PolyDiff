@@ -259,6 +259,5 @@ export class RoomManagerService {
         this.clientSocket.on('lobby', ChannelEvents.LobbyMessage, (chat: Chat) => {
             this.message.next(chat);
         });
-        this.clientSocket.on('lobby', LobbyEvents.Leave, () => {});
     }
 }
