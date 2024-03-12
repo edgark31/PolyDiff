@@ -4,6 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { NavigationService } from '@app/services/navigation-service/navigation.service';
 // import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
@@ -35,6 +36,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
         private readonly dialog: MatDialog,
         private readonly clientSocket: ClientSocketService,
         private readonly welcomeService: WelcomeService,
+        private readonly navigationService: NavigationService,
     ) {
         this.gameModes = GameModes;
         // this.isStartingGame = false;
@@ -84,6 +86,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
+        this.navigationService.setPreviousUrl('/classic');
         this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();

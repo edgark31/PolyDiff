@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
@@ -13,7 +13,7 @@ import { Lobby } from '@common/game-interfaces';
     templateUrl: './room-sheet.component.html',
     styleUrls: ['./room-sheet.component.scss'],
 })
-export class RoomSheetComponent {
+export class RoomSheetComponent implements OnInit {
     @Input() lobby: Lobby;
     numberOfDifferences: number;
     gameModes: typeof GameModes = GameModes;
@@ -24,6 +24,10 @@ export class RoomSheetComponent {
         private readonly dialog: MatDialog,
     ) {
         this.numberOfDifferences = 0;
+    }
+
+    ngOnInit(): void {
+        console.log(this.lobby.mode);
     }
 
     manageGames(lobby: Lobby): void {

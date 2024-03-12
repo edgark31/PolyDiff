@@ -7,7 +7,7 @@
             <span>Créer une salle</span>
         </button>
         <div *ngFor="let lobby of pagedLobby">
-            <div *ngIf="lobby.mode === gameModes.Classic">
+            <div *ngIf="lobby.mode === gameModes.Limited">
                 <img alt="background-image" id="image" src="./assets/gameSheet.png"/>
                 <app-room-sheet [lobby]="lobby"></app-room-sheet>
             </div>
