@@ -14,7 +14,7 @@ class LobbyService extends ChangeNotifier {
   static int _gameDuration = 0;
   late Lobby _lobby;
   static bool _isLobbyStarted = false;
-  static bool _isPlayerinLobbyPage = false;
+  static bool _isPlayerInLobbyPage = false;
 
   GameModes get gameModes => _gameModes;
   String get gameModesName => _gameModesName;
@@ -90,7 +90,7 @@ class LobbyService extends ChangeNotifier {
       lobbyCreated.toJson(),
     );
     print('Setting _isPlayerinLobbyPage to true');
-    _isPlayerinLobbyPage = true;
+    _isPlayerInLobbyPage = true;
     // _lobbies.add(Lobby());
     // notifyListeners();
   }
@@ -129,13 +129,16 @@ class LobbyService extends ChangeNotifier {
     }
     _lobby = _lobbies.firstWhere((lobby) => lobby.lobbyId == joinedLobbyId);
     print('Setting _isPlayerinLobbyPage to true');
-    _isPlayerinLobbyPage = true;
+    _isPlayerInLobbyPage = true;
     notifyListeners();
     print('Joining lobby with id: $joinedLobbyId');
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Join.name,
-      joinedLobbyId,
+      {
+        'lobbyId': joinedLobbyId,
+        'password': null,
+      },
     );
   }
 
@@ -154,7 +157,7 @@ class LobbyService extends ChangeNotifier {
     );
     socketService.disconnect(SocketType.Lobby);
     print('Setting _isPlayerinLobbyPage to false');
-    _isPlayerinLobbyPage = false;
+    _isPlayerInLobbyPage = false;
   }
 
   void setListeners() {
@@ -189,7 +192,7 @@ class LobbyService extends ChangeNotifier {
         }).toList();
         print('Number of lobbies updated: ${updatedLobbies.length}');
         _lobbies = updatedLobbies;
-        if (_isPlayerinLobbyPage) {
+        if (_isPlayerInLobbyPage) {
           print('Player is in lobby page, updating the main lobby');
           _lobby =
               _lobbies.firstWhere((lobby) => lobby.lobbyId == _lobby.lobbyId);
@@ -209,9 +212,12 @@ class LobbyService extends ChangeNotifier {
         _isLobbyStarted = true;
         print('_isLobbyStarted is now : $_isLobbyStarted');
         print('Setting _isPlayerinLobbyPage to false');
-        _isPlayerinLobbyPage = false;
+        _isPlayerInLobbyPage = false;
         notifyListeners();
       }
     });
+
+    // TODO: Implement LobbyEvents.Leave Listerners to handle creator quitting
+    // socketService.on(SocketType.Lobby, LobbyEvents.Leave.name, (data) {
   }
 }
