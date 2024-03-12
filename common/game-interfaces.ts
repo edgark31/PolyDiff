@@ -159,10 +159,11 @@ export interface Lobby {
 
 export interface Game {
     lobbyId: string;
-    gameId?: string;
+    gameId: string;
+    name: string;
     original: string;
     modified: string;
-    difficulty: string;
+    difficulty?: string;
     differences: Coordinate[][];
 }
 

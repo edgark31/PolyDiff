@@ -1,6 +1,7 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GameModes } from '@common/enums';
+import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 
 @Component({
@@ -10,7 +11,6 @@ import { Lobby } from '@common/game-interfaces';
 })
 export class CreateRoomPageComponent implements AfterViewInit {
     isCheatModeEnabled = false;
-
     gameModes: typeof GameModes = GameModes;
     mode: GameModes;
     time: number | null;
@@ -47,6 +47,7 @@ export class CreateRoomPageComponent implements AfterViewInit {
         if (this.mode === GameModes.Limited) {
             this.roomManagerService.createLimitedRoom(roomPayload);
         } else if (this.mode === GameModes.Classic) {
+            roomPayload.time = this.time as number;
             this.roomManagerService.createClassicRoom(roomPayload);
         }
     }
