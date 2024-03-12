@@ -11,6 +11,10 @@ export class NavigationService {
         this.previousUrl = this.router.url;
     }
 
+    setPreviousUrl(url: string): void {
+        this.previousUrl = url;
+    }
+
     getPreviousUrl(): string {
         return this.previousUrl;
     }

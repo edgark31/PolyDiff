@@ -7,6 +7,7 @@ import { ModalAccessMatchComponent } from '@app/components/modal-access-match/mo
 // import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 // import { WaitingForPlayerToJoinComponent } from '@app/components/waiting-player-to-join/waiting-player-to-join.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { NavigationService } from '@app/services/navigation-service/navigation.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { ChannelEvents, GameModes } from '@common/enums';
@@ -38,6 +39,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         private readonly dialog: MatDialog,
         private readonly clientSocket: ClientSocketService,
         private readonly welcomeService: WelcomeService,
+        private readonly navigationService: NavigationService,
     ) {
         this.gameModes = GameModes;
         // this.isStartingGame = false;
@@ -87,6 +89,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
+        this.navigationService.setPreviousUrl(this.router.url);
         this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();
