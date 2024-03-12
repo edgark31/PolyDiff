@@ -1,15 +1,17 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
 import { Chat } from '@common/game-interfaces';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-chat-page',
     templateUrl: './chat-page.component.html',
     styleUrls: ['./chat-page.component.scss'],
 })
-export class ChatPageComponent implements AfterViewInit, OnDestroy {
+export class ChatPageComponent implements OnInit, OnDestroy {
+    chatSubscription: Subscription;
     messages: Chat[] = [];
 
     constructor(
@@ -18,11 +20,10 @@ export class ChatPageComponent implements AfterViewInit, OnDestroy {
         private readonly router: Router,
     ) {}
 
-    ngAfterViewInit(): void {
+    ngOnInit(): void {
         if (this.clientSocketService.isSocketAlive('auth')) {
             this.globalChatService.manage();
-            this.globalChatService.updateLog();
-            this.globalChatService.message$.subscribe((message: Chat) => {
+            this.chatSubscription = this.globalChatService.message$.subscribe((message: Chat) => {
                 this.receiveMessage(message);
             });
         }
@@ -44,5 +45,6 @@ export class ChatPageComponent implements AfterViewInit, OnDestroy {
         if (this.clientSocketService.isSocketAlive('auth')) {
             this.globalChatService.off();
         }
+        this.chatSubscription?.unsubscribe();
     }
 }

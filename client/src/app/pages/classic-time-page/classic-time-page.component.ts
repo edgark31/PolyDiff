@@ -3,23 +3,20 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
-// import { NoGameAvailableDialogComponent } from '@app/components/no-game-available-dialog/no-game-available-dialog.component';
-// import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
-// import { WaitingForPlayerToJoinComponent } from '@app/components/waiting-player-to-join/waiting-player-to-join.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+// import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { ChannelEvents, GameModes } from '@common/enums';
+import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
-// import { PlayerData } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'app-limited-time-page',
-    templateUrl: './limited-time-page.component.html',
-    styleUrls: ['./limited-time-page.component.scss'],
+    selector: 'app-classic-time-page',
+    templateUrl: './classic-time-page.component.html',
+    styleUrls: ['./classic-time-page.component.scss'],
 })
-export class LimitedTimePageComponent implements OnDestroy, OnInit {
+export class ClassicTimePageComponent implements OnDestroy, OnInit {
     lobbies: Lobby[];
     pageSize = 2;
     currentPage = 0;
@@ -49,7 +46,14 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
 
     ngOnInit(): void {
         this.roomManagerService.retrieveLobbies();
+        // this.roomManagerService.lobbies$.pipe(filter((lobbies) => !!lobbies)).subscribe((lobbies) => {
+        //     this.lobbies = Array.from(lobbies.values());
+        // });
+
         this.updatePagedImages();
+        // this.openDialog();
+        // this.handleJoinCoopRoom();
+        // this.handleNoGameAvailable();
     }
     previousPage() {
         if (this.currentPage > 0) {
@@ -57,6 +61,12 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
             this.updatePagedImages();
         }
     }
+
+    // ngOnChanges(changes: SimpleChanges): void {
+    //     if (changes.lobbys) {
+    //         this.updatePagedImages();
+    //     }
+    // }
 
     nextPage() {
         const v = this.lobbies.length / this.pageSize - 1;
@@ -70,7 +80,8 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     updatePagedImages() {
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
-                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Classic);
+                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
+                // this.lobbies = lobbies;
                 const startIndex = this.currentPage * this.pageSize;
                 const endIndex = startIndex + this.pageSize;
                 this.pagedLobby = this.lobbies.slice(startIndex, endIndex);
@@ -87,10 +98,10 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
+        // this.clientSocket.disconnect('lobby');
         this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();
         this.hasNoGameAvailableSubscription?.unsubscribe();
-        this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
     }
 }

@@ -12,20 +12,31 @@ export class ChatBoxComponent {
     @Input() gameMode: string;
     @Input() isReplaying: boolean;
     @Output() private add: EventEmitter<string>;
+    @Output() private addLobby: EventEmitter<string>;
 
     constructor(private readonly router: Router) {
         this.messages = [];
         this.add = new EventEmitter<string>();
+        this.addLobby = new EventEmitter<string>();
     }
 
     onAdd(inputField: { value: string }): void {
-        if (inputField.value) {
-            this.add.emit(inputField.value.trim());
-            inputField.value = '';
+        if (this.router.url === '/chat') {
+            if (inputField.value) {
+                this.add.emit(inputField.value.trim());
+                inputField.value = '';
+            }
+        } else if (this.router.url === '/waiting-room') {
+            if (inputField.value) {
+                this.addLobby.emit(inputField.value.trim());
+                inputField.value = '';
+            }
         }
     }
 
     onClose(): void {
-        this.router.navigate(['/home']);
+        if (this.router.url === '/chat') {
+            this.router.navigate(['/home']);
+        }
     }
 }

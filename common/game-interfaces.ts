@@ -154,7 +154,7 @@ export interface Lobby {
     password?: string; // oui
     time?: number;
     chatLog?: ChatLog;
-    nDifferences?: number; // oui en classique
+    nDifferences?: number;
 }
 
 export interface Game {

@@ -1,10 +1,161 @@
+// #image {
+//     position: absolute;
+//     top: 220px;
+//     left: 50.7%;
+//     transform: translateX(-50%);
+//     width: 65%;
+//     height: 50%;
+// }
+
+// .create-button {
+//     top: 100px;
+//     cursor: pointer;
+//     position: relative;
+//     text-align: center;
+//     font-family: 'Troika', sans-serif;
+//     font-size: 40px;
+//     width: auto;
+//     height: auto;
+//     margin-bottom: 40px;
+//     text-transform: uppercase;
+//     transition: 0.5s;
+//     color: rgba(253, 250, 151, 255);
+//     border: none;
+//     border-radius: 25px;
+//     background-color: #e8a430;
+//     animation: titleFadeIn 1.5s ease-in-out;
+//     z-index: 1;
+// }
+
+.create-button:hover {
+    background-color: #db9110;
+    color: black;
+    transform: scale(1.05);
+}
+
+// .join-button {
+//     top: 220px;
+//     left: 10px;
+//     cursor: pointer;
+//     position: relative;
+//     text-align: center;
+//     font-family: 'Troika', sans-serif;
+//     font-size: 50px;
+//     width: 280px;
+//     height: 280px;
+//     margin-bottom: 40px;
+//     text-transform: uppercase;
+//     transition: 0.5s;
+//     color: rgba(253, 250, 151, 255);
+//     border: none;
+//     border-radius: 5px;
+//     background-color: #e8a430;
+//     animation: titleFadeIn 1.5s ease-in-out;
+//     z-index: 1;
+// }
+
+.join-button:hover {
+    background-color: #db9110;
+    color: black;
+    transform: scale(1.05);
+}
+
+// .difference-number {
+//     top: 200px;
+//     font-weight: bold;
+//     position: relative;
+//     text-align: center;
+//     animation: titleFadeIn 1s ease-in-out;
+//     z-index: 1;
+//     color: white;
+//     font-size: 30px;
+//     font-family: 'Troika', sans-serif;
+//     -webkit-text-stroke: 1px black;
+// }
+
+// .game-mode {
+//     top: 220px;
+//     right: 350px;
+//     font-weight: bold;
+//     position: relative;
+//     text-align: center;
+//     animation: titleFadeIn 1s ease-in-out;
+//     z-index: 1;
+//     color: white;
+//     font-size: 30px;
+//     font-family: 'Troika', sans-serif;
+//     -webkit-text-stroke: 1px black;
+// }
+
+.player-count {
+    bottom: -6px;
+    left: 250px;
+    font-weight: bold;
+    position: relative;
+    text-align: center;
+    animation: titleFadeIn 1s ease-in-out;
+    z-index: 1;
+    color: white;
+    font-size: 15px;
+    font-family: 'Troika', sans-serif;
+    -webkit-text-stroke: 1px black;
+}
+
+// .player-container {
+//     bottom: 100px;
+//     left: 350px;
+//     font-weight: bold;
+//     position: relative;
+//     text-align: center;
+//     animation: titleFadeIn 1s ease-in-out;
+//     z-index: 1;
+//     color: white;
+//     font-size: 30px;
+//     font-family: 'Troika', sans-serif;
+//     -webkit-text-stroke: 1px black;
+// }
+
+// .player {
+//     padding: 15px;
+// }
+
+// .game-mode-image {
+//     position: relative;
+//     right: 330px;
+//     top: 320px;
+//     width: 1px;
+//     height: 1px;
+//     z-index: 2;
+//     object-fit: cover;
+// }
+
 #image {
     position: absolute;
     top: 220px;
     left: 50.7%;
     transform: translateX(-50%);
-    width: 65%;
-    height: 50%;
+    width: 32.5%; /* Réduit de moitié */
+    height: 30%; /* Réduit de moitié */
+}
+
+.create-button {
+    top: 100px;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    font-family: 'Troika', sans-serif;
+    font-size: 20px; /* Réduit de moitié */
+    width: auto;
+    height: auto;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: rgba(253, 250, 151, 255);
+    border: none;
+    border-radius: 25px;
+    background-color: #e8a430;
+    animation: titleFadeIn 1.5s ease-in-out;
+    z-index: 1;
 }
 
 .join-button {
@@ -14,9 +165,9 @@
     position: relative;
     text-align: center;
     font-family: 'Troika', sans-serif;
-    font-size: 50px;
-    width: 280px;
-    height: 280px;
+    font-size: 25px; /* Réduit de moitié */
+    width: 140px; /* Réduit de moitié */
+    height: 140px; /* Réduit de moitié */
     margin-bottom: 40px;
     text-transform: uppercase;
     transition: 0.5s;
@@ -28,12 +179,6 @@
     z-index: 1;
 }
 
-.join-button:hover {
-    background-color: #db9110;
-    color: black;
-    transform: scale(1.05);
-}
-
 .difference-number {
     top: 200px;
     font-weight: bold;
@@ -42,63 +187,48 @@
     animation: titleFadeIn 1s ease-in-out;
     z-index: 1;
     color: white;
-    font-size: 30px;
+    font-size: 15px; /* Réduit de moitié */
     font-family: 'Troika', sans-serif;
-    -webkit-text-stroke: 1px black;
+    -webkit-text-stroke: 0.5px black; /* Réduit de moitié */
 }
 
 .game-mode {
     top: 220px;
-    right: 350px;
+    right: 230px;
     font-weight: bold;
     position: relative;
     text-align: center;
     animation: titleFadeIn 1s ease-in-out;
     z-index: 1;
     color: white;
-    font-size: 30px;
+    font-size: 15px; /* Réduit de moitié */
     font-family: 'Troika', sans-serif;
-    -webkit-text-stroke: 1px black;
-}
-
-.player-count {
-    bottom: 138px;
-    left: 350px;
-    font-weight: bold;
-    position: relative;
-    text-align: center;
-    animation: titleFadeIn 1s ease-in-out;
-    z-index: 1;
-    color: white;
-    font-size: 30px;
-    font-family: 'Troika', sans-serif;
-    -webkit-text-stroke: 1px black;
+    -webkit-text-stroke: 0.5px black; /* Réduit de moitié */
 }
 
 .player-container {
-    bottom: 100px;
-    left: 350px;
+    bottom: -28px;
+    left: 250px;
     font-weight: bold;
     position: relative;
     text-align: center;
     animation: titleFadeIn 1s ease-in-out;
     z-index: 1;
     color: white;
-    font-size: 30px;
+    font-size: 15px; /* Réduit de moitié */
     font-family: 'Troika', sans-serif;
-    -webkit-text-stroke: 1px black;
+    -webkit-text-stroke: 0.5px black; /* Réduit de moitié */
 }
 
 .player {
-    padding: 15px;
+    padding: 7.5px; /* Réduit de moitié */
 }
 
-.game-mode-image {
+#game-mode-image {
     position: relative;
-    right: 330px;
+    right: 160px;
     top: 320px;
-    width: 1px;
-    height: 1px;
+    width: 70px; /* Mettez la moitié de la largeur originale ici */
+    height: 70px; /* Mettez la moitié de la hauteur originale ici */
     z-index: 2;
-    object-fit: cover;
 }
