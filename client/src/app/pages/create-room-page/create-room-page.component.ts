@@ -24,7 +24,7 @@ export class CreateRoomPageComponent implements AfterViewInit {
         const previousUrl = this.navigationService.getPreviousUrl();
         this.mode = previousUrl === '/limited' ? GameModes.Limited : GameModes.Classic;
         this.gameId = this.navigationService.getGameId();
-        this.nDifferences = this.navigationService.getNDifferences();
+        // this.nDifferences = this.navigationService.getNDifferences();
     }
 
     ngAfterViewInit(): void {
