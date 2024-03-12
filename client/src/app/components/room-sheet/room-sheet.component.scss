@@ -1,11 +1,11 @@
-// #image {
-//     position: absolute;
-//     top: 220px;
-//     left: 50.7%;
-//     transform: translateX(-50%);
-//     width: 65%;
-//     height: 50%;
-// }
+#image {
+    position: absolute;
+    top: 220px;
+    left: 50.7%;
+    transform: translateX(-50%);
+    width: 65%;
+    height: 50%;
+}
 
 // .create-button {
 //     top: 100px;
@@ -129,14 +129,6 @@
     object-fit: cover;
 }
 
-#image {
-    position: absolute;
-    top: 220px;
-    left: 50.7%;
-    transform: translateX(-50%);
-    width: 32.5%; /* Réduit de moitié */
-    height: 30%; /* Réduit de moitié */
-}
 
 .create-button {
     top: 100px;

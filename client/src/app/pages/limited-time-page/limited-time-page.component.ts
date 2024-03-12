@@ -74,7 +74,8 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     updatePagedImages() {
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
-                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Classic);
+                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
+                console.log(this.lobbies);
                 const startIndex = this.currentPage * this.pageSize;
                 const endIndex = startIndex + this.pageSize;
                 this.pagedLobby = this.lobbies.slice(startIndex, endIndex);
@@ -91,7 +92,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
-        this.navigationService.setPreviousUrl(this.router.url);
+        this.navigationService.setPreviousUrl('/limited');
         this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();

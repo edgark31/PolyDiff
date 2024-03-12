@@ -21,6 +21,7 @@ export class CreateRoomPageComponent implements AfterViewInit {
         this.time = 0;
         this.nDifferences = 0;
         const previousUrl = this.navigationService.getPreviousUrl();
+        console.log(previousUrl);
         this.mode = previousUrl === '/limited' ? GameModes.Limited : GameModes.Classic;
     }
 
@@ -45,6 +46,7 @@ export class CreateRoomPageComponent implements AfterViewInit {
             password: this.password,
             nDifferences: this.nDifferences,
         };
+        console.log(roomPayload.mode);
         if (this.mode === GameModes.Limited) {
             this.roomManagerService.createLimitedRoom(roomPayload);
         } else if (this.mode === GameModes.Classic) {
