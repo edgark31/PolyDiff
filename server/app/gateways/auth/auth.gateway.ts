@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { ChannelEvents, MessageTag } from '@common/enums';
@@ -76,4 +74,3 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.accountManager.deconnexion(socket.data.accountId);
     }
 }
->>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8

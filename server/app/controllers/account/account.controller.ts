@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import { Credentials, Theme } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MailService } from '@app/services/mail-service/mail-service';
@@ -143,4 +141,3 @@ export class AccountController {
         }
     }
 }
->>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8
