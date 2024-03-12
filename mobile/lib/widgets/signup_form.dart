@@ -116,39 +116,53 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Future<void> _registerUser() async {
-    if (isFormValid()) {
-      Credentials credentials = Credentials(
-        username: userNameController.text,
-        password: passwordController.text,
-        email: emailController.text,
-      );
+    // Check if the form is valid before proceeding
+    if (!isFormValid()) {
+      setState(() {
+        errorMessage = "Une ou plusieurs entrée(s) est/sont incorrecte(s)";
+      });
+      return;
+    }
 
-      // Handle avatar upload/selection based on the type of avatar data available
-      String? avatarErrorMessage;
-      String? serverErrorMessage;
-      if (_selectedAvatarId != null) {
-        serverErrorMessage =
-            await formService.register(credentials, _selectedAvatarId!);
-        print("selected id : $_selectedAvatarId");
-      } else if (_selectedAvatarBase64 != null) {
-        // Camera image selected, call uploadAvatar
+    // Prepare credentials from form inputs
+    final credentials = Credentials(
+      username: userNameController.text,
+      password: passwordController.text,
+      email: emailController.text,
+    );
+
+    // Initialize error messages
+    String? avatarErrorMessage;
+    String? serverErrorMessage;
+
+    // Handle registration based on avatar selection or upload
+    if (_selectedAvatarId != null) {
+      // Pre-selected avatar case
+      serverErrorMessage =
+          await formService.register(credentials, _selectedAvatarId!);
+    } else if (_selectedAvatarBase64 != null) {
+      // Avatar upload case: Register with a temporary ID then upload the avatar
+      const tempsId = "1";
+      serverErrorMessage = await formService.register(credentials, tempsId);
+
+      if (serverErrorMessage == null) {
         avatarErrorMessage = await _avatarService.uploadCameraImage(
           credentials.username,
           _selectedAvatarBase64!,
         );
       }
+    } else {
+      // No avatar selected case
+      avatarErrorMessage = "avatar non sélectionné";
+    }
 
-      if (serverErrorMessage == null && avatarErrorMessage == null) {
-        Navigator.pushNamed(context, LOGIN_ROUTE);
-      } else {
-        setState(() {
-          errorMessage =
-              serverErrorMessage ?? avatarErrorMessage ?? "An error occurred";
-        });
-      }
+    // Navigate to login on successful registration and avatar handling, else show error
+    if (serverErrorMessage == null && avatarErrorMessage == null) {
+      Navigator.pushNamed(context, LOGIN_ROUTE);
     } else {
       setState(() {
-        errorMessage = "Une ou plusieurs entrée(s) est/sont incorrecte(s)";
+        errorMessage =
+            serverErrorMessage ?? avatarErrorMessage ?? "An error occurred";
       });
     }
   }

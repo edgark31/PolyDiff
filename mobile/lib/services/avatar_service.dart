@@ -22,10 +22,15 @@ class AvatarService with ChangeNotifier {
     return base64Encode(imageData);
   }
 
+  // Convert Base64 string to buffer image
+  Uint8List base64ToBuffer(String base64Image) {
+    return base64Decode(base64Image);
+  }
+
   // Convert Base64 string to image avatar
   ImageProvider base64ToImage(String base64Image) {
-    Uint8List bytes = base64Decode(base64Image);
-    return MemoryImage(bytes);
+    Uint8List bufferImage = base64ToBuffer(base64Image);
+    return MemoryImage(bufferImage);
   }
 
   // Upload avatar from camera
@@ -40,10 +45,11 @@ class AvatarService with ChangeNotifier {
 
   // If avatar is from camera or selected file
   Future<String?> uploadAvatar(String username, String base64Avatar) async {
-    const String url = '$API_URL/avatar/upload';
-    // const String url = '$API_URL/account/avatar/upload';
+    const String url = '$API_URL/account/avatar/upload';
+    print("URL : $url");
 
     try {
+      print("********** \n USERNAME : $username     BASE64:  $base64Avatar");
       final response = await http.put(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
@@ -51,6 +57,7 @@ class AvatarService with ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
+        print("setting account");
         AvatarProvider.instance.setAccountAvatarUrl(username);
         return null;
       } else {
@@ -65,7 +72,7 @@ class AvatarService with ChangeNotifier {
   Future<String?> chooseAvatar(String username, String id) async {
     print("id: $id");
     print("username: $username");
-    const String url = '$API_URL/avatar/choose';
+    const String url = '$API_URL/account/avatar/choose';
 
     try {
       final response = await http.put(
