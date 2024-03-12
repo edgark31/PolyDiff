@@ -42,6 +42,10 @@ export class WaitingRoomComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    onQuit(): void {
+        this.router.navigate(['/Limited']);
+        this.roomManagerService.onQuit(this.lobby);
+    }
     receiveMessage(chat: Chat): void {
         this.messages.push(chat);
     }

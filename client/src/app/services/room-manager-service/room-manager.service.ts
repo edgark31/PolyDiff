@@ -194,6 +194,10 @@ export class RoomManagerService {
         this.clientSocket.send('lobby', PlayerEvents.UpdateWaitingPlayerNameList, playerPayLoad);
     }
 
+    onQuit(lobby: Lobby): void {
+        this.clientSocket.send('lobby', LobbyEvents.Leave, lobby.lobbyId);
+    }
+
     isPlayerNameIsAlreadyTaken(playerPayLoad: PlayerData): void {
         this.clientSocket.send('lobby', PlayerEvents.CheckIfPlayerNameIsAvailable, playerPayLoad);
     }
@@ -260,10 +264,11 @@ export class RoomManagerService {
         if (this.isOrganizer) {
             this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby.next(lobby);
+                console.log('créer');
             });
-        } else if (this.wait === true) {
-            this.clientSocket.on('lobby', LobbyEvents.Join, (lobbyJoin: Lobby) => {
-                this.lobby.next(lobbyJoin);
+        } else {
+            this.clientSocket.on('lobby', LobbyEvents.Join, (lobbyq: Lobby) => {
+                this.lobby.next(lobbyq);
             });
         }
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {

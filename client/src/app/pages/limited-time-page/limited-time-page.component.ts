@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
 // import { NoGameAvailableDialogComponent } from '@app/components/no-game-available-dialog/no-game-available-dialog.component';
@@ -20,6 +21,9 @@ import { Subscription } from 'rxjs';
 })
 export class LimitedTimePageComponent implements OnDestroy, OnInit {
     lobbies: Lobby[];
+    pageSize = 2;
+    currentPage = 0;
+    pagedLobby: Lobby[] = [];
     gameModes: typeof GameModes;
     nPlayersConnected: number;
     private lobbiesSubscription: Subscription;
@@ -48,16 +52,55 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         // this.roomManagerService.lobbies$.pipe(filter((lobbies) => !!lobbies)).subscribe((lobbies) => {
         //     this.lobbies = Array.from(lobbies.values());
         // });
-        this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
-            if (lobbies.length > 0) {
-                this.lobbies = lobbies;
-            }
-        });
+
+        this.updatePagedImages();
         // this.openDialog();
         // this.handleJoinCoopRoom();
         // this.handleNoGameAvailable();
     }
+    previousPage() {
+        if (this.currentPage > 0) {
+            this.currentPage--;
+            this.updatePagedImages();
+        }
+    }
 
+    // ngOnChanges(changes: SimpleChanges): void {
+    //     if (changes.lobbys) {
+    //         this.updatePagedImages();
+    //     }
+    // }
+
+    nextPage() {
+        const v = this.lobbies.length / this.pageSize - 1;
+        console.log(v > this.currentPage);
+        if (v > this.currentPage) {
+            this.currentPage++;
+            this.updatePagedImages();
+        }
+    }
+
+    updatePagedImages() {
+        this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
+            if (lobbies.length > 0) {
+                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Classic);
+                // this.lobbies = lobbies;
+                const startIndex = this.currentPage * this.pageSize;
+                const endIndex = startIndex + this.pageSize;
+                console.log(`Updating images for page ${this.currentPage}: startIndex=${startIndex}, endIndex=${endIndex}`);
+                console.log(this.lobbies.length);
+                console.log(this.pageSize - 1);
+                console.log(this.currentPage);
+                console.log(this.lobbies.length / this.pageSize - 1 > this.currentPage);
+                this.pagedLobby = this.lobbies.slice(startIndex, endIndex);
+            }
+        });
+    }
+
+    handlePageEvent(event: PageEvent) {
+        this.currentPage = event.pageIndex;
+        this.updatePagedImages();
+    }
     manageGames(): void {
         this.dialog.open(ModalAccessMatchComponent);
     }
