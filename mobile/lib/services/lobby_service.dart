@@ -112,6 +112,7 @@ class LobbyService extends ChangeNotifier {
     );
     _isLobbyStarted = true;
     print('_isLobbyStarted is now : $_isLobbyStarted');
+    _isPlayerInLobbyPage = false;
     notifyListeners();
   }
 
