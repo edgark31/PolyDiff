@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { ChannelEvents, GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
 import { Chat, Lobby, Player, PlayerData } from '@common/game-interfaces';
-import { Subject, filter } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -122,28 +122,9 @@ export class RoomManagerService {
     off(): void {
         this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
         this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
-        // this.message.unsubscribe();
+        this.message?.unsubscribe();
     }
 
-    updateLog() {
-        this.lobby$.pipe(filter((lobby) => !!lobby)).subscribe((lobby: Lobby) => {
-            if (lobby.chatLog) lobby.chatLog.chat = this.retrieveMessage();
-            this.clientSocket.send('lobby', LobbyEvents.UpdateLobbys);
-        });
-    }
-
-    retrieveMessage(): Chat[] {
-        let chats: Chat[] = [{ raw: 'erreur' }];
-        this.messages.subscribe((messages: Chat[]) => {
-            chats = messages;
-        });
-
-        chats.forEach((chat) => {
-            console.log("chatttttttttttttt"+ chat.raw)
-        });
-
-      return chats;
-    }
     sendMessage(lobbyId: string | undefined, message: string): void {
         this.clientSocket.send('lobby', ChannelEvents.SendLobbyMessage, { lobbyId, message });
     }
@@ -264,19 +245,17 @@ export class RoomManagerService {
         if (this.isOrganizer) {
             this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby.next(lobby);
-                console.log('créer');
             });
         } else {
-            this.clientSocket.on('lobby', LobbyEvents.Join, (lobbyq: Lobby) => {
-                this.lobby.next(lobbyq);
+            this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
+                this.lobby.next(lobby);
             });
         }
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });
-        this.clientSocket.on('lobby', ChannelEvents.LobbyMessage, (chats: Chat) => {
-            // this.messages.next(chats);
-            this.message.next(chats);
+        this.clientSocket.on('lobby', ChannelEvents.LobbyMessage, (chat: Chat) => {
+            this.message.next(chat);
         });
     }
 }

@@ -70,7 +70,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
 
     nextPage() {
         const v = this.lobbies.length / this.pageSize - 1;
-        console.log(v > this.currentPage);
+
         if (v > this.currentPage) {
             this.currentPage++;
             this.updatePagedImages();

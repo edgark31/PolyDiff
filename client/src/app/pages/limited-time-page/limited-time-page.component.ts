@@ -9,7 +9,7 @@ import { ModalAccessMatchComponent } from '@app/components/modal-access-match/mo
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { GameModes } from '@common/enums';
+import { ChannelEvents, GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 // import { PlayerData } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
@@ -49,14 +49,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
 
     ngOnInit(): void {
         this.roomManagerService.retrieveLobbies();
-        // this.roomManagerService.lobbies$.pipe(filter((lobbies) => !!lobbies)).subscribe((lobbies) => {
-        //     this.lobbies = Array.from(lobbies.values());
-        // });
-
         this.updatePagedImages();
-        // this.openDialog();
-        // this.handleJoinCoopRoom();
-        // this.handleNoGameAvailable();
     }
     previousPage() {
         if (this.currentPage > 0) {
@@ -65,15 +58,9 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         }
     }
 
-    // ngOnChanges(changes: SimpleChanges): void {
-    //     if (changes.lobbys) {
-    //         this.updatePagedImages();
-    //     }
-    // }
-
     nextPage() {
         const v = this.lobbies.length / this.pageSize - 1;
-        console.log(v > this.currentPage);
+
         if (v > this.currentPage) {
             this.currentPage++;
             this.updatePagedImages();
@@ -84,14 +71,8 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
                 this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Classic);
-                // this.lobbies = lobbies;
                 const startIndex = this.currentPage * this.pageSize;
                 const endIndex = startIndex + this.pageSize;
-                console.log(`Updating images for page ${this.currentPage}: startIndex=${startIndex}, endIndex=${endIndex}`);
-                console.log(this.lobbies.length);
-                console.log(this.pageSize - 1);
-                console.log(this.currentPage);
-                console.log(this.lobbies.length / this.pageSize - 1 > this.currentPage);
                 this.pagedLobby = this.lobbies.slice(startIndex, endIndex);
             }
         });
@@ -106,23 +87,10 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
-        // this.clientSocket.disconnect('lobby');
         this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();
         this.hasNoGameAvailableSubscription?.unsubscribe();
+        this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
     }
-
-    // private openDialog() {
-    //     this.dialog
-    //         .open(PlayerNameDialogBoxComponent, { disableClose: true, panelClass: 'dialog' })
-    //         .afterClosed()
-    //         .subscribe((playerName) => {
-    //             if (playerName) {
-    //                 this.playerName = playerName;
-    //             } else {
-    //                 this.router.navigate(['/']);
-    //             }
-    //         });
-    // }
 }
