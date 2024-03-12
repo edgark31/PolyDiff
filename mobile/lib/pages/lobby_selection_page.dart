@@ -79,6 +79,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     // TODO : add classic game card thumbnail from url with lobby.gameId
     // Change 'assets/images/placeholderThumbnail.bmp' to dynamic path
     // Dynamic path should be from server '$BASE_URL/$gameId/original.png';
+    // String classicImagePath = '$BASE_URL/${lobby.game.}/orignal.png';
     String imagePath = isLobbyClassic
         ? 'assets/images/placeholderThumbnail.bmp'
         : 'assets/images/limitedTime.png';

@@ -48,6 +48,9 @@ class _ChatBoxState extends State<ChatBox> {
     print('Current page is $route');
     final messages =
         isGlobalChat ? chatService.globalMessages : chatService.lobbyMessages;
+    final chatBoxHeader = isGlobalChat
+        ? "ZONE DE CLAVARDAGE GLOBAL"
+        : "ZONE DE CLAVARDAGE DE SALLE";
     return Container(
       width: 500,
       height: 700,
@@ -74,7 +77,7 @@ class _ChatBoxState extends State<ChatBox> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "ZONE DE CLAVARDAGE",
+                  chatBoxHeader,
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
