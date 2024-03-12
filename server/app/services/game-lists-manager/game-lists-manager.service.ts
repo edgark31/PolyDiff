@@ -22,6 +22,7 @@ export class GameListsManagerService {
             soloTopTime: DEFAULT_BEST_TIMES,
             oneVsOneTopTime: DEFAULT_BEST_TIMES,
             thumbnail: `assets/${game._id.toString()}/original.bmp`,
+            nDifference: game.nDifference,
         };
         return gameCard;
     }
