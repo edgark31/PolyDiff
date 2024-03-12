@@ -1,4 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { NavigationService } from '@app/services/navigation-service/navigation.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
@@ -9,17 +10,19 @@ import { Lobby } from '@common/game-interfaces';
     styleUrls: ['./create-room-page.component.scss'],
 })
 export class CreateRoomPageComponent implements AfterViewInit {
+    previousUrl: string;
     isCheatModeEnabled = false;
-    gameModes: typeof GameModes = GameModes;
     mode: GameModes;
+    gameModes: typeof GameModes;
     time: number | null;
     password: string;
     nDifferences: number;
     lobby: Lobby;
-    constructor(private readonly roomManagerService: RoomManagerService) {
-        this.mode = GameModes.Classic;
+    constructor(private readonly roomManagerService: RoomManagerService, private readonly navigationService: NavigationService) {
         this.time = 0;
         this.nDifferences = 0;
+        const previousUrl = this.navigationService.getPreviousUrl();
+        this.mode = previousUrl === '/limited' ? GameModes.Limited : GameModes.Classic;
     }
 
     ngAfterViewInit(): void {

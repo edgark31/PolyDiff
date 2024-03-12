@@ -70,6 +70,7 @@ import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { WaitingRoomComponent } from './pages/waiting-room/waiting-room.component';
+import { NavigationServiceComponent } from './services/navigation-service/navigation-service.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -125,6 +126,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         LimitedTimePageComponent,
         RoomSheetComponent,
         ClassicTimePageComponent,
+        NavigationServiceComponent,
     ],
     imports: [
         AppMaterialModule,
