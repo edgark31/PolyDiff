@@ -10,7 +10,6 @@ import { Lobby } from '@common/game-interfaces';
     styleUrls: ['./create-room-page.component.scss'],
 })
 export class CreateRoomPageComponent implements AfterViewInit {
-    previousUrl: string;
     isCheatModeEnabled = false;
     mode: GameModes;
     gameModes: typeof GameModes;
