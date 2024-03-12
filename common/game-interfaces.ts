@@ -152,7 +152,7 @@ export interface Lobby {
     isCheatEnabled: boolean; // false
     mode: GameModes; // classique ou limited
     password?: string; // oui
-    time?: number;
+    timeLimit: number;
     chatLog?: ChatLog;
     nDifferences?: number;
 }

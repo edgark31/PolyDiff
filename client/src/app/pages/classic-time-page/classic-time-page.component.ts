@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
     templateUrl: './classic-time-page.component.html',
     styleUrls: ['./classic-time-page.component.scss'],
 })
-export class ClassicTimePageComponent implements OnDestroy, OnInit {
+export class ClassicTimePageComponent implements OnDestroy, OnInit, AfterViewInit {
     lobbies: Lobby[];
     pageSize = 2;
     currentPage = 0;
@@ -48,8 +48,12 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
 
     ngOnInit(): void {
         this.roomManagerService.retrieveLobbies();
+    }
+
+    ngAfterViewInit(): void {
         this.updatePagedImages();
     }
+
     previousPage() {
         if (this.currentPage > 0) {
             this.currentPage--;

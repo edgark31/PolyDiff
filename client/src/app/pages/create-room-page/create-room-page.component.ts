@@ -16,13 +16,15 @@ export class CreateRoomPageComponent implements AfterViewInit {
     time: number | null;
     password: string;
     nDifferences: number;
+    gameId: string;
     lobby: Lobby;
     constructor(private readonly roomManagerService: RoomManagerService, private readonly navigationService: NavigationService) {
         this.time = 0;
         this.nDifferences = 0;
         const previousUrl = this.navigationService.getPreviousUrl();
-        console.log(previousUrl);
         this.mode = previousUrl === '/limited' ? GameModes.Limited : GameModes.Classic;
+        this.gameId = this.navigationService.getGameId();
+        this.nDifferences = this.navigationService.getNDifferences();
     }
 
     ngAfterViewInit(): void {
@@ -45,12 +47,12 @@ export class CreateRoomPageComponent implements AfterViewInit {
             mode: this.mode,
             password: this.password,
             nDifferences: this.nDifferences,
+            gameId: this.gameId,
+            timeLimit: this.time as number,
         };
-        console.log(roomPayload.mode);
         if (this.mode === GameModes.Limited) {
             this.roomManagerService.createLimitedRoom(roomPayload);
         } else if (this.mode === GameModes.Classic) {
-            roomPayload.time = this.time as number;
             this.roomManagerService.createClassicRoom(roomPayload);
         }
     }
