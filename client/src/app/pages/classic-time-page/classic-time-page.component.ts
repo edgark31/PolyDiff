@@ -46,14 +46,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
 
     ngOnInit(): void {
         this.roomManagerService.retrieveLobbies();
-        // this.roomManagerService.lobbies$.pipe(filter((lobbies) => !!lobbies)).subscribe((lobbies) => {
-        //     this.lobbies = Array.from(lobbies.values());
-        // });
-
         this.updatePagedImages();
-        // this.openDialog();
-        // this.handleJoinCoopRoom();
-        // this.handleNoGameAvailable();
     }
     previousPage() {
         if (this.currentPage > 0) {
@@ -61,12 +54,6 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
             this.updatePagedImages();
         }
     }
-
-    // ngOnChanges(changes: SimpleChanges): void {
-    //     if (changes.lobbys) {
-    //         this.updatePagedImages();
-    //     }
-    // }
 
     nextPage() {
         const v = this.lobbies.length / this.pageSize - 1;
@@ -81,7 +68,6 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
                 this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
-                // this.lobbies = lobbies;
                 const startIndex = this.currentPage * this.pageSize;
                 const endIndex = startIndex + this.pageSize;
                 this.pagedLobby = this.lobbies.slice(startIndex, endIndex);
@@ -98,7 +84,6 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
-        // this.clientSocket.disconnect('lobby');
         this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();
