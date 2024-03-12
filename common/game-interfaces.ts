@@ -38,6 +38,7 @@ export interface GameCard {
     soloTopTime: PlayerTime[];
     oneVsOneTopTime: PlayerTime[];
     thumbnail: string;
+    nDifference: number;
 }
 
 export interface CarouselPaginator {
