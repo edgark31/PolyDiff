@@ -190,12 +190,19 @@ class LobbyService extends ChangeNotifier {
         List<Lobby> updatedLobbies = data.map<Lobby>((lobbyData) {
           return Lobby.fromJson(lobbyData as Map<String, dynamic>);
         }).toList();
-        print('Number of lobbies updated: ${updatedLobbies.length}');
+        print(
+            'Number of lobbies updated: from ${_lobbies.length} to ${updatedLobbies.length}');
         _lobbies = updatedLobbies;
         if (_isPlayerInLobbyPage) {
           print('Player is in lobby page, updating the main lobby');
-          _lobby =
-              _lobbies.firstWhere((lobby) => lobby.lobbyId == _lobby.lobbyId);
+          if (!isCurrentLobbyInLobbies()) {
+            print('The lobby is not in the main lobby');
+            print('Setting _isPlayerinLobbyPage to false');
+            _isPlayerInLobbyPage = false;
+          } else {
+            print('Player is in lobby page, updating the main lobby');
+            _lobby = getLobbyFromLobbies();
+          }
         }
         notifyListeners();
       } else {
@@ -219,5 +226,13 @@ class LobbyService extends ChangeNotifier {
 
     // TODO: Implement LobbyEvents.Leave Listerners to handle creator quitting
     // socketService.on(SocketType.Lobby, LobbyEvents.Leave.name, (data) {
+  }
+
+  bool isCurrentLobbyInLobbies() {
+    return _lobbies.any((lobby) => lobby.lobbyId == _lobby.lobbyId);
+  }
+
+  Lobby getLobbyFromLobbies() {
+    return _lobbies.firstWhere((lobby) => lobby.lobbyId == _lobby.lobbyId);
   }
 }

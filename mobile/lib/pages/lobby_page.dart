@@ -32,22 +32,32 @@ class _LobbyPageState extends State<LobbyPage> {
       if (lobbyService.isLobbyStarted) {
         print('Navigating to GamePage from initState');
         Navigator.pushNamed(context, CLASSIC_ROUTE);
+      } else if (lobbyService.isCurrentLobbyInLobbies() &&
+          !lobbyService.isCreator) {
+        // Creator navigation logic is handled client side
+        print('Navigating to DashBoardPage from initState');
+        Navigator.pushNamed(context, DASHBOARD_ROUTE);
       }
-      lobbyService.addListener(_checkLobbyStart);
+      lobbyService.addListener(_checkLobbyState);
     });
   }
 
   @override
   void dispose() {
-    context.read<LobbyService>().removeListener(_checkLobbyStart);
+    context.read<LobbyService>().removeListener(_checkLobbyState);
     super.dispose();
   }
 
-  void _checkLobbyStart() {
+  void _checkLobbyState() {
     final lobbyService = context.read<LobbyService>();
     if (lobbyService.isLobbyStarted) {
       print('Navigating to GamePage from _checkLobbyStart');
       Navigator.pushNamed(context, CLASSIC_ROUTE);
+    } else if (lobbyService.isCurrentLobbyInLobbies() &&
+        !lobbyService.isCreator) {
+      // Creator navigation logic is handled client side
+      print('Navigating to DashBoardPage from _checkLobbyStart');
+      Navigator.pushNamed(context, DASHBOARD_ROUTE);
     }
   }
 
