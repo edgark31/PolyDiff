@@ -119,15 +119,15 @@
 //     padding: 15px;
 // }
 
-// .game-mode-image {
-//     position: relative;
-//     right: 330px;
-//     top: 320px;
-//     width: 1px;
-//     height: 1px;
-//     z-index: 2;
-//     object-fit: cover;
-// }
+.game-mode-image {
+    position: relative;
+    right: 330px;
+    top: 320px;
+    width: 1px;
+    height: 1px;
+    z-index: 2;
+    object-fit: cover;
+}
 
 #image {
     position: absolute;
@@ -224,11 +224,11 @@
     padding: 7.5px; /* Réduit de moitié */
 }
 
-#game-mode-image {
-    position: relative;
-    right: 160px;
-    top: 320px;
-    width: 70px; /* Mettez la moitié de la largeur originale ici */
-    height: 70px; /* Mettez la moitié de la hauteur originale ici */
-    z-index: 2;
-}
+// #game-mode-image {
+//     position: relative;
+//     right: 160px;
+//     top: 320px;
+//     width: 70px; /* Mettez la moitié de la largeur originale ici */
+//     height: 70px; /* Mettez la moitié de la hauteur originale ici */
+//     z-index: 2;
+// }
