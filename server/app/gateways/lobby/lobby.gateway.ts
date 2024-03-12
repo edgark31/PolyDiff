@@ -55,7 +55,7 @@ export class LobbyGateway implements OnGatewayConnection {
             name: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
         };
         this.roomsManager.lobbies.get(lobbyId).players.push(player);
-        socket.emit(LobbyEvents.Join, this.roomsManager.lobbies.get(lobbyId));
+        this.server.to(lobbyId).emit(LobbyEvents.Join, this.roomsManager.lobbies.get(lobbyId));
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} rejoint le lobby ${lobbyId}`);
     }
