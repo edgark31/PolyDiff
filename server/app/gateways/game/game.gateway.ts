@@ -1,7 +1,12 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
+import { ClassicModeService } from '@app/services/classic-mode/classic-mode.service';
+import { GameService } from '@app/services/game/game.service';
+import { LimitedModeService } from '@app/services/limited-mode/limited-mode.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
-import { GameEvents, GameState } from '@common/enums';
-import { Game } from '@common/game-interfaces';
+import { GameEvents, GameModes, GameState } from '@common/enums';
+import { Coordinate, Game } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import {
     ConnectedSocket,
@@ -23,28 +28,52 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
     @WebSocketServer() private server: Server;
     private readonly games = new Map<string, Game>();
 
-    // gateway needs to be injected all the services that it needs to use
-    // eslint-disable-next-line max-params -- services are needed for the gateway
     constructor(
         private readonly logger: Logger,
-        private readonly roomsManager: RoomsManagerService,
         private readonly accountManager: AccountManagerService,
+        private readonly gameService: GameService,
+        private readonly roomsManager: RoomsManagerService,
+        private readonly classicMode: ClassicModeService,
+        private readonly limitedMode: LimitedModeService,
     ) {}
 
     @SubscribeMessage(GameEvents.Start)
     startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         // this.roomsManager.startGame(socket, lobbyId);
+        socket.data.state = GameState.InGame;
+        socket.join(lobbyId);
+
+        // Pour démarrer tout le monde en même temps
+        if (Array.from(socket.rooms)[1].length === this.roomsManager.lobbies.get(lobbyId).players.length) {
+            if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
+                this.gameService.getGameById(this.roomsManager.lobbies.get(lobbyId).gameId).then((game) => {
+                    // Mettre une copie de game(db) vers game(lobby) et l'identifier par le lobbyId
+                    this.roomsManager.lobbies.get(lobbyId).game = {
+                        lobbyId,
+                        name: game.name,
+                        original: game.originalImage,
+                        modified: game.modifiedImage,
+                        gameId: game._id,
+                        differences: JSON.parse(game.differences) as Coordinate[][],
+                    };
+                });
+                socket.to(lobbyId).emit(GameEvents.Start, this.roomsManager.lobbies.get(lobbyId).game);
+            }
+        }
     }
+
+    // Juste pour limited
+    @SubscribeMessage(GameEvents.Start)
+    nextGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {}
 
     afterInit() {
         setInterval(() => {
-            this.roomsManager.updateTimers(this.server);
+            // this.roomsManager.updateTimers(this.server);
         }, DELAY_BEFORE_EMITTING_TIME);
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
-        socket.data.state = GameState.InGame;
 
         socket.on('disconnecting', () => {
             switch (socket.data.state) {

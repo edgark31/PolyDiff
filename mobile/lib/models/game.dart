@@ -1,3 +1,5 @@
+// TODO : Confirme game does not need 'name' attribute
+
 class Game {
   String lobbyId;
   String? gameId;

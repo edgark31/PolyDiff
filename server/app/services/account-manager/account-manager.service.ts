@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials, Statistics, Song, Theme } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Song, Statistics, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONNALIZATION } from '@common/constants';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
@@ -64,9 +64,9 @@ export class AccountManagerService implements OnModuleInit {
                 ],
             });
             if (!accountFound) throw new Error('Account not found');
-            if (this.connectedUsers.has(accountFound.credentials.username)) throw new Error('Account already connected');
 
             accountFound.id = accountFound._id.toString();
+            if (this.connectedUsers.has(accountFound.id)) throw new Error('Account already connected');
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
