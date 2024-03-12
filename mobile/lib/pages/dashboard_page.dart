@@ -42,6 +42,7 @@ class _DashboardPageState extends State<DashboardPage> {
       text: type == GameModes.Classic ? 'Classique' : 'Temps limité',
       press: () {
         socketService.setup(SocketType.Lobby, infoService.id);
+        chatService.clearLobbyMessages();
         lobbyService.setListeners();
         chatService.setLobbyChatListeners();
         lobbyService.setGameModes(type);
