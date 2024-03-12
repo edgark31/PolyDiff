@@ -121,10 +121,13 @@ export class RoomManagerService {
     }
 
     off(): void {
-        this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
-        this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
-        this.lobby?.unsubscribe();
-        this.message?.unsubscribe();
+        // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
+        // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        if (this.lobby && !this.lobby.closed) {
+            this.lobby?.unsubscribe();
+        }
+        if (this.message && !this.message.closed) this.message?.unsubscribe();
+        if (this.lobbies && !this.lobbies.closed) this.lobbies?.unsubscribe();
     }
 
     sendMessage(lobbyId: string | undefined, message: string): void {
@@ -244,6 +247,9 @@ export class RoomManagerService {
     }
 
     handleRoomEvents(): void {
+        this.lobby = new Subject();
+        this.lobbies = new Subject();
+        this.message = new Subject();
         if (this.isOrganizer)
             this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby.next(lobby);
@@ -251,7 +257,6 @@ export class RoomManagerService {
         else
             this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
                 this.lobby.next(lobby);
-                this.player.next(lobby.players);
             });
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);

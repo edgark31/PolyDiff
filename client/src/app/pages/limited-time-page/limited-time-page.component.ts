@@ -45,12 +45,13 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         // this.isStartingGame = false;
         this.nPlayersConnected = 0;
         this.lobbies = [];
+
         this.clientSocket.connect(this.welcomeService.account.id as string, 'lobby');
         console.log(welcomeService.account.credentials.username + 'est connecté');
-        this.roomManagerService.handleRoomEvents();
     }
 
     ngOnInit(): void {
+        this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         this.updatePagedImages();
     }
@@ -96,6 +97,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();
         this.hasNoGameAvailableSubscription?.unsubscribe();
+
         this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
     }
 }
