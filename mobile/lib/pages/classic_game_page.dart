@@ -5,7 +5,6 @@ import 'package:mobile/constants/temp_images.dart'; // TODO : replace with speci
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
-import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/canvas.dart';
 import 'package:mobile/widgets/chat_box.dart';
 
@@ -44,7 +43,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
 
   @override
   Widget build(BuildContext context) {
-    final lobbyService = context.watch<LobbyService>();
+    //final lobbyService = context.watch<LobbyService>();
     return Scaffold(
       body: Stack(
         children: [
