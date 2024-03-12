@@ -45,12 +45,6 @@ h2 {
     width: 32.5%; /* Réduit de moitié */
     height: 25%; /* Réduit de moitié */
 }
-body {
-    background-image: url('../../../assets/LimitedTimeBackground.jpg');
-    background-size: cover; /* Cela garantit que l'image couvre tout l'écran */
-    background-position: center center; /* Cela centre l'image dans la page */
-    background-repeat: no-repeat; /* Cela empêche l'image de se répéter */
-}
 
 .create-button {
     top: 100px;
