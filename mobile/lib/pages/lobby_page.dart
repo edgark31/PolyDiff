@@ -89,10 +89,8 @@ class _LobbyPageState extends State<LobbyPage> {
                           ? CustomButton(
                               text: 'Commencer la partie',
                               press: () {
-                                print(
-                                    'Starting the game Navigating to GamePage');
+                                print('Calling lobbyServce.startLobby');
                                 lobbyService.startLobby();
-                                Navigator.pushNamed(context, CLASSIC_ROUTE);
                               },
                               backgroundColor: kMidGreen,
                             )

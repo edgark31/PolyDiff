@@ -3,7 +3,6 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/game_card_service.dart';
-import 'package:mobile/services/image_converter_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
@@ -47,8 +46,11 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     setState(() => isLoading = true);
     final gameCardService =
         Provider.of<GameCardService>(context, listen: false);
+    print('Calling gameCardService.getGameCards()');
     String? serverErrorMessage = await gameCardService.getGameCards();
+    print('Finish calling gameCardService.getGameCards()');
     if (mounted) {
+      print('mounted');
       setState(() {
         isLoading = false;
         if (serverErrorMessage != null) {
@@ -96,8 +98,9 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
   }
 
   Widget buildGameCard(BuildContext context, GameCard card) {
-    final imageConverterService = ImageConverterService();
     final lobbyService = context.watch<LobbyService>();
+    String imagePath = '$BASE_URL/${card.gameId}/original.bmp';
+    print('Image path : $imagePath');
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -105,11 +108,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
         child: Column(
           children: [
             ListTile(
-              leading: Image.memory(
-                imageConverterService.uint8listFromBase64String(card.thumbnail),
-                width: 100,
-                height: 100,
-              ),
+              leading: Image.network(imagePath),
               title: Text(card.name),
               subtitle: Text('Différences: ${card.nDifferences}'),
             ),

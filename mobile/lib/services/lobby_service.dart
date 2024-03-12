@@ -23,6 +23,7 @@ class LobbyService extends ChangeNotifier {
   // String get gameId => _gameId;
   Lobby get lobby => _lobby;
   bool get isLobbyStarted => _isLobbyStarted;
+  bool get isPlayerInLobbyPage => _isPlayerInLobbyPage;
 
   final SocketService socketService = Get.find();
 
@@ -75,7 +76,7 @@ class LobbyService extends ChangeNotifier {
       [], // observers
       _isCheatEnabled,
       isGameModesClassic() ? GameModes.Classic : GameModes.Limited,
-      '', // Do not need send password
+      null, // ABSOLUTELY Do not send password
       _gameDuration,
       null, // Do not send chat log
       0, // TODO : Get nDifferences from the game ? (not needed for now)
@@ -92,7 +93,7 @@ class LobbyService extends ChangeNotifier {
     print('Setting _isPlayerinLobbyPage to true');
     _isPlayerInLobbyPage = true;
     // _lobbies.add(Lobby());
-    // notifyListeners();
+    notifyListeners();
   }
 
   void startLobby() {
@@ -158,6 +159,7 @@ class LobbyService extends ChangeNotifier {
     socketService.disconnect(SocketType.Lobby);
     print('Setting _isPlayerinLobbyPage to false');
     _isPlayerInLobbyPage = false;
+    notifyListeners();
   }
 
   void setListeners() {
@@ -215,7 +217,6 @@ class LobbyService extends ChangeNotifier {
       print('Lobby with id $data was started');
       String startedLobbyId = data as String;
       if (startedLobbyId == _lobby.lobbyId) {
-        // startLobby();
         _isLobbyStarted = true;
         print('_isLobbyStarted is now : $_isLobbyStarted');
         print('Setting _isPlayerinLobbyPage to false');
