@@ -7,6 +7,7 @@ const String EMPTY_BACKGROUND_PATH = 'assets/images/empty_background.jpg';
 const String MENU_BACKGROUND_PATH = 'assets/images/menu_background.jpg';
 const String SELECTION_BACKGROUND_PATH =
     'assets/images/selection_background.jpg';
+const String GAME_BACKGROUND_PATH = 'assets/images/game_background.jpg';
 
 // Colors
 const kDark = Colors.black;
