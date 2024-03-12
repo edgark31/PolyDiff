@@ -9,9 +9,11 @@ class GameAreaService extends ChangeNotifier {
   GameAreaService();
   Coordinate? currentCoord;
   List<Coordinate> coordinates = [];
+  List<Coordinate> cheatCoordinates = [];
   List<Coordinate> leftErrorCoord = [];
   List<Coordinate> rightErrorCoord = [];
   Path? blinkingDifference;
+  Path? cheatBlinkingDifference;
   Paint blinkingColor = Paint()
     ..color = Colors.green
     ..style = PaintingStyle.fill;
@@ -109,6 +111,61 @@ class GameAreaService extends ChangeNotifier {
 
   void resetBlinkingDifference() {
     blinkingDifference = null;
+    notifyListeners();
+  }
+
+  void initCheatPath(List<Coordinate> coords) {
+    print('Enter initcheatpath');
+    final cheatPath = Path();
+    for (var coord in coords) {
+      cheatPath.addRect(Rect.fromLTWH(
+        coord.x.toDouble(),
+        coord.y.toDouble(),
+        1,
+        1,
+      ));
+    }
+    cheatBlinkingDifference = cheatPath;
+  }
+
+  Future<void> toggleCheatMode(List<Coordinate> coords) async {
+    cheatCoordinates.addAll(coords);
+    notifyListeners();
+    print('Enter toggleCheatMode');
+    initCheatPath(coords);
+    if (cheatBlinkingDifference == null) return;
+
+    final Path blinkingCheatPath = cheatBlinkingDifference!;
+    const int timeToBlinkMs = 150;
+    const int cheatModeWaitMs = 250;
+
+    for (int i = 0; i < 10; i++) {
+      await showCheatDifference(blinkingCheatPath, timeToBlinkMs);
+      await hideCheatDifference(cheatModeWaitMs);
+    }
+
+    resetCheatBlinkingDifference();
+  }
+
+  Future<void> showCheatDifference(Path difference, int waitingTimeMs) async {
+    print('Enter showcheat');
+    blinkingColor.color = Colors.red;
+    cheatBlinkingDifference = difference;
+    notifyListeners();
+    await Future.delayed(Duration(milliseconds: waitingTimeMs));
+  }
+
+  Future<void> hideCheatDifference(int waitingTimeMs) async {
+    print('Enter hidecheat');
+    blinkingColor.color = Colors.red;
+    cheatBlinkingDifference = null;
+    notifyListeners();
+    await Future.delayed(Duration(milliseconds: waitingTimeMs));
+  }
+
+  void resetCheatBlinkingDifference() {
+    print('Enter resetcheat');
+    cheatBlinkingDifference = null;
     notifyListeners();
   }
 }
