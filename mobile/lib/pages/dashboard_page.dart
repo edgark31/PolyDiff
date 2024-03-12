@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
@@ -35,12 +36,14 @@ class _DashboardPageState extends State<DashboardPage> {
     final lobbyService = context.watch<LobbyService>();
     final socketService = context.watch<SocketService>();
     final infoService = context.watch<InfoService>();
+    final chatService = context.watch<ChatService>();
 
     return CustomButton(
       text: type == GameModes.Classic ? 'Classique' : 'Temps limité',
       press: () {
         socketService.setup(SocketType.Lobby, infoService.id);
         lobbyService.setListeners();
+        chatService.setLobbyChatListeners();
         lobbyService.setGameModes(type);
         _navigateTo(LOBBY_SELECTION_ROUTE);
       },

@@ -88,6 +88,12 @@ export class LobbyGateway implements OnGatewayConnection {
             this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
             message,
         );
+        console.log('lobbies');
+        console.log(this.roomsManager.lobbies);
+        console.log('lobbyId');
+        console.log(lobbyId);
+        console.log('lobby get');
+        console.log(this.roomsManager.lobbies.get(lobbyId));
         this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(chat);
 
         socket.emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Sent });
@@ -95,7 +101,6 @@ export class LobbyGateway implements OnGatewayConnection {
 
         const lobbies = Array.from(this.roomsManager.lobbies.values());
         this.server.emit(LobbyEvents.UpdateLobbys, lobbies);
-        socket.to(lobbyId).emit(LobbyEvents.Start, lobbyId);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} envoie un message`);
     }
 
