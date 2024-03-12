@@ -48,9 +48,11 @@ class _LobbyPageState extends State<LobbyPage> {
       chatService.clearLobbyMessages();
       print('Navigating to GamePage from _checkLobbyStart');
       Navigator.pushNamed(context, CLASSIC_ROUTE);
+      context.read<LobbyService>().removeListener(_checkLobbyState); // Optimisation possible?
     } else if (!lobbyService.isCurrentLobbyInLobbies()) {
       print('Navigating to DashBoardPage from _checkLobbyStart');
       Navigator.pushNamed(context, DASHBOARD_ROUTE);
+      context.read<LobbyService>().removeListener(_checkLobbyState); // Optimisation possible?
     }
   }
 
@@ -103,6 +105,7 @@ class _LobbyPageState extends State<LobbyPage> {
                       print('Quitting lobby and navigating to Dashboard');
                       lobbyService.leaveLobby();
                       Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                      context.read<LobbyService>().removeListener(_checkLobbyState); // Optimisation possible?
                     },
                     backgroundColor: kMidOrange,
                   ),
