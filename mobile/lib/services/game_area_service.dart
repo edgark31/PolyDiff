@@ -43,6 +43,8 @@ class GameAreaService extends ChangeNotifier {
   void showDifferenceFound(List<Coordinate> newCoordinates) {
     soundService.playCorrectSound();
     coordinates.addAll(newCoordinates);
+    isCheatMode = false;
+    resetCheatBlinkingDifference();
     notifyListeners();
     startBlinking(newCoordinates);
   }
