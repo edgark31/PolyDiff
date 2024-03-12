@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 import { GameModes } from './enums';
 import { ConnectionLog, PlayerTime, Song, Theme } from './game-interfaces';
 
@@ -55,3 +57,4 @@ export const DEFAULT_GAME_MODES = {
     [GameModes.LimitedSolo]: { isCountdown: true },
     [GameModes.LimitedCoop]: { isCountdown: true, requiresPlayer2: true },
 };
+>>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8

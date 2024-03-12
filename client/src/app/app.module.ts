@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 /* eslint-disable import/no-unresolved */
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -170,3 +172,4 @@ export const createTranslateLoader = (http: HttpClient) => {
     bootstrap: [AppComponent],
 })
 export class AppModule {}
+>>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8

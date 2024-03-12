@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Injectable } from '@angular/core';
 import { IMG_HEIGHT, IMG_TYPE_BMP, IMG_TYPE_JPEG_JPG, IMG_TYPE_PNG, IMG_WIDTH } from '@app/constants/image';
@@ -49,3 +51,4 @@ export class ValidationService {
         return image.width === IMG_WIDTH && image.height === IMG_HEIGHT;
     }
 }
+>>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8

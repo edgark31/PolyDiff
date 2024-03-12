@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 import { Component, EventEmitter, Output } from '@angular/core';
 
 import { Router } from '@angular/router';
@@ -31,3 +33,4 @@ export class MenuComponent {
     //     this.sidenav.toggle();
     // }
 }
+>>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8

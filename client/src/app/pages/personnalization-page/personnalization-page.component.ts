@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 /* eslint-disable max-params */
 /* eslint-disable max-len */
 /* eslint-disable no-console */
@@ -78,3 +80,4 @@ export class PersonnalizationPageComponent implements OnInit {
         this.welcomeService.chooseImage = choose;
     }
 }
+>>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8

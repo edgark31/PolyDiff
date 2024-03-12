@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 export enum GameEvents {
     ValidateCoords = 'ValidateCoords',
     CheckStatus = 'CheckStatus',
@@ -163,3 +165,4 @@ export enum ChannelEvents {
 export enum RankingEvents {
     Update = 'Update',
 }
+>>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8

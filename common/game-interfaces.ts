@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 import { Coordinate } from '@common/coordinate';
 import { GameModes, MessageTag } from '@common/enums';
 
@@ -264,3 +266,4 @@ export interface Song {
 //     language: string;
 //     password: string;
 // }
+>>>>>>> c5f4dc77a04b45be526171e798ba15819d6d8df8
