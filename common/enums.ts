@@ -74,6 +74,8 @@ export enum GameModes {
     ClassicOneVsOne = 'Classic->OneVsOne',
     LimitedSolo = 'Limited->Solo',
     LimitedCoop = 'Limited->Coop',
+    Classic = "Classic",
+    Limited = "Limited",
 }
 
 export enum MessageEvents {
@@ -100,16 +102,20 @@ export enum ConnectionEvents {
 }
 
 export enum LobbyEvents {
-    Create = 'Create',
-    Join = 'Join',
-    Leave = 'Leave',
-    Kick = 'Kick',
-    Lock = 'Lock',
+    Create = 'LobbyCreate',
+    Join = 'LobbyJoin',
+    Leave = 'LobbyLeave',
     OptPlayer = 'OptPlayer',
     JoinAsObserver = 'JoinAsObserver',
     LeaveAsObserver = 'LeaveAsObserver',
     UpdateLobbys = 'UpdateLobbys',
     Start = 'Start',
+}
+
+export enum LobbyState {
+    Idle = 'LobbyIdle',
+    Waiting = 'LobbyWaiting',
+    InGame = 'LobbyInGame',
 }
 
 export enum AccountEvents {
@@ -135,6 +141,12 @@ export enum GameEvents {
     Next = 'Next',
     Leave = 'Leave',
     End = 'End',
+}
+
+export enum GameState {
+    InGame = 'GameInGame',
+    Left = 'GameHasLeft',
+    Abandoned = 'GameHasAbandoned',
 }
 
 export enum ChannelEvents {

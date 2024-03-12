@@ -266,3 +266,14 @@ button {
 body {
     // background-color: #b7f1c6;
 }
+
+.status-indicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px; /* Taille du point de statut */
+    height: 10px; /* Taille du point de statut */
+    border-radius: 50%;
+    background: green;
+    border: 2px solid white; /* Pour qu'il ressorte sur des fonds variés */
+}

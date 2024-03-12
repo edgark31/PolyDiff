@@ -1,6 +1,7 @@
 import { Credentials, Theme } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MailService } from '@app/services/mail-service/mail-service';
+import { Song } from '@common/game-interfaces';
 import { Body, Controller, Delete, HttpStatus, Post, Put, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -114,6 +115,26 @@ export class AccountController {
     async modifyLanguage(@Body('oldUsername') oldUsername: string, @Body('newLangage') newLangage: string, @Res() response: Response) {
         try {
             await this.accountManager.modifyLanguage(oldUsername, newLangage);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.CONFLICT).json(error);
+        }
+    }
+
+    @Put('song/error')
+    async modifySongDifference(@Body('oldUsername') oldUsername: string, @Body('newSong') newSongError: Song, @Res() response: Response) {
+        try {
+            await this.accountManager.modifySongDifference(oldUsername, newSongError);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.CONFLICT).json(error);
+        }
+    }
+
+    @Put('song/difference')
+    async modifySongError(@Body('oldUsername') oldUsername: string, @Body('newSong') newSongDifference: Song, @Res() response: Response) {
+        try {
+            await this.accountManager.modifySongError(oldUsername, newSongDifference);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);

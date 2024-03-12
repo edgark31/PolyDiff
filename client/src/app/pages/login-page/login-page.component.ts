@@ -23,7 +23,6 @@ export class LoginPageComponent {
     creds: Credentials;
     feedback: string;
 
-    // eslint-disable-next-line max-params
     constructor(
         private readonly gameManager: GameManagerService,
         private readonly clientSocket: ClientSocketService,

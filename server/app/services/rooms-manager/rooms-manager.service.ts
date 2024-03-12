@@ -6,13 +6,26 @@ import { HistoryService } from '@app/services/history/history.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { CHARACTERS, DEFAULT_GAME_MODES, KEY_SIZE, MAX_BONUS_TIME_ALLOWED, NOT_FOUND } from '@common/constants';
 import { GameEvents, GameModes, MessageEvents, MessageTag, PlayerStatus } from '@common/enums';
-import { Chat, ClientSideGame, Coordinate, Differences, GameConfigConst, GameRoom, Player, PlayerData, TimerMode } from '@common/game-interfaces';
+import {
+    Chat,
+    ClientSideGame,
+    Coordinate,
+    Differences,
+    GameConfigConst,
+    GameRoom,
+    Lobby,
+    Player,
+    PlayerData,
+    TimerMode,
+} from '@common/game-interfaces';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as fs from 'fs';
 import * as io from 'socket.io';
 
 @Injectable()
 export class RoomsManagerService implements OnModuleInit {
+    lobbies = new Map<string, Lobby>();
+
     private gameConstants: GameConfigConst;
     private modeTimerMap: { [key: string]: TimerMode };
     private rooms: Map<string, GameRoom>;
@@ -29,6 +42,13 @@ export class RoomsManagerService implements OnModuleInit {
     async onModuleInit() {
         await this.getGameConstants();
     }
+
+    // async get(lobbyId: string): Promise<GameRoom> {
+    //     if (this.lobbies.get(lobbyId).gameId) {
+    //         const game: Game = await this.gameService.getGameById(this.lobbies.get(lobbyId).gameId);
+    //         return this.buildGameRoom(game, this.lobbies.get(lobbyId).player);
+    //     }
+    // }
 
     async createRoom(playerPayLoad: PlayerData): Promise<GameRoom> {
         const game = !playerPayLoad.gameId ? await this.gameService.getRandomGame([]) : await this.gameService.getGameById(playerPayLoad.gameId);
@@ -48,15 +68,15 @@ export class RoomsManagerService implements OnModuleInit {
         return Array.from(socket.rooms.values())[1];
     }
 
-    getRoomByPlayerId(playerId: string): GameRoom {
-        return Array.from(this.rooms.values()).find((room) => room.player1.playerId === playerId || room.player2?.playerId === playerId);
+    getRoomBySocketId(socketId: string): GameRoom {
+        return Array.from(this.rooms.values()).find((room) => room.player1.accountId === socketId || room.player2?.accountId === socketId);
     }
 
     getHostIdByGameId(gameId: string): string {
         const roomTarget = Array.from(this.rooms.values()).find(
             (room) => room.clientGame.id === gameId && room.clientGame.mode === GameModes.ClassicOneVsOne && !room.player2,
         );
-        return roomTarget?.player1.playerId;
+        return roomTarget?.player1.accountId;
     }
 
     getCreatedCoopRoom(): GameRoom {
@@ -77,8 +97,8 @@ export class RoomsManagerService implements OnModuleInit {
     }
 
     startGame(socket: io.Socket, server: io.Server): void {
-        const room = this.getRoomByPlayerId(socket.id);
-        if (!room || ![room.player1.playerId, room.player2?.playerId].includes(socket.id)) {
+        const room = this.getRoomBySocketId(socket.id);
+        if (!room || ![room.player1.accountId, room.player2?.accountId].includes(socket.id)) {
             this.handleGamePageRefresh(socket, server);
             return;
         }
@@ -105,7 +125,7 @@ export class RoomsManagerService implements OnModuleInit {
 
         if (!room) return;
 
-        const player = room.player1.playerId === socket.id ? room.player1 : room.player2;
+        const player = room.player1.accountId === socket.id ? room.player1 : room.player2;
         const index = room.originalDifferences.findIndex((difference) =>
             difference.some((coord: Coordinate) => coord.x === coords.x && coord.y === coords.y),
         );
@@ -117,7 +137,7 @@ export class RoomsManagerService implements OnModuleInit {
         server.to(room.roomId).emit(MessageEvents.LocalMessage, localMessage);
         server
             .to(room.roomId)
-            .emit(GameEvents.RemoveDifference, { differencesData, playerId: socket.id, cheatDifferences: room.originalDifferences });
+            .emit(GameEvents.RemoveDifference, { differencesData, socketId: socket.id, cheatDifferences: room.originalDifferences });
     }
 
     updateTimers(server: io.Server) {
@@ -150,16 +170,16 @@ export class RoomsManagerService implements OnModuleInit {
 
     leaveRoom(room: GameRoom, server: io.Server): void {
         [room.player1, room.player2].forEach((player) => {
-            const socket = server.sockets.sockets.get(player?.playerId);
+            const socket = server.sockets.sockets.get(player?.accountId);
             if (socket) socket.rooms.delete(room.roomId);
         });
     }
 
     async abandonGame(socket: io.Socket, server: io.Server): Promise<void> {
-        const room = this.getRoomByPlayerId(socket.id);
+        const room = this.getRoomBySocketId(socket.id);
         if (!room) return;
-        const player: Player = room.player1.playerId === socket.id ? room.player1 : room.player2;
-        const opponent: Player = room.player1.playerId === socket.id ? room.player2 : room.player1;
+        const player: Player = room.player1.accountId === socket.id ? room.player1 : room.player2;
+        const opponent: Player = room.player1.accountId === socket.id ? room.player2 : room.player1;
         this.historyService.markPlayer(room.roomId, player.name, PlayerStatus.Quitter);
         if (this.isMultiplayerGame(room.clientGame) && opponent) {
             const localMessage =
@@ -199,7 +219,7 @@ export class RoomsManagerService implements OnModuleInit {
 
     private handleCoopAbandon(player: Player, room: GameRoom, server: io.Server): Chat {
         const opponent = this.getOpponent(room, player);
-        server.to(opponent.playerId).emit(GameEvents.GameModeChanged);
+        server.to(opponent.accountId).emit(GameEvents.GameModeChanged);
         room.clientGame.mode = GameModes.LimitedSolo;
         this.updateRoom(room);
         return this.messageManager.getQuitMessage(player.name);
@@ -253,7 +273,7 @@ export class RoomsManagerService implements OnModuleInit {
     }
 
     private getOpponent(room: GameRoom, player: Player): Player {
-        return room.player1.playerId === player.playerId ? room.player2 : room.player1;
+        return room.player1.accountId === player.accountId ? room.player2 : room.player1;
     }
 
     private buildClientGameVersion(game: Game): ClientSideGame {

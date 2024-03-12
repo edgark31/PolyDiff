@@ -8,14 +8,17 @@ class SocketService extends ChangeNotifier {
   static late IO.Socket lobbySocket;
   static late IO.Socket gameSocket;
 
-  void setup(SocketType type, String name) {
-    print('Setup ${type.name} started for $name');
+  void setup(SocketType type, String id) {
+    print('Setup ${type.name} started for $id');
     switch (type) {
       case SocketType.Auth:
+        String query = 'id=$id';
+        print('Sending a query as $query');
         authSocket = IO.io(BASE_URL, <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'name=$name'
+          'forceNew': true,
+          'query': query
         });
         authSocket.connect();
         setSocket(authSocket);
@@ -24,7 +27,8 @@ class SocketService extends ChangeNotifier {
         lobbySocket = IO.io("$BASE_URL/lobby", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'name=$name'
+          'forceNew': true,
+          'query': 'id=$id'
         });
         lobbySocket.connect();
         setSocket(lobbySocket);
@@ -33,13 +37,14 @@ class SocketService extends ChangeNotifier {
         gameSocket = IO.io("$BASE_URL/game", <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
-          'query': 'name=$name',
+          'forceNew': true,
+          'query': 'id=$id',
         });
         gameSocket.connect();
         setSocket(gameSocket);
         break;
     }
-    print("Setup $type.name completed for $name");
+    print("Setup ${type.name} completed for $id");
   }
 
   void setSocket(IO.Socket socket) {

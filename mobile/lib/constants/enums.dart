@@ -35,7 +35,77 @@ enum SocketType {
   Game,
 }
 
-enum GameType {
+enum GameModes {
   Classic,
   Limited,
+}
+
+enum ChannelEvents {
+  SendLobbyMessage,
+  LobbyMessage,
+  SendLocalMessage,
+  LocalMessage,
+  SendGlobalMessage,
+  GlobalMessage,
+  UpdateLog,
+  FriendConnection,
+}
+
+enum LobbyEvents {
+  Create,
+  Join,
+  Leave,
+  OptPlayer,
+  JoinAsObserver,
+  LeaveAsObserver,
+  UpdateLobbys,
+  Start,
+}
+
+extension LobbyEventsExtension on LobbyEvents {
+  String get name {
+    switch (this) {
+      case LobbyEvents.Create:
+        return 'LobbyCreate';
+      case LobbyEvents.Join:
+        return 'LobbyJoin';
+      case LobbyEvents.Leave:
+        return 'LobbyLeave';
+      case LobbyEvents.OptPlayer:
+        return 'OptPlayer';
+      case LobbyEvents.JoinAsObserver:
+        return 'JoinAsObserver';
+      case LobbyEvents.LeaveAsObserver:
+        return 'LeaveAsObserver';
+      case LobbyEvents.UpdateLobbys:
+        return 'UpdateLobbys';
+      case LobbyEvents.Start:
+        return 'Start';
+      default:
+        return '';
+    }
+  }
+
+  String get value {
+    switch (this) {
+      case LobbyEvents.Create:
+        return 'LobbyCreate';
+      case LobbyEvents.Join:
+        return 'LobbyJoin';
+      case LobbyEvents.Leave:
+        return 'LobbyLeave';
+      case LobbyEvents.OptPlayer:
+        return 'OptPlayer';
+      case LobbyEvents.JoinAsObserver:
+        return 'JoinAsObserver';
+      case LobbyEvents.LeaveAsObserver:
+        return 'LeaveAsObserver';
+      case LobbyEvents.UpdateLobbys:
+        return 'UpdateLobbys';
+      case LobbyEvents.Start:
+        return 'Start';
+      default:
+        return '';
+    }
+  }
 }

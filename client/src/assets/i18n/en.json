@@ -24,7 +24,9 @@
         "Connexion": "Login statement",
         "gameHistoric": "game history",
         "changePassword": "Change password",
-        "confirmePassword": "Confirm password"
+        "confirmePassword": "Confirm password",
+        "songDifference": "choose your sound for difference found",
+        "songError": "choose your sound for error"
     },
 
     "bouton": {

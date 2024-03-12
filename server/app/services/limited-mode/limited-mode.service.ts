@@ -22,13 +22,13 @@ export class LimitedModeService {
         socket.join(limitedRoom.roomId);
         server.to(limitedRoom.roomId).emit(RoomEvents.RoomLimitedCreated, limitedRoom.roomId);
         limitedRoom.clientGame.mode = playerPayLoad.gameMode;
-        limitedRoom.player1.playerId = socket.id;
+        limitedRoom.player1.accountId = socket.id;
         limitedRoom.timer = limitedRoom.gameConstants.countdownTime;
         this.roomsManagerService.updateRoom(limitedRoom);
     }
 
     async startNextGame(socket: io.Socket, server: io.Server): Promise<void> {
-        const room = this.roomsManagerService.getRoomByPlayerId(socket.id);
+        const room = this.roomsManagerService.getRoomBySocketId(socket.id);
         if (!room) return;
         const playedGameIds = this.getGameIds(room.roomId);
         const nextGameId = await this.roomsManagerService.loadNextGame(room, playedGameIds);
@@ -63,7 +63,7 @@ export class LimitedModeService {
         const room = this.roomsManagerService.getCreatedCoopRoom();
         if (!room) return;
         socket.join(room.roomId);
-        room.player2 = { name: playerPayLoad.playerName, playerId: socket.id, differenceData: room.player1.differenceData };
+        room.player2 = { name: playerPayLoad.playerName, accountId: socket.data.accountId, differenceData: room.player1.differenceData };
         this.roomsManagerService.updateRoom(room);
         server.to(room.roomId).emit(RoomEvents.LimitedCoopRoomJoined);
     }

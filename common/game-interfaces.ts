@@ -68,12 +68,6 @@ export interface GameRoom {
     player1: Player;
 }
 
-export interface Player {
-    playerId?: string;
-    name: string;
-    differenceData: Differences;
-}
-
 export interface PlayerData {
     playerName: string;
     gameId: string;
@@ -128,6 +122,7 @@ export enum GameCardActions {
     Create = 'create',
     Join = 'join',
 }
+
 export { Coordinate };
 
 export interface ChatMessageGlobal {
@@ -137,24 +132,36 @@ export interface ChatMessageGlobal {
     timestamp?: string;
 }
 
-export interface Lobby {
-    lobbyId: number;
-    gameId: number;
-    isAvailable: boolean;
-    players: Player[];
-    observers: Observers[];
-    isCheatEnabled: boolean;
+export interface Player {
+    accountId?: string;
+    name?: string;
+    differenceData?: Differences;
 }
 
 export interface Observers {
     name: string;
 }
 
+export interface Lobby {
+    lobbyId?: string;
+    gameId?: string; // creer en classique
+    game?: Game;
+    isAvailable: boolean; // true
+    players: Player[]; // vide
+    observers: Observers[]; // vide
+    isCheatEnabled: boolean; // false
+    mode: GameModes; // classique ou limited
+    password?: string; // oui
+    time?: number;
+    chatLog?: ChatLog;
+    nDifferences?: number; // oui en classique
+}
+
 export interface Game {
-    gameId: number;
+    lobbyId: string;
+    gameId?: string;
     original: string;
     modified: string;
-    mode: string;
     difficulty: string;
     differences: Coordinate[][];
 }
@@ -180,6 +187,8 @@ export interface Profile {
     friendRequests: string[];
     theme: Theme;
     language: string;
+    songDifference: Song;
+    songError: Song;
 }
 
 export interface SessionLog {
@@ -240,6 +249,11 @@ export interface Theme {
     color: string;
     backgroundColor: string;
     buttonColor: string;
+}
+
+export interface Song {
+    name: string;
+    link: string;
 }
 
 // export interface modifyProfile {

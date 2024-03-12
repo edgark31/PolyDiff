@@ -23,7 +23,8 @@ class CreateRoomOptionsPage extends StatefulWidget {
 
 class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
   bool cheatMode = false;
-  double time = 20;
+  double gameDuration = 30;
+
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
@@ -36,18 +37,17 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-                'Sélectionner les options de la salle de jeu en Mode ${lobbyService.gameTypeName}'),
+                'Sélectionner les options de la salle de jeu en Mode ${lobbyService.gameModesName}'),
             cheatSetting(context),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
             ),
-            lobbyService.isGameTypeClassic()
-                ? const SizedBox()
-                : timeSelection(context),
+            timeSelection(context),
             CustomButton(
               press: () {
-                // TODO: Add creating lobby logic
-                lobbyService.setIsCreator(true);
+                lobbyService.setIsCheatEnabled(cheatMode);
+                lobbyService.setGameDuration(gameDuration.round());
+                lobbyService.createLobby();
                 Navigator.pushNamed(context, LOBBY_ROUTE);
               },
               text: 'Créer la salle de jeu',
@@ -56,6 +56,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
             CustomButton(
               press: () {
                 // TODO: Make sure the page does not count stats + no clock
+                // TODO: Think if we need to disconnect the lobby socket
                 print("Navigate to game page but stats do not count");
                 Navigator.pushNamed(context, CLASSIC_ROUTE);
               },
@@ -91,14 +92,14 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
       children: [
         Text('Temps initial de la partie (en secondes)'),
         Slider(
-          value: time,
-          min: 0,
+          value: gameDuration,
+          min: 30,
           max: 60,
           divisions: 60,
-          label: time.round().toString(),
+          label: gameDuration.round().toString(),
           onChanged: (double newValue) {
             setState(() {
-              time = newValue;
+              gameDuration = newValue;
             });
           },
         ),

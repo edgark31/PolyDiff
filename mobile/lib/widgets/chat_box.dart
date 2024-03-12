@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/enums.dart';
-import 'package:mobile/models/chat_message_model.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
@@ -86,7 +84,7 @@ class _ChatBoxState extends State<ChatBox> {
                 controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
-                  bool isSent = messages[index].userName == username;
+                  bool isSent = messages[index].name == username;
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
@@ -96,10 +94,11 @@ class _ChatBoxState extends State<ChatBox> {
                           : CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                            backgroundImage: NetworkImage(avatarUrl), // TODO : Also show avatar of sender
+                            backgroundImage: NetworkImage(
+                                avatarUrl), // TODO : Also show avatar of sender
                             radius: 15.0),
                         Text(
-                          messages[index].userName,
+                          messages[index].name,
                           style: TextStyle(color: Colors.black),
                         ),
                         Container(
@@ -111,7 +110,7 @@ class _ChatBoxState extends State<ChatBox> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            messages[index].message,
+                            messages[index].raw,
                             style: TextStyle(color: Colors.black),
                           ),
                         ),
@@ -157,14 +156,7 @@ class _ChatBoxState extends State<ChatBox> {
                     onPressed: () {
                       String message = messageController.text;
                       if (message.isNotEmpty) {
-                        chatService.sendMessage(
-                          ChatMessage(
-                            MessageTag.Sent,
-                            message,
-                            username,
-                            'test',
-                          ),
-                        );
+                        chatService.sendGlobalMessage(message);
                         setState(() {});
                         messageController.clear();
                         WidgetsBinding.instance.addPostFrameCallback((_) {
