@@ -42,7 +42,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         // this.roomsManager.startGame(socket, lobbyId);
         socket.data.state = GameState.InGame;
         socket.join(lobbyId);
-        // Pour démarrer en même temps tout le monde
+
+        // Pour démarrer tout le monde en même temps
         if (Array.from(socket.rooms)[1].length === this.roomsManager.lobbies.get(lobbyId).players.length) {
             if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
                 this.gameService.getGameById(this.roomsManager.lobbies.get(lobbyId).gameId).then((game) => {
