@@ -242,15 +242,12 @@ export class RoomManagerService {
     }
 
     handleRoomEvents(): void {
-        if (this.isOrganizer) {
-            this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
-                this.lobby.next(lobby);
-            });
-        } else {
-            this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
-                this.lobby.next(lobby);
-            });
-        }
+        this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
+            this.lobby.next(lobby);
+        });
+        this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
+            this.lobby.next(lobby);
+        });
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });
