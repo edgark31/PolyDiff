@@ -8,7 +8,7 @@ import { NavigationService } from '@app/services/navigation-service/navigation.s
 // import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { GameModes } from '@common/enums';
+import { ChannelEvents, GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
 
@@ -95,5 +95,6 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit, AfterViewIni
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();
         this.hasNoGameAvailableSubscription?.unsubscribe();
+        this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
     }
 }
