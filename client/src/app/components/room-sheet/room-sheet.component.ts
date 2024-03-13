@@ -15,7 +15,6 @@ import { Lobby } from '@common/game-interfaces';
 })
 export class RoomSheetComponent {
     @Input() lobby: Lobby;
-    numberOfDifferences: number;
     gameModes: typeof GameModes = GameModes;
 
     constructor(
