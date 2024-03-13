@@ -86,14 +86,14 @@ export class LobbyGateway implements OnGatewayConnection {
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} quitte le lobby ${lobbyId}`);
     }
 
-    // l'hôte démmare le lobby et connecte le socket game - transfert vers game gateway
+    // l'HÔTE démmare le lobby et connecte le socket game - transfert vers game gateway
     @SubscribeMessage(LobbyEvents.Start)
     start(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.data.state = LobbyState.InGame;
         this.roomsManager.lobbies.get(lobbyId).isAvailable = false;
 
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
-        socket.to(lobbyId).emit(LobbyEvents.Start, lobbyId);
+        this.server.to(lobbyId).emit(LobbyEvents.Start, socket.data.accountId);
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} démarre le lobby ${lobbyId}`);
     }
 
@@ -129,7 +129,6 @@ export class LobbyGateway implements OnGatewayConnection {
                 case LobbyState.Idle:
                     break;
                 case LobbyState.Waiting: // ta deja rejoint une room
-                    socket.data.state = LobbyState.Idle;
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
                     break;

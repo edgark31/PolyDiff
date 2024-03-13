@@ -137,7 +137,6 @@ export class RoomsManagerService implements OnModuleInit {
             if (lobby.isAvailable) return;
             if (lobby.time === 0) {
                 server.to(lobby.lobbyId).emit(GameEvents.EndGame, 'Temps écoulé !');
-                this.lobbies.delete(lobby.lobbyId);
                 return;
             }
             server.to(lobby.lobbyId).emit(GameEvents.TimerUpdate, --lobby.time);

@@ -154,6 +154,7 @@ export interface Lobby {
     mode: GameModes; // classique ou limited
     password?: string; // oui
     time?: number;
+    timerId?: NodeJS.Timeout;
     timeLimit: number;
     bonusTime?: number;
     chatLog?: ChatLog;

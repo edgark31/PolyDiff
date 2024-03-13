@@ -63,12 +63,20 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
                 // Start Limited Mode
                 this.logger.error('Not implemented yet, sorry... 😭');
             }
+            // Set timer indivually for each lobby
+            this.roomsManager.lobbies.get(lobbyId).timerId = setInterval(() => {
+                if (this.roomsManager.lobbies.get(lobbyId).time <= 0) {
+                    this.server.to(lobbyId).emit(GameEvents.EndGame, 'Temps écoulé !');
+                    clearInterval(this.roomsManager.lobbies.get(lobbyId).timerId);
+                    return;
+                }
+                this.roomsManager.lobbies.get(lobbyId).time -= 1;
+                this.server.to(lobbyId).emit(GameEvents.TimerUpdate, this.roomsManager.lobbies.get(lobbyId).time);
+            }, 1000);
         }
     }
 
     // -------------------------- CLASSIC MODE --------------------------
-
-
 
     // -------------------------- LIMITED MODE --------------------------
     @SubscribeMessage(GameEvents.Start)
@@ -76,7 +84,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
 
     afterInit() {
         setInterval(() => {
-            this.roomsManager.updateTimers(this.server);
+            // this.roomsManager.updateTimers(this.server);
         }, DELAY_BEFORE_EMITTING_TIME);
     }
 
