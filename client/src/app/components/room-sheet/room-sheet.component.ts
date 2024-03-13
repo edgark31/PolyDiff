@@ -1,7 +1,10 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Component, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
+import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 
@@ -12,10 +15,18 @@ import { Lobby } from '@common/game-interfaces';
 })
 export class RoomSheetComponent {
     @Input() lobby: Lobby;
-    numberOfDifferences: number;
     gameModes: typeof GameModes = GameModes;
 
-    constructor(public router: Router) {
-        this.numberOfDifferences = 0;
+    constructor(
+        public router: Router, // private readonly dialog: MatDialog
+        public roomManager: RoomManagerService,
+        private readonly dialog: MatDialog,
+    ) {}
+
+    manageGames(lobby: Lobby): void {
+        if (!this.lobby.password) {
+            this.roomManager.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
+            this.router.navigate(['/waiting-room']);
+        } else this.dialog.open(ModalAccessMatchComponent);
     }
 }

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
-import { GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
-import { Lobby, PlayerData } from '@common/game-interfaces';
+import { ChannelEvents, GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
+import { Chat, Lobby, Player, PlayerData } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -10,7 +10,11 @@ import { Subject } from 'rxjs';
 })
 export class RoomManagerService {
     password: string;
-    private lobby: Subject<Lobby>;
+    isOrganizer: boolean;
+    lobby: Subject<Lobby>;
+    wait: boolean;
+    // player: Player[];
+    player: Subject<Player[]>;
     private lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
     // private playerNameAvailability: Subject<PlayerNameAvailability>;
@@ -25,6 +29,8 @@ export class RoomManagerService {
     // private isLimitedCoopRoomAvailable: Subject<boolean>;
     // private hasNoGameAvailable: Subject<boolean>;
     private isGameHistoryReloadNeeded: Subject<boolean>;
+    private messages: Subject<Chat[]>;
+    private message: Subject<Chat>;
 
     constructor(private readonly clientSocket: ClientSocketService) {
         // this.playerNameAvailability = new Subject<PlayerNameAvailability>();
@@ -42,10 +48,20 @@ export class RoomManagerService {
         // this.roomSoloId = new Subject<string>();
         // this.roomLimitedId = new Subject<string>();
         this.isGameHistoryReloadNeeded = new Subject<boolean>();
+        this.messages = new Subject<Chat[]>();
+        this.message = new Subject<Chat>();
     }
 
     get joinedPlayerNamesByGameId$() {
         return this.joinedPlayerNames.asObservable();
+    }
+
+    get messages$() {
+        return this.messages.asObservable();
+    }
+
+    get message$() {
+        return this.message.asObservable();
     }
 
     // get playerNameAvailability$() {
@@ -104,7 +120,22 @@ export class RoomManagerService {
         return this.lobbies.asObservable();
     }
 
+    off(): void {
+        // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
+        // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        if (this.lobby && !this.lobby.closed) {
+            this.lobby?.unsubscribe();
+        }
+        if (this.message && !this.message.closed) this.message?.unsubscribe();
+        if (this.lobbies && !this.lobbies.closed) this.lobbies?.unsubscribe();
+    }
+
+    sendMessage(lobbyId: string | undefined, message: string): void {
+        this.clientSocket.send('lobby', ChannelEvents.SendLobbyMessage, { lobbyId, message });
+    }
+
     createClassicRoom(roomPayload: Lobby) {
+        this.isOrganizer = true;
         this.clientSocket.send('lobby', LobbyEvents.Create, roomPayload);
     }
 
@@ -113,7 +144,7 @@ export class RoomManagerService {
     }
 
     joinRoom(lobbyId: string) {
-        this.clientSocket.send('lobby', LobbyEvents.Join, lobbyId);
+        this.clientSocket.send('lobby', LobbyEvents.Join, { lobbyId });
     }
 
     createOneVsOneRoom(playerPayLoad: PlayerData): void {
@@ -121,6 +152,7 @@ export class RoomManagerService {
     }
 
     createLimitedRoom(roomPayload: Lobby): void {
+        this.isOrganizer = true;
         this.clientSocket.send('lobby', LobbyEvents.Create, roomPayload);
     }
 
@@ -146,6 +178,10 @@ export class RoomManagerService {
 
     updateWaitingPlayerNameList(playerPayLoad: PlayerData): void {
         this.clientSocket.send('lobby', PlayerEvents.UpdateWaitingPlayerNameList, playerPayLoad);
+    }
+
+    onQuit(lobby: Lobby): void {
+        this.clientSocket.send('lobby', LobbyEvents.Leave, lobby.lobbyId);
     }
 
     isPlayerNameIsAlreadyTaken(playerPayLoad: PlayerData): void {
@@ -204,17 +240,29 @@ export class RoomManagerService {
         this.clientSocket.lobbySocket.off();
     }
 
-    handleRoomEvents(): void {
-        this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
-            this.lobby.next(lobby);
-        });
+    async setPlayers() {
+        // this.lobby$.subscribe((lobby: Lobby) => {
+        //     this.player = lobby.players;
+        // });
+    }
 
+    handleRoomEvents(): void {
+        this.lobby = new Subject();
+        this.lobbies = new Subject();
+        this.message = new Subject();
+        if (this.isOrganizer)
+            this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
+                this.lobby.next(lobby);
+            });
+        else
+            this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
+                this.lobby.next(lobby);
+            });
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });
-
-        // this.clientSocket.on('lobby', LobbyEvents.Join, (playerNames: string[]) => {
-        //     this.joinedPlayerNames.next(playerNames);
-        // });
+        this.clientSocket.on('lobby', ChannelEvents.LobbyMessage, (chat: Chat) => {
+            this.message.next(chat);
+        });
     }
 }

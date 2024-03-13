@@ -1,7 +1,7 @@
 <div id="chat-box">
     <div class="content">
         <div class="contact-profile">
-            <p class = "chat">Zone de clavardage</p>
+            <p class="chat">Zone de clavardage</p>
         </div>
         <div class="messages">
             <ul>
@@ -15,7 +15,8 @@
         </div>
         <div class="message-input">
             <div class="wrap">
-                <input id = "input" type="text" #inputText placeholder="Entrez un message" (keyup.enter)="onAdd(inputText)" maxlength="200" />
+                <input id="input" type="text" #inputText placeholder="Entrez un message"
+                    (keyup.enter)="onAdd(inputText)" maxlength="200" />
                 <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
                 <button mat-button class="submit" (click)="onAdd(inputText)">
                     <mat-icon class="small-icon">near_me</mat-icon>

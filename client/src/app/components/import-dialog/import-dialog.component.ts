@@ -39,6 +39,7 @@ export class ImportDialogComponent {
     onImport(): void {
         if (this.welcomeService.chooseImage) this.choice = `http://localhost:3000/avatar/default${this.welcomeService.selectLocal}.png`;
         else this.choice = this.imageData;
+        this.welcomeService.selectAvatarRegister = this.choice;
         this.dialogRef.close();
         this.verifyAccount();
     }
