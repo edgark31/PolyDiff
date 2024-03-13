@@ -4,7 +4,6 @@ import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
-import { NavigationService } from '@app/services/navigation-service/navigation.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
@@ -23,10 +22,7 @@ export class RoomSheetComponent {
         public router: Router, // private readonly dialog: MatDialog
         public roomManager: RoomManagerService,
         private readonly dialog: MatDialog,
-        private readonly navigationService: NavigationService,
-    ) {
-        this.numberOfDifferences = this.navigationService.getNDifferences();
-    }
+    ) {}
 
     manageGames(lobby: Lobby): void {
         if (!this.lobby.password) {

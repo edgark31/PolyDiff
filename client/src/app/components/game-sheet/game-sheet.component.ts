@@ -98,7 +98,7 @@ export class GameSheetComponent implements OnDestroy, OnInit {
 
     setGameId(): void {
         this.navigationService.setGameId(this.game._id);
-        this.navigationService.setNDifferences(this.game.nDifference);
+        this.navigationService.setNDifferences(this.game.nDifference as number);
     }
 
     ngOnDestroy(): void {

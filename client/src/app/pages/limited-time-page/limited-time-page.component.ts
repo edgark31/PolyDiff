@@ -75,7 +75,6 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
                 this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
-                console.log(this.lobbies);
                 const startIndex = this.currentPage * this.pageSize;
                 const endIndex = startIndex + this.pageSize;
                 this.pagedLobby = this.lobbies.slice(startIndex, endIndex);
