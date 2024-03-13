@@ -3,8 +3,8 @@
     top: 220px;
     left: 50.7%;
     transform: translateX(-50%);
-    width: 65%;
-    height: 50%;
+    width: 50%;
+    height: 30%;
 }
 
 // .create-button {
@@ -88,7 +88,7 @@
 // }
 
 .player-count {
-    bottom: -6px;
+    bottom: 175px;
     left: 250px;
     font-weight: bold;
     position: relative;
@@ -129,6 +129,16 @@
     object-fit: cover;
 }
 
+.game-mode-image-classic img{
+    position: relative;
+    right: 220px;
+    top: 220px;
+    width: 180px;
+    height: auto;
+    z-index: 2;
+    object-fit: cover;
+}
+
 
 .create-button {
     top: 100px;
@@ -151,8 +161,8 @@
 }
 
 .join-button {
-    top: 220px;
-    left: 10px;
+    top: 40px;
+    left: 20px;
     cursor: pointer;
     position: relative;
     text-align: center;
@@ -172,7 +182,7 @@
 }
 
 .difference-number {
-    top: 200px;
+    top: 25px;
     font-weight: bold;
     position: relative;
     text-align: center;
@@ -185,7 +195,7 @@
 }
 
 .game-mode {
-    top: 220px;
+    top: 50px;
     right: 230px;
     font-weight: bold;
     position: relative;
@@ -199,7 +209,7 @@
 }
 
 .player-container {
-    bottom: -28px;
+    top: 25px;
     left: 250px;
     font-weight: bold;
     position: relative;

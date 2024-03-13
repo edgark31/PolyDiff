@@ -2,8 +2,8 @@
 <div *ngIf="lobby.mode===gameModes.Limited" class="game-mode-image">
     <img alt="game-mode-image" id="game-mode-image" src="./assets/LimitedTime.png" />
 </div>
-<div *ngIf="lobby.gameId && lobby.mode===gameModes.Classic" class="game-mode-image">
-    <img alt="game-mode-image" id="game-mode-image" src="{{'http://localhost:3000/' + lobby.gameId + '/original.bmp'}}" />
+<div *ngIf="lobby.gameId && lobby.mode===gameModes.Classic" class="game-mode-image-classic">
+    <img alt="game-mode-image" id="game-mode-image-classic" src="{{'http://localhost:3000/' + lobby.gameId + '/original.bmp'}}" />
 </div>
 
 <div class="container">
