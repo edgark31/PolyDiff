@@ -6,7 +6,7 @@ import 'package:mobile/services/socket_service.dart';
 
 class LobbyService extends ChangeNotifier {
   static GameModes _gameModes = GameModes.Classic;
-  static String _gameModesName = 'Classique';
+  static String _gameModesName = GameModes.Classic.name;
   static bool _isCreator = false;
   static List<Lobby> _lobbies = [];
   static String _gameId = 'initial-game-id';
@@ -43,11 +43,11 @@ class LobbyService extends ChangeNotifier {
   }
 
   // Lobby Selection setters
-
   void setGameModes(GameModes newGameModes) {
     print('Setting game type to: $newGameModes');
     _gameModes = newGameModes;
-    _gameModesName = isGameModesClassic() ? 'Classique' : 'Temps limité';
+    _gameModesName =
+        isGameModesClassic() ? GameModes.Classic.name : GameModes.Limited.name;
     print('Game type name is : $_gameModesName');
     notifyListeners();
   }
@@ -65,22 +65,15 @@ class LobbyService extends ChangeNotifier {
   void createLobby() {
     print('Creating lobby');
     setIsCreator(true);
-    List<List<Coordinate>> emptyDifferences = [];
-    Lobby lobbyCreated = Lobby(
-      'initial-lobby-id', // Do not need send lobbyId
-      _gameId,
-      Game('', '', '', '', '', emptyDifferences), // Do not need send game
-      true, // isAvailable
-      [], // players
-      [], // observers
-      _isCheatEnabled,
-      isGameModesClassic() ? GameModes.Classic : GameModes.Limited,
-      '', // Do not need send password
-      _gameDuration,
-      null, // Do not send chat log
-      0, // TODO : Get nDifferences from the game ? (not needed for now)
+    Lobby lobbyCreated = Lobby.create(
+      isAvailable: true,
+      players: [],
+      observers: [], // observers
+      isCheatEnabled: _isCheatEnabled,
+      mode: isGameModesClassic() ? GameModes.Classic : GameModes.Limited,
+      time: _gameDuration,
+      timeLimit: _gameDuration, // timeLimit
     );
-    print('GameId Lobby Sent: ${lobbyCreated.gameId}');
     print('IsCheatEnabled Lobby Sent: ${lobbyCreated.isCheatEnabled}');
     print('Mode Lobby Sent: ${lobbyCreated.mode}');
     print('Time Lobby Sent: ${lobbyCreated.time}');
@@ -89,7 +82,7 @@ class LobbyService extends ChangeNotifier {
       LobbyEvents.Create.name,
       lobbyCreated.toJson(),
     );
-    print('Setting _isPlayerinLobbyPage to true');
+    print('Setting _isPlayerInLobbyPage to true');
     _isPlayerInLobbyPage = true;
     // _lobbies.add(Lobby());
     // notifyListeners();
@@ -128,7 +121,7 @@ class LobbyService extends ChangeNotifier {
       return;
     }
     _lobby = _lobbies.firstWhere((lobby) => lobby.lobbyId == joinedLobbyId);
-    print('Setting _isPlayerinLobbyPage to true');
+    print('Setting _isPlayerInLobbyPage to true');
     _isPlayerInLobbyPage = true;
     notifyListeners();
     print('Joining lobby with id: $joinedLobbyId');
@@ -156,7 +149,7 @@ class LobbyService extends ChangeNotifier {
       leftLobbyId,
     );
     socketService.disconnect(SocketType.Lobby);
-    print('Setting _isPlayerinLobbyPage to false');
+    print('Setting _isPlayerInLobbyPage to false');
     _isPlayerInLobbyPage = false;
   }
 
@@ -211,11 +204,14 @@ class LobbyService extends ChangeNotifier {
         // startLobby();
         _isLobbyStarted = true;
         print('_isLobbyStarted is now : $_isLobbyStarted');
-        print('Setting _isPlayerinLobbyPage to false');
+        print('Setting _isPlayerInLobbyPage to false');
         _isPlayerInLobbyPage = false;
         notifyListeners();
       }
     });
+
+    // TODO: Implement LobbyEvents.Join Listerners ??
+    // socketService.on(SocketType.Lobby, LobbyEvents.Join.name, (data) {
 
     // TODO: Implement LobbyEvents.Leave Listerners to handle creator quitting
     // socketService.on(SocketType.Lobby, LobbyEvents.Leave.name, (data) {
