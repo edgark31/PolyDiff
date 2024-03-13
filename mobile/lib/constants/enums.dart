@@ -60,6 +60,7 @@ enum LobbyEvents {
   LeaveAsObserver,
   UpdateLobbys,
   Start,
+  LeaveRoom,
 }
 
 extension LobbyEventsExtension on LobbyEvents {
@@ -81,6 +82,8 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'UpdateLobbys';
       case LobbyEvents.Start:
         return 'Start';
+      case LobbyEvents.LeaveRoom:
+        return 'LeaveRoom';
       default:
         return '';
     }
@@ -104,6 +107,8 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'UpdateLobbys';
       case LobbyEvents.Start:
         return 'Start';
+      case LobbyEvents.LeaveRoom:
+        return 'LeaveRoom';
       default:
         return '';
     }
