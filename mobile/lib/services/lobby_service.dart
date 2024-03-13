@@ -187,6 +187,7 @@ class LobbyService extends ChangeNotifier {
         _lobbies = updatedLobbies;
         if (_isPlayerInLobbyPage) {
           print('Player is in lobby page, updating the main lobby');
+          // TODO : fix error if creator leaves on waiting player
           _lobby =
               _lobbies.firstWhere((lobby) => lobby.lobbyId == _lobby.lobbyId);
         }
