@@ -12,8 +12,10 @@ class Lobby {
   final GameModes mode;
   final String? password;
   int? time;
+  int timeLimit;
+  int? bonusTime;
   ChatLog? chatLog;
-  final int? nDifferences;
+  int? nDifferences;
 
   Lobby(
     this.lobbyId,
@@ -26,9 +28,37 @@ class Lobby {
     this.mode,
     this.password,
     this.time,
+    this.timeLimit,
+    this.bonusTime,
     this.chatLog,
     this.nDifferences,
   );
+
+  // Method to create a new lobby
+  Lobby.create({
+    required bool isAvailable,
+    required List<Player> players,
+    required List<Observers> observers,
+    required bool isCheatEnabled,
+    required GameModes mode,
+    required int time,
+    required int timeLimit,
+  }) : this(
+          null, // lobbyId
+          null, // gameId
+          null, // game
+          isAvailable,
+          players,
+          observers,
+          isCheatEnabled,
+          mode,
+          null, // password
+          time, // time
+          timeLimit,
+          null, // bonusTime
+          null, // chatLog
+          null, // nDifferences
+        );
 
   static Lobby fromJson(Map<String, dynamic> json) {
     if (json['observers'] == []) {
@@ -51,6 +81,8 @@ class Lobby {
       GameModes.values.firstWhere((element) => element.name == json['mode']),
       json['password'],
       json['time'],
+      json['timeLimit'],
+      json['bonusTime'],
       ChatLog.fromJson(json['chatLog']),
       json['nDifferences'],
     );
@@ -68,6 +100,8 @@ class Lobby {
       'mode': mode.name,
       'password': password,
       'time': time,
+      'timeLimit': timeLimit,
+      'bonusTime': bonusTime,
       'chatLog': chatLog?.toJson(),
       'nDifferences': nDifferences,
     };

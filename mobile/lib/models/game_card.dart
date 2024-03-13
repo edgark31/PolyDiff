@@ -1,45 +1,30 @@
-enum GameMode {
-  practice,
-  classic,
-  limitedTime,
-}
-
-GameMode gameModeFromString(String modeString) {
-  return GameMode.values.firstWhere(
-    (mode) => mode.toString().split('.').last == modeString,
-    orElse: () => GameMode.practice, // Default value
-  );
-}
-
+// Note: GameCard in common also has
+// soloTopTime: PlayerTime[];
+// oneVsOneTopTime: PlayerTime[];
+// but attributes are not need on mobile
 class GameCard {
+  String id; // Attribute in _id in common
   String name;
-  String gameId;
-  GameMode gameMode;
-  int nDifferences;
-  String thumbnail;
-  // TODO: get this info from with the lobby service
-  int numbersOfPlayers;
-  List<String> playerUsernames;
+  bool difficultyLevel; // Useless attribute
+  String thumbnail; // Useless attribute
+  // Since thumbnail are showed with id and url
+  int? nDifferences;
 
   GameCard({
+    required this.id,
     required this.name,
-    required this.gameId,
-    required this.gameMode,
+    required this.difficultyLevel,
     required this.nDifferences,
-    required this.numbersOfPlayers,
     required this.thumbnail,
-    required this.playerUsernames,
   });
 
   factory GameCard.fromJson(Map<String, dynamic> json) {
     return GameCard(
+      id: json['_id'] as String,
       name: json['name'] as String,
-      gameId: json['_id'] as String,
-      gameMode: GameMode.classic, // TODO: Maybe change in future
-      nDifferences: 0, // TODO: Get this info from the server, for now it's '0
-      numbersOfPlayers: 2, // TODO: Get this info from lobbyservice
+      difficultyLevel: json['difficultyLevel'] as bool,
+      nDifferences: json['nDifferences'] as int,
       thumbnail: json['thumbnail'] as String,
-      playerUsernames: [], // TODO: Get this info from lobbyservice
     );
   }
 }
