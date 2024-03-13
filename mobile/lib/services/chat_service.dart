@@ -49,6 +49,11 @@ class ChatService extends ChangeNotifier {
     print('Length of lobby messages: ${_lobbyMessages.length}');
   }
 
+  void clearLobbyMessages() {
+    _lobbyMessages.clear();
+    notifyListeners();
+  }
+
   void setGlobalChatListeners() {
     socketService.on(SocketType.Auth, ChannelEvents.GlobalMessage.name, (data) {
       print('GlobalMessage received: $data');
