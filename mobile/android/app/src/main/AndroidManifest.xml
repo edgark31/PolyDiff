@@ -3,7 +3,7 @@
     <!-- Add CAMERA permission -->
     <uses-permission android:name="android.permission.CAMERA"/>
     <application
-        android:label="thin_client_prototype"
+        android:label="mobile"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

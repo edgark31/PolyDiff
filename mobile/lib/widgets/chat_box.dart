@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:provider/provider.dart';
@@ -38,8 +37,6 @@ class _ChatBoxState extends State<ChatBox> {
     final chatService = context.watch<ChatService>();
 
     // user avatar
-    AvatarProvider.instance.setAccountAvatarUrl(username);
-    final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
     String? route = ModalRoute.of(context)?.settings.name;
     bool isGlobalChat = true;
     if (route != null) {
@@ -91,6 +88,8 @@ class _ChatBoxState extends State<ChatBox> {
                 controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
+                  // TODO : Change logic to id when implemented on server
+                  // bool isSent = messages[index].id == infoService.id;
                   bool isSent = messages[index].name == username;
                   return Align(
                     alignment:
@@ -102,7 +101,7 @@ class _ChatBoxState extends State<ChatBox> {
                       children: [
                         CircleAvatar(
                           backgroundImage: NetworkImage(
-                              avatarUrl), // TODO : Also show avatar of sender
+                              '$BASE_URL/avatar/${messages[index].name}.png'), // TODO : Show by userId when implement on server
                           radius: 15.0,
                         ),
                         Text(

@@ -1,4 +1,4 @@
-package com.example.thin_client_prototype
+package com.example.mobile
 
 import io.flutter.embedding.android.FlutterActivity
 
