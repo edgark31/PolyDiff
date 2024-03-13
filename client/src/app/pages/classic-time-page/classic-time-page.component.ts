@@ -1,13 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { NavigationService } from '@app/services/navigation-service/navigation.service';
 // import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { GameModes } from '@common/enums';
+import { ChannelEvents, GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
 
@@ -16,7 +17,7 @@ import { Subscription } from 'rxjs';
     templateUrl: './classic-time-page.component.html',
     styleUrls: ['./classic-time-page.component.scss'],
 })
-export class ClassicTimePageComponent implements OnDestroy, OnInit {
+export class ClassicTimePageComponent implements OnDestroy, OnInit, AfterViewInit {
     lobbies: Lobby[];
     pageSize = 2;
     currentPage = 0;
@@ -35,6 +36,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
         private readonly dialog: MatDialog,
         private readonly clientSocket: ClientSocketService,
         private readonly welcomeService: WelcomeService,
+        private readonly navigationService: NavigationService,
     ) {
         this.gameModes = GameModes;
         // this.isStartingGame = false;
@@ -46,27 +48,18 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
 
     ngOnInit(): void {
         this.roomManagerService.retrieveLobbies();
-        // this.roomManagerService.lobbies$.pipe(filter((lobbies) => !!lobbies)).subscribe((lobbies) => {
-        //     this.lobbies = Array.from(lobbies.values());
-        // });
-
-        this.updatePagedImages();
-        // this.openDialog();
-        // this.handleJoinCoopRoom();
-        // this.handleNoGameAvailable();
     }
+
+    ngAfterViewInit(): void {
+        this.updatePagedImages();
+    }
+
     previousPage() {
         if (this.currentPage > 0) {
             this.currentPage--;
             this.updatePagedImages();
         }
     }
-
-    // ngOnChanges(changes: SimpleChanges): void {
-    //     if (changes.lobbys) {
-    //         this.updatePagedImages();
-    //     }
-    // }
 
     nextPage() {
         const v = this.lobbies.length / this.pageSize - 1;
@@ -80,8 +73,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
     updatePagedImages() {
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
-                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
-                // this.lobbies = lobbies;
+                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Classic);
                 const startIndex = this.currentPage * this.pageSize;
                 const endIndex = startIndex + this.pageSize;
                 this.pagedLobby = this.lobbies.slice(startIndex, endIndex);
@@ -98,10 +90,11 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
-        // this.clientSocket.disconnect('lobby');
+        this.navigationService.setPreviousUrl('/classic');
         this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();
         this.hasNoGameAvailableSubscription?.unsubscribe();
+        this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
     }
 }

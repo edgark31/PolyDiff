@@ -13,7 +13,8 @@ export class RoomManagerService {
     isOrganizer: boolean;
     lobby: Subject<Lobby>;
     wait: boolean;
-    player: Player[];
+    // player: Player[];
+    player: Subject<Player[]>;
     private lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
     // private playerNameAvailability: Subject<PlayerNameAvailability>;
@@ -120,9 +121,13 @@ export class RoomManagerService {
     }
 
     off(): void {
-        this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
-        this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
-        this.message?.unsubscribe();
+        // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
+        // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        if (this.lobby && !this.lobby.closed) {
+            this.lobby?.unsubscribe();
+        }
+        if (this.message && !this.message.closed) this.message?.unsubscribe();
+        if (this.lobbies && !this.lobbies.closed) this.lobbies?.unsubscribe();
     }
 
     sendMessage(lobbyId: string | undefined, message: string): void {
@@ -236,18 +241,23 @@ export class RoomManagerService {
     }
 
     async setPlayers() {
-        this.lobby$.subscribe((lobby: Lobby) => {
-            this.player = lobby.players;
-        });
+        // this.lobby$.subscribe((lobby: Lobby) => {
+        //     this.player = lobby.players;
+        // });
     }
 
     handleRoomEvents(): void {
-        this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
-            this.lobby.next(lobby);
-        });
-        this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
-            this.lobby.next(lobby);
-        });
+        this.lobby = new Subject();
+        this.lobbies = new Subject();
+        this.message = new Subject();
+        if (this.isOrganizer)
+            this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
+                this.lobby.next(lobby);
+            });
+        else
+            this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
+                this.lobby.next(lobby);
+            });
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });

@@ -110,6 +110,7 @@ export enum LobbyEvents {
     LeaveAsObserver = 'LeaveAsObserver',
     UpdateLobbys = 'UpdateLobbys',
     Start = 'Start',
+    LeaveRoom = 'LeaveRoom',
 }
 
 export enum LobbyState {

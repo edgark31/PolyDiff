@@ -1,11 +1,11 @@
-// #image {
-//     position: absolute;
-//     top: 220px;
-//     left: 50.7%;
-//     transform: translateX(-50%);
-//     width: 65%;
-//     height: 50%;
-// }
+#image {
+    position: absolute;
+    top: 220px;
+    left: 50.7%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 30%;
+}
 
 // .create-button {
 //     top: 100px;
@@ -88,7 +88,7 @@
 // }
 
 .player-count {
-    bottom: -6px;
+    bottom: 175px;
     left: 250px;
     font-weight: bold;
     position: relative;
@@ -119,24 +119,26 @@
 //     padding: 15px;
 // }
 
-// .game-mode-image {
-//     position: relative;
-//     right: 330px;
-//     top: 320px;
-//     width: 1px;
-//     height: 1px;
-//     z-index: 2;
-//     object-fit: cover;
-// }
-
-#image {
-    position: absolute;
-    top: 220px;
-    left: 50.7%;
-    transform: translateX(-50%);
-    width: 32.5%; /* Réduit de moitié */
-    height: 30%; /* Réduit de moitié */
+.game-mode-image {
+    position: relative;
+    right: 330px;
+    top: 320px;
+    width: 1px;
+    height: 1px;
+    z-index: 2;
+    object-fit: cover;
 }
+
+.game-mode-image-classic img{
+    position: relative;
+    right: 220px;
+    top: 220px;
+    width: 180px;
+    height: auto;
+    z-index: 2;
+    object-fit: cover;
+}
+
 
 .create-button {
     top: 100px;
@@ -159,8 +161,8 @@
 }
 
 .join-button {
-    top: 220px;
-    left: 10px;
+    top: 40px;
+    left: 20px;
     cursor: pointer;
     position: relative;
     text-align: center;
@@ -180,7 +182,7 @@
 }
 
 .difference-number {
-    top: 200px;
+    top: 25px;
     font-weight: bold;
     position: relative;
     text-align: center;
@@ -193,7 +195,7 @@
 }
 
 .game-mode {
-    top: 220px;
+    top: 50px;
     right: 230px;
     font-weight: bold;
     position: relative;
@@ -207,7 +209,7 @@
 }
 
 .player-container {
-    bottom: -28px;
+    bottom: 150px;
     left: 250px;
     font-weight: bold;
     position: relative;
@@ -224,11 +226,11 @@
     padding: 7.5px; /* Réduit de moitié */
 }
 
-#game-mode-image {
-    position: relative;
-    right: 160px;
-    top: 320px;
-    width: 70px; /* Mettez la moitié de la largeur originale ici */
-    height: 70px; /* Mettez la moitié de la hauteur originale ici */
-    z-index: 2;
-}
+// #game-mode-image {
+//     position: relative;
+//     right: 160px;
+//     top: 320px;
+//     width: 70px; /* Mettez la moitié de la largeur originale ici */
+//     height: 70px; /* Mettez la moitié de la hauteur originale ici */
+//     z-index: 2;
+// }

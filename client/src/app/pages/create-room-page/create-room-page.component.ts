@@ -1,4 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { NavigationService } from '@app/services/navigation-service/navigation.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
@@ -10,16 +11,20 @@ import { Lobby } from '@common/game-interfaces';
 })
 export class CreateRoomPageComponent implements AfterViewInit {
     isCheatModeEnabled = false;
-    gameModes: typeof GameModes = GameModes;
     mode: GameModes;
+    gameModes: typeof GameModes;
     time: number | null;
     password: string;
     nDifferences: number;
+    gameId: string;
     lobby: Lobby;
-    constructor(private readonly roomManagerService: RoomManagerService) {
-        this.mode = GameModes.Classic;
+    constructor(private readonly roomManagerService: RoomManagerService, private readonly navigationService: NavigationService) {
         this.time = 0;
         this.nDifferences = 0;
+        const previousUrl = this.navigationService.getPreviousUrl();
+        this.mode = previousUrl === '/limited' ? GameModes.Limited : GameModes.Classic;
+        this.gameId = this.navigationService.getGameId();
+        this.nDifferences = this.navigationService.getNDifferences();
     }
 
     ngAfterViewInit(): void {
@@ -43,11 +48,11 @@ export class CreateRoomPageComponent implements AfterViewInit {
             timeLimit: this.time as number,
             password: this.password,
             nDifferences: this.nDifferences,
+            gameId: this.gameId,
         };
         if (this.mode === GameModes.Limited) {
             this.roomManagerService.createLimitedRoom(roomPayload);
         } else if (this.mode === GameModes.Classic) {
-            roomPayload.time = this.time as number;
             this.roomManagerService.createClassicRoom(roomPayload);
         }
     }

@@ -7,23 +7,15 @@
             <span>Créer une salle</span>
         </button>
         <div *ngFor="let lobby of pagedLobby">
-            <img alt="background-image" id="image" src="./assets/gameSheet.png"/>
-            <div></div>
+            <div *ngIf="lobby.mode === gameModes.Classic">
+                <img alt="background-image" id="image" src="./assets/gameSheet.png"/>
                 <app-room-sheet [lobby]="lobby"></app-room-sheet>
-
+            </div>
         </div>
-
-        <!-- <mat-paginator [length]="lobbys.length"
-                   [pageSize]="pageSize"
-                   (page)="handlePageEvent($event)">
-    </mat-paginator> -->
-    <div class="button-container">
-    <button (click)="previousPage()" *ngIf="currentPage > 0">Précédent</button>
-    <button (click)="nextPage()" *ngIf="(lobbies.length / pageSize) - 1 > currentPage ">Suivant</button>
+        <div class="button-container">
+            <button (click)="previousPage()" *ngIf="currentPage > 0">Précédent</button>
+            <button (click)="nextPage()" *ngIf="(lobbies.length / pageSize) - 1 > currentPage ">Suivant</button>
+        </div>
     </div>
-        <section id="server-message" class="flex-column section">
-        </section>
-    </div>
-
-    </body>
+</body>
 
