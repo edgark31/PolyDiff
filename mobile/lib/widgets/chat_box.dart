@@ -45,7 +45,6 @@ class _ChatBoxState extends State<ChatBox> {
     if (route != null) {
       isGlobalChat = route == CHAT_ROUTE;
     }
-    print('Current page is $route');
     final messages =
         isGlobalChat ? chatService.globalMessages : chatService.lobbyMessages;
     final chatBoxHeader = isGlobalChat

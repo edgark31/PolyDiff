@@ -150,7 +150,7 @@ class LobbyService extends ChangeNotifier {
       print('No left lobby id was provided (!)');
       return;
     }
-    print('Leaving lobby with id: ${leftLobbyId}');
+    print('Leaving lobby with id: $leftLobbyId');
     setIsCreator(false);
     socketService.send(
       SocketType.Lobby,
@@ -187,7 +187,6 @@ class LobbyService extends ChangeNotifier {
     });
 
     socketService.on(SocketType.Lobby, LobbyEvents.UpdateLobbys.name, (data) {
-      print('Lobbies were updated');
       print('Lobbies received from LobbyEvents.UpdateLobbys : $data');
       if (data is List) {
         List<Lobby> updatedLobbies = data.map<Lobby>((lobbyData) {

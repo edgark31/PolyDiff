@@ -48,7 +48,7 @@ class SocketService extends ChangeNotifier {
   }
 
   void setSocket(IO.Socket socket) {
-    print('Setting socket id : ${socket.id}');
+    // print('Setting socket id : ${socket.id}');
 
     socket.onConnect((_) {
       print('Connected to server on $BASE_URL');
