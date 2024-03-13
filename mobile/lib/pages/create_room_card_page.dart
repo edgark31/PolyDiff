@@ -98,6 +98,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
   Widget buildGameCard(BuildContext context, GameCard card) {
     final lobbyService = context.watch<LobbyService>();
     String imagePath = '$BASE_URL/${card.id}/original.bmp';
+    String differenceText = 'Différences: ${card.nDifference}';
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -107,7 +108,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
             ListTile(
               leading: Image.network(imagePath),
               title: Text(card.name),
-              subtitle: Text('Différences: ${card.nDifferences}'),
+              subtitle: Text(differenceText),
             ),
             ButtonBar(
               alignment: MainAxisAlignment.start,

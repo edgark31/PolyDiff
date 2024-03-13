@@ -8,13 +8,13 @@ class GameCard {
   bool difficultyLevel; // Useless attribute
   String thumbnail; // Useless attribute
   // Since thumbnail are showed with id and url
-  int? nDifferences;
+  int? nDifference;
 
   GameCard({
     required this.id,
     required this.name,
     required this.difficultyLevel,
-    required this.nDifferences,
+    required this.nDifference,
     required this.thumbnail,
   });
 
@@ -23,7 +23,7 @@ class GameCard {
       id: json['_id'] as String,
       name: json['name'] as String,
       difficultyLevel: json['difficultyLevel'] as bool,
-      nDifferences: json['nDifferences'] as int,
+      nDifference: json['nDifference'],
       thumbnail: json['thumbnail'] as String,
     );
   }

@@ -26,14 +26,13 @@ class GameCardService extends ChangeNotifier {
             .map((gameCardJson) => GameCard.fromJson(gameCardJson))
             .toList();
         notifyListeners();
-
         return null;
       } else {
         final errorMessage = response.body;
         return errorMessage;
       }
     } catch (error) {
-      return 'Error: $error';
+      return 'Error getGameCards(): $error';
     }
   }
 }

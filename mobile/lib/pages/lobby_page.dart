@@ -87,7 +87,7 @@ class _LobbyPageState extends State<LobbyPage> {
                               text: 'Commencer la partie',
                               press: () {
                                 print(
-                                    'Starting the game Navigating to GamePage');
+                                    'Starting the lobby and Navigating to GamePage');
                                 lobbyService.startLobby();
                                 Navigator.pushNamed(context, CLASSIC_ROUTE);
                               },
