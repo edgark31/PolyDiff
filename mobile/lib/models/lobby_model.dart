@@ -36,6 +36,7 @@ class Lobby {
 
   // Method to create a new lobby
   Lobby.create({
+    required String gameId,
     required bool isAvailable,
     required List<Player> players,
     required List<Observers> observers,
@@ -45,7 +46,7 @@ class Lobby {
     required int timeLimit,
   }) : this(
           null, // lobbyId
-          null, // gameId
+          gameId, // gameId
           null, // game
           isAvailable,
           players,

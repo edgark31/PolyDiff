@@ -66,6 +66,7 @@ class LobbyService extends ChangeNotifier {
     print('Creating lobby');
     setIsCreator(true);
     Lobby lobbyCreated = Lobby.create(
+      gameId: _gameId,
       isAvailable: true,
       players: [],
       observers: [], // observers
