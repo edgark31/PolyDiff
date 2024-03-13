@@ -74,8 +74,8 @@ export enum GameModes {
     ClassicOneVsOne = 'Classic->OneVsOne',
     LimitedSolo = 'Limited->Solo',
     LimitedCoop = 'Limited->Coop',
-    Classic = "Classic",
-    Limited = "Limited",
+    Classic = 'Classic',
+    Limited = 'Limited',
 }
 
 export enum MessageEvents {
