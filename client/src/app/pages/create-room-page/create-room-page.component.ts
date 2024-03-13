@@ -45,6 +45,7 @@ export class CreateRoomPageComponent implements AfterViewInit {
             observers: [],
             isCheatEnabled: this.isCheatModeEnabled,
             mode: this.mode,
+            timeLimit: this.time as number,
             password: this.password,
             nDifferences: this.nDifferences,
             gameId: this.gameId,
