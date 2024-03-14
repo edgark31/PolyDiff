@@ -50,7 +50,10 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
                 lobbySelectionService.setIsCheatEnabled(cheatMode);
                 lobbySelectionService.setGameDuration(gameDuration.round());
                 lobbyService.createLobby();
-                Navigator.pushNamed(context, LOBBY_ROUTE);
+                Future.delayed(Duration(milliseconds: 200), () {
+                  // Waiting for server to emit the created lobby from creator
+                  Navigator.pushNamed(context, LOBBY_ROUTE);
+                });
               },
               text: 'Créer la salle de jeu',
               backgroundColor: kMidOrange,
