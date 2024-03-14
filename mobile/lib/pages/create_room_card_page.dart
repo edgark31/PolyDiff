@@ -3,7 +3,6 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/game_card_service.dart';
-import 'package:mobile/services/image_converter_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
@@ -25,15 +24,47 @@ class CreateRoomCardPage extends StatefulWidget {
 }
 
 class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
+  bool _isFetchingGameCards = false;
   bool isLoading = false;
-  String errorMessage = "ho";
+  String errorMessage = "";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isFetchingGameCards) {
+      _isFetchingGameCards = true;
+      _fetchGameCards();
+    }
+  }
+
+  Future<void> _fetchGameCards() async {
+    setState(() => isLoading = true);
+    final gameCardService =
+        Provider.of<GameCardService>(context, listen: false);
+    String? serverErrorMessage = await gameCardService.getGameCards();
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+        if (serverErrorMessage != null) {
+          errorMessage = serverErrorMessage;
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final gameCardService = context.watch<GameCardService>();
     final gameCardsFromServer = gameCardService.gameCards;
+    // TODO : Reload game cards if new games are added to the server
 
     return Scaffold(
+      // TODO : Think problems if drawer and appbar are used
       // drawer: CustomMenuDrawer(),
       // appBar: CustomAppBar(),
       body: SingleChildScrollView(
@@ -51,25 +82,6 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
                       return buildGameCard(context, gameCardsFromServer[index]);
                     },
                   ),
-            CustomButton(
-              text: 'Obtenir les jeux du serveur',
-              press: () async {
-                setState(() => isLoading = true);
-                String? serverErrorMessage =
-                    await gameCardService.getGameCards();
-                setState(() => isLoading = false);
-
-                if (serverErrorMessage == null) {
-                  print('Game cards fetched from server');
-                } else {
-                  setState(() {
-                    errorMessage = serverErrorMessage;
-                  });
-                }
-              },
-              backgroundColor: kMidGreen,
-              widthFactor: 0.5,
-            ),
             Text(
               errorMessage,
               style: TextStyle(
@@ -84,8 +96,9 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
   }
 
   Widget buildGameCard(BuildContext context, GameCard card) {
-    final imageConverterService = ImageConverterService();
     final lobbyService = context.watch<LobbyService>();
+    String imagePath = '$BASE_URL/${card.id}/original.bmp';
+    String differenceText = 'Différences: ${card.nDifference}';
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -93,21 +106,16 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
         child: Column(
           children: [
             ListTile(
-              leading: Image.memory(
-                imageConverterService.uint8listFromBase64String(card.thumbnail),
-                width: 100,
-                height: 100,
-              ),
+              leading: Image.network(imagePath),
               title: Text(card.name),
-              subtitle: Text('Différences: ${card.nDifferences}'),
+              subtitle: Text(differenceText),
             ),
             ButtonBar(
               alignment: MainAxisAlignment.start,
               children: [
                 CustomButton(
                   press: () {
-                    print('Selected game card with gameId: ${card.gameId}');
-                    lobbyService.setGameId(card.gameId);
+                    lobbyService.setGameId(card.id);
                     Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
                   },
                   text: 'Choisir cette fiche',

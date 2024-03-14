@@ -74,8 +74,8 @@ export enum GameModes {
     ClassicOneVsOne = 'Classic->OneVsOne',
     LimitedSolo = 'Limited->Solo',
     LimitedCoop = 'Limited->Coop',
-    Classic = "Classic",
-    Limited = "Limited",
+    Classic = 'Classic',
+    Limited = 'Limited',
 }
 
 export enum MessageEvents {
@@ -110,6 +110,7 @@ export enum LobbyEvents {
     LeaveAsObserver = 'LeaveAsObserver',
     UpdateLobbys = 'UpdateLobbys',
     Start = 'Start',
+    LeaveRoom = 'LeaveRoom',
 }
 
 export enum LobbyState {

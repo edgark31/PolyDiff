@@ -53,11 +53,12 @@ h2 {
 .gameCarrousel {
     margin-left: 80px;
     margin-right: 80px;
+    top: 230px;
 }
 
 #previous_button {
     position: absolute;
-    top: 50%;
+    top: 95%;
     transform: translateY(-50%);
     left: 0;
     min-width: 100px;
@@ -72,7 +73,7 @@ h2 {
 
 #next_button {
     position: absolute;
-    top: 50%;
+    top: 95%;
     transform: translateY(-50%);
     right: 0;
     min-width: 100px;

@@ -38,6 +38,7 @@ export interface GameCard {
     soloTopTime: PlayerTime[];
     oneVsOneTopTime: PlayerTime[];
     thumbnail: string;
+    nDifference?: number;
 }
 
 export interface CarouselPaginator {
@@ -153,8 +154,10 @@ export interface Lobby {
     mode: GameModes; // classique ou limited
     password?: string; // oui
     time?: number;
+    timeLimit: number;
+    bonusTime?: number;
     chatLog?: ChatLog;
-    nDifferences?: number; // oui en classique
+    nDifferences?: number;
 }
 
 export interface Game {

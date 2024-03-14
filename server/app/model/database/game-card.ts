@@ -28,6 +28,10 @@ export class GameCard {
     difficultyLevel: boolean;
 
     @ApiProperty()
+    @Prop({ required: true })
+    nDifference: number;
+
+    @ApiProperty()
     _id: string;
 }
 
