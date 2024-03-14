@@ -37,9 +37,6 @@ class Lobby {
   // Method to create a new lobby
   Lobby.create({
     required String gameId,
-    required bool isAvailable,
-    required List<Player> players,
-    required List<Observers> observers,
     required bool isCheatEnabled,
     required GameModes mode,
     required int time,
@@ -48,9 +45,9 @@ class Lobby {
           null, // lobbyId
           gameId, // gameId
           null, // game
-          isAvailable,
-          players,
-          observers,
+          true, // isAvailable : initial lobby is available
+          [], // players : initial lobby has no players
+          [], // observers : initial lobby has no observers
           isCheatEnabled,
           mode,
           null, // password

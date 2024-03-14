@@ -67,13 +67,10 @@ class LobbyService extends ChangeNotifier {
     setIsCreator(true);
     Lobby lobbyCreated = Lobby.create(
       gameId: _gameId,
-      isAvailable: true,
-      players: [],
-      observers: [], // observers
       isCheatEnabled: _isCheatEnabled,
-      mode: isGameModesClassic() ? GameModes.Classic : GameModes.Limited,
+      mode: _gameModes,
       time: _gameDuration,
-      timeLimit: _gameDuration, // timeLimit
+      timeLimit: _gameDuration,
     );
     print('IsCheatEnabled Lobby Sent: ${lobbyCreated.isCheatEnabled}');
     print('Mode Lobby Sent: ${lobbyCreated.mode}');
