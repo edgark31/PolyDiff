@@ -147,7 +147,6 @@ export interface Observers {
 export interface Lobby {
     lobbyId?: string;
     gameId?: string; // creer en classique
-    game?: Game;
     isAvailable: boolean; // true
     players: Player[]; // vide
     observers: Observers[]; // vide
@@ -155,7 +154,6 @@ export interface Lobby {
     mode: GameModes; // classique ou limited
     password?: string; // oui
     time?: number;
-    timerId?: any;
     timeLimit: number;
     bonusTime?: number;
     chatLog?: ChatLog;
