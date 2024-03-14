@@ -5,16 +5,22 @@ import 'package:mobile/models/models.dart';
 
 class InfoService extends ChangeNotifier {
   static late Credentials credentials;
-  static String _name = 'temp_name'; // TODO : fix default avatar issue
+  static String _username = 'temp_name'; // TODO : fix default avatar issue
   static String _id = 'temp_id';
   static String _avatar =
       'temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar';
   static String _email = 'temp_email';
+  static String _language = 'fr';
+  static String _soundOnError = 'sound/ErrorSoundEffect.mp3';
+  static String _soundOnDifference = 'sound/WinSoundEffect.mp3';
 
-  String get username => _name;
+  String get username => _username;
   String get id => _id;
   String get avatar => _avatar;
   String get email => _email;
+  String get language => _language;
+  String get soundOnError => _soundOnError;
+  String get soundOnDifference => _soundOnDifference;
 
   void setId(String newId) {
     print('Changing id from $_id to $newId');
@@ -22,9 +28,9 @@ class InfoService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setName(String newName) {
-    print('Changing name from $_name to $newName for ($_id)');
-    _name = newName;
+  void setUsername(String newName) {
+    print('Changing name from $_username to $newName for ($_id)');
+    _username = newName;
     notifyListeners();
   }
 
@@ -36,17 +42,38 @@ class InfoService extends ChangeNotifier {
     }
   }
 
+  void setSoundOnError(String newSoundOnError) {
+    print(
+        'Changing onErrorSound from $_soundOnError to $newSoundOnError for $username ($_id)');
+    _email = newSoundOnError;
+    notifyListeners();
+  }
+
+  void setSoundOnDifference(String newSoundOnDifference) {
+    print(
+        'Changing email from $_soundOnDifference to $newSoundOnDifference for $username ($_id)');
+    _email = newSoundOnDifference;
+  }
+
   void setAvatar(String newAvatar) {
     String shortOldAvatar = _avatar.substring(0, 100);
     String shortNewAvatar = newAvatar.substring(0, 100);
-    print('Changing avatar from $shortOldAvatar to  $shortNewAvatar for $username ($_id)');
+    print(
+        'Changing avatar from $shortOldAvatar to  $shortNewAvatar for $username ($_id)');
     _avatar = newAvatar;
+    notifyListeners();
+  }
+
+  void setLanguage(String newLanguage) {
+    print(
+        'Changing language from $_email to $newLanguage for $username ($_id)');
+    _email = newLanguage;
     notifyListeners();
   }
 
   void setCredentials(Credentials credentialsReceived) {
     credentials = credentialsReceived;
-    setName(credentials.username);
+    setUsername(credentials.username);
     setEmail(credentials.email);
   }
 

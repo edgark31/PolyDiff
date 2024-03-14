@@ -111,4 +111,9 @@ class SocketService extends ChangeNotifier {
         break;
     }
   }
+
+  void logOut(context, SocketType socketType) {
+    disconnect(socketType);
+    Navigator.pushNamed(context, LOGIN_ROUTE);
+  }
 }

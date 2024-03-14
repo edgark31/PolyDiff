@@ -1,95 +1,59 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/providers/avatar_provider.dart';
+import 'package:mobile/models/account.dart';
 
-enum AvatarType { predefined, camera }
-
-class AvatarServiceException implements Exception {
-  final String message;
-  AvatarServiceException(this.message);
-
-  @override
-  String toString() => message;
+Future<http.Response?> putCameraImageAvatar(UploadAvatarBody data) async {
+  const url = "$API_URL/account/avatar/upload";
+  http.Response? response;
+  try {
+    response = await http.put(Uri.parse(url),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+        body: jsonEncode(data.toJson()));
+  } catch (error) {
+    log(error.toString());
+  }
+  return response;
 }
 
-class AvatarService with ChangeNotifier {
-  // Convert image data to Base64 string
-  String imageToBase64(Uint8List imageData) {
-    return base64Encode(imageData);
+Future<http.Response?> putPredefinedAvatar(UploadAvatarBody data) async {
+  const url = "$API_URL/account/avatar/choose";
+  http.Response? response;
+  try {
+    response = await http.put(Uri.parse(url),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+        },
+        body: jsonEncode(data.toJson()));
+  } catch (error) {
+    log(error.toString());
   }
+  return response;
+}
 
-  // Convert Base64 string to buffer image
-  Uint8List base64ToBuffer(String base64Image) {
-    return base64Decode(base64Image);
-  }
+// Convert image data to Base64 string
+String imageToBase64(Uint8List imageData) {
+  return base64Encode(imageData);
+}
 
-  // Convert Base64 string to image avatar
-  ImageProvider base64ToImage(String base64Image) {
-    Uint8List bufferImage = base64ToBuffer(base64Image);
-    return MemoryImage(bufferImage);
-  }
+// Convert Base64 string to buffer image
+Uint8List base64ToBuffer(String base64Image) {
+  return base64Decode(base64Image);
+}
 
-  // Upload avatar from camera
-  Future<String?> uploadCameraImage(
-      String username, String base64Avatar) async {
-    return uploadAvatar(username, base64Avatar);
-  }
+// Convert Base64 string to image avatar
+ImageProvider base64ToImage(String base64Image) {
+  Uint8List bufferImage = base64ToBuffer(base64Image);
+  return MemoryImage(bufferImage);
+}
 
-  String getDefaultAvatarUrl(String id) {
-    return '$BASE_URL/avatar/default$id.png';
-  }
-
-  // If avatar is from camera or selected file
-  Future<String?> uploadAvatar(String username, String base64Avatar) async {
-    const String url = '$API_URL/account/avatar/upload';
-    print("URL : $url");
-
-    try {
-      print("********** \n USERNAME : $username     BASE64:  $base64Avatar");
-      final response = await http.put(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'username': username, 'avatar': base64Avatar}),
-      );
-
-      if (response.statusCode == 200) {
-        print("setting account");
-        AvatarProvider.instance.setAccountAvatarUrl(username);
-        return null;
-      } else {
-        return response.body;
-      }
-    } catch (e) {
-      return 'Error: $e';
-    }
-  }
-
-  // If avatar is chosen from predefined avatar
-  Future<String?> chooseAvatar(String username, String id) async {
-    print("id: $id");
-    print("username: $username");
-    const String url = '$API_URL/account/avatar/choose';
-
-    try {
-      final response = await http.put(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'username': username, 'id': id}),
-      );
-
-      if (response.statusCode == 200) {
-        print('no');
-        AvatarProvider.instance.setAccountAvatarUrl(username);
-        return null;
-      } else {
-        return response.body;
-      }
-    } catch (e) {
-      return 'Error: $e';
-    }
-  }
+String getDefaultAvatarUrl(String id) {
+  return '$BASE_URL/avatar/default$id.png';
 }

@@ -4,16 +4,17 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/widgets/avatar.dart';
+import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
-    this.text,
+    required this.title,
     this.actions,
   });
 
-  final String? text;
+  final String title;
   final List<Widget>? actions;
 
   @override
@@ -27,7 +28,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     AvatarProvider.instance.setAccountAvatarUrl(infoService.username);
     final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
     return AppBar(
+      centerTitle: true,
+      titleTextStyle: appstyle(20, kLight, FontWeight.bold),
+      title: Text(title, style: TextStyle(letterSpacing: 3)),
       backgroundColor: kMidOrange,
+      iconTheme: IconThemeData(color: kLight),
       actions: <Widget>[
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
@@ -40,7 +45,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(right: 10.0),
           child: IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () => Navigator.pushNamed(context, SEARCH_ROUTE),
+            onPressed: () => Navigator.pushNamed(context, SEARCH_FRIEND_ROUTE),
           ),
         ),
         Padding(

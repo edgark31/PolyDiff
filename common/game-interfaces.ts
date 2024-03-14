@@ -188,8 +188,8 @@ export interface Profile {
     friendRequests: string[];
     theme: Theme;
     language: string;
-    songDifference: Song;
-    songError: Song;
+    differenceSound: Sound;
+    errorSound: Sound;
 }
 
 export interface SessionLog {
@@ -199,7 +199,7 @@ export interface SessionLog {
 
 export interface ConnectionLog {
     timestamp: string;
-    isConnexion: boolean;
+    isConnection: boolean;
 }
 
 export interface Statistics {
@@ -252,7 +252,7 @@ export interface Theme {
     buttonColor: string;
 }
 
-export interface Song {
+export interface Sound {
     name: string;
     link: string;
 }

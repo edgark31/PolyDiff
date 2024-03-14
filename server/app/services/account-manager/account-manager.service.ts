@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials, Song, Statistics, Theme } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Statistics, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
-import { SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONNALIZATION } from '@common/constants';
+import { SOUND_LIST_DIFFERENCE, SOUND_LIST_ERROR, THEME_PERSONALIZATION } from '@common/constants';
+import { Sound } from '@common/game-interfaces';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -39,9 +39,9 @@ export class AccountManagerService implements OnModuleInit {
                     friends: [],
                     friendRequests: [],
                     language: 'en',
-                    theme: THEME_PERSONNALIZATION[0],
-                    songDifference: SONG_LIST_DIFFERENCE[0],
-                    songError: SONG_LIST_ERROR[0],
+                    theme: THEME_PERSONALIZATION[0],
+                    soundOnDifference: SOUND_LIST_DIFFERENCE[0],
+                    soundOnError: SOUND_LIST_ERROR[0],
                 },
             };
             await this.accountModel.create(newAccount);
@@ -54,7 +54,7 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async connexion(creds: Credentials): Promise<Account> {
+    async connection(creds: Credentials): Promise<Account> {
         try {
             this.logger.log(`Received connection request from ${creds.username} has connected with password ${creds.password}`);
             const accountFound = await this.accountModel.findOne({
@@ -142,12 +142,12 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async changePassword(username: string, newPasword: string): Promise<void> {
+    async changePassword(username: string, newPassword: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');
 
-            accountFound.credentials.password = newPasword;
+            accountFound.credentials.password = newPassword;
 
             await accountFound.save();
             this.connectedUsers.set(accountFound.id, accountFound);
@@ -161,35 +161,35 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async modifySongError(oldUsername: string, newSong: Song): Promise<void> {
+    async modifyOnErrorSound(oldUsername: string, newSound: Sound): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
 
             if (!accountFound) throw new Error('Account not found');
-            accountFound.profile.songDifference = newSong;
+            accountFound.profile.soundOnDifference = newSound;
 
             await accountFound.save();
-            this.logger.verbose('song change');
+            this.logger.verbose('sound change');
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to change song --> ${error.message}`);
+            this.logger.error(`Failed to change sound --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
 
-    async modifySongDifference(oldUsername: string, newSong: Song): Promise<void> {
+    async modifyOnDifferenceSound(oldUsername: string, newSound: Sound): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
 
             if (!accountFound) throw new Error('Account not found');
 
-            accountFound.profile.songError = newSong;
+            accountFound.profile.soundOnError = newSound;
 
             await accountFound.save();
-            this.logger.verbose('song change');
+            this.logger.verbose('sound change');
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to change song --> ${error.message}`);
+            this.logger.error(`Failed to change sound --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
@@ -261,7 +261,7 @@ export class AccountManagerService implements OnModuleInit {
         });
     }
 
-    async connexionToAdmin(password: string): Promise<boolean> {
+    async connectionToAdmin(password: string): Promise<boolean> {
         try {
             if (password !== 'admin') throw new Error('Wrong password');
             return Promise.resolve(password === 'admin');
@@ -278,7 +278,7 @@ export class AccountManagerService implements OnModuleInit {
         });
     }
 
-    deconnexion(id: string): void {
+    disconnection(id: string): void {
         this.connectedUsers.delete(id);
     }
 

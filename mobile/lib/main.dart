@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
-import 'package:mobile/services/avatar_service.dart';
+import 'package:mobile/providers/register_provider.dart';
+import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_card_service.dart';
@@ -22,6 +24,7 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageProvider()),
+    ChangeNotifierProvider(create: (_) => RegisterProvider()),
     ChangeNotifierProvider(create: (context) {
       SocketService socketService = Get.find();
       return socketService;
@@ -34,6 +37,7 @@ void main() async {
       InfoService infoService = Get.find();
       return infoService;
     }),
+
     ChangeNotifierProvider(create: (context) {
       LobbyService lobbyService = Get.find();
       return lobbyService;
@@ -48,7 +52,7 @@ void main() async {
     }),
     // Avatar
     ChangeNotifierProvider(create: (context) => AvatarProvider()),
-    Provider(create: (context) => AvatarService()),
+    ChangeNotifierProvider(create: (context) => ThemeProvider()),
   ], child: const MyApp()));
 }
 
@@ -67,7 +71,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PolyDiff',
+      title: APP_NAME_TXT,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),

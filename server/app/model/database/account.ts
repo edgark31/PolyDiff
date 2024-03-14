@@ -1,5 +1,4 @@
 // eslint-disable-next-line max-classes-per-file
-import { ConnectionLog } from '@common/game-interfaces';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
@@ -33,7 +32,7 @@ export class Theme {
 export const themeSchema = SchemaFactory.createForClass(Theme);
 
 @Schema()
-export class Song {
+export class Sound {
     @Prop({ required: true })
     name: string;
 
@@ -41,18 +40,18 @@ export class Song {
     link: string;
 }
 
-export const songSchema = SchemaFactory.createForClass(Song);
+export const soundSchema = SchemaFactory.createForClass(Sound);
 
 @Schema()
-export class ConnexionLog {
+export class ConnectionLog {
     @Prop({ required: true })
     timestamp: string;
 
     @Prop({ required: true })
-    isConnexion: boolean;
+    isConnection: boolean;
 }
 
-export const connexionLogSchema = SchemaFactory.createForClass(ConnexionLog);
+export const connectionLogSchema = SchemaFactory.createForClass(ConnectionLog);
 
 export class Statistics {
     @Prop({ required: true })
@@ -101,7 +100,7 @@ export class Profile {
     @Prop({ type: [sessionLogSchema], default: [] })
     sessions: SessionLog[];
 
-    @Prop({ type: [connexionLogSchema], default: [] })
+    @Prop({ type: [connectionLogSchema], default: [] })
     connections: ConnectionLog[];
 
     @Prop({ type: statisticsSchema, required: true })
@@ -119,11 +118,11 @@ export class Profile {
     @Prop({ type: themeSchema, required: false })
     theme: Theme;
 
-    @Prop({ type: songSchema, required: false })
-    songDifference: Song;
+    @Prop({ type: soundSchema, required: false })
+    soundOnDifference: Sound;
 
-    @Prop({ type: songSchema, required: false })
-    songError: Song;
+    @Prop({ type: soundSchema, required: false })
+    soundOnError: Sound;
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);

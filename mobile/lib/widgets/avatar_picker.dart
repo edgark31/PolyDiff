@@ -16,26 +16,12 @@ class AvatarPicker extends StatefulWidget {
 }
 
 class _AvatarPickerState extends State<AvatarPicker> {
-  // Service to communicate with server
-  final AvatarService _avatarService = AvatarService();
   // Providers
   final CameraImageProvider _imageProvider = CameraImageProvider();
 
-  ImageProvider? _selectedImage; // Placeholder image
-
-  // selected avatar displayed but not uploaded
-  void _updateSelectedImage(ImageProvider image) {
-    setState(() {
-      _selectedImage = image;
-    });
-    widget.onAvatarSelected(image);
-  }
-
   void _handlePredefinedAvatarSelection(String id) {
-    ImageProvider image = NetworkImage(_avatarService.getDefaultAvatarUrl(id));
-    setState(() {
-      _selectedImage = image;
-    });
+    ImageProvider image = NetworkImage(getDefaultAvatarUrl(id));
+
     widget.onAvatarSelected(image, id: id);
   }
 
@@ -43,11 +29,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
     final String? base64Image = await _imageProvider.pickImageFromCamera();
 
     if (base64Image != null) {
-      ImageProvider image = _avatarService.base64ToImage(base64Image);
-      setState(() {
-        _selectedImage = image;
-      });
-      print("hiiiiiiiiiiii $base64Image");
+      ImageProvider image = base64ToImage(base64Image);
 
       widget.onAvatarSelected(image, base64: base64Image);
     }
@@ -71,8 +53,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                   _handlePredefinedAvatarSelection('1');
                 },
                 child: avatarContainer(
-                    NetworkImage(_avatarService.getDefaultAvatarUrl('1')),
-                    kLightGreen),
+                    NetworkImage(getDefaultAvatarUrl('1')), kLightGreen),
               ),
               SizedBox(width: 20),
               // Second predefined avatar container
@@ -81,8 +62,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                   _handlePredefinedAvatarSelection('2');
                 },
                 child: avatarContainer(
-                    NetworkImage(_avatarService.getDefaultAvatarUrl('2')),
-                    kLightGreen),
+                    NetworkImage(getDefaultAvatarUrl('2')), kLightGreen),
               ),
               SizedBox(width: 20),
               // TODO: Third predefined avatar container

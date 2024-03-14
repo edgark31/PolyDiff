@@ -3,12 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
+import 'package:mobile/utils/credentials_validation.dart';
 import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
@@ -21,31 +23,56 @@ class ConnectionForm extends StatefulWidget {
 
 class _ConnectionFormState extends State<ConnectionForm> {
   final FormService formService = FormService();
-  TextEditingController userNameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  String errorMessage = "";
+
+  String usernameFormat = NO;
+  String emailFormat = NO;
+  String passwordFormat = NO;
+
+  late final CredentialsValidation _validator;
 
   @override
   void initState() {
     super.initState();
-    userNameController.addListener(() {
-      if (userNameController.text.isEmpty) {
+    _validator = CredentialsValidation(
+      onStateChanged: () {
         setState(() {
-          errorMessage = "";
+          // Force the widget to rebuild with updated validation status
         });
-      }
-    });
-    passwordController.addListener(() {
-      if (passwordController.text.isEmpty) {
-        setState(() {
-          errorMessage = "";
-        });
-      }
+      },
+    );
+    usernameController.addListener(validateUsername);
+    passwordController.addListener(validatePassword);
+  }
+
+  void updateValidationStates() {
+    setState(() {
+      usernameFormat =
+          _validator.states['username'] == ValidationState.valid ? YES : NO;
+      _validator.states['password'] == ValidationState.valid ? YES : NO;
     });
   }
 
+  void validateUsername() {
+    _validator.isValidUsername(usernameController.text);
+    updateValidationStates();
+  }
+
+  void validatePassword() {
+    _validator.updatePasswordStrength(passwordController.text);
+    updateValidationStates();
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   bool isFormValid() {
-    bool isValidUsername = userNameController.text.isNotEmpty;
+    bool isValidUsername = usernameController.text.isNotEmpty;
     bool isValidPassword = passwordController.text.isNotEmpty;
     return isValidUsername && isValidPassword;
   }
@@ -69,77 +96,66 @@ class _ConnectionFormState extends State<ConnectionForm> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "PolyDiff",
+                  APP_NAME_TXT,
                   style: appstyle(60, kLightOrange, FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 50),
                 CustomTextInputField(
                   label: 'Nom d\'utilisateur ou courriel',
-                  controller: userNameController,
+                  controller: usernameController,
                   hint: 'Entrez votre nom d\'utilisateur',
                   maxLength: 20,
+                  errorText:
+                      _validator.states['username'] == ValidationState.invalid
+                          ? "Nom d\'utilisateur ou courriel invalide"
+                          : null,
                   isPassword: false,
                 ),
                 CustomTextInputField(
                   label: 'Mot de passe',
                   controller: passwordController,
                   hint: 'Entrez votre mot de passe',
+                  errorText:
+                      _validator.states['password'] == ValidationState.invalid
+                          ? "Mot de passe invalide"
+                          : null,
                   maxLength: 20,
                   isPassword: true,
                 ),
-                CustomButton(
-                  press: () async {
-                    if (isFormValid()) {
-                      Credentials credentials = Credentials(
-                        username: userNameController.text,
-                        password: passwordController.text,
-                      );
-                      String? serverErrorMessage =
-                          await formService.connect(credentials);
-                      if (serverErrorMessage == null) {
-                        socketService.setup(
-                            SocketType.Auth, infoService.id);
-                        chatService.setGlobalChatListeners(); // TODO : move this (maybe)
-                        Navigator.pushNamed(context, DASHBOARD_ROUTE);
-                      } else {
-                        setState(() {
-                          errorMessage = serverErrorMessage;
-                        });
-                      }
-                    } else {
-                      setState(() {
-                        errorMessage =
-                            "Les entrées ne devraient pas être vides";
-                      });
-                    }
-                  },
-                  backgroundColor: kMidOrange,
-                  textColor: kLight,
-                  text: 'C O N N E X I O N',
-                ),
-                Text(
-                  errorMessage,
-                  style: TextStyle(
-                      color: const Color.fromARGB(255, 240, 16, 0),
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
-                ),
-                Center(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, SIGNUP_ROUTE);
-                    },
-                    child: Container(
-                      child: Text(
-                        "S' I N S C R I R E",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton(
+                      press: () async {
+                        if (isFormValid()) {
+                          Credentials credentials = Credentials(
+                            username: usernameController.text,
+                            password: passwordController.text,
+                          );
+                          String? serverErrorMessage =
+                              await formService.connect(credentials);
+                          if (serverErrorMessage == null) {
+                            socketService.setup(
+                                SocketType.Auth, infoService.id);
+                            chatService
+                                .setGlobalChatListeners(); // TODO : move this (maybe)
+                            Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                          }
+                        }
+                      },
+                      backgroundColor: kMidOrange,
+                      textColor: kLight,
+                      text: SIGN_IN_BTN_TXT,
                     ),
-                  ),
+                    SizedBox(width: 125),
+                    CustomButton(
+                        text: SIGN_UP_BTN_TXT,
+                        press: () =>
+                            Navigator.pushNamed(context, SIGN_UP_ROUTE),
+                        backgroundColor: kMidGreen,
+                        textColor: kLight),
+                  ],
                 ),
               ],
             ),

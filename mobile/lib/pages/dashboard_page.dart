@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
+import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/widgets.dart';
@@ -37,7 +39,6 @@ class _DashboardPageState extends State<DashboardPage> {
     final socketService = context.watch<SocketService>();
     final infoService = context.watch<InfoService>();
     final chatService = context.watch<ChatService>();
-
     return CustomButton(
       text: type == GameModes.Classic ? 'Classique' : 'Temps limité',
       press: () {
@@ -56,30 +57,30 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double startingPoint = screenHeight * 0.05;
     return BackgroundContainer(
-      backgroundImagePath: SELECTION_BACKGROUND_PATH,
+      backgroundImagePath: EMPTY_BACKGROUND_PATH,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         drawer: CustomMenuDrawer(),
-        appBar: CustomAppBar(),
+        appBar: CustomAppBar(title: ''),
         body: SingleChildScrollView(
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 25.0, bottom: 20.0),
+                    padding: EdgeInsets.only(top: startingPoint),
                     child: Text(
-                      'SÉLECTIONNER UN MODE DE JEU',
-                      style: TextStyle(
-                          fontSize: 30,
-                          color: kMidOrange,
-                          backgroundColor: kLight,
-                          fontWeight: FontWeight.bold),
+                      GAME_MODES_TXT,
+                      style: appstyle(60, kLightOrange, FontWeight.bold),
+                      textAlign: TextAlign.center,
                     ),
                   ),
+                  SizedBox(height: 100),
                   _gameModeOption(
                     GameModes.Classic,
                     Icons.class_,
@@ -91,14 +92,17 @@ class _DashboardPageState extends State<DashboardPage> {
                     Icons.hourglass_bottom,
                     kMidGreen,
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 30),
                   CustomButton(
-                    text: 'Observer une parte',
+                    text: 'Observer une partie',
                     press: () {
                       print(
                           'Navigating to Observer Selection Page'); // TODO: Observer Selection Page
                     },
                     backgroundColor: kLime,
+                    icon: Icons.remove_red_eye_outlined,
+                    widthFactor: 0.30,
+                    height: 80,
                   ),
                 ],
               ),

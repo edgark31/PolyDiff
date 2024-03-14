@@ -6,14 +6,14 @@
         "text": "This tutorial explains, how you can easily translate your Angular app.",
         "hello": "salut"
     },
-    "connexion": "connection",
+    "connection": "connection",
     "username": "Username or email",
     "mdp": "Password",
-    "profil": {
-        "information": "General informations",
+    "profile": {
+        "information": "General information",
         "username": "Username or email",
         "Password": "choose a password",
-        "confirmPassword": "Configuring a password        ",
+        "configurePassword": "Configuring a password        ",
         "theme": "current theme",
         "language": "current language",
         "statistic": "statistical",
@@ -21,19 +21,19 @@
         "gameWin": "number of games won",
         "gameAverage": "average of differences found per part",
         "gameAverageTime": "average time per game",
-        "Connexion": "Login statement",
+        "Connection": "Login statement",
         "gameHistoric": "game history",
         "changePassword": "Change password",
-        "confirmePassword": "Confirm password",
-        "songDifference": "choose your sound for difference found",
-        "songError": "choose your sound for error"
+        "confirmPassword": "Confirm password",
+        "onDifferenceSound": "choose your sound for difference found",
+        "onErrorSound": "choose your sound for error"
     },
 
-    "bouton": {
-        "deconnexion": "Disconnect",
-        "returnProfil": "return to profile",
-        "GoReglage": "Go to settings",
-        "Reglage": "Settings",
+    "button": {
+        "disconnection": "Disconnect",
+        "returnProfile": "return to profile",
+        "GoSettings": "Go to settings",
+        "Settings": "Settings",
         "fr": "french",
         "en": "english"
     }

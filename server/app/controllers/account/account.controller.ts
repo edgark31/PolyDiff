@@ -1,7 +1,7 @@
 import { Credentials, Theme } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MailService } from '@app/services/mail-service/mail-service';
-import { Song } from '@common/game-interfaces';
+import { Sound } from '@common/game-interfaces';
 import { Body, Controller, Delete, HttpStatus, Post, Put, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -22,9 +22,9 @@ export class AccountController {
     }
 
     @Post('login')
-    async connexion(@Body() creds: Credentials, @Res() response: Response) {
+    async connection(@Body() creds: Credentials, @Res() response: Response) {
         try {
-            const accountFound = await this.accountManager.connexion(creds);
+            const accountFound = await this.accountManager.connection(creds);
             response.status(HttpStatus.OK).json(accountFound);
         } catch (error) {
             response.status(HttpStatus.UNAUTHORIZED).json(error);
@@ -32,9 +32,9 @@ export class AccountController {
     }
 
     @Post('admin')
-    async connexionToAdmin(@Body('passwd') password: string, @Res() response: Response) {
+    async connectionToAdmin(@Body('passwd') password: string, @Res() response: Response) {
         try {
-            const accountFound = await this.accountManager.connexionToAdmin(password);
+            const accountFound = await this.accountManager.connectionToAdmin(password);
             response.status(HttpStatus.OK).json(accountFound);
         } catch (error) {
             response.status(HttpStatus.UNAUTHORIZED).json(error);
@@ -52,9 +52,9 @@ export class AccountController {
     }
 
     @Put('password')
-    async changePassword(@Body('oldUsername') oldUsername: string, @Body('newPassword') newpassword: string, @Res() response: Response) {
+    async changePassword(@Body('username') username: string, @Body('newPassword') newPassword: string, @Res() response: Response) {
         try {
-            await this.accountManager.changePassword(oldUsername, newpassword);
+            await this.accountManager.changePassword(username, newPassword);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
@@ -102,39 +102,39 @@ export class AccountController {
     }
 
     @Put('theme')
-    async modifyTheme(@Body('oldUsername') oldUsername: string, @Body('newTheme') newtheme: Theme, @Res() response: Response) {
+    async modifyTheme(@Body('oldUsername') oldUsername: string, @Body('newTheme') newTheme: Theme, @Res() response: Response) {
         try {
-            await this.accountManager.modifyTheme(oldUsername, newtheme);
+            await this.accountManager.modifyTheme(oldUsername, newTheme);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
         }
     }
 
-    @Put('langage')
-    async modifyLanguage(@Body('oldUsername') oldUsername: string, @Body('newLangage') newLangage: string, @Res() response: Response) {
+    @Put('language')
+    async modifyLanguage(@Body('oldUsername') oldUsername: string, @Body('newLanguage') newLanguage: string, @Res() response: Response) {
         try {
-            await this.accountManager.modifyLanguage(oldUsername, newLangage);
+            await this.accountManager.modifyLanguage(oldUsername, newLanguage);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
         }
     }
 
-    @Put('song/error')
-    async modifySongDifference(@Body('oldUsername') oldUsername: string, @Body('newSong') newSongError: Song, @Res() response: Response) {
+    @Put('sound/error')
+    async modifyOnDifferenceSound(@Body('oldUsername') oldUsername: string, @Body('newSound') newSoundError: Sound, @Res() response: Response) {
         try {
-            await this.accountManager.modifySongDifference(oldUsername, newSongError);
+            await this.accountManager.modifyOnDifferenceSound(oldUsername, newSoundError);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
         }
     }
 
-    @Put('song/difference')
-    async modifySongError(@Body('oldUsername') oldUsername: string, @Body('newSong') newSongDifference: Song, @Res() response: Response) {
+    @Put('sound/difference')
+    async modifyOnErrorSound(@Body('oldUsername') oldUsername: string, @Body('newSound') newSoundDifference: Sound, @Res() response: Response) {
         try {
-            await this.accountManager.modifySongError(oldUsername, newSongDifference);
+            await this.accountManager.modifyOnErrorSound(oldUsername, newSoundDifference);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);

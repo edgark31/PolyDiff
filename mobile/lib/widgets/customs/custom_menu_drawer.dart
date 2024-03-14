@@ -25,7 +25,6 @@ class CustomMenuDrawer extends StatelessWidget {
             accountName: Text(infoService.username),
             accountEmail: Text(infoService.email),
             currentAccountPicture: Avatar(
-              // TODO: Change avatar
               imageUrl: avatarUrl,
               radius: 20,
             ),
@@ -58,12 +57,14 @@ class CustomMenuDrawer extends StatelessWidget {
               onTap: () => Navigator.pushNamed(context, ADMIN_ROUTE)),
           SizedBox(height: 10),
           ListTile(
-              leading: Icon(Icons.logout),
+              leading: Icon(
+                Icons.logout,
+                color: kLight,
+              ),
               title: Text('Déconnexion'),
               onTap: () {
                 print('Déconnexion');
-                socketService.disconnect(SocketType.Auth);
-                Navigator.pushNamed(context, HOME_ROUTE);
+                socketService.logOut(context, SocketType.Auth);
               }),
         ],
       ),
