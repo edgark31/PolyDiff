@@ -59,6 +59,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
                         modified: game.modifiedImage,
                         gameId: game._id,
                         differences: JSON.parse(game.differences) as Coordinate[][],
+                        nDifferences: JSON.parse(game.differences).length,
                     });
                     this.games.set(lobbyId, clonedGame);
                 });
@@ -103,23 +104,28 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
             // Si trouvé
             if (index !== NOT_FOUND) {
                 this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
-                if (
-                    this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count >
-                    this.roomsManager.lobbies.get(lobbyId).nDifferences / 2
-                ) {
+                const remainingDifferences: Coordinate[][] = this.games.get(lobbyId).differences.splice(index, 1);
+                if (this.games.get(lobbyId).differences.length === 0) {
+                    this.server.to(lobbyId).emit(GameEvents.EndGame);
+                    this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
+                        raw: 'MATCH NUL',
+                        tag: MessageTag.Common,
+                    } as Chat);
+                }
+
+                const { isGameFinished, potentialWinner } = this.thresholdCheck(lobbyId);
+                if (isGameFinished && potentialWinner) {
                     this.server.to(lobbyId).emit(GameEvents.EndGame);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
                         raw: `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a gagné !`,
                         tag: MessageTag.Common,
                     } as Chat);
                 }
-                const difference = this.games.get(lobbyId).differences[index];
-                const cheatDifferences = this.games.get(lobbyId).differences.splice(index, 1);
                 this.server.to(lobbyId).emit(GameEvents.Found, {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
-                    difference: difference,
+                    difference: this.games.get(lobbyId).differences[index],
                 });
-                this.roomsManager.lobbies.get(lobbyId).isCheatEnabled ? this.server.to(lobbyId).emit(GameEvents.Cheat, cheatDifferences) : null;
+                this.roomsManager.lobbies.get(lobbyId).isCheatEnabled ? this.server.to(lobbyId).emit(GameEvents.Cheat, remainingDifferences) : null;
                 this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
                 return;
             }
@@ -132,7 +138,18 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         }
     }
 
-    @SubscribeMessage(GameEvents.StartGame)
+    @SubscribeMessage(GameEvents.AbandonGame)
+    abandonGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        socket.data.state = GameState.Abandoned;
+        socket.leave(lobbyId);
+        if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
+            this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
+            clearInterval(this.timers.get(lobbyId));
+        }
+        this.logger.log(`Game abandoned in lobby ${lobbyId}`);
+    }
+
+    @SubscribeMessage(GameEvents.NextGame)
     nextGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {}
 
     afterInit() {
@@ -147,6 +164,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
                 case GameState.InGame:
+                    const lobbyId = Array.from(socket.rooms)[1] as string;
+                    if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
+                        this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
+                        clearInterval(this.timers.get(lobbyId));
+                    }
                     break;
                 case GameState.Abandoned:
                     break;
@@ -158,6 +180,32 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
             this.logger.log(`LOBBY OUT de ${socket.data.accountId}`);
         });
         this.logger.log(`GAME ON de ${socket.data.accountId}`);
+    }
+
+    private thresholdCheck(lobbyId: string) {
+        const leftDifferences = this.games.get(lobbyId).differences.length;
+
+        let potentialWinner = null;
+        let isGameFinished = false;
+        for (const player of this.roomsManager.lobbies.get(lobbyId).players) {
+            // Le score le plus élevé possible pour les autres joueurs est leur score actuel plus les différences restantes.
+            const maxPossibleScoreForOthers = leftDifferences + player.count;
+
+            // Vérifiez si un autre joueur peut dépasser ou égaler le score du joueur actuel
+            // avec les différences restantes.
+            const canAnyOtherPlayerCatchUp = this.roomsManager.lobbies
+                .get(lobbyId)
+                .players.some((p) => p.accountId !== player.accountId && p.count + leftDifferences >= maxPossibleScoreForOthers);
+
+            // Si personne ne peut rattraper le joueur actuel, il est le gagnant potentiel.
+            if (!canAnyOtherPlayerCatchUp) {
+                potentialWinner = player;
+                isGameFinished = true;
+                break;
+            }
+        }
+
+        return { isGameFinished, potentialWinner };
     }
 
     private maximumCallStackCheck(dataToStringify: any) {
