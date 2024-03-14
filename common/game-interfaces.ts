@@ -137,6 +137,7 @@ export interface Player {
     accountId?: string;
     name?: string;
     differenceData?: Differences;
+    count?: number;
 }
 
 export interface Observers {
@@ -154,7 +155,7 @@ export interface Lobby {
     mode: GameModes; // classique ou limited
     password?: string; // oui
     time?: number;
-    timerId?: NodeJS.Timeout;
+    timerId?: any;
     timeLimit: number;
     bonusTime?: number;
     chatLog?: ChatLog;
@@ -168,7 +169,7 @@ export interface Game {
     original: string;
     modified: string;
     difficulty?: string;
-    differences: Coordinate[][];
+    differences?: Coordinate[][];
 }
 
 export interface Account {

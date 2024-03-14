@@ -4,9 +4,11 @@ import { AccountManagerService } from '@app/services/account-manager/account-man
 import { ClassicModeService } from '@app/services/classic-mode/classic-mode.service';
 import { GameService } from '@app/services/game/game.service';
 import { LimitedModeService } from '@app/services/limited-mode/limited-mode.service';
+import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
-import { GameEvents, GameModes, GameState } from '@common/enums';
-import { Coordinate, Game } from '@common/game-interfaces';
+import { NOT_FOUND } from '@common/constants';
+import { ChannelEvents, GameEvents, GameModes, GameState, MessageTag } from '@common/enums';
+import { Chat, Coordinate, Game } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import {
     ConnectedSocket,
@@ -35,10 +37,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         private readonly roomsManager: RoomsManagerService,
         private readonly classicMode: ClassicModeService,
         private readonly limitedMode: LimitedModeService,
+        private readonly messageManager: MessageManagerService,
     ) {}
 
     // ------------------ CLASSIC MODE && LIMITED MODE ------------------
-    @SubscribeMessage(GameEvents.Start)
+    @SubscribeMessage(GameEvents.StartGame)
     async startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.data.state = GameState.InGame;
         socket.join(lobbyId);
@@ -57,7 +60,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
                         differences: JSON.parse(game.differences) as Coordinate[][],
                     };
                 });
-                this.server.to(lobbyId).emit(GameEvents.Start, this.roomsManager.lobbies.get(lobbyId));
+                this.server.to(lobbyId).emit(GameEvents.StartGame, this.roomsManager.lobbies.get(lobbyId));
                 this.logger.log(`Game started in lobby ${lobbyId}`);
             } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
                 // Start Limited Mode
@@ -77,9 +80,43 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
     }
 
     // -------------------------- CLASSIC MODE --------------------------
+    @SubscribeMessage(GameEvents.Clic)
+    clic(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('coordClic') coordClic: Coordinate) {
+        // Si le cheat est enabled
+        this.logger.error('Clic found in lobby' + lobbyId);
+        const index: number = this.roomsManager.lobbies
+            .get(lobbyId)
+            .game.differences.findIndex((difference) => difference.some((coord: Coordinate) => coord.x === coordClic.x && coord.y === coordClic.y));
+
+        const commonMessage =
+            index !== NOT_FOUND
+                ? `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username}, 'a trouvé une différence !`
+                : `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username}, 's'est trompé !`;
+
+        // Si trouvé
+        if (index !== NOT_FOUND) {
+            this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
+            const endVerification = this.roomsManager.lobbies.get(lobbyId).players.every((player) => player.count === 3);
+            if (this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count) {
+
+            }
+            this.server
+                .to(lobbyId)
+                .emit(GameEvents.Found, {
+                    lobby: this.roomsManager.lobbies.get(lobbyId),
+                    differences: this.roomsManager.lobbies.get(lobbyId).game.differences,
+                });
+            this.roomsManager.lobbies.get(lobbyId).isCheatEnabled ? this.server.to(lobbyId).emit(GameEvents.Cheat) : null;
+            this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
+            return;
+        }
+        // Si pas trouvé
+        this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
+        this.server.to(lobbyId).emit(GameEvents.NotFound, coordClic);
+    }
 
     // -------------------------- LIMITED MODE --------------------------
-    @SubscribeMessage(GameEvents.Start)
+    @SubscribeMessage(GameEvents.StartGame)
     nextGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {}
 
     afterInit() {

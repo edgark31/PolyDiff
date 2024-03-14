@@ -44,8 +44,7 @@ export class LobbyGateway implements OnGatewayConnection {
 
     // un joueur rejoint le lobby
     @SubscribeMessage(LobbyEvents.Join)
-    join(@ConnectedSocket() socket: Socket, @MessageBody() data: { lobbyId: string; password?: string }) {
-        const { lobbyId, password } = data;
+    join(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('password') password?: string) {
         if (this.roomsManager.lobbies.get(lobbyId).password && this.roomsManager.lobbies.get(lobbyId).password !== password) return;
 
         socket.data.state = LobbyState.Waiting;

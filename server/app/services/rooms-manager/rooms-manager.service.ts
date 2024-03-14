@@ -40,7 +40,6 @@ export class RoomsManagerService implements OnModuleInit {
     }
 
     async onModuleInit() {}
-    x;
 
     async createRoom(playerPayLoad: PlayerData): Promise<GameRoom> {
         const game = !playerPayLoad.gameId ? await this.gameService.getRandomGame([]) : await this.gameService.getGameById(playerPayLoad.gameId);
@@ -143,24 +142,6 @@ export class RoomsManagerService implements OnModuleInit {
         });
     }
 
-    async addHintPenalty(socket: io.Socket, server: io.Server): Promise<void> {
-        const roomId = this.getRoomIdFromSocket(socket);
-        const room = this.getRoomById(roomId);
-        if (!room) return;
-        const { clientGame, gameConstants, timer } = room;
-        let penaltyTime = gameConstants.penaltyTime;
-
-        if (this.isLimitedModeGame(clientGame)) penaltyTime = -penaltyTime;
-        if (timer + penaltyTime < 0) {
-            await this.countdownOver(room, server);
-        } else {
-            const hintMessage = this.messageManager.createMessage(MessageTag.Common, 'Indice utilisé');
-            room.timer += penaltyTime;
-            this.rooms.set(room.roomId, room);
-            server.to(room.roomId).emit(MessageEvents.LocalMessage, hintMessage);
-            server.to(room.roomId).emit(GameEvents.TimerUpdate, room.timer);
-        }
-    }
 
     leaveRoom(room: GameRoom, server: io.Server): void {
         [room.player1, room.player2].forEach((player) => {

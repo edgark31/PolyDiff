@@ -1,19 +1,3 @@
-export enum GameEvents {
-    ValidateCoords = 'ValidateCoords',
-    CheckStatus = 'CheckStatus',
-    EndGame = 'EndGame',
-    TimerUpdate = 'TimerUpdate',
-    RemoveDifference = 'removeDifference',
-    GameStarted = 'GameStarted',
-    AbandonGame = 'AbandonGame',
-    StartGameByRoomId = 'CreateOneVsOneGame',
-    StartNextGame = 'StartNextGame',
-    RequestHint = 'RequestHint',
-    UpdateDifferencesFound = 'UpdateDifferencesFound',
-    GameModeChanged = 'GameModeChanged',
-    GamePageRefreshed = 'Refresh',
-}
-
 export enum PlayerEvents {
     PlayerRefused = 'PlayerRefused',
     GetJoinedPlayerNames = 'GetJoinedPlayerNames',
@@ -135,13 +119,29 @@ export enum FriendEvents {
 }
 
 export enum GameEvents {
-    Start = 'Start',
+    ValidateCoords = 'ValidateCoords',
+    CheckStatus = 'CheckStatus',
+    TimerUpdate = 'TimerUpdate',
+    RemoveDifference = 'removeDifference',
+    GameStarted = 'GameStarted',
+    StartGameByRoomId = 'CreateOneVsOneGame',
+    StartNextGame = 'StartNextGame',
+    RequestHint = 'RequestHint',
+    UpdateDifferencesFound = 'UpdateDifferencesFound',
+    GameModeChanged = 'GameModeChanged',
+    GamePageRefreshed = 'GamePageRefreshed',
+    // J'utilise pas les events plus haut
+    StartGame = 'StartGame',
     UpdateTimer = 'UpdateTimer',
     // CheckStatus = "CheckStatus",
     // RemoveDifference = "RemoveDifference",
-    Next = 'Next',
-    Leave = 'Leave',
-    End = 'End',
+    Clic = 'Clic',
+    Found = 'Found',
+    NotFound = 'NotFound',
+    Cheat = 'Cheat',
+    NextGame = 'NextGame',
+    AbandonGame = 'AbandonGame',
+    EndGame = 'EndGame',
 }
 
 export enum GameState {
@@ -153,8 +153,8 @@ export enum GameState {
 export enum ChannelEvents {
     SendLobbyMessage = 'SendLobbyMessage',
     LobbyMessage = 'LobbyMessage',
-    SendLocalMessage = 'SendLocalMessage',
-    LocalMessage = 'LocalMessage',
+    SendGameMessage = 'SendGameMessage',
+    GameMessage = 'GameMessage',
     SendGlobalMessage = 'SendGlobalMessage',
     GlobalMessage = 'GlobalMessage',
     UpdateLog = 'UpdateLog',
