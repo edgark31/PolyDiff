@@ -189,8 +189,11 @@ class LobbyService extends ChangeNotifier {
         if (_isPlayerInLobbyPage) {
           print('Player is in lobby page, updating the main lobby');
           // TODO : fix error if creator leaves on waiting player
-          _lobby =
-              _lobbies.firstWhere((lobby) => lobby.lobbyId == _lobby.lobbyId);
+          if (isCurrentLobbyInLobbies()) {
+            _lobby = getLobbyFromLobbies();
+          } else {
+            _isPlayerInLobbyPage = false;
+          }
         }
         notifyListeners();
       } else {
@@ -217,5 +220,13 @@ class LobbyService extends ChangeNotifier {
 
     // TODO: Implement LobbyEvents.Leave Listerners to handle creator quitting
     // socketService.on(SocketType.Lobby, LobbyEvents.Leave.name, (data) {
+  }
+
+  bool isCurrentLobbyInLobbies() {
+    return _lobbies.any((lobby) => lobby.lobbyId == _lobby.lobbyId);
+  }
+
+  Lobby getLobbyFromLobbies() {
+    return _lobbies.firstWhere((lobby) => lobby.lobbyId == _lobby.lobbyId);
   }
 }
