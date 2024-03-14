@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/socket_service.dart';
 
 class LobbyService extends ChangeNotifier {
@@ -9,9 +10,6 @@ class LobbyService extends ChangeNotifier {
   static String _gameModesName = GameModes.Classic.name;
   static bool _isCreator = false;
   static List<Lobby> _lobbies = [];
-  static String _gameId = 'initial-game-id';
-  static bool _isCheatEnabled = false;
-  static int _gameDuration = 0;
   late Lobby _lobby;
   static bool _isLobbyStarted = false;
   static bool _isPlayerInLobbyPage = false;
@@ -20,27 +18,11 @@ class LobbyService extends ChangeNotifier {
   String get gameModesName => _gameModesName;
   bool get isCreator => _isCreator;
   List<Lobby> get lobbies => _lobbies;
-  // String get gameId => _gameId;
   Lobby get lobby => _lobby;
   bool get isLobbyStarted => _isLobbyStarted;
 
   final SocketService socketService = Get.find();
-
-  // New Lobby setters
-  void setGameId(String newGameId) {
-    print('Setting game id from $_gameId to $newGameId');
-    _gameId = newGameId;
-  }
-
-  void setIsCheatEnabled(bool newIsCheatEnabled) {
-    print('Setting isCheatEnabled from $_isCheatEnabled to $newIsCheatEnabled');
-    _isCheatEnabled = newIsCheatEnabled;
-  }
-
-  void setGameDuration(int newGameDuration) {
-    print('Setting game duration from $_gameDuration to $newGameDuration');
-    _gameDuration = newGameDuration;
-  }
+  final LobbySelectionService lobbySelectionService = Get.find();
 
   // Lobby Selection setters
   void setGameModes(GameModes newGameModes) {
@@ -65,16 +47,7 @@ class LobbyService extends ChangeNotifier {
   void createLobby() {
     print('Creating lobby');
     setIsCreator(true);
-    Lobby lobbyCreated = Lobby.create(
-      gameId: _gameId,
-      isCheatEnabled: _isCheatEnabled,
-      mode: _gameModes,
-      time: _gameDuration,
-      timeLimit: _gameDuration,
-    );
-    print('IsCheatEnabled Lobby Sent: ${lobbyCreated.isCheatEnabled}');
-    print('Mode Lobby Sent: ${lobbyCreated.mode}');
-    print('Time Lobby Sent: ${lobbyCreated.time}');
+    Lobby lobbyCreated = lobbySelectionService.createLobby(_gameModes);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Create.name,
@@ -154,24 +127,9 @@ class LobbyService extends ChangeNotifier {
   void setListeners() {
     socketService.on(SocketType.Lobby, LobbyEvents.Create.name, (data) {
       print('Lobbies received from LobbyEvents.Create : $data');
-      if (data is Map<String, dynamic>) {
-        Lobby lobbyCreated = Lobby.fromJson(data);
-        print('LobbyId: ${lobbyCreated.lobbyId}');
-        print('GameId: ${lobbyCreated.gameId}');
-        print('IsAvailable: ${lobbyCreated.isAvailable}');
-        print('Players: ${lobbyCreated.players}');
-        print('Observers: ${lobbyCreated.observers}');
-        print('IsCheatEnabled: ${lobbyCreated.isCheatEnabled}');
-        print('Mode: ${lobbyCreated.mode}');
-        print('Time: ${lobbyCreated.time}');
-        print('Password: ${lobbyCreated.password}');
-        print('ChatLog: ${lobbyCreated.chatLog}');
-        print('NDifferences: ${lobbyCreated.nDifferences}');
-        _lobby = lobbyCreated;
-        notifyListeners();
-      } else {
-        print('Received data is not a Map<String, dynamic>');
-      }
+      Lobby lobbyCreated = Lobby.fromJson(data as Map<String, dynamic>);
+      _lobby = lobbyCreated;
+      notifyListeners();
     });
 
     socketService.on(SocketType.Lobby, LobbyEvents.UpdateLobbys.name, (data) {

@@ -36,7 +36,7 @@ class Lobby {
 
   // Method to create a new lobby
   Lobby.create({
-    required String gameId,
+    required String? gameId,
     required bool isCheatEnabled,
     required GameModes mode,
     required int time,
