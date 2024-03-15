@@ -1,13 +1,78 @@
 import 'package:mobile/constants/app_text_constants.dart';
 
-enum ValidationState { valid, invalid }
+enum NewInputStateMessageEnum {
+  usernameInput(
+    invalidMessage: "Veuillez entrée un nom d'utilisateur valide",
+    isEmptyMessage: "Nom d'utilisateur requis",
+  ),
+  emailInputField(
+    invalidMessage: "Veuillez entrer une adresse courriel valide",
+    isEmptyMessage: "Addresse courriel requis(e)",
+  ),
+  selectedAvatar(
+    invalidMessage: "Veuillez choisir une format de l'avatar valide",
+    isEmptyMessage: "Veuillez sélectionné un avatar",
+  ),
+  passwordInput(
+    invalidMessage: "Veuillez entrée un mot de passe valide",
+    isEmptyMessage: "Mot de passe requis",
+  );
 
-enum EmptyState { isEmpty, notEmpty }
+  final String invalidMessage;
+  final String isEmptyMessage;
 
-class CredentialsValidation {
+  const NewInputStateMessageEnum({
+    required this.invalidMessage,
+    required this.isEmptyMessage,
+  });
+}
+
+enum LoginInputFieldsStateMessageEnum {
+  usernameInput(
+    invalidMessage: "Utilisateur inconnu",
+    isEmptyMessage: "Nom d'utilisateur ou addresse courriel requis(e)",
+  ),
+  passwordInput(
+    invalidMessage: "Veuillez entrée un mot de passe valide",
+    isEmptyMessage: "Mot de passe requis",
+  );
+
+  final String invalidMessage;
+  final String isEmptyMessage;
+
+  const LoginInputFieldsStateMessageEnum({
+    required this.invalidMessage,
+    required this.isEmptyMessage,
+  });
+}
+
+enum ValidatorState {
+  isValid,
+  isInvalid,
+  isEmpty,
+  isNotEmpty;
+
+  String get inputValidatorStateMessage {
+    switch (this) {
+      case ValidatorState.isInvalid:
+        return 'Champ invalide';
+
+      case ValidatorState.isValid:
+        return '';
+
+      case ValidatorState.isEmpty:
+        return 'Information requise';
+
+      case ValidatorState.isNotEmpty:
+        return '';
+    }
+  }
+}
+
+class CredentialsValidator {
   Function? onStateChanged;
 
-  CredentialsValidation({this.onStateChanged});
+  CredentialsValidator({this.onStateChanged});
 
   void notifyStateChanged() {
     onStateChanged?.call();
@@ -22,38 +87,38 @@ class CredentialsValidation {
   String passwordStrength = '';
 
   // InputTextField states
-  Map<String, ValidationState> states = {
-    'username': ValidationState.invalid,
-    'email': ValidationState.invalid,
-    'password': ValidationState.invalid,
-    'passwordConfirmation': ValidationState.invalid,
+  Map<String, ValidatorState> states = {
+    'username': ValidatorState.isEmpty,
+    'email': ValidatorState.isEmpty,
+    'password': ValidatorState.isEmpty,
+    'passwordConfirmation': ValidatorState.isEmpty,
   };
 
   bool isValidUsername(String username) {
     var state =
-        username.isNotEmpty ? ValidationState.valid : ValidationState.invalid;
+        username.isNotEmpty ? ValidatorState.isValid : ValidatorState.isInvalid;
 
     states['username'] = state;
     notifyStateChanged();
 
-    return state == ValidationState.valid;
+    return state == ValidatorState.isValid;
   }
 
   bool isValidEmail(String email) {
     var state = emailRegex.hasMatch(email) && email.isNotEmpty
-        ? ValidationState.valid
-        : ValidationState.invalid;
+        ? ValidatorState.isValid
+        : ValidatorState.isInvalid;
 
     states['email'] = state;
     notifyStateChanged();
 
-    return state == ValidationState.valid;
+    return state == ValidatorState.isValid;
   }
 
   void updatePasswordStrength(String password) {
     if (password.isEmpty) {
       passwordStrength = '';
-      states['password'] = ValidationState.invalid;
+      states['password'] = ValidatorState.isInvalid;
       return;
     }
 
@@ -71,7 +136,7 @@ class CredentialsValidation {
       }
     }
 
-    states['password'] = ValidationState.valid;
+    states['password'] = ValidatorState.isValid;
     notifyStateChanged();
   }
 
@@ -79,13 +144,13 @@ class CredentialsValidation {
     bool areMatching = password == confirmation && password.isNotEmpty;
 
     states['passwordConfirmation'] =
-        areMatching ? ValidationState.valid : ValidationState.invalid;
+        areMatching ? ValidatorState.isValid : ValidatorState.isInvalid;
     notifyStateChanged();
 
     return areMatching;
   }
 
   bool hasValidCredentials() {
-    return states.values.every((state) => state == ValidationState.valid);
+    return states.values.every((state) => state == ValidatorState.isValid);
   }
 }

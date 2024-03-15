@@ -52,12 +52,12 @@ class _SignUpState extends State<SignUp> {
   String passwordStrength = '';
   String passwordConfirmation = '';
 
-  late final CredentialsValidation _validator;
+  late final CredentialsValidator _validator;
 
   @override
   void initState() {
     super.initState();
-    _validator = CredentialsValidation(
+    _validator = CredentialsValidator(
       onStateChanged: () {
         setState(() {
           // Force the widget to rebuild with updated validation status
@@ -70,15 +70,15 @@ class _SignUpState extends State<SignUp> {
     confirmationController.addListener(validatePasswordConfirmation);
   }
 
-  void updateValidationStates() {
+  void updateValidatorStates() {
     setState(() {
       usernameFormat =
-          _validator.states['username'] == ValidationState.valid ? YES : NO;
+          _validator.states['username'] == ValidatorState.isValid ? YES : NO;
       emailFormat =
-          _validator.states['email'] == ValidationState.valid ? YES : NO;
+          _validator.states['email'] == ValidatorState.isValid ? YES : NO;
       passwordStrength = _validator.passwordStrength;
       passwordConfirmation =
-          _validator.states['passwordConfirmation'] == ValidationState.valid
+          _validator.states['passwordConfirmation'] == ValidatorState.isValid
               ? YES
               : NO;
     });
@@ -86,23 +86,23 @@ class _SignUpState extends State<SignUp> {
 
   void validateUsername() {
     _validator.isValidUsername(usernameController.text);
-    updateValidationStates();
+    updateValidatorStates();
   }
 
   void validateEmail() {
     _validator.isValidEmail(emailController.text);
-    updateValidationStates();
+    updateValidatorStates();
   }
 
   void validatePassword() {
     _validator.updatePasswordStrength(passwordController.text);
-    updateValidationStates();
+    updateValidatorStates();
   }
 
   void validatePasswordConfirmation() {
     _validator.hasMatchingPasswords(
         passwordController.text, confirmationController.text);
-    updateValidationStates();
+    updateValidatorStates();
   }
 
   Future<void> _registerUserCredentials() async {
@@ -233,7 +233,7 @@ class _SignUpState extends State<SignUp> {
           controller: usernameController,
           hint: "Entrez votre nom d'utilisateur",
           helperText: 'Non vide: $usernameFormat',
-          errorText: _validator.states['username'] == ValidationState.invalid
+          errorText: _validator.states['username'] == ValidatorState.isInvalid
               ? "Nom d'utilisateur requis"
               : null,
           maxLength: 20,
@@ -252,7 +252,7 @@ class _SignUpState extends State<SignUp> {
           controller: emailController,
           hint: "ex: john.doe@gmail.com",
           helperText: 'Format valide requis: $emailFormat',
-          errorText: _validator.states['email'] == ValidationState.invalid
+          errorText: _validator.states['email'] == ValidatorState.isInvalid
               ? "Courriel requis ou invalide"
               : null,
           maxLength: 40,
@@ -271,7 +271,7 @@ class _SignUpState extends State<SignUp> {
           controller: passwordController,
           hint: "Entrez votre mot de passe",
           helperText: 'Force du mot de passe: $passwordStrength',
-          errorText: _validator.states['password'] == ValidationState.invalid
+          errorText: _validator.states['password'] == ValidatorState.isInvalid
               ? "Mot de passe requis"
               : null,
           maxLength: 20,
@@ -294,7 +294,7 @@ class _SignUpState extends State<SignUp> {
               'Doit correspondre au mot de passe: $passwordConfirmation',
           maxLength: 40,
           errorText: _validator.states['passwordConfirmation'] ==
-                  ValidationState.invalid
+                  ValidatorState.isInvalid
               ? "Les mots de passes doivent être identiques"
               : null,
           isPassword: true,

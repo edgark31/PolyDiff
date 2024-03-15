@@ -48,7 +48,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String currentTheme = '';
 
   final AccountService accountService = AccountService();
-  late final CredentialsValidation _validator;
+  late final CredentialsValidator _validator;
   String usernameFormat = NO;
 
   // TODO: Update with provider Sound, Username, Avatar and Theme
@@ -61,18 +61,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void updateUsernameValidationStates() {
     setState(() {
-      usernameFormat =
-          _validator.states['username'] == ValidationState.valid ? YES : NO;
+      usernameFormat = _validator.states['username'] == ValidatorState.isValid
+          ? ''
+          : NewInputStateMessageEnum.usernameInput.invalidMessage;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _validator = CredentialsValidation(
+    _validator = CredentialsValidator(
       onStateChanged: () {
         setState(() {
-          // Force the widget to rebuild with updated validation status
+          // Force the widget to rebuild with updated Validator status
         });
       },
     );
@@ -80,14 +81,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final infoService = Provider.of<InfoService>(context, listen: false);
     currentErrorSound = errorSounds.contains(infoService.soundOnError)
         ? infoService.soundOnError
-        : errorSounds.first;
+        : 'ErrorSoundEffect.mp3';
     currentDifferenceSound =
         differenceSounds.contains(infoService.soundOnDifference)
             ? infoService.soundOnDifference
-            : differenceSounds.first;
+            : 'WinSoundEffect.mp3';
     currentLanguage = languages.contains(infoService.language)
         ? infoService.language
-        : languages.first;
+        : 'Français';
     currentTheme = Provider.of<ThemeProvider>(context, listen: false).isDarkMode
         ? 'Dark'
         : 'Light';
@@ -107,7 +108,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     AvatarProvider.instance.setAccountAvatarUrl(infoService.username);
 
     return Scaffold(
-        appBar: CustomAppBar(title: "M O D I F I E R   S O N  P R O F I L"),
+        appBar: CustomAppBar(title: "Personnalisation du profil"),
         body: Container(
             padding: EdgeInsets.only(left: 15, top: 20, right: 15),
             child: GestureDetector(
@@ -165,7 +166,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     buildTextField(
                         "Nom d'utilisateur", usernameController, false),
                     SizedBox(height: 30),
-                    // Choisir un son lorsqu'un joueur ne click pas sur une différence
+                    // Son lorsqu'un joueur ne click pas sur une différence
                     DropdownButtonFormField<String>(
                       value: currentErrorSound,
                       items: errorSounds
@@ -294,9 +295,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             fontWeight: FontWeight.bold,
             color: Colors.grey,
           ),
-          errorText: _validator.states['username'] == ValidationState.invalid
-              ? "Nom d'utilisateur requis"
-              : null,
+          errorText: usernameFormat,
         ),
       ),
     );
