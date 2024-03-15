@@ -49,6 +49,11 @@ class ChatService extends ChangeNotifier {
     print('Length of lobby messages: ${_lobbyMessages.length}');
   }
 
+  void setupLobby() {
+    clearLobbyMessages();
+    setLobbyChatListeners();
+  }
+
   void clearLobbyMessages() {
     _lobbyMessages.clear();
     notifyListeners();

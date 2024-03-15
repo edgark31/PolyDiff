@@ -17,29 +17,29 @@ class InfoService extends ChangeNotifier {
   String get email => _email;
 
   void setId(String newId) {
-    print('Changing id from $_id to $newId');
+    // print('Changing id from $_id to $newId');
     _id = newId;
     notifyListeners();
   }
 
   void setName(String newName) {
-    print('Changing name from $_name to $newName for ($_id)');
+    // print('Changing name from $_name to $newName for ($_id)');
     _name = newName;
     notifyListeners();
   }
 
   void setEmail(String? newEmail) {
     if (newEmail != null) {
-      print('Changing email from $_email to $newEmail for $username ($_id)');
+      // print('Changing email from $_email to $newEmail for $username ($_id)');
       _email = newEmail;
       notifyListeners();
     }
   }
 
   void setAvatar(String newAvatar) {
-    String shortOldAvatar = _avatar.substring(0, 100);
-    String shortNewAvatar = newAvatar.substring(0, 100);
-    print('Changing avatar from $shortOldAvatar to  $shortNewAvatar for $username ($_id)');
+    // String shortOldAvatar = _avatar.substring(0, 100);
+    // String shortNewAvatar = newAvatar.substring(0, 100);
+    // print('Changing avatar from $shortOldAvatar to  $shortNewAvatar for $username ($_id)');
     _avatar = newAvatar;
     notifyListeners();
   }
@@ -53,13 +53,13 @@ class InfoService extends ChangeNotifier {
   void setInfosOnConnection(String serverConnectionResponse) {
     final result = jsonDecode(serverConnectionResponse) as Map<String, dynamic>;
 
-    print('id: ${result['id']}');
+    // print('id: ${result['id']}');
     setId(result['id']);
 
-    print('credentials: ${result['credentials']}');
+    // print('credentials: ${result['credentials']}');
     final credentials = Credentials.fromJson(result['credentials']);
-    print('email: ${credentials.email}');
-    print('username: ${credentials.username}');
+    // print('email: ${credentials.email}');
+    // print('username: ${credentials.username}');
     setCredentials(credentials);
 
     setAvatar(

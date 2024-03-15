@@ -29,51 +29,48 @@ class _LobbyPageState extends State<LobbyPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final lobbyService = context.read<LobbyService>();
-      if (lobbyService.isLobbyStarted) {
-        print('Navigating to GamePage from initState');
-        Navigator.pushNamed(context, CLASSIC_ROUTE);
-      }
-      lobbyService.addListener(_checkLobbyStart);
+      lobbyService.addListener(_checkLobbyState);
     });
   }
 
   @override
   void dispose() {
-    context.read<LobbyService>().removeListener(_checkLobbyStart);
+    context.read<LobbyService>().removeListener(_checkLobbyState);
     super.dispose();
   }
 
-  void _checkLobbyStart() {
+  void _checkLobbyState() {
     final lobbyService = context.read<LobbyService>();
     if (lobbyService.isLobbyStarted) {
       print('Navigating to GamePage from _checkLobbyStart');
       Navigator.pushNamed(context, CLASSIC_ROUTE);
+      lobbyService.removeListener(_checkLobbyState); // Optimisation possible?
+    } else if (!lobbyService.isCurrentLobbyInLobbies()) {
+      print('Navigating to DashBoardPage from _checkLobbyStart');
+      Navigator.pushNamed(context, DASHBOARD_ROUTE);
+      lobbyService.removeListener(_checkLobbyState); // Optimisation possible?
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
-    bool isCreator = lobbyService.isCreator;
-    int nPlayers = lobbyService.lobby.players.length;
-    bool canGameStart = nPlayers >= 2 && nPlayers <= 4;
     List<String> playerNames = lobbyService.lobby.players.map((e) {
       return e.name ?? '';
     }).toList();
+    String gameModeName = lobbyService.gameModes.name;
 
     return BackgroundContainer(
-      backgroundImagePath:
-          SELECTION_BACKGROUND_PATH, // TODO : fix white background
+      backgroundImagePath: SELECTION_BACKGROUND_PATH,
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Text(
-                  'Salle d\'attente de la partie en ${lobbyService.gameModesName}'),
+              Text('Salle d\'attente de la partie en $gameModeName'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // TODO: Add lobby + game specific chat logic
                   ChatBox(),
                   playersInfos(context, playerNames: playerNames),
                 ],
@@ -81,21 +78,7 @@ class _LobbyPageState extends State<LobbyPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  isCreator
-                      ? (canGameStart
-                          ? CustomButton(
-                              text: 'Commencer la partie',
-                              press: () {
-                                print(
-                                    'Starting the lobby and Navigating to GamePage');
-                                lobbyService.startLobby();
-                                Navigator.pushNamed(context, CLASSIC_ROUTE);
-                              },
-                              backgroundColor: kMidGreen,
-                            )
-                          : Text(
-                              'Vous devez être entre 2 et 4 joueurs pour commencer la partie'))
-                      : Text('En attente du début de la partie...'),
+                  lobbyButton(context),
                   CustomButton(
                     text: 'Quitter la salle d\'attente',
                     press: () {
@@ -112,6 +95,28 @@ class _LobbyPageState extends State<LobbyPage> {
         ),
       ),
     );
+  }
+
+  Widget lobbyButton(BuildContext context) {
+    final lobbyService = context.watch<LobbyService>();
+    int nPlayers = lobbyService.lobby.players.length;
+    if (!lobbyService.isCreator) {
+      return Text('En attente du début de la partie...');
+    }
+    if (nPlayers >= 2 && nPlayers <= 4) {
+      return CustomButton(
+        text: 'Commencer la partie',
+        press: () {
+          print('Starting the lobby and Navigating to GamePage');
+          lobbyService.startLobby();
+          Navigator.pushNamed(context, CLASSIC_ROUTE);
+        },
+        backgroundColor: kMidGreen,
+      );
+    } else {
+      return Text(
+          'Vous devez être entre 2 et 4 joueurs pour commencer la partie');
+    }
   }
 
   Widget playersInfos(BuildContext context,
