@@ -9,7 +9,6 @@ class SocketService extends ChangeNotifier {
   static late IO.Socket gameSocket;
 
   void setup(SocketType type, String id) {
-    print('Setup ${type.name} started for $id');
     switch (type) {
       case SocketType.Auth:
         authSocket = IO.io(BASE_URL, <String, dynamic>{
@@ -58,7 +57,6 @@ class SocketService extends ChangeNotifier {
 
     socket.onDisconnect((_) {
       print('Disconnected from server on $BASE_URL');
-      print("Disconnected socket id : ${socket.id}");
     });
   }
 
