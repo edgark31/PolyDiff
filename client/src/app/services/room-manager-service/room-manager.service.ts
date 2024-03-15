@@ -2,18 +2,20 @@
 import { Injectable } from '@angular/core';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { ChannelEvents, GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
-import { Chat, Lobby, PlayerData } from '@common/game-interfaces';
+import { Chat, Game, Lobby, PlayerData } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
+import { CommunicationService } from '../communication-service/communication.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class RoomManagerService {
     password: string;
+    lobbyGame: Lobby;
     isOrganizer: boolean;
     lobby: Subject<Lobby>;
     wait: boolean;
-    // player: Player[];
+    game: Game;
 
     private lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
@@ -32,7 +34,7 @@ export class RoomManagerService {
     private messages: Subject<Chat[]>;
     private message: Subject<Chat>;
 
-    constructor(private readonly clientSocket: ClientSocketService) {
+    constructor(private readonly clientSocket: ClientSocketService, private communication: CommunicationService) {
         // this.playerNameAvailability = new Subject<PlayerNameAvailability>();
         // this.roomOneVsOneId = new Subject<string>();
         // this.isPlayerAccepted = new Subject<boolean>();
@@ -254,9 +256,11 @@ export class RoomManagerService {
         if (this.isOrganizer)
             this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby.next(lobby);
+                this.lobbyGame = lobby;
             });
         else
             this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
+                this.lobbyGame = lobby;
                 this.lobby.next(lobby);
             });
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
@@ -264,6 +268,11 @@ export class RoomManagerService {
         });
         this.clientSocket.on('lobby', ChannelEvents.LobbyMessage, (chat: Chat) => {
             this.message.next(chat);
+        });
+
+        const id = this.lobbyGame.gameId ? this.lobbyGame.gameId : ''; // en attendant d'expliquer pourquoi gameId est optionnel
+        this.communication.getGameById(id).subscribe((e) => {
+            this.game = e;
         });
     }
 }

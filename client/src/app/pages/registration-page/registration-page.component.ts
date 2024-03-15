@@ -7,7 +7,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 // eslint-disable-next-line import/no-unresolved
-import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
+import { ImportDialogComponent } from '@app/components/import-Dialog/import-dialog.component';
 import { NameGenerationDialogComponent } from '@app/components/name-generation-dialog/name-generation-dialog.component';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { NameGenerationService } from '@app/services/name-generation-service/name-generation-service.service';

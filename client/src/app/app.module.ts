@@ -46,7 +46,7 @@ import { DeleteResetConfirmationDialogComponent } from './components/delete-rese
 import { GamePageDialogComponent } from './components/game-page-dialog/game-page-dialog.component';
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
-import { ImportDialogComponent } from './components/import-dialog/import-dialog.component';
+import { ImportDialogComponent } from './components/import-Dialog/import-dialog.component';
 import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { ModalAccessMatchComponent } from './components/modal-access-match/modal-access-match.component';
