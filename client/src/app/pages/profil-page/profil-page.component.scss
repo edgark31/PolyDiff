@@ -9,42 +9,40 @@ form {
 
 .mat-header-cell,
 .mat-cell {
-    padding: 10px; /* Espacement autour du contenu de la cellule */
+    padding: 10px;
 }
 
 .mat-header-cell {
-    font-weight: bold; /* Texte en gras pour les cellules d'en-tête */
+    font-weight: bold;
 }
 
 .mat-cell {
 }
 
-/* Définir la largeur des colonnes */
 .mat-column-position,
 .mat-column-name,
 .mat-column-weight {
-    width: 39.89%; /* Répartir les colonnes également sur la largeur de la table */
+    width: 39.89%;
 }
 
 .mat-paginator {
-    font-size: 14px; /* Taille de la police */
-    padding: 8px; /* Espacement autour du paginator */
-    /* Espacement en haut du paginator */
-    max-width: 300px; /* Largeur maximale du paginator */
+    font-size: 14px;
+    padding: 8px;
+    max-width: 300px;
     margin-top: 10px;
 }
 
 .mat-paginator-page-size,
 .mat-paginator-range-label,
 .mat-paginator-navigation {
-    font-size: 14px; /* Taille de la police */
+    font-size: 14px;
 }
 
 .mat-paginator-page-size-label {
 }
 
 h1 {
-    font-size: 1.5rem; /* Taille de police agrandie pour le titre */
+    font-size: 1.5rem;
     color: #333;
     padding-bottom: 2px;
     border-bottom: 1px solid #ccc;
@@ -53,14 +51,12 @@ h1 {
 .form-avatar {
     margin-bottom: 50px;
     display: flex;
-    flex-direction: column; /* Mettre en colonne les éléments à l'intérieur */
-    align-items: flex-start; /* Aligner les éléments à gauche */
-    text-align: left; /* Aligner le texte à gauche */
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
 }
 
 .form-avatar label {
-    // font-size: 1.1rem; /* Taille de police agrandie pour les labels */
-    // font-weight: 500;
     margin-bottom: 10px;
     color: #333;
     font-size: 1.2rem;
@@ -93,8 +89,6 @@ h1 {
 }
 
 .form-control label {
-    // font-size: 1.1rem; /* Taille de police agrandie pour les labels */
-    // font-weight: 500;
     margin-bottom: 50px;
     color: #333;
     font-size: 1.2rem;
@@ -152,16 +146,16 @@ button {
 .mat-form-field,
 .mat-label,
 .mat-select {
-    font-size: 1em; /* Tripler la taille de la police */
+    font-size: 1em;
 }
 
 .mat-option {
-    font-size: 1em; /* Tripler la taille de la police */
-    line-height: 3; /* Tripler la hauteur de ligne pour s'adapter à la taille de la police */
+    font-size: 1em;
+    line-height: 3;
 }
 
 .section {
-    margin-bottom: 20px; /* Espace de 20 pixels en bas */
+    margin-bottom: 20px;
 }
 
 .button-container {
@@ -187,29 +181,28 @@ button {
 }
 
 .container-information {
-    text-align: center; /* Centrer le contenu */
+    text-align: center;
 }
 
 .information {
-    display: inline-block; /* Afficher en ligne */
-    text-align: left; /* Aligner le texte à gauche */
-    font-size: 32px; /* Taille de la police */
-    font-weight: bold; /* Gras */
-    padding: 10px; /* Espacement intérieur */
-    margin-bottom: 10px; /* Espacement en bas */
+    display: inline-block;
+    text-align: left;
+    font-size: 32px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 10px;
     margin-top: 20px;
-    // background-color: #28b24d;
-    padding-right: 14px; /* Réduire la largeur du fond */
-    width: 350px; /* Définir une largeur spécifique */
+    padding-right: 14px;
+    width: 350px;
     height: 50px;
 }
 
 .personalisation {
-    font-size: 24px; /* Taille de la police */
-    font-weight: bold; /* Gras */
-    background-color: #0bf286; /* Couleur de fond */
-    padding: 10px; /* Espacement intérieur */
-    margin-bottom: 10px; /* Espacement en bas */
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #0bf286;
+    padding: 10px;
+    margin-bottom: 10px;
     margin-top: 20px;
     color: white;
 }
@@ -230,7 +223,6 @@ button {
     margin: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    // background-color: #b7f1c6de;
 }
 .form-stat div {
     margin-bottom: 4px;
@@ -245,35 +237,29 @@ button {
 .form-control img {
     width: 150px;
     height: 150px;
-    margin-bottom: 10px; /* Espacement entre l'image et le label */
+    margin-bottom: 10px;
 }
 
 .section h1 {
     font-size: 2rem;
 }
 
-/* Agrandir les éléments de statistiques */
 .form-stat div:not(:empty) {
     font-size: 1.5rem;
 }
 
 .dark-theme {
-    background-color: #333; /* Couleur de fond sombre */
-    color: #fff; /* Couleur du texte clair */
-    /* Autres styles spécifiques au thème sombre */
-}
-
-body {
-    // background-color: #b7f1c6;
+    background-color: #333;
+    color: #fff;
 }
 
 .status-indicator {
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 10px; /* Taille du point de statut */
-    height: 10px; /* Taille du point de statut */
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: green;
-    border: 2px solid white; /* Pour qu'il ressorte sur des fonds variés */
+    border: 2px solid white;
 }

@@ -10,7 +10,6 @@ export class AdminGuard implements CanActivate {
 
     async canActivate(): Promise<boolean> {
         if (this.welcomeService.getLoginState()) {
-            console.log('aie');
             return true;
         } else {
             this.router.navigate(['/home']);

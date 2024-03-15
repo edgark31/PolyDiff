@@ -70,6 +70,9 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         this.roomManagerService.sendMessage(this.lobby.lobbyId, message);
     }
 
+    onStart(): void {
+        this.router.navigate(['/game']);
+    }
     ngOnDestroy(): void {
         this.onQuit();
         if (this.clientSocketService.isSocketAlive('lobby')) {
