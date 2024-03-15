@@ -45,7 +45,7 @@ export class ImportDialogComponent {
     }
 
     verifyAccount(): void {
-        if (this.welcomeService.account) this.welcomeService.selectAvatarRegister = this.choice;
+        if (!this.welcomeService.account) this.welcomeService.selectAvatarRegister = this.choice;
         else this.welcomeService.selectAvatar = this.choice;
     }
     chooseImage(id: string): void {

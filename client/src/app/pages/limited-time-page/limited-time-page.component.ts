@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -14,7 +14,6 @@ import { ChannelEvents, GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 // import { PlayerData } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
-
 @Component({
     selector: 'app-limited-time-page',
     templateUrl: './limited-time-page.component.html',
@@ -24,7 +23,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     lobbies: Lobby[];
     pageSize = 2;
     currentPage = 0;
-    pagedLobby: Lobby[] = [];
+    pagedLobbies: Lobby[] = [];
     gameModes: typeof GameModes;
     nPlayersConnected: number;
     private lobbiesSubscription: Subscription;
@@ -40,17 +39,16 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         private readonly clientSocket: ClientSocketService,
         private readonly welcomeService: WelcomeService,
         private readonly navigationService: NavigationService,
+        private cdr: ChangeDetectorRef,
     ) {
         this.gameModes = GameModes;
         // this.isStartingGame = false;
         this.nPlayersConnected = 0;
         this.lobbies = [];
-
-        this.clientSocket.connect(this.welcomeService.account.id as string, 'lobby');
-        console.log(welcomeService.account.credentials.username + 'est connecté');
     }
 
     ngOnInit(): void {
+        this.clientSocket.connect(this.welcomeService.account.id as string, 'lobby');
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         this.updatePagedImages();
@@ -58,33 +56,42 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     previousPage() {
         if (this.currentPage > 0) {
             this.currentPage--;
-            this.updatePagedImages();
+            this.updatepagedLobbies();
         }
     }
 
     nextPage() {
-        const v = this.lobbies.length / this.pageSize - 1;
+        const lobbyLengthValid = this.lobbies.length / (this.pageSize - 1);
 
-        if (v > this.currentPage) {
+        if (lobbyLengthValid > this.currentPage) {
             this.currentPage++;
-            this.updatePagedImages();
+            this.updatepagedLobbies();
         }
     }
 
+    updatepagedLobbies() {
+        const startIndex = this.currentPage * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        this.lobbies = this.lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
+        this.pagedLobbies = this.lobbies.slice(startIndex, endIndex);
+    }
+
     updatePagedImages() {
+        if (this.lobbiesSubscription) {
+            this.lobbiesSubscription?.unsubscribe();
+        }
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
                 this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
-                const startIndex = this.currentPage * this.pageSize;
-                const endIndex = startIndex + this.pageSize;
-                this.pagedLobby = this.lobbies.slice(startIndex, endIndex);
+                this.updatepagedLobbies();
+                this.cdr.detectChanges();
             }
         });
     }
 
     handlePageEvent(event: PageEvent) {
         this.currentPage = event.pageIndex;
-        this.updatePagedImages();
+        this.updatepagedLobbies();
     }
     manageGames(): void {
         this.dialog.open(ModalAccessMatchComponent);

@@ -8,7 +8,7 @@ form {
 }
 
 h1 {
-    font-size: 1.5rem; /* Taille de police agrandie pour le titre */
+    font-size: 1.5rem;
     color: #333;
     padding-bottom: 2px;
     border-bottom: 1px solid #ccc;
@@ -17,14 +17,12 @@ h1 {
 .form-avatar {
     margin-bottom: 50px;
     display: flex;
-    flex-direction: column; /* Mettre en colonne les éléments à l'intérieur */
-    align-items: flex-start; /* Aligner les éléments à gauche */
-    text-align: left; /* Aligner le texte à gauche */
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
 }
 
 .form-avatar label {
-    // font-size: 1.1rem; /* Taille de police agrandie pour les labels */
-    // font-weight: 500;
     margin-bottom: 10px;
     color: #333;
     font-size: 1.2rem;
@@ -57,8 +55,6 @@ h1 {
 }
 
 .form-control label {
-    // font-size: 1.1rem; /* Taille de police agrandie pour les labels */
-    // font-weight: 500;
     margin-bottom: 50px;
     color: #333;
     font-size: 1.2rem;
@@ -91,7 +87,7 @@ button:hover {
     background: rgb(11, 145, 15);
 }
 .option-icon {
-    margin-right: 8px; /* ajustez la marge à votre convenance */
+    margin-right: 8px;
 }
 button {
     margin-bottom: 10px;
@@ -118,15 +114,14 @@ button {
 .mat-form-field,
 .mat-label,
 .mat-select {
-    font-size: 1em; /* Tripler la taille de la police */
+    font-size: 1em;
     margin-bottom: 1px;
 }
 .mat-form-field.mat-form-field {
-    font-size: 18px; /* Taille de la police */
-    width: 500px; /* Largeur de l'input */
+    font-size: 18px;
+    width: 500px;
 }
 
-/* Réduit la hauteur de l'underline */
 .mat-form-field.mat-form-field-appearance-legacy .mat-form-field-underline {
     height: 10px;
 }
@@ -137,12 +132,12 @@ button {
 }
 
 .mat-option {
-    font-size: 1em; /* Tripler la taille de la police */
-    line-height: 3; /* Tripler la hauteur de ligne pour s'adapter à la taille de la police */
+    font-size: 1em;
+    line-height: 3;
 }
 
 .section {
-    margin-bottom: 20px; /* Espace de 20 pixels en bas */
+    margin-bottom: 20px;
 }
 
 .button-container {
@@ -161,22 +156,22 @@ button {
 }
 
 .information {
-    text-align: center; /* Centrer le texte */
-    font-size: 32px; /* Taille de la police */
-    font-weight: bold; /* Gras */
-    padding: 10px; /* Espacement intérieur */
-    margin-bottom: 10px; /* Espacement en bas */
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 10px;
     margin-top: 20px;
 
     padding-right: 600px;
 }
 
 .personalisation {
-    font-size: 24px; /* Taille de la police */
-    font-weight: bold; /* Gras */
-    background-color: #0bf286; /* Couleur de fond */
-    padding: 10px; /* Espacement intérieur */
-    margin-bottom: 10px; /* Espacement en bas */
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #0bf286;
+    padding: 10px;
+    margin-bottom: 10px;
     margin-top: 20px;
     color: white;
 }
@@ -212,20 +207,15 @@ button {
 .form-control img {
     width: 150px;
     height: 150px;
-    margin-bottom: 10px; /* Espacement entre l'image et le label */
+    margin-bottom: 10px;
 }
 
 .section h1 {
     font-size: 2rem;
 }
 
-/* Agrandir les éléments de statistiques */
 .form-stat div:not(:empty) {
     font-size: 1.5rem;
-}
-
-body {
-    // background-color: #b7f1c6; /* Vert clair */
 }
 
 button[mat-icon-button] {
