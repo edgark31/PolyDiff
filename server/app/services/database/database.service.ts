@@ -49,15 +49,7 @@ export class DatabaseService implements OnModuleInit {
             // Database vers les assets du server
             const games = await this.gameModel.find().exec();
             games.forEach((game) => {
-                const createGameDto: CreateGameDto = {
-                    name: game.name,
-                    originalImage: game.originalImage,
-                    modifiedImage: game.modifiedImage,
-                    nDifference: game.nDifference,
-                    differences: JSON.parse(game.differences),
-                    isHard: game.isHard,
-                };
-                this.saveFiles(createGameDto);
+                this.saveFiles(game);
             });
         } catch (error) {
             return Promise.reject(`Failed to load games in server: ${error}`);
@@ -118,15 +110,15 @@ export class DatabaseService implements OnModuleInit {
         }
     }
 
-    saveFiles(newGame: CreateGameDto): void {
-        const dirName = `assets/${newGame.name}`;
+    saveFiles(newGame: Game): void {
+        const dirName = `assets/${newGame._id.toString()}`;
         const dataOfOriginalImage = Buffer.from(newGame.originalImage.replace(/^data:image\/\w+;base64,/, ''), 'base64');
         const dataOfModifiedImage = Buffer.from(newGame.modifiedImage.replace(/^data:image\/\w+;base64,/, ''), 'base64');
         if (!fs.existsSync(dirName)) {
             fs.mkdirSync(dirName);
-            fs.writeFileSync(`assets/${newGame.name}/original.bmp`, dataOfOriginalImage);
-            fs.writeFileSync(`assets/${newGame.name}/modified.bmp`, dataOfModifiedImage);
-            fs.writeFileSync(`assets/${newGame.name}/differences.json`, JSON.stringify(newGame.differences));
+            fs.writeFileSync(`assets/${newGame._id.toString()}/original.bmp`, dataOfOriginalImage);
+            fs.writeFileSync(`assets/${newGame._id.toString()}/modified.bmp`, dataOfModifiedImage);
+            fs.writeFileSync(`assets/${newGame._id.toString()}/differences.json`, JSON.stringify(newGame.differences));
         }
     }
 
@@ -140,10 +132,10 @@ export class DatabaseService implements OnModuleInit {
                 nDifference: newGame.nDifference,
                 isHard: newGame.isHard,
             };
-            this.saveFiles(newGame);
             const id = (await this.gameModel.create(newGameInDB))._id.toString();
             this.gameIds.push(id);
             newGameInDB._id = id;
+            this.saveFiles(newGameInDB);
             const gameCard = this.gameListManager.buildGameCardFromGame(newGameInDB);
             await this.gameCardModel.create(gameCard);
             this.gameListManager.addGameCarousel(gameCard);

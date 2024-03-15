@@ -79,7 +79,7 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit(): void {
         this.gameManager.startGame();
-        this.getPlayers();
+        // this.getPlayers();
         this.setUpGame();
         this.setUpReplay();
         this.updateTimer();
@@ -180,16 +180,16 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
         });
     }
 
-    private getPlayers(): void {
-        this.gameManager.players$.pipe(takeUntil(this.onDestroy$)).subscribe((players) => {
-            this.players = players;
-            if (players.player1.accountId === this.gameManager.getSocketId('game')) {
-                this.player = players.player1.name ?? '';
-            } else if (players.player2 && players.player2.accountId === this.gameManager.getSocketId('game')) {
-                this.player = players.player2.name ?? '';
-            }
-        });
-    }
+    // private getPlayers(): void {
+    //     this.gameManager.players$.pipe(takeUntil(this.onDestroy$)).subscribe((players) => {
+    //         this.players = players;
+    //         if (players.player1.accountId === this.gameManager.getSocketId('game')) {
+    //             this.player = players.player1.name ?? '';
+    //         } else if (players.player2 && players.player2.accountId === this.gameManager.getSocketId('game')) {
+    //             this.player = players.player2.name ?? '';
+    //         }
+    //     });
+    // }
 
     private setUpGame(): void {
         this.gameManager.currentGame$.pipe(takeUntil(this.onDestroy$)).subscribe((game) => {

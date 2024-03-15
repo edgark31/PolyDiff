@@ -70,7 +70,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`DEATH de ${socket.data.accountId}`);
-        this.accountManager.disconnection(socket.data.accountId);
+        this.logger.log(`DEAUTH de ${socket.data.accountId}`);
+        this.accountManager.deconnexion(socket.data.accountId);
     }
 }

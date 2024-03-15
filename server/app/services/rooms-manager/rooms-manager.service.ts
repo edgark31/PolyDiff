@@ -5,7 +5,7 @@ import { GameService } from '@app/services/game/game.service';
 import { HistoryService } from '@app/services/history/history.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { CHARACTERS, DEFAULT_GAME_MODES, KEY_SIZE, MAX_BONUS_TIME_ALLOWED, NOT_FOUND } from '@common/constants';
-import { GameEvents, GameModes, MessageEvents, MessageTag, PlayerStatus } from '@common/enums';
+import { GameEvents, GameModes, MessageEvents, PlayerStatus } from '@common/enums';
 import {
     Chat,
     ClientSideGame,
@@ -39,16 +39,7 @@ export class RoomsManagerService implements OnModuleInit {
         this.modeTimerMap = DEFAULT_GAME_MODES;
     }
 
-    async onModuleInit() {
-        await this.getGameConstants();
-    }
-
-    // async get(lobbyId: string): Promise<GameRoom> {
-    //     if (this.lobbies.get(lobbyId).gameId) {
-    //         const game: Game = await this.gameService.getGameById(this.lobbies.get(lobbyId).gameId);
-    //         return this.buildGameRoom(game, this.lobbies.get(lobbyId).player);
-    //     }
-    // }
+    async onModuleInit() {}
 
     async createRoom(playerPayLoad: PlayerData): Promise<GameRoom> {
         const game = !playerPayLoad.gameId ? await this.gameService.getRandomGame([]) : await this.gameService.getGameById(playerPayLoad.gameId);
@@ -65,7 +56,7 @@ export class RoomsManagerService implements OnModuleInit {
     }
 
     getRoomIdFromSocket(socket: io.Socket): string {
-        return Array.from(socket.rooms.values())[1];
+        return Array.from(socket.rooms.values())[1] as string;
     }
 
     getRoomBySocketId(socketId: string): GameRoom {
@@ -141,31 +132,14 @@ export class RoomsManagerService implements OnModuleInit {
     }
 
     updateTimers(server: io.Server) {
-        for (const room of this.rooms.values()) {
-            const modeInfo = this.modeTimerMap[room?.clientGame?.mode];
-            if (!modeInfo || (modeInfo.requiresPlayer2 && !room.player2)) continue;
-
-            this.updateTimer(room, server, modeInfo.isCountdown);
-        }
-    }
-
-    async addHintPenalty(socket: io.Socket, server: io.Server): Promise<void> {
-        const roomId = this.getRoomIdFromSocket(socket);
-        const room = this.getRoomById(roomId);
-        if (!room) return;
-        const { clientGame, gameConstants, timer } = room;
-        let penaltyTime = gameConstants.penaltyTime;
-
-        if (this.isLimitedModeGame(clientGame)) penaltyTime = -penaltyTime;
-        if (timer + penaltyTime < 0) {
-            await this.countdownOver(room, server);
-        } else {
-            const hintMessage = this.messageManager.createMessage(MessageTag.Common, 'Indice utilisé');
-            room.timer += penaltyTime;
-            this.rooms.set(room.roomId, room);
-            server.to(room.roomId).emit(MessageEvents.LocalMessage, hintMessage);
-            server.to(room.roomId).emit(GameEvents.TimerUpdate, room.timer);
-        }
+        this.lobbies.forEach((lobby) => {
+            if (lobby.isAvailable) return;
+            if (lobby.time === 0) {
+                server.to(lobby.lobbyId).emit(GameEvents.EndGame, 'Temps écoulé !');
+                return;
+            }
+            server.to(lobby.lobbyId).emit(GameEvents.TimerUpdate, --lobby.time);
+        });
     }
 
     leaveRoom(room: GameRoom, server: io.Server): void {
@@ -202,6 +176,14 @@ export class RoomsManagerService implements OnModuleInit {
         }
     }
 
+    private async updateTimer(room: GameRoom, server: io.Server, isCountdown: boolean): Promise<void> {
+        if (isCountdown) room.timer--;
+        else room.timer++;
+        this.updateRoom(room);
+        server.to(room.roomId).emit(GameEvents.TimerUpdate, room.timer);
+        if (room.timer === 0) await this.countdownOver(room, server);
+    }
+
     private differenceFound(room: GameRoom, player: Player, index: number): Chat {
         this.addBonusTime(room);
         player.differenceData.differencesFound++;
@@ -233,14 +215,6 @@ export class RoomsManagerService implements OnModuleInit {
             room.timer = MAX_BONUS_TIME_ALLOWED;
         }
         this.updateRoom(room);
-    }
-
-    private async updateTimer(room: GameRoom, server: io.Server, isCountdown: boolean): Promise<void> {
-        if (isCountdown) room.timer--;
-        else room.timer++;
-        this.updateRoom(room);
-        server.to(room.roomId).emit(GameEvents.TimerUpdate, room.timer);
-        if (room.timer === 0) await this.countdownOver(room, server);
     }
 
     private async countdownOver(room: GameRoom, server: io.Server): Promise<void> {

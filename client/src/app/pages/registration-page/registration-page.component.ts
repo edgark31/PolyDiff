@@ -38,8 +38,8 @@ export class RegistrationPageComponent {
         private readonly router: Router,
         private readonly dialog: MatDialog,
         private readonly nameGeneration: NameGenerationService,
-        readonly validation: ValidationService,
-        readonly welcomeService: WelcomeService,
+        public validation: ValidationService,
+        public welcomeService: WelcomeService,
     ) {
         this.feedback = '';
     }
