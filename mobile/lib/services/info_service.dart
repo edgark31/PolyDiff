@@ -45,14 +45,14 @@ class InfoService extends ChangeNotifier {
   void setSoundOnError(String newSoundOnError) {
     print(
         'Changing onErrorSound from $_soundOnError to $newSoundOnError for $username ($_id)');
-    _email = newSoundOnError;
+    _soundOnError = newSoundOnError;
     notifyListeners();
   }
 
   void setSoundOnDifference(String newSoundOnDifference) {
     print(
-        'Changing email from $_soundOnDifference to $newSoundOnDifference for $username ($_id)');
-    _email = newSoundOnDifference;
+        'Changing onFoundDifferenceSound from $_soundOnDifference to $newSoundOnDifference for $username ($_id)');
+    _soundOnDifference = newSoundOnDifference;
   }
 
   void setAvatar(String newAvatar) {
@@ -89,7 +89,6 @@ class InfoService extends ChangeNotifier {
     print('username: ${credentials.username}');
     setCredentials(credentials);
 
-    setAvatar(
-        result['profile']['avatar']); // TODO : Add the rest of the profile
+    setAvatar(result['profile']['avatar']);
   }
 }
