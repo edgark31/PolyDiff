@@ -30,15 +30,15 @@ class _ConnectionFormState extends State<ConnectionForm> {
   String emailFormat = NO;
   String passwordFormat = NO;
 
-  late final CredentialsValidation _validator;
+  late final CredentialsValidator _validator;
 
   @override
   void initState() {
     super.initState();
-    _validator = CredentialsValidation(
+    _validator = CredentialsValidator(
       onStateChanged: () {
         setState(() {
-          // Force the widget to rebuild with updated validation status
+          // Force the widget to rebuild with updated Validator status
         });
       },
     );
@@ -46,22 +46,22 @@ class _ConnectionFormState extends State<ConnectionForm> {
     passwordController.addListener(validatePassword);
   }
 
-  void updateValidationStates() {
+  void updateValidatorStates() {
     setState(() {
       usernameFormat =
-          _validator.states['username'] == ValidationState.valid ? YES : NO;
-      _validator.states['password'] == ValidationState.valid ? YES : NO;
+          _validator.states['username'] == ValidatorState.isValid ? YES : NO;
+      _validator.states['password'] == ValidatorState.isValid ? YES : NO;
     });
   }
 
   void validateUsername() {
     _validator.isValidUsername(usernameController.text);
-    updateValidationStates();
+    updateValidatorStates();
   }
 
   void validatePassword() {
     _validator.updatePasswordStrength(passwordController.text);
-    updateValidationStates();
+    updateValidatorStates();
   }
 
   @override
@@ -107,7 +107,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   hint: 'Entrez votre nom d\'utilisateur',
                   maxLength: 20,
                   errorText:
-                      _validator.states['username'] == ValidationState.invalid
+                      _validator.states['username'] == ValidatorState.isInvalid
                           ? "Nom d\'utilisateur ou courriel invalide"
                           : null,
                   isPassword: false,
@@ -117,7 +117,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   controller: passwordController,
                   hint: 'Entrez votre mot de passe',
                   errorText:
-                      _validator.states['password'] == ValidationState.invalid
+                      _validator.states['password'] == ValidatorState.isInvalid
                           ? "Mot de passe invalide"
                           : null,
                   maxLength: 20,
@@ -138,8 +138,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                           if (serverErrorMessage == null) {
                             socketService.setup(
                                 SocketType.Auth, infoService.id);
-                            chatService
-                                .setGlobalChatListeners(); // TODO : move this (maybe)
+                            chatService.setGlobalChatListeners();
                             Navigator.pushNamed(context, DASHBOARD_ROUTE);
                           }
                         }
