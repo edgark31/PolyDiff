@@ -12,13 +12,11 @@ class SocketService extends ChangeNotifier {
     print('Setup ${type.name} started for $id');
     switch (type) {
       case SocketType.Auth:
-        String query = 'id=$id';
-        print('Sending a query as $query');
         authSocket = IO.io(BASE_URL, <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
           'forceNew': true,
-          'query': query
+          'query': 'id=$id'
         });
         authSocket.connect();
         setSocket(authSocket);
@@ -48,8 +46,6 @@ class SocketService extends ChangeNotifier {
   }
 
   void setSocket(IO.Socket socket) {
-    print('Setting socket id : ${socket.id}');
-
     socket.onConnect((_) {
       print('Connected to server on $BASE_URL');
       print("Connected socket id : ${socket.id}");
