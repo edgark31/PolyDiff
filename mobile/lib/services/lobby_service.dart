@@ -107,30 +107,25 @@ class LobbyService extends ChangeNotifier {
   }
 
   void setListeners() {
-    socketService.on(SocketType.Lobby, LobbyEvents.Create.name, (data) {
-      print('Lobbies received from LobbyEvents.Create : $data');
-      Lobby lobbyCreated = Lobby.fromJson(data as Map<String, dynamic>);
-      _lobby = lobbyCreated;
-      notifyListeners();
-    });
+    // socketService.on(SocketType.Lobby, LobbyEvents.Create.name, (data) {
+    //   print('Lobbies received from LobbyEvents.Create : $data');
+    //   Lobby lobbyCreated = Lobby.fromJson(data as Map<String, dynamic>);
+    //   _lobby = lobbyCreated;
+    //   notifyListeners();
+    // });
 
     socketService.on(SocketType.Lobby, LobbyEvents.UpdateLobbys.name, (data) {
-      print('Lobbies were updated');
       print('Lobbies received from LobbyEvents.UpdateLobbys : $data');
-      if (data is List) {
-        List<Lobby> updatedLobbies = data.map<Lobby>((lobbyData) {
-          return Lobby.fromJson(lobbyData as Map<String, dynamic>);
-        }).toList();
-        print('Number of lobbies updated: ${updatedLobbies.length}');
-        _lobbies = updatedLobbies;
-        // TODO : fix error if creator leaves on waiting player
-        if (isCurrentLobbyInLobbies()) {
-          _lobby = getLobbyFromLobbies();
-        }
-        notifyListeners();
-      } else {
-        print('Received data is not a List');
+      List<Lobby> updatedLobbies = (data as List).map<Lobby>((lobbyData) {
+        return Lobby.fromJson(lobbyData as Map<String, dynamic>);
+      }).toList();
+      print('Number of lobbies updated: ${updatedLobbies.length}');
+      _lobbies = updatedLobbies;
+      // TODO : fix error if creator leaves on waiting player
+      if (isCurrentLobbyInLobbies()) {
+        _lobby = getLobbyFromLobbies();
       }
+      notifyListeners();
     });
 
     socketService.on(SocketType.Lobby, LobbyEvents.Start.name, (data) {
