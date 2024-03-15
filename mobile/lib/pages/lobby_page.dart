@@ -28,8 +28,7 @@ class _LobbyPageState extends State<LobbyPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final lobbyService = context.read<LobbyService>();
-      lobbyService.addListener(_checkLobbyState);
+      context.read<LobbyService>().addListener(_checkLobbyState);
     });
   }
 

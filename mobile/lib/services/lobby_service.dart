@@ -21,7 +21,6 @@ class LobbyService extends ChangeNotifier {
   final SocketService socketService = Get.find();
   final LobbySelectionService lobbySelectionService = Get.find();
 
-  // Lobby Selection setters
   void setGameModes(GameModes newGameModes) {
     _gameModes = newGameModes;
     notifyListeners();
@@ -32,13 +31,17 @@ class LobbyService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setLobby(Lobby newLobby) {
+    _lobby = newLobby;
+    notifyListeners();
+  }
+
   void createLobby() {
     setIsCreator(true);
-    Lobby lobbyCreated = lobbySelectionService.createLobby(_gameModes);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Create.name,
-      lobbyCreated.toJson(),
+      lobbySelectionService.createLobby(_gameModes).toJson(),
     );
   }
 
@@ -53,8 +56,7 @@ class LobbyService extends ChangeNotifier {
 
   void joinLobby(String? joinedLobbyId) {
     setIsCreator(false);
-    _lobby = _lobbies.firstWhere((lobby) => lobby.lobbyId == joinedLobbyId);
-    notifyListeners();
+    setLobby(getLobbyFromLobbies(joinedLobbyId));
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Join.name,
@@ -91,9 +93,7 @@ class LobbyService extends ChangeNotifier {
 
   void setListeners() {
     socketService.on(SocketType.Lobby, LobbyEvents.Create.name, (data) {
-      Lobby lobbyCreated = Lobby.fromJson(data as Map<String, dynamic>);
-      _lobby = lobbyCreated;
-      notifyListeners();
+      setLobby(Lobby.fromJson(data as Map<String, dynamic>));
     });
 
     socketService.on(SocketType.Lobby, LobbyEvents.UpdateLobbys.name, (data) {
@@ -101,23 +101,17 @@ class LobbyService extends ChangeNotifier {
       List<Lobby> updatedLobbies = (data as List).map<Lobby>((lobbyData) {
         return Lobby.fromJson(lobbyData as Map<String, dynamic>);
       }).toList();
-      print('Number of lobbies updated: ${updatedLobbies.length}');
       _lobbies = updatedLobbies;
       // TODO : fix error if creator leaves on waiting player
       if (isCurrentLobbyInLobbies()) {
-        _lobby = getLobbyFromLobbies();
+        _lobby = getLobbyFromLobbies(_lobby.lobbyId);
       }
       notifyListeners();
     });
 
     socketService.on(SocketType.Lobby, LobbyEvents.Start.name, (data) {
-      // Lobby the client was waiting in was started
-      print('Lobby with id $data was started');
-      String startedLobbyId = data as String;
-      if (startedLobbyId == _lobby.lobbyId) {
-        // startLobby();
+      if ((data as String) == _lobby.lobbyId) {
         _isLobbyStarted = true;
-        print('_isLobbyStarted is now : $_isLobbyStarted');
         notifyListeners();
       }
     });
@@ -137,8 +131,8 @@ class LobbyService extends ChangeNotifier {
     return _lobbies.any((lobby) => lobby.lobbyId == _lobby.lobbyId);
   }
 
-  Lobby getLobbyFromLobbies() {
-    return _lobbies.firstWhere((lobby) => lobby.lobbyId == _lobby.lobbyId);
+  Lobby getLobbyFromLobbies(String? lobbyId) {
+    return _lobbies.firstWhere((lobby) => lobby.lobbyId == lobbyId);
   }
 
   List<Lobby> filterLobbies() {
