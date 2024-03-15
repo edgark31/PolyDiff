@@ -23,13 +23,11 @@ class LobbyService extends ChangeNotifier {
 
   // Lobby Selection setters
   void setGameModes(GameModes newGameModes) {
-    print('Setting game type to: $newGameModes');
     _gameModes = newGameModes;
     notifyListeners();
   }
 
   void setIsCreator(bool newIsCreator) {
-    print('Setting isCreator from $_isCreator to $newIsCreator');
     _isCreator = newIsCreator;
     notifyListeners();
   }
@@ -46,64 +44,49 @@ class LobbyService extends ChangeNotifier {
 
   void startLobby() {
     setIsCreator(false);
-    print('Starting lobby and telling the server');
-    // _isLobbyStarted = true;
-    // print('_isLobbyStarted is now : $_isLobbyStarted');
-    // notifyListeners();
-    String? startedLobbyId = _lobby.lobbyId;
-    if (startedLobbyId == null) {
-      print('No started lobby id was provided (!)');
-      return;
-    }
-    print('Starting lobby with id: $startedLobbyId');
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Start.name,
-      startedLobbyId,
+      _lobby.lobbyId,
     );
   }
 
   void joinLobby(String? joinedLobbyId) {
     setIsCreator(false);
-    if (joinedLobbyId == null) {
-      print('No joined lobby id was provided (!)');
-      return;
-    }
     _lobby = getLobbyFromLobbies();
     notifyListeners();
-    print('Joining lobby with id: $joinedLobbyId');
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Join.name,
       {
         'lobbyId': joinedLobbyId,
-        'password': null, // mobile can't create password lobbies
+        'password': null, // mobile can't see or join password lobbies
       },
     );
   }
 
   void leaveLobby() {
-    String? leftLobbyId = _lobby.lobbyId;
-    if (leftLobbyId == null) {
-      print('No left lobby id was provided (!)');
-      return;
-    }
-    print('Leaving lobby with id: $leftLobbyId');
     setIsCreator(false);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Leave.name,
-      leftLobbyId,
+      _lobby.lobbyId,
     );
     socketService.disconnect(SocketType.Lobby);
   }
 
-  void endLobby() {
-    print('Ending lobby');
-    _isLobbyStarted = false;
-    print('_isLobbyStarted is now : $_isLobbyStarted');
-    notifyListeners();
-    socketService.disconnect(SocketType.Lobby);
+  // TODO : Implement end of lobby logic
+  // void endLobby() {
+  //   print('Ending lobby');
+  //   _isLobbyStarted = false;
+  //   print('_isLobbyStarted is now : $_isLobbyStarted');
+  //   notifyListeners();
+  //   socketService.disconnect(SocketType.Lobby);
+  // }
+
+  void setupLobby(GameModes mode) {
+    setListeners();
+    setGameModes(mode);
   }
 
   void setListeners() {
