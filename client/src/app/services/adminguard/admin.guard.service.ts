@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 
 @Injectable({
     providedIn: 'root',
 })
-export class AdminGuard {
+export class AdminGuard implements CanActivate {
     constructor(private welcomeService: WelcomeService, public router: Router) {}
 
-    canActivate(): boolean {
+    async canActivate(): Promise<boolean> {
         if (this.welcomeService.getLoginState()) {
+            console.log('aie');
             return true;
         } else {
             this.router.navigate(['/home']);

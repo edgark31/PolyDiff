@@ -42,9 +42,8 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.lobby = lobby;
             this.messages = this.lobby.chatLog?.chat as Chat[];
             this.messages.forEach((message: Chat) => {
-                if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Received;
+                if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Sent;
                 else message.tag = MessageTag.Received;
-                console.log(message.tag);
             });
         });
         this.chatSubscription = this.roomManagerService.message$.subscribe((message: Chat) => {
