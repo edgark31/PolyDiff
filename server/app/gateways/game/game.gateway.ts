@@ -31,6 +31,13 @@ export class GameGateway implements OnGatewayConnection {
     // ------------------ CLASSIC MODE && LIMITED MODE ------------------
     @SubscribeMessage(GameEvents.StartGame)
     async startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        private readonly classicMode: ClassicModeService,
+        private readonly limitedMode: LimitedModeService,
+    ) {}
+
+    // ------------------ CLASSIC MODE && LIMITED MODE ------------------
+    @SubscribeMessage(GameEvents.Start)
+    async startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.data.state = GameState.InGame;
         socket.join(lobbyId);
 
@@ -40,6 +47,9 @@ export class GameGateway implements OnGatewayConnection {
                 await this.gameService.getGameById(this.roomsManager.lobbies.get(lobbyId).gameId).then((game) => {
                     // Mettre une copie de game(db) vers game(game) et l'identifier par le lobbyId
                     const clonedGame: Game = structuredClone({
+                await this.gameService.getGameById(this.roomsManager.lobbies.get(lobbyId).gameId).then((game) => {
+                    // Mettre une copie de game(db) vers game(lobby) et l'identifier par le lobbyId
+                    this.roomsManager.lobbies.get(lobbyId).game = {
                         lobbyId,
                         name: game.name,
                         original: game.originalImage,
@@ -140,7 +150,28 @@ export class GameGateway implements OnGatewayConnection {
     }
 
     @SubscribeMessage(GameEvents.NextGame)
+                this.server.to(lobbyId).emit(GameEvents.Start, this.roomsManager.lobbies.get(lobbyId));
+                this.logger.log(`Game started in lobby ${lobbyId}`);
+            } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
+                // Start Limited Mode
+                this.logger.error('Not implemented yet, sorry... 😭');
+            }
+        }
+    }
+
+    // -------------------------- CLASSIC MODE --------------------------
+
+
+
+    // -------------------------- LIMITED MODE --------------------------
+    @SubscribeMessage(GameEvents.Start)
     nextGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {}
+
+    afterInit() {
+        setInterval(() => {
+            this.roomsManager.updateTimers(this.server);
+        }, DELAY_BEFORE_EMITTING_TIME);
+    }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;

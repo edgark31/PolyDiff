@@ -76,17 +76,16 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
   Widget buildLobbyCard(BuildContext context, Lobby lobby) {
     bool isLobbyClassic = lobby.mode == GameModes.Classic;
     String lobbyName = isLobbyClassic ? 'Classique' : 'Temps limité';
-    // TODO : add classic game card thumbnail from url with lobby.gameId
-    // Change 'assets/images/placeholderThumbnail.bmp' to dynamic path
-    // Dynamic path should be from server '$BASE_URL/$gameId/original.png';
-    String imagePath = isLobbyClassic
-        ? 'assets/images/placeholderThumbnail.bmp'
-        : 'assets/images/limitedTime.png';
+    String classicImagePath = '$BASE_URL/${lobby.gameId}/original.bmp';
+    ImageProvider<Object>? lobbyImage = isLobbyClassic
+        ? Image.network(classicImagePath).image
+        : const AssetImage('assets/images/limitedTime.png');
     String differences =
         isLobbyClassic ? 'Différences: ${lobby.nDifferences}, ' : '';
     String nPlayers = 'Nombre de joueurs: ${lobby.players.length}/4';
     String playerNames = lobby.players.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -95,7 +94,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
           children: [
             ListTile(
               leading: CircleAvatar(
-                backgroundImage: AssetImage(imagePath),
+                backgroundImage: lobbyImage,
                 radius: 30,
                 backgroundColor: kLight,
               ),

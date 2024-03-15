@@ -95,32 +95,6 @@ body {
     margin-top: -400px;
 }
 
-.create-button {
-    top: 100px;
-    cursor: pointer;
-    position: relative;
-    text-align: center;
-    font-family: 'Troika', sans-serif;
-    font-size: 40px;
-    width: auto;
-    height: auto;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-    transition: 0.5s;
-    color: rgba(253, 250, 151, 255);
-    border: none;
-    border-radius: 25px;
-    background-color: #e8a430;
-    animation: titleFadeIn 1.5s ease-in-out;
-    z-index: 1;
-}
-
-.create-button:hover {
-    background-color: #db9110;
-    color: black;
-    transform: scale(1.05);
-}
-
 #mode {
     position: absolute;
     z-index: 2;

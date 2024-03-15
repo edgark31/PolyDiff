@@ -157,7 +157,7 @@ export interface Lobby {
     timeLimit: number;
     bonusTime?: number;
     chatLog?: ChatLog;
-    nDifferences?: number; // oui en classique
+    nDifferences?: number;
 }
 
 export interface Game {

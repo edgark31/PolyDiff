@@ -43,6 +43,7 @@ class _DashboardPageState extends State<DashboardPage> {
       text: type == GameModes.Classic ? 'Classique' : 'Temps limité',
       press: () {
         socketService.setup(SocketType.Lobby, infoService.id);
+        chatService.clearLobbyMessages();
         lobbyService.setListeners();
         chatService.setLobbyChatListeners();
         lobbyService.setGameModes(type);
@@ -92,18 +93,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     Icons.hourglass_bottom,
                     kMidGreen,
                   ),
-                  SizedBox(height: 30),
-                  CustomButton(
-                    text: 'Observer une partie',
-                    press: () {
-                      print(
-                          'Navigating to Observer Selection Page'); // TODO: Observer Selection Page
-                    },
-                    backgroundColor: kLime,
-                    icon: Icons.remove_red_eye_outlined,
-                    widthFactor: 0.30,
-                    height: 80,
-                  ),
+                  SizedBox(height: 50),
                 ],
               ),
             ),

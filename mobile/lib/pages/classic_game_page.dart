@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/temp_images.dart'; // TODO : replace with specific image when http is setup
 import 'package:mobile/models/canvas_model.dart';
+import 'package:mobile/models/game.dart';
+import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
 import 'package:mobile/widgets/canvas.dart';
 import 'package:mobile/widgets/chat_box.dart';
+import 'package:provider/provider.dart';
 
 class ClassicGamePage extends StatefulWidget {
   static const routeName = CLASSIC_ROUTE;
@@ -26,9 +30,10 @@ class ClassicGamePage extends StatefulWidget {
 
 class _ClassicGamePageState extends State<ClassicGamePage> {
   final ImageConverterService imageConverterService = ImageConverterService();
-  final GameAreaService gameAreaService = GameAreaService();
+  final GameAreaService gameAreaService = Get.find();
   late Future<CanvasModel> imagesFuture;
   bool isChatBoxVisible = false;
+  final tempGameManager = CoordinateConversionService();
 
   @override
   void initState() {
@@ -43,6 +48,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
 
   @override
   Widget build(BuildContext context) {
+    final gameAreaService = Provider.of<GameAreaService>(context);
     //final lobbyService = context.watch<LobbyService>();
     return Scaffold(
       body: Stack(
@@ -61,16 +67,21 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
               Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.vpn_key),
-                    iconSize: 40.0,
-                    color: Colors.black,
+                    icon: Icon(Icons.vpn_key_sharp),
+                    iconSize: 70.0,
+                    color: Colors.red,
                     onPressed: () {
-                      print('Activate Cheat');
+                      List<List<Coordinate>> differences =
+                          tempGameManager.testCheat();
+                      List<Coordinate> mergedDifferences =
+                          differences.expand((x) => x).toList();
+                      gameAreaService.toggleCheatMode(mergedDifferences);
                     },
                   ),
                   SizedBox(
                     height: 200,
                     width: 1000,
+                    //child:
                     // TODO: Place game info widget as a child here when ready
                   ),
                 ],
@@ -138,7 +149,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: IconButton(
-                icon: Icon(Icons.wechat_sharp),
+                icon: Icon(Icons.chat),
                 iconSize: 45.0,
                 color: Colors.white,
                 onPressed: () {

@@ -11,12 +11,21 @@ class ForegroundPtOriginal extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    print('called paint');
     if (gameAreaService.blinkingDifference != null) {
       canvas.scale(
           GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
 
       canvas.drawPath(
           gameAreaService.blinkingDifference!, gameAreaService.blinkingColor);
+    }
+
+    if (gameAreaService.cheatBlinkingDifference != null) {
+      canvas.scale(
+          GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
+
+      canvas.drawPath(gameAreaService.cheatBlinkingDifference!,
+          gameAreaService.blinkingColor);
     }
 
     if (gameAreaService.leftErrorCoord.isNotEmpty) {

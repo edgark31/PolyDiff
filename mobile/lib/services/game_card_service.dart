@@ -13,27 +13,19 @@ class GameCardService extends ChangeNotifier {
   Future<String?> getGameCards() async {
     const url = '$API_URL/games/cards';
 
-    try {
-      final response = await http.get(
-        Uri.parse(url),
-        // headers: {'Content-Type': 'application/json'},
-      );
+    final response = await http.get(Uri.parse(url));
 
-      if (response.statusCode == 200) {
-        String gameCardsServerString = response.body;
-        List<dynamic> gameCardsJson = jsonDecode(gameCardsServerString);
-        _gameCards = gameCardsJson
-            .map((gameCardJson) => GameCard.fromJson(gameCardJson))
-            .toList();
-        notifyListeners();
-
-        return null;
-      } else {
-        final errorMessage = response.body;
-        return errorMessage;
-      }
-    } catch (error) {
-      return 'Error: $error';
+    if (response.statusCode == 200) {
+      String gameCardsServerString = response.body;
+      List<dynamic> gameCardsJson = jsonDecode(gameCardsServerString);
+      _gameCards = gameCardsJson
+          .map((gameCardJson) => GameCard.fromJson(gameCardJson))
+          .toList();
+      notifyListeners();
+      return null;
+    } else {
+      final errorMessage = response.body;
+      return errorMessage;
     }
   }
 }
