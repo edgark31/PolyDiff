@@ -12,6 +12,7 @@ import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
+import 'package:mobile/widgets/password_reset_popup.dart';
 import 'package:provider/provider.dart';
 
 class ConnectionForm extends StatefulWidget {
@@ -85,7 +86,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   label: 'Mot de passe',
                   controller: passwordController,
                   hint: 'Entrez votre mot de passe',
-                  maxLength: 20,
+                  maxLength: 40,
                   isPassword: true,
                 ),
                 CustomButton(
@@ -98,9 +99,9 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       String? serverErrorMessage =
                           await formService.connect(credentials);
                       if (serverErrorMessage == null) {
-                        socketService.setup(
-                            SocketType.Auth, infoService.id);
-                        chatService.setGlobalChatListeners(); // TODO : move this (maybe)
+                        socketService.setup(SocketType.Auth, infoService.id);
+                        chatService
+                            .setGlobalChatListeners(); // TODO : move this (maybe)
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       } else {
                         setState(() {
@@ -134,8 +135,31 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       child: Text(
                         "S' I N S C R I R E",
                         style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Center(
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return PasswordResetPopup();
+                        },
+                      );
+                    },
+                    child: Container(
+                      child: Text(
+                        "MOT DE PASSE OUBLIÉ",
+                        style: TextStyle(
                           fontSize: 18,
                           color: Colors.black,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
