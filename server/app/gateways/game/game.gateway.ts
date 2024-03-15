@@ -1,32 +1,21 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
-import { ClassicModeService } from '@app/services/classic-mode/classic-mode.service';
 import { GameService } from '@app/services/game/game.service';
-import { LimitedModeService } from '@app/services/limited-mode/limited-mode.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { NOT_FOUND } from '@common/constants';
 import { ChannelEvents, GameEvents, GameModes, GameState, MessageTag } from '@common/enums';
 import { Chat, Coordinate, Game } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
-import {
-    ConnectedSocket,
-    MessageBody,
-    OnGatewayConnection,
-    OnGatewayInit,
-    SubscribeMessage,
-    WebSocketGateway,
-    WebSocketServer,
-} from '@nestjs/websockets';
+import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
 
 @WebSocketGateway({
     namespace: '/game',
 })
 @Injectable()
-export class GameGateway implements OnGatewayConnection, OnGatewayInit {
+export class GameGateway implements OnGatewayConnection {
     @WebSocketServer() private server: Server;
     games = new Map<string, Game>();
     timers = new Map<string, NodeJS.Timeout>();
@@ -36,8 +25,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         private readonly accountManager: AccountManagerService,
         private readonly gameService: GameService,
         private readonly roomsManager: RoomsManagerService,
-        private readonly classicMode: ClassicModeService,
-        private readonly limitedMode: LimitedModeService,
         private readonly messageManager: MessageManagerService,
     ) {}
 
@@ -64,13 +51,13 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
                     this.games.set(lobbyId, clonedGame);
                 });
                 this.server.to(lobbyId).emit(GameEvents.StartGame, this.roomsManager.lobbies.get(lobbyId));
-                this.logger.log(`Game started in lobby ${lobbyId}`);
+                this.logger.log(`Game started in lobby -> ${lobbyId}`);
             } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
                 // Start Limited Mode
+                // const allGameIds : string[] = this.gameService.get
                 this.logger.error('Not implemented yet, sorry... 😭');
             }
             // Set timer indivually for each lobby
-
             const timerId = setInterval(() => {
                 if (!this.roomsManager.lobbies.get(lobbyId)) {
                     clearInterval(timerId);
@@ -103,27 +90,30 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
         if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
             // Si trouvé
             if (index !== NOT_FOUND) {
+                // Update tout correctement
                 this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
-                const remainingDifferences: Coordinate[][] = this.games.get(lobbyId).differences.splice(index, 1);
-                if (this.games.get(lobbyId).differences.length === 0) {
+                const difference = this.games.get(lobbyId).differences.splice(index, 1);
+                const remainingDifferences: Coordinate[][] = this.games.get(lobbyId).differences;
+                // Vérifier s'il reste des differences
+                if (this.games.get(lobbyId).differences.length <= 0) {
                     this.server.to(lobbyId).emit(GameEvents.EndGame);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
                         raw: 'MATCH NUL',
                         tag: MessageTag.Common,
                     } as Chat);
                 }
-
+                // Vérifier si un seuil est atteint pour un joueur
                 const { isGameFinished, potentialWinner } = this.thresholdCheck(lobbyId);
                 if (isGameFinished && potentialWinner) {
                     this.server.to(lobbyId).emit(GameEvents.EndGame);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
-                        raw: `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a gagné !`,
+                        raw: `${this.accountManager.connectedUsers.get(potentialWinner.accountId).credentials.username} a gagné !`,
                         tag: MessageTag.Common,
                     } as Chat);
                 }
                 this.server.to(lobbyId).emit(GameEvents.Found, {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
-                    difference: this.games.get(lobbyId).differences[index],
+                    difference: difference,
                 });
                 this.roomsManager.lobbies.get(lobbyId).isCheatEnabled ? this.server.to(lobbyId).emit(GameEvents.Cheat, remainingDifferences) : null;
                 this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
@@ -131,7 +121,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
             }
             // Si pas trouvé
             this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
-            this.server.to(lobbyId).emit(GameEvents.NotFound, coordClic);
+            socket.emit(GameEvents.NotFound, coordClic);
         } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
             // Limited Mode
             this.logger.error('Not implemented yet, sorry... 😭');
@@ -151,12 +141,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
 
     @SubscribeMessage(GameEvents.NextGame)
     nextGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {}
-
-    afterInit() {
-        setInterval(() => {
-            // this.roomsManager.updateTimers(this.server);
-        }, DELAY_BEFORE_EMITTING_TIME);
-    }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
@@ -184,35 +168,25 @@ export class GameGateway implements OnGatewayConnection, OnGatewayInit {
 
     private thresholdCheck(lobbyId: string) {
         const leftDifferences = this.games.get(lobbyId).differences.length;
-
         let potentialWinner = null;
         let isGameFinished = false;
+
+        const highestCurrentScore = Math.max(...this.roomsManager.lobbies.get(lobbyId).players.map((p) => p.count));
+
         for (const player of this.roomsManager.lobbies.get(lobbyId).players) {
-            // Le score le plus élevé possible pour les autres joueurs est leur score actuel plus les différences restantes.
-            const maxPossibleScoreForOthers = leftDifferences + player.count;
-
-            // Vérifiez si un autre joueur peut dépasser ou égaler le score du joueur actuel
-            // avec les différences restantes.
-            const canAnyOtherPlayerCatchUp = this.roomsManager.lobbies
+            const maxPossibleScoreForOtherPlayers: number[] = this.roomsManager.lobbies
                 .get(lobbyId)
-                .players.some((p) => p.accountId !== player.accountId && p.count + leftDifferences >= maxPossibleScoreForOthers);
+                .players.filter((p) => p.accountId !== player.accountId)
+                .map((p) => p.count + leftDifferences);
 
-            // Si personne ne peut rattraper le joueur actuel, il est le gagnant potentiel.
-            if (!canAnyOtherPlayerCatchUp) {
+            const canAnyOtherPlayerCatchUp: boolean = maxPossibleScoreForOtherPlayers.some((score) => score >= player.count);
+
+            if (!canAnyOtherPlayerCatchUp && player.count === highestCurrentScore) {
                 potentialWinner = player;
                 isGameFinished = true;
                 break;
             }
         }
-
         return { isGameFinished, potentialWinner };
-    }
-
-    private maximumCallStackCheck(dataToStringify: any) {
-        try {
-            JSON.stringify(dataToStringify);
-        } catch (error) {
-            this.logger.error(error);
-        }
     }
 }
