@@ -24,7 +24,6 @@ export class PersonnalizationPageComponent implements OnInit {
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
-
     feedback: string;
     constructor(
         private readonly router: Router,
