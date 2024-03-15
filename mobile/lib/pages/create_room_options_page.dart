@@ -30,6 +30,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
     final lobbySelectionService = context.watch<LobbySelectionService>();
+    final gameModeName = lobbyService.gameModes.name;
 
     return Scaffold(
       // appBar: CustomAppBar(),
@@ -39,7 +40,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-                'Sélectionner les options de la salle de jeu en Mode ${lobbyService.gameModesName}'),
+                'Sélectionner les options de la salle de jeu en Mode $gameModeName'),
             cheatSetting(context),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),

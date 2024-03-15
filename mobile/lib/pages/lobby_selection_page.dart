@@ -37,10 +37,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     String creationRoute = lobbyService.isGameModesClassic()
         ? CREATE_ROOM_CARD_ROUTE
         : CREATE_ROOM_OPTIONS_ROUTE;
-    final lobbiesFromServerOfSpecificMode = lobbyService.lobbies
-        .where((lobby) =>
-            lobby.mode == lobbyService.gameModes && lobby.players.isNotEmpty)
-        .toList();
+    final lobbiesFromServer = lobbyService.filterLobbies();
+    final gameModeName = lobbyService.gameModes.name;
     return Scaffold(
       // drawer: CustomMenuDrawer(),
       // appBar: CustomAppBar(),
@@ -53,18 +51,18 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                       onPressed: () =>
                           Navigator.pushNamed(context, creationRoute),
                       child: Text(
-                        'Créer une salle pour le mode ${lobbyService.gameModesName}',
+                        'Créer une salle pour le mode $gameModeName',
                       )),
-                  lobbiesFromServerOfSpecificMode.isEmpty
+                  lobbiesFromServer.isEmpty
                       ? Text(
-                          'Aucune salle d\'attente disponible pour le Mode ${lobbyService.gameModes}')
+                          'Aucune salle d\'attente disponible pour le Mode $gameModeName')
                       : ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: lobbiesFromServerOfSpecificMode.length,
+                          itemCount: lobbiesFromServer.length,
                           itemBuilder: (context, index) {
-                            return buildLobbyCard(context,
-                                lobbiesFromServerOfSpecificMode[index]);
+                            return buildLobbyCard(
+                                context, lobbiesFromServer[index]);
                           },
                         ),
                 ],
@@ -122,8 +120,6 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                         ? const Text('Salle d\'attente pleine')
                         : CustomButton(
                             press: () {
-                              print("Selected lobby with id: ${lobby.lobbyId}");
-                              lobbyService.setIsCreator(false);
                               lobbyService.joinLobby(lobby.lobbyId);
                               Navigator.pushNamed(context, LOBBY_ROUTE);
                             },

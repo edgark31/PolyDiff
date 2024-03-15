@@ -7,7 +7,6 @@ import 'package:mobile/services/socket_service.dart';
 
 class LobbyService extends ChangeNotifier {
   static GameModes _gameModes = GameModes.Classic;
-  static String _gameModesName = GameModes.Classic.name;
   static bool _isCreator = false;
   static List<Lobby> _lobbies = [];
   late Lobby _lobby;
@@ -15,7 +14,6 @@ class LobbyService extends ChangeNotifier {
   static bool _isPlayerInLobbyPage = false;
 
   GameModes get gameModes => _gameModes;
-  String get gameModesName => _gameModesName;
   bool get isCreator => _isCreator;
   List<Lobby> get lobbies => _lobbies;
   Lobby get lobby => _lobby;
@@ -28,9 +26,6 @@ class LobbyService extends ChangeNotifier {
   void setGameModes(GameModes newGameModes) {
     print('Setting game type to: $newGameModes');
     _gameModes = newGameModes;
-    _gameModesName =
-        isGameModesClassic() ? GameModes.Classic.name : GameModes.Limited.name;
-    print('Game type name is : $_gameModesName');
     notifyListeners();
   }
 
@@ -40,13 +35,9 @@ class LobbyService extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool isGameModesClassic() {
-    return _gameModes == GameModes.Classic;
-  }
-
   void createLobby() {
-    print('Creating lobby');
     setIsCreator(true);
+    print('Creating lobby');
     Lobby lobbyCreated = lobbySelectionService.createLobby(_gameModes);
     socketService.send(
       SocketType.Lobby,
@@ -60,8 +51,8 @@ class LobbyService extends ChangeNotifier {
   }
 
   void startLobby() {
-    print('Starting lobby and telling the server');
     setIsCreator(false);
+    print('Starting lobby and telling the server');
     // _isLobbyStarted = true;
     // print('_isLobbyStarted is now : $_isLobbyStarted');
     // notifyListeners();
@@ -87,6 +78,7 @@ class LobbyService extends ChangeNotifier {
   }
 
   void joinLobby(String? joinedLobbyId) {
+    setIsCreator(false);
     if (joinedLobbyId == null) {
       print('No joined lobby id was provided (!)');
       return;
@@ -101,7 +93,7 @@ class LobbyService extends ChangeNotifier {
       LobbyEvents.Join.name,
       {
         'lobbyId': joinedLobbyId,
-        'password': null,
+        'password': null, // mobile can't create password lobbies
       },
     );
   }
@@ -177,11 +169,25 @@ class LobbyService extends ChangeNotifier {
     // socketService.on(SocketType.Lobby, LobbyEvents.Leave.name, (data) {
   }
 
+  bool isGameModesClassic() {
+    return _gameModes == GameModes.Classic;
+  }
+
   bool isCurrentLobbyInLobbies() {
     return _lobbies.any((lobby) => lobby.lobbyId == _lobby.lobbyId);
   }
 
   Lobby getLobbyFromLobbies() {
     return _lobbies.firstWhere((lobby) => lobby.lobbyId == _lobby.lobbyId);
+  }
+
+  List<Lobby> filterLobbies() {
+    return _lobbies
+        .where((lobby) =>
+            lobby.mode == _gameModes &&
+            lobby.players.isNotEmpty &&
+            lobby.password ==
+                null) // Password lobbies are not displayed on mobile
+        .toList();
   }
 }

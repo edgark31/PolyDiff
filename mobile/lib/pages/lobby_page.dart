@@ -60,6 +60,7 @@ class _LobbyPageState extends State<LobbyPage> {
     List<String> playerNames = lobbyService.lobby.players.map((e) {
       return e.name ?? '';
     }).toList();
+    String gameModeName = lobbyService.gameModes.name;
 
     return BackgroundContainer(
       backgroundImagePath:
@@ -68,8 +69,7 @@ class _LobbyPageState extends State<LobbyPage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Text(
-                  'Salle d\'attente de la partie en ${lobbyService.gameModesName}'),
+              Text('Salle d\'attente de la partie en $gameModeName'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
