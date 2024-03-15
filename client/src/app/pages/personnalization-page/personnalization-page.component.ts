@@ -7,7 +7,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
+import { ImportDialogComponent } from '@app/components/import-Dialog/import-dialog.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
