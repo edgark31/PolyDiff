@@ -11,7 +11,6 @@ class LobbyService extends ChangeNotifier {
   static List<Lobby> _lobbies = [];
   late Lobby _lobby;
   static bool _isLobbyStarted = false;
-  static bool _isPlayerInLobbyPage = false;
 
   GameModes get gameModes => _gameModes;
   bool get isCreator => _isCreator;
@@ -37,17 +36,12 @@ class LobbyService extends ChangeNotifier {
 
   void createLobby() {
     setIsCreator(true);
-    print('Creating lobby');
     Lobby lobbyCreated = lobbySelectionService.createLobby(_gameModes);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Create.name,
       lobbyCreated.toJson(),
     );
-    print('Setting _isPlayerInLobbyPage to true');
-    _isPlayerInLobbyPage = true;
-    // _lobbies.add(Lobby());
-    // notifyListeners();
   }
 
   void startLobby() {
@@ -69,23 +63,13 @@ class LobbyService extends ChangeNotifier {
     );
   }
 
-  void endLobby() {
-    print('Ending lobby');
-    _isLobbyStarted = false;
-    print('_isLobbyStarted is now : $_isLobbyStarted');
-    notifyListeners();
-    socketService.disconnect(SocketType.Lobby);
-  }
-
   void joinLobby(String? joinedLobbyId) {
     setIsCreator(false);
     if (joinedLobbyId == null) {
       print('No joined lobby id was provided (!)');
       return;
     }
-    _lobby = _lobbies.firstWhere((lobby) => lobby.lobbyId == joinedLobbyId);
-    print('Setting _isPlayerInLobbyPage to true');
-    _isPlayerInLobbyPage = true;
+    _lobby = getLobbyFromLobbies();
     notifyListeners();
     print('Joining lobby with id: $joinedLobbyId');
     socketService.send(
@@ -104,7 +88,7 @@ class LobbyService extends ChangeNotifier {
       print('No left lobby id was provided (!)');
       return;
     }
-    print('Leaving lobby with id: ${leftLobbyId}');
+    print('Leaving lobby with id: $leftLobbyId');
     setIsCreator(false);
     socketService.send(
       SocketType.Lobby,
@@ -112,8 +96,14 @@ class LobbyService extends ChangeNotifier {
       leftLobbyId,
     );
     socketService.disconnect(SocketType.Lobby);
-    print('Setting _isPlayerInLobbyPage to false');
-    _isPlayerInLobbyPage = false;
+  }
+
+  void endLobby() {
+    print('Ending lobby');
+    _isLobbyStarted = false;
+    print('_isLobbyStarted is now : $_isLobbyStarted');
+    notifyListeners();
+    socketService.disconnect(SocketType.Lobby);
   }
 
   void setListeners() {
@@ -133,14 +123,9 @@ class LobbyService extends ChangeNotifier {
         }).toList();
         print('Number of lobbies updated: ${updatedLobbies.length}');
         _lobbies = updatedLobbies;
-        if (_isPlayerInLobbyPage) {
-          print('Player is in lobby page, updating the main lobby');
-          // TODO : fix error if creator leaves on waiting player
-          if (isCurrentLobbyInLobbies()) {
-            _lobby = getLobbyFromLobbies();
-          } else {
-            _isPlayerInLobbyPage = false;
-          }
+        // TODO : fix error if creator leaves on waiting player
+        if (isCurrentLobbyInLobbies()) {
+          _lobby = getLobbyFromLobbies();
         }
         notifyListeners();
       } else {
@@ -156,8 +141,6 @@ class LobbyService extends ChangeNotifier {
         // startLobby();
         _isLobbyStarted = true;
         print('_isLobbyStarted is now : $_isLobbyStarted');
-        print('Setting _isPlayerInLobbyPage to false');
-        _isPlayerInLobbyPage = false;
         notifyListeners();
       }
     });
