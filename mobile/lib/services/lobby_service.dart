@@ -9,7 +9,7 @@ class LobbyService extends ChangeNotifier {
   static GameModes _gameModes = GameModes.Classic;
   static bool _isCreator = false;
   static List<Lobby> _lobbies = [];
-  late Lobby _lobby;
+  static Lobby _lobby = Lobby.initial();
   static bool _isLobbyStarted = false;
 
   GameModes get gameModes => _gameModes;
@@ -53,7 +53,7 @@ class LobbyService extends ChangeNotifier {
 
   void joinLobby(String? joinedLobbyId) {
     setIsCreator(false);
-    _lobby = getLobbyFromLobbies();
+    _lobby = _lobbies.firstWhere((lobby) => lobby.lobbyId == joinedLobbyId);
     notifyListeners();
     socketService.send(
       SocketType.Lobby,
@@ -90,12 +90,11 @@ class LobbyService extends ChangeNotifier {
   }
 
   void setListeners() {
-    // socketService.on(SocketType.Lobby, LobbyEvents.Create.name, (data) {
-    //   print('Lobbies received from LobbyEvents.Create : $data');
-    //   Lobby lobbyCreated = Lobby.fromJson(data as Map<String, dynamic>);
-    //   _lobby = lobbyCreated;
-    //   notifyListeners();
-    // });
+    socketService.on(SocketType.Lobby, LobbyEvents.Create.name, (data) {
+      Lobby lobbyCreated = Lobby.fromJson(data as Map<String, dynamic>);
+      _lobby = lobbyCreated;
+      notifyListeners();
+    });
 
     socketService.on(SocketType.Lobby, LobbyEvents.UpdateLobbys.name, (data) {
       print('Lobbies received from LobbyEvents.UpdateLobbys : $data');

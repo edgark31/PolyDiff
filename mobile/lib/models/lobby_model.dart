@@ -58,6 +58,24 @@ class Lobby {
           null, // nDifferences
         );
 
+  Lobby.initial()
+      : this(
+          null, // lobbyId
+          null, // gameId
+          null, // game
+          false, // isAvailable
+          [], // players
+          [], // observers
+          false, // isCheatEnabled
+          GameModes.Classic, // mode
+          null, // password
+          0, // time
+          0, // timeLimit
+          null, // bonusTime
+          null, // chatLog
+          null, // nDifferences
+        );
+
   static Lobby fromJson(Map<String, dynamic> json) {
     if (json['observers'] == []) {
       json['observers'] = List<Observers>.empty();
