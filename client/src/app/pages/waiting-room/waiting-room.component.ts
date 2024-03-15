@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { LobbyEvents } from '@common/enums';
+import { LobbyEvents, MessageTag } from '@common/enums';
 import { Chat, Lobby } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
@@ -42,6 +42,8 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.lobby = lobby;
             this.messages = this.lobby.chatLog?.chat as Chat[];
             this.messages.forEach((message: Chat) => {
+                if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Received;
+                else message.tag = MessageTag.Received;
                 console.log(message.tag);
             });
         });

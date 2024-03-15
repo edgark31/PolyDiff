@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
     templateUrl: './classic-time-page.component.html',
     styleUrls: ['./classic-time-page.component.scss'],
 })
-export class ClassicTimePageComponent implements OnDestroy, OnInit, AfterViewInit {
+export class ClassicTimePageComponent implements OnDestroy, OnInit {
     lobbies: Lobby[];
     pageSize = 2;
     currentPage = 0;
@@ -37,53 +37,58 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit, AfterViewIni
         private readonly clientSocket: ClientSocketService,
         private readonly welcomeService: WelcomeService,
         private readonly navigationService: NavigationService,
+        private cdr: ChangeDetectorRef,
     ) {
         this.gameModes = GameModes;
         // this.isStartingGame = false;
         this.nPlayersConnected = 0;
         this.lobbies = [];
-        this.clientSocket.connect(this.welcomeService.account.id as string, 'lobby');
-        this.roomManagerService.handleRoomEvents();
     }
 
     ngOnInit(): void {
+        this.clientSocket.connect(this.welcomeService.account.id as string, 'lobby');
+        this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
-    }
-
-    ngAfterViewInit(): void {
         this.updatePagedImages();
     }
-
     previousPage() {
         if (this.currentPage > 0) {
             this.currentPage--;
-            this.updatePagedImages();
+            this.updatepagedLobbies();
         }
     }
 
     nextPage() {
-        const v = this.lobbies.length / this.pageSize - 1;
+        const lobbyLengthValid = this.lobbies.length / (this.pageSize - 1);
 
-        if (v > this.currentPage) {
+        if (lobbyLengthValid > this.currentPage) {
             this.currentPage++;
-            this.updatePagedImages();
+            this.updatepagedLobbies();
         }
     }
 
+    updatepagedLobbies() {
+        const startIndex = this.currentPage * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        this.pagedLobbies = this.lobbies.slice(startIndex, endIndex);
+    }
+
     updatePagedImages() {
+        if (this.lobbiesSubscription) {
+            this.lobbiesSubscription?.unsubscribe();
+        }
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
                 this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Classic);
-                const startIndex = this.currentPage * this.pageSize;
-                const endIndex = startIndex + this.pageSize;
-                this.pagedLobbies = this.lobbies.slice(startIndex, endIndex);
+                this.updatepagedLobbies();
+                this.cdr.detectChanges();
             }
         });
     }
 
     handlePageEvent(event: PageEvent) {
         this.currentPage = event.pageIndex;
-        this.updatePagedImages();
+        this.updatepagedLobbies();
     }
     manageGames(): void {
         this.dialog.open(ModalAccessMatchComponent);
@@ -95,6 +100,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit, AfterViewIni
         this.roomIdSubscription?.unsubscribe();
         this.isLimitedCoopRoomAvailableSubscription?.unsubscribe();
         this.hasNoGameAvailableSubscription?.unsubscribe();
+
         this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
     }
 }

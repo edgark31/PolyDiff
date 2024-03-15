@@ -61,9 +61,9 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     }
 
     nextPage() {
-        const v = this.lobbies.length / (this.pageSize - 1);
+        const lobbyLengthValid = this.lobbies.length / (this.pageSize - 1);
 
-        if (v > this.currentPage) {
+        if (lobbyLengthValid > this.currentPage) {
             this.currentPage++;
             this.updatepagedLobbies();
         }
@@ -72,6 +72,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     updatepagedLobbies() {
         const startIndex = this.currentPage * this.pageSize;
         const endIndex = startIndex + this.pageSize;
+        this.lobbies = this.lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
         this.pagedLobbies = this.lobbies.slice(startIndex, endIndex);
     }
 
