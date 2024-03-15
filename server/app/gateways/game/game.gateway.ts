@@ -1,3 +1,6 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
@@ -10,6 +13,7 @@ import { Chat, Coordinate, Game } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
 
 @WebSocketGateway({
     namespace: '/game',
@@ -50,6 +54,7 @@ export class GameGateway implements OnGatewayConnection {
                     });
                     this.games.set(lobbyId, clonedGame);
                 });
+                //Cheat differences is cheat enabled
                 this.server.to(lobbyId).emit(GameEvents.StartGame, this.roomsManager.lobbies.get(lobbyId));
                 this.logger.log(`Game started in lobby -> ${lobbyId}`);
             } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
@@ -71,7 +76,7 @@ export class GameGateway implements OnGatewayConnection {
                 }
                 this.roomsManager.lobbies.get(lobbyId).time -= 1;
                 this.server.to(lobbyId).emit(GameEvents.TimerUpdate, this.roomsManager.lobbies.get(lobbyId).time);
-            }, 1000);
+            }, DELAY_BEFORE_EMITTING_TIME);
             this.timers.set(lobbyId, timerId);
         }
     }
@@ -113,7 +118,7 @@ export class GameGateway implements OnGatewayConnection {
                 }
                 this.server.to(lobbyId).emit(GameEvents.Found, {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
-                    difference: difference,
+                    difference,
                 });
                 this.roomsManager.lobbies.get(lobbyId).isCheatEnabled ? this.server.to(lobbyId).emit(GameEvents.Cheat, remainingDifferences) : null;
                 this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
@@ -142,13 +147,24 @@ export class GameGateway implements OnGatewayConnection {
     @SubscribeMessage(GameEvents.NextGame)
     nextGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {}
 
+    @SubscribeMessage(ChannelEvents.SendGameMessage)
+    handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
+        const chat: Chat = this.messageManager.createMessage(
+            this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+            message,
+        );
+
+        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received });
+    }
+
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
 
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
                 case GameState.InGame:
-                    const lobbyId = Array.from(socket.rooms)[1] as string;
+                    const lobbyId: string = Array.from(socket.rooms)[1] as string;
                     if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
                         this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
                         clearInterval(this.timers.get(lobbyId));
