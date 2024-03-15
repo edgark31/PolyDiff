@@ -69,7 +69,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       width: 200,
                       child: CustomButton(
                           text: "Modifier votre profil",
-                          press: () => {},
+                          press: () {
+                            Navigator.pushNamed(context, EDIT_PROFILE_ROUTE);
+                          },
                           backgroundColor: kMidOrange),
                     ),
                     const SizedBox(height: 30),
