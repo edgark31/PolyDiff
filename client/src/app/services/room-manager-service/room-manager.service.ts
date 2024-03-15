@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { ChannelEvents, GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
-import { Chat, Lobby, Player, PlayerData } from '@common/game-interfaces';
+import { Chat, Lobby, PlayerData } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class RoomManagerService {
     lobby: Subject<Lobby>;
     wait: boolean;
     // player: Player[];
-    player: Subject<Player[]>;
+
     private lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
     // private playerNameAvailability: Subject<PlayerNameAvailability>;
@@ -182,6 +182,7 @@ export class RoomManagerService {
 
     onQuit(lobby: Lobby): void {
         this.clientSocket.send('lobby', LobbyEvents.Leave, lobby.lobbyId);
+        if (this.isOrganizer) this.isOrganizer = false;
     }
 
     isPlayerNameIsAlreadyTaken(playerPayLoad: PlayerData): void {
@@ -247,9 +248,9 @@ export class RoomManagerService {
     }
 
     handleRoomEvents(): void {
-        this.lobby = new Subject();
-        this.lobbies = new Subject();
-        this.message = new Subject();
+        this.lobby = new Subject<Lobby>();
+        this.lobbies = new Subject<Lobby[]>();
+        this.message = new Subject<Chat>();
         if (this.isOrganizer)
             this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby.next(lobby);

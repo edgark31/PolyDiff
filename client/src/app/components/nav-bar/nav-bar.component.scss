@@ -12,8 +12,28 @@ ul a {
     -webkit-text-stroke: 1px black;
 }
 
-li:hover{
+::ng-deep .mat-menu-panel {
+    background-color: rgb(11, 145, 15);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+}
+
+::ng-deep .mat-menu-item {
+    color: white;
+    padding: 8px 16px;
+}
+
+::ng-deep .mat-menu-item:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+}
+
+li:hover {
     transform: scale(1.15);
+}
+
+.button-back {
+    margin-right: 100px; /* Ajustez la valeur en fonction de vos besoins */
 }
 
 .navElement {

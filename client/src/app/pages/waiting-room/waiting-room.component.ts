@@ -13,9 +13,11 @@ import { WelcomeService } from './../../services/welcome-service/welcome.service
 })
 export class WaitingRoomComponent implements OnInit, OnDestroy {
     lobby: Lobby;
+    lobbies: Lobby[] = [];
     messages: Chat[] = [];
     chatSubscription: Subscription;
-    lobbySubscription: Subscription;
+    lobbiesSubscription: Subscription;
+    private lobbySubscription: Subscription;
     constructor(
         public router: Router,
         public roomManagerService: RoomManagerService,
@@ -27,19 +29,32 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         this.roomManagerService.wait = true;
-        if (this.clientSocketService.isSocketAlive('lobby')) {
-            this.lobbySubscription = this.roomManagerService.lobby$.subscribe((lobby: Lobby) => {
-                this.lobby = lobby;
 
-                this.messages = this.lobby.chatLog?.chat as Chat[];
-            });
-            this.chatSubscription = this.roomManagerService.message$.subscribe((message: Chat) => {
-                this.receiveMessage(message);
-            });
-            this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {
-                this.router.navigate(['/game-mode']);
-            });
+        if (this.lobbySubscription) {
+            this.lobbySubscription?.unsubscribe();
         }
+
+        this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies: Lobby[]) => {
+            this.lobbies = lobbies;
+            this.updateCurrentLobby();
+        });
+        this.lobbySubscription = this.roomManagerService.lobby$.subscribe((lobby: Lobby) => {
+            this.lobby = lobby;
+            this.messages = this.lobby.chatLog?.chat as Chat[];
+            this.messages.forEach((message: Chat) => {
+                console.log(message.tag);
+            });
+        });
+        this.chatSubscription = this.roomManagerService.message$.subscribe((message: Chat) => {
+            this.receiveMessage(message);
+        });
+        this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {
+            this.router.navigate(['/game-mode']);
+        });
+    }
+
+    updateCurrentLobby(): void {
+        this.lobby = this.lobbies.find((lobby) => lobby.lobbyId === this.lobby.lobbyId) || this.lobby;
     }
 
     onQuit(): void {
@@ -61,8 +76,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.chatSubscription?.unsubscribe();
             this.roomManagerService.off();
         }
-        // if (this.roomManagerService.isOrganizer) this.clientSocketService.lobbySocket.off(LobbyEvents.Create);
-        // else this.clientSocketService.lobbySocket.off(LobbyEvents.Join);
         this.roomManagerService.wait = false;
     }
 }

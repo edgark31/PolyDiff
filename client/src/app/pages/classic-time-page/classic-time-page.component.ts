@@ -21,7 +21,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit, AfterViewIni
     lobbies: Lobby[];
     pageSize = 2;
     currentPage = 0;
-    pagedLobby: Lobby[] = [];
+    pagedLobbies: Lobby[] = [];
     gameModes: typeof GameModes;
     nPlayersConnected: number;
     private lobbiesSubscription: Subscription;
@@ -76,7 +76,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit, AfterViewIni
                 this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Classic);
                 const startIndex = this.currentPage * this.pageSize;
                 const endIndex = startIndex + this.pageSize;
-                this.pagedLobby = this.lobbies.slice(startIndex, endIndex);
+                this.pagedLobbies = this.lobbies.slice(startIndex, endIndex);
             }
         });
     }
