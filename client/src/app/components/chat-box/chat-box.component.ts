@@ -15,7 +15,7 @@ export class ChatBoxComponent {
     @Output() private addLobby: EventEmitter<string>;
 
     constructor(private readonly router: Router) {
-        this.messages = [];
+        // this.messages = [];
         this.add = new EventEmitter<string>();
         this.addLobby = new EventEmitter<string>();
     }

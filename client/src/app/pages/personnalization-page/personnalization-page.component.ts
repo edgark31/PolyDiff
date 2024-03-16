@@ -7,7 +7,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { ImportDialogComponent } from '@app/components/import-dialog/import-dialog.component';
+import { ImportDialogComponent } from '@app/components/import-dialog-box/import-dialog-box.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
@@ -24,7 +24,6 @@ export class PersonnalizationPageComponent implements OnInit {
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
-
     feedback: string;
     constructor(
         private readonly router: Router,

@@ -6,7 +6,7 @@
         <button mat-raised-button class="create-button" routerLink="/selection">
             <span>Créer une salle</span>
         </button>
-        <div *ngFor="let lobby of pagedLobby">
+        <div *ngFor="let lobby of pagedLobbies">
             <div *ngIf="lobby.mode === gameModes.Limited">
                 <img alt="background-image" id="image" src="./assets/gameSheet.png"/>
                 <app-room-sheet [lobby]="lobby"></app-room-sheet>
@@ -16,6 +16,6 @@
             <button (click)="previousPage()" *ngIf="currentPage > 0">Précédent</button>
             <button (click)="nextPage()" *ngIf="(lobbies.length / pageSize) - 1 > currentPage ">Suivant</button>
         </div>
-    </div>    
+    </div>
 </body>
 
