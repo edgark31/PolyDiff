@@ -116,6 +116,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
                 CustomButton(
                   press: () {
                     lobbySelectionService.setGameId(card.id);
+                    lobbySelectionService.setNDifferences(card.nDifference);
                     Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
                   },
                   text: 'Choisir cette fiche',
