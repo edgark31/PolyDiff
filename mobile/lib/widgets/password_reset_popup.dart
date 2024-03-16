@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/pages/login_page.dart';
+import 'package:mobile/services/form_service.dart';
 
 class PasswordResetPopup extends StatefulWidget {
   @override
@@ -8,14 +9,15 @@ class PasswordResetPopup extends StatefulWidget {
 }
 
 class _PasswordResetPopupState extends State<PasswordResetPopup> {
-  TextEditingController passwordController = TextEditingController();
+  final FormService formService = FormService();
+  TextEditingController emailController = TextEditingController();
   String errorMessage = "";
 
   @override
   void initState() {
     super.initState();
-    passwordController.addListener(() {
-      if (passwordController.text.isEmpty) {
+    emailController.addListener(() {
+      if (emailController.text.isEmpty) {
         setState(() {
           errorMessage = "";
         });
@@ -90,7 +92,7 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                   child: Padding(
                     padding: EdgeInsets.only(),
                     child: TextField(
-                      controller: passwordController,
+                      controller: emailController,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(40),
                       ],
@@ -110,9 +112,11 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                     width: 430,
                     height: 40,
                     child: ElevatedButton(
-                      onPressed: () {
-                        //Juste pour tester
-                        if (passwordController.text == "12345") {
+                      onPressed: () async {
+                        String? serverErrorMessage =
+                          await formService.sendMail(emailController.text);
+                        
+                        if (serverErrorMessage == null) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => LoginPage(),
@@ -121,7 +125,7 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                         } else {
                           setState(() {
                             errorMessage =
-                                "Le mot de passe entré est incorrecte";
+                                "Il n'y a pas de compte associé à cet email";
                           });
                         }
                       },

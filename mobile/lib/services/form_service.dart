@@ -58,4 +58,25 @@ class FormService {
       return 'Error: $error';
     }
   }
+
+  Future<String?> sendMail(String email) async {
+    final String url = '$baseUrl/account/mail';
+    try {
+      final requestBody = {'email': email};
+      final response = await http.put(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        return null;
+      } else {
+        final errorMessage = response.body;
+        return errorMessage;
+      }
+    } catch (error) {
+      return 'Error: $error';
+    }
+  }
 }
