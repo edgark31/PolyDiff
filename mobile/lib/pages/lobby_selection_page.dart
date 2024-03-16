@@ -3,6 +3,7 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
@@ -83,6 +84,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     String nPlayers = 'Nombre de joueurs: ${lobby.players.length}/4';
     String playerNames = lobby.players.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
+    final chatService = context.watch<ChatService>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -121,6 +123,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                         : CustomButton(
                             press: () {
                               lobbyService.joinLobby(lobby.lobbyId);
+                              chatService.setLobbyMessages(lobby.chatLog!.chat);
                               Navigator.pushNamed(context, LOBBY_ROUTE);
                             },
                             text: 'Rejoindre cette salle d\'attente',
