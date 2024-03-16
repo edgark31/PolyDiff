@@ -45,7 +45,7 @@ class _SignUpFormState extends State<SignUpForm> {
   bool hasAnimalName = false;
   bool hasNumber = false;
 
-  String errorMessage = "";
+  String? serverErrorMessage;
   String usernameFormat = NO;
   String emailFormat = NO;
   String passwordStrength = '';
@@ -107,7 +107,7 @@ class _SignUpFormState extends State<SignUpForm> {
   Future<void> _registerUserCredentials() async {
     if (!_validator.hasValidCredentials()) {
       setState(() {
-        errorMessage = INVALID_FORM_INPUTS;
+        serverErrorMessage = INVALID_FORM_INPUTS;
       });
       return;
     }
@@ -138,7 +138,9 @@ class _SignUpFormState extends State<SignUpForm> {
         await registerProvider.putAvatarData(
             predefinedAvatarBody, AvatarType.predefined);
 
-        if (registerProvider.isBack) Navigator.pushNamed(context, LOGIN_ROUTE);
+        if (registerProvider.isBack) {
+          Navigator.pushNamed(context, LOGIN_ROUTE);
+        }
       } else if (_selectedAvatarBase64 != null) {
         UploadAvatarBody avatarBody = UploadAvatarBody(
             username: username, base64Avatar: _selectedAvatarBase64!);
@@ -226,7 +228,20 @@ class _SignUpFormState extends State<SignUpForm> {
           CustomButton(
               press: () => _registerUserCredentials(),
               backgroundColor: kMidOrange,
-              text: SIGN_UP_BTN_TXT)
+              text: SIGN_UP_BTN_TXT),
+          if (serverErrorMessage != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                serverErrorMessage!,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight
+                        .bold // Use a color that makes the error message stand out
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ),
         ],
       ),
     );
@@ -333,11 +348,25 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Widget buildSelectedAvatar() {
-    return CircleAvatar(
-      backgroundImage: _selectedAvatar,
-      radius: 50,
-      backgroundColor: Colors.grey.shade200,
-      child: _selectedAvatar == null ? Icon(Icons.person, size: 50) : null,
+    return Container(
+      width: 100, // Total diameter including border
+      height: 100, // Total diameter including border
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.grey.shade200, // Background color inside the border
+        border: Border.all(
+          color: _selectedAvatar == null
+              ? Colors.red
+              : Colors.green, // Border color based on condition
+          width: 4, // Border width
+        ),
+      ),
+      child: CircleAvatar(
+        backgroundImage: _selectedAvatar,
+        radius: 50,
+        backgroundColor: Colors.grey.shade200,
+        child: _selectedAvatar == null ? Icon(Icons.person, size: 50) : null,
+      ),
     );
   }
 

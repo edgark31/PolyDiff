@@ -5,22 +5,24 @@ import 'package:mobile/models/models.dart';
 
 class InfoService extends ChangeNotifier {
   static late Credentials credentials;
-  static String _username = 'temp_name'; // TODO : fix default avatar issue
+  static String _username = 'temp_name';
   static String _id = 'temp_id';
   static String _avatar =
       'temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar';
   static String _email = 'temp_email';
+  static String _theme = 'light';
   static String _language = 'fr';
-  static String _soundOnError = 'sound/ErrorSoundEffect.mp3';
-  static String _soundOnDifference = 'sound/WinSoundEffect.mp3';
+  static String _onErrorSound = '1';
+  static String _onCorrectSound = '1';
 
   String get username => _username;
   String get id => _id;
   String get avatar => _avatar;
   String get email => _email;
   String get language => _language;
-  String get soundOnError => _soundOnError;
-  String get soundOnDifference => _soundOnDifference;
+  String get theme => _theme;
+  String get onErrorSound => _onErrorSound;
+  String get onCorrectSound => _onCorrectSound;
 
   void setId(String newId) {
     print('Changing id from $_id to $newId');
@@ -42,17 +44,23 @@ class InfoService extends ChangeNotifier {
     }
   }
 
-  void setSoundOnError(String newSoundOnError) {
-    print(
-        'Changing onErrorSound from $_soundOnError to $newSoundOnError for $username ($_id)');
-    _soundOnError = newSoundOnError;
+  void setTheme(String newTheme) {
+    print('Changing theme from $_theme to $newTheme for $username ($_id)');
+    _theme = newTheme;
     notifyListeners();
   }
 
-  void setSoundOnDifference(String newSoundOnDifference) {
+  void setOnErrorSound(String newOnErrorSound) {
     print(
-        'Changing onFoundDifferenceSound from $_soundOnDifference to $newSoundOnDifference for $username ($_id)');
-    _soundOnDifference = newSoundOnDifference;
+        'Changing onErrorSoundId from $_onErrorSound to $newOnErrorSound for $username ($_id)');
+    _onErrorSound = newOnErrorSound;
+    notifyListeners();
+  }
+
+  void setOnCorrectSound(String newOnCorrectSound) {
+    print(
+        'Changing onCorrectSoundId from $_onCorrectSound to $newOnCorrectSound for $username ($_id)');
+    _onCorrectSound = newOnCorrectSound;
   }
 
   void setAvatar(String newAvatar) {
@@ -66,8 +74,8 @@ class InfoService extends ChangeNotifier {
 
   void setLanguage(String newLanguage) {
     print(
-        'Changing language from $_email to $newLanguage for $username ($_id)');
-    _email = newLanguage;
+        'Changing language from $_language to $newLanguage for $username ($_id)');
+    _language = newLanguage;
     notifyListeners();
   }
 
@@ -76,6 +84,9 @@ class InfoService extends ChangeNotifier {
     setUsername(credentials.username);
     setEmail(credentials.email);
   }
+
+  // TODO
+  void setAccountInfo(Profile fetchedProfile) {}
 
   void setInfosOnConnection(String serverConnectionResponse) {
     final result = jsonDecode(serverConnectionResponse) as Map<String, dynamic>;
@@ -90,5 +101,9 @@ class InfoService extends ChangeNotifier {
     setCredentials(credentials);
 
     setAvatar(result['profile']['avatar']);
+    setTheme(result['profile']['mobileTheme']);
+    setLanguage(result['profile']['language']);
+    setOnCorrectSound(result['profile']['onCorrectSoundId']);
+    setOnErrorSound(result['profile']['onErrorSoundId']);
   }
 }

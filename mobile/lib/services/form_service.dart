@@ -44,7 +44,9 @@ class FormService {
       );
 
       if (response.statusCode == 200) {
-        infoService.setInfosOnConnection(response.body);
+        String info = response.body;
+        infoService.setInfosOnConnection(info);
+        print('SET INFO ON CONNECTION : $info');
         return null;
       } else {
         final errorMessage = response.body;

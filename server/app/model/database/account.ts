@@ -33,11 +33,13 @@ export const themeSchema = SchemaFactory.createForClass(Theme);
 
 @Schema()
 export class Sound {
+    @ApiProperty({ description: "Id du son joué lors d'une action correcte" })
     @Prop({ required: true })
-    name: string;
+    onCorrectId: string;
 
-    @Prop({ required: false })
-    link: string;
+    @ApiProperty({ description: "Id du son joué en cas d'erreur" })
+    @Prop({ required: true })
+    onErrorId: string;
 }
 
 export const soundSchema = SchemaFactory.createForClass(Sound);
@@ -116,13 +118,16 @@ export class Profile {
     language: string;
 
     @Prop({ type: themeSchema, required: false })
-    theme: Theme;
+    desktopTheme: Theme;
 
-    @Prop({ type: soundSchema, required: false })
-    soundOnDifference: Sound;
+    @Prop({ type: String, required: false })
+    mobileTheme: string;
 
-    @Prop({ type: soundSchema, required: false })
-    soundOnError: Sound;
+    @Prop({ type: String, required: false })
+    onCorrectSoundId: string;
+
+    @Prop({ type: String, required: false })
+    onErrorSoundId: string;
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);

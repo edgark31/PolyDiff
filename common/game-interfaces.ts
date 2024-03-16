@@ -257,8 +257,8 @@ export interface Theme {
 }
 
 export interface Sound {
-    name: string;
-    link: string;
+    id: string;
+    path: string;
 }
 
 // export interface modifyProfile {

@@ -16,16 +16,17 @@ import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
 import 'package:provider/provider.dart';
 
-class ConnectionForm extends StatefulWidget {
+class SignInForm extends StatefulWidget {
   @override
-  State<ConnectionForm> createState() => _ConnectionFormState();
+  State<SignInForm> createState() => _SignInFormState();
 }
 
-class _ConnectionFormState extends State<ConnectionForm> {
+class _SignInFormState extends State<SignInForm> {
   final FormService formService = FormService();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  String? serverErrorMessage;
   String usernameFormat = NO;
   String emailFormat = NO;
   String passwordFormat = NO;
@@ -107,9 +108,12 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   hint: 'Entrez votre nom d\'utilisateur',
                   maxLength: 20,
                   errorText:
-                      _validator.states['username'] == ValidatorState.isInvalid
-                          ? "Nom d\'utilisateur ou courriel invalide"
-                          : null,
+                      _validator.states['username'] == ValidatorState.isEmpty
+                          ? "Nom d\'utilisateur ou courriel requis"
+                          : _validator.states['username'] ==
+                                  ValidatorState.isInvalid
+                              ? "Nom d\'utilisateur ou courriel invalide"
+                              : null,
                   isPassword: false,
                 ),
                 CustomTextInputField(
@@ -117,9 +121,12 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   controller: passwordController,
                   hint: 'Entrez votre mot de passe',
                   errorText:
-                      _validator.states['password'] == ValidatorState.isInvalid
-                          ? "Mot de passe invalide"
-                          : null,
+                      _validator.states['password'] == ValidatorState.isEmpty
+                          ? "Mot de passe requis"
+                          : _validator.states['password'] ==
+                                  ValidatorState.isInvalid
+                              ? "Mot de passe invalide"
+                              : null,
                   maxLength: 20,
                   isPassword: true,
                 ),
@@ -130,8 +137,11 @@ class _ConnectionFormState extends State<ConnectionForm> {
                         username: usernameController.text,
                         password: passwordController.text,
                       );
-                      String? serverErrorMessage =
+                      String? newServerErrorMessage =
                           await formService.connect(credentials);
+                      setState(() {
+                        serverErrorMessage = newServerErrorMessage;
+                      });
                       if (serverErrorMessage == null) {
                         socketService.setup(SocketType.Auth, infoService.id);
                         chatService.setGlobalChatListeners();
@@ -143,6 +153,19 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   textColor: kLight,
                   text: SIGN_IN_BTN_TXT,
                 ),
+                if (serverErrorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      serverErrorMessage!,
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight
+                              .bold // Use a color that makes the error message stand out
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 SizedBox(height: 30),
                 CustomButton(
                     text: SIGN_UP_BTN_TXT,

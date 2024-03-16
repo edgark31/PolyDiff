@@ -2,8 +2,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Account, AccountDocument, Credentials, Statistics, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
-import { SOUND_LIST_DIFFERENCE, SOUND_LIST_ERROR, THEME_PERSONALIZATION } from '@common/constants';
-import { Sound } from '@common/game-interfaces';
+import { THEME_PERSONALIZATION } from '@common/constants';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -39,10 +38,11 @@ export class AccountManagerService implements OnModuleInit {
                     stats: {} as Statistics,
                     friends: [],
                     friendRequests: [],
-                    language: 'en',
-                    theme: THEME_PERSONALIZATION[0],
-                    soundOnDifference: SOUND_LIST_DIFFERENCE[0],
-                    soundOnError: SOUND_LIST_ERROR[0],
+                    language: 'fr',
+                    desktopTheme: THEME_PERSONALIZATION[0],
+                    mobileTheme: 'light',
+                    onCorrectSoundId: '1',
+                    onErrorSoundId: '1',
                 },
             };
             await this.accountModel.create(newAccount);
@@ -162,12 +162,12 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async modifyOnErrorSound(oldUsername: string, newSound: Sound): Promise<void> {
+    async updateOnErrorSound(username: string, newOnErrorSoundId: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
-            accountFound.profile.soundOnDifference = newSound;
+            accountFound.profile.onErrorSoundId = newOnErrorSoundId;
 
             await accountFound.save();
             this.logger.verbose('sound change');
@@ -178,13 +178,13 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async modifyOnDifferenceSound(oldUsername: string, newSound: Sound): Promise<void> {
+    async updateOnCorrectSound(username: string, newCorrectSoundId: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
 
-            accountFound.profile.soundOnError = newSound;
+            accountFound.profile.onCorrectSoundId = newCorrectSoundId;
 
             await accountFound.save();
             this.logger.verbose('sound change');
@@ -195,19 +195,36 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async modifyTheme(oldUsername: string, newTheme: Theme): Promise<void> {
+    async updateDesktopTheme(username: string, newTheme: Theme): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
 
-            accountFound.profile.theme = newTheme;
+            accountFound.profile.desktopTheme = newTheme;
 
             await accountFound.save();
-            this.logger.verbose('Theme change');
+            this.logger.verbose('Desktop theme change');
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to change theme --> ${error.message}`);
+            this.logger.error(`Failed to change desktop theme --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async updateMobileTheme(username: string, newTheme: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.mobileTheme = newTheme;
+
+            await accountFound.save();
+            this.logger.verbose('Mobile Theme change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change mobile theme --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }

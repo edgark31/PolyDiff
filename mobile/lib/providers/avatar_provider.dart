@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_routes.dart';
 
 // Singleton
-class AvatarProvider with ChangeNotifier {
+class AvatarProvider extends ChangeNotifier {
   static final AvatarProvider _instance = AvatarProvider._internal();
   factory AvatarProvider() => _instance;
   AvatarProvider._internal();
@@ -12,8 +12,8 @@ class AvatarProvider with ChangeNotifier {
   String _currentAvatarUrl = '';
   String get currentAvatarUrl => _currentAvatarUrl;
 
-  void setAccountAvatarUrl(String username) {
-    _currentAvatarUrl = '$BASE_URL/avatar/$username.png';
+  void setAccountAvatarUrl(String id) {
+    _currentAvatarUrl = '$BASE_URL/avatar/$id.png';
     notifyListeners();
   }
 

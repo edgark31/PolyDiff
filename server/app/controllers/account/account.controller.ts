@@ -1,7 +1,6 @@
 import { Credentials, Theme } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MailService } from '@app/services/mail-service/mail-service';
-import { Sound } from '@common/game-interfaces';
 import { Body, Controller, Delete, HttpStatus, Post, Put, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -9,7 +8,7 @@ import { Response } from 'express';
 @ApiTags('Accounts')
 @Controller('account')
 export class AccountController {
-    constructor(private readonly accountManager: AccountManagerService, private readonly mailservice: MailService) {}
+    constructor(private readonly accountManager: AccountManagerService, private readonly mailService: MailService) {}
 
     @Post('register')
     async register(@Body('creds') creds: Credentials, @Body('id') id: string, @Res() response: Response) {
@@ -94,17 +93,27 @@ export class AccountController {
     @Put('mail')
     async sendMail(@Body('email') mail: string, @Res() response: Response) {
         try {
-            await this.mailservice.signUp(mail);
+            await this.mailService.signUp(mail);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NOT_FOUND).json(error);
         }
     }
 
-    @Put('theme')
-    async modifyTheme(@Body('oldUsername') oldUsername: string, @Body('newTheme') newTheme: Theme, @Res() response: Response) {
+    @Put('desktop/theme')
+    async updateDesktopTheme(@Body('username') username: string, @Body('newTheme') newTheme: Theme, @Res() response: Response) {
         try {
-            await this.accountManager.modifyTheme(oldUsername, newTheme);
+            await this.accountManager.updateDesktopTheme(username, newTheme);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.CONFLICT).json(error);
+        }
+    }
+
+    @Put('mobile/theme')
+    async updateMobileTheme(@Body('username') username: string, @Body('newTheme') newTheme: string, @Res() response: Response) {
+        try {
+            await this.accountManager.updateMobileTheme(username, newTheme);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
@@ -112,7 +121,7 @@ export class AccountController {
     }
 
     @Put('language')
-    async modifyLanguage(@Body('oldUsername') oldUsername: string, @Body('newLanguage') newLanguage: string, @Res() response: Response) {
+    async updateLanguage(@Body('username') oldUsername: string, @Body('newLanguage') newLanguage: string, @Res() response: Response) {
         try {
             await this.accountManager.modifyLanguage(oldUsername, newLanguage);
             response.status(HttpStatus.OK).send();
@@ -122,19 +131,19 @@ export class AccountController {
     }
 
     @Put('sound/error')
-    async modifyOnDifferenceSound(@Body('oldUsername') oldUsername: string, @Body('newSound') newSoundError: Sound, @Res() response: Response) {
+    async updateOnCorrectSound(@Body('username') username: string, @Body('newSoundId') newOnCorrectSoundId: string, @Res() response: Response) {
         try {
-            await this.accountManager.modifyOnDifferenceSound(oldUsername, newSoundError);
+            await this.accountManager.updateOnCorrectSound(username, newOnCorrectSoundId);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
         }
     }
 
-    @Put('sound/difference')
-    async modifyOnErrorSound(@Body('oldUsername') oldUsername: string, @Body('newSound') newSoundDifference: Sound, @Res() response: Response) {
+    @Put('sound/correct')
+    async updateOnErrorSound(@Body('username') username: string, @Body('newSoundId') newOnCorrectSoundId: string, @Res() response: Response) {
         try {
-            await this.accountManager.modifyOnErrorSound(oldUsername, newSoundDifference);
+            await this.accountManager.updateOnErrorSound(username, newOnCorrectSoundId);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);

@@ -3,7 +3,6 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
-import 'package:mobile/widgets/avatar.dart';
 import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +24,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final infoService = context.watch<InfoService>();
 
     // user avatar
-    AvatarProvider.instance.setAccountAvatarUrl(infoService.username);
+    AvatarProvider.instance.setAccountAvatarUrl(infoService.id);
     final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
     return AppBar(
       centerTitle: true,
@@ -59,9 +58,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(right: 30.0),
           child: GestureDetector(
             onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE),
-            child: Avatar(
-              imageUrl: avatarUrl,
-              radius: 15,
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(avatarUrl),
+              radius: 18.0,
             ),
           ),
         ),

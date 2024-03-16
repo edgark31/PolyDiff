@@ -3,9 +3,9 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
-import 'package:mobile/widgets/avatar.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
+import 'package:mobile/widgets/customs/custom_circle_avatar.dart';
 import 'package:provider/provider.dart';
 
 class StatisticsPage extends StatelessWidget {
@@ -43,7 +43,7 @@ class StatisticsPage extends StatelessWidget {
     ];
 
     // user avatar
-    AvatarProvider.instance.setAccountAvatarUrl(infoService.username);
+    AvatarProvider.instance.setAccountAvatarUrl(infoService.id);
     final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
 
     return Scaffold(
@@ -57,9 +57,8 @@ class StatisticsPage extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Avatar(
+                child: CustomCircleAvatar(
                   imageUrl: avatarUrl,
-                  radius: 50,
                 ),
               ),
               ...statistics

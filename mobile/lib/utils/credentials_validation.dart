@@ -1,72 +1,10 @@
 import 'package:mobile/constants/app_text_constants.dart';
 
-enum NewInputStateMessageEnum {
-  usernameInput(
-    invalidMessage: "Veuillez entrée un nom d'utilisateur valide",
-    isEmptyMessage: "Nom d'utilisateur requis",
-  ),
-  emailInputField(
-    invalidMessage: "Veuillez entrer une adresse courriel valide",
-    isEmptyMessage: "Addresse courriel requis(e)",
-  ),
-  selectedAvatar(
-    invalidMessage: "Veuillez choisir une format de l'avatar valide",
-    isEmptyMessage: "Veuillez sélectionné un avatar",
-  ),
-  passwordInput(
-    invalidMessage: "Veuillez entrée un mot de passe valide",
-    isEmptyMessage: "Mot de passe requis",
-  );
-
-  final String invalidMessage;
-  final String isEmptyMessage;
-
-  const NewInputStateMessageEnum({
-    required this.invalidMessage,
-    required this.isEmptyMessage,
-  });
-}
-
-enum LoginInputFieldsStateMessageEnum {
-  usernameInput(
-    invalidMessage: "Utilisateur inconnu",
-    isEmptyMessage: "Nom d'utilisateur ou addresse courriel requis(e)",
-  ),
-  passwordInput(
-    invalidMessage: "Veuillez entrée un mot de passe valide",
-    isEmptyMessage: "Mot de passe requis",
-  );
-
-  final String invalidMessage;
-  final String isEmptyMessage;
-
-  const LoginInputFieldsStateMessageEnum({
-    required this.invalidMessage,
-    required this.isEmptyMessage,
-  });
-}
-
 enum ValidatorState {
   isValid,
   isInvalid,
   isEmpty,
   isNotEmpty;
-
-  String get inputValidatorStateMessage {
-    switch (this) {
-      case ValidatorState.isInvalid:
-        return 'Champ invalide';
-
-      case ValidatorState.isValid:
-        return '';
-
-      case ValidatorState.isEmpty:
-        return 'Information requise';
-
-      case ValidatorState.isNotEmpty:
-        return '';
-    }
-  }
 }
 
 class CredentialsValidator {

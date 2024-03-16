@@ -5,7 +5,7 @@ import 'package:mobile/constants/enums.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
-import 'package:mobile/widgets/avatar.dart';
+import 'package:mobile/widgets/customs/custom_circle_avatar.dart';
 import 'package:provider/provider.dart';
 
 class CustomMenuDrawer extends StatelessWidget {
@@ -15,18 +15,14 @@ class CustomMenuDrawer extends StatelessWidget {
     final socketService = context.watch<SocketService>();
     final infoService = context.watch<InfoService>();
 
-    // user avatar
-    AvatarProvider.instance.setAccountAvatarUrl(infoService.username);
-    final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
     return Drawer(
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(infoService.username),
             accountEmail: Text(infoService.email),
-            currentAccountPicture: Avatar(
-              imageUrl: avatarUrl,
-              radius: 20,
+            currentAccountPicture: CustomCircleAvatar(
+              imageUrl: AvatarProvider.instance.currentAvatarUrl,
             ),
             decoration: BoxDecoration(color: kMidOrange),
           ),
@@ -64,7 +60,8 @@ class CustomMenuDrawer extends StatelessWidget {
               title: Text('Déconnexion'),
               onTap: () {
                 print('Déconnexion');
-                socketService.logOut(context, SocketType.Auth);
+                socketService.disconnect(SocketType.Auth);
+                Navigator.pushNamed(context, HOME_ROUTE);
               }),
         ],
       ),

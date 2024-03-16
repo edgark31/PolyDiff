@@ -1,27 +1,15 @@
 class Theme {
-  final String name;
-  final String? color;
-  final String? backgroundColor;
-  final String? buttonColor;
+  final String theme;
 
   Theme({
-    required this.name,
-    this.color,
-    this.backgroundColor,
-    this.buttonColor,
+    required this.theme,
   });
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        if (color != null) 'color': color,
-        if (backgroundColor != null) 'backgroundColor': backgroundColor,
-        if (buttonColor != null) 'buttonColor': buttonColor,
+        'mobileTheme': theme,
       };
 
   factory Theme.fromJson(Map<String, dynamic> json) => Theme(
-        name: json['name'],
-        color: json['color'],
-        backgroundColor: json['backgroundColor'],
-        buttonColor: json['buttonColor'],
+        theme: json['mobileTheme'],
       );
 }

@@ -10,18 +10,26 @@ class RegisterProvider extends ChangeNotifier {
   bool isLoading = false;
   bool isBack = false;
 
-  Future<void> postCredentialsData(SignUpCredentialsBody body) async {
+  Future<String?> postCredentialsData(SignUpCredentialsBody body) async {
     isLoading = true;
     notifyListeners();
-    http.Response response = (await registerCredentials(body))!;
-    if (response.statusCode == 200) {
-      isBack = true;
+    try {
+      http.Response response = (await registerCredentials(body))!;
+      if (response.statusCode == 200) {
+        isBack = true;
+        print('Successfully posting CredentialsData in register provider');
+      }
+    } catch (error) {
+      isLoading = false;
+      notifyListeners();
+      return 'Error: $error';
     }
     isLoading = false;
     notifyListeners();
+    return null;
   }
 
-  Future<void> putAvatarData(
+  Future<String?> putAvatarData(
       UploadAvatarBody body, AvatarType avatarType) async {
     isLoading = true;
     isBack = false;
@@ -29,17 +37,33 @@ class RegisterProvider extends ChangeNotifier {
 
     switch (avatarType) {
       case AvatarType.predefined:
-        http.Response response = (await putPredefinedAvatar(body))!;
-        if (response.statusCode == 200) {
-          isBack = true;
+        try {
+          http.Response response = (await putPredefinedAvatar(body))!;
+          if (response.statusCode == 200) {
+            isBack = true;
+            isLoading = false;
+            notifyListeners();
+            return null;
+          }
+        } catch (e) {
+          isLoading = false;
+          notifyListeners();
+          return 'Error updating predefined avatar ';
         }
       case AvatarType.camera:
-        http.Response response = (await putCameraImageAvatar(body))!;
-        if (response.statusCode == 200) {
-          isBack = true;
+        try {
+          http.Response response = (await putCameraImageAvatar(body))!;
+          if (response.statusCode == 200) {
+            isBack = true;
+          }
+        } catch (error) {
+          isLoading = false;
+          notifyListeners();
+          return 'Error: $error';
         }
     }
     isLoading = false;
     notifyListeners();
+    return null;
   }
 }

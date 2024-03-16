@@ -28,15 +28,15 @@ export const THEME_PERSONALIZATION: Theme[] = [
 ];
 
 export const SOUND_LIST_DIFFERENCE: Sound[] = [
-    { name: 'DefaultSound', link: 'assets/sound/WinSoundEffect.mp3' },
-    { name: 'Sound2', link: 'assets/sound/WinSoundEffect.mp3' }, // en attendant
-    { name: 'Sound3', link: 'assets/sound/WinSoundEffect.mp3' }, // en attendant
+    { id: '1', path: 'assets/sound/WinSoundEffect.mp3' },
+    { id: 'Sound2', path: 'assets/sound/WinSoundEffect.mp3' },
+    { id: 'Sound3', path: 'assets/sound/WinSoundEffect.mp3' },
 ];
 
 export const SOUND_LIST_ERROR: Sound[] = [
-    { name: 'DefaultSound', link: 'assets/sound/ErrorSoundEffect.mp3' },
-    { name: 'Sound2', link: 'assets/sound/ErrorSoundEffect.mp3' }, // en attendant
-    { name: 'Sound3', link: 'assets/sound/ErrorSoundEffect.mp3' }, // en attendant
+    { id: 'DefaultSound', path: 'assets/sound/ErrorSoundEffect.mp3' },
+    { id: 'Sound2', path: 'assets/sound/ErrorSoundEffect.mp3' },
+    { id: 'Sound3', path: 'assets/sound/ErrorSoundEffect.mp3' },
 ];
 
 export const LANGUAGES: string[] = ['fr', 'en'];

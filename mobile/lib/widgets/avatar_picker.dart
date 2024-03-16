@@ -74,6 +74,14 @@ class _AvatarPickerState extends State<AvatarPicker> {
                     NetworkImage(getDefaultAvatarUrl('3')), kMidGreen),
               ),
               SizedBox(width: 20),
+              GestureDetector(
+                onTap: () {
+                  _handlePredefinedAvatarSelection('5');
+                },
+                child: avatarContainer(
+                    NetworkImage(getDefaultAvatarUrl('5')), kMidGreen),
+              ),
+              SizedBox(width: 20),
               // Tablet camera image container
               GestureDetector(
                 onTap: () => _handleCameraImageSelection(),
@@ -99,7 +107,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
       width: 100,
       child: CircleAvatar(
         backgroundColor: backgroundColor,
-        radius: 50,
+        radius: 70,
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           backgroundImage: image,

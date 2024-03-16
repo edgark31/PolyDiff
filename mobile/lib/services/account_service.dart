@@ -13,19 +13,8 @@ enum Sound {
 class AccountService {
   final String baseUrl = API_URL;
 
-  String _responseFeedBack(http.Response response) {
-    if (response.statusCode == 200) {
-      return "Modified profile successfully";
-    }
-    return 'Error ${response.statusCode}: ${response.body}';
-  }
-
-  String _catchErrorMessage(Object error) {
-    return 'Error : $error';
-  }
-
   // Password
-  Future<String> changePassword(String username, String newPassword) async {
+  Future<String?> updatePassword(String username, String newPassword) async {
     try {
       final response = await http.put(
         Uri.parse('$baseUrl/account/password'),
@@ -37,15 +26,18 @@ class AccountService {
           'newPassword': newPassword,
         }),
       );
-
-      return _responseFeedBack(response);
+      if (response.statusCode == 200) {
+        print('Modified successfully ');
+        return "Modified profile successfully";
+      }
     } catch (error) {
-      return _catchErrorMessage(error);
+      return 'Error: $error';
     }
+    return null;
   }
 
   // Password
-  Future<String> changePseudo(String oldUsername, String newUsername) async {
+  Future<String?> updateUsername(String oldUsername, String newUsername) async {
     try {
       final response = await http.put(
         Uri.parse('$baseUrl/account/pseudo'),
@@ -57,54 +49,58 @@ class AccountService {
           'newUsername': newUsername,
         }),
       );
-
-      return _responseFeedBack(response);
+      if (response.statusCode == 200) {
+        print("$oldUsername updated to $newUsername ");
+        return null;
+      }
     } catch (error) {
-      return _catchErrorMessage(error);
+      print("Failed to update username : $error");
+      return 'Error: $error';
     }
-  }
-
-  // Password
-  Future<String> changeEmail(String username, String newEmail) async {
-    try {
-      final response = await http.put(
-        Uri.parse('$baseUrl/account/mail'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'username': username,
-          'newEmail': newEmail,
-        }),
-      );
-
-      return _responseFeedBack(response);
-    } catch (error) {
-      return _catchErrorMessage(error);
-    }
+    return null;
   }
 
   // Theme
-  Future<String?> modifyTheme(String username, String newTheme) async {
+  Future<String?> updateTheme(String username, String newTheme) async {
+    final String themeToLowerCase = newTheme.toLowerCase();
     try {
       final response = await http.put(
-        Uri.parse('$baseUrl/account/theme'),
+        Uri.parse('$baseUrl/account/mobile/theme'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode({
           'username': username,
-          'newTheme': newTheme,
+          'newTheme': themeToLowerCase,
         }),
       );
-      _responseFeedBack(response);
+      if (response.statusCode == 200) {
+        print("Theme updated to $themeToLowerCase ");
+        return null;
+      }
     } catch (error) {
-      _catchErrorMessage(error);
+      print("Error updating theme preference: $error");
+      return 'Error: $error';
     }
+    return null;
   }
 
   // Language
-  Future<String?> modifyLanguage(String username, String newLanguage) async {
+  Future<String?> updateLanguage(String username, String newLanguage) async {
+    String newLanguageFormatted;
+    switch (newLanguage) {
+      case 'Français':
+      case 'French':
+        newLanguageFormatted = 'fr';
+
+      case 'Anglais':
+      case 'English':
+        newLanguageFormatted = 'en';
+
+      default:
+        newLanguageFormatted = 'fr';
+    }
+
     try {
       final response = await http.put(
         Uri.parse('$baseUrl/account/language'),
@@ -113,36 +109,56 @@ class AccountService {
         },
         body: jsonEncode({
           'username': username,
-          'newLanguage': newLanguage, // TODO : server newLanguage
+          'newLanguage': newLanguageFormatted,
         }),
       );
-
-      _responseFeedBack(response);
+      if (response.statusCode == 200) {
+        print("Langugae updated to $newLanguageFormatted ");
+        return null;
+      }
     } catch (error) {
-      _catchErrorMessage(error);
+      print("Error updating language preference: $error");
+      return 'Error: $error';
     }
+    return null;
   }
 
-  // TODO: Check with server routes
-  Future<String?> modifySound(
-      String username, String newErrorSoundId, Sound soundType) async {
-    String endpoint = (soundType == Sound.onError) ? 'error' : 'difference';
-
+  Future<String?> updateCorrectSound(String username, String newSoundId) async {
+    final url = Uri.parse("$baseUrl/account/sound/correct");
     try {
       final response = await http.put(
-        Uri.parse('$baseUrl/account/sound/$endpoint'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'username': username,
-          'newErrorSoundId': newErrorSoundId,
-        }),
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"username": username, "soundId": newSoundId}),
       );
-
-      _responseFeedBack(response);
+      if (response.statusCode == 200) {
+        print("Correct sound updated to $newSoundId ");
+        return null;
+      }
     } catch (error) {
-      _catchErrorMessage(error);
+      print("Error updating correct sound preference: $error");
+      return 'Error: $error';
     }
+    return null;
+  }
+
+  Future<String?> updateErrorSound(String username, String newSoundId) async {
+    final url = Uri.parse("$baseUrl/account/sound/error");
+    try {
+      final response = await http.put(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"username": username, "soundId": newSoundId}),
+      );
+      if (response.statusCode == 200) {
+        print("Failed to update sound preference");
+        return null;
+      }
+    } catch (error) {
+      // Handle error
+      print("Error updating sound preference: $error");
+      return 'Error: $error';
+    }
+    return null;
   }
 }
