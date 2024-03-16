@@ -34,7 +34,7 @@ export class RoomManagerService {
     private messages: Subject<Chat[]>;
     private message: Subject<Chat>;
 
-    constructor(private readonly clientSocket: ClientSocketService, private communication: CommunicationService) {
+    constructor(private readonly clientSocket: ClientSocketService, public communication: CommunicationService) {
         // this.playerNameAvailability = new Subject<PlayerNameAvailability>();
         // this.roomOneVsOneId = new Subject<string>();
         // this.isPlayerAccepted = new Subject<boolean>();
@@ -266,13 +266,12 @@ export class RoomManagerService {
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });
+
+        this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
+            this.lobbies.next(lobbies);
+        });
         this.clientSocket.on('lobby', ChannelEvents.LobbyMessage, (chat: Chat) => {
             this.message.next(chat);
-        });
-
-        const id = this.lobbyGame.gameId ? this.lobbyGame.gameId : ''; // en attendant d'expliquer pourquoi gameId est optionnel
-        this.communication.getGameById(id).subscribe((e) => {
-            this.game = e;
         });
     }
 }

@@ -8,7 +8,7 @@ import { GameAreaService } from '@app/services/game-area-service/game-area.servi
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, MessageEvents, MessageTag } from '@common/enums';
-import { ChatMessage, ChatMessageGlobal, ClientSideGame, Differences, GameConfigConst, GameRoom, Players } from '@common/game-interfaces';
+import { ChatMessage, ChatMessageGlobal, ClientSideGame, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
 @Injectable({
     providedIn: 'root',
@@ -18,12 +18,15 @@ export class GameManagerService {
     differences: Coordinate[][];
     gameConstants: GameConfigConst;
     username: string;
+    isLeftCanvas: boolean;
+    lobby: Subject<Lobby>;
+    endGame: string;
     private timer: Subject<number>;
     private differencesFound: Subject<number>;
     private opponentDifferencesFound: Subject<number>;
     private currentGame: Subject<ClientSideGame>;
     private message: Subject<ChatMessage>;
-    private isLeftCanvas: boolean;
+
     private endMessage: Subject<string>;
     private players: Subject<Players>;
     private isFirstDifferencesFound: Subject<boolean>;
@@ -35,14 +38,15 @@ export class GameManagerService {
     // eslint-disable-next-line max-params
     constructor(
         private readonly clientSocket: ClientSocketService,
-        private readonly gameAreaService: GameAreaService,
-        private readonly soundService: SoundService,
+        gameAreaService: GameAreaService,
+        soundService: SoundService,
         private readonly captureService: CaptureService,
     ) {
         this.currentGame = new Subject<ClientSideGame>();
         this.differencesFound = new Subject<number>();
         this.timer = new Subject<number>();
         this.players = new Subject<Players>();
+        this.lobby = new Subject<Lobby>();
         this.message = new Subject<ChatMessage>();
         this.endMessage = new Subject<string>();
         this.opponentDifferencesFound = new Subject<number>();
@@ -164,83 +168,90 @@ export class GameManagerService {
     }
 
     manageSocket(): void {
-        this.clientSocket.on('game', GameEvents.GameStarted, (room: GameRoom) => {
-            this.currentGame.next(room.clientGame);
-            this.gameConstants = room.gameConstants;
-            this.players.next({ player1: room.player1, player2: room.player2 });
-            this.differences = room.originalDifferences;
-            this.captureService.saveReplayEvent(ReplayActions.StartGame, room);
+        this.lobby = new Subject<Lobby>();
+        // this.message = new Subject<Chat>();
+
+        this.clientSocket.on('game', GameEvents.StartGame, (lobby: Lobby) => {
+            this.lobby.next(lobby);
         });
 
-        this.clientSocket.on(
-            'game',
-            GameEvents.RemoveDifference,
-            (data: { differencesData: Differences; playerId: string; cheatDifferences: Coordinate[][] }) => {
-                this.handleRemoveDifference(data);
-            },
-        );
+        // this.clientSocket.on('game', GameEvents.GameStarted, (room: GameRoom) => {
+        //     this.currentGame.next(room.clientGame);
+        //     this.gameConstants = room.gameConstants;
+        //     this.players.next({ player1: room.player1, player2: room.player2 });
+        //     this.differences = room.originalDifferences;
+        //     this.captureService.saveReplayEvent(ReplayActions.StartGame, room);
+        // });
 
-        this.clientSocket.on('game', GameEvents.TimerUpdate, (timer: number) => {
-            this.timer.next(timer);
-            this.captureService.saveReplayEvent(ReplayActions.TimerUpdate, timer);
-        });
+        // this.clientSocket.on(
+        //     'game',
+        //     GameEvents.RemoveDifference,
+        //     (data: { differencesData: Differences; playerId: string; cheatDifferences: Coordinate[][] }) => {
+        //         this.handleRemoveDifference(data);
+        //     },
+        // );
 
-        this.clientSocket.on('game', GameEvents.EndGame, (endGameMessage: string) => {
-            this.endMessage.next(endGameMessage);
-        });
+        // this.clientSocket.on('game', GameEvents.TimerUpdate, (timer: number) => {
+        //     this.timer.next(timer);
+        //     this.captureService.saveReplayEvent(ReplayActions.TimerUpdate, timer);
+        // });
 
-        this.clientSocket.on('game', MessageEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
-            if (receivedMessage.userName === this.username) {
-                receivedMessage.tag = MessageTag.Sent;
-            } else {
-                receivedMessage.tag = MessageTag.Received;
-            }
-            this.globalMessage.next(receivedMessage);
-            // this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, receivedMessage);
-        });
+        // this.clientSocket.on('game', GameEvents.EndGame, (endGameMessage: string) => {
+        //     this.endMessage.next(endGameMessage);
+        // });
 
-        this.clientSocket.on('game', GameEvents.UpdateDifferencesFound, (differencesFound: number) => {
-            this.differencesFound.next(differencesFound);
-        });
+        // this.clientSocket.on('game', MessageEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
+        //     if (receivedMessage.userName === this.username) {
+        //         receivedMessage.tag = MessageTag.Sent;
+        //     } else {
+        //         receivedMessage.tag = MessageTag.Received;
+        //     }
+        //     this.globalMessage.next(receivedMessage);
+        //     // this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, receivedMessage);
+        // });
 
-        this.clientSocket.on('game', GameEvents.GameModeChanged, () => {
-            this.isGameModeChanged.next(true);
-        });
+        // this.clientSocket.on('game', GameEvents.UpdateDifferencesFound, (differencesFound: number) => {
+        //     this.differencesFound.next(differencesFound);
+        // });
 
-        this.clientSocket.on('game', GameEvents.GamePageRefreshed, () => {
-            this.isGamePageRefreshed.next(true);
-        });
+        // this.clientSocket.on('game', GameEvents.GameModeChanged, () => {
+        //     this.isGameModeChanged.next(true);
+        // });
+
+        // this.clientSocket.on('game', GameEvents.GamePageRefreshed, () => {
+        //     this.isGamePageRefreshed.next(true);
+        // });
     }
 
-    private checkStatus(): void {
-        this.clientSocket.send('game', GameEvents.CheckStatus);
-    }
+    // private checkStatus(): void {
+    //     this.clientSocket.send('game', GameEvents.CheckStatus);
+    // }
 
-    private replaceDifference(differences: Coordinate[], isPlayerIdMatch: boolean): void {
-        const hasDifferences = differences.length > 0;
-        if (!hasDifferences) {
-            this.soundService.playErrorSound();
-            this.gameAreaService.showError(this.isLeftCanvas, this.gameAreaService.mousePosition);
-            return;
-        }
-        this.soundService.playCorrectSound();
-        this.gameAreaService.setAllData();
-        this.gameAreaService.replaceDifference(differences);
-        if (isPlayerIdMatch) this.isFirstDifferencesFound.next(true);
-    }
+    // private replaceDifference(differences: Coordinate[], isPlayerIdMatch: boolean): void {
+    //     const hasDifferences = differences.length > 0;
+    //     if (!hasDifferences) {
+    //         this.soundService.playErrorSound();
+    //         this.gameAreaService.showError(this.isLeftCanvas, this.gameAreaService.mousePosition);
+    //         return;
+    //     }
+    //     this.soundService.playCorrectSound();
+    //     this.gameAreaService.setAllData();
+    //     this.gameAreaService.replaceDifference(differences);
+    //     if (isPlayerIdMatch) this.isFirstDifferencesFound.next(true);
+    // }
 
-    private handleRemoveDifference(data: { differencesData: Differences; playerId: string; cheatDifferences: Coordinate[][] }): void {
-        const isPlayerIdMatch = data.playerId === this.getSocketId('game');
-        if (isPlayerIdMatch) {
-            this.replaceDifference(data.differencesData.currentDifference, isPlayerIdMatch);
-            this.differencesFound.next(data.differencesData.differencesFound);
-            this.checkStatus();
-            this.captureService.saveReplayEvent(ReplayActions.DifferenceFoundUpdate, data.differencesData.differencesFound);
-        } else if (data.differencesData.currentDifference.length !== 0) {
-            this.replaceDifference(data.differencesData.currentDifference, isPlayerIdMatch);
-            this.opponentDifferencesFound.next(data.differencesData.differencesFound);
-            this.captureService.saveReplayEvent(ReplayActions.OpponentDifferencesFoundUpdate, data.differencesData.differencesFound);
-        }
-        this.differences = data.cheatDifferences;
-    }
+    // private handleRemoveDifference(data: { differencesData: Differences; playerId: string; cheatDifferences: Coordinate[][] }): void {
+    //     const isPlayerIdMatch = data.playerId === this.getSocketId('game');
+    //     if (isPlayerIdMatch) {
+    //         this.replaceDifference(data.differencesData.currentDifference, isPlayerIdMatch);
+    //         this.differencesFound.next(data.differencesData.differencesFound);
+    //         this.checkStatus();
+    //         this.captureService.saveReplayEvent(ReplayActions.DifferenceFoundUpdate, data.differencesData.differencesFound);
+    //     } else if (data.differencesData.currentDifference.length !== 0) {
+    //         this.replaceDifference(data.differencesData.currentDifference, isPlayerIdMatch);
+    //         this.opponentDifferencesFound.next(data.differencesData.differencesFound);
+    //         this.captureService.saveReplayEvent(ReplayActions.OpponentDifferencesFoundUpdate, data.differencesData.differencesFound);
+    //     }
+    //     this.differences = data.cheatDifferences;
+    // }
 }
