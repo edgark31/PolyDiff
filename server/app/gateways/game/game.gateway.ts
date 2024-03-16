@@ -142,6 +142,7 @@ export class GameGateway implements OnGatewayConnection {
                 const game = await this.nextGame(lobbyId, this.games.get(lobbyId).playedGameIds);
                 if (!game) {
                     const { winningPlayers, message } = this.limitedEndCheck(lobbyId);
+                    this.logger.log(`Game ${lobbyId} ended with ${winningPlayers.length} winners`);
                     this.server.to(lobbyId).emit(GameEvents.EndGame);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
                         raw: message,
