@@ -112,6 +112,7 @@ class _LobbyPageState extends State<LobbyPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Nombre de joueurs: ${playerNames.length}/4'),
           Text('Joueurs en ligne',
               style: Theme.of(context).textTheme.titleLarge),
           ...playerNames.map((name) => Text(name)),

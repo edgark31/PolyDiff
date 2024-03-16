@@ -8,7 +8,6 @@ class Chat {
   Chat(this.raw, this.name, this.tag, this.timestamp);
 
   static Chat fromJson(Map<String, dynamic> json) {
-    print('Chat.fromJson: $json');
     MessageTag? tag;
     if (json['tag'] != null) {
       tag = MessageTag.values
