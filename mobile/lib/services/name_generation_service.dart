@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import '../common/random_name_lists.dart';
+import 'package:mobile/constants/random_name_lists.dart';
 
 class NameGenerationService {
   String generatedName = '';
