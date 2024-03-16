@@ -5,6 +5,7 @@
 /* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { GameService } from '@app/services/game/game.service';
+import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { NOT_FOUND } from '@common/constants';
@@ -30,6 +31,7 @@ export class GameGateway implements OnGatewayConnection {
         private readonly gameService: GameService,
         private readonly roomsManager: RoomsManagerService,
         private readonly messageManager: MessageManagerService,
+        private readonly imageManager: ImageManagerService,
     ) {}
 
     // ------------------ CLASSIC MODE && LIMITED MODE ------------------
@@ -61,17 +63,7 @@ export class GameGateway implements OnGatewayConnection {
                 this.server.to(lobbyId).emit(GameEvents.StartGame, this.roomsManager.lobbies.get(lobbyId));
                 this.logger.log(`Game started in lobby -> ${lobbyId}`);
             } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
-                await this.gameService.getRandomGame([] as string[]).then((game) => {
-                    const clonedGame: Game = structuredClone({
-                        lobbyId,
-                        name: game.name,
-                        original: game.originalImage,
-                        modified: game.modifiedImage,
-                        gameId: game._id,
-                        differences: JSON.parse(game.differences) as Coordinate[][],
-                    });
-                    this.games.set(lobbyId, clonedGame);
-                });
+                await this.nextGame(lobbyId, []);
             }
             // Set timer indivually for each lobby
             const timerId = setInterval(() => {
@@ -160,9 +152,6 @@ export class GameGateway implements OnGatewayConnection {
         this.logger.log(`Game abandoned in lobby ${lobbyId}`);
     }
 
-    @SubscribeMessage(GameEvents.NextGame)
-    nextGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {}
-
     @SubscribeMessage(ChannelEvents.SendGameMessage)
     handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
         const chat: Chat = this.messageManager.createMessage(
@@ -221,5 +210,26 @@ export class GameGateway implements OnGatewayConnection {
             }
         }
         return { isGameFinished, potentialWinner };
+    }
+
+    private async nextGame(lobbyId: string, gamesPlayed: string[]) {
+        let clonedGame: Game;
+        // Picking one game randomly
+        await this.gameService.getRandomGame(gamesPlayed).then((game) => {
+            clonedGame = structuredClone({
+                lobbyId,
+                name: game.name,
+                original: game.originalImage,
+                modified: game.modifiedImage,
+                gameId: game._id,
+                differences: JSON.parse(game.differences) as Coordinate[][],
+                playedGameIds: gamesPlayed,
+            });
+        });
+        // Randomly picking one difference to keep
+        const keepIndex: number = Math.floor(Math.random() * clonedGame.differences.length);
+        const gameCopy = structuredClone(clonedGame);
+        clonedGame.modified = await this.imageManager.modifyImage(gameCopy, keepIndex);
+        this.games.set(lobbyId, clonedGame);
     }
 }
