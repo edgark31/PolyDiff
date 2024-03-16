@@ -25,39 +25,28 @@ class LobbyPage extends StatefulWidget {
 
 class _LobbyPageState extends State<LobbyPage> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<LobbyService>().addListener(_checkLobbyState);
-    });
-  }
-
-  @override
-  void dispose() {
-    context.read<LobbyService>().removeListener(_checkLobbyState);
-    super.dispose();
-  }
-
-  void _checkLobbyState() {
-    final lobbyService = context.read<LobbyService>();
-    if (lobbyService.isLobbyStarted) {
-      print('Navigating to GamePage from _checkLobbyStart');
-      Navigator.pushNamed(context, CLASSIC_ROUTE);
-      lobbyService.removeListener(_checkLobbyState); // Optimisation possible?
-    } else if (!lobbyService.isCurrentLobbyInLobbies()) {
-      print('Navigating to DashBoardPage from _checkLobbyStart');
-      Navigator.pushNamed(context, DASHBOARD_ROUTE);
-      lobbyService.removeListener(_checkLobbyState); // Optimisation possible?
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
     List<String> playerNames = lobbyService.lobby.players.map((e) {
       return e.name ?? '';
     }).toList();
     String gameModeName = lobbyService.gameModes.name;
+
+    if (!lobbyService.isCurrentLobbyInLobbies()) {
+      Future.delayed(Duration.zero, () {
+        if (ModalRoute.of(context)?.isCurrent ?? false) {
+          print('Current Lobby not in Lobbies navigating to DashBoardPage');
+          Navigator.pushNamed(context, DASHBOARD_ROUTE);
+        }
+      });
+    } else if (lobbyService.isCurrentLobbyStarted()) {
+      Future.delayed(Duration.zero, () {
+        if (ModalRoute.of(context)?.isCurrent ?? false) {
+          print('Current Lobby is started navigating to GamePage');
+          Navigator.pushNamed(context, CLASSIC_ROUTE);
+        }
+      });
+    }
 
     return BackgroundContainer(
       backgroundImagePath: SELECTION_BACKGROUND_PATH,
@@ -81,9 +70,8 @@ class _LobbyPageState extends State<LobbyPage> {
                   CustomButton(
                     text: 'Quitter la salle d\'attente',
                     press: () {
-                      print('Quitting lobby and navigating to Dashboard');
+                      print('Quitting lobby');
                       lobbyService.leaveLobby();
-                      Navigator.pushNamed(context, DASHBOARD_ROUTE);
                     },
                     backgroundColor: kMidOrange,
                   ),
@@ -106,9 +94,8 @@ class _LobbyPageState extends State<LobbyPage> {
       return CustomButton(
         text: 'Commencer la partie',
         press: () {
-          print('Starting the lobby and Navigating to GamePage');
+          print('Starting the lobby');
           lobbyService.startLobby();
-          Navigator.pushNamed(context, CLASSIC_ROUTE);
         },
         backgroundColor: kMidGreen,
       );
@@ -127,7 +114,7 @@ class _LobbyPageState extends State<LobbyPage> {
         children: [
           Text('Joueurs en ligne',
               style: Theme.of(context).textTheme.titleLarge),
-          ...playerNames.map((name) => Text(name)).toList(),
+          ...playerNames.map((name) => Text(name)),
         ],
       ),
     );

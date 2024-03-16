@@ -10,13 +10,11 @@ class LobbyService extends ChangeNotifier {
   static bool _isCreator = false;
   static List<Lobby> _lobbies = [];
   static Lobby _lobby = Lobby.initial();
-  static bool _isLobbyStarted = false;
 
   GameModes get gameModes => _gameModes;
   bool get isCreator => _isCreator;
   List<Lobby> get lobbies => _lobbies;
   Lobby get lobby => _lobby;
-  bool get isLobbyStarted => _isLobbyStarted;
 
   final SocketService socketService = Get.find();
   final LobbySelectionService lobbySelectionService = Get.find();
@@ -74,7 +72,6 @@ class LobbyService extends ChangeNotifier {
       LobbyEvents.Leave.name,
       _lobby.lobbyId,
     );
-    socketService.disconnect(SocketType.Lobby);
   }
 
   // TODO : Implement end of lobby logic
@@ -98,33 +95,36 @@ class LobbyService extends ChangeNotifier {
 
     socketService.on(SocketType.Lobby, LobbyEvents.UpdateLobbys.name, (data) {
       print('Lobbies received from LobbyEvents.UpdateLobbys : $data');
-      List<Lobby> updatedLobbies = (data as List).map<Lobby>((lobbyData) {
+      _lobbies = (data as List).map<Lobby>((lobbyData) {
         return Lobby.fromJson(lobbyData as Map<String, dynamic>);
       }).toList();
-      _lobbies = updatedLobbies;
-      // TODO : fix error if creator leaves on waiting player
       if (isCurrentLobbyInLobbies()) {
         _lobby = getLobbyFromLobbies(_lobby.lobbyId);
       }
       notifyListeners();
     });
 
-    socketService.on(SocketType.Lobby, LobbyEvents.Start.name, (data) {
-      if ((data as String) == _lobby.lobbyId) {
-        _isLobbyStarted = true;
-        notifyListeners();
-      }
-    });
+    // TODO: Implement LobbyEvents.Start Listeners ??
+    // socketService.on(SocketType.Lobby, LobbyEvents.Start.name, (data) {
+    //   if ((data as String) == _lobby.lobbyId) {
+    //     _isLobbyStarted = true;
+    //     notifyListeners();
+    //   }
+    // });
 
-    // TODO: Implement LobbyEvents.Join Listerners ??
+    // TODO: Implement LobbyEvents.Join Listeners ??
     // socketService.on(SocketType.Lobby, LobbyEvents.Join.name, (data) {
 
-    // TODO: Implement LobbyEvents.Leave Listerners to handle creator quitting
+    // TODO: Implement LobbyEvents.Leave Listeners to handle creator quitting
     // socketService.on(SocketType.Lobby, LobbyEvents.Leave.name, (data) {
   }
 
   bool isGameModesClassic() {
     return _gameModes == GameModes.Classic;
+  }
+
+  bool isCurrentLobbyStarted() {
+    return _lobby.isAvailable == false;
   }
 
   bool isCurrentLobbyInLobbies() {
