@@ -41,6 +41,7 @@ class Lobby {
     required GameModes mode,
     required int time,
     required int timeLimit,
+    required int? nDifferences,
   }) : this(
           null, // lobbyId
           gameId, // gameId
@@ -55,7 +56,7 @@ class Lobby {
           timeLimit,
           null, // bonusTime
           null, // chatLog
-          null, // nDifferences
+          nDifferences,
         );
 
   Lobby.initial()
