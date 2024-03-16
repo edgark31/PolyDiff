@@ -1,9 +1,9 @@
+import { HistoryService } from '@app/services/history/history.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
-import { GameEvents, RoomEvents, GameModes } from '@common/enums';
+import { GameEvents, GameModes, RoomEvents } from '@common/enums';
 import { GameRoom, PlayerData } from '@common/game-interfaces';
 import { Injectable } from '@nestjs/common';
 import * as io from 'socket.io';
-import { HistoryService } from '@app/services/history/history.service';
 
 @Injectable()
 export class LimitedModeService {
