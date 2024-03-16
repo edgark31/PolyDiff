@@ -75,6 +75,7 @@ class _LobbyPageState extends State<LobbyPage> {
                     press: () {
                       print('Quitting lobby');
                       lobbyService.leaveLobby();
+                      Navigator.pushNamed(context, DASHBOARD_ROUTE);
                     },
                     backgroundColor: kMidOrange,
                   ),
@@ -99,6 +100,7 @@ class _LobbyPageState extends State<LobbyPage> {
         press: () {
           print('Starting the lobby');
           lobbyService.startLobby();
+          Navigator.pushNamed(context, CLASSIC_ROUTE);
         },
         backgroundColor: kMidGreen,
       );
