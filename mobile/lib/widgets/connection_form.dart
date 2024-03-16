@@ -78,7 +78,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   label: 'Nom d\'utilisateur ou courriel',
                   controller: userNameController,
                   hint: 'Entrez votre nom d\'utilisateur',
-                  maxLength: 20,
+                  maxLength: 40,
                   isPassword: false,
                 ),
                 CustomTextInputField(
@@ -98,9 +98,9 @@ class _ConnectionFormState extends State<ConnectionForm> {
                       String? serverErrorMessage =
                           await formService.connect(credentials);
                       if (serverErrorMessage == null) {
-                        socketService.setup(
-                            SocketType.Auth, infoService.id);
-                        chatService.setGlobalChatListeners(); // TODO : move this (maybe)
+                        socketService.setup(SocketType.Auth, infoService.id);
+                        chatService
+                            .setGlobalChatListeners(); // TODO : move this (maybe)
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       } else {
                         setState(() {
