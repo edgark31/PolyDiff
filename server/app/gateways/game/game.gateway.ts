@@ -40,7 +40,6 @@ export class GameGateway implements OnGatewayConnection {
     async startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.data.state = GameState.InGame;
         socket.join(lobbyId);
-
         // Pour démarrer tout le monde en même temps
         if (Array.from(await this.server.in(lobbyId).fetchSockets()).length === this.roomsManager.lobbies.get(lobbyId).players.length) {
             if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
@@ -58,6 +57,7 @@ export class GameGateway implements OnGatewayConnection {
                     this.games.set(lobbyId, clonedGame);
                 });
                 this.server.to(lobbyId).emit(GameEvents.StartGame, this.roomsManager.lobbies.get(lobbyId));
+
                 this.logger.log(`Game started in lobby -> ${lobbyId}`);
             } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
                 // Start Limited Mode

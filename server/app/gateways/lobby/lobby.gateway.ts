@@ -93,7 +93,7 @@ export class LobbyGateway implements OnGatewayConnection {
         this.roomsManager.lobbies.get(lobbyId).isAvailable = false;
 
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
-        socket.to(lobbyId).emit(LobbyEvents.Start, lobbyId);
+        this.server.to(lobbyId).emit(LobbyEvents.Start); // petit chazngement sinonremplacement du socket par this.server
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} démarre le lobby ${lobbyId}`);
     }
 

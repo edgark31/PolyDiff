@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { GameEvents, LobbyEvents, MessageTag } from '@common/enums';
+import { LobbyEvents, MessageTag } from '@common/enums';
 import { Chat, Lobby } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
@@ -18,12 +18,10 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     chatSubscription: Subscription;
     lobbiesSubscription: Subscription;
     private lobbySubscription: Subscription;
-    private gameStartedSubscription: Subscription;
     constructor(
         public router: Router,
         public roomManagerService: RoomManagerService,
         private clientSocketService: ClientSocketService,
-        // private readonly gameManager: GameManagerService,
         public welcome: WelcomeService,
     ) {}
 
@@ -31,7 +29,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         this.roomManagerService.wait = true;
-        this.clientSocketService.connect(this.welcome.account.id as string, 'game');
+
         if (this.lobbySubscription) {
             this.lobbySubscription?.unsubscribe();
         }
@@ -55,16 +53,8 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.router.navigate(['/game-mode']);
         });
 
-        this.gameStartedSubscription = this.roomManagerService.gameStartedLobby.subscribe((gameStarted) => {
-            console.log('force à000000000000000000 ' + gameStarted);
-            this.lobby.players.forEach((player) => console.log('force player: ' + player.name));
-            if (gameStarted) {
-                console.log('force aaa1111111111 ' + gameStarted);
-                this.clientSocketService.on('game', GameEvents.StartGame, (lobby: Lobby) => {
-                    console.log('arrivé à ' + lobby.lobbyId);
-                    this.router.navigate(['/game']);
-                });
-            }
+        this.clientSocketService.on('lobby', LobbyEvents.Start, () => {
+            this.router.navigate(['/game']);
         });
     }
 
@@ -86,18 +76,15 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
 
     onStart(): void {
         this.roomManagerService.onStart(this.lobby.lobbyId ? this.lobby.lobbyId : '');
-
-        console.log('force à ' + this.lobby.lobbyId);
     }
     ngOnDestroy(): void {
         // this.onQuit();
-        // if (this.clientSocketService.isSocketAlive('lobby')) {
-        // this.clientSocketService.disconnect('lobby');
-        this.gameStartedSubscription.unsubscribe();
-        this.lobbySubscription?.unsubscribe();
-        this.chatSubscription?.unsubscribe();
-        this.roomManagerService.off();
-        // }
+        if (this.clientSocketService.isSocketAlive('lobby')) {
+            // this.clientSocketService.disconnect('lobby');
+            this.lobbySubscription?.unsubscribe();
+            this.chatSubscription?.unsubscribe();
+            this.roomManagerService.off();
+        }
         this.roomManagerService.wait = false;
     }
 }

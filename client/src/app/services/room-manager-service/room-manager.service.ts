@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
-import { ChannelEvents, GameCardEvents, GameEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
+import { ChannelEvents, GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
 import { Chat, Game, Lobby, PlayerData } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
 
@@ -16,8 +16,7 @@ export class RoomManagerService {
     lobby: Subject<Lobby>;
     wait: boolean;
     game: Game;
-    gameStarted: boolean;
-    gameStartedLobby: Subject<boolean>;
+
     private lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
     // private playerNameAvailability: Subject<PlayerNameAvailability>;
@@ -42,7 +41,6 @@ export class RoomManagerService {
         this.lobby = new Subject<Lobby>();
         this.lobbies = new Subject<Lobby[]>();
         this.joinedPlayerNames = new Subject<string[]>();
-        this.gameStartedLobby = new Subject<boolean>();
         // this.rooms1V1AvailabilityByGameId = new Subject<RoomAvailability>();
         this.deletedGameId = new Subject<string>();
         // this.refusedPlayerId = new Subject<string>();
@@ -120,10 +118,6 @@ export class RoomManagerService {
         return this.lobby.asObservable();
     }
 
-    get gameStartedLobby$() {
-        return this.gameStartedLobby.asObservable();
-    }
-
     get lobbies$() {
         return this.lobbies.asObservable();
     }
@@ -136,7 +130,6 @@ export class RoomManagerService {
         }
         if (this.message && !this.message.closed) this.message?.unsubscribe();
         if (this.lobbies && !this.lobbies.closed) this.lobbies?.unsubscribe();
-        if (this.gameStartedLobby && !this.gameStartedLobby.closed) this.gameStartedLobby?.unsubscribe();
     }
 
     sendMessage(lobbyId: string | undefined, message: string): void {
@@ -150,11 +143,6 @@ export class RoomManagerService {
 
     retrieveLobbies() {
         this.clientSocket.send('lobby', LobbyEvents.UpdateLobbys);
-    }
-
-    onStart(id: string) {
-        this.gameStartedLobby.next(true);
-        this.clientSocket.send('game', GameEvents.StartGame, id);
     }
 
     joinRoom(lobbyId: string) {
@@ -215,6 +203,9 @@ export class RoomManagerService {
         this.clientSocket.send('lobby', PlayerEvents.AcceptPlayer, { gameId, roomId, playerName });
     }
 
+    onStart(id: string) {
+        this.clientSocket.send('lobby', LobbyEvents.Start, id);
+    }
     cancelJoining(gameId: string): void {
         this.clientSocket.send('lobby', PlayerEvents.CancelJoining, gameId);
     }
@@ -269,7 +260,6 @@ export class RoomManagerService {
         this.lobby = new Subject<Lobby>();
         this.lobbies = new Subject<Lobby[]>();
         this.message = new Subject<Chat>();
-        this.gameStartedLobby = new Subject<boolean>();
         if (this.isOrganizer)
             this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby.next(lobby);
