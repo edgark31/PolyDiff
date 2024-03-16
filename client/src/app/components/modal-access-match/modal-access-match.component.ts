@@ -12,7 +12,7 @@ import { Lobby } from '@common/game-interfaces';
 })
 export class ModalAccessMatchComponent {
     @Output() loginEvent = new EventEmitter<string>();
-
+    accept: boolean;
     codeAccess: string;
     isPasswordWrong: boolean = false;
     isAccessPassInvalid: boolean = true;
@@ -29,7 +29,6 @@ export class ModalAccessMatchComponent {
     onSubmitAccess() {
         if (this.codeAccess === this.data.password) {
             this.isAccessPassInvalid = false;
-            console.log(this.data.lobbyId);
             this.roomManager.joinRoomAcces(this.data.lobbyId ? this.data.lobbyId : '', this.codeAccess);
             this.router.navigate(['/waiting-room']);
             this.dialogRef.close();
