@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/common/enums.dart';
-import 'package:mobile/models/chat_message_model.dart';
-import 'package:mobile/pages/login_page.dart';
-import 'package:mobile/services/socket_service.dart';
+import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:provider/provider.dart';
 
 class ChatBox extends StatefulWidget {
@@ -33,8 +32,18 @@ class _ChatBoxState extends State<ChatBox> {
 
   @override
   Widget build(BuildContext context) {
-    final socketService = context.watch<SocketService>();
-    final messages = socketService.allMessages;
+    final infoService = context.watch<InfoService>();
+    final username = infoService.username;
+    final chatService = context.watch<ChatService>();
+
+    // user avatar
+    String? route = ModalRoute.of(context)?.settings.name;
+    bool isGlobalChat = true;
+    if (route != null) {
+      isGlobalChat = route == CHAT_ROUTE;
+    }
+    final messages =
+        isGlobalChat ? chatService.globalMessages : chatService.lobbyMessages;
     return Container(
       width: 500,
       height: 700,
@@ -63,23 +72,9 @@ class _ChatBoxState extends State<ChatBox> {
                 Text(
                   "ZONE DE CLAVARDAGE",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 50),
-                  child: IconButton(
-                    icon: Icon(Icons.exit_to_app),
-                    onPressed: () {
-                      socketService.disconnect();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
-                    },
-                    iconSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
                 ),
               ],
@@ -92,11 +87,9 @@ class _ChatBoxState extends State<ChatBox> {
                 controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
-                  bool isSent =
-                      messages[index].userName == socketService.userName;
-                  // WidgetsBinding.instance.addPostFrameCallback((_) {
-                  //   scrollToBottom();
-                  // });
+                  // TODO : Change logic to id when implemented on server
+                  // bool isSent = messages[index].id == infoService.id;
+                  bool isSent = messages[index].name == username;
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
@@ -105,8 +98,13 @@ class _ChatBoxState extends State<ChatBox> {
                           ? CrossAxisAlignment.end
                           : CrossAxisAlignment.start,
                       children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              '$BASE_URL/avatar/${messages[index].name}.png'), // TODO : Show by userId when implement on server
+                          radius: 15.0,
+                        ),
                         Text(
-                          messages[index].userName,
+                          messages[index].name,
                           style: TextStyle(color: Colors.black),
                         ),
                         Container(
@@ -118,7 +116,7 @@ class _ChatBoxState extends State<ChatBox> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            messages[index].message,
+                            messages[index].raw,
                             style: TextStyle(color: Colors.black),
                           ),
                         ),
@@ -163,16 +161,12 @@ class _ChatBoxState extends State<ChatBox> {
                     icon: Icon(Icons.send),
                     onPressed: () {
                       String message = messageController.text;
-                      if (message.isNotEmpty &&
-                          socketService.connectionStatus) {
-                        socketService.sendMessage(
-                          ChatMessage(
-                            MessageTag.Sent,
-                            message,
-                            socketService.userName,
-                            'test',
-                          ),
-                        );
+                      if (message.isNotEmpty) {
+                        if (isGlobalChat) {
+                          chatService.sendGlobalMessage(message);
+                        } else {
+                          chatService.sendLobbyMessage(message);
+                        }
                         setState(() {});
                         messageController.clear();
                         WidgetsBinding.instance.addPostFrameCallback((_) {

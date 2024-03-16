@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
     templateUrl: './profil-page.component.html',
     styleUrls: ['./profil-page.component.scss'],
 })
-export class ProfilPageComponent implements AfterViewInit {
+export class ProfilPageComponent implements AfterViewInit, OnInit {
     selectedValue: string;
     language = LANGUAGES;
     showTable = false;
@@ -34,6 +34,10 @@ export class ProfilPageComponent implements AfterViewInit {
         private clientsocket: ClientSocketService,
         private translate: TranslateService,
     ) {}
+
+    ngOnInit() {
+        console.log(this.welcomeService.account);
+    }
 
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;

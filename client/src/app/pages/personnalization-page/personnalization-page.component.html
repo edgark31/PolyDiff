@@ -1,6 +1,7 @@
 <body>
   <!--     [ngStyle]="{'background-color': (welcomeService.chooseTheme.BackgroundColor), 'color': (welcomeService.chooseTheme.ButtonColor)}"> -->
-  <app-menu></app-menu>
+  <app-nav-bar id ="nav-bar"></app-nav-bar>
+  <!-- <app-menu></app-menu> -->
   <div class="information">{{'profil.information' | translate }}</div>
   <div class="container">
     <div class="left">
@@ -56,10 +57,13 @@
           <mat-form-field>
             <mat-label>{{'profil.theme' | translate }}</mat-label>
             <mat-select [(value)]="welcomeService.selectTheme">
-              <mat-option [value]="welcomeService.themePersonnalization[0]">{{ welcomeService.themePersonnalization[0].name }}</mat-option>
-              <mat-option [value]="welcomeService.themePersonnalization[1]">{{ welcomeService.themePersonnalization[1].name }}</mat-option>
-              <mat-option [value]="welcomeService.themePersonnalization[2]">{{ welcomeService.themePersonnalization[2].name }}</mat-option>
-            </mat-select>
+                <mat-select-trigger>
+                    {{ welcomeService.selectTheme.name }}
+                  </mat-select-trigger>
+                <mat-option *ngFor="let theme of welcomeService.themePersonnalization" [value]="theme">
+                  {{ theme.name }}
+                </mat-option>
+              </mat-select>
           </mat-form-field>
         </div>
 
@@ -83,6 +87,9 @@
         <mat-form-field>
           <mat-label>{{'profil.songError' | translate }}</mat-label>
           <mat-select [(value)]="sound.correctSoundEffect">
+            <mat-select-trigger>
+                {{ sound.correctSoundEffect.name }}
+              </mat-select-trigger>
             <mat-option [value]="welcomeService.songListDifference[0]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[0])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[0])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[0].name }}</mat-option>
             <mat-option [value]="welcomeService.songListDifference[1]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[1])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[1])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[1].name }}</mat-option>
             <mat-option [value]="welcomeService.songListDifference[2]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[2])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[2])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[2].name }}</mat-option>
@@ -95,6 +102,9 @@
         <mat-form-field>
           <mat-label>{{'profil.songDifference' | translate }}</mat-label>
           <mat-select [(value)]="sound.incorrectSoundEffect">
+            <mat-select-trigger>
+                {{sound.incorrectSoundEffect.name }}
+              </mat-select-trigger>
             <mat-option [value]="welcomeService.songListError[0]">
                 <mat-icon (mouseover)="sound.playIncorrectSound(welcomeService.songListError[0])" (mouseleave)="sound.stopIncorrectSound(welcomeService.songListError[0])" class="option-icon">headset</mat-icon>
                 {{ welcomeService.songListError[0].name }}

@@ -81,6 +81,7 @@ app.*.map.json
 **/android/**/GeneratedPluginRegistrant.java
 
 # iOS/XCode related
+/ios/
 **/ios/**/*.mode1v3
 **/ios/**/*.mode2v3
 **/ios/**/*.moved-aside
@@ -112,3 +113,12 @@ app.*.map.json
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+# macOS related
+/macos/
+
+# windows related
+/windows/
+
+# linux related
+/linux/

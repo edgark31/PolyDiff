@@ -1,113 +1,108 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/common/enums.dart';
-import 'package:mobile/models/chat_message_model.dart';
+import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends ChangeNotifier {
-  static const String serverIP = '34.118.163.79';
-  static const String serverPort = '3000';
-  static const String serverURL = 'http://$serverIP:$serverPort';
-  static IO.Socket socket = IO.io(serverURL, <String, dynamic>{
-    'transports': ['websocket'],
-    'autoConnect': false,
-  });
+  static late IO.Socket authSocket;
+  static late IO.Socket lobbySocket;
+  static late IO.Socket gameSocket;
 
-  final List<ChatMessage> messages = [];
-  String approvedName = '';
-  String inputName = '';
+  void setup(SocketType type, String id) {
+    switch (type) {
+      case SocketType.Auth:
+        authSocket = IO.io(BASE_URL, <String, dynamic>{
+          'transports': ['websocket'],
+          'autoConnect': false,
+          'forceNew': true,
+          'query': 'id=$id'
+        });
+        authSocket.connect();
+        setSocket(authSocket);
+        break;
+      case SocketType.Lobby:
+        lobbySocket = IO.io("$BASE_URL/lobby", <String, dynamic>{
+          'transports': ['websocket'],
+          'autoConnect': false,
+          'forceNew': true,
+          'query': 'id=$id'
+        });
+        lobbySocket.connect();
+        setSocket(lobbySocket);
+        break;
+      case SocketType.Game:
+        gameSocket = IO.io("$BASE_URL/game", <String, dynamic>{
+          'transports': ['websocket'],
+          'autoConnect': false,
+          'forceNew': true,
+          'query': 'id=$id',
+        });
+        gameSocket.connect();
+        setSocket(gameSocket);
+        break;
+    }
+    print("Setup ${type.name} completed for $id");
+  }
 
-  bool isConnectionApproved = false;
-  bool isSocketConnected = false;
-
-  String get userName => approvedName;
-  bool get connectionStatus => isConnectionApproved;
-  bool get socketStatus => isSocketConnected;
-  List<ChatMessage> get allMessages => List.unmodifiable(messages);
-
-  void setup() {
+  void setSocket(IO.Socket socket) {
     socket.onConnect((_) {
-      print('Connected to server on $serverIP:$serverPort');
-      isSocketConnected = true;
-      notifyListeners();
+      print('Connected to server on $BASE_URL');
+      print("Connected socket id : ${socket.id}");
     });
-    socket.onConnectError((data) => print('Connection error: $data'));
+
+    socket.onConnectError((data) {
+      print("Connection error for socket id : ${socket.id}");
+      print('Connection error: $data');
+    });
+
     socket.onDisconnect((_) {
-      print('Disconnected from server');
-      isSocketConnected = false;
-      isConnectionApproved = false;
-
-      notifyListeners();
+      print('Disconnected from server on $BASE_URL');
     });
-
-    //Event listeners
-    socket.on(ConnectionEvents.UserConnectionRequest.name, (data) {
-      print('UserConnectionRequest: $data');
-      isConnectionApproved = data;
-      if (!isConnectionApproved) {
-        disconnect();
-      } else if (inputName != '') {
-        approvedName = inputName;
-      }
-      connectionStatus
-          ? print('Connection approved')
-          : print('Connection denied');
-      notifyListeners();
-    });
-
-    socket.on(MessageEvents.GlobalMessage.name, (data) {
-      print('GlobalMessage received: $data');
-      ChatMessage message = ChatMessage.fromJson(data);
-      print('Message: ${message.message}');
-      print('Tag: ${message.tag}');
-      print('User: ${message.userName}');
-      print('Timestamp: ${message.timestamp}');
-      addMessage(message);
-      notifyListeners();
-    });
-
-    print('Socket setup complete');
   }
 
-  void connect() {
-    socket.connect();
-    messages.clear(); // TODO : Figure out if we need this
+  void send<T>(SocketType type, String event, [T? data]) {
+    switch (type) {
+      case SocketType.Auth:
+        authSocket.emit(event, data);
+        break;
+      case SocketType.Lobby:
+        lobbySocket.emit(event, data);
+        break;
+      case SocketType.Game:
+        gameSocket.emit(event, data);
+        break;
+    }
   }
 
-  void disconnect() {
-    approvedName = '';
-    inputName = '';
-    socket.disconnect();
+  void on<T>(SocketType type, String event, Function(T) action) {
+    switch (type) {
+      case SocketType.Auth:
+        authSocket.on(event, (data) => action(data as T));
+        break;
+      case SocketType.Lobby:
+        lobbySocket.on(event, (data) => action(data as T));
+        break;
+      case SocketType.Game:
+        gameSocket.on(event, (data) => action(data as T));
+        break;
+    }
   }
 
-  void sendTestMessage() {
-    print('Sending test message');
-    final ChatMessage testMessage = ChatMessage(
-      MessageTag.Sent,
-      'test message',
-      'Zooboomafoo',
-      'test',
-    );
-    socket.emit(MessageEvents.GlobalMessage.name, testMessage.toJson());
-  }
-
-  void sendMessage(ChatMessage message) {
-    print('Sending message');
-    socket.emit(MessageEvents.GlobalMessage.name, message.toJson());
-  }
-
-  void addMessage(ChatMessage message) {
-    messages.add(message);
-    notifyListeners();
-    print(allMessages.length);
-  }
-
-  void checkName(String name) {
-    socket.dispose();
-    setup();
-    connect();
-
-    print('Checking name : $name');
-    socket.emit(ConnectionEvents.UserConnectionRequest.name, name);
-    inputName = name;
+  void disconnect(SocketType type) {
+    print("Disconnecting socket $type");
+    switch (type) {
+      case SocketType.Auth:
+        authSocket.disconnect();
+        authSocket.clearListeners();
+        break;
+      case SocketType.Lobby:
+        lobbySocket.disconnect();
+        lobbySocket.clearListeners();
+        break;
+      case SocketType.Game:
+        gameSocket.disconnect();
+        gameSocket.clearListeners();
+        break;
+    }
   }
 }
