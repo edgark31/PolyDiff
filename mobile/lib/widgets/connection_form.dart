@@ -90,7 +90,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
         SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.only(
-                top: bottomPadding, left: 16, right: 16, bottom: 16),
+                top: bottomPadding, left: 1, right: 16, bottom: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -100,7 +100,7 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   style: appstyle(60, kLightOrange, FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 40),
                 CustomTextInputField(
                   label: 'Nom d\'utilisateur ou courriel',
                   controller: usernameController,
@@ -123,39 +123,32 @@ class _ConnectionFormState extends State<ConnectionForm> {
                   maxLength: 20,
                   isPassword: true,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomButton(
-                      press: () async {
-                        if (isFormValid()) {
-                          Credentials credentials = Credentials(
-                            username: usernameController.text,
-                            password: passwordController.text,
-                          );
-                          String? serverErrorMessage =
-                              await formService.connect(credentials);
-                          if (serverErrorMessage == null) {
-                            socketService.setup(
-                                SocketType.Auth, infoService.id);
-                            chatService.setGlobalChatListeners();
-                            Navigator.pushNamed(context, DASHBOARD_ROUTE);
-                          }
-                        }
-                      },
-                      backgroundColor: kMidOrange,
-                      textColor: kLight,
-                      text: SIGN_IN_BTN_TXT,
-                    ),
-                    SizedBox(width: 125),
-                    CustomButton(
-                        text: SIGN_UP_BTN_TXT,
-                        press: () =>
-                            Navigator.pushNamed(context, SIGN_UP_ROUTE),
-                        backgroundColor: kMidGreen,
-                        textColor: kLight),
-                  ],
+                CustomButton(
+                  press: () async {
+                    if (isFormValid()) {
+                      Credentials credentials = Credentials(
+                        username: usernameController.text,
+                        password: passwordController.text,
+                      );
+                      String? serverErrorMessage =
+                          await formService.connect(credentials);
+                      if (serverErrorMessage == null) {
+                        socketService.setup(SocketType.Auth, infoService.id);
+                        chatService.setGlobalChatListeners();
+                        Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                      }
+                    }
+                  },
+                  backgroundColor: kMidGreen,
+                  textColor: kLight,
+                  text: SIGN_IN_BTN_TXT,
                 ),
+                SizedBox(height: 30),
+                CustomButton(
+                    text: SIGN_UP_BTN_TXT,
+                    press: () => Navigator.pushNamed(context, SIGN_UP_ROUTE),
+                    backgroundColor: kMidOrange,
+                    textColor: kLight),
               ],
             ),
           ),

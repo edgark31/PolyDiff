@@ -9,18 +9,17 @@ import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/utils/credentials_validation.dart';
 import 'package:mobile/widgets/avatar_picker.dart';
-import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
 import 'package:mobile/widgets/username_generator.dart';
 import 'package:provider/provider.dart';
 
-class SignUp extends StatefulWidget {
+class SignUpForm extends StatefulWidget {
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final FormService formService = FormService();
 
@@ -154,58 +153,67 @@ class _SignUpState extends State<SignUp> {
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Center(
-                child: Text(SIGN_UP_BTN_TXT,
-                    style: appstyle(24, kMidOrange, FontWeight.bold)),
-              ),
-              SizedBox(height: 20),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    buildSelectedAvatar(),
-                    SizedBox(width: 100),
-                    buildAvatarPicker(),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              Center(child: buildFieldsWithGenerator()),
-            ],
-          ),
+          padding: const EdgeInsets.all(20),
+          child: buildFieldsWithGenerator(),
         ),
       ),
     );
   }
 
   Widget buildFieldsWithGenerator() {
-    return Stack(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 80.0),
+        Flexible(
+          flex: 1,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              buildUsernameField(),
-              buildEmailField(),
-              buildPasswordField(),
-              buildPasswordConfirmationField(),
-              buildSubmitButton(),
-              buildLoginLink(),
+              buildSelectedAvatar(),
+              SizedBox(height: 30),
+              Container(
+                width: 450,
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                decoration: BoxDecoration(
+                  color: kLight,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    buildUsernameField(),
+                    buildEmailField(),
+                    buildPasswordField(),
+                    buildPasswordConfirmationField(),
+                    buildSubmitButton(),
+                    buildLoginLink(),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-        Positioned(
-          top: 20,
-          right: 200,
-          child: UsernameGenerator(onUsernameGenerated: (generatedName) {
-            usernameController.text = generatedName;
-            validateUsername();
-          }),
+        Flexible(
+          flex: 1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              buildAvatarPicker(),
+              SizedBox(height: 30),
+              UsernameGenerator(onUsernameGenerated: (generatedName) {
+                usernameController.text = generatedName;
+                validateUsername();
+              }),
+            ],
+          ),
         ),
       ],
     );
@@ -233,9 +241,11 @@ class _SignUpState extends State<SignUp> {
           controller: usernameController,
           hint: "Entrez votre nom d'utilisateur",
           helperText: 'Non vide: $usernameFormat',
-          errorText: _validator.states['username'] == ValidatorState.isInvalid
+          errorText: _validator.states['username'] == ValidatorState.isEmpty
               ? "Nom d'utilisateur requis"
-              : null,
+              : _validator.states['username'] == ValidatorState.isInvalid
+                  ? "Format invalide"
+                  : null,
           maxLength: 20,
         ),
         SizedBox(height: 10),
@@ -248,13 +258,15 @@ class _SignUpState extends State<SignUp> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextInputField(
-          label: "Email",
+          label: "Adresse courriel",
           controller: emailController,
           hint: "ex: john.doe@gmail.com",
           helperText: 'Format valide requis: $emailFormat',
-          errorText: _validator.states['email'] == ValidatorState.isInvalid
-              ? "Courriel requis ou invalide"
-              : null,
+          errorText: _validator.states['email'] == ValidatorState.isEmpty
+              ? "Adresse courriel requise"
+              : _validator.states['email'] == ValidatorState.isInvalid
+                  ? "Format est invalide"
+                  : null,
           maxLength: 40,
         ),
         SizedBox(height: 10),
@@ -271,7 +283,7 @@ class _SignUpState extends State<SignUp> {
           controller: passwordController,
           hint: "Entrez votre mot de passe",
           helperText: 'Force du mot de passe: $passwordStrength',
-          errorText: _validator.states['password'] == ValidatorState.isInvalid
+          errorText: _validator.states['password'] == ValidatorState.isEmpty
               ? "Mot de passe requis"
               : null,
           maxLength: 20,
@@ -294,9 +306,12 @@ class _SignUpState extends State<SignUp> {
               'Doit correspondre au mot de passe: $passwordConfirmation',
           maxLength: 40,
           errorText: _validator.states['passwordConfirmation'] ==
-                  ValidatorState.isInvalid
-              ? "Les mots de passes doivent être identiques"
-              : null,
+                  ValidatorState.isEmpty
+              ? "Veuillez confirmer votre mot de passe"
+              : _validator.states['passwordConfirmation'] ==
+                      ValidatorState.isInvalid
+                  ? "Les mots de passes doivent être identiques"
+                  : null,
           isPassword: true,
         ),
         SizedBox(height: 10),
@@ -308,14 +323,11 @@ class _SignUpState extends State<SignUp> {
     return Center(
       child: Padding(
         padding: EdgeInsets.only(top: 10),
-        child: InkWell(
-          onTap: () => Navigator.pushNamed(context, LOGIN_ROUTE),
-          child: Text(
-            "Se connecter",
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: kDarkGreen),
-          ),
-        ),
+        child: CustomButton(
+            text: SIGN_IN_BTN_TXT,
+            press: () => Navigator.pushNamed(context, LOGIN_ROUTE),
+            backgroundColor: kMidGreen,
+            textColor: kLight),
       ),
     );
   }
@@ -341,13 +353,11 @@ class _SignUpState extends State<SignUp> {
     return AvatarPicker(
       onAvatarSelected: (ImageProvider image, {String? id, String? base64}) {
         if (id != null) {
-          // predefined avatar selected
           setPredefinedAvatarSelection(id);
         } else if (base64 != null) {
-          // camera image selected
           setCameraAvatarSelection(base64);
         }
-        // update UI, no upload required
+        // Updates the UI
         setState(() {
           _selectedAvatar = image;
         });

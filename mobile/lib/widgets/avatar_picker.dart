@@ -40,7 +40,6 @@ class _AvatarPickerState extends State<AvatarPicker> {
     return Center(
       child: Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.symmetric(vertical: 20.0),
         height: 120,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -62,10 +61,19 @@ class _AvatarPickerState extends State<AvatarPicker> {
                   _handlePredefinedAvatarSelection('2');
                 },
                 child: avatarContainer(
-                    NetworkImage(getDefaultAvatarUrl('2')), kLightGreen),
+                    NetworkImage(getDefaultAvatarUrl('2')), kLime),
+              ),
+              // Second predefined avatar container
+              SizedBox(width: 20),
+
+              GestureDetector(
+                onTap: () {
+                  _handlePredefinedAvatarSelection('3');
+                },
+                child: avatarContainer(
+                    NetworkImage(getDefaultAvatarUrl('3')), kMidGreen),
               ),
               SizedBox(width: 20),
-              // TODO: Third predefined avatar container
               // Tablet camera image container
               GestureDetector(
                 onTap: () => _handleCameraImageSelection(),
@@ -86,7 +94,6 @@ class _AvatarPickerState extends State<AvatarPicker> {
     );
   }
 
-  // TODO: remplace with reusable component
   Widget avatarContainer(ImageProvider image, Color backgroundColor) {
     return SizedBox(
       width: 100,

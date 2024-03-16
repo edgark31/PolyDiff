@@ -95,7 +95,7 @@ class CredentialsValidator {
   };
 
   bool isValidUsername(String username) {
-    var state =
+    ValidatorState state =
         username.isNotEmpty ? ValidatorState.isValid : ValidatorState.isInvalid;
 
     states['username'] = state;
@@ -105,7 +105,7 @@ class CredentialsValidator {
   }
 
   bool isValidEmail(String email) {
-    var state = emailRegex.hasMatch(email) && email.isNotEmpty
+    ValidatorState state = emailRegex.hasMatch(email) && email.isNotEmpty
         ? ValidatorState.isValid
         : ValidatorState.isInvalid;
 
@@ -118,7 +118,7 @@ class CredentialsValidator {
   void updatePasswordStrength(String password) {
     if (password.isEmpty) {
       passwordStrength = '';
-      states['password'] = ValidatorState.isInvalid;
+      states['password'] = ValidatorState.isEmpty;
       return;
     }
 
