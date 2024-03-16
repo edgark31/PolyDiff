@@ -32,6 +32,7 @@ export class LobbyGateway implements OnGatewayConnection {
         const player: Player = {
             accountId: socket.data.accountId,
             name: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+            count: 0,
         };
         lobby.players.push(player);
         lobby.chatLog = { chat: [], channelName: 'lobby' } as ChatLog;
@@ -53,6 +54,7 @@ export class LobbyGateway implements OnGatewayConnection {
         const player: Player = {
             accountId: socket.data.accountId,
             name: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+            count: 0,
         };
         this.roomsManager.lobbies.get(lobbyId).players.push(player);
         this.server.to(lobbyId).emit(LobbyEvents.Join, this.roomsManager.lobbies.get(lobbyId));
@@ -129,7 +131,6 @@ export class LobbyGateway implements OnGatewayConnection {
                 case LobbyState.Idle:
                     break;
                 case LobbyState.Waiting: // ta deja rejoint une room
-                    socket.data.state = LobbyState.Idle;
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
                     break;
