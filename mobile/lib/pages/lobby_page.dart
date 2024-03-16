@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/chat_box.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
@@ -27,6 +28,7 @@ class _LobbyPageState extends State<LobbyPage> {
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
+    final chatService = context.watch<ChatService>();
     List<String> playerNames = lobbyService.lobby.players.map((e) {
       return e.name ?? '';
     }).toList();
@@ -43,6 +45,7 @@ class _LobbyPageState extends State<LobbyPage> {
       Future.delayed(Duration.zero, () {
         if (ModalRoute.of(context)?.isCurrent ?? false) {
           print('Current Lobby is started navigating to GamePage');
+          chatService.clearLobbyMessages();
           Navigator.pushNamed(context, CLASSIC_ROUTE);
         }
       });
@@ -112,6 +115,7 @@ class _LobbyPageState extends State<LobbyPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Nombre de joueurs: ${playerNames.length}/4'),
           Text('Joueurs en ligne',
               style: Theme.of(context).textTheme.titleLarge),
           ...playerNames.map((name) => Text(name)),
