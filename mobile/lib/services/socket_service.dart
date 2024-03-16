@@ -9,16 +9,13 @@ class SocketService extends ChangeNotifier {
   static late IO.Socket gameSocket;
 
   void setup(SocketType type, String id) {
-    print('Setup ${type.name} started for $id');
     switch (type) {
       case SocketType.Auth:
-        String query = 'id=$id';
-        print('Sending a query as $query');
         authSocket = IO.io(BASE_URL, <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': false,
           'forceNew': true,
-          'query': query
+          'query': 'id=$id'
         });
         authSocket.connect();
         setSocket(authSocket);
@@ -48,8 +45,6 @@ class SocketService extends ChangeNotifier {
   }
 
   void setSocket(IO.Socket socket) {
-    print('Setting socket id : ${socket.id}');
-
     socket.onConnect((_) {
       print('Connected to server on $BASE_URL');
       print("Connected socket id : ${socket.id}");
@@ -62,7 +57,6 @@ class SocketService extends ChangeNotifier {
 
     socket.onDisconnect((_) {
       print('Disconnected from server on $BASE_URL');
-      print("Disconnected socket id : ${socket.id}");
     });
   }
 

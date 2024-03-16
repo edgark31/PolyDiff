@@ -130,7 +130,6 @@ export class LobbyGateway implements OnGatewayConnection {
                 case LobbyState.Idle:
                     break;
                 case LobbyState.Waiting: // ta deja rejoint une room
-                    socket.data.state = LobbyState.Idle;
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
                     break;

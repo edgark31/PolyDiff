@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+/* eslint-disable object-shorthand */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-case-declarations */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
@@ -151,7 +158,6 @@ export class GameGateway implements OnGatewayConnection {
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
                 case GameState.InGame:
-                    // eslint-disable-next-line no-case-declarations
                     const lobbyId = Array.from(socket.rooms)[1] as string;
                     if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
                         this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');

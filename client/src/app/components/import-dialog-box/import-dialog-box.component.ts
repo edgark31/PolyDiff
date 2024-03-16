@@ -4,9 +4,9 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 
 @Component({
-    selector: 'app-import-dialog',
-    templateUrl: './import-dialog.component.html',
-    styleUrls: ['./import-dialog.component.scss'],
+    selector: 'app-import-dialog-box',
+    templateUrl: './import-dialog-box.component.html',
+    styleUrls: ['./import-dialog-box.component.scss'],
 })
 export class ImportDialogComponent {
     imageData: string;
@@ -45,7 +45,7 @@ export class ImportDialogComponent {
     }
 
     verifyAccount(): void {
-        if (this.welcomeService.account) this.welcomeService.selectAvatarRegister = this.choice;
+        if (!this.welcomeService.account) this.welcomeService.selectAvatarRegister = this.choice;
         else this.welcomeService.selectAvatar = this.choice;
     }
     chooseImage(id: string): void {

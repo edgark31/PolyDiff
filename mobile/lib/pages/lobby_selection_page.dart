@@ -3,6 +3,7 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
@@ -37,10 +38,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     String creationRoute = lobbyService.isGameModesClassic()
         ? CREATE_ROOM_CARD_ROUTE
         : CREATE_ROOM_OPTIONS_ROUTE;
-    final lobbiesFromServerOfSpecificMode = lobbyService.lobbies
-        .where((lobby) =>
-            lobby.mode == lobbyService.gameModes && lobby.players.isNotEmpty)
-        .toList();
+    final lobbiesFromServer = lobbyService.filterLobbies();
+    final gameModeName = lobbyService.gameModes.name;
     return Scaffold(
       // drawer: CustomMenuDrawer(),
       // appBar: CustomAppBar(),
@@ -53,18 +52,18 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                       onPressed: () =>
                           Navigator.pushNamed(context, creationRoute),
                       child: Text(
-                        'Créer une salle pour le mode ${lobbyService.gameModesName}',
+                        'Créer une salle pour le mode $gameModeName',
                       )),
-                  lobbiesFromServerOfSpecificMode.isEmpty
+                  lobbiesFromServer.isEmpty
                       ? Text(
-                          'Aucune salle d\'attente disponible pour le Mode ${lobbyService.gameModes}')
+                          'Aucune salle d\'attente disponible pour le Mode $gameModeName')
                       : ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: lobbiesFromServerOfSpecificMode.length,
+                          itemCount: lobbiesFromServer.length,
                           itemBuilder: (context, index) {
-                            return buildLobbyCard(context,
-                                lobbiesFromServerOfSpecificMode[index]);
+                            return buildLobbyCard(
+                                context, lobbiesFromServer[index]);
                           },
                         ),
                 ],
@@ -85,6 +84,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     String nPlayers = 'Nombre de joueurs: ${lobby.players.length}/4';
     String playerNames = lobby.players.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
+    final chatService = context.watch<ChatService>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -122,9 +122,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                         ? const Text('Salle d\'attente pleine')
                         : CustomButton(
                             press: () {
-                              print("Selected lobby with id: ${lobby.lobbyId}");
-                              lobbyService.setIsCreator(false);
                               lobbyService.joinLobby(lobby.lobbyId);
+                              chatService.setLobbyMessages(lobby.chatLog!.chat);
                               Navigator.pushNamed(context, LOBBY_ROUTE);
                             },
                             text: 'Rejoindre cette salle d\'attente',

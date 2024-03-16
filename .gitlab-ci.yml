@@ -70,7 +70,7 @@ install:server:
 lint:client:
     stage: lint
     needs: ['install:client']
-    allow_failure: true
+    allow_failure: false
     <<: *only-client
     script:
         - cd client
@@ -79,7 +79,7 @@ lint:client:
 lint:server:
     stage: lint
     needs: ['install:server']
-    allow_failure: true
+    allow_failure: false
     <<: *only-server
     script:
         - cd server
