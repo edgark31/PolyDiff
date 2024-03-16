@@ -29,7 +29,7 @@ export class RoomSheetComponent {
             this.router.navigate(['/waiting-room']);
         } else
             this.dialog.open(ModalAccessMatchComponent, {
-                data: lobby.password,
+                data: lobby,
             });
     }
 }

@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
+import { Lobby } from '@common/game-interfaces';
 
 @Component({
     selector: 'app-modal-access-match',
@@ -20,23 +22,18 @@ export class ModalAccessMatchComponent {
         private router: Router,
         public dialogRef: MatDialogRef<ModalAccessMatchComponent>,
         public clientSocketService: ClientSocketService,
+        public roomManager: RoomManagerService,
+        @Inject(MAT_DIALOG_DATA) public data: Lobby,
     ) {}
 
-    // async onSubmitAccess() {
-    //     this.welcomeService.validateAccess(this.codeAccess).then((isValid) => {
-    //         if (isValid) {
-    //             this.isAccessPassInvalid = false;
-    //             this.router.navigate(['/Joining-room']);
-    //             this.dialogRef.close();
-    //         }
-    //     });
-    // }
-
     onSubmitAccess() {
-        this.isAccessPassInvalid = false;
-        // rajouter le socket
-        this.dialogRef.close();
-        this.router.navigate(['/waiting-room']);
+        if (this.codeAccess === this.data.password) {
+            this.isAccessPassInvalid = false;
+            console.log(this.data.lobbyId);
+            this.roomManager.joinRoomAcces(this.data.lobbyId ? this.data.lobbyId : '', this.codeAccess);
+            this.router.navigate(['/waiting-room']);
+            this.dialogRef.close();
+        }
     }
 
     onCancel(): void {
