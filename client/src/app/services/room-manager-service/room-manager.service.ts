@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
+
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { ChannelEvents, GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
-import { Chat, Lobby, PlayerData } from '@common/game-interfaces';
+import { Chat, Game, Lobby, PlayerData } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -10,10 +11,11 @@ import { Subject } from 'rxjs';
 })
 export class RoomManagerService {
     password: string;
+    lobbyGame: Lobby;
     isOrganizer: boolean;
     lobby: Subject<Lobby>;
     wait: boolean;
-    // player: Player[];
+    game: Game;
 
     private lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
@@ -254,11 +256,17 @@ export class RoomManagerService {
         if (this.isOrganizer)
             this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby.next(lobby);
+                this.lobbyGame = lobby;
             });
         else
             this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
+                this.lobbyGame = lobby;
                 this.lobby.next(lobby);
             });
+        this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
+            this.lobbies.next(lobbies);
+        });
+
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });

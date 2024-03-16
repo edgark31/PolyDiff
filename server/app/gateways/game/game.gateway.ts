@@ -11,15 +11,21 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({
-    namespace: '/game',
-})
+@WebSocketGateway(
+    WebSocketGateway({
+        cors: {
+            origin: '*',
+        },
+    }),
+)
 @Injectable()
 export class GameGateway implements OnGatewayConnection {
     @WebSocketServer() private server: Server;
     games = new Map<string, Game>();
     timers = new Map<string, NodeJS.Timeout>();
 
+    // gateway needs to be injected all the services that it needs to use
+    // eslint-disable-next-line max-params -- services are needed for the gateway
     constructor(
         private readonly logger: Logger,
         private readonly accountManager: AccountManagerService,
@@ -143,7 +149,8 @@ export class GameGateway implements OnGatewayConnection {
     nextGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {}
 
     handleConnection(@ConnectedSocket() socket: Socket) {
-        socket.data.accountId = socket.handshake.query.id as string;
+        this.logger.log(`Connexion par l'utilisateur avec id : ${socket.id}`);
+    }
 
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
