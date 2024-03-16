@@ -5,7 +5,7 @@ import { GameDetails } from '@app/interfaces/game-interfaces';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Account, CarouselPaginator, Credentials, GameConfigConst, GameHistory, Song, Theme } from './../../../../../common/game-interfaces';
+import { Account, CarouselPaginator, Credentials, Game, GameConfigConst, GameHistory, Song, Theme } from './../../../../../common/game-interfaces';
 
 @Injectable({
     providedIn: 'root',
@@ -173,6 +173,10 @@ export class CommunicationService {
 
     deleteGameById(id: string): Observable<void> {
         return this.http.delete<void>(`${this.gameUrl}/${id}`);
+    }
+
+    getGameById(id: string): Observable<Game> {
+        return this.http.get<Game>(`${this.gameUrl}/${id}`).pipe(catchError(this.handleError<Game>(`getGameById id=${id}`)));
     }
 
     deleteAllGames(): Observable<void> {

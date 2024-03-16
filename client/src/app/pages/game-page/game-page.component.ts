@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GamePageDialogComponent } from '@app/components/game-page-dialog/game-page-dialog.component';
@@ -10,21 +10,21 @@ import { GameAreaService } from '@app/services/game-area-service/game-area.servi
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameModes, GamePageEvent, MessageTag } from '@common/enums';
 import { ChatMessage, ClientSideGame, Players } from '@common/game-interfaces';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-game-page',
     templateUrl: './game-page.component.html',
     styleUrls: ['./game-page.component.scss'],
 })
-export class GamePageComponent implements AfterViewInit, OnDestroy {
+export class GamePageComponent implements OnDestroy, OnInit {
     @ViewChild('originalCanvas', { static: false }) originalCanvas!: ElementRef<HTMLCanvasElement>;
     @ViewChild('modifiedCanvas', { static: false }) modifiedCanvas!: ElementRef<HTMLCanvasElement>;
-    @ViewChild('originalCanvasFG', { static: false }) private originalCanvasForeground!: ElementRef<HTMLCanvasElement>;
-    @ViewChild('modifiedCanvasFG', { static: false }) private modifiedCanvasForeground!: ElementRef<HTMLCanvasElement>;
+    @ViewChild('originalCanvasFG', { static: false }) originalCanvasForeground!: ElementRef<HTMLCanvasElement>;
+    @ViewChild('modifiedCanvasFG', { static: false }) modifiedCanvasForeground!: ElementRef<HTMLCanvasElement>;
     game: ClientSideGame;
     differencesFound: number;
     opponentDifferencesFound: number;
@@ -36,19 +36,22 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     isReplayAvailable: boolean;
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
-    private onDestroy$: Subject<void>;
+    // private onDestroy$: Subject<void>;
 
     // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
     constructor(
+        replayService: ReplayService,
+        router: Router,
+        imageService: ImageService,
         private readonly gameAreaService: GameAreaService,
         private readonly gameManager: GameManagerService,
-        private readonly imageService: ImageService,
+        // private clientSocket: ClientSocketService,
+        public welcome: WelcomeService,
+
         private readonly matDialog: MatDialog,
-        private readonly replayService: ReplayService,
-        private readonly router: Router,
     ) {
-        this.gameManager.manageSocket();
+        // this.gameManager.manageSocket();
         this.differencesFound = 0;
         this.opponentDifferencesFound = 0;
         this.timer = 0;
@@ -59,7 +62,7 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
         this.canvasSize = CANVAS_MEASUREMENTS;
         this.isReplayAvailable = false;
         this.gameMode = GameModes;
-        this.onDestroy$ = new Subject();
+        // this.onDestroy$ = new Subject();
     }
 
     private get differences(): Coordinate[][] {
@@ -76,20 +79,20 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
             }
         }
     }
-
-    ngAfterViewInit(): void {
-        this.gameManager.startGame();
-        // this.getPlayers();
-        this.setUpGame();
-        this.setUpReplay();
-        this.updateTimer();
-        this.handleDifferences();
-        this.handleMessages();
-        this.showEndMessage();
-        this.updateIfFirstDifferencesFound();
-        this.updateGameMode();
-        this.handlePageRefresh();
-    }
+    ngOnInit(): void {}
+    // ngAfterViewInit(): void {
+    //     // this.gameManager.startGame();
+    //     // // this.getPlayers();
+    //     // this.setUpGame();
+    //     // this.setUpReplay();
+    //     // this.updateTimer();
+    //     // this.handleDifferences();
+    //     // this.handleMessages();
+    //     // this.showEndMessage();
+    //     // this.updateIfFirstDifferencesFound();
+    //     // this.updateGameMode();
+    //     // this.handlePageRefresh();
+    // }
     showAbandonDialog(): void {
         this.matDialog.open(GamePageDialogComponent, {
             data: { action: GamePageEvent.Abandon, message: 'Êtes-vous certain de vouloir abandonner la partie ? ' },
@@ -115,70 +118,70 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.onDestroy$.next();
-        this.onDestroy$.complete();
-        this.gameAreaService.resetCheatMode();
-        this.gameManager.removeAllListeners('game');
+        // this.onDestroy$.next();
+        // this.onDestroy$.complete();
+        // this.gameAreaService.resetCheatMode();
+        // this.gameManager.removeAllListeners('game');
     }
 
-    private isLimitedMode(): boolean {
-        return this.game.mode === GameModes.LimitedCoop || this.game.mode === GameModes.LimitedSolo;
-    }
+    // private isLimitedMode(): boolean {
+    //     return this.game.mode === GameModes.LimitedCoop || this.game.mode === GameModes.LimitedSolo;
+    // }
 
-    private showEndGameDialog(endingMessage: string): void {
-        this.matDialog.open(GamePageDialogComponent, {
-            data: { action: GamePageEvent.EndGame, message: endingMessage, isReplayMode: this.game?.mode.includes('Classic') },
-            disableClose: true,
-            panelClass: 'dialog',
-        });
-        if (this.game?.mode.includes('Classic')) this.isReplayAvailable = true;
-    }
+    // private showEndGameDialog(endingMessage: string): void {
+    //     this.matDialog.open(GamePageDialogComponent, {
+    //         data: { action: GamePageEvent.EndGame, message: endingMessage, isReplayMode: this.game?.mode.includes('Classic') },
+    //         disableClose: true,
+    //         panelClass: 'dialog',
+    //     });
+    //     if (this.game?.mode.includes('Classic')) this.isReplayAvailable = true;
+    // }
 
-    private updateTimer(): void {
-        this.gameManager.timer$.pipe(takeUntil(this.onDestroy$)).subscribe((timer) => {
-            this.timer = timer;
-        });
-    }
+    // private updateTimer(): void {
+    //     this.gameManager.timer$.pipe(takeUntil(this.onDestroy$)).subscribe((timer) => {
+    //         this.timer = timer;
+    //     });
+    // }
 
-    private handleMessages(): void {
-        this.gameManager.message$.pipe(takeUntil(this.onDestroy$)).subscribe((message) => {
-            this.messages.push(message);
-        });
-    }
+    // private handleMessages(): void {
+    //     this.gameManager.message$.pipe(takeUntil(this.onDestroy$)).subscribe((message) => {
+    //         this.messages.push(message);
+    //     });
+    // }
 
-    private showEndMessage(): void {
-        this.gameManager.endMessage$.pipe(takeUntil(this.onDestroy$)).subscribe((endMessage) => {
-            this.showEndGameDialog(endMessage);
-        });
-    }
+    // private showEndMessage(): void {
+    //     this.gameManager.endMessage$.pipe(takeUntil(this.onDestroy$)).subscribe((endMessage) => {
+    //         this.showEndGameDialog(endMessage);
+    //     });
+    // }
 
-    private handleDifferences(): void {
-        this.gameManager.differencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((differencesFound) => {
-            this.differencesFound = differencesFound;
-        });
+    // private handleDifferences(): void {
+    //     this.gameManager.differencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((differencesFound) => {
+    //         this.differencesFound = differencesFound;
+    //     });
 
-        this.gameManager.opponentDifferencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((opponentDifferencesFound) => {
-            this.opponentDifferencesFound = opponentDifferencesFound;
-        });
-    }
+    //     this.gameManager.opponentDifferencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((opponentDifferencesFound) => {
+    //         this.opponentDifferencesFound = opponentDifferencesFound;
+    //     });
+    // }
 
-    private updateIfFirstDifferencesFound(): void {
-        this.gameManager.isFirstDifferencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((isFirstDifferencesFound) => {
-            if (isFirstDifferencesFound && this.isLimitedMode()) this.gameManager.startNextGame();
-        });
-    }
+    // private updateIfFirstDifferencesFound(): void {
+    //     this.gameManager.isFirstDifferencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((isFirstDifferencesFound) => {
+    //         if (isFirstDifferencesFound && this.isLimitedMode()) this.gameManager.startNextGame();
+    //     });
+    // }
 
-    private updateGameMode(): void {
-        this.gameManager.isGameModeChanged$.pipe(takeUntil(this.onDestroy$)).subscribe((isGameModeChanged) => {
-            if (isGameModeChanged) this.game.mode = GameModes.LimitedSolo;
-        });
-    }
+    // private updateGameMode(): void {
+    //     this.gameManager.isGameModeChanged$.pipe(takeUntil(this.onDestroy$)).subscribe((isGameModeChanged) => {
+    //         if (isGameModeChanged) this.game.mode = GameModes.LimitedSolo;
+    //     });
+    // }
 
-    private handlePageRefresh(): void {
-        this.gameManager.isGamePageRefreshed$.pipe(takeUntil(this.onDestroy$)).subscribe((isGamePageRefreshed) => {
-            if (isGamePageRefreshed) this.router.navigate(['/']);
-        });
-    }
+    // private handlePageRefresh(): void {
+    //     this.gameManager.isGamePageRefreshed$.pipe(takeUntil(this.onDestroy$)).subscribe((isGamePageRefreshed) => {
+    //         if (isGamePageRefreshed) this.router.navigate(['/']);
+    //     });
+    // }
 
     // private getPlayers(): void {
     //     this.gameManager.players$.pipe(takeUntil(this.onDestroy$)).subscribe((players) => {
@@ -191,52 +194,52 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     //     });
     // }
 
-    private setUpGame(): void {
-        this.gameManager.currentGame$.pipe(takeUntil(this.onDestroy$)).subscribe((game) => {
-            this.game = game;
-            this.gameAreaService.setOriginalContext(
-                this.originalCanvas.nativeElement.getContext('2d', {
-                    willReadFrequently: true,
-                }) as CanvasRenderingContext2D,
-            );
-            this.gameAreaService.setModifiedContext(
-                this.modifiedCanvas.nativeElement.getContext('2d', {
-                    willReadFrequently: true,
-                }) as CanvasRenderingContext2D,
-            );
-            this.gameAreaService.setOriginalFrontContext(
-                this.originalCanvasForeground.nativeElement.getContext('2d', {
-                    willReadFrequently: true,
-                }) as CanvasRenderingContext2D,
-            );
-            this.gameAreaService.setModifiedFrontContext(
-                this.modifiedCanvasForeground.nativeElement.getContext('2d', {
-                    willReadFrequently: true,
-                }) as CanvasRenderingContext2D,
-            );
-            this.imageService.loadImage(this.gameAreaService.getOriginalContext(), this.game.original);
-            this.imageService.loadImage(this.gameAreaService.getModifiedContext(), this.game.modified);
-            this.gameAreaService.setAllData();
-        });
-    }
+    // private setUpGame(): void {
+    //     this.gameManager.currentGame$.pipe(takeUntil(this.onDestroy$)).subscribe((game) => {
+    //         this.game = game;
+    //         this.gameAreaService.setOriginalContext(
+    //             this.originalCanvas.nativeElement.getContext('2d', {
+    //                 willReadFrequently: true,
+    //             }) as CanvasRenderingContext2D,
+    //         );
+    //         this.gameAreaService.setModifiedContext(
+    //             this.modifiedCanvas.nativeElement.getContext('2d', {
+    //                 willReadFrequently: true,
+    //             }) as CanvasRenderingContext2D,
+    //         );
+    //         this.gameAreaService.setOriginalFrontContext(
+    //             this.originalCanvasForeground.nativeElement.getContext('2d', {
+    //                 willReadFrequently: true,
+    //             }) as CanvasRenderingContext2D,
+    //         );
+    //         this.gameAreaService.setModifiedFrontContext(
+    //             this.modifiedCanvasForeground.nativeElement.getContext('2d', {
+    //                 willReadFrequently: true,
+    //             }) as CanvasRenderingContext2D,
+    //         );
+    //         this.imageService.loadImage(this.gameAreaService.getOriginalContext(), this.game.original);
+    //         this.imageService.loadImage(this.gameAreaService.getModifiedContext(), this.game.modified);
+    //         this.gameAreaService.setAllData();
+    //     });
+    // }
 
-    private setUpReplay(): void {
-        this.replayService.replayTimer$.pipe(takeUntil(this.onDestroy$)).subscribe((replayTimer: number) => {
-            if (this.isReplayAvailable) {
-                this.timer = replayTimer;
-                if (replayTimer === 0) {
-                    this.messages = [];
-                    this.differencesFound = 0;
-                }
-            }
-        });
+    // private setUpReplay(): void {
+    //     this.replayService.replayTimer$.pipe(takeUntil(this.onDestroy$)).subscribe((replayTimer: number) => {
+    //         if (this.isReplayAvailable) {
+    //             this.timer = replayTimer;
+    //             if (replayTimer === 0) {
+    //                 this.messages = [];
+    //                 this.differencesFound = 0;
+    //             }
+    //         }
+    //     });
 
-        this.replayService.replayDifferenceFound$.pipe(takeUntil(this.onDestroy$)).subscribe((replayDiffFound) => {
-            if (this.isReplayAvailable) this.differencesFound = replayDiffFound;
-        });
+    //     this.replayService.replayDifferenceFound$.pipe(takeUntil(this.onDestroy$)).subscribe((replayDiffFound) => {
+    //         if (this.isReplayAvailable) this.differencesFound = replayDiffFound;
+    //     });
 
-        this.replayService.replayOpponentDifferenceFound$.pipe(takeUntil(this.onDestroy$)).subscribe((replayDiffFound) => {
-            if (this.isReplayAvailable) this.opponentDifferencesFound = replayDiffFound;
-        });
-    }
+    //     this.replayService.replayOpponentDifferenceFound$.pipe(takeUntil(this.onDestroy$)).subscribe((replayDiffFound) => {
+    //         if (this.isReplayAvailable) this.opponentDifferencesFound = replayDiffFound;
+    //     });
+    // }
 }

@@ -14,7 +14,7 @@ export class CreateRoomPageComponent implements AfterViewInit {
     mode: GameModes;
     gameModes: typeof GameModes;
     time: number | null;
-    password: string;
+    password: string = '';
     nDifferences: number;
     gameId: string;
     lobby: Lobby;
@@ -38,6 +38,9 @@ export class CreateRoomPageComponent implements AfterViewInit {
         return value + ' sec';
     }
 
+    onVerifyClassic() {
+        return this.mode === GameModes.Classic;
+    }
     onSubmit() {
         const roomPayload: Lobby = {
             isAvailable: true,

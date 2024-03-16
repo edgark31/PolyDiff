@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+/* eslint-disable object-shorthand */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-case-declarations */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';

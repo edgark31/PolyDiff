@@ -23,7 +23,7 @@
         </div>
 
         <div class="button-container">
-            <button (click)="onStart()" *ngIf="roomManagerService.isOrganizer && lobby.players.length>=2" type="submit">Commencer la partie</button>
+            <button (click)="onStart()" *ngIf="roomManagerService.isOrganizer " type="submit">Commencer la partie</button>
             <button (click)="onQuit()" type="submit">Quitter</button>
         </div>
     </div>
