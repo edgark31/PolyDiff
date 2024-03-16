@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 /* eslint-disable object-shorthand */
 /* eslint-disable no-unused-expressions */
