@@ -12,7 +12,7 @@ import { SoundService } from '../sound-service/sound.service';
     providedIn: 'root',
 })
 export class WelcomeService {
-    isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    isLoggedIn = localStorage.getItem('isLogged') === 'true';
     songListDifference = SONG_LIST_DIFFERENCE;
     songListError = SONG_LIST_ERROR;
     account: Account;
@@ -67,7 +67,7 @@ export class WelcomeService {
     }
 
     setLoginState(state: boolean): void {
-        localStorage.setItem('isLoggedIn', String(state));
+        localStorage.setItem('isLogged', String(state));
         this.isLoggedIn = state;
     }
 

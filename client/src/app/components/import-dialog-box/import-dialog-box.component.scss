@@ -1,0 +1,21 @@
+
+::ng-deep .mat-dialog-container {
+    width: 400px; 
+    height: 200px;
+}
+
+// .dialog-content {
+//     display: flex;
+//     flex-wrap: wrap;
+// }
+
+.dialog-image {
+    width: 40px;
+    height: auto;
+    margin-right: 20px;
+    margin-bottom: 20px; 
+}
+
+// ::ng-deep .mat-dialog-actions {
+//     justify-content: flex-end; 
+// }

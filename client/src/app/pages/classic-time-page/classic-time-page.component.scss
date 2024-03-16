@@ -2,9 +2,9 @@
 
 body {
     background-image: url('../../../assets/LimitedTimeBackground.jpg');
-    background-size: cover; /* Cela garantit que l'image couvre tout l'écran */
-    background-position: center center; /* Cela centre l'image dans la page */
-    background-repeat: no-repeat; /* Cela empêche l'image de se répéter */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
 .flex-column {
@@ -14,8 +14,8 @@ body {
     align-items: center;
 }
 .button-creer {
-    width: 50px; /* Ajustez cette valeur pour diminuer la longueur */
-    margin-top: -70px; /* Ajustez cette valeur pour monter le bouton */
+    width: 50px;
+    margin-top: -70px;
 }
 
 .flex-row {
@@ -49,8 +49,8 @@ h2 {
     top: 220px;
     left: 50.7%;
     transform: translateX(-50%);
-    width: 32.5%; /* Réduit de moitié */
-    height: 25%; /* Réduit de moitié */
+    width: 32.5%;
+    height: 25%;
 }
 
 .create-button {
@@ -161,8 +161,8 @@ button:hover {
 }
 
 .button-container button {
-    margin-bottom: 0; /* Ajustez cette valeur si nécessaire */
-    margin-left: 0; /* Ajustez cette valeur si nécessaire */
+    margin-bottom: 0;
+    margin-left: 0;
     background-color: rgb(158, 19, 19);
     color: #fff;
     padding: 8px 24px;

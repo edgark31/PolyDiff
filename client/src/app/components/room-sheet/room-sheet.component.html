@@ -3,7 +3,7 @@
     <img alt="game-mode-image" id="game-mode-image" src="./assets/LimitedTime.png" />
 </div>
 <div *ngIf="lobby.gameId && lobby.mode===gameModes.Classic" class="game-mode-image-classic">
-    <img alt="game-mode-image" id="game-mode-image-classic" src="{{'http://localhost:3000/' + lobby.gameId + '/original.bmp'}}" />
+    <img alt="game-mode-image" id="game-mode-image-classic" src="{{'http://34.118.163.79:3000/' + lobby.gameId + '/original.bmp'}}" />
 </div>
 
 <div class="container">
@@ -14,7 +14,12 @@
         Nombre de différences : {{lobby.nDifferences}}
     </div>
     <button mat-raised-button class="join-button" (click)="manageGames(lobby)">
-        <span id>Rejoindre</span>
+        <div *ngIf="lobby.players.length < 4">
+            <span id>Rejoindre</span>
+        </div>
+        <div *ngIf="lobby.players.length >= 4">
+            <span id>Partie pleine</span>
+        </div>
     </button>
     <div class="player-count">{{lobby.players.length}}/4 joueurs</div>
 </div>
