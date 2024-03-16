@@ -137,6 +137,7 @@ export interface Player {
     accountId?: string;
     name?: string;
     differenceData?: Differences;
+    count?: number;
 }
 
 export interface Observers {
@@ -146,7 +147,6 @@ export interface Observers {
 export interface Lobby {
     lobbyId?: string;
     gameId?: string; // creer en classique
-    game?: Game;
     isAvailable: boolean; // true
     players: Player[]; // vide
     observers: Observers[]; // vide
@@ -167,7 +167,8 @@ export interface Game {
     original: string;
     modified: string;
     difficulty?: string;
-    differences: Coordinate[][];
+    differences?: Coordinate[][];
+    nDifferences?: number;
 }
 
 export interface Account {

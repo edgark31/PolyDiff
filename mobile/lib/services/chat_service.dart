@@ -15,7 +15,6 @@ class ChatService extends ChangeNotifier {
   List<Chat> get lobbyMessages => List.unmodifiable(_lobbyMessages);
 
   void sendGlobalMessage(String message) {
-    print('Sending message');
     socketService.send(
       SocketType.Auth,
       ChannelEvents.SendGlobalMessage.name,
@@ -24,7 +23,6 @@ class ChatService extends ChangeNotifier {
   }
 
   void sendLobbyMessage(String message) {
-    print('Sending message');
     socketService.send(
       SocketType.Lobby,
       ChannelEvents.SendLobbyMessage.name,
@@ -36,17 +34,24 @@ class ChatService extends ChangeNotifier {
   }
 
   void addGlobalMessage(Chat message) {
-    print('Adding global message saying ${message.raw} from ${message.name}');
     _globalMessages.add(message);
     notifyListeners();
-    print('Length of global messages: ${_globalMessages.length}');
   }
 
   void addLobbyMessage(Chat message) {
-    print('Adding lobby message saying ${message.raw} from ${message.name}');
     _lobbyMessages.add(message);
     notifyListeners();
-    print('Length of lobby messages: ${_lobbyMessages.length}');
+  }
+
+  void setupLobby() {
+    clearLobbyMessages();
+    setLobbyChatListeners();
+  }
+
+  void setLobbyMessages(List<Chat> messages) {
+    _lobbyMessages.clear();
+    _lobbyMessages.addAll(messages);
+    notifyListeners();
   }
 
   void clearLobbyMessages() {
@@ -56,33 +61,13 @@ class ChatService extends ChangeNotifier {
 
   void setGlobalChatListeners() {
     socketService.on(SocketType.Auth, ChannelEvents.GlobalMessage.name, (data) {
-      print('GlobalMessage received: $data');
-      if (data is Map<String, dynamic>) {
-        Chat message = Chat.fromJson(data);
-        print('Message: ${message.raw}');
-        print('Tag: ${message.tag}');
-        print('User: ${message.name}');
-        print('Timestamp: ${message.timestamp}');
-        addGlobalMessage(message);
-      } else {
-        print('Received data is not a Map<String, dynamic>');
-      }
+      addGlobalMessage(Chat.fromJson(data as Map<String, dynamic>));
     });
   }
 
   void setLobbyChatListeners() {
     socketService.on(SocketType.Lobby, ChannelEvents.LobbyMessage.name, (data) {
-      print('LobbyMessage received: $data');
-      if (data is Map<String, dynamic>) {
-        Chat message = Chat.fromJson(data);
-        print('Message: ${message.raw}');
-        print('Tag: ${message.tag}');
-        print('User: ${message.name}');
-        print('Timestamp: ${message.timestamp}');
-        addLobbyMessage(message);
-      } else {
-        print('Received data is not a Map<String, dynamic>');
-      }
+      addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
     });
   }
 }

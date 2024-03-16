@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
+
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { ChannelEvents, GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
-import { Chat, Lobby, Player, PlayerData } from '@common/game-interfaces';
+import { Chat, Game, Lobby, PlayerData } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -10,11 +11,12 @@ import { Subject } from 'rxjs';
 })
 export class RoomManagerService {
     password: string;
+    lobbyGame: Lobby;
     isOrganizer: boolean;
     lobby: Subject<Lobby>;
     wait: boolean;
-    // player: Player[];
-    player: Subject<Player[]>;
+    game: Game;
+
     private lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
     // private playerNameAvailability: Subject<PlayerNameAvailability>;
@@ -182,6 +184,7 @@ export class RoomManagerService {
 
     onQuit(lobby: Lobby): void {
         this.clientSocket.send('lobby', LobbyEvents.Leave, lobby.lobbyId);
+        if (this.isOrganizer) this.isOrganizer = false;
     }
 
     isPlayerNameIsAlreadyTaken(playerPayLoad: PlayerData): void {
@@ -247,17 +250,23 @@ export class RoomManagerService {
     }
 
     handleRoomEvents(): void {
-        this.lobby = new Subject();
-        this.lobbies = new Subject();
-        this.message = new Subject();
+        this.lobby = new Subject<Lobby>();
+        this.lobbies = new Subject<Lobby[]>();
+        this.message = new Subject<Chat>();
         if (this.isOrganizer)
             this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby.next(lobby);
+                this.lobbyGame = lobby;
             });
         else
             this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
+                this.lobbyGame = lobby;
                 this.lobby.next(lobby);
             });
+        this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
+            this.lobbies.next(lobbies);
+        });
+
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });

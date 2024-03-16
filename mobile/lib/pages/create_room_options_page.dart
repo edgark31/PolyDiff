@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,8 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
+    final lobbySelectionService = context.watch<LobbySelectionService>();
+    final gameModeName = lobbyService.gameModes.name;
 
     return Scaffold(
       // appBar: CustomAppBar(),
@@ -37,7 +40,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-                'Sélectionner les options de la salle de jeu en Mode ${lobbyService.gameModesName}'),
+                'Sélectionner les options de la salle de jeu en Mode $gameModeName'),
             cheatSetting(context),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
@@ -45,10 +48,13 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
             timeSelection(context),
             CustomButton(
               press: () {
-                lobbyService.setIsCheatEnabled(cheatMode);
-                lobbyService.setGameDuration(gameDuration.round());
+                lobbySelectionService.setIsCheatEnabled(cheatMode);
+                lobbySelectionService.setGameDuration(gameDuration.round());
                 lobbyService.createLobby();
-                Navigator.pushNamed(context, LOBBY_ROUTE);
+                Future.delayed(Duration(milliseconds: 500), () {
+                  // Waiting for server to emit the created lobby from creator
+                  Navigator.pushNamed(context, LOBBY_ROUTE);
+                });
               },
               text: 'Créer la salle de jeu',
               backgroundColor: kMidOrange,

@@ -7,85 +7,17 @@
     height: 30%;
 }
 
-// .create-button {
-//     top: 100px;
-//     cursor: pointer;
-//     position: relative;
-//     text-align: center;
-//     font-family: 'Troika', sans-serif;
-//     font-size: 40px;
-//     width: auto;
-//     height: auto;
-//     margin-bottom: 40px;
-//     text-transform: uppercase;
-//     transition: 0.5s;
-//     color: rgba(253, 250, 151, 255);
-//     border: none;
-//     border-radius: 25px;
-//     background-color: #e8a430;
-//     animation: titleFadeIn 1.5s ease-in-out;
-//     z-index: 1;
-// }
-
 .create-button:hover {
     background-color: #db9110;
     color: black;
     transform: scale(1.05);
 }
 
-// .join-button {
-//     top: 220px;
-//     left: 10px;
-//     cursor: pointer;
-//     position: relative;
-//     text-align: center;
-//     font-family: 'Troika', sans-serif;
-//     font-size: 50px;
-//     width: 280px;
-//     height: 280px;
-//     margin-bottom: 40px;
-//     text-transform: uppercase;
-//     transition: 0.5s;
-//     color: rgba(253, 250, 151, 255);
-//     border: none;
-//     border-radius: 5px;
-//     background-color: #e8a430;
-//     animation: titleFadeIn 1.5s ease-in-out;
-//     z-index: 1;
-// }
-
 .join-button:hover {
     background-color: #db9110;
     color: black;
     transform: scale(1.05);
 }
-
-// .difference-number {
-//     top: 200px;
-//     font-weight: bold;
-//     position: relative;
-//     text-align: center;
-//     animation: titleFadeIn 1s ease-in-out;
-//     z-index: 1;
-//     color: white;
-//     font-size: 30px;
-//     font-family: 'Troika', sans-serif;
-//     -webkit-text-stroke: 1px black;
-// }
-
-// .game-mode {
-//     top: 220px;
-//     right: 350px;
-//     font-weight: bold;
-//     position: relative;
-//     text-align: center;
-//     animation: titleFadeIn 1s ease-in-out;
-//     z-index: 1;
-//     color: white;
-//     font-size: 30px;
-//     font-family: 'Troika', sans-serif;
-//     -webkit-text-stroke: 1px black;
-// }
 
 .player-count {
     bottom: 175px;
@@ -101,24 +33,6 @@
     -webkit-text-stroke: 1px black;
 }
 
-// .player-container {
-//     bottom: 100px;
-//     left: 350px;
-//     font-weight: bold;
-//     position: relative;
-//     text-align: center;
-//     animation: titleFadeIn 1s ease-in-out;
-//     z-index: 1;
-//     color: white;
-//     font-size: 30px;
-//     font-family: 'Troika', sans-serif;
-//     -webkit-text-stroke: 1px black;
-// }
-
-// .player {
-//     padding: 15px;
-// }
-
 .game-mode-image {
     position: relative;
     right: 330px;
@@ -129,7 +43,7 @@
     object-fit: cover;
 }
 
-.game-mode-image-classic img{
+.game-mode-image-classic img {
     position: relative;
     right: 220px;
     top: 220px;
@@ -139,14 +53,13 @@
     object-fit: cover;
 }
 
-
 .create-button {
     top: 100px;
     cursor: pointer;
     position: relative;
     text-align: center;
     font-family: 'Troika', sans-serif;
-    font-size: 20px; /* Réduit de moitié */
+    font-size: 20px;
     width: auto;
     height: auto;
     margin-bottom: 40px;
@@ -167,9 +80,9 @@
     position: relative;
     text-align: center;
     font-family: 'Troika', sans-serif;
-    font-size: 25px; /* Réduit de moitié */
-    width: 140px; /* Réduit de moitié */
-    height: 140px; /* Réduit de moitié */
+    font-size: 25px;
+    width: 140px;
+    height: 140px;
     margin-bottom: 40px;
     text-transform: uppercase;
     transition: 0.5s;
@@ -189,9 +102,9 @@
     animation: titleFadeIn 1s ease-in-out;
     z-index: 1;
     color: white;
-    font-size: 15px; /* Réduit de moitié */
+    font-size: 15px;
     font-family: 'Troika', sans-serif;
-    -webkit-text-stroke: 0.5px black; /* Réduit de moitié */
+    -webkit-text-stroke: 0.5px black;
 }
 
 .game-mode {
@@ -203,9 +116,9 @@
     animation: titleFadeIn 1s ease-in-out;
     z-index: 1;
     color: white;
-    font-size: 15px; /* Réduit de moitié */
+    font-size: 15px;
     font-family: 'Troika', sans-serif;
-    -webkit-text-stroke: 0.5px black; /* Réduit de moitié */
+    -webkit-text-stroke: 0.5px black;
 }
 
 .player-container {
@@ -217,20 +130,11 @@
     animation: titleFadeIn 1s ease-in-out;
     z-index: 1;
     color: white;
-    font-size: 15px; /* Réduit de moitié */
+    font-size: 15px;
     font-family: 'Troika', sans-serif;
-    -webkit-text-stroke: 0.5px black; /* Réduit de moitié */
+    -webkit-text-stroke: 0.5px black;
 }
 
 .player {
-    padding: 7.5px; /* Réduit de moitié */
+    padding: 7.5px;
 }
-
-// #game-mode-image {
-//     position: relative;
-//     right: 160px;
-//     top: 320px;
-//     width: 70px; /* Mettez la moitié de la largeur originale ici */
-//     height: 70px; /* Mettez la moitié de la hauteur originale ici */
-//     z-index: 2;
-// }

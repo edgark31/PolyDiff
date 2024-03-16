@@ -3,7 +3,7 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/game_card_service.dart';
-import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
 
@@ -96,7 +96,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
   }
 
   Widget buildGameCard(BuildContext context, GameCard card) {
-    final lobbyService = context.watch<LobbyService>();
+    final lobbySelectionService = context.watch<LobbySelectionService>();
     String imagePath = '$BASE_URL/${card.id}/original.bmp';
     String differenceText = 'Différences: ${card.nDifference}';
     return Padding(
@@ -115,7 +115,8 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
               children: [
                 CustomButton(
                   press: () {
-                    lobbyService.setGameId(card.id);
+                    lobbySelectionService.setGameId(card.id);
+                    lobbySelectionService.setNDifferences(card.nDifference);
                     Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
                   },
                   text: 'Choisir cette fiche',
