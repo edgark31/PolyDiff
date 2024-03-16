@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
+
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { ChannelEvents, GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
 import { Chat, Game, Lobby, PlayerData } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
-import { CommunicationService } from '../communication-service/communication.service';
 
 @Injectable({
     providedIn: 'root',
@@ -34,7 +34,7 @@ export class RoomManagerService {
     private messages: Subject<Chat[]>;
     private message: Subject<Chat>;
 
-    constructor(private readonly clientSocket: ClientSocketService, public communication: CommunicationService) {
+    constructor(private readonly clientSocket: ClientSocketService) {
         // this.playerNameAvailability = new Subject<PlayerNameAvailability>();
         // this.roomOneVsOneId = new Subject<string>();
         // this.isPlayerAccepted = new Subject<boolean>();

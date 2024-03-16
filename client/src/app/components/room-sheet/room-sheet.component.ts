@@ -24,7 +24,6 @@ export class RoomSheetComponent {
     ) {}
 
     manageGames(lobby: Lobby): void {
-        console.log(lobby.password);
         if (!lobby.password) {
             this.roomManager.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
             this.router.navigate(['/waiting-room']);

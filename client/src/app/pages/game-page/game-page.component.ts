@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GamePageDialogComponent } from '@app/components/game-page-dialog/game-page-dialog.component';
@@ -22,7 +22,7 @@ import { Subject } from 'rxjs';
     templateUrl: './game-page.component.html',
     styleUrls: ['./game-page.component.scss'],
 })
-export class GamePageComponent implements AfterViewInit, OnDestroy, OnInit {
+export class GamePageComponent implements OnDestroy, OnInit {
     @ViewChild('originalCanvas', { static: false }) originalCanvas!: ElementRef<HTMLCanvasElement>;
     @ViewChild('modifiedCanvas', { static: false }) modifiedCanvas!: ElementRef<HTMLCanvasElement>;
     @ViewChild('originalCanvasFG', { static: false }) originalCanvasForeground!: ElementRef<HTMLCanvasElement>;
@@ -85,19 +85,19 @@ export class GamePageComponent implements AfterViewInit, OnDestroy, OnInit {
         this.clientSocket.connect(this.welcome.account.id as string, 'game');
         this.gameManager.manageSocket();
     }
-    ngAfterViewInit(): void {
-        // this.gameManager.startGame();
-        // // this.getPlayers();
-        // this.setUpGame();
-        // this.setUpReplay();
-        // this.updateTimer();
-        // this.handleDifferences();
-        // this.handleMessages();
-        // this.showEndMessage();
-        // this.updateIfFirstDifferencesFound();
-        // this.updateGameMode();
-        // this.handlePageRefresh();
-    }
+    // ngAfterViewInit(): void {
+    //     // this.gameManager.startGame();
+    //     // // this.getPlayers();
+    //     // this.setUpGame();
+    //     // this.setUpReplay();
+    //     // this.updateTimer();
+    //     // this.handleDifferences();
+    //     // this.handleMessages();
+    //     // this.showEndMessage();
+    //     // this.updateIfFirstDifferencesFound();
+    //     // this.updateGameMode();
+    //     // this.handlePageRefresh();
+    // }
     showAbandonDialog(): void {
         this.matDialog.open(GamePageDialogComponent, {
             data: { action: GamePageEvent.Abandon, message: 'Êtes-vous certain de vouloir abandonner la partie ? ' },
