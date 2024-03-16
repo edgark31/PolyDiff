@@ -72,6 +72,7 @@ class LobbyService extends ChangeNotifier {
       LobbyEvents.Leave.name,
       _lobby.lobbyId,
     );
+    setLobby(Lobby.initial());
   }
 
   // TODO : Implement end of lobby logic
