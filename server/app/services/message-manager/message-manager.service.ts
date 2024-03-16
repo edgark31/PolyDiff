@@ -1,33 +1,37 @@
 import { SCORE_POSITION } from '@common/constants';
-import { GameModes, MessageTag } from '@common/enums';
-import { ChatMessage, NewRecord } from '@common/game-interfaces';
+import { GameModes } from '@common/enums';
+import { Chat, NewRecord } from '@common/game-interfaces';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class MessageManagerService {
-    getQuitMessage(playerName: string): ChatMessage {
-        return this.createMessage(MessageTag.Common, `${playerName} a abandonné la partie`);
+    getQuitMessage(playerName: string): Chat {
+        return this.createMessage(playerName, 'a abandonné la partie');
     }
 
-    getNewRecordMessage(newRecord: NewRecord): ChatMessage {
+    getNewRecordMessage(newRecord: NewRecord): Chat {
         const content =
             `${newRecord.playerName} obtient la ${SCORE_POSITION[newRecord.rank]} place` +
             ` dans les meilleurs temps du jeu ${newRecord.gameName} en ${newRecord.gameMode}`;
-        return this.createMessage(MessageTag.Global, content);
+        return this.createMessage(newRecord.playerName, content);
     }
 
-    getLocalMessage(gameMode: string, isDifferenceFound: boolean, playerName: string): ChatMessage {
+    getLocalMessage(gameMode: string, isDifferenceFound: boolean, playerName: string): Chat {
         let content = isDifferenceFound ? 'Différence trouvée' : 'Erreur';
         if (gameMode !== GameModes.ClassicSolo && gameMode !== GameModes.LimitedSolo) {
             content += ` par ${playerName}`;
         }
-        return this.createMessage(MessageTag.Common, content);
+        return this.createMessage(playerName, content);
     }
 
-    createMessage(tag: MessageTag, content: string): ChatMessage {
-        const date: Date = new Date();
-        const time = `${date.getHours()} : ${date.getMinutes()} : ${date.getSeconds()}`;
-        const message = time + ' - ' + content;
-        return { tag, message };
+    createMessage(name: string, content: string): Chat {
+        const timestamp = new Date().toLocaleTimeString('en-US', {
+            timeZone: 'America/Toronto',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        });
+        const raw = content;
+        return { raw, name, timestamp };
     }
 }

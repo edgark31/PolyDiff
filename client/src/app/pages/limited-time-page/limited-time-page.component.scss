@@ -1,11 +1,14 @@
 @import url('https://fonts.cdnfonts.com/css/troika-2');
 
-
 .flex-column {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+.button-creer {
+    width: 50px;
+    margin-top: -70px;
 }
 
 .flex-row {
@@ -34,17 +37,52 @@ h2 {
     animation: titleFadeIn 0.5s ease-in-out;
 }
 
-.button {
+#image {
+    position: absolute;
+    top: 220px;
+    left: 50.7%;
+    transform: translateX(-50%);
+    width: 32.5%;
+    height: 25%;
+}
+body {
+    background-image: url('../../../assets/LimitedTimeBackground.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.create-button {
+    top: 100px;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    font-family: 'Troika', sans-serif;
+    font-size: 40px;
+    width: auto;
+    height: auto;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: rgba(253, 250, 151, 255);
+    border: none;
+    border-radius: 25px;
+    background-color: #e8a430;
+    animation: titleFadeIn 1.5s ease-in-out;
+    z-index: 1;
+}
+
+.button-creer {
     top: 500px;
     cursor: pointer;
     position: relative;
     display: inline-block;
     text-align: center;
     font-family: 'Troika', sans-serif;
-    font-size: 80px;
+    font-size: 40px;
     margin: 0 20px 20px 20px;
     width: 500px;
-    height: 500px;
+    height: 150px;
     text-transform: uppercase;
     transition: 0.5s;
     color: rgba(253, 250, 151, 255);
@@ -54,20 +92,47 @@ h2 {
     background-color: #5cbf99;
     animation: titleFadeIn 1.5s ease-in-out;
     z-index: 1;
+    margin-top: -400px;
+}
+
+#mode {
+    position: absolute;
+    z-index: 2;
+    left: 100px;
+    top: 200px;
+}
+
+#text-mode {
+    left: 100px;
+}
+
+#connected {
+    position: absolute;
+    z-index: 2;
+    left: 960px;
+    top: 200px;
+}
+
+#text-connected {
+    left: 100px;
+}
+
+#join {
+    width: 500px;
 }
 
 #solo {
     position: absolute;
     z-index: 2;
-    left: 165px;
-    top: 200px;
+    left: 75px;
+    top: 85px;
 }
 
 #coop {
     position: absolute;
     z-index: 2;
     left: 40px;
-    top: 200px;
+    top: 85px;
 }
 
 button:hover {
@@ -83,4 +148,31 @@ button:hover {
     z-index: 1;
     font-size: 30px;
     margin-right: 20px;
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100vh;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+.button-container button {
+    margin-bottom: 0;
+    margin-left: 0;
+    background-color: rgb(158, 19, 19);
+    color: #fff;
+    padding: 8px 24px;
+    border-radius: 4px;
+    border: 1px solid #000000;
+    font-size: 2.8rem;
+    cursor: pointer;
+    width: auto;
+    z-index: 100000000000000000000000000000000000000000;
+}
+
+button:hover {
+    background: rgb(94, 8, 8);
 }

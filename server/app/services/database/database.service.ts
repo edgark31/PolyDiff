@@ -36,6 +36,33 @@ export class DatabaseService implements OnModuleInit {
     }
     async onModuleInit() {
         await this.getAllGameIds();
+        await this.loadGamesInServer();
+    }
+
+    async loadGamesInServer(): Promise<void> {
+        try {
+            // Delete les assets du server saud l'avatar bien sur
+            fs.readdirSync('assets', { withFileTypes: true })
+                .filter((item) => item.isDirectory() && item.name !== 'avatar')
+                .forEach((item) => fs.rmdirSync(`assets/${item.name}`, { recursive: true }));
+
+            // Database vers les assets du server
+            const games = await this.gameModel.find().exec();
+            games.forEach((game) => {
+                this.saveFiles(game);
+            });
+        } catch (error) {
+            return Promise.reject(`Failed to load games in server: ${error}`);
+        }
+    }
+
+    async getGamesCards(): Promise<GameCard[]> {
+        const originalGameCards = await this.gameCardModel.find().exec();
+        const modifiedGameCards = originalGameCards.map((gameCard) => {
+            const thumbnailBase64 = fs.readFileSync(gameCard.thumbnail, 'base64');
+            return { ...gameCard.toObject(), thumbnail: thumbnailBase64 } as GameCard;
+        });
+        return modifiedGameCards;
     }
 
     async getGamesCarrousel(): Promise<CarouselPaginator[]> {
@@ -83,15 +110,15 @@ export class DatabaseService implements OnModuleInit {
         }
     }
 
-    saveFiles(newGame: CreateGameDto): void {
-        const dirName = `assets/${newGame.name}`;
+    saveFiles(newGame: Game): void {
+        const dirName = `assets/${newGame._id.toString()}`;
         const dataOfOriginalImage = Buffer.from(newGame.originalImage.replace(/^data:image\/\w+;base64,/, ''), 'base64');
         const dataOfModifiedImage = Buffer.from(newGame.modifiedImage.replace(/^data:image\/\w+;base64,/, ''), 'base64');
         if (!fs.existsSync(dirName)) {
             fs.mkdirSync(dirName);
-            fs.writeFileSync(`assets/${newGame.name}/original.bmp`, dataOfOriginalImage);
-            fs.writeFileSync(`assets/${newGame.name}/modified.bmp`, dataOfModifiedImage);
-            fs.writeFileSync(`assets/${newGame.name}/differences.json`, JSON.stringify(newGame.differences));
+            fs.writeFileSync(`assets/${newGame._id.toString()}/original.bmp`, dataOfOriginalImage);
+            fs.writeFileSync(`assets/${newGame._id.toString()}/modified.bmp`, dataOfModifiedImage);
+            fs.writeFileSync(`assets/${newGame._id.toString()}/differences.json`, JSON.stringify(newGame.differences));
         }
     }
 
@@ -99,16 +126,16 @@ export class DatabaseService implements OnModuleInit {
         try {
             const newGameInDB: Game = {
                 name: newGame.name,
-                originalImage: `assets/${newGame.name}/original.bmp`,
-                modifiedImage: `assets/${newGame.name}/modified.bmp`,
-                differences: `assets/${newGame.name}/differences.json`,
+                originalImage: newGame.originalImage,
+                modifiedImage: newGame.modifiedImage,
+                differences: JSON.stringify(newGame.differences),
                 nDifference: newGame.nDifference,
                 isHard: newGame.isHard,
             };
-            this.saveFiles(newGame);
             const id = (await this.gameModel.create(newGameInDB))._id.toString();
             this.gameIds.push(id);
             newGameInDB._id = id;
+            this.saveFiles(newGameInDB);
             const gameCard = this.gameListManager.buildGameCardFromGame(newGameInDB);
             await this.gameCardModel.create(gameCard);
             this.gameListManager.addGameCarousel(gameCard);

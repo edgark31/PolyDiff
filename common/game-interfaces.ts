@@ -7,12 +7,12 @@ export interface Players {
 }
 
 export interface GameHistory {
-    date: string,
-    startingHour: string,
-    duration: number,
-    gameMode: string,
-    player1: PlayerInfo,
-    player2?: PlayerInfo,
+    date: string;
+    startingHour: string;
+    duration: number;
+    gameMode: string;
+    player1: PlayerInfo;
+    player2?: PlayerInfo;
 }
 
 export interface PlayerInfo {
@@ -38,6 +38,7 @@ export interface GameCard {
     soloTopTime: PlayerTime[];
     oneVsOneTopTime: PlayerTime[];
     thumbnail: string;
+    nDifference?: number;
 }
 
 export interface CarouselPaginator {
@@ -66,12 +67,6 @@ export interface GameRoom {
     gameConstants: GameConfigConst;
     player2?: Player;
     player1: Player;
-}
-
-export interface Player {
-    playerId?: string;
-    name: string;
-    differenceData: Differences;
 }
 
 export interface PlayerData {
@@ -128,5 +123,148 @@ export enum GameCardActions {
     Create = 'create',
     Join = 'join',
 }
+
 export { Coordinate };
 
+export interface ChatMessageGlobal {
+    tag: MessageTag;
+    message: string;
+    userName: string;
+    timestamp?: string;
+}
+
+export interface Player {
+    accountId?: string;
+    name?: string;
+    differenceData?: Differences;
+    count?: number;
+}
+
+export interface Observers {
+    name: string;
+}
+
+export interface Lobby {
+    lobbyId?: string;
+    gameId?: string; // creer en classique
+    isAvailable: boolean; // true
+    players: Player[]; // vide
+    observers: Observers[]; // vide
+    isCheatEnabled: boolean; // false
+    mode: GameModes; // classique ou limited
+    password?: string; // oui
+    time?: number;
+    timeLimit: number;
+    bonusTime?: number;
+    chatLog?: ChatLog;
+    nDifferences?: number;
+}
+
+export interface Game {
+    lobbyId: string;
+    gameId: string;
+    name: string;
+    original: string;
+    modified: string;
+    difficulty?: string;
+    differences?: Coordinate[][];
+    nDifferences?: number;
+}
+
+export interface Account {
+    id?: string;
+    credentials: Credentials;
+    profile: Profile;
+}
+
+export interface Credentials {
+    username: string;
+    password: string;
+    email?: string;
+}
+
+export interface Profile {
+    avatar: string;
+    sessions: SessionLog[];
+    connections: ConnectionLog[];
+    stats: Statistics;
+    friends: Friend[];
+    friendRequests: string[];
+    theme: Theme;
+    language: string;
+    songDifference: Song;
+    songError: Song;
+}
+
+export interface SessionLog {
+    timestamp: string;
+    isWinner: boolean;
+}
+
+export interface ConnectionLog {
+    timestamp: string;
+    isConnexion: boolean;
+}
+
+export interface Statistics {
+    gamePlayed: number;
+    gameWon: number;
+    averageTime: number;
+    averageDifferences: number;
+}
+
+export interface Friend {
+    name: string;
+    avatar: string;
+    friendNames: string[];
+    commonFriendNames: string[];
+    isFavorite: boolean;
+    isOnline: boolean;
+}
+
+export interface Score {
+    value: number;
+    mode: string;
+    duration: number;
+    diffFound: number;
+    difficulty: string;
+}
+
+export interface Chat {
+    raw: string;
+    name?: string;
+    tag?: MessageTag;
+    timestamp?: string;
+}
+
+export interface ChatLog {
+    chat: Chat[];
+    channelName: string;
+}
+
+export interface Replay {
+    name: string;
+    actions: string[];
+    mode: string;
+    timestamps: string;
+}
+
+export interface Theme {
+    name: string;
+    color: string;
+    backgroundColor: string;
+    buttonColor: string;
+}
+
+export interface Song {
+    name: string;
+    link: string;
+}
+
+// export interface modifyProfile {
+//     avatar: string;
+//     name: string;
+//     theme: Theme;
+//     language: string;
+//     password: string;
+// }

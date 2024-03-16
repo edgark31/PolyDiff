@@ -14,10 +14,6 @@
             </h1>
         </div>
         <app-game-infos [isReplayAvailable]="isReplayAvailable" [game]="game"></app-game-infos>
-        <div *ngIf="isThirdHintActive">
-            <img id="raccoon" [src]="hintsAssets[proximity]" />
-            <p id = "intro1">Yo moi c'est big Émile. Observes bien la façon dont je réagis lorsque tu déplaces la souris sur un des canvas</p>
-        </div>
     </div>
     <div class="canvas-container">
         <div class="game-canvas">
@@ -27,7 +23,6 @@
                 [attr.width]="canvasSize.width"
                 #originalCanvasFG
                 (click)="mouseClickOnCanvas($event, true)"
-                (mousemove)="checkThirdHint($event)"
             ></canvas>
             <canvas
                 id="original"
@@ -35,7 +30,6 @@
                 [attr.width]="canvasSize.width"
                 #originalCanvas
                 (click)="mouseClickOnCanvas($event, true)"
-                (mousemove)="checkThirdHint($event)"
             ></canvas>
         </div>
         <div class="game-canvas">
@@ -45,7 +39,6 @@
                 [attr.width]="canvasSize.width"
                 #modifiedCanvasFG
                 (click)="mouseClickOnCanvas($event, false)"
-                (mousemove)="checkThirdHint($event)"
             ></canvas>
             <canvas
                 id="modified"
@@ -53,7 +46,6 @@
                 [attr.width]="canvasSize.width"
                 #modifiedCanvas
                 (click)="mouseClickOnCanvas($event, false)"
-                (mousemove)="checkThirdHint($event)"
             ></canvas>
         </div>
     </div>
@@ -63,6 +55,6 @@
 </div>
 <img id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
 <div *ngIf="game">
-    <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages" [isReplaying]="isReplayAvailable" [gameMode]="game.mode"></app-chat-box>
+    <!-- <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages" [isReplaying]="isReplayAvailable" [gameMode]="game.mode"></app-chat-box> -->
     <app-replay-buttons [isReplayAvailable]="isReplayAvailable"></app-replay-buttons>
 </div>

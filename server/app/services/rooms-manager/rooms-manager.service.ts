@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 // Id comes from database to allow _id
 /* eslint-disable no-underscore-dangle */
 import { Game } from '@app/model/database/game';
@@ -5,14 +6,15 @@ import { GameService } from '@app/services/game/game.service';
 import { HistoryService } from '@app/services/history/history.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { CHARACTERS, DEFAULT_GAME_MODES, KEY_SIZE, MAX_BONUS_TIME_ALLOWED, NOT_FOUND } from '@common/constants';
-import { GameEvents, GameModes, MessageEvents, MessageTag, PlayerStatus } from '@common/enums';
+import { GameEvents, GameModes, MessageEvents, PlayerStatus } from '@common/enums';
 import {
-    ChatMessage,
+    Chat,
     ClientSideGame,
     Coordinate,
     Differences,
     GameConfigConst,
     GameRoom,
+    Lobby,
     Player,
     PlayerData,
     TimerMode,
@@ -23,6 +25,8 @@ import * as io from 'socket.io';
 
 @Injectable()
 export class RoomsManagerService implements OnModuleInit {
+    lobbies = new Map<string, Lobby>();
+
     private gameConstants: GameConfigConst;
     private modeTimerMap: { [key: string]: TimerMode };
     private rooms: Map<string, GameRoom>;
@@ -36,9 +40,7 @@ export class RoomsManagerService implements OnModuleInit {
         this.modeTimerMap = DEFAULT_GAME_MODES;
     }
 
-    async onModuleInit() {
-        await this.getGameConstants();
-    }
+    async onModuleInit() {}
 
     async createRoom(playerPayLoad: PlayerData): Promise<GameRoom> {
         const game = !playerPayLoad.gameId ? await this.gameService.getRandomGame([]) : await this.gameService.getGameById(playerPayLoad.gameId);
@@ -55,18 +57,18 @@ export class RoomsManagerService implements OnModuleInit {
     }
 
     getRoomIdFromSocket(socket: io.Socket): string {
-        return Array.from(socket.rooms.values())[1];
+        return Array.from(socket.rooms.values())[1] as string;
     }
 
-    getRoomByPlayerId(playerId: string): GameRoom {
-        return Array.from(this.rooms.values()).find((room) => room.player1.playerId === playerId || room.player2?.playerId === playerId);
+    getRoomBySocketId(socketId: string): GameRoom {
+        return Array.from(this.rooms.values()).find((room) => room.player1.accountId === socketId || room.player2?.accountId === socketId);
     }
 
     getHostIdByGameId(gameId: string): string {
         const roomTarget = Array.from(this.rooms.values()).find(
             (room) => room.clientGame.id === gameId && room.clientGame.mode === GameModes.ClassicOneVsOne && !room.player2,
         );
-        return roomTarget?.player1.playerId;
+        return roomTarget?.player1.accountId;
     }
 
     getCreatedCoopRoom(): GameRoom {
@@ -87,8 +89,8 @@ export class RoomsManagerService implements OnModuleInit {
     }
 
     startGame(socket: io.Socket, server: io.Server): void {
-        const room = this.getRoomByPlayerId(socket.id);
-        if (!room || ![room.player1.playerId, room.player2?.playerId].includes(socket.id)) {
+        const room = this.getRoomBySocketId(socket.id);
+        if (!room || ![room.player1.accountId, room.player2?.accountId].includes(socket.id)) {
             this.handleGamePageRefresh(socket, server);
             return;
         }
@@ -115,7 +117,7 @@ export class RoomsManagerService implements OnModuleInit {
 
         if (!room) return;
 
-        const player = room.player1.playerId === socket.id ? room.player1 : room.player2;
+        const player = room.player1.accountId === socket.id ? room.player1 : room.player2;
         const index = room.originalDifferences.findIndex((difference) =>
             difference.some((coord: Coordinate) => coord.x === coords.x && coord.y === coords.y),
         );
@@ -127,49 +129,32 @@ export class RoomsManagerService implements OnModuleInit {
         server.to(room.roomId).emit(MessageEvents.LocalMessage, localMessage);
         server
             .to(room.roomId)
-            .emit(GameEvents.RemoveDifference, { differencesData, playerId: socket.id, cheatDifferences: room.originalDifferences });
+            .emit(GameEvents.RemoveDifference, { differencesData, socketId: socket.id, cheatDifferences: room.originalDifferences });
     }
 
     updateTimers(server: io.Server) {
-        for (const room of this.rooms.values()) {
-            const modeInfo = this.modeTimerMap[room?.clientGame?.mode];
-            if (!modeInfo || (modeInfo.requiresPlayer2 && !room.player2)) continue;
-
-            this.updateTimer(room, server, modeInfo.isCountdown);
-        }
-    }
-
-    async addHintPenalty(socket: io.Socket, server: io.Server): Promise<void> {
-        const roomId = this.getRoomIdFromSocket(socket);
-        const room = this.getRoomById(roomId);
-        if (!room) return;
-        const { clientGame, gameConstants, timer } = room;
-        let penaltyTime = gameConstants.penaltyTime;
-
-        if (this.isLimitedModeGame(clientGame)) penaltyTime = -penaltyTime;
-        if (timer + penaltyTime < 0) {
-            await this.countdownOver(room, server);
-        } else {
-            const hintMessage = this.messageManager.createMessage(MessageTag.Common, 'Indice utilisé');
-            room.timer += penaltyTime;
-            this.rooms.set(room.roomId, room);
-            server.to(room.roomId).emit(MessageEvents.LocalMessage, hintMessage);
-            server.to(room.roomId).emit(GameEvents.TimerUpdate, room.timer);
-        }
+        this.lobbies.forEach((lobby) => {
+            if (lobby.isAvailable) return;
+            if (lobby.time === 0) {
+                server.to(lobby.lobbyId).emit(GameEvents.EndGame, 'Temps écoulé !');
+                return;
+            }
+            server.to(lobby.lobbyId).emit(GameEvents.TimerUpdate, --lobby.time);
+        });
     }
 
     leaveRoom(room: GameRoom, server: io.Server): void {
         [room.player1, room.player2].forEach((player) => {
-            const socket = server.sockets.sockets.get(player?.playerId);
+            const socket = server.sockets.sockets.get(player?.accountId);
             if (socket) socket.rooms.delete(room.roomId);
         });
     }
 
     async abandonGame(socket: io.Socket, server: io.Server): Promise<void> {
-        const room = this.getRoomByPlayerId(socket.id);
+        const room = this.getRoomBySocketId(socket.id);
         if (!room) return;
-        const player: Player = room.player1.playerId === socket.id ? room.player1 : room.player2;
-        const opponent: Player = room.player1.playerId === socket.id ? room.player2 : room.player1;
+        const player: Player = room.player1.accountId === socket.id ? room.player1 : room.player2;
+        const opponent: Player = room.player1.accountId === socket.id ? room.player2 : room.player1;
         this.historyService.markPlayer(room.roomId, player.name, PlayerStatus.Quitter);
         if (this.isMultiplayerGame(room.clientGame) && opponent) {
             const localMessage =
@@ -192,7 +177,15 @@ export class RoomsManagerService implements OnModuleInit {
         }
     }
 
-    private differenceFound(room: GameRoom, player: Player, index: number): ChatMessage {
+    private async updateTimer(room: GameRoom, server: io.Server, isCountdown: boolean): Promise<void> {
+        if (isCountdown) room.timer--;
+        else room.timer++;
+        this.updateRoom(room);
+        server.to(room.roomId).emit(GameEvents.TimerUpdate, room.timer);
+        if (room.timer === 0) await this.countdownOver(room, server);
+    }
+
+    private differenceFound(room: GameRoom, player: Player, index: number): Chat {
         this.addBonusTime(room);
         player.differenceData.differencesFound++;
         player.differenceData.currentDifference = room.originalDifferences[index];
@@ -201,15 +194,15 @@ export class RoomsManagerService implements OnModuleInit {
         return this.messageManager.getLocalMessage(room.clientGame.mode, true, player.name);
     }
 
-    private differenceNotFound(room: GameRoom, player: Player): ChatMessage {
+    private differenceNotFound(room: GameRoom, player: Player): Chat {
         player.differenceData.currentDifference = [];
         this.updateRoom(room);
         return this.messageManager.getLocalMessage(room.clientGame.mode, false, player.name);
     }
 
-    private handleCoopAbandon(player: Player, room: GameRoom, server: io.Server): ChatMessage {
+    private handleCoopAbandon(player: Player, room: GameRoom, server: io.Server): Chat {
         const opponent = this.getOpponent(room, player);
-        server.to(opponent.playerId).emit(GameEvents.GameModeChanged);
+        server.to(opponent.accountId).emit(GameEvents.GameModeChanged);
         room.clientGame.mode = GameModes.LimitedSolo;
         this.updateRoom(room);
         return this.messageManager.getQuitMessage(player.name);
@@ -223,14 +216,6 @@ export class RoomsManagerService implements OnModuleInit {
             room.timer = MAX_BONUS_TIME_ALLOWED;
         }
         this.updateRoom(room);
-    }
-
-    private async updateTimer(room: GameRoom, server: io.Server, isCountdown: boolean): Promise<void> {
-        if (isCountdown) room.timer--;
-        else room.timer++;
-        this.updateRoom(room);
-        server.to(room.roomId).emit(GameEvents.TimerUpdate, room.timer);
-        if (room.timer === 0) await this.countdownOver(room, server);
     }
 
     private async countdownOver(room: GameRoom, server: io.Server): Promise<void> {
@@ -251,7 +236,7 @@ export class RoomsManagerService implements OnModuleInit {
         server.to(socket.id).emit(GameEvents.GamePageRefreshed);
     }
 
-    private async handleOneVsOneAbandon(player: Player, room: GameRoom, server: io.Server): Promise<ChatMessage> {
+    private async handleOneVsOneAbandon(player: Player, room: GameRoom, server: io.Server): Promise<Chat> {
         const opponent: Player = this.getOpponent(room, player);
         this.historyService.markPlayer(room.roomId, opponent?.name, PlayerStatus.Winner);
         room.endMessage = "L'adversaire a abandonné la partie!";
@@ -263,7 +248,7 @@ export class RoomsManagerService implements OnModuleInit {
     }
 
     private getOpponent(room: GameRoom, player: Player): Player {
-        return room.player1.playerId === player.playerId ? room.player2 : room.player1;
+        return room.player1.accountId === player.accountId ? room.player2 : room.player1;
     }
 
     private buildClientGameVersion(game: Game): ClientSideGame {

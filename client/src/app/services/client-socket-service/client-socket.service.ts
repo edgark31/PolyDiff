@@ -8,33 +8,88 @@ import { environment } from 'src/environments/environment';
     providedIn: 'root',
 })
 export class ClientSocketService {
-    socket: Socket;
+    lobbySocket: Socket;
+    gameSocket: Socket;
+    authSocket: Socket;
     private readonly baseUrl: string;
     constructor() {
         this.baseUrl = environment.serverUrl.replace('/api', '');
-        this.connect();
-    }
-    isSocketAlive() {
-        return this.socket && this.socket.connected;
     }
 
-    connect() {
-        this.socket = io(this.baseUrl, { transports: ['websocket'], upgrade: false });
+    isSocketAlive(nameSpace: string): boolean {
+        switch (nameSpace) {
+            case 'lobby':
+                return this.lobbySocket && this.lobbySocket.connected;
+            case 'game':
+                return this.gameSocket && this.gameSocket.connected;
+            case 'auth':
+                return this.authSocket && this.authSocket.connected;
+            default:
+                throw new Error(`Unknown namespace: ${nameSpace}`);
+        }
     }
 
-    disconnect() {
-        this.socket.disconnect();
+    connect(userId: string, nameSpace: string) {
+        switch (nameSpace) {
+            case 'lobby':
+                this.lobbySocket = io(`${this.baseUrl}/${nameSpace}`, { transports: ['websocket'], upgrade: false, query: { id: userId } });
+                break;
+            case 'game':
+                this.gameSocket = io(`${this.baseUrl}/${nameSpace}`, { transports: ['websocket'], upgrade: false, query: { id: userId } });
+                break;
+            case 'auth':
+                this.authSocket = io(this.baseUrl, { transports: ['websocket'], upgrade: false, query: { id: userId } });
+                break;
+            default:
+                throw new Error(`Unknown namespace: ${nameSpace}`);
+        }
     }
 
-    on<T>(event: string, action: (data: T) => void): void {
-        this.socket.on(event, action);
+    disconnect(nameSpace: string) {
+        switch (nameSpace) {
+            case 'lobby':
+                this.lobbySocket.disconnect();
+                break;
+            case 'game':
+                this.gameSocket.disconnect();
+                break;
+            case 'auth':
+                this.authSocket.disconnect();
+                break;
+            default:
+                throw new Error(`Unknown namespace: ${nameSpace}`);
+        }
     }
 
-    send<T>(event: string, data?: T): void {
-        if (data) {
-            this.socket.emit(event, data);
-        } else {
-            this.socket.emit(event);
+    on<T>(nameSpace: string, event: string, action: (data: T) => void): void {
+        switch (nameSpace) {
+            case 'lobby':
+                this.lobbySocket.on(event, action);
+                break;
+            case 'game':
+                this.gameSocket.on(event, action);
+                break;
+            case 'auth':
+                this.authSocket.on(event, action);
+                break;
+            default:
+                throw new Error(`Unknown namespace: ${nameSpace}`);
+        }
+    }
+
+    send<T>(nameSpace: string, event: string, data?: T): void {
+        switch (nameSpace) {
+            case 'lobby':
+                this.lobbySocket.emit(event, data || undefined);
+                break;
+            case 'game':
+                this.gameSocket.emit(event, data || undefined);
+                break;
+            case 'auth':
+                this.authSocket.emit(event, data || undefined);
+                break;
+            default:
+                throw new Error(`Unknown namespace: ${nameSpace}`);
         }
     }
 }

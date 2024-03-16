@@ -1,26 +1,23 @@
 <div class="container flex-column">
+    <div>
+        <app-nav-bar> </app-nav-bar>
+    </div>
     <header class="header">
-        <h1 class="header-item flex-column">{{ gameTitle }}</h1>
-    </header> 
-    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>   
-    <section id="server-message" class="flex-column section">
-        <h2>Choisis ton mode de jeu :</h2>
-        <div class="flex-row">
-            <button class="button" [routerLink]="selectionRoute">
-                <span id = "classic">Classique</span>
-            </button>
-            <button class="button" [routerLink]="limitedRoute">
-                <span id = "limited">Temps Limité</span>
-            </button>
-            <button class="button" [routerLink]="configRoute">
-                <span id = "config">Configuration</span>
-            </button>
-        </div>
-    </section>
+        <h1 class="header-item flex-column">Bienvenue</h1>
+    </header>
+    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+    <div class="flex-column">
+        <button class="button" routerLink="/game-mode">
+            <span id = "limited">Modes de jeu</span>
+        </button>
+        <button class="button" routerLink="/chat">
+            <span id = "classic">Chat</span>
+        </button>
+        <button class="button" (click)="manageGames()">
+            <span id = "config">Admin</span>
+        </button>
+    </div>
+
     <footer class="footer flex-column">
-        <h3 class="team-name"><strong>{{ teamNumber }}</strong></h3>
-        <p>
-            <span *ngFor="let teammateName of teammateNameList"> {{ teammateName }} </span>
-        </p>
     </footer>
 </div>

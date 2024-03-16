@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-nav-bar',
@@ -6,15 +10,26 @@ import { Component } from '@angular/core';
     styleUrls: ['./nav-bar.component.scss'],
 })
 export class NavBarComponent {
-    readonly selectionRoute: string;
+    @Output() manageGame: EventEmitter<void> = new EventEmitter();
     readonly configRoute: string;
     readonly homeRoute: string;
-    readonly limitedRoute: string;
+    readonly chatRoute: string;
+    readonly profileRoute: string;
+    readonly friendsRoute: string;
 
-    constructor() {
-        this.selectionRoute = '/selection';
-        this.configRoute = '/config';
+    constructor(
+        public welcomeService: WelcomeService,
+        public gameManager: GameManagerService,
+        public clientsocket: ClientSocketService,
+        public translate: TranslateService,
+    ) {
+        this.configRoute = '/admin';
         this.homeRoute = '/home';
-        this.limitedRoute = '/limited';
+        this.chatRoute = '/chat';
+        this.profileRoute = '/profil';
+    }
+
+    onManageGames(): void {
+        this.manageGame.emit();
     }
 }

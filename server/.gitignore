@@ -36,4 +36,8 @@ lerna-debug.log*
 !package-lock.json
 
 #.env key
-*.env
+# *.env
+
+# assets
+/assets/*
+!/assets/avatar/

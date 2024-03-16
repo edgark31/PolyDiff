@@ -3,7 +3,7 @@ import { GameHistory } from '@app/model/database/game-history';
 import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 import { GameConstantsDto } from '@app/model/dto/game/game-constants.dto';
 import { DatabaseService } from '@app/services/database/database.service';
-import { CarouselPaginator, GameConfigConst, PlayerTime } from '@common/game-interfaces';
+import { CarouselPaginator, GameCard, GameConfigConst, PlayerTime } from '@common/game-interfaces';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
@@ -16,6 +16,10 @@ export class GameService {
             return configConstants;
         }
         throw new NotFoundException('No game config constants found');
+    }
+
+    async getGamesCards(): Promise<GameCard[]> {
+        return this.databaseService.getGamesCards();
     }
 
     async getGameCarousel(): Promise<CarouselPaginator[]> {
