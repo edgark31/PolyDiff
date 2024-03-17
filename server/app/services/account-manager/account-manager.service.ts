@@ -71,9 +71,9 @@ export class AccountManagerService implements OnModuleInit {
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
-            accountFound.profile.avatar = '';
 
             accountFound.save();
+            accountFound.profile.avatar = '';
             this.connectedUsers.set(accountFound.id, accountFound);
             this.fetchUsers();
             this.logger.log(`${accountFound.credentials.username} has connected with password ${accountFound.credentials.password}`);
