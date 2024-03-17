@@ -14,7 +14,7 @@ import { ReplayService } from '@app/services/replay-service/replay.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent } from '@common/enums';
-import { Chat, ClientSideGame, Lobby, Players } from '@common/game-interfaces';
+import { Chat, ClientSideGame, Game, Players } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -27,6 +27,7 @@ export class GamePageComponent implements OnDestroy, OnInit {
     @ViewChild('modifiedCanvas', { static: false }) modifiedCanvas!: ElementRef<HTMLCanvasElement>;
     @ViewChild('originalCanvasFG', { static: false }) originalCanvasForeground!: ElementRef<HTMLCanvasElement>;
     @ViewChild('modifiedCanvasFG', { static: false }) modifiedCanvasForeground!: ElementRef<HTMLCanvasElement>;
+
     game: ClientSideGame;
     differencesFound: number;
     opponentDifferencesFound: number;
@@ -36,11 +37,12 @@ export class GamePageComponent implements OnDestroy, OnInit {
     players: Players;
     hintsAssets: string[];
     isReplayAvailable: boolean;
-    lobby: Lobby;
+
+    gameLobby: Game;
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
-    private lobbySubscription: Subscription;
+    private gameSubscription: Subscription;
     // private onDestroy$: Subject<void>;
 
     // Services are needed for the dialog and dialog needs to talk to the parent component
@@ -90,23 +92,19 @@ export class GamePageComponent implements OnDestroy, OnInit {
         this.chatSubscription = this.gameManager.message$.subscribe((message: Chat) => {
             this.receiveMessage(message);
         });
-
-        this.lobbySubscription = this.gameManager.lobby$.subscribe((lobby: Lobby) => {
-            this.lobby = lobby;
-        });
     }
 
     ngOnDestroy(): void {
         if (this.clientSocket.isSocketAlive('game')) {
             // this.clientSocketService.disconnect('lobby');
-            this.lobbySubscription?.unsubscribe();
+            this.gameSubscription?.unsubscribe();
             this.chatSubscription?.unsubscribe();
             this.gameManager.off();
         }
     }
 
     sendMessage(message: string): void {
-        this.gameManager.sendMessage(this.lobby.lobbyId, message);
+        this.gameManager.sendMessage(this.gameLobby.lobbyId, message);
     }
     receiveMessage(chat: Chat): void {
         this.messages.push(chat);

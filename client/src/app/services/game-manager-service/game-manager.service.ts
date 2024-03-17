@@ -6,7 +6,7 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { Coordinate } from '@common/coordinate';
-import { Chat, ChatMessageGlobal, ClientSideGame, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
+import { Chat, ChatMessageGlobal, ClientSideGame, Game, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
 @Injectable({
     providedIn: 'root',
@@ -17,8 +17,8 @@ export class GameManagerService {
     gameConstants: GameConfigConst;
     username: string;
     isLeftCanvas: boolean;
-    lobby: Subject<Lobby>;
-    lobbyTimer: Lobby;
+    game: Subject<Game>;
+    timerLobby: Subject<number>;
     lobbyWaiting: Lobby;
     endGame: string;
     private timer: Subject<number>;
@@ -46,7 +46,8 @@ export class GameManagerService {
         this.differencesFound = new Subject<number>();
         this.timer = new Subject<number>();
         this.players = new Subject<Players>();
-        this.lobby = new Subject<Lobby>();
+        this.game = new Subject<Game>();
+        this.timerLobby = new Subject<number>();
         this.message = new Subject<Chat>();
         this.endMessage = new Subject<string>();
         this.opponentDifferencesFound = new Subject<number>();
@@ -71,10 +72,13 @@ export class GameManagerService {
         return this.message.asObservable();
     }
 
-    get lobby$() {
-        return this.lobby.asObservable();
+    get game$() {
+        return this.game.asObservable();
     }
 
+    get timerLobby$() {
+        return this.timerLobby.asObservable();
+    }
     get endMessage$() {
         return this.endMessage.asObservable().pipe(filter((message) => !!message));
     }
@@ -176,12 +180,12 @@ export class GameManagerService {
     }
 
     manageSocket(): void {
-        this.lobby = new Subject<Lobby>();
+        this.game = new Subject<Game>();
         this.message = new Subject<Chat>();
-
-        this.clientSocket.on('game', GameEvents.StartGame, (lobby: Lobby) => {
-            console.log('yoooo' + lobby.lobbyId);
-            this.lobby.next(lobby);
+        this.timerLobby = new Subject<number>();
+        this.clientSocket.on('game', GameEvents.StartGame, (game: Game) => {
+            console.log('yoooo' + game.lobbyId);
+            this.game.next(game);
         });
 
         this.clientSocket.on('game', ChannelEvents.GameMessage, (chat: Chat) => {
@@ -189,10 +193,9 @@ export class GameManagerService {
             this.message.next(chat);
         });
 
-        // this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
-        //     this.lobbyTimer.time = time;
-        //     this.lobby.next(this.lobbyTimer);
-        // });
+        this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
+            this.timerLobby.next(time);
+        });
 
         // this.clientSocket.on('game', GameEvents.GameStarted, (room: GameRoom) => {
         //     this.currentGame.next(room.clientGame);
@@ -245,10 +248,11 @@ export class GameManagerService {
     off(): void {
         // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
         // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
-        if (this.lobby && !this.lobby.closed) {
-            this.lobby?.unsubscribe();
+        if (this.game && !this.game.closed) {
+            this.game?.unsubscribe();
         }
         if (this.message && !this.message.closed) this.message?.unsubscribe();
+        if (this.timerLobby && !this.timerLobby.closed) this.timerLobby?.unsubscribe();
     }
 
     // private checkStatus(): void {

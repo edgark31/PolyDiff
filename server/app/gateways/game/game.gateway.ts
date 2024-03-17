@@ -1,16 +1,6 @@
-<<<<<<< HEAD
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-magic-numbers */
-/* eslint-disable object-shorthand */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-case-declarations */
-=======
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-unused-expressions */
->>>>>>> desktop
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
@@ -65,12 +55,7 @@ export class GameGateway implements OnGatewayConnection {
                     });
                     this.games.set(lobbyId, clonedGame);
                 });
-<<<<<<< HEAD
-                this.server.to(lobbyId).emit(GameEvents.StartGame, this.roomsManager.lobbies.get(lobbyId));
-
-=======
                 this.server.to(lobbyId).emit(GameEvents.StartGame, this.games.get(lobbyId));
->>>>>>> desktop
                 this.logger.log(`Game started in lobby -> ${lobbyId}`);
             } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
                 await this.nextGame(lobbyId, []);

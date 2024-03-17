@@ -1,19 +1,19 @@
 <div id="game-page" class="justified">
     <div *ngIf="game" class="game-infos information-header justified">
-        <h1 id = "title">{{ game.name }}</h1>
-        <div class="game-feedback">
+        <h1 id = "title">{{ gameLobby.name }}</h1>
+        <!-- <div class="game-feedback">
             <mat-icon class="personIcon">person</mat-icon>
-            <h1>{{ player }} Différences trouvées : {{ differencesFound }}</h1>
+            <h1>{{  }} Différences trouvées : {{ differencesFound }}</h1>
             &nbsp;
             <h1>Temps : {{ timer * 1000 | date: 'mm:ss' }}</h1>
             &nbsp;
             <mat-icon *ngIf="isMultiplayerMode()" class="personIcon">person</mat-icon>
             <h1 *ngIf="isMultiplayerMode()">
                 {{ player === players.player1.name ? players.player2?.name : players.player1.name }} &nbsp;
-                <span *ngIf="game.mode === gameMode.ClassicOneVsOne"> Différences trouvées :{{ opponentDifferencesFound }}</span>
+                <span *ngIf="gameManager.lobbyWaiting.mode === gameModes.Classic"> Différences trouvées :{{ opponentDifferencesFound }}</span>
             </h1>
-        </div>
-        <app-game-infos [isReplayAvailable]="isReplayAvailable" [game]="game"></app-game-infos>
+        </div> -->
+        <!-- <app-game-infos [isReplayAvailable]="isReplayAvailable" [game]="game"></app-game-infos> -->
     </div>
     <div class="canvas-container">
         <div class="game-canvas">
@@ -56,8 +56,9 @@
         <span id="abandon">Abandonner la partie</span>
     </button>
 </div>
-<img id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
+ <img id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
 <div *ngIf="game">
     <!-- <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages" [isReplaying]="isReplayAvailable" [gameMode]="game.mode"></app-chat-box> -->
     <app-replay-buttons [isReplayAvailable]="isReplayAvailable"></app-replay-buttons>
 </div>
+
