@@ -328,7 +328,6 @@ export class AccountManagerService implements OnModuleInit {
             (account.profile.stats.averageTime * (account.profile.stats.gamesPlayed - 1) + timePlayed) / account.profile.stats.gamesPlayed;
         account.profile.stats.averageDifferences =
             (account.profile.stats.averageDifferences * (account.profile.stats.gamesPlayed - 1) + count) / account.profile.stats.gamesPlayed;
-        console.log(account.profile.stats);
         account.save();
     }
 
