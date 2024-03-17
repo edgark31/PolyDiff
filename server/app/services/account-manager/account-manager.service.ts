@@ -70,6 +70,7 @@ export class AccountManagerService implements OnModuleInit {
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
+            accountFound.profile.avatar = '';
 
             accountFound.save();
             this.connectedUsers.set(accountFound.id, accountFound);
@@ -114,7 +115,7 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
             await accountFound.save();
-            this.logger.log(`${username} has changed his avatar`);
+            this.logger.log(`${username} has uploaded his avatar`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to upload avatar --> ${error.message}`);
@@ -134,7 +135,7 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
             await accountFound.save();
-            this.logger.log(`${username} has changed his avatar`);
+            this.logger.log(`${username} has choose his avatar`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to choose avatar --> ${error.message}`);
@@ -169,7 +170,7 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.profile.songDifference = newSong;
 
             await accountFound.save();
-            this.logger.verbose('song change');
+            this.logger.verbose(`${username} has changed his error sound effect`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change song --> ${error.message}`);
@@ -180,13 +181,12 @@ export class AccountManagerService implements OnModuleInit {
     async modifySongDifference(username: string, newSong: Song): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
-
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.songError = newSong;
 
             await accountFound.save();
-            this.logger.verbose('song change');
+            this.logger.verbose(`${username} has changed his difference sound effect`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change song --> ${error.message}`);
@@ -203,7 +203,7 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.profile.theme = newTheme;
 
             await accountFound.save();
-            this.logger.verbose('Theme change');
+            this.logger.verbose(`${username} has changed his theme`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change theme --> ${error.message}`);
@@ -232,8 +232,9 @@ export class AccountManagerService implements OnModuleInit {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
             if (!accountFound) throw new Error('Account not found');
-            await this.accountModel.deleteOne({ 'credentials.username': creds.username });
+
             if (!this.connectedUsers.delete(accountFound.id)) throw new Error('Account not connected');
+            await this.accountModel.deleteOne({ 'credentials.username': creds.username });
             this.fetchUsers();
             this.logger.verbose(`Account ${creds.username} has been deleted`);
             return Promise.resolve();
@@ -256,6 +257,7 @@ export class AccountManagerService implements OnModuleInit {
     async fetchUsers() {
         await this.accountModel.find().then((accounts) => {
             accounts.forEach((account) => {
+                account.profile.avatar = '';
                 this.users.set(account.credentials.username, account);
             });
         });
@@ -280,6 +282,8 @@ export class AccountManagerService implements OnModuleInit {
 
     deconnexion(id: string): void {
         this.connectedUsers.delete(id);
+        this.logger.log(`Account ${id} has been disconnected`);
+        this.showProfiles();
     }
 
     // async connexionToAdmin(password: string): Promise<boolean> {

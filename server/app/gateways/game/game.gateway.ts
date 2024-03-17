@@ -38,7 +38,6 @@ export class GameGateway implements OnGatewayConnection {
     @SubscribeMessage(GameEvents.StartGame)
     async startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.join(lobbyId);
-
         // Pour démarrer tout le monde en même temps
         if (Array.from(await this.server.in(lobbyId).fetchSockets()).length === this.roomsManager.lobbies.get(lobbyId).players.length) {
             this.roomsManager.lobbies.get(lobbyId).chatLog = { chat: [], channelName: 'game' } as ChatLog;
@@ -89,7 +88,7 @@ export class GameGateway implements OnGatewayConnection {
             index !== NOT_FOUND
                 ? `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username}, 'a trouvé une différence !`
                 : `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username}, 's'est trompé !`;
-
+        // ------------------ CLASSIC MODE ------------------
         if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
             // Si trouvé
             if (index !== NOT_FOUND) {
@@ -127,11 +126,17 @@ export class GameGateway implements OnGatewayConnection {
             // Si pas trouvé
             this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
             socket.emit(GameEvents.NotFound, coordClic);
+            // ------------------ LIMITED MODE ------------------
         } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
             // Si trouvé
             if (index !== NOT_FOUND) {
                 // Update tout correctement
                 this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
+                // Update le time
+                this.roomsManager.lobbies.get(lobbyId).time + this.roomsManager.lobbies.get(lobbyId).bonusTime >=
+                this.roomsManager.lobbies.get(lobbyId).timeLimit
+                    ? (this.roomsManager.lobbies.get(lobbyId).time = this.roomsManager.lobbies.get(lobbyId).timeLimit)
+                    : (this.roomsManager.lobbies.get(lobbyId).time += this.roomsManager.lobbies.get(lobbyId).bonusTime);
                 const difference = this.games.get(lobbyId).differences[index];
                 this.server.to(lobbyId).emit(GameEvents.Found, {
                     lobby: this.roomsManager.lobbies.get(lobbyId),

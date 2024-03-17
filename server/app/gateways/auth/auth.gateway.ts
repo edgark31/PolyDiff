@@ -1,6 +1,6 @@
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
-import { ChannelEvents, MessageTag } from '@common/enums';
+import { AccountEvents, ChannelEvents, MessageTag } from '@common/enums';
 import { Chat, ChatLog } from '@common/game-interfaces';
 import { Logger } from '@nestjs/common';
 import {
@@ -38,6 +38,21 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         private readonly messageManager: MessageManagerService,
     ) {
         this.globalChatLog = { chat: [], channelName: 'global' };
+    }
+
+    @SubscribeMessage(AccountEvents.UserUpdate)
+    retrivesUsers() {
+        this.server.emit(AccountEvents.UserUpdate, Array.from(this.accountManager.users.values()));
+    }
+
+    @SubscribeMessage(AccountEvents.UserCreate)
+    handleAccountCreate() {
+        this.server.emit(AccountEvents.UserUpdate, Array.from(this.accountManager.users.values()));
+    }
+
+    @SubscribeMessage(AccountEvents.UserDelete)
+    handleAccountDelete() {
+        this.server.emit(AccountEvents.UserUpdate, Array.from(this.accountManager.users.values()));
     }
 
     @SubscribeMessage(ChannelEvents.SendGlobalMessage)
