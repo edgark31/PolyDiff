@@ -156,6 +156,7 @@ export interface Lobby {
     time?: number;
     timeLimit: number;
     bonusTime?: number;
+    timePlayed: number;
     chatLog?: ChatLog;
     nDifferences?: number;
 }
@@ -208,7 +209,7 @@ export interface ConnectionLog {
 }
 
 export interface Statistics {
-    gamePlayed: number;
+    gamesPlayed: number;
     gameWon: number;
     averageTime: number;
     averageDifferences: number;

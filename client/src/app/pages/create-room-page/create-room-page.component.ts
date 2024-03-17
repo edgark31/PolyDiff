@@ -52,6 +52,7 @@ export class CreateRoomPageComponent implements AfterViewInit {
             password: this.password,
             nDifferences: this.nDifferences,
             gameId: this.gameId,
+            timePlayed: 0,
         };
         if (this.mode === GameModes.Limited) {
             this.roomManagerService.createLimitedRoom(roomPayload);
