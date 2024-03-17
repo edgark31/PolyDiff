@@ -208,7 +208,7 @@ export interface ConnectionLog {
 }
 
 export interface Statistics {
-    gamePlayed: number;
+    gamesPlayed: number;
     gameWon: number;
     averageTime: number;
     averageDifferences: number;

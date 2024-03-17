@@ -286,6 +286,25 @@ export class AccountManagerService implements OnModuleInit {
         this.showProfiles();
     }
 
+    async logConnexion(id: string, isConnexion: boolean): Promise<void> {
+        const account = await this.accountModel.findOne({ id });
+        if (account) {
+            account.profile.connections.push({
+                timestamp: new Date().toLocaleTimeString('en-US', {
+                    timeZone: 'America/Toronto',
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                }),
+                isConnexion,
+            });
+            account.save();
+        }
+    }
+
     // async connexionToAdmin(password: string): Promise<boolean> {
     //     try {
     //         console.log(password + 'qdsdss');
