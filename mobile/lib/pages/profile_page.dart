@@ -27,14 +27,20 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late final AvatarProvider _avatarProvider;
+  late final InfoService _infoService;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _avatarProvider = Provider.of<AvatarProvider>(context, listen: false);
+    _infoService = Provider.of<InfoService>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     final socketService = context.watch<SocketService>();
-    final infoService = context.watch<InfoService>();
-
-    // avatar
-    AvatarProvider.instance.setAccountAvatarUrl(infoService.id);
-    final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
 
     return Scaffold(
       appBar: CustomAppBar(title: "P R O F I L"),
@@ -55,6 +61,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Stack(
                           children: [
                             Container(
+                              key: ValueKey(
+                                  AvatarProvider.instance.currentAvatarUrl),
                               width: 130,
                               height: 130,
                               decoration: BoxDecoration(
@@ -69,8 +77,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: NetworkImage(AvatarProvider
-                                        .instance.currentAvatarUrl),
+                                    image: NetworkImage(
+                                        _avatarProvider.currentAvatarUrl),
                                   )),
                             ),
                             Positioned(
@@ -100,9 +108,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: Column(children: [
-                        Text(infoService.username),
+                        Text(_infoService.username),
                         SizedBox(height: 5),
-                        Text(infoService.email),
+                        Text(_infoService.email),
                       ]),
                     ),
 

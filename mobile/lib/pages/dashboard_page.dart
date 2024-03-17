@@ -36,6 +36,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget _gameModeOption(GameModes type, IconData icon, Color color) {
     final lobbyService = context.watch<LobbyService>();
+
     final socketService = context.watch<SocketService>();
     final infoService = context.watch<InfoService>();
     final chatService = context.watch<ChatService>();

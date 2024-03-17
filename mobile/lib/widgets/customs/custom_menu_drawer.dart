@@ -8,21 +8,43 @@ import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/custom_circle_avatar.dart';
 import 'package:provider/provider.dart';
 
-class CustomMenuDrawer extends StatelessWidget {
+class CustomMenuDrawer extends StatefulWidget {
   const CustomMenuDrawer({super.key});
+
+  @override
+  _CustomMenuDrawerState createState() => _CustomMenuDrawerState();
+}
+
+class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
+  late final AvatarProvider _avatarProvider;
+  late final InfoService _infoService;
+  late final SocketService _socketService;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize providers in initState to avoid calling Provider.of in build method
+
+    _avatarProvider = Provider.of<AvatarProvider>(context, listen: false);
+    _infoService = Provider.of<InfoService>(context, listen: false);
+    _socketService = Provider.of<SocketService>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final socketService = context.watch<SocketService>();
-    final infoService = context.watch<InfoService>();
+    // Use Consumer to listen to AvatarProvider changes
 
     return Drawer(
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text(infoService.username),
-            accountEmail: Text(infoService.email),
+            accountName: Text(_infoService.username),
+            accountEmail: Text(_infoService.email),
             currentAccountPicture: CustomCircleAvatar(
-              imageUrl: AvatarProvider.instance.currentAvatarUrl,
+              // Provide a unique key to force widget rebuild when avatar changes
+              key: ValueKey(AvatarProvider.instance.currentAvatarUrl),
+
+              imageUrl: _avatarProvider.currentAvatarUrl,
             ),
             decoration: BoxDecoration(color: kMidOrange),
           ),
@@ -55,12 +77,11 @@ class CustomMenuDrawer extends StatelessWidget {
           ListTile(
               leading: Icon(
                 Icons.logout,
-                color: kLight,
               ),
               title: Text('Déconnexion'),
               onTap: () {
                 print('Déconnexion');
-                socketService.disconnect(SocketType.Auth);
+                _socketService.disconnect(SocketType.Auth);
                 Navigator.pushNamed(context, HOME_ROUTE);
               }),
         ],

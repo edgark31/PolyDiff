@@ -6,6 +6,7 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/services/info_service.dart';
@@ -145,6 +146,8 @@ class _SignInFormState extends State<SignInForm> {
                       if (serverErrorMessage == null) {
                         socketService.setup(SocketType.Auth, infoService.id);
                         chatService.setGlobalChatListeners();
+                        AvatarProvider.instance
+                            .setAccountAvatarUrl(infoService.id);
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       }
                     }

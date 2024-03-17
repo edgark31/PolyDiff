@@ -35,6 +35,7 @@ Future<http.Response?> putPredefinedAvatar(UploadAvatarBody data) async {
   } catch (error) {
     log(error.toString());
   }
+
   return response;
 }
 

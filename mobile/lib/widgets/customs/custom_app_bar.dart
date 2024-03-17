@@ -3,10 +3,9 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
-import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:provider/provider.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     required this.title,
@@ -20,18 +19,32 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
-  Widget build(BuildContext context) {
-    final infoService = context.watch<InfoService>();
+  State<CustomAppBar> createState() => _CustomAppBarState();
+}
 
-    // user avatar
-    AvatarProvider.instance.setAccountAvatarUrl(infoService.id);
-    final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
+class _CustomAppBarState extends State<CustomAppBar> {
+  late final AvatarProvider _avatarProvider;
+  late final InfoService _infoService;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _avatarProvider = Provider.of<AvatarProvider>(context, listen: false);
+    _infoService = Provider.of<InfoService>(context, listen: false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Optionally listen for changes in infoService if avatar URL might change based on user actions
+
     return AppBar(
       centerTitle: true,
-      titleTextStyle: appstyle(20, kLight, FontWeight.bold),
-      title: Text(title, style: TextStyle(letterSpacing: 3)),
+      titleTextStyle:
+          TextStyle(fontSize: 20, color: kLight, fontWeight: FontWeight.bold),
+      title: Text(widget.title, style: const TextStyle(letterSpacing: 3)),
       backgroundColor: kMidOrange,
-      iconTheme: IconThemeData(color: kLight),
+      iconTheme: const IconThemeData(color: kLight),
       actions: <Widget>[
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
@@ -59,7 +72,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: GestureDetector(
             onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE),
             child: CircleAvatar(
-              backgroundImage: NetworkImage(avatarUrl),
+              key: ValueKey(AvatarProvider.instance.currentAvatarUrl),
+              backgroundImage: NetworkImage(_avatarProvider.currentAvatarUrl),
               radius: 18.0,
             ),
           ),

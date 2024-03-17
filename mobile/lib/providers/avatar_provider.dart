@@ -13,13 +13,20 @@ class AvatarProvider extends ChangeNotifier {
   String get currentAvatarUrl => _currentAvatarUrl;
 
   void setAccountAvatarUrl(String id) {
-    _currentAvatarUrl = '$BASE_URL/avatar/$id.png';
-    notifyListeners();
+    // Append a timestamp to the URL as a cache-buster
+    final String newAvatarUrl = '$BASE_URL/avatar/$id.png';
+    print('Changing avatar from $_currentAvatarUrl to $newAvatarUrl');
+    imageCache.evict(AvatarProvider.instance.currentAvatarUrl);
+    _instance._currentAvatarUrl = newAvatarUrl;
+    _instance.notifyListeners();
   }
 
   static void setInitialAvatar() {
     const String defaultId = '1';
-    _instance._currentAvatarUrl = '$BASE_URL/avatar/default$defaultId.png';
+    // Include the cache-buster here too if the initial avatar might change and need refreshing
+    final String newAvatarUrl =
+        '$BASE_URL/avatar/default$defaultId.png?timestamp=${DateTime.now().millisecondsSinceEpoch}';
+    _instance._currentAvatarUrl = newAvatarUrl;
     _instance.notifyListeners();
   }
 }

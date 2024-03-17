@@ -44,7 +44,9 @@ class StatisticsPage extends StatelessWidget {
 
     // user avatar
     AvatarProvider.instance.setAccountAvatarUrl(infoService.id);
+    // Dynamically change the avatar URL
     final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
+    // ui updates when the avatar changes
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -64,7 +66,6 @@ class StatisticsPage extends StatelessWidget {
               ...statistics
                   .map((stat) => StatisticCard(statistic: stat))
                   .toList(),
-              // Ajouter ici un widget pour les graphiques si nécessaire
             ],
           ),
         ),

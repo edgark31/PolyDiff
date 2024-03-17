@@ -59,6 +59,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     _validator = CredentialsValidator(onStateChanged: _forceRebuild);
     usernameController.addListener(_onUsernameChanged);
+
     _loadInitialSettings();
   }
 
@@ -101,6 +102,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> saveChanges() async {
     final infoService = Provider.of<InfoService>(context, listen: false);
+    final avatarProvider = Provider.of<AvatarProvider>(context, listen: false);
     final registerProvider =
         Provider.of<RegisterProvider>(context, listen: false);
 
@@ -108,12 +110,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
       // Avatar changes
       if (_selectedAvatarId != null) {
         UploadAvatarBody predefinedAvatarBody = UploadAvatarBody(
-            username: infoService.username, id: _selectedAvatarId!);
+            username: infoService.username, id: _selectedAvatarId);
         String? response = await registerProvider.putAvatarData(
             predefinedAvatarBody, AvatarType.predefined);
+        print("response : $response");
         if (response == null) {
-          AvatarProvider.instance.setAccountAvatarUrl(infoService.id);
-          showFeedback("Avatar updated successfully.");
+          avatarProvider.setAccountAvatarUrl(infoService.username);
         } else {
           throw Exception(response);
         }
@@ -133,8 +135,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
       // Username changes
       if (usernameController.text.trim() != initialSettings?.username &&
-          usernameController.text.trim().isNotEmpty &&
-          usernameFormat.isEmpty) {
+          usernameController.text.trim().isNotEmpty) {
         String? response = await accountService.updateUsername(
             infoService.username, usernameController.text.trim());
         if (response == null) {
@@ -207,13 +208,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final infoService = context.watch<InfoService>();
     final soundService = SoundService();
-    RegisterProvider registerProvider =
-        Provider.of<RegisterProvider>(context, listen: false);
-
-    // avatar
-    AvatarProvider.instance.setAccountAvatarUrl(infoService.id);
 
     return Scaffold(
         drawer: CustomMenuDrawer(),

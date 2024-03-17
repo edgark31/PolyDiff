@@ -40,8 +40,11 @@ class RegisterProvider extends ChangeNotifier {
         try {
           http.Response response = (await putPredefinedAvatar(body))!;
           if (response.statusCode == 200) {
+            String body = response.body;
             isBack = true;
             isLoading = false;
+            print("Successfully updating predefined avatar $body");
+
             notifyListeners();
             return null;
           }

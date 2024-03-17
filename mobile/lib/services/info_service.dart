@@ -85,9 +85,6 @@ class InfoService extends ChangeNotifier {
     setEmail(credentials.email);
   }
 
-  // TODO
-  void setAccountInfo(Profile fetchedProfile) {}
-
   void setInfosOnConnection(String serverConnectionResponse) {
     final result = jsonDecode(serverConnectionResponse) as Map<String, dynamic>;
 
