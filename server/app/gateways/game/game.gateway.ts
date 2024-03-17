@@ -1,22 +1,20 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-magic-numbers */
-/* eslint-disable object-shorthand */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-case-declarations */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { GameService } from '@app/services/game/game.service';
+import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { NOT_FOUND } from '@common/constants';
 import { ChannelEvents, GameEvents, GameModes, GameState, MessageTag } from '@common/enums';
-import { Chat, Coordinate, Game } from '@common/game-interfaces';
+import { Chat, ChatLog, Coordinate, Game } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { DELAY_BEFORE_EMITTING_TIME } from './game.gateway.constants';
 
 @WebSocketGateway({
     namespace: '/game',
@@ -33,16 +31,17 @@ export class GameGateway implements OnGatewayConnection {
         private readonly gameService: GameService,
         private readonly roomsManager: RoomsManagerService,
         private readonly messageManager: MessageManagerService,
+        private readonly imageManager: ImageManagerService,
     ) {}
 
     // ------------------ CLASSIC MODE && LIMITED MODE ------------------
     @SubscribeMessage(GameEvents.StartGame)
     async startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        socket.data.state = GameState.InGame;
         socket.join(lobbyId);
 
         // Pour démarrer tout le monde en même temps
         if (Array.from(await this.server.in(lobbyId).fetchSockets()).length === this.roomsManager.lobbies.get(lobbyId).players.length) {
+            this.roomsManager.lobbies.get(lobbyId).chatLog = { chat: [], channelName: 'game' } as ChatLog;
             if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
                 await this.gameService.getGameById(this.roomsManager.lobbies.get(lobbyId).gameId).then((game) => {
                     // Mettre une copie de game(db) vers game(game) et l'identifier par le lobbyId
@@ -57,12 +56,10 @@ export class GameGateway implements OnGatewayConnection {
                     });
                     this.games.set(lobbyId, clonedGame);
                 });
-                this.server.to(lobbyId).emit(GameEvents.StartGame, this.roomsManager.lobbies.get(lobbyId));
+                this.server.to(lobbyId).emit(GameEvents.StartGame, this.games.get(lobbyId));
                 this.logger.log(`Game started in lobby -> ${lobbyId}`);
             } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
-                // Start Limited Mode
-                // const allGameIds : string[] = this.gameService.get
-                this.logger.error('Not implemented yet, sorry... 😭');
+                await this.nextGame(lobbyId, []);
             }
             // Set timer indivually for each lobby
             const timerId = setInterval(() => {
@@ -78,14 +75,13 @@ export class GameGateway implements OnGatewayConnection {
                 }
                 this.roomsManager.lobbies.get(lobbyId).time -= 1;
                 this.server.to(lobbyId).emit(GameEvents.TimerUpdate, this.roomsManager.lobbies.get(lobbyId).time);
-            }, 1000);
+            }, DELAY_BEFORE_EMITTING_TIME);
             this.timers.set(lobbyId, timerId);
         }
     }
 
     @SubscribeMessage(GameEvents.Clic)
-    clic(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('coordClic') coordClic: Coordinate) {
-        this.logger.warn('Clic happened in lobby ' + lobbyId);
+    async clic(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('coordClic') coordClic: Coordinate) {
         const index: number = this.games
             .get(lobbyId)
             .differences.findIndex((difference) => difference.some((coord: Coordinate) => coord.x === coordClic.x && coord.y === coordClic.y));
@@ -101,14 +97,12 @@ export class GameGateway implements OnGatewayConnection {
                 this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
                 const difference = this.games.get(lobbyId).differences.splice(index, 1);
                 const remainingDifferences: Coordinate[][] = this.games.get(lobbyId).differences;
-                // Vérifier s'il reste des differences
-                if (this.games.get(lobbyId).differences.length <= 0) {
-                    this.server.to(lobbyId).emit(GameEvents.EndGame);
-                    this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
-                        raw: 'MATCH NUL',
-                        tag: MessageTag.Common,
-                    } as Chat);
-                }
+                this.server.to(lobbyId).emit(GameEvents.Found, {
+                    lobby: this.roomsManager.lobbies.get(lobbyId),
+                    difference,
+                });
+                this.roomsManager.lobbies.get(lobbyId).isCheatEnabled ? this.server.to(lobbyId).emit(GameEvents.Cheat, remainingDifferences) : null;
+                this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
                 // Vérifier si un seuil est atteint pour un joueur
                 const { isGameFinished, potentialWinner } = this.thresholdCheck(lobbyId);
                 if (isGameFinished && potentialWinner) {
@@ -117,45 +111,94 @@ export class GameGateway implements OnGatewayConnection {
                         raw: `${this.accountManager.connectedUsers.get(potentialWinner.accountId).credentials.username} a gagné !`,
                         tag: MessageTag.Common,
                     } as Chat);
+                    return;
                 }
-                this.server.to(lobbyId).emit(GameEvents.Found, {
-                    lobby: this.roomsManager.lobbies.get(lobbyId),
-                    difference: difference,
-                });
-                this.roomsManager.lobbies.get(lobbyId).isCheatEnabled ? this.server.to(lobbyId).emit(GameEvents.Cheat, remainingDifferences) : null;
-                this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
+                // Vérifier s'il reste des differences
+                if (this.games.get(lobbyId).differences.length <= 0) {
+                    this.server.to(lobbyId).emit(GameEvents.EndGame);
+                    this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
+                        raw: 'MATCH NUL',
+                        tag: MessageTag.Common,
+                    } as Chat);
+                    clearInterval(this.timers.get(lobbyId));
+                }
                 return;
             }
             // Si pas trouvé
             this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
             socket.emit(GameEvents.NotFound, coordClic);
         } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
-            // Limited Mode
-            this.logger.error('Not implemented yet, sorry... 😭');
+            // Si trouvé
+            if (index !== NOT_FOUND) {
+                // Update tout correctement
+                this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
+                const difference = this.games.get(lobbyId).differences[index];
+                this.server.to(lobbyId).emit(GameEvents.Found, {
+                    lobby: this.roomsManager.lobbies.get(lobbyId),
+                    difference,
+                });
+                this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
+                // Load la next game
+                const game = await this.nextGame(lobbyId, this.games.get(lobbyId).playedGameIds);
+                if (!game) {
+                    const { winningPlayers, message } = this.limitedEndCheck(lobbyId);
+                    this.logger.log(`Game ${lobbyId} ended with ${winningPlayers.length} winners`);
+                    this.server.to(lobbyId).emit(GameEvents.EndGame);
+                    this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
+                        raw: message,
+                        tag: MessageTag.Common,
+                    } as Chat);
+                    clearInterval(this.timers.get(lobbyId));
+                    return;
+                }
+                this.roomsManager.lobbies.get(lobbyId).isCheatEnabled
+                    ? this.server.to(lobbyId).emit(GameEvents.Cheat, this.games.get(lobbyId).differences)
+                    : null;
+                return;
+            }
+            // Si pas trouvé
+            this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
+            socket.emit(GameEvents.NotFound, coordClic);
         }
     }
 
     @SubscribeMessage(GameEvents.AbandonGame)
     abandonGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.data.state = GameState.Abandoned;
+        this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
+            .get(lobbyId)
+            .players.filter((player) => player.accountId !== socket.data.accountId);
         socket.leave(lobbyId);
+        this.logger.log(`${socket.data.accountId} abandoned game ${lobbyId}`);
         if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
             this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
             clearInterval(this.timers.get(lobbyId));
+            this.logger.log(`Game ${lobbyId} ended because of not enough players`);
         }
-        this.logger.log(`Game abandoned in lobby ${lobbyId}`);
     }
 
-    @SubscribeMessage(GameEvents.NextGame)
-    nextGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {}
+    @SubscribeMessage(ChannelEvents.SendGameMessage)
+    handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
+        const chat: Chat = this.messageManager.createMessage(
+            this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+            message,
+        );
+
+        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received });
+    }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
+        socket.data.state = GameState.InGame;
 
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
                 case GameState.InGame:
-                    const lobbyId = Array.from(socket.rooms)[1] as string;
+                    const lobbyId: string = Array.from(socket.rooms)[1] as string;
+                    this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
+                        .get(lobbyId)
+                        .players.filter((player) => player.accountId !== socket.data.accountId);
                     if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
                         this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
                         clearInterval(this.timers.get(lobbyId));
@@ -168,11 +211,12 @@ export class GameGateway implements OnGatewayConnection {
                 default:
                     break;
             }
-            this.logger.log(`LOBBY OUT de ${socket.data.accountId}`);
+            this.logger.log(`GAME OUT de ${socket.data.accountId}`);
         });
         this.logger.log(`GAME ON de ${socket.data.accountId}`);
     }
 
+    // ------------------ CLASSIC MODE ------------------
     private thresholdCheck(lobbyId: string) {
         const leftDifferences = this.games.get(lobbyId).differences.length;
         let potentialWinner = null;
@@ -195,5 +239,43 @@ export class GameGateway implements OnGatewayConnection {
             }
         }
         return { isGameFinished, potentialWinner };
+    }
+    // ------------------ LIMITED MODE ------------------
+    private limitedEndCheck(lobbyId: string) {
+        const players = this.roomsManager.lobbies.get(lobbyId).players;
+        const highestScore = Math.max(...players.map((player) => player.count));
+        const winningPlayers = players.filter((player) => player.count === highestScore);
+        let message: string;
+
+        if (winningPlayers.length === 1) {
+            message = `${winningPlayers[0].name} a gagné avec ${highestScore} points !`;
+        } else {
+            const names = winningPlayers.map((player) => player.name).join(', ');
+            message = `Match nul entre ${names} avec ${highestScore} points chacun !`;
+        }
+
+        return { winningPlayers, message };
+    }
+
+    private async nextGame(lobbyId: string, gamesPlayed: string[]) {
+        // Picking one game randomly
+        const game = await this.gameService.getRandomGame(gamesPlayed);
+        if (!game) return false;
+        const clonedGame: Game = structuredClone({
+            lobbyId,
+            name: game.name,
+            original: game.originalImage,
+            modified: game.modifiedImage,
+            gameId: game._id,
+            differences: JSON.parse(game.differences) as Coordinate[][],
+            playedGameIds: [...gamesPlayed, game._id.toString()],
+        });
+        // Randomly picking one difference to keep
+        const keepIndex: number = Math.floor(Math.random() * clonedGame.differences.length);
+        const gameCopy = structuredClone(clonedGame);
+        clonedGame.modified = await this.imageManager.modifyImage(gameCopy, keepIndex);
+        clonedGame.differences = clonedGame.differences.filter((_, index) => index === keepIndex);
+        this.games.set(lobbyId, clonedGame);
+        return game;
     }
 }
