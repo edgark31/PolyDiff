@@ -161,9 +161,9 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async modifySongError(oldUsername: string, newSong: Song): Promise<void> {
+    async modifySongError(username: string, newSong: Song): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
             accountFound.profile.songDifference = newSong;
@@ -177,9 +177,9 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async modifySongDifference(oldUsername: string, newSong: Song): Promise<void> {
+    async modifySongDifference(username: string, newSong: Song): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
 
@@ -194,9 +194,9 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async modifyTheme(oldUsername: string, newTheme: Theme): Promise<void> {
+    async modifyTheme(username: string, newTheme: Theme): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
 

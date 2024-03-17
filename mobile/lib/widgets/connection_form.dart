@@ -1,10 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:mobile/pages/signup_page.dart';
-import 'package:provider/provider.dart';
+// ignore_for_file: use_build_context_synchronously
 
-import '../pages/chat_page.dart';
-import '../services/socket_service.dart';
+import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
+import 'package:mobile/models/models.dart';
+import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/form_service.dart';
+import 'package:mobile/services/info_service.dart';
+import 'package:mobile/services/socket_service.dart';
+import 'package:mobile/widgets/customs/app_style.dart';
+import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:mobile/widgets/customs/custom_text_input_field.dart';
+import 'package:provider/provider.dart';
 
 class ConnectionForm extends StatefulWidget {
   @override
@@ -12,6 +20,7 @@ class ConnectionForm extends StatefulWidget {
 }
 
 class _ConnectionFormState extends State<ConnectionForm> {
+  final FormService formService = FormService();
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String errorMessage = "";
@@ -26,180 +35,117 @@ class _ConnectionFormState extends State<ConnectionForm> {
         });
       }
     });
+    passwordController.addListener(() {
+      if (passwordController.text.isEmpty) {
+        setState(() {
+          errorMessage = "";
+        });
+      }
+    });
+  }
+
+  bool isFormValid() {
+    bool isValidUsername = userNameController.text.isNotEmpty;
+    bool isValidPassword = passwordController.text.isNotEmpty;
+    return isValidUsername && isValidPassword;
   }
 
   @override
   Widget build(BuildContext context) {
+    double bottomPadding = MediaQuery.of(context).viewInsets.bottom > 0
+        ? 20
+        : MediaQuery.of(context).size.height * 0.3;
     final socketService = context.watch<SocketService>();
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xFF7DAF9C),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Container(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Connexion',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 21, right: 100),
+    final infoService = context.watch<InfoService>();
+    final chatService = context.watch<ChatService>();
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(
+                top: bottomPadding, left: 16, right: 16, bottom: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "PolyDiff",
+                  style: appstyle(60, kLightOrange, FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 50),
+                CustomTextInputField(
+                  label: 'Nom d\'utilisateur ou courriel',
+                  controller: userNameController,
+                  hint: 'Entrez votre nom d\'utilisateur',
+                  maxLength: 20,
+                  isPassword: false,
+                ),
+                CustomTextInputField(
+                  label: 'Mot de passe',
+                  controller: passwordController,
+                  hint: 'Entrez votre mot de passe',
+                  maxLength: 20,
+                  isPassword: true,
+                ),
+                CustomButton(
+                  press: () async {
+                    if (isFormValid()) {
+                      Credentials credentials = Credentials(
+                        username: userNameController.text,
+                        password: passwordController.text,
+                      );
+                      String? serverErrorMessage =
+                          await formService.connect(credentials);
+                      if (serverErrorMessage == null) {
+                        socketService.setup(
+                            SocketType.Auth, infoService.id);
+                        chatService.setGlobalChatListeners(); // TODO : move this (maybe)
+                        Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                      } else {
+                        setState(() {
+                          errorMessage = serverErrorMessage;
+                        });
+                      }
+                    } else {
+                      setState(() {
+                        errorMessage =
+                            "Les entrées ne devraient pas être vides";
+                      });
+                    }
+                  },
+                  backgroundColor: kMidOrange,
+                  textColor: kLight,
+                  text: 'C O N N E X I O N',
+                ),
+                Text(
+                  errorMessage,
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 240, 16, 0),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                ),
+                Center(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, SIGNUP_ROUTE);
+                    },
+                    child: Container(
                       child: Text(
-                        "Nom d'utilisateur ou courriel",
+                        "S' I N S C R I R E",
                         style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black,
                         ),
                       ),
                     ),
                   ),
-                  Container(
-                    width: 400,
-                    height: 63,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: TextField(
-                        controller: userNameController,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(20),
-                        ],
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: 21,
-                        right: 200,
-                      ),
-                      child: Text(
-                        "Mot de passe",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 400,
-                    height: 63,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: TextField(
-                        controller: passwordController,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(20),
-                        ],
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 21),
-                    child: SizedBox(
-                      width: 430,
-                      height: 40,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // TODO: ajouter la vérification et l'envoit du mot de passe
-                          // TODO optionnel: rendre ca clean pas if if if if
-                          String userName = userNameController.text;
-                          if (userName.isNotEmpty) {
-                            print("Sending the server your username: " +
-                                userName);
-                            socketService.checkName(userName);
-                          } else {
-                            setState(() {
-                              errorMessage = "Votre nom ne peut pas être vide";
-                            });
-                          }
-                          Future.delayed(Duration(milliseconds: 300), () {
-                            print(
-                                "Connection status: ${socketService.connectionStatus}");
-                            if (socketService.connectionStatus) {
-                              print("We are in the connection status");
-                              print("Connection approved");
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ChatPage(),
-                                ),
-                              );
-                            } else if (userName.isNotEmpty) {
-                              setState(() {
-                                errorMessage =
-                                    "Un client avec ce nom existe déjà";
-                              });
-                            }
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0),
-                          ),
-                          backgroundColor: Color.fromARGB(255, 31, 150, 104),
-                          foregroundColor: Colors.white,
-                        ),
-                        child: Text("Connexion"),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    errorMessage,
-                    style: TextStyle(
-                        color: const Color.fromARGB(255, 240, 16, 0),
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Center(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => SignUpPage(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        child: Text(
-                          "S'inscrire",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
