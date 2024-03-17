@@ -4,7 +4,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ _id: false })
 export class SessionLog {
     @Prop({ required: true })
     timestamp: string;
@@ -15,7 +15,7 @@ export class SessionLog {
 
 export const sessionLogSchema = SchemaFactory.createForClass(SessionLog);
 
-@Schema()
+@Schema({ _id: false })
 export class Theme {
     @Prop({ required: true })
     name: string;
@@ -32,7 +32,7 @@ export class Theme {
 
 export const themeSchema = SchemaFactory.createForClass(Theme);
 
-@Schema()
+@Schema({ _id: false })
 export class Song {
     @Prop({ required: true })
     name: string;
@@ -43,7 +43,7 @@ export class Song {
 
 export const songSchema = SchemaFactory.createForClass(Song);
 
-@Schema()
+@Schema({ _id: false })
 export class ConnexionLog {
     @Prop({ required: true })
     timestamp: string;
@@ -54,6 +54,7 @@ export class ConnexionLog {
 
 export const connexionLogSchema = SchemaFactory.createForClass(ConnexionLog);
 
+@Schema({ _id: false })
 export class Statistics {
     @Prop({ required: true })
     gamePlayed: number;
@@ -70,7 +71,7 @@ export class Statistics {
 
 export const statisticsSchema = SchemaFactory.createForClass(Statistics);
 
-@Schema()
+@Schema({ _id: false })
 export class Friend {
     @Prop({ required: true })
     name: string;
@@ -93,7 +94,7 @@ export class Friend {
 
 export const friendSchema = SchemaFactory.createForClass(Friend);
 
-@Schema()
+@Schema({ _id: false })
 export class Profile {
     @Prop({ required: true })
     avatar: string;
@@ -127,7 +128,8 @@ export class Profile {
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);
-@Schema()
+
+@Schema({ _id: false })
 export class Credentials {
     @Prop({ required: true })
     username: string;
