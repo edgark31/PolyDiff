@@ -49,7 +49,6 @@ export class GamePageComponent implements OnDestroy, OnInit {
         replayService: ReplayService,
         router: Router,
         imageService: ImageService,
-
         private readonly gameAreaService: GameAreaService,
         private readonly gameManager: GameManagerService,
         private clientSocket: ClientSocketService,

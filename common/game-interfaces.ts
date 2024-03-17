@@ -169,6 +169,7 @@ export interface Game {
     difficulty?: string;
     differences?: Coordinate[][];
     nDifferences?: number;
+    playedGameIds?: string[];
 }
 
 export interface Account {
