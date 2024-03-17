@@ -69,10 +69,12 @@ export class GameGateway implements OnGatewayConnection {
                 }
                 if (this.roomsManager.lobbies.get(lobbyId).time <= 0) {
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Temps écoulé !');
+                    this.logDraw(lobbyId);
                     clearInterval(timerId);
                     return;
                 }
                 this.roomsManager.lobbies.get(lobbyId).time -= 1;
+                this.roomsManager.lobbies.get(lobbyId).timePlayed += 1;
                 this.server.to(lobbyId).emit(GameEvents.TimerUpdate, this.roomsManager.lobbies.get(lobbyId).time);
             }, DELAY_BEFORE_EMITTING_TIME);
             this.timers.set(lobbyId, timerId);
@@ -88,7 +90,7 @@ export class GameGateway implements OnGatewayConnection {
             index !== NOT_FOUND
                 ? `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username}, 'a trouvé une différence !`
                 : `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username}, 's'est trompé !`;
-
+        // ------------------ CLASSIC MODE ------------------
         if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
             // Si trouvé
             if (index !== NOT_FOUND) {
@@ -106,15 +108,18 @@ export class GameGateway implements OnGatewayConnection {
                 const { isGameFinished, potentialWinner } = this.thresholdCheck(lobbyId);
                 if (isGameFinished && potentialWinner) {
                     this.server.to(lobbyId).emit(GameEvents.EndGame);
+                    this.logOneWinner(lobbyId, potentialWinner.accountId);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
                         raw: `${this.accountManager.connectedUsers.get(potentialWinner.accountId).credentials.username} a gagné !`,
                         tag: MessageTag.Common,
                     } as Chat);
+                    clearInterval(this.timers.get(lobbyId));
                     return;
                 }
                 // Vérifier s'il reste des differences
                 if (this.games.get(lobbyId).differences.length <= 0) {
                     this.server.to(lobbyId).emit(GameEvents.EndGame);
+                    this.logDraw(lobbyId);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
                         raw: 'MATCH NUL',
                         tag: MessageTag.Common,
@@ -126,11 +131,17 @@ export class GameGateway implements OnGatewayConnection {
             // Si pas trouvé
             this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
             socket.emit(GameEvents.NotFound, coordClic);
+            // ------------------ LIMITED MODE ------------------
         } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
             // Si trouvé
             if (index !== NOT_FOUND) {
                 // Update tout correctement
                 this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
+                // Update le time
+                this.roomsManager.lobbies.get(lobbyId).time + this.roomsManager.lobbies.get(lobbyId).bonusTime >=
+                this.roomsManager.lobbies.get(lobbyId).timeLimit
+                    ? (this.roomsManager.lobbies.get(lobbyId).time = this.roomsManager.lobbies.get(lobbyId).timeLimit)
+                    : (this.roomsManager.lobbies.get(lobbyId).time += this.roomsManager.lobbies.get(lobbyId).bonusTime);
                 const difference = this.games.get(lobbyId).differences[index];
                 this.server.to(lobbyId).emit(GameEvents.Found, {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
@@ -143,6 +154,7 @@ export class GameGateway implements OnGatewayConnection {
                     const { winningPlayers, message } = this.limitedEndCheck(lobbyId);
                     this.logger.log(`Game ${lobbyId} ended with ${winningPlayers.length} winners`);
                     this.server.to(lobbyId).emit(GameEvents.EndGame);
+                    winningPlayers.length === 1 ? this.logOneWinner(lobbyId, winningPlayers[0].accountId) : this.logDraw(lobbyId);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
                         raw: message,
                         tag: MessageTag.Common,
@@ -276,5 +288,24 @@ export class GameGateway implements OnGatewayConnection {
         clonedGame.differences = clonedGame.differences.filter((_, index) => index === keepIndex);
         this.games.set(lobbyId, clonedGame);
         return game;
+    }
+
+    // ------------------ CALCULATE SESSION LOG ------------------
+
+    // "winner" veut dire que tout le monde lose sauf le winner
+    private logOneWinner(lobbyId: string, accountId: string) {
+        const winner = this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === accountId);
+        this.accountManager.logSession(winner.accountId, true, this.roomsManager.lobbies.get(lobbyId).timePlayed, winner.count);
+        const losers = this.roomsManager.lobbies.get(lobbyId).players.filter((player) => player.accountId !== accountId);
+        losers.forEach((player) => {
+            this.accountManager.logSession(player.accountId, false, this.roomsManager.lobbies.get(lobbyId).timePlayed, player.count);
+        });
+    }
+
+    // "draw" veut dire que tout le monde lose
+    private logDraw(lobbyId: string) {
+        this.roomsManager.lobbies.get(lobbyId).players.forEach((player) => {
+            this.accountManager.logSession(player.accountId, false, this.roomsManager.lobbies.get(lobbyId).timePlayed, player.count);
+        });
     }
 }

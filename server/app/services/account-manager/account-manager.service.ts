@@ -1,6 +1,7 @@
+/* eslint-disable max-params */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials, Song, Statistics, Theme } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Song, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONNALIZATION } from '@common/constants';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
@@ -35,7 +36,12 @@ export class AccountManagerService implements OnModuleInit {
                     avatar: this.imageManager.convert(`default${id}.png`),
                     sessions: [],
                     connections: [],
-                    stats: {} as Statistics,
+                    stats: {
+                        gamesPlayed: 0,
+                        gameWon: 0,
+                        averageTime: 0,
+                        averageDifferences: 0,
+                    },
                     friends: [],
                     friendRequests: [],
                     language: 'en',
@@ -71,7 +77,8 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
-            accountFound.save();
+            await accountFound.save();
+            accountFound.profile.avatar = '';
             this.connectedUsers.set(accountFound.id, accountFound);
             this.fetchUsers();
             this.logger.log(`${accountFound.credentials.username} has connected with password ${accountFound.credentials.password}`);
@@ -114,7 +121,7 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
             await accountFound.save();
-            this.logger.log(`${username} has changed his avatar`);
+            this.logger.log(`${username} has uploaded his avatar`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to upload avatar --> ${error.message}`);
@@ -134,7 +141,7 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
             await accountFound.save();
-            this.logger.log(`${username} has changed his avatar`);
+            this.logger.log(`${username} has choose his avatar`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to choose avatar --> ${error.message}`);
@@ -169,7 +176,7 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.profile.songDifference = newSong;
 
             await accountFound.save();
-            this.logger.verbose('song change');
+            this.logger.verbose(`${username} has changed his error sound effect`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change song --> ${error.message}`);
@@ -180,13 +187,12 @@ export class AccountManagerService implements OnModuleInit {
     async modifySongDifference(username: string, newSong: Song): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
-
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.songError = newSong;
 
             await accountFound.save();
-            this.logger.verbose('song change');
+            this.logger.verbose(`${username} has changed his difference sound effect`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change song --> ${error.message}`);
@@ -203,7 +209,7 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.profile.theme = newTheme;
 
             await accountFound.save();
-            this.logger.verbose('Theme change');
+            this.logger.verbose(`${username} has changed his theme`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change theme --> ${error.message}`);
@@ -232,8 +238,9 @@ export class AccountManagerService implements OnModuleInit {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
             if (!accountFound) throw new Error('Account not found');
-            await this.accountModel.deleteOne({ 'credentials.username': creds.username });
+
             if (!this.connectedUsers.delete(accountFound.id)) throw new Error('Account not connected');
+            await this.accountModel.deleteOne({ 'credentials.username': creds.username });
             this.fetchUsers();
             this.logger.verbose(`Account ${creds.username} has been deleted`);
             return Promise.resolve();
@@ -256,6 +263,7 @@ export class AccountManagerService implements OnModuleInit {
     async fetchUsers() {
         await this.accountModel.find().then((accounts) => {
             accounts.forEach((account) => {
+                account.profile.avatar = '';
                 this.users.set(account.credentials.username, account);
             });
         });
@@ -280,6 +288,47 @@ export class AccountManagerService implements OnModuleInit {
 
     deconnexion(id: string): void {
         this.connectedUsers.delete(id);
+        this.logger.log(`Account ${id} has been disconnected`);
+        this.showProfiles();
+    }
+
+    async logConnexion(id: string, isConnexion: boolean): Promise<void> {
+        const account = await this.accountModel.findOne({ id });
+        if (account) {
+            account.profile.connections.push({
+                timestamp: new Date().toLocaleTimeString('en-US', {
+                    timeZone: 'America/Toronto',
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                }),
+                isConnexion,
+            });
+            account.save();
+        }
+    }
+
+    async logSession(id: string, isWinner: boolean, timePlayed: number, count: number): Promise<void> {
+        const account = await this.accountModel.findOne({ id });
+        account.profile.sessions.push({
+            timestamp: new Date().toLocaleTimeString('en-US', {
+                timeZone: 'America/Toronto',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            }),
+            isWinner,
+        });
+        account.profile.stats.gamesPlayed++;
+        account.profile.stats.gameWon += isWinner ? 1 : 0;
+        account.profile.stats.averageTime =
+            (account.profile.stats.averageTime * (account.profile.stats.gamesPlayed - 1) + timePlayed) / account.profile.stats.gamesPlayed;
+        account.profile.stats.averageDifferences =
+            (account.profile.stats.averageDifferences * (account.profile.stats.gamesPlayed - 1) + count) / account.profile.stats.gamesPlayed;
+        account.save();
     }
 
     // async connexionToAdmin(password: string): Promise<boolean> {
