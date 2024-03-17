@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Account, AccountDocument, Credentials, Song, Statistics, Theme } from '@app/model/database/account';
@@ -305,7 +306,7 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async logSession(id: string, isWinner: boolean): Promise<void> {
+    async logSession(id: string, isWinner: boolean, timePlayed: number, count: number): Promise<void> {
         const account = await this.accountModel.findOne({ id });
         account.profile.sessions.push({
             timestamp: new Date().toLocaleTimeString('en-US', {
@@ -316,6 +317,12 @@ export class AccountManagerService implements OnModuleInit {
             }),
             isWinner,
         });
+        account.profile.stats.gamesPlayed++;
+        account.profile.stats.gameWon += isWinner ? 1 : 0;
+        account.profile.stats.averageTime =
+            (account.profile.stats.averageTime * (account.profile.stats.gamesPlayed - 1) + timePlayed) / account.profile.stats.gamesPlayed;
+        account.profile.stats.averageDifferences =
+            (account.profile.stats.averageDifferences * (account.profile.stats.gamesPlayed - 1) + count) / account.profile.stats.gamesPlayed;
         account.save();
     }
 
