@@ -305,6 +305,20 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
+    async logSession(id: string, isWinner: boolean): Promise<void> {
+        const account = await this.accountModel.findOne({ id });
+        account.profile.sessions.push({
+            timestamp: new Date().toLocaleTimeString('en-US', {
+                timeZone: 'America/Toronto',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            }),
+            isWinner,
+        });
+        account.save();
+    }
+
     // async connexionToAdmin(password: string): Promise<boolean> {
     //     try {
     //         console.log(password + 'qdsdss');

@@ -156,6 +156,7 @@ export interface Lobby {
     time?: number;
     timeLimit: number;
     bonusTime?: number;
+    timePlayed: number;
     chatLog?: ChatLog;
     nDifferences?: number;
 }
