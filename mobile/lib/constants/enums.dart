@@ -63,6 +63,70 @@ enum LobbyEvents {
   LeaveRoom,
 }
 
+enum GameEvents {
+  StartGame,
+  UpdateTimer,
+  Clic,
+  Found,
+  NotFound,
+  Cheat,
+  NextGame,
+  AbandonGame,
+  EndGame
+}
+
+extension GameEventsExtension on GameEvents {
+  String get name {
+    switch (this) {
+      case GameEvents.StartGame:
+        return 'StartGame';
+      case GameEvents.UpdateTimer:
+        return 'UpdateTimer';
+      case GameEvents.Clic:
+        return 'Clic';
+      case GameEvents.Found:
+        return 'Found';
+      case GameEvents.NotFound:
+        return 'NotFound';
+      case GameEvents.Cheat:
+        return 'Cheat';
+      case GameEvents.NextGame:
+        return 'NextGame';
+      case GameEvents.AbandonGame:
+        return 'AbandonGame';
+      case GameEvents.EndGame:
+        return 'EndGame';
+      default:
+        return '';
+    }
+  }
+
+  String get value {
+    switch (this) {
+      case GameEvents.StartGame:
+        return 'StartGame';
+      case GameEvents.UpdateTimer:
+        return 'UpdateTimer';
+      case GameEvents.Clic:
+        return 'Clic';
+      case GameEvents.Found:
+        return 'Found';
+      case GameEvents.NotFound:
+        return 'NotFound';
+      case GameEvents.Cheat:
+        return 'Cheat';
+      case GameEvents.NextGame:
+        return 'NextGame';
+      case GameEvents.AbandonGame:
+        return 'AbandonGame';
+      case GameEvents.EndGame:
+        return 'EndGame';
+      default:
+        return '';
+    }
+  }
+}
+
 extension LobbyEventsExtension on LobbyEvents {
   String get name {
     switch (this) {
