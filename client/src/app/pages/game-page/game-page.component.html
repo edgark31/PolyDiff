@@ -49,6 +49,9 @@
             ></canvas>
         </div>
     </div>
+
+    <app-chat-box class="chat-box" (addGame)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
+
     <button *ngIf="!isReplayAvailable" class="importantButton justified" (click)="showAbandonDialog()">
         <span id="abandon">Abandonner la partie</span>
     </button>

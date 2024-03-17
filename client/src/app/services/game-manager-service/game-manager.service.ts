@@ -1,14 +1,12 @@
+import { ChannelEvents, GameEvents, MessageEvents, MessageTag } from './../../../../../common/enums';
 /* eslint-disable no-console */
 import { Injectable } from '@angular/core';
-import { ReplayActions } from '@app/enum/replay-actions';
 import { ReplayEvent } from '@app/interfaces/replay-actions';
-import { CaptureService } from '@app/services/capture-service/capture.service';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { Coordinate } from '@common/coordinate';
-import { GameEvents, MessageEvents, MessageTag } from '@common/enums';
-import { ChatMessage, ChatMessageGlobal, ClientSideGame, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
+import { Chat, ChatMessageGlobal, ClientSideGame, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
 @Injectable({
     providedIn: 'root',
@@ -20,12 +18,14 @@ export class GameManagerService {
     username: string;
     isLeftCanvas: boolean;
     lobby: Subject<Lobby>;
+    lobbyTimer: Lobby;
+    lobbyWaiting: Lobby;
     endGame: string;
     private timer: Subject<number>;
     private differencesFound: Subject<number>;
     private opponentDifferencesFound: Subject<number>;
     private currentGame: Subject<ClientSideGame>;
-    private message: Subject<ChatMessage>;
+    private message: Subject<Chat>;
 
     private endMessage: Subject<string>;
     private players: Subject<Players>;
@@ -40,14 +40,14 @@ export class GameManagerService {
         private readonly clientSocket: ClientSocketService,
         gameAreaService: GameAreaService,
         soundService: SoundService,
-        private readonly captureService: CaptureService,
+        // private readonly captureService: CaptureService,
     ) {
         this.currentGame = new Subject<ClientSideGame>();
         this.differencesFound = new Subject<number>();
         this.timer = new Subject<number>();
         this.players = new Subject<Players>();
         this.lobby = new Subject<Lobby>();
-        this.message = new Subject<ChatMessage>();
+        this.message = new Subject<Chat>();
         this.endMessage = new Subject<string>();
         this.opponentDifferencesFound = new Subject<number>();
         this.replayEventsSubject = new Subject<ReplayEvent>();
@@ -68,7 +68,11 @@ export class GameManagerService {
         return this.differencesFound.asObservable().pipe(filter((differencesFound) => !!differencesFound));
     }
     get message$() {
-        return this.message.asObservable().pipe(filter((message) => !!message));
+        return this.message.asObservable();
+    }
+
+    get lobby$() {
+        return this.lobby.asObservable();
     }
 
     get endMessage$() {
@@ -99,7 +103,7 @@ export class GameManagerService {
         return this.globalMessage.asObservable();
     }
 
-    setMessage(message: ChatMessage) {
+    setMessage(message: Chat) {
         this.message.next(message);
     }
 
@@ -140,12 +144,16 @@ export class GameManagerService {
         this.isLeftCanvas = isLeft;
     }
 
-    sendMessage(textMessage: string): void {
-        const newMessage = { tag: MessageTag.Received, message: textMessage };
-        this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, { tag: MessageTag.Sent, message: textMessage } as ChatMessage);
-        this.clientSocket.send('game', MessageEvents.LocalMessage, newMessage);
-    }
+    // sendMessage(textMessage: string): void {
+    //     const newMessage = { tag: MessageTag.Received, message: textMessage };
+    //     this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, { tag: MessageTag.Sent, message: textMessage } as ChatMessage);
+    //     this.clientSocket.send('game', MessageEvents.LocalMessage, newMessage);
+    // }
 
+    sendMessage(lobbyId: string | undefined, message: string): void {
+        this.clientSocket.send('game', ChannelEvents.SendGameMessage, { lobbyId, message });
+        console.log('prend mon message' + message + lobbyId);
+    }
     removeAllListeners(nameSpace: string) {
         switch (nameSpace) {
             case 'lobby':
@@ -169,11 +177,22 @@ export class GameManagerService {
 
     manageSocket(): void {
         this.lobby = new Subject<Lobby>();
-        // this.message = new Subject<Chat>();
+        this.message = new Subject<Chat>();
 
         this.clientSocket.on('game', GameEvents.StartGame, (lobby: Lobby) => {
+            console.log('yoooo' + lobby.lobbyId);
             this.lobby.next(lobby);
         });
+
+        this.clientSocket.on('game', ChannelEvents.GameMessage, (chat: Chat) => {
+            console.log('yoooo' + chat.raw);
+            this.message.next(chat);
+        });
+
+        // this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
+        //     this.lobbyTimer.time = time;
+        //     this.lobby.next(this.lobbyTimer);
+        // });
 
         // this.clientSocket.on('game', GameEvents.GameStarted, (room: GameRoom) => {
         //     this.currentGame.next(room.clientGame);
@@ -221,6 +240,15 @@ export class GameManagerService {
         // this.clientSocket.on('game', GameEvents.GamePageRefreshed, () => {
         //     this.isGamePageRefreshed.next(true);
         // });
+    }
+
+    off(): void {
+        // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
+        // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        if (this.lobby && !this.lobby.closed) {
+            this.lobby?.unsubscribe();
+        }
+        if (this.message && !this.message.closed) this.message?.unsubscribe();
     }
 
     // private checkStatus(): void {
