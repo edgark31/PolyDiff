@@ -1,7 +1,7 @@
 /* eslint-disable max-params */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials, Song, Statistics, Theme } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Song, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONNALIZATION } from '@common/constants';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
@@ -36,7 +36,12 @@ export class AccountManagerService implements OnModuleInit {
                     avatar: this.imageManager.convert(`default${id}.png`),
                     sessions: [],
                     connections: [],
-                    stats: {} as Statistics,
+                    stats: {
+                        gamesPlayed: 0,
+                        gameWon: 0,
+                        averageTime: 0,
+                        averageDifferences: 0,
+                    },
                     friends: [],
                     friendRequests: [],
                     language: 'en',
@@ -72,7 +77,7 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
-            accountFound.save();
+            await accountFound.save();
             accountFound.profile.avatar = '';
             this.connectedUsers.set(accountFound.id, accountFound);
             this.fetchUsers();
@@ -323,6 +328,7 @@ export class AccountManagerService implements OnModuleInit {
             (account.profile.stats.averageTime * (account.profile.stats.gamesPlayed - 1) + timePlayed) / account.profile.stats.gamesPlayed;
         account.profile.stats.averageDifferences =
             (account.profile.stats.averageDifferences * (account.profile.stats.gamesPlayed - 1) + count) / account.profile.stats.gamesPlayed;
+        console.log(account.profile.stats);
         account.save();
     }
 
