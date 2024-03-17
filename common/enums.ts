@@ -103,9 +103,9 @@ export enum LobbyState {
 }
 
 export enum AccountEvents {
-    UserUpdate = 'UserUpdate',
-    UserCreate = 'UserCreate',
-    UserDelete = 'UserDelete',
+    UpdateUsers = 'UpdateUsers',
+    UserCreated = 'UserCreated',
+    UserDeleted = 'UserDeleted',
 }
 
 export enum FriendEvents {
