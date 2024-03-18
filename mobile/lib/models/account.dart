@@ -2,7 +2,8 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/info_service.dart';
 
-class Profile {
+/// Represents a user's account.
+class User {
   final String avatar;
   final List<SessionLog> sessions;
   final List<ConnectionLog> connections;
@@ -14,7 +15,7 @@ class Profile {
   final String onCorrectSoundId;
   final String onErrorSoundId;
 
-  Profile({
+  User({
     required this.avatar,
     required this.sessions,
     required this.connections,
@@ -27,8 +28,8 @@ class Profile {
     required this.onErrorSoundId,
   });
 
-  factory Profile.fromJson(Map<String, dynamic> json) {
-    return Profile(
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
       avatar: json['avatar'],
       sessions: List<SessionLog>.from(
           json['sessions'].map((x) => SessionLog.fromJson(x))),
