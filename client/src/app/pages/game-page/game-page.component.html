@@ -1,8 +1,8 @@
 <div id="game-page" class="justified">
-    <div *ngIf="game" class="game-infos information-header justified">
+    <div  class="game-infos information-header justified">
         <h1 id = "title">{{ gameLobby.name }}</h1>
-        <!-- <div class="game-feedback">
-            <mat-icon class="personIcon">person</mat-icon>
+         <div class="game-feedback">
+            <!-- <mat-icon class="personIcon">person</mat-icon>
             <h1>{{  }} Différences trouvées : {{ differencesFound }}</h1>
             &nbsp;
             <h1>Temps : {{ timer * 1000 | date: 'mm:ss' }}</h1>
@@ -11,8 +11,9 @@
             <h1 *ngIf="isMultiplayerMode()">
                 {{ player === players.player1.name ? players.player2?.name : players.player1.name }} &nbsp;
                 <span *ngIf="gameManager.lobbyWaiting.mode === gameModes.Classic"> Différences trouvées :{{ opponentDifferencesFound }}</span>
-            </h1>
-        </div> -->
+            </h1> -->
+            <h1>Temps : {{ timer * 1000 | date: 'mm:ss' }}</h1>
+        </div>
         <!-- <app-game-infos [isReplayAvailable]="isReplayAvailable" [game]="game"></app-game-infos> -->
     </div>
     <div class="canvas-container">
@@ -55,8 +56,9 @@
     <button *ngIf="!isReplayAvailable" class="importantButton justified" (click)="showAbandonDialog()">
         <span id="abandon">Abandonner la partie</span>
     </button>
+    <span></span>
 </div>
- <img id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
+ <!-- <img id="background" src="./assets/background/BackgroundImage.jpg" alt="background" /> -->
 <div *ngIf="game">
     <!-- <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages" [isReplaying]="isReplayAvailable" [gameMode]="game.mode"></app-chat-box> -->
     <app-replay-buttons [isReplayAvailable]="isReplayAvailable"></app-replay-buttons>

@@ -49,11 +49,13 @@ export class CreateRoomPageComponent implements AfterViewInit {
             isCheatEnabled: this.isCheatModeEnabled,
             mode: this.mode,
             timeLimit: this.time as number,
+            time: this.time as number, // vue que le serveur l'utilise pour diminueer le temps
             password: this.password,
             nDifferences: this.nDifferences,
             gameId: this.gameId,
             timePlayed: 0,
         };
+        console.log('lobbyssss time' + roomPayload.timeLimit);
         if (this.mode === GameModes.Limited) {
             this.roomManagerService.createLimitedRoom(roomPayload);
         } else if (this.mode === GameModes.Classic) {

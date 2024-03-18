@@ -187,11 +187,6 @@ app-replay-buttons {
     font-family: 'Troika', sans-serif;
 }
 
-.chat-box {
-    position: fixed; /* Positionne le composant de manière fixe par rapport à la fenêtre du navigateur */
-    right: 0; /* Le place tout à droite de la fenêtre */
-    z-index: 1000; /* Assure que le chat box soit au-dessus des autres éléments */
-}
 #title {
     font-size: 70px;
 }
