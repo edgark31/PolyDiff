@@ -109,7 +109,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         //     // this.gameManager.startGame();
         //     // // this.getPlayers();
-        console.log('yo tu commences?');
         this.setUpGame();
         //     // this.setUpReplay();
         //     // this.updateTimer();
@@ -158,9 +157,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     setUpGame(): void {
-        console.log('yo t es là?');
         this.canvasGameSubscription = this.gameManager.currentGame$.subscribe((game) => {
-            console.log("yo tu t'initialises?");
             this.gameAreaService.setOriginalContext(
                 this.originalCanvas.nativeElement.getContext('2d', {
                     willReadFrequently: true,

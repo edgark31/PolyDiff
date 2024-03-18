@@ -24,9 +24,9 @@
 
 .canvas-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 700px);
     grid-template-rows: repeat(2, 1fr);
-    gap: 10px; /* Espace entre les canvas, ajustez comme vous le souhaitez */
+    gap: 10px;
 }
 
 .game-canvas {
@@ -51,17 +51,21 @@ canvas {
 
 #original {
     z-index: 1;
+    left: 100px;
 }
 
 #originalFG {
     z-index: 2;
+    left: 100px;
 }
 
 #modified {
     z-index: 1;
+    right: 300px;
 }
 #modifiedFG {
     z-index: 2;
+    right: 300px;
 }
 
 .background {
@@ -146,7 +150,7 @@ canvas {
 
 app-chat-box {
     position: absolute;
-    left: 74.75%;
+    left: 67.5%;
     bottom: 13%;
     z-index: 1;
 }
