@@ -7,6 +7,8 @@ class Game {
   String modified;
   String difficulty;
   List<List<Coordinate>> differences;
+  int nDifferences;
+  List<String> playedGameIds;
   Game(
     this.lobbyId,
     this.gameId,
@@ -14,6 +16,8 @@ class Game {
     this.modified,
     this.difficulty,
     this.differences,
+    this.nDifferences,
+    this.playedGameIds,
   );
 
   factory Game.fromJson(Map<String, dynamic> json) => Game(
@@ -25,6 +29,8 @@ class Game {
         List<List<Coordinate>>.from(json['differences'].map((x) =>
             List<Coordinate>.from(
                 x.map((x) => Coordinate.fromJson(x)).toList()))),
+        json['nDifferences'],
+        List<String>.from(json['playedGameIds'].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -35,6 +41,8 @@ class Game {
         'difficulty': difficulty,
         'differences': List<dynamic>.from(differences
             .map((x) => List<dynamic>.from(x.map((x) => x.toJson())))),
+        'nDifferences': nDifferences,
+        'playedGameIds': List<dynamic>.from(playedGameIds.map((x) => x)),
       };
 }
 
