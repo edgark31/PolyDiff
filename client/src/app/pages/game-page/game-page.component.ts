@@ -2,8 +2,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, 
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GamePageDialogComponent } from '@app/components/game-page-dialog/game-page-dialog.component';
-import { DEFAULT_PLAYERS, INPUT_TAG_NAME } from '@app/constants/constants';
-import { ASSETS_HINTS } from '@app/constants/hint';
+import { INPUT_TAG_NAME } from '@app/constants/constants';
 import { CANVAS_MEASUREMENTS } from '@app/constants/image';
 import { CanvasMeasurements } from '@app/interfaces/game-interfaces';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
@@ -11,10 +10,11 @@ import { GameAreaService } from '@app/services/game-area-service/game-area.servi
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
+import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent } from '@common/enums';
-import { Chat, ClientSideGame, Game, Players } from '@common/game-interfaces';
+import { Chat, Game, Lobby } from '@common/game-interfaces';
 import { Subject, Subscription } from 'rxjs';
 
 @Component({
@@ -28,21 +28,17 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     @ViewChild('originalCanvasFG', { static: false }) originalCanvasForeground!: ElementRef<HTMLCanvasElement>;
     @ViewChild('modifiedCanvasFG', { static: false }) modifiedCanvasForeground!: ElementRef<HTMLCanvasElement>;
 
-    game: ClientSideGame;
-    differencesFound: number;
-    opponentDifferencesFound: number;
     timer: number;
+    nDifferencesFound: number;
     messages: Chat[];
-    player: string;
-    players: Players;
-    hintsAssets: string[];
     isReplayAvailable: boolean;
-
     gameLobby: Game;
+    lobby: Lobby;
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
     timeSubscription: Subscription;
+    lobbySubscription: Subscription;
     private gameSubscription: Subscription;
     private canvasGameSubscription: Subscription;
     private onDestroy$: Subject<void>;
@@ -55,18 +51,15 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         private imageService: ImageService,
         private readonly gameAreaService: GameAreaService,
         private readonly gameManager: GameManagerService,
+        private readonly roomManager: RoomManagerService,
         private clientSocket: ClientSocketService,
         public welcome: WelcomeService,
         private readonly matDialog: MatDialog,
     ) {
-        // this.gameManager.manageSocket();
-        this.differencesFound = 0;
-        this.opponentDifferencesFound = 0;
+        this.nDifferencesFound = 0;
+        this.lobby = this.roomManager.lobbyGame;
         this.timer = 0;
         this.messages = [];
-        this.hintsAssets = ASSETS_HINTS;
-        this.player = '';
-        this.players = DEFAULT_PLAYERS;
         this.canvasSize = CANVAS_MEASUREMENTS;
         this.isReplayAvailable = false;
         this.gameMode = GameModes;
@@ -90,35 +83,35 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
     ngOnInit(): void {
         this.clientSocket.connect(this.welcome.account.id as string, 'game');
-        this.gameManager.manageSocket();
         this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
-        this.chatSubscription = this.gameManager.message$.subscribe((message: Chat) => {
-            this.receiveMessage(message);
-        });
+        this.gameManager.manageSocket();
         this.gameSubscription = this.gameManager.game$.subscribe((game: Game) => {
             this.gameLobby = game;
         });
-
+        // this.chatSubscription = this.gameManager.message$.subscribe((message: Chat) => {
+        //     this.receiveMessage(message);
+        // });
         this.timeSubscription = this.gameManager.timerLobby$.subscribe((timer: number) => {
             this.timer = timer;
         });
-
         this.clientSocket.on('game', GameEvents.EndGame, () => {
             this.router.navigate(['/game-mode']);
         });
     }
     ngAfterViewInit(): void {
         //     // this.gameManager.startGame();
-        //     // // this.getPlayers();
         this.setUpGame();
         //     // this.setUpReplay();
         //     // this.updateTimer();
         //     // this.handleDifferences();
         //     // this.handleMessages();
         //     // this.showEndMessage();
-        //     // this.updateIfFirstDifferencesFound();
         //     // this.updateGameMode();
         //     // this.handlePageRefresh();
+        this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
+            this.lobby = lobby;
+            this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
+        });
     }
     sendMessage(message: string): void {
         this.gameManager.sendMessage(this.gameLobby.lobbyId, message);
@@ -138,12 +131,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         if (!this.gameAreaService.detectLeftClick(event)) return;
         this.gameAreaService.setAllData();
         this.gameManager.setIsLeftCanvas(isLeft);
-        this.gameManager.requestVerification(this.gameAreaService.getMousePosition());
+        this.gameManager.requestVerification(this.lobby.lobbyId as string, this.gameAreaService.getMousePosition());
     }
 
-    isMultiplayerMode(): boolean {
-        return this.game.mode === GameModes.LimitedCoop || this.game.mode === GameModes.ClassicOneVsOne;
-    }
+    // isMultiplayerMode(): boolean {
+    //     return this.game.mode === GameModes.LimitedCoop || this.game.mode === GameModes.ClassicOneVsOne;
+    // }
+
     ngOnDestroy(): void {
         if (this.clientSocket.isSocketAlive('game')) {
             this.gameSubscription?.unsubscribe();
@@ -198,11 +192,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     //         if (this.isReplayAvailable) this.differencesFound = replayDiffFound;
     //     });
 
-    //     this.replayService.replayOpponentDifferenceFound$.pipe(takeUntil(this.onDestroy$)).subscribe((replayDiffFound) => {
-    //         if (this.isReplayAvailable) this.opponentDifferencesFound = replayDiffFound;
-    //     });
-    // }
-
     // this.gameAreaService.resetCheatMode();
     // this.gameManager.removeAllListeners('game');
 
@@ -237,15 +226,11 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     //     });
     // }
 
-    private handleDifferences(): void {
-        this.gameManager.differencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((differencesFound) => {
-            this.differencesFound = differencesFound;
-        });
-
-        this.gameManager.opponentDifferencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((opponentDifferencesFound) => {
-            this.opponentDifferencesFound = opponentDifferencesFound;
-        });
-    }
+    // private handleDifferences(): void {
+    //     this.gameManager.lobbyGame$.subscribe((lobby) => {
+    //         this.lobbyClassic = lobby;
+    //     });
+    // }
 
     // private updateIfFirstDifferencesFound(): void {
     //     this.gameManager.isFirstDifferencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((isFirstDifferencesFound) => {
@@ -262,17 +247,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     // private handlePageRefresh(): void {
     //     this.gameManager.isGamePageRefreshed$.pipe(takeUntil(this.onDestroy$)).subscribe((isGamePageRefreshed) => {
     //         if (isGamePageRefreshed) this.router.navigate(['/']);
-    //     });
-    // }
-
-    // private getPlayers(): void {
-    //     this.gameManager.players$.pipe(takeUntil(this.onDestroy$)).subscribe((players) => {
-    //         this.players = players;
-    //         if (players.player1.accountId === this.gameManager.getSocketId('game')) {
-    //             this.player = players.player1.name ?? '';
-    //         } else if (players.player2 && players.player2.accountId === this.gameManager.getSocketId('game')) {
-    //             this.player = players.player2.name ?? '';
-    //         }
     //     });
     // }
 }

@@ -42,7 +42,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         });
         this.lobbySubscription = this.roomManagerService.lobby$.subscribe((lobby: Lobby) => {
             this.lobby = lobby;
-            console.log('lobbyssss timehjghcgv' + this.lobby.time);
             this.messages = this.lobby.chatLog?.chat as Chat[];
             this.messages.forEach((message: Chat) => {
                 if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Sent;
@@ -81,14 +80,12 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         this.roomManagerService.onStart(this.lobby.lobbyId ? this.lobby.lobbyId : '');
     }
     ngOnDestroy(): void {
-        // this.onQuit();
         if (this.clientSocketService.isSocketAlive('lobby')) {
             this.clientSocketService.disconnect('lobby');
             this.lobbySubscription?.unsubscribe();
             this.chatSubscription?.unsubscribe();
             this.roomManagerService.off();
             this.gameManager.lobbyWaiting = this.lobby;
-            console.log('lobby time' + this.gameManager.lobbyWaiting.time);
         }
         this.roomManagerService.wait = false;
     }

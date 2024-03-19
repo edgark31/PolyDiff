@@ -55,7 +55,6 @@ export class CreateRoomPageComponent implements AfterViewInit {
             gameId: this.gameId,
             timePlayed: 0,
         };
-        console.log('lobbyssss time' + roomPayload.timeLimit);
         if (this.mode === GameModes.Limited) {
             this.roomManagerService.createLimitedRoom(roomPayload);
         } else if (this.mode === GameModes.Classic) {
