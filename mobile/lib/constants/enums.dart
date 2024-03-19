@@ -51,18 +51,6 @@ enum ChannelEvents {
   FriendConnection,
 }
 
-enum LobbyEvents {
-  Create,
-  Join,
-  Leave,
-  OptPlayer,
-  JoinAsObserver,
-  LeaveAsObserver,
-  UpdateLobbys,
-  Start,
-  LeaveRoom,
-}
-
 enum GameEvents {
   StartGame,
   UpdateTimer,
@@ -75,57 +63,17 @@ enum GameEvents {
   EndGame
 }
 
-extension GameEventsExtension on GameEvents {
-  String get name {
-    switch (this) {
-      case GameEvents.StartGame:
-        return 'StartGame';
-      case GameEvents.UpdateTimer:
-        return 'UpdateTimer';
-      case GameEvents.Clic:
-        return 'Clic';
-      case GameEvents.Found:
-        return 'Found';
-      case GameEvents.NotFound:
-        return 'NotFound';
-      case GameEvents.Cheat:
-        return 'Cheat';
-      case GameEvents.NextGame:
-        return 'NextGame';
-      case GameEvents.AbandonGame:
-        return 'AbandonGame';
-      case GameEvents.EndGame:
-        return 'EndGame';
-      default:
-        return '';
-    }
-  }
-
-  String get value {
-    switch (this) {
-      case GameEvents.StartGame:
-        return 'StartGame';
-      case GameEvents.UpdateTimer:
-        return 'UpdateTimer';
-      case GameEvents.Clic:
-        return 'Clic';
-      case GameEvents.Found:
-        return 'Found';
-      case GameEvents.NotFound:
-        return 'NotFound';
-      case GameEvents.Cheat:
-        return 'Cheat';
-      case GameEvents.NextGame:
-        return 'NextGame';
-      case GameEvents.AbandonGame:
-        return 'AbandonGame';
-      case GameEvents.EndGame:
-        return 'EndGame';
-      default:
-        return '';
-    }
-  }
+enum LobbyEvents {
+  Create,
+  Join,
+  Leave,
+  OptPlayer,
+  JoinAsObserver,
+  LeaveAsObserver,
+  UpdateLobbys,
+  Start,
 }
+
 
 extension LobbyEventsExtension on LobbyEvents {
   String get name {
@@ -146,8 +94,6 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'UpdateLobbys';
       case LobbyEvents.Start:
         return 'Start';
-      case LobbyEvents.LeaveRoom:
-        return 'LeaveRoom';
       default:
         return '';
     }
@@ -171,10 +117,14 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'UpdateLobbys';
       case LobbyEvents.Start:
         return 'Start';
-      case LobbyEvents.LeaveRoom:
-        return 'LeaveRoom';
       default:
         return '';
     }
   }
+}
+
+enum AccountEvents {
+  UserUpdate,
+  UserCreate,
+  UserDelete,
 }
