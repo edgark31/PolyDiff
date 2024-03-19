@@ -15,14 +15,11 @@
         Nombre de différences : {{lobby.nDifferences}}
     </div>
     <button mat-raised-button class="join-button" (click)="manageGames(lobby)">
-        <div *ngIf="lobby.players.length < 4 && lobby.isAvailable"  >
+        <div *ngIf="lobby.players.length < 4">
             <span id>Rejoindre</span>
         </div>
-        <div *ngIf="lobby.players.length >= 4 && lobby.isAvailable ">
+        <div *ngIf="lobby.players.length >= 4">
             <span id>Partie pleine</span>
-        </div>
-        <div *ngIf="!lobby.isAvailable">
-            <span id>Rejoindre en tant qu'observateur</span>
         </div>
     </button>
     <div class="player-count">{{lobby.players.length}}/4 joueurs</div>

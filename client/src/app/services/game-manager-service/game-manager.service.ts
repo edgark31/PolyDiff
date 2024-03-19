@@ -59,7 +59,7 @@ export class GameManagerService {
     }
 
     get currentGame$() {
-        return this.currentGame.asObservable().pipe(filter((currentGame) => !!currentGame));
+        return this.currentGame.asObservable();
     }
 
     get timer$() {
@@ -197,6 +197,7 @@ export class GameManagerService {
 
         this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
             this.timerLobby.next(time);
+            console.log('time' + time);
         });
 
         // this.clientSocket.on('game', GameEvents.GameStarted, (room: GameRoom) => {

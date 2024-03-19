@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GamePageDialogComponent } from '@app/components/game-page-dialog/game-page-dialog.component';
@@ -23,15 +23,11 @@ import { Subject, Subscription } from 'rxjs';
     styleUrls: ['./game-page.component.scss'],
 })
 export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
-    @ViewChild('originalCanvasPlayerOne', { static: false }) originalCanvasPlayerOne!: ElementRef<HTMLCanvasElement>;
-    @ViewChild('modifiedCanvasPlayerOne', { static: false }) modifiedCanvasPlayerOne!: ElementRef<HTMLCanvasElement>;
-    @ViewChild('originalCanvasPlayerTwo', { static: false }) originalCanvasPlayerTwo!: ElementRef<HTMLCanvasElement>;
-    @ViewChild('modifiedCanvasPlayerTwo', { static: false }) modifiedCanvasPlayerTwo!: ElementRef<HTMLCanvasElement>;
-    @ViewChild('originalCanvasPlayerThree', { static: false }) originalCanvasPlayerThree!: ElementRef<HTMLCanvasElement>;
-    @ViewChild('modifiedCanvasPlayerThree', { static: false }) modifiedCanvasPlayerThree!: ElementRef<HTMLCanvasElement>;
-    @ViewChild('originalCanvasPlayerFour', { static: false }) originalCanvasPlayerFour!: ElementRef<HTMLCanvasElement>;
-    @ViewChild('modifiedCanvasPlayerFour', { static: false }) modifiedCanvasPlayerFour!: ElementRef<HTMLCanvasElement>;
-    playerList = ['PlayerOne', 'PlayerTwo', 'PlayerThree', 'PlayerFour'];
+    @ViewChild('originalCanvas', { static: false }) originalCanvas!: ElementRef<HTMLCanvasElement>;
+    @ViewChild('modifiedCanvas', { static: false }) modifiedCanvas!: ElementRef<HTMLCanvasElement>;
+    @ViewChild('originalCanvasFG', { static: false }) originalCanvasForeground!: ElementRef<HTMLCanvasElement>;
+    @ViewChild('modifiedCanvasFG', { static: false }) modifiedCanvasForeground!: ElementRef<HTMLCanvasElement>;
+
     game: ClientSideGame;
     differencesFound: number;
     opponentDifferencesFound: number;
@@ -58,11 +54,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         private router: Router,
         private imageService: ImageService,
         private readonly gameAreaService: GameAreaService,
-        public gameManager: GameManagerService,
+        private readonly gameManager: GameManagerService,
         private clientSocket: ClientSocketService,
         public welcome: WelcomeService,
         private readonly matDialog: MatDialog,
-        private cdr: ChangeDetectorRef,
     ) {
         // this.gameManager.manageSocket();
         this.differencesFound = 0;
@@ -91,9 +86,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
                 this.gameAreaService.toggleCheatMode(differencesCoordinates);
             }
         }
-    }
-    getPlayerList(size: number): string[] {
-        return this.playerList.slice(0, size);
     }
     ngOnInit(): void {
         this.clientSocket.connect(this.welcome.account.id as string, 'game');
@@ -157,71 +149,43 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.gameSubscription?.unsubscribe();
             this.chatSubscription?.unsubscribe();
             this.timeSubscription?.unsubscribe();
+            this.canvasGameSubscription?.unsubscribe();
             this.onDestroy$.next();
             this.onDestroy$.complete();
-            this.canvasGameSubscription?.unsubscribe();
-            this.gameAreaService.resetCheatMode();
             this.gameManager.off();
         }
     }
 
     setUpGame(): void {
-        // this.canvasGameSubscription = this.gameManager.currentGame$
-        //     .pipe(
-        //         tap((value) => console.log('Observable emitted: ', value)),
-        //         takeUntil(this.onDestroy$),
-        //     )
-        //     .subscribe((game) => {
-        //         setTimeout(() => {
-
-        this.gameAreaService.setoriginalContextPlayerOne(
-            this.originalCanvasPlayerOne.nativeElement.getContext('2d', {
-                willReadFrequently: true,
-            }) as CanvasRenderingContext2D,
-        );
-        this.gameAreaService.setmodifiedContextPlayerOne(
-            this.modifiedCanvasPlayerOne.nativeElement.getContext('2d', {
-                willReadFrequently: true,
-            }) as CanvasRenderingContext2D,
-        );
-        this.gameAreaService.setOriginalContextPlayerTwo(
-            this.originalCanvasPlayerTwo.nativeElement.getContext('2d', {
-                willReadFrequently: true,
-            }) as CanvasRenderingContext2D,
-        );
-        this.gameAreaService.setModifiedContextPlayerTwo(
-            this.modifiedCanvasPlayerTwo.nativeElement.getContext('2d', {
-                willReadFrequently: true,
-            }) as CanvasRenderingContext2D,
-        );
-
-        this.gameAreaService.setoriginalContextPlayerThree(
-            this.originalCanvasPlayerThree.nativeElement.getContext('2d', {
-                willReadFrequently: true,
-            }) as CanvasRenderingContext2D,
-        );
-        this.gameAreaService.setmodifiedContextPlayerThree(
-            this.modifiedCanvasPlayerThree.nativeElement.getContext('2d', {
-                willReadFrequently: true,
-            }) as CanvasRenderingContext2D,
-        );
-        this.gameAreaService.setoriginalContextPlayerFour(
-            this.originalCanvasPlayerFour.nativeElement.getContext('2d', {
-                willReadFrequently: true,
-            }) as CanvasRenderingContext2D,
-        );
-        this.gameAreaService.setmodifiedContextPlayerFour(
-            this.modifiedCanvasPlayerFour.nativeElement.getContext('2d', {
-                willReadFrequently: true,
-            }) as CanvasRenderingContext2D,
-        );
-        this.imageService.loadImage(this.gameAreaService.getoriginalContextPlayerOne(), this.gameLobby.original);
-        this.imageService.loadImage(this.gameAreaService.getmodifiedContextPlayerOne(), this.gameLobby.modified);
-
-        this.gameAreaService.setAllData();
-        this.cdr.detectChanges();
-        //     }, 6000);
-        // });
+        this.canvasGameSubscription = this.gameManager.currentGame$.subscribe((game) => {
+            this.gameAreaService.setOriginalContext(
+                this.originalCanvas.nativeElement.getContext('2d', {
+                    willReadFrequently: true,
+                }) as CanvasRenderingContext2D,
+            );
+            this.gameAreaService.setModifiedContext(
+                this.modifiedCanvas.nativeElement.getContext('2d', {
+                    willReadFrequently: true,
+                }) as CanvasRenderingContext2D,
+            );
+            this.gameAreaService.setOriginalFrontContext(
+                this.originalCanvasForeground.nativeElement.getContext('2d', {
+                    willReadFrequently: true,
+                }) as CanvasRenderingContext2D,
+            );
+            this.gameAreaService.setModifiedFrontContext(
+                this.modifiedCanvasForeground.nativeElement.getContext('2d', {
+                    willReadFrequently: true,
+                }) as CanvasRenderingContext2D,
+            );
+            this.imageService.loadImage(this.gameAreaService.getOriginalContext(), this.game.original);
+            this.imageService.loadImage(
+                this.gameAreaService.getModifiedContext(),
+                this.game.modified,
+                // 'http://localhost:3000/' + game.gameId.toString() + '/original.bmp',
+            );
+            this.gameAreaService.setAllData();
+        });
     }
 
     // private setUpReplay(): void {

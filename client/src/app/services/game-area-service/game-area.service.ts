@@ -21,22 +21,14 @@ import { Coordinate } from '@common/coordinate';
 })
 export class GameAreaService {
     mousePosition: Coordinate;
-    private originalPixelDataPlayerOnes: ImageData;
-    private modifiedPixelDataPlayerOnes: ImageData;
-    private originalPixelDataPlayerTwo: ImageData;
-    private modifiedPixelDataPlayerTwo: ImageData;
-    // private originalPixelDataPlayerThree: ImageData;
-    // private modifiedPixelDataPlayerThree: ImageData;
-    // private originalPixelDataPlayerFour: ImageData;
-    // private modifiedPixelDataPlayerFour: ImageData;
-    private originalContextPlayerOne: CanvasRenderingContext2D;
-    private modifiedContextPlayerOne: CanvasRenderingContext2D;
-    private originalContextPlayerTwo: CanvasRenderingContext2D;
-    private modifiedContextPlayerTwo: CanvasRenderingContext2D;
-    private originalContextPlayerThree: CanvasRenderingContext2D;
-    private modifiedContextPlayerThree: CanvasRenderingContext2D;
-    private originalContextPlayerFour: CanvasRenderingContext2D;
-    private modifiedContextPlayerFour: CanvasRenderingContext2D;
+    private originalPixelData: ImageData;
+    private modifiedPixelData: ImageData;
+    private originalFrontPixelData: ImageData;
+    private modifiedFrontPixelData: ImageData;
+    private originalContext: CanvasRenderingContext2D;
+    private modifiedContext: CanvasRenderingContext2D;
+    private originalContextFrontLayer: CanvasRenderingContext2D;
+    private modifiedContextFrontLayer: CanvasRenderingContext2D;
     private isClickDisabled: boolean;
     private isCheatMode: boolean;
     private cheatModeInterval: number;
@@ -49,14 +41,10 @@ export class GameAreaService {
 
     @HostListener('keydown', ['$event'])
     setAllData(): void {
-        this.originalPixelDataPlayerOnes = this.originalContextPlayerOne.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
-        this.modifiedPixelDataPlayerOnes = this.modifiedContextPlayerOne.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
-        this.originalPixelDataPlayerTwo = this.originalContextPlayerTwo.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
-        this.modifiedPixelDataPlayerTwo = this.modifiedContextPlayerTwo.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
-        // this.originalPixelDataPlayerThree = this.originalContextPlayerThree.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
-        // this.modifiedPixelDataPlayerThree = this.modifiedContextPlayerThree.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
-        // this.originalPixelDataPlayerFour = this.originalContextPlayerFour.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
-        // this.modifiedPixelDataPlayerFour = this.modifiedContextPlayerFour.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
+        // this.originalPixelData = this.originalContext.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
+        this.modifiedPixelData = this.modifiedContext.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
+        this.originalFrontPixelData = this.originalContextFrontLayer.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
+        this.modifiedFrontPixelData = this.modifiedContextFrontLayer.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
     }
 
     detectLeftClick(event: MouseEvent): boolean {
@@ -64,7 +52,7 @@ export class GameAreaService {
     }
 
     showError(isMainCanvas: boolean, errorCoordinate: Coordinate, flashingSpeed: number = SPEED_X1): void {
-        const frontContext: CanvasRenderingContext2D = isMainCanvas ? this.originalContextPlayerTwo : this.modifiedContextPlayerTwo;
+        const frontContext: CanvasRenderingContext2D = isMainCanvas ? this.originalContextFrontLayer : this.modifiedContextFrontLayer;
         frontContext.fillStyle = 'red';
         this.isClickDisabled = true;
         frontContext.font = 'bold 30px Arial, Helvetica, sans-serif';
@@ -80,10 +68,10 @@ export class GameAreaService {
         const imageDataIndex = this.convert2DCoordToPixelIndex(differenceCoord);
         for (const index of imageDataIndex) {
             for (let i = 0; i < N_PIXEL_ATTRIBUTE; i++) {
-                this.modifiedPixelDataPlayerOnes.data[index + i] = this.originalPixelDataPlayerOnes.data[index + i];
+                this.modifiedPixelData.data[index + i] = this.originalPixelData.data[index + i];
             }
         }
-        this.modifiedContextPlayerOne.putImageData(this.modifiedPixelDataPlayerOnes, 0, 0);
+        this.modifiedContext.putImageData(this.modifiedPixelData, 0, 0);
         this.resetCheatMode();
         this.captureService.saveReplayEvent(ReplayActions.ClickFound, differenceCoord);
         this.flashPixels(differenceCoord, flashingSpeed, isPaused);
@@ -93,14 +81,14 @@ export class GameAreaService {
         const imageDataIndexes = this.convert2DCoordToPixelIndex(differenceCoord);
         const firstInterval = setInterval(() => {
             const secondInterval = setInterval(() => {
-                this.setPixelData(imageDataIndexes, this.modifiedPixelDataPlayerTwo, this.originalPixelDataPlayerTwo);
+                this.setPixelData(imageDataIndexes, this.modifiedFrontPixelData, this.originalFrontPixelData);
                 this.putImageDataToContexts();
             }, GREEN_FLASH_TIME / flashingSpeed);
 
             const color = [YELLOW_PIXEL.red, YELLOW_PIXEL.green, YELLOW_PIXEL.blue, YELLOW_PIXEL.alpha];
             for (const index of imageDataIndexes) {
-                this.modifiedPixelDataPlayerTwo.data.set(color, index);
-                this.originalPixelDataPlayerTwo.data.set(color, index);
+                this.modifiedFrontPixelData.data.set(color, index);
+                this.originalFrontPixelData.data.set(color, index);
             }
             this.putImageDataToContexts();
 
@@ -122,8 +110,8 @@ export class GameAreaService {
             this.cheatModeInterval = window.setInterval(() => {
                 const color = [RED_PIXEL.red, RED_PIXEL.green, RED_PIXEL.blue, RED_PIXEL.alpha];
                 for (const index of imageDataIndexes) {
-                    this.modifiedPixelDataPlayerTwo.data.set(color, index);
-                    this.originalPixelDataPlayerTwo.data.set(color, index);
+                    this.modifiedFrontPixelData.data.set(color, index);
+                    this.originalFrontPixelData.data.set(color, index);
                 }
                 this.putImageDataToContexts();
 
@@ -140,65 +128,30 @@ export class GameAreaService {
         this.isCheatMode = !this.isCheatMode;
     }
 
-    getoriginalContextPlayerOne(): CanvasRenderingContext2D {
-        return this.originalContextPlayerOne;
+    getOriginalContext(): CanvasRenderingContext2D {
+        return this.originalContext;
     }
 
-    setoriginalContextPlayerOne(context: CanvasRenderingContext2D): void {
-        this.originalContextPlayerOne = context;
+    setOriginalContext(context: CanvasRenderingContext2D): void {
+        this.originalContext = context;
     }
 
-    getoriginalContextPlayerThree(): CanvasRenderingContext2D {
-        return this.originalContextPlayerThree;
+    setOriginalFrontContext(context: CanvasRenderingContext2D): void {
+        this.originalContextFrontLayer = context;
     }
 
-    setoriginalContextPlayerThree(context: CanvasRenderingContext2D): void {
-        this.originalContextPlayerThree = context;
+    getModifiedContext(): CanvasRenderingContext2D {
+        return this.modifiedContext;
     }
 
-    getoriginalContextPlayerFour(): CanvasRenderingContext2D {
-        return this.originalContextPlayerFour;
+    setModifiedContext(context: CanvasRenderingContext2D): void {
+        this.modifiedContext = context;
     }
 
-    setoriginalContextPlayerFour(context: CanvasRenderingContext2D): void {
-        this.originalContextPlayerFour = context;
-    }
-    setOriginalContextPlayerTwo(context: CanvasRenderingContext2D): void {
-        this.originalContextPlayerTwo = context;
-    }
-    getoriginalContextPlayerTwo(): CanvasRenderingContext2D {
-        return this.originalContextPlayerTwo;
+    setModifiedFrontContext(context: CanvasRenderingContext2D): void {
+        this.modifiedContextFrontLayer = context;
     }
 
-    getmodifiedContextPlayerOne(): CanvasRenderingContext2D {
-        return this.modifiedContextPlayerOne;
-    }
-
-    setmodifiedContextPlayerOne(context: CanvasRenderingContext2D): void {
-        this.modifiedContextPlayerOne = context;
-    }
-
-    getmodifiedContextPlayerThree(): CanvasRenderingContext2D {
-        return this.modifiedContextPlayerThree;
-    }
-
-    setmodifiedContextPlayerThree(context: CanvasRenderingContext2D): void {
-        this.modifiedContextPlayerThree = context;
-    }
-    getmodifiedContextPlayerFour(): CanvasRenderingContext2D {
-        return this.modifiedContextPlayerFour;
-    }
-
-    setmodifiedContextPlayerFour(context: CanvasRenderingContext2D): void {
-        this.modifiedContextPlayerFour = context;
-    }
-    setModifiedContextPlayerTwo(context: CanvasRenderingContext2D): void {
-        this.modifiedContextPlayerTwo = context;
-    }
-
-    getmodifiedContextPlayerTwo(): CanvasRenderingContext2D {
-        return this.modifiedContextPlayerTwo;
-    }
     getMousePosition(): Coordinate {
         return this.mousePosition;
     }
@@ -210,30 +163,30 @@ export class GameAreaService {
 
     private clearFlashing(isPaused: boolean = false): void {
         if (!isPaused) {
-            this.modifiedContextPlayerTwo?.clearRect(0, 0, IMG_WIDTH, IMG_HEIGHT);
-            this.originalContextPlayerTwo?.clearRect(0, 0, IMG_WIDTH, IMG_HEIGHT);
-            this.originalPixelDataPlayerTwo = this.originalContextPlayerTwo?.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
-            this.modifiedPixelDataPlayerTwo = this.modifiedContextPlayerTwo?.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
+            this.modifiedContextFrontLayer?.clearRect(0, 0, IMG_WIDTH, IMG_HEIGHT);
+            this.originalContextFrontLayer?.clearRect(0, 0, IMG_WIDTH, IMG_HEIGHT);
+            this.originalFrontPixelData = this.originalContextFrontLayer?.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
+            this.modifiedFrontPixelData = this.modifiedContextFrontLayer?.getImageData(0, 0, IMG_WIDTH, IMG_HEIGHT);
             this.isClickDisabled = false;
         }
     }
 
     private putImageDataToContexts(): void {
-        this.modifiedContextPlayerTwo?.putImageData(this.modifiedPixelDataPlayerTwo, 0, 0);
-        this.originalContextPlayerTwo?.putImageData(this.originalPixelDataPlayerTwo, 0, 0);
+        this.modifiedContextFrontLayer?.putImageData(this.modifiedFrontPixelData, 0, 0);
+        this.originalContextFrontLayer?.putImageData(this.originalFrontPixelData, 0, 0);
     }
 
-    private setPixelData(imageDataIndexes: number[], modifiedPixelDataPlayerTwo: ImageData, originalPixelDataPlayerTwo: ImageData): void {
+    private setPixelData(imageDataIndexes: number[], modifiedFrontPixelData: ImageData, originalFrontPixelData: ImageData): void {
         for (const index of imageDataIndexes) {
-            modifiedPixelDataPlayerTwo.data[index] = GREEN_PIXEL.red;
-            modifiedPixelDataPlayerTwo.data[index + 1] = GREEN_PIXEL.green;
-            modifiedPixelDataPlayerTwo.data[index + 2] = GREEN_PIXEL.blue;
-            modifiedPixelDataPlayerTwo.data[index + 3] = GREEN_PIXEL.alpha;
+            modifiedFrontPixelData.data[index] = GREEN_PIXEL.red;
+            modifiedFrontPixelData.data[index + 1] = GREEN_PIXEL.green;
+            modifiedFrontPixelData.data[index + 2] = GREEN_PIXEL.blue;
+            modifiedFrontPixelData.data[index + 3] = GREEN_PIXEL.alpha;
 
-            originalPixelDataPlayerTwo.data[index] = GREEN_PIXEL.red;
-            originalPixelDataPlayerTwo.data[index + 1] = GREEN_PIXEL.green;
-            originalPixelDataPlayerTwo.data[index + 2] = GREEN_PIXEL.blue;
-            originalPixelDataPlayerTwo.data[index + 3] = GREEN_PIXEL.alpha;
+            originalFrontPixelData.data[index] = GREEN_PIXEL.red;
+            originalFrontPixelData.data[index + 1] = GREEN_PIXEL.green;
+            originalFrontPixelData.data[index + 2] = GREEN_PIXEL.blue;
+            originalFrontPixelData.data[index + 3] = GREEN_PIXEL.alpha;
         }
     }
 
