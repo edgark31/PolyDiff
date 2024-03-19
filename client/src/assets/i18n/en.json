@@ -25,7 +25,7 @@
         "gameHistoric": "game history",
         "changePassword": "Change password",
         "confirmPassword": "Confirm password",
-        "onDifferenceSound": "choose your sound for difference found",
+        "onCorrectSound": "choose your sound for difference found",
         "onErrorSound": "choose your sound for error"
     },
 
