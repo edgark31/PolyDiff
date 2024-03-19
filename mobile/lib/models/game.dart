@@ -1,5 +1,3 @@
-// TODO : Confirme game does not need 'name' attribute
-
 class Game {
   String lobbyId;
   String? gameId;
@@ -20,6 +18,16 @@ class Game {
     this.playedGameIds,
   );
 
+  Game.initial(): this(
+    '', // lobbyId
+    '', // gameId
+    '', // original
+    '', // modified
+    '', // difficulty
+    [], // differences
+    0, // nDifferences
+    [], // playedGameIds
+  );
   factory Game.fromJson(Map<String, dynamic> json) => Game(
         json['lobbyId'],
         json['gameId'],
