@@ -72,8 +72,8 @@
           <mat-form-field>
             <mat-label>{{'profil.language' | translate }}</mat-label>
             <mat-select [(value)]="welcomeService.selectLanguage" (valueChange)="useLanguage(welcomeService.selectLanguage)">
-              <mat-option [value]="welcomeService.language[0]">{{'bouton.fr' | translate }}</mat-option>
-              <mat-option [value]="welcomeService.language[1]">{{'bouton.en' | translate }}</mat-option>
+              <mat-option [value]="welcomeService.language[0]">{{'button.fr' | translate }}</mat-option>
+              <mat-option [value]="welcomeService.language[1]">{{'button.en' | translate }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -126,8 +126,8 @@
 
 
   <div class="button-container">
-    <button type="submit" (click)="onSubmitProfile()">{{'bouton.returnProfil' | translate }}</button>
-    <button type="submit" (click)="onSubmitHome()">{{'bouton.deconnexion' | translate }}</button>
+    <button type="submit" (click)="onSubmitProfile()">{{'button.returnProfile' | translate }}</button>
+    <button type="submit" (click)="onSubmitHome()">{{'button.deconnexion' | translate }}</button>
   </div>
 
 </body>
