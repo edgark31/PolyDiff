@@ -3,6 +3,7 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
@@ -34,6 +35,7 @@ class _LobbyPageState extends State<LobbyPage> {
     final chatService = context.watch<ChatService>();
     final socketService = context.watch<SocketService>();
     final infoService = context.watch<InfoService>();
+    final gameManagerService = context.watch<GameManagerService>();
     List<String> playerNames = lobbyService.lobby.players.map((e) {
       return e.name ?? '';
     }).toList();
@@ -52,6 +54,7 @@ class _LobbyPageState extends State<LobbyPage> {
           print('Current Lobby is started navigating to GamePage');
           chatService.clearLobbyMessages();
           socketService.setup(SocketType.Game, infoService.id);
+          gameManagerService.setListeners();
           Navigator.pushNamed(context, CLASSIC_ROUTE);
         }
       });
@@ -106,7 +109,8 @@ class _LobbyPageState extends State<LobbyPage> {
         press: () {
           print('Starting the lobby');
           lobbyService.startLobby();
-          Navigator.pushNamed(context, CLASSIC_ROUTE);
+          // TODO: Add loading message for creator
+          // Navigator.pushNamed(context, CLASSIC_ROUTE);
         },
         backgroundColor: kMidGreen,
       );
