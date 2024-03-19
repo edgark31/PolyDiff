@@ -138,7 +138,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
     sendMessageLobby(message: string): void {
         console.log('affiche toi message: ' + message);
-        this.globalChatService.sendMessage('yo');
+        this.globalChatService.sendMessage(message);
     }
     receiveMessage(chat: Chat): void {
         this.messages.push(chat);

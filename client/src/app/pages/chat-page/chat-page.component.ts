@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
-import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { ChatState } from '@common/enums';
@@ -18,7 +17,6 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     messages: Chat[] = [];
 
     constructor(
-        private gameManager: GameManagerService,
         private readonly clientSocketService: ClientSocketService,
         private readonly globalChatService: GlobalChatService,
         private readonly router: Router,
@@ -37,12 +35,6 @@ export class ChatPageComponent implements OnInit, OnDestroy {
         }
     }
 
-    goPageChat(): void {
-        // this.clientSocketService.disconnect('auth');
-
-        console.log('lobby retour' + this.gameManager.lobbyWaiting.lobbyId);
-        this.router.navigate(['/game']);
-    }
     back(): void {
         this.router.navigate(['/home']);
     }
