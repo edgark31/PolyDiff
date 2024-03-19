@@ -44,7 +44,7 @@ class LobbyService extends ChangeNotifier {
   }
 
   void startLobby() {
-    setIsCreator(false);
+    // setIsCreator(false);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Start.name,

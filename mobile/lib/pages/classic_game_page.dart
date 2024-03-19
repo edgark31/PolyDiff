@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/constants/temp_images.dart'; // TODO : replace with specific image when http is setup
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
+import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/canvas.dart';
 import 'package:mobile/widgets/chat_box.dart';
 import 'package:provider/provider.dart';
@@ -31,25 +32,48 @@ class ClassicGamePage extends StatefulWidget {
 class _ClassicGamePageState extends State<ClassicGamePage> {
   final ImageConverterService imageConverterService = ImageConverterService();
   final GameAreaService gameAreaService = Get.find();
+  final GameManagerService gameManagerService = Get.find();
   late Future<CanvasModel> imagesFuture;
   bool isChatBoxVisible = false;
+  bool _initialLoad = false;
   final tempGameManager = CoordinateConversionService();
 
   @override
   void initState() {
     super.initState();
-    imagesFuture = loadImage();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (gameManagerService.game.gameId != '' && !_initialLoad) {
+      print("initial hack");
+      _initialLoad = true;
+      imagesFuture = loadImage();
+    }
   }
 
   Future<CanvasModel> loadImage() async {
-    return imageConverterService.fromImagesBase64(originalImageTempBase64,
-        modifiedImageTempBase64); // TODO : replace with specific image when http is setup
+    final gameManagerService = context.watch<GameManagerService>();
+    return imageConverterService.fromImagesBase64(
+      gameManagerService.game.original,
+      gameManagerService.game.modified,
+    ); // TODO : replace with specific image when http is setup
   }
 
   @override
   Widget build(BuildContext context) {
     final gameAreaService = Provider.of<GameAreaService>(context);
-    //final lobbyService = context.watch<LobbyService>();
+    final gameManagerService = context.watch<GameManagerService>();
+    final lobbyService = context.watch<LobbyService>();
+    if (gameManagerService.game.gameId == null) {
+      return Column(
+        children: [
+          CircularProgressIndicator(),
+          Text('Game is loading'),
+        ],
+      );
+    }
     return Scaffold(
       body: Stack(
         children: [

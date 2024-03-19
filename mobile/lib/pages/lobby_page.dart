@@ -55,7 +55,14 @@ class _LobbyPageState extends State<LobbyPage> {
           chatService.clearLobbyMessages();
           socketService.setup(SocketType.Game, infoService.id);
           gameManagerService.setListeners();
+          // if (lobbyService.isCreator) {
+          lobbyService.setIsCreator(false); // TODO: clean this
+          gameManagerService.startGame(lobbyService.lobby.lobbyId);
+          // }
+          // Future.delayed(Duration(milliseconds: 2000), () {
+          // Waiting for server to emit the created game from creator
           Navigator.pushNamed(context, CLASSIC_ROUTE);
+          // });
         }
       });
     }

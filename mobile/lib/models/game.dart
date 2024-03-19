@@ -1,15 +1,17 @@
 class Game {
   String lobbyId;
-  String? gameId;
+  String gameId;
+  String name;
   String original;
   String modified;
-  String difficulty;
-  List<List<Coordinate>> differences;
-  int nDifferences;
-  List<String> playedGameIds;
+  String? difficulty;
+  List<List<Coordinate>>? differences;
+  int? nDifferences;
+  List<String>? playedGameIds;
   Game(
     this.lobbyId,
     this.gameId,
+    this.name,
     this.original,
     this.modified,
     this.difficulty,
@@ -18,39 +20,48 @@ class Game {
     this.playedGameIds,
   );
 
-  Game.initial(): this(
-    '', // lobbyId
-    '', // gameId
-    '', // original
-    '', // modified
-    '', // difficulty
-    [], // differences
-    0, // nDifferences
-    [], // playedGameIds
-  );
-  factory Game.fromJson(Map<String, dynamic> json) => Game(
-        json['lobbyId'],
-        json['gameId'],
-        json['original'],
-        json['modified'],
-        json['difficulty'],
-        List<List<Coordinate>>.from(json['differences'].map((x) =>
-            List<Coordinate>.from(
-                x.map((x) => Coordinate.fromJson(x)).toList()))),
-        json['nDifferences'],
-        List<String>.from(json['playedGameIds'].map((x) => x)),
-      );
-
+  Game.initial()
+      : this(
+          '', // lobbyId
+          '', // gameId
+          '', // name
+          '', // original
+          '', // modified
+          '', // difficulty
+          [], // differences
+          0, // nDifferences
+          [], // playedGameIds
+        );
+  factory Game.fromJson(Map<String, dynamic> json) {
+    List<String>? playedGameIds;
+    if (json['playedGameIds'] != null) {
+      playedGameIds = List<String>.from(json['playedGameIds'].map((x) => x));
+    }
+    return Game(
+      json['lobbyId'],
+      json['gameId'],
+      json['name'],
+      json['original'],
+      json['modified'],
+      json['difficulty'],
+      List<List<Coordinate>>.from(json['differences'].map((x) =>
+          List<Coordinate>.from(
+              x.map((x) => Coordinate.fromJson(x)).toList()))),
+      json['nDifferences'],
+      playedGameIds,
+    );
+  }
   Map<String, dynamic> toJson() => {
         'lobbyId': lobbyId,
         'gameId': gameId,
+        'name': name,
         'original': original,
         'modified': modified,
         'difficulty': difficulty,
-        'differences': List<dynamic>.from(differences
+        'differences': List<dynamic>.from(differences!
             .map((x) => List<dynamic>.from(x.map((x) => x.toJson())))),
         'nDifferences': nDifferences,
-        'playedGameIds': List<dynamic>.from(playedGameIds.map((x) => x)),
+        'playedGameIds': List<dynamic>.from(playedGameIds!.map((x) => x)),
       };
 }
 
