@@ -9,9 +9,10 @@ import 'package:mobile/services/avatar_service.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_card_service.dart';
+import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/info_service.dart';
-import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
 
@@ -44,6 +45,10 @@ void main() async {
       return lobbyService;
     }),
     ChangeNotifierProvider(create: (context) {
+      GameManagerService gameManagerService = Get.find();
+      return gameManagerService;
+    }),
+    ChangeNotifierProvider(create: (context) {
       ChatService chatService = Get.find();
       return chatService;
     }),
@@ -63,6 +68,7 @@ void initializeServices() {
   Get.put(InfoService());
   Get.put(LobbySelectionService());
   Get.put(LobbyService());
+  Get.put(GameManagerService());
   Get.put(ChatService());
   Get.put(GameCardService());
 }
