@@ -83,6 +83,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         if (eventHTMLElement.tagName !== INPUT_TAG_NAME) {
             if (event.key === 't') {
                 const differencesCoordinates = ([] as Coordinate[]).concat(...this.differences);
+                this.clientSocket.send('game', GameEvents.Clic, { lobbyId: this.gameLobby.lobbyId, coordClic: differencesCoordinates });
                 this.gameAreaService.toggleCheatMode(differencesCoordinates);
             }
         }
