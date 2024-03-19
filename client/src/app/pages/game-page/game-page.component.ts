@@ -157,35 +157,35 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     setUpGame(): void {
-        this.canvasGameSubscription = this.gameManager.currentGame$.subscribe((game) => {
-            this.gameAreaService.setOriginalContext(
-                this.originalCanvas.nativeElement.getContext('2d', {
-                    willReadFrequently: true,
-                }) as CanvasRenderingContext2D,
-            );
-            this.gameAreaService.setModifiedContext(
-                this.modifiedCanvas.nativeElement.getContext('2d', {
-                    willReadFrequently: true,
-                }) as CanvasRenderingContext2D,
-            );
-            this.gameAreaService.setOriginalFrontContext(
-                this.originalCanvasForeground.nativeElement.getContext('2d', {
-                    willReadFrequently: true,
-                }) as CanvasRenderingContext2D,
-            );
-            this.gameAreaService.setModifiedFrontContext(
-                this.modifiedCanvasForeground.nativeElement.getContext('2d', {
-                    willReadFrequently: true,
-                }) as CanvasRenderingContext2D,
-            );
-            this.imageService.loadImage(this.gameAreaService.getOriginalContext(), this.game.original);
-            this.imageService.loadImage(
-                this.gameAreaService.getModifiedContext(),
-                this.game.modified,
-                // 'http://localhost:3000/' + game.gameId.toString() + '/original.bmp',
-            );
-            this.gameAreaService.setAllData();
-        });
+        // this.canvasGameSubscription = this.gameManager.currentGame$.pipe(takeUntil(this.onDestroy$)).subscribe((game) => {
+        this.gameAreaService.setOriginalContext(
+            this.originalCanvas.nativeElement.getContext('2d', {
+                willReadFrequently: true,
+            }) as CanvasRenderingContext2D,
+        );
+        this.gameAreaService.setModifiedContext(
+            this.modifiedCanvas.nativeElement.getContext('2d', {
+                willReadFrequently: true,
+            }) as CanvasRenderingContext2D,
+        );
+        this.gameAreaService.setOriginalFrontContext(
+            this.originalCanvasForeground.nativeElement.getContext('2d', {
+                willReadFrequently: true,
+            }) as CanvasRenderingContext2D,
+        );
+        this.gameAreaService.setModifiedFrontContext(
+            this.modifiedCanvasForeground.nativeElement.getContext('2d', {
+                willReadFrequently: true,
+            }) as CanvasRenderingContext2D,
+        );
+        this.imageService.loadImage(this.gameAreaService.getOriginalContext(), this.gameLobby.original);
+        this.imageService.loadImage(
+            this.gameAreaService.getModifiedContext(),
+            this.gameLobby.modified,
+            // 'http://localhost:3000/' + game.gameId.toString() + '/original.bmp',
+        );
+        this.gameAreaService.setAllData();
+        // });
     }
 
     // private setUpReplay(): void {
