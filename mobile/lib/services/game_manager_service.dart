@@ -4,4 +4,8 @@ import 'package:mobile/services/socket_service.dart';
 
 class GameManagerService extends ChangeNotifier {
   final SocketService socketService = Get.find();
+
+  void startGame(String? lobbyID) {}
+
+  void sendCoord() {}
 }
