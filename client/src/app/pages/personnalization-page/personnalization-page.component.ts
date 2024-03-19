@@ -19,7 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
     templateUrl: './personnalization-page.component.html',
     styleUrls: ['./personnalization-page.component.scss'],
 })
-export class PersonnalizationPageComponent implements OnInit {
+export class PersonalizationPageComponent implements OnInit {
     @ViewChild(ImportDialogComponent) importDialogComponent: ImportDialogComponent;
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
@@ -33,17 +33,16 @@ export class PersonnalizationPageComponent implements OnInit {
         public sound: SoundService,
 
         private translate: TranslateService,
-        private clientsocket: ClientSocketService,
+        private clientSocket: ClientSocketService,
     ) {}
 
     ngOnInit() {
         this.welcomeService.selectName = this.gameManager.username;
         this.welcomeService.selectAvatar = this.welcomeService.account.profile.avatar;
-        this.welcomeService.selectTheme = this.welcomeService.account.profile.theme;
+        this.welcomeService.selectTheme = this.welcomeService.account.profile.desktopTheme;
         this.welcomeService.selectLanguage = this.welcomeService.account.profile.language;
-        this.sound.correctSoundEffect = this.welcomeService.account.profile.songDifference;
-
-        this.sound.incorrectSoundEffect = this.welcomeService.account.profile.songError;
+        this.sound.correctSoundId = this.welcomeService.account.profile.onCorrectSoundId;
+        this.sound.incorrectSoundId = this.welcomeService.account.profile.onErrorSoundId;
     }
 
     useLanguage(language: string): void {
@@ -51,7 +50,7 @@ export class PersonnalizationPageComponent implements OnInit {
     }
 
     onSubmitHome() {
-        this.clientsocket.disconnect('auth');
+        this.clientSocket.disconnect('auth');
         this.router.navigate(['/login']);
     }
 
@@ -63,10 +62,10 @@ export class PersonnalizationPageComponent implements OnInit {
             this.welcomeService.onChooseAvatar();
         if (this.welcomeService.selectPassword !== this.welcomeService.account.credentials.password && this.welcomeService.selectPassword)
             this.welcomeService.onModifyPassword();
-        if (this.welcomeService.selectTheme !== this.welcomeService.account.profile.theme) this.welcomeService.onModifyTheme();
+        if (this.welcomeService.selectTheme !== this.welcomeService.account.profile.desktopTheme) this.welcomeService.onModifyTheme();
         if (this.welcomeService.selectLanguage !== this.welcomeService.account.profile.language) this.welcomeService.onModifyLanguage();
-        if (this.sound.correctSoundEffect !== this.welcomeService.account.profile.songDifference) this.welcomeService.onModifySongDifference();
-        if (this.sound.incorrectSoundEffect !== this.welcomeService.account.profile.songError) this.welcomeService.onModifySongError();
+        if (this.sound.correctSoundId !== this.welcomeService.account.profile.onCorrectSoundId) this.welcomeService.onModifySongDifference();
+        if (this.sound.incorrectSoundId !== this.welcomeService.account.profile.onErrorSoundId) this.welcomeService.onModifySongError();
 
         this.router.navigate(['/profil']);
     }

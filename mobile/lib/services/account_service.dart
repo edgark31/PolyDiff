@@ -42,7 +42,7 @@ class AccountService {
       print(
           "*** Server Updating username from $oldUsername to $newUsername, path : $baseUrl/account/pseudo ***");
       final response = await http.put(
-        Uri.parse('$baseUrl/account/pseudo'),
+        Uri.parse('$baseUrl/account/username'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

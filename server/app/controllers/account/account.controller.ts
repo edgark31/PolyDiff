@@ -40,7 +40,7 @@ export class AccountController {
         }
     }
 
-    @Put('pseudo')
+    @Put('username')
     async changePseudo(@Body('oldUsername') oldUsername: string, @Body('newUsername') newUsername: string, @Res() response: Response) {
         try {
             await this.accountManager.changePseudo(oldUsername, newUsername);

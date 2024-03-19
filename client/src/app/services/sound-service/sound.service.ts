@@ -1,44 +1,46 @@
 import { Injectable } from '@angular/core';
-import { Song } from '@common/game-interfaces';
-
 @Injectable({
     providedIn: 'root',
 })
 export class SoundService {
-    // correctSoundEffect: HTMLAudioElement;
-    // incorrectSoundEffect: HTMLAudioElement;
-    correctSoundEffect: Song;
-    incorrectSoundEffect: Song;
 
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+    correctSoundId: string;
+    incorrectSoundId: string;
+
+    onErrorSoundPath: string;
+    onCorrectSoundPath: string;
+
+
     constructor() {
-        // this.correctSoundEffect = new Audio('assets/sound/WinSoundEffect.mp3');
-        // this.incorrectSoundEffect = new Audio('assets/sound/ErrorSoundEffect.mp3');
+        this.onErrorSoundPath = "asset/sound/error$this.incorrectSoundId.mp3";
+        this.onCorrectSoundPath = "asset/sound/correct$this.correctSoundId.mp3";
     }
 
     playErrorSound(): void {
-        new Audio(this.incorrectSoundEffect.link).play();
+        new Audio(this.onErrorSoundPath).play();
     }
 
     playCorrectSound(): void {
-        new Audio(this.correctSoundEffect.link).play();
+        new Audio(this.onCorrectSoundPath).play();
     }
 
-    playCorrectSoundDifference(song: Song): void {
-        new Audio(song.link).play();
+
+    stopCorrectSound(): void {
+        new Audio(this.onCorrectSoundPath).pause();
+        new Audio(this.onErrorSoundPath).currentTime = 0;
     }
 
-    playIncorrectSound(song: Song): void {
-        new Audio(song.link).play();
+    stopIncorrectSound(): void {
+        new Audio(this.onErrorSoundPath).pause();
+        new Audio(this.onErrorSoundPath).currentTime = 0;
     }
 
-    stopCorrectSound(song: Song): void {
-        new Audio(song.link).pause();
-        new Audio(song.link).currentTime = 0;
+    play(sourcePath : string) {
+        new Audio(sourcePath);
     }
 
-    stopIncorrectSound(song: Song): void {
-        new Audio(song.link).pause();
-        new Audio(song.link).currentTime = 0;
+    stop(sourcePath : string) {
+        new Audio(sourcePath);
+        new Audio(sourcePath).currentTime = 0;
     }
 }

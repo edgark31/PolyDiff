@@ -60,7 +60,7 @@
                 <mat-select-trigger>
                     {{ welcomeService.selectTheme.name }}
                   </mat-select-trigger>
-                <mat-option *ngFor="let theme of welcomeService.themePersonnalization" [value]="theme">
+                <mat-option *ngFor="let theme of welcomeService.themePersonalization" [value]="theme">
                   {{ theme.name }}
                 </mat-option>
               </mat-select>
@@ -86,13 +86,13 @@
        <div class="form-control section"> <label for="Theme"> {{'profil.songError' | translate }}</label>
         <mat-form-field>
           <mat-label>{{'profil.songError' | translate }}</mat-label>
-          <mat-select [(value)]="sound.correctSoundEffect">
+          <mat-select [(value)]="sound.correctSoundId">
             <mat-select-trigger>
-                {{ sound.correctSoundEffect.name }}
+                {{ sound.correctSoundId }}
               </mat-select-trigger>
-            <mat-option [value]="welcomeService.songListDifference[0]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[0])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[0])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[0].name }}</mat-option>
-            <mat-option [value]="welcomeService.songListDifference[1]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[1])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[1])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[1].name }}</mat-option>
-            <mat-option [value]="welcomeService.songListDifference[2]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[2])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[2])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[2].name }}</mat-option>
+            <mat-option [value]="welcomeService.soundCorrectList[0]"><mat-icon (mouseover)="sound.play(welcomeService.soundCorrectList[0])" (mouseleave)="sound.stop(welcomeService.soundCorrectList[0])" class="option-icon">headset</mat-icon>{{welcomeService.soundCorrectList[0] }}</mat-option>
+            <mat-option [value]="welcomeService.soundCorrectList[1]"><mat-icon (mouseover)="sound.play(welcomeService.soundCorrectList[1])" (mouseleave)="sound.stop(welcomeService.soundCorrectList[1])" class="option-icon">headset</mat-icon>{{welcomeService.soundCorrectList[1] }}</mat-option>
+            <mat-option [value]="welcomeService.soundCorrectList[2]"><mat-icon (mouseover)="sound.play(welcomeService.soundCorrectList[2])" (mouseleave)="sound.stop(welcomeService.soundCorrectList[2])" class="option-icon">headset</mat-icon>{{welcomeService.soundCorrectList[2] }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -101,21 +101,21 @@
       <div class="form-control section"> <label for="Theme"> {{'profil.songDifference' | translate }}</label>
         <mat-form-field>
           <mat-label>{{'profil.songDifference' | translate }}</mat-label>
-          <mat-select [(value)]="sound.incorrectSoundEffect">
+          <mat-select [(value)]="sound.incorrectSoundId">
             <mat-select-trigger>
-                {{sound.incorrectSoundEffect.name }}
+                {{sound.incorrectSoundId }}
               </mat-select-trigger>
-            <mat-option [value]="welcomeService.songListError[0]">
-                <mat-icon (mouseover)="sound.playIncorrectSound(welcomeService.songListError[0])" (mouseleave)="sound.stopIncorrectSound(welcomeService.songListError[0])" class="option-icon">headset</mat-icon>
-                {{ welcomeService.songListError[0].name }}
+            <mat-option [value]="welcomeService.soundErrorList[0]">
+                <mat-icon (mouseover)="sound.play(welcomeService.soundErrorList[0])" (mouseleave)="sound.stop(welcomeService.soundErrorList[0])" class="option-icon">headset</mat-icon>
+                {{ welcomeService.soundErrorList[0] }}
               </mat-option>
-              <mat-option [value]="welcomeService.songListError[1]">
-                <mat-icon (mouseover)="sound.playIncorrectSound(welcomeService.songListError[1])" (mouseleave)="sound.stopIncorrectSound(welcomeService.songListError[1])" class="option-icon">headset</mat-icon>
-                {{ welcomeService.songListError[1].name }}
+              <mat-option [value]="welcomeService.soundErrorList[1]">
+                <mat-icon (mouseover)="sound.play(welcomeService.soundErrorList[1])" (mouseleave)="sound.stop(welcomeService.soundErrorList[1])" class="option-icon">headset</mat-icon>
+                {{ welcomeService.soundErrorList[1] }}
               </mat-option>
-              <mat-option [value]="welcomeService.songListError[2]">
-                <mat-icon (mouseover)="sound.playIncorrectSound(welcomeService.songListError[2])" (mouseleave)="sound.stopIncorrectSound(welcomeService.songListError[2])" class="option-icon">headset</mat-icon>
-                {{ welcomeService.songListError[2].name }}
+              <mat-option [value]="welcomeService.soundErrorList[2]">
+                <mat-icon (mouseover)="sound.play(welcomeService.soundErrorList[2])" (mouseleave)="sound.stop(welcomeService.soundErrorList[2])" class="option-icon">headset</mat-icon>
+                {{ welcomeService.soundErrorList[2] }}
               </mat-option>
           </mat-select>
         </mat-form-field>

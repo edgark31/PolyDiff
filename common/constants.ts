@@ -1,5 +1,5 @@
 import { GameModes } from './enums';
-import { ConnectionLog, PlayerTime, Sound, Theme } from './game-interfaces';
+import { ConnectionLog, PlayerTime, Theme } from './game-interfaces';
 
 export const DEFAULT_COUNTDOWN_VALUE = 30;
 export const DEFAULT_HINT_PENALTY = 5;
@@ -27,16 +27,16 @@ export const THEME_PERSONALIZATION: Theme[] = [
     { name: 'cafe', color: '', buttonColor: 'brown', backgroundColor: 'black' },
 ];
 
-export const SOUND_LIST_DIFFERENCE: Sound[] = [
-    { id: '1', path: 'assets/sound/WinSoundEffect.mp3' },
-    { id: 'Sound2', path: 'assets/sound/WinSoundEffect.mp3' },
-    { id: 'Sound3', path: 'assets/sound/WinSoundEffect.mp3' },
+export const SOUND_CORRECT_LIST: string[] = [
+    'assets/sound/WinSoundEffect.mp3',
+    'assets/sound/WinSoundEffect.mp3',
+    'assets/sound/WinSoundEffect.mp3' ,
 ];
 
-export const SOUND_LIST_ERROR: Sound[] = [
-    { id: 'DefaultSound', path: 'assets/sound/ErrorSoundEffect.mp3' },
-    { id: 'Sound2', path: 'assets/sound/ErrorSoundEffect.mp3' },
-    { id: 'Sound3', path: 'assets/sound/ErrorSoundEffect.mp3' },
+export const SOUND_ERROR_LIST: string[] = [
+    'assets/sound/ErrorSoundEffect.mp3',
+   'assets/sound/ErrorSoundEffect.mp3',
+    'assets/sound/ErrorSoundEffect.mp3',
 ];
 
 export const LANGUAGES: string[] = ['fr', 'en'];

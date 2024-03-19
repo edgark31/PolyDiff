@@ -190,10 +190,10 @@ export interface Profile {
     stats: Statistics;
     friends: Friend[];
     friendRequests: string[];
-    theme: Theme;
+    desktopTheme: Theme;
     language: string;
-    differenceSound: Sound;
-    errorSound: Sound;
+    onCorrectSoundId: string;
+    onErrorSoundId: string;
 }
 
 export interface SessionLog {
@@ -207,7 +207,7 @@ export interface ConnectionLog {
 }
 
 export interface Statistics {
-    gamePlayed: number;
+    gamesPlayed: number;
     gameWon: number;
     averageTime: number;
     averageDifferences: number;
@@ -261,10 +261,3 @@ export interface Sound {
     path: string;
 }
 
-// export interface modifyProfile {
-//     avatar: string;
-//     name: string;
-//     theme: Theme;
-//     language: string;
-//     password: string;
-// }
