@@ -3,8 +3,6 @@ import { ChannelEvents, GameEvents, MessageEvents, MessageTag } from './../../..
 import { Injectable } from '@angular/core';
 import { ReplayEvent } from '@app/interfaces/replay-actions';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
-import { GameAreaService } from '@app/services/game-area-service/game-area.service';
-import { SoundService } from '@app/services/sound-service/sound.service';
 import { Coordinate } from '@common/coordinate';
 import { Chat, ChatMessageGlobal, Game, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
@@ -36,12 +34,7 @@ export class GameManagerService {
 
     // Service are needed to be used in this service
     // eslint-disable-next-line max-params
-    constructor(
-        private readonly clientSocket: ClientSocketService,
-        gameAreaService: GameAreaService,
-        soundService: SoundService,
-        // private readonly captureService: CaptureService,
-    ) {
+    constructor(private readonly clientSocket: ClientSocketService) {
         this.currentGame = new Subject<Game>();
         this.differencesFound = new Subject<number>();
         this.timer = new Subject<number>();
@@ -180,14 +173,13 @@ export class GameManagerService {
     }
 
     manageSocket(): void {
-        this.game = new Subject<Game>();
-        this.currentGame = new Subject<Game>();
-        this.message = new Subject<Chat>();
-        this.timerLobby = new Subject<number>();
         this.clientSocket.on('game', GameEvents.StartGame, (game: Game) => {
             console.log('yoooo' + game.lobbyId);
             this.game.next(game);
-            this.currentGame.next(game);
+        });
+
+        this.clientSocket.on('game', GameEvents.Found, (data: { lobby: Lobby; remainingDifferences: Coordinate[][] }) => {
+            this.differencesFound.next(data.remainingDifferences);
         });
 
         this.clientSocket.on('game', ChannelEvents.GameMessage, (chat: Chat) => {

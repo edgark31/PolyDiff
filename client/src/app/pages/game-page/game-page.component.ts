@@ -103,7 +103,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.timer = timer;
         });
 
-        this.clientSocket.on('game', GameEvents.EndGame, (response: string) => {
+        this.clientSocket.on('game', GameEvents.EndGame, () => {
             this.router.navigate(['/game-mode']);
         });
     }
@@ -125,7 +125,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
     receiveMessage(chat: Chat): void {
         this.messages.push(chat);
-        console.log(this.messages);
     }
     showAbandonDialog(): void {
         this.matDialog.open(GamePageDialogComponent, {
@@ -180,13 +179,8 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             }) as CanvasRenderingContext2D,
         );
         this.imageService.loadImage(this.gameAreaService.getOriginalContext(), this.gameLobby.original);
-        this.imageService.loadImage(
-            this.gameAreaService.getModifiedContext(),
-            this.gameLobby.modified,
-            // 'http://localhost:3000/' + game.gameId.toString() + '/original.bmp',
-        );
+        this.imageService.loadImage(this.gameAreaService.getModifiedContext(), this.gameLobby.modified);
         this.gameAreaService.setAllData();
-        // });
     }
 
     // private setUpReplay(): void {
@@ -243,15 +237,15 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     //     });
     // }
 
-    // private handleDifferences(): void {
-    //     this.gameManager.differencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((differencesFound) => {
-    //         this.differencesFound = differencesFound;
-    //     });
+    private handleDifferences(): void {
+        this.gameManager.differencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((differencesFound) => {
+            this.differencesFound = differencesFound;
+        });
 
-    //     this.gameManager.opponentDifferencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((opponentDifferencesFound) => {
-    //         this.opponentDifferencesFound = opponentDifferencesFound;
-    //     });
-    // }
+        this.gameManager.opponentDifferencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((opponentDifferencesFound) => {
+            this.opponentDifferencesFound = opponentDifferencesFound;
+        });
+    }
 
     // private updateIfFirstDifferencesFound(): void {
     //     this.gameManager.isFirstDifferencesFound$.pipe(takeUntil(this.onDestroy$)).subscribe((isFirstDifferencesFound) => {
