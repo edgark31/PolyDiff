@@ -96,7 +96,8 @@ export class GameGateway implements OnGatewayConnection {
             if (index !== NOT_FOUND) {
                 // Update tout correctement
                 this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
-                const difference = this.games.get(lobbyId).differences.splice(index, 1);
+                const difference = this.games.get(lobbyId).differences[index];
+                this.games.get(lobbyId).differences.splice(index, 1);
                 const remainingDifferences: Coordinate[][] = this.games.get(lobbyId).differences;
                 this.server.to(lobbyId).emit(GameEvents.Found, {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
