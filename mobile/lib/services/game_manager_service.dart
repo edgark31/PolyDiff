@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/game.dart';
+import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/socket_service.dart';
 
 class GameManagerService extends ChangeNotifier {
   static Game _game = Game.initial();
   final SocketService socketService = Get.find();
+  final GameAreaService gameAreaService = Get.find();
 
   Game get game => _game;
 
@@ -35,8 +37,8 @@ class GameManagerService extends ChangeNotifier {
       setGame(Game.fromJson(data as Map<String, dynamic>));
     });
 
-    socketService.on(SocketType.Game, GameEvents.Clic.name, (data) {
-      print('GameEvents.Clic.name event received');
+    socketService.on(SocketType.Game, GameEvents.Found.name, (data) {
+      
     });
 
     socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
