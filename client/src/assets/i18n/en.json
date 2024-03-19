@@ -30,7 +30,7 @@
     },
 
     "button": {
-        "disconnection": "Disconnect",
+        "deconnexion": "Disconnect",
         "returnProfile": "return to profile",
         "GoSettings": "Go to settings",
         "Settings": "Settings",
