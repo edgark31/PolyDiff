@@ -19,35 +19,63 @@
     <div class="canvas-container">
         <div class="game-canvas">
             <canvas
-                id="originalFG"
+                id="originalCanvasPlayerOne"
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
-                #originalCanvasFG
+                #originalCanvasPlayerOne
                 (click)="mouseClickOnCanvas($event, true)"
             ></canvas>
             <canvas
-                id="original"
+                id="originalCanvasPlayerTwo"
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
-                #originalCanvas
+                #originalCanvasPlayerTwo
                 (click)="mouseClickOnCanvas($event, true)"
             ></canvas>
+            <canvas *ngIf=" this.gameManager.lobbyWaiting.players && this.gameManager.lobbyWaiting.players.length===3"
+            id="originalCanvasPlayerThree"
+            [attr.height]="canvasSize.height"
+            [attr.width]="canvasSize.width"
+            #originalCanvasPlayerThree
+            (click)="mouseClickOnCanvas($event, true)"
+        ></canvas>
+        <canvas *ngIf=" this.gameManager.lobbyWaiting.players && this.gameManager.lobbyWaiting.players.length === 4"
+            id="originalCanvasPlayerFour"
+            [attr.height]="canvasSize.height"
+            [attr.width]="canvasSize.width"
+            #originalCanvasPlayerFour
+            (click)="mouseClickOnCanvas($event, true)"
+        ></canvas>
         </div>
         <div class="game-canvas">
             <canvas
-                id="modifiedFG"
+                id="modifiedCanvasPlayerOne"
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
-                #modifiedCanvasFG
+                #modifiedCanvasPlayerOne
                 (click)="mouseClickOnCanvas($event, false)"
             ></canvas>
             <canvas
-                id="modified"
+                id="modifiedCanvasPlayerTwo"
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
-                #modifiedCanvas
+                #modifiedCanvasPlayerTwo
                 (click)="mouseClickOnCanvas($event, false)"
             ></canvas>
+            <canvas *ngIf=" this.gameManager.lobbyWaiting.players && this.gameManager.lobbyWaiting.players.length===3"
+            id="modifiedCanvasPlayerThree"
+            [attr.height]="canvasSize.height"
+            [attr.width]="canvasSize.width"
+            #modifiedCanvasPlayerThree
+            (click)="mouseClickOnCanvas($event, false)"
+        ></canvas>
+        <canvas *ngIf=" this.gameManager.lobbyWaiting.players && this.gameManager.lobbyWaiting.players.length===4"
+            id="modifiedCanvasPlayerFour"
+            [attr.height]="canvasSize.height"
+            [attr.width]="canvasSize.width"
+            #modifiedCanvasPlayerFour
+            (click)="mouseClickOnCanvas($event, false)"
+        ></canvas>
         </div>
     </div>
 
@@ -58,7 +86,7 @@
     </button>
     <span></span>
 </div>
- <img id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
+ <!-- <img id="background" src="./assets/background/BackgroundImage.jpg" alt="background" /> -->
 <div *ngIf="game">
     <!-- <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages" [isReplaying]="isReplayAvailable" [gameMode]="game.mode"></app-chat-box> -->
     <app-replay-buttons [isReplayAvailable]="isReplayAvailable"></app-replay-buttons>

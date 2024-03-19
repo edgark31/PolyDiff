@@ -82,7 +82,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         }
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
-                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Limited && lobby.isAvailable);
+                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
                 this.updatepagedLobbies();
                 this.cdr.detectChanges();
             }

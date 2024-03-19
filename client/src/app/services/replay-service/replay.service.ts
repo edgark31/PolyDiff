@@ -222,8 +222,8 @@ export class ReplayService implements OnDestroy {
 
     private replayGameStart(replayData: ReplayPayload): void {
         this.gameManager.differences = (replayData as GameRoom).originalDifferences;
-        this.imageService.loadImage(this.gameAreaService.getOriginalContext(), (replayData as GameRoom).clientGame.original);
-        this.imageService.loadImage(this.gameAreaService.getModifiedContext(), (replayData as GameRoom).clientGame.modified);
+        this.imageService.loadImage(this.gameAreaService.getoriginalContextPlayerOne(), (replayData as GameRoom).clientGame.original);
+        this.imageService.loadImage(this.gameAreaService.getmodifiedContextPlayerOne(), (replayData as GameRoom).clientGame.modified);
         this.gameAreaService.setAllData();
     }
 
