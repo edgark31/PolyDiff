@@ -1,6 +1,7 @@
 <div id="game-page" class="justified">
     <div  class="game-infos information-header justified">
         <h1 id = "title">{{ gameLobby.name }}</h1>
+        <h1 id = "mode">{{ lobby.mode }}</h1>
          <div class="game-feedback">
             <!-- <mat-icon class="personIcon">person</mat-icon> -->
             <h1>Différences trouvées : {{ nDifferencesFound }}</h1>
@@ -8,9 +9,11 @@
             <h1>Temps : {{ timer * 1000 | date: 'mm:ss' }}</h1>
             &nbsp;
             <!-- <mat-icon class="personIcon">person</mat-icon> -->
-            <h1 *ngFor="let player of lobby.players">
-                <span> {{player.name}} : {{player.count}}</span>
-            </h1>
+            <div *ngIf="lobby.players.length > 0">
+                <h1 *ngFor="let player of lobby.players">
+                    <span> {{player.name}} : {{player.count}}</span>
+                </h1>
+            </div>
         </div>
         <!-- <app-game-infos [isReplayAvailable]="isReplayAvailable" [game]="game"></app-game-infos> -->
     </div>

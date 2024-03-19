@@ -38,8 +38,7 @@ export class GameManagerService {
     // eslint-disable-next-line max-params
     constructor(
         private readonly clientSocket: ClientSocketService,
-        // private readonly soundService: SoundService,
-        private readonly gameAreaService: GameAreaService,
+        private readonly gameAreaService: GameAreaService, // private readonly welcomeService: WelcomeService,
     ) {
         this.currentGame = new Subject<Game>();
         this.lobbyGame = new Subject<Lobby>(); // used
@@ -263,11 +262,11 @@ export class GameManagerService {
     private replaceDifference(differences: Coordinate[]): void {
         const hasDifferences = differences.length > 0;
         if (!hasDifferences) {
-            // this.soundService.playErrorSound();
+            // this.soundService.playIncorrectSound(this.welcomeService.account.profile.songError);
             this.gameAreaService.showError(this.isLeftCanvas, this.gameAreaService.mousePosition);
             return;
         }
-        // this.soundService.playCorrectSound();
+        // this.soundService.playCorrectSoundDifference(this.welcomeService.account.profile.songDifference);
         this.gameAreaService.setAllData();
         this.gameAreaService.replaceDifference(differences);
         // this.isFirstDifferencesFound.next(true);
