@@ -1,0 +1,30 @@
+<div class="selectionComponent">
+    <div class="header">
+        <app-nav-bar id="nav-bar"></app-nav-bar>
+    </div>
+    <img id="background" src="./assets/background/MenuBackground.jpg" alt="background" />
+    <div class="container">
+        <div class="left">
+            <app-chat-box (addLobby)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
+        </div>
+        <div class="right">
+            <div class="player-count"> {{lobby.players.length}}/4 joueurs présents</div>
+            <div class="element">
+                <div class="players-list">
+
+                    <p class="waiting-text"> Joueur(s) en attente : </p>
+                    <div class="player-container">
+                        <div class="players" *ngFor="let playerName of lobby.players">
+                            <p class="player">Joueur: <span class="player-name">{{ playerName.name }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button (click)="onStart()" *ngIf="roomManagerService.isOrganizer && lobby.players.length>=2" type="submit">Commencer la partie</button>
+            <button (click)="onQuit()" type="submit">Quitter</button>
+        </div>
+    </div>
+</div>

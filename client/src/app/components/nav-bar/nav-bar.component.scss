@@ -1,0 +1,61 @@
+.navBar {
+    display: flex;
+    flex-direction: row;
+    text-transform: uppercase;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+ul a {
+    cursor: pointer;
+    color: white;
+    -webkit-text-stroke: 1px black;
+}
+
+::ng-deep .mat-menu-panel {
+    background-color: #d2b48c;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+}
+
+::ng-deep .mat-menu-item {
+    color: white;
+    padding: 8px 16px;
+}
+
+::ng-deep .mat-menu-item:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+}
+
+li:hover {
+    transform: scale(1.15);
+}
+
+.button-back {
+    margin-right: 100px;
+}
+
+.navElement {
+    margin: 0 10px;
+    font-size: 1.1em;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        color: #ffffff;
+    }
+}
+
+ul {
+    list-style-type: none;
+}
+
+a:hover {
+    color: #000000ab;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+}

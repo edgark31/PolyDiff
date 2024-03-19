@@ -1,0 +1,21 @@
+<body>
+    <div class="container flex-column">
+        <div class="header">
+            <app-nav-bar id ="nav-bar"></app-nav-bar>
+        </div>
+        <button mat-raised-button class="create-button" routerLink="/selection">
+            <span>Créer une salle</span>
+        </button>
+        <div *ngFor="let lobby of pagedLobbies">
+            <div *ngIf="lobby.mode === gameModes.Classic">
+                <img alt="background-image" id="image" src="./assets/gameSheet.png"/>
+                <app-room-sheet [lobby]="lobby"></app-room-sheet>
+            </div>
+        </div>
+        <div class="button-container">
+            <button (click)="previousPage()" *ngIf="currentPage > 0">Précédent</button>
+            <button (click)="nextPage()" *ngIf="(lobbies.length / pageSize) - 1 > currentPage ">Suivant</button>
+        </div>
+    </div>
+</body>
+
