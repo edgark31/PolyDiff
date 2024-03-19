@@ -16,35 +16,29 @@ class CustomMenuDrawer extends StatefulWidget {
 }
 
 class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
-  late final AvatarProvider _avatarProvider;
-  late final InfoService _infoService;
-  late final SocketService _socketService;
-
   @override
   void initState() {
     super.initState();
-    // Initialize providers in initState to avoid calling Provider.of in build method
-
-    _avatarProvider = Provider.of<AvatarProvider>(context, listen: false);
-    _infoService = Provider.of<InfoService>(context, listen: false);
-    _socketService = Provider.of<SocketService>(context, listen: false);
   }
 
   @override
   Widget build(BuildContext context) {
     // Use Consumer to listen to AvatarProvider changes
+    final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
+    final InfoService infoService = context.read<InfoService>();
+    final SocketService socketService = context.read<SocketService>();
 
     return Drawer(
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text(_infoService.username),
-            accountEmail: Text(_infoService.email),
+            accountName: Text(infoService.username),
+            accountEmail: Text(infoService.email),
             currentAccountPicture: CustomCircleAvatar(
               // Provide a unique key to force widget rebuild when avatar changes
-              key: ValueKey(AvatarProvider.instance.currentAvatarUrl),
+              key: ValueKey(avatarProvider.currentAvatarUrl),
 
-              imageUrl: _avatarProvider.currentAvatarUrl,
+              imageUrl: avatarProvider.currentAvatarUrl,
             ),
             decoration: BoxDecoration(color: kMidOrange),
           ),
@@ -81,7 +75,7 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
               title: Text('Déconnexion'),
               onTap: () {
                 print('Déconnexion');
-                _socketService.disconnect(SocketType.Auth);
+                socketService.disconnect(SocketType.Auth);
                 Navigator.pushNamed(context, HOME_ROUTE);
               }),
         ],

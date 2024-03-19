@@ -87,6 +87,7 @@ class _SignInFormState extends State<SignInForm> {
     final socketService = context.watch<SocketService>();
     final infoService = context.watch<InfoService>();
     final chatService = context.watch<ChatService>();
+    final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
     return Stack(
       children: [
         SingleChildScrollView(
@@ -146,8 +147,7 @@ class _SignInFormState extends State<SignInForm> {
                       if (serverErrorMessage == null) {
                         socketService.setup(SocketType.Auth, infoService.id);
                         chatService.setGlobalChatListeners();
-                        AvatarProvider.instance
-                            .setAccountAvatarUrl(infoService.id);
+                        avatarProvider.setAccountAvatarUrl();
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       }
                     }

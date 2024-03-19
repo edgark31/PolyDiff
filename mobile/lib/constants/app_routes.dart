@@ -51,7 +51,7 @@ const String FRIENDS_ROUTE = '/friends';
 const String SEARCH_FRIEND_ROUTE = '$FRIENDS_ROUTE/search';
 
 // GAMES
-const String GAME_ROUTE = 'game/';
+const String GAME_ROUTE = '/game';
 const String CLASSIC_ROUTE = '$GAME_ROUTE/classic';
 const String LIMITED_TIME_ROUTE = '$GAME_ROUTE/limited';
 

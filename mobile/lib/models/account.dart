@@ -72,7 +72,7 @@ class AccountSettings {
     return AccountSettings(
       username: service.username,
       id: service.id,
-      avatar: service.avatar,
+      avatar: "",
       email: service.email,
       theme: service.theme,
       language: service.language,

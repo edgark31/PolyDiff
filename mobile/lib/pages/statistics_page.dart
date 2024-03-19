@@ -23,6 +23,7 @@ class StatisticsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final infoService = context.watch<InfoService>();
+    final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
     final username = infoService.username;
     // TODO: create a statistics service
     final List<StatisticItem> statistics = [
@@ -42,12 +43,6 @@ class StatisticsPage extends StatelessWidget {
           title: "Temps moyen par partie", value: "5m 30s", icon: Icons.timer),
     ];
 
-    // user avatar
-    AvatarProvider.instance.setAccountAvatarUrl(infoService.id);
-    // Dynamically change the avatar URL
-    final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
-    // ui updates when the avatar changes
-
     return Scaffold(
       appBar: CustomAppBar(
         title: "Statistiques de $username",
@@ -60,7 +55,7 @@ class StatisticsPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CustomCircleAvatar(
-                  imageUrl: avatarUrl,
+                  imageUrl: avatarProvider.currentAvatarUrl,
                 ),
               ),
               ...statistics

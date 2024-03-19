@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
@@ -33,6 +34,10 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController usernameController = TextEditingController();
+  AvatarProvider _avatarProvider = Get.find();
+  InfoService _infoService = Get.find();
+  RegisterProvider _registerProvider = Get.find();
+
   // Same logic when signing up : avatar
   ImageProvider? _selectedAvatar;
   String? _selectedAvatarId;
@@ -51,11 +56,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String serverErrorMessage = "";
 
   late final CredentialsValidator _validator;
+
   String usernameFormat = NO;
 
   @override
   void initState() {
-    super.initState();
     super.initState();
     _validator = CredentialsValidator(onStateChanged: _forceRebuild);
     usernameController.addListener(_onUsernameChanged);
@@ -64,9 +69,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _loadInitialSettings() {
-    InfoService infoService = Provider.of<InfoService>(context, listen: false);
-    initialSettings = AccountSettings.fromInfoService(infoService);
-    currentSettings = AccountSettings.fromInfoService(infoService);
+    initialSettings = AccountSettings.fromInfoService(_infoService);
+    currentSettings = AccountSettings.fromInfoService(_infoService);
   }
 
   void _forceRebuild() => setState(() {});
@@ -101,32 +105,31 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> saveChanges() async {
-    final infoService = Provider.of<InfoService>(context, listen: false);
-    final avatarProvider = Provider.of<AvatarProvider>(context, listen: false);
-    final registerProvider =
-        Provider.of<RegisterProvider>(context, listen: false);
-
     try {
       // Avatar changes
       if (_selectedAvatarId != null) {
         UploadAvatarBody predefinedAvatarBody = UploadAvatarBody(
-            username: infoService.username, id: _selectedAvatarId);
-        String? response = await registerProvider.putAvatarData(
+            username: _infoService.username, id: _selectedAvatarId);
+        String? response = await _registerProvider.putAvatarData(
             predefinedAvatarBody, AvatarType.predefined);
+
+        print("HERE AVATAR CHANGED");
         print("response : $response");
         if (response == null) {
-          avatarProvider.setAccountAvatarUrl(infoService.username);
+          _avatarProvider.setAccountAvatarUrl();
+          showFeedback("Avatar updated successfully.");
         } else {
           throw Exception(response);
         }
       } else if (_selectedAvatarBase64 != null) {
+        print("HERE AVATAR CHANGED WRONG");
         UploadAvatarBody avatarBody = UploadAvatarBody(
-            username: infoService.username,
+            username: _infoService.username,
             base64Avatar: _selectedAvatarBase64!);
-        String? response =
-            await registerProvider.putAvatarData(avatarBody, AvatarType.camera);
+        String? response = await _registerProvider.putAvatarData(
+            avatarBody, AvatarType.camera);
+
         if (response == null) {
-          infoService.setAvatar(_selectedAvatarBase64!);
           showFeedback("Avatar updated successfully.");
         } else {
           throw Exception(response);
@@ -137,9 +140,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       if (usernameController.text.trim() != initialSettings?.username &&
           usernameController.text.trim().isNotEmpty) {
         String? response = await accountService.updateUsername(
-            infoService.username, usernameController.text.trim());
+            _infoService.username, usernameController.text.trim());
         if (response == null) {
-          infoService.setUsername(usernameController.text.trim());
+          _infoService.setUsername(usernameController.text.trim());
           showFeedback("Username updated successfully.");
         } else {
           throw Exception(response);
@@ -149,9 +152,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       if (currentSettings?.language != initialSettings?.language &&
           currentSettings?.language != null) {
         String? response = await accountService.updateLanguage(
-            infoService.username, currentSettings!.language);
+            _infoService.username, currentSettings!.language);
         if (response == null) {
-          infoService.setLanguage(currentSettings!.language);
+          _infoService.setLanguage(currentSettings!.language);
           showFeedback("Language updated successfully.");
         } else {
           throw Exception(response);
@@ -161,9 +164,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       if (currentSettings?.theme != initialSettings?.theme &&
           currentSettings?.theme != null) {
         String? response = await accountService.updateTheme(
-            infoService.username, currentSettings!.theme);
+            _infoService.username, currentSettings!.theme);
         if (response == null) {
-          infoService.setTheme(currentSettings!.theme);
+          _infoService.setTheme(currentSettings!.theme);
           showFeedback("Theme updated successfully.");
         } else {
           throw Exception(response);
@@ -173,10 +176,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
       if (currentSettings?.onErrorSound != initialSettings?.onErrorSound &&
           currentSettings?.onErrorSound != null) {
         String? response = await accountService.updateErrorSound(
-            infoService.username, currentSettings!.onErrorSound);
+            _infoService.username, currentSettings!.onErrorSound);
         if (response == null) {
-          infoService.setOnErrorSound(currentSettings!.onErrorSound);
-          showFeedback("Error sound updated successfully.");
+          _infoService.setOnErrorSound(currentSettings!.onErrorSound);
+          showFeedback("Sound onError updated successfully.");
         } else {
           throw Exception(response);
         }
@@ -184,9 +187,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       if (currentSettings?.onCorrectSound != initialSettings?.onCorrectSound &&
           currentSettings?.onCorrectSound != null) {
         String? response = await accountService.updateCorrectSound(
-            infoService.username, currentSettings!.onCorrectSound);
+            _infoService.username, currentSettings!.onCorrectSound);
         if (response == null) {
-          infoService.setOnCorrectSound(currentSettings!.onCorrectSound);
+          _infoService.setOnCorrectSound(currentSettings!.onCorrectSound);
           showFeedback("Correct sound updated successfully.");
         } else {
           throw Exception(response);
@@ -194,7 +197,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       }
 
       // Refresh initial settings to the current state
-      initialSettings = AccountSettings.fromInfoService(infoService);
+      initialSettings = AccountSettings.fromInfoService(_infoService);
     } catch (e) {
       showFeedback(e.toString());
     }

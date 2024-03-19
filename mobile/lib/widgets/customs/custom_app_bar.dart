@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
-import 'package:mobile/services/info_service.dart';
 import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -23,21 +22,15 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  late final AvatarProvider _avatarProvider;
-  late final InfoService _infoService;
-
   @override
   void initState() {
     super.initState();
-
-    _avatarProvider = Provider.of<AvatarProvider>(context, listen: false);
-    _infoService = Provider.of<InfoService>(context, listen: false);
   }
 
   @override
   Widget build(BuildContext context) {
     // Optionally listen for changes in infoService if avatar URL might change based on user actions
-
+    final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
     return AppBar(
       centerTitle: true,
       titleTextStyle:
@@ -72,8 +65,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           child: GestureDetector(
             onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE),
             child: CircleAvatar(
-              key: ValueKey(AvatarProvider.instance.currentAvatarUrl),
-              backgroundImage: NetworkImage(_avatarProvider.currentAvatarUrl),
+              backgroundImage: NetworkImage(avatarProvider.currentAvatarUrl),
               radius: 18.0,
             ),
           ),

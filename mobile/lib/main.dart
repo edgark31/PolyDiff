@@ -12,8 +12,8 @@ import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_card_service.dart';
 import 'package:mobile/services/info_service.dart';
-import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +25,10 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageProvider()),
-    ChangeNotifierProvider(create: (_) => RegisterProvider()),
+    ChangeNotifierProvider(create: (context) {
+      RegisterProvider registerProvider = Get.find();
+      return registerProvider;
+    }),
     ChangeNotifierProvider(create: (context) {
       SocketService socketService = Get.find();
       return socketService;
@@ -56,7 +59,10 @@ void main() async {
       return gameCardService;
     }),
     // Avatar
-    ChangeNotifierProvider(create: (context) => AvatarProvider()),
+    ChangeNotifierProvider(create: (context) {
+      AvatarProvider avatarProvider = Get.find();
+      return avatarProvider;
+    }),
     ChangeNotifierProvider(create: (context) => ThemeProvider()),
   ], child: const MyApp()));
 }
@@ -69,6 +75,8 @@ void initializeServices() {
   Get.put(LobbyService());
   Get.put(ChatService());
   Get.put(GameCardService());
+  Get.put(AvatarProvider());
+  Get.put(RegisterProvider());
 }
 
 class MyApp extends StatelessWidget {

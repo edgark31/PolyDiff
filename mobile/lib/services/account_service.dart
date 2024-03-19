@@ -39,6 +39,8 @@ class AccountService {
   // Password
   Future<String?> updateUsername(String oldUsername, String newUsername) async {
     try {
+      print(
+          "*** Server Updating username from $oldUsername to $newUsername, path : $baseUrl/account/pseudo ***");
       final response = await http.put(
         Uri.parse('$baseUrl/account/pseudo'),
         headers: <String, String>{

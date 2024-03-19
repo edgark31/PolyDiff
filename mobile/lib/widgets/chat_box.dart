@@ -34,6 +34,7 @@ class _ChatBoxState extends State<ChatBox> {
   @override
   Widget build(BuildContext context) {
     final infoService = context.watch<InfoService>();
+    final avatarProvider = context.watch<AvatarProvider>();
     dynamic username = infoService.username;
     final chatService = context.watch<ChatService>();
 
@@ -100,8 +101,9 @@ class _ChatBoxState extends State<ChatBox> {
                           : CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                          backgroundImage: NetworkImage(AvatarProvider.instance
-                              .currentAvatarUrl), // TODO : Show by userId when implement on server
+                          key: UniqueKey(),
+                          backgroundImage:
+                              NetworkImage(avatarProvider.currentAvatarUrl),
                           radius: 15.0,
                         ),
                         Text(

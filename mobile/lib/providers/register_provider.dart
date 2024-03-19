@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/models/models.dart';
+import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/avatar_service.dart';
 import 'package:mobile/services/register_service.dart';
 
 enum AvatarType { predefined, camera }
 
 class RegisterProvider extends ChangeNotifier {
+  final AvatarProvider _avatarProvider = Get.find();
   bool isLoading = false;
   bool isBack = false;
 
@@ -37,13 +40,17 @@ class RegisterProvider extends ChangeNotifier {
 
     switch (avatarType) {
       case AvatarType.predefined:
+        print('putAvatarData: $body inside cas predefined');
         try {
+          print('before await inside cas predefined');
           http.Response response = (await putPredefinedAvatar(body))!;
+          print('after inside cas predefined');
           if (response.statusCode == 200) {
             String body = response.body;
             isBack = true;
             isLoading = false;
             print("Successfully updating predefined avatar $body");
+            _avatarProvider.setAccountAvatarUrl();
 
             notifyListeners();
             return null;

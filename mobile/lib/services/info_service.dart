@@ -7,8 +7,6 @@ class InfoService extends ChangeNotifier {
   static late Credentials credentials;
   static String _username = 'temp_name';
   static String _id = 'temp_id';
-  static String _avatar =
-      'temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar';
   static String _email = 'temp_email';
   static String _theme = 'light';
   static String _language = 'fr';
@@ -17,7 +15,7 @@ class InfoService extends ChangeNotifier {
 
   String get username => _username;
   String get id => _id;
-  String get avatar => _avatar;
+
   String get email => _email;
   String get language => _language;
   String get theme => _theme;
@@ -63,15 +61,6 @@ class InfoService extends ChangeNotifier {
     _onCorrectSound = newOnCorrectSound;
   }
 
-  void setAvatar(String newAvatar) {
-    String shortOldAvatar = _avatar.substring(0, 100);
-    String shortNewAvatar = newAvatar.substring(0, 100);
-    print(
-        'Changing avatar from $shortOldAvatar to  $shortNewAvatar for $username ($_id)');
-    _avatar = newAvatar;
-    notifyListeners();
-  }
-
   void setLanguage(String newLanguage) {
     print(
         'Changing language from $_language to $newLanguage for $username ($_id)');
@@ -93,11 +82,9 @@ class InfoService extends ChangeNotifier {
 
     // print('credentials: ${result['credentials']}');
     final credentials = Credentials.fromJson(result['credentials']);
-    // print('email: ${credentials.email}');
-    // print('username: ${credentials.username}');
+ 
     setCredentials(credentials);
 
-    setAvatar(result['profile']['avatar']);
     setTheme(result['profile']['mobileTheme']);
     setLanguage(result['profile']['language']);
     setOnCorrectSound(result['profile']['onCorrectSoundId']);
