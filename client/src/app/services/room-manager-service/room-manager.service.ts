@@ -125,6 +125,10 @@ export class RoomManagerService {
     off(): void {
         // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
         // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        this.clientSocket.lobbySocket.off(LobbyEvents.Create);
+        this.clientSocket.authSocket.off(LobbyEvents.Join);
+        this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        this.clientSocket.authSocket.off(ChannelEvents.LobbyMessage);
         if (this.lobby && !this.lobby.closed) {
             this.lobby?.unsubscribe();
         }

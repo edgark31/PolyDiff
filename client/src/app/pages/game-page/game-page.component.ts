@@ -13,9 +13,10 @@ import { ImageService } from '@app/services/image-service/image.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
-import { GameEvents, GameModes, GamePageEvent } from '@common/enums';
+import { ChatState, GameEvents, GameModes, GamePageEvent } from '@common/enums';
 import { Chat, ClientSideGame, Game, Players } from '@common/game-interfaces';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
 
 @Component({
     selector: 'app-game-page',
@@ -33,6 +34,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     opponentDifferencesFound: number;
     timer: number;
     messages: Chat[];
+    messagesLobby: Chat[];
     player: string;
     players: Players;
     hintsAssets: string[];
@@ -42,10 +44,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
+    chatSubscriptionlobby: Subscription;
     timeSubscription: Subscription;
     private gameSubscription: Subscription;
     private canvasGameSubscription: Subscription;
-    private onDestroy$: Subject<void>;
 
     // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
@@ -54,23 +56,25 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         private router: Router,
         private imageService: ImageService,
         private readonly gameAreaService: GameAreaService,
-        private readonly gameManager: GameManagerService,
+        public gameManager: GameManagerService,
         private clientSocket: ClientSocketService,
         public welcome: WelcomeService,
         private readonly matDialog: MatDialog,
+        public globalChatService: GlobalChatService,
     ) {
         // this.gameManager.manageSocket();
         this.differencesFound = 0;
         this.opponentDifferencesFound = 0;
         this.timer = 0;
         this.messages = [];
+        this.messagesLobby = [];
         this.hintsAssets = ASSETS_HINTS;
         this.player = '';
         this.players = DEFAULT_PLAYERS;
         this.canvasSize = CANVAS_MEASUREMENTS;
         this.isReplayAvailable = false;
         this.gameMode = GameModes;
-        this.onDestroy$ = new Subject();
+        this.welcome.currentChatState = ChatState.Game;
     }
 
     private get differences(): Coordinate[][] {
@@ -98,14 +102,22 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.gameSubscription = this.gameManager.game$.subscribe((game: Game) => {
             this.gameLobby = game;
         });
-
         this.timeSubscription = this.gameManager.timerLobby$.subscribe((timer: number) => {
             this.timer = timer;
         });
 
         this.clientSocket.on('game', GameEvents.EndGame, (response: string) => {
             this.router.navigate(['/game-mode']);
+            this.welcome.goChat = false;
         });
+
+        if (this.clientSocket.isSocketAlive('auth')) {
+            this.globalChatService.manage();
+            this.globalChatService.updateLog();
+            this.chatSubscriptionlobby = this.globalChatService.message$.subscribe((message: Chat) => {
+                this.receiveMessageLobby(message);
+            });
+        }
     }
     ngAfterViewInit(): void {
         //     // this.gameManager.startGame();
@@ -123,9 +135,25 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     sendMessage(message: string): void {
         this.gameManager.sendMessage(this.gameLobby.lobbyId, message);
     }
+
+    sendMessageLobby(message: string): void {
+        console.log('affiche toi message: ' + message);
+        this.globalChatService.sendMessage('yo');
+    }
     receiveMessage(chat: Chat): void {
         this.messages.push(chat);
         console.log(this.messages);
+    }
+
+    receiveMessageLobby(chat: Chat): void {
+        this.messagesLobby.push(chat);
+        console.log(this.messagesLobby);
+    }
+
+    goPageChat(): void {
+        this.welcome.goChat = true;
+        this.clientSocket.disconnect('game');
+        this.router.navigate(['/chat']);
     }
     showAbandonDialog(): void {
         this.matDialog.open(GamePageDialogComponent, {
@@ -151,10 +179,14 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.chatSubscription?.unsubscribe();
             this.timeSubscription?.unsubscribe();
             this.canvasGameSubscription?.unsubscribe();
-            this.onDestroy$.next();
-            this.onDestroy$.complete();
             this.gameManager.off();
         }
+        this.clientSocket.disconnect('game');
+
+        if (this.clientSocket.isSocketAlive('auth')) {
+            this.globalChatService.off();
+        }
+        this.chatSubscriptionlobby?.unsubscribe();
     }
 
     setUpGame(): void {

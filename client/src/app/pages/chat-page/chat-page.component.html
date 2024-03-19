@@ -1,13 +1,14 @@
 
 <div>
-    <button class="back-button" (click)="back()">Retour</button>
+    <!-- <button class="back-button" (click)="back()">Retour</button> -->
     <div class="container flex-column">
         <div class="nav">
             <app-nav-bar></app-nav-bar>
         </div>
         <div class="chat flex-column">
             <app-chat-box (add)="sendMessage($event)" [messages]="messages"></app-chat-box>
-            <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/> 
-        </div> 
+            <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+            <button (click)="goPageChat()"> retour page Game</button>
+        </div>
     </div>
 </div>

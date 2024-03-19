@@ -3,6 +3,8 @@
         <div class="contact-profile">
             <p class="chat">Zone de clavardage</p>
         </div>
+        <button *ngIf="welcome.goChat" (click)=" goPageChat()"> aller à la chat Game</button>
+        <button *ngIf="!welcome.goChat" (click)=" goPageChat()"> aller à la chat page</button>
         <div class="messages">
             <ul>
                 <li [class]="message.tag" *ngFor="let message of messages">

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { LobbyEvents, MessageTag } from '@common/enums';
+import { ChatState, LobbyEvents, MessageTag } from '@common/enums';
 import { Subscription } from 'rxjs';
 import { Chat, Lobby } from './../../../../../common/game-interfaces';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
@@ -25,9 +25,12 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         private clientSocketService: ClientSocketService,
         public welcome: WelcomeService,
         public gameManager: GameManagerService,
-    ) {}
+    ) {
+        this.welcome.currentChatState = ChatState.Waiting;
+    }
 
     ngOnInit(): void {
+        if (this.welcome.goChat) this.clientSocketService.connect(this.welcome.account.id as string, 'lobby');
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         this.roomManagerService.wait = true;

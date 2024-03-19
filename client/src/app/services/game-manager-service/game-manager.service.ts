@@ -154,9 +154,12 @@ export class GameManagerService {
     //     this.clientSocket.send('game', MessageEvents.LocalMessage, newMessage);
     // }
 
+    sendMessageLobby(lobbyId: string | undefined, message: string): void {
+        this.clientSocket.send('auth', ChannelEvents.SendGameMessage, { lobbyId, message });
+    }
+
     sendMessage(lobbyId: string | undefined, message: string): void {
         this.clientSocket.send('game', ChannelEvents.SendGameMessage, { lobbyId, message });
-        console.log('prend mon message' + message + lobbyId);
     }
     removeAllListeners(nameSpace: string) {
         switch (nameSpace) {
@@ -197,7 +200,6 @@ export class GameManagerService {
 
         this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
             this.timerLobby.next(time);
-            console.log('time' + time);
         });
 
         // this.clientSocket.on('game', GameEvents.GameStarted, (room: GameRoom) => {
@@ -251,6 +253,9 @@ export class GameManagerService {
     off(): void {
         // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
         // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        this.clientSocket.authSocket.off(GameEvents.StartGame);
+        this.clientSocket.authSocket.off(ChannelEvents.GameMessage);
+        this.clientSocket.authSocket.off(GameEvents.TimerUpdate);
         if (this.game && !this.game.closed) {
             this.game?.unsubscribe();
         }

@@ -7,11 +7,13 @@ import { CommunicationService } from '../communication-service/communication.ser
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
 import { GameManagerService } from '../game-manager-service/game-manager.service';
 // eslint-disable-next-line no-restricted-imports
+import { ChatState } from '@common/enums';
 import { SoundService } from '../sound-service/sound.service';
 @Injectable({
     providedIn: 'root',
 })
 export class WelcomeService {
+    goChat: boolean = false;
     isLoggedIn = localStorage.getItem('isLogged') === 'true';
     songListDifference = SONG_LIST_DIFFERENCE;
     songListError = SONG_LIST_ERROR;
@@ -30,6 +32,7 @@ export class WelcomeService {
     selectLanguage: string;
     language = LANGUAGES;
     themePersonnalization = THEME_PERSONNALIZATION;
+    currentChatState: ChatState = ChatState.Nothing;
     constructor(private communication: CommunicationService, public gameManager: GameManagerService, private sound: SoundService) {}
 
     async validate(password: string): Promise<boolean> {
