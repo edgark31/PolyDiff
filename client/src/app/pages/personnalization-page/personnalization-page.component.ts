@@ -33,7 +33,7 @@ export class PersonnalizationPageComponent implements OnInit {
         public sound: SoundService,
 
         private translate: TranslateService,
-        private clientsocket: ClientSocketService,
+        private clientSocket: ClientSocketService,
     ) {}
 
     ngOnInit() {
@@ -51,7 +51,7 @@ export class PersonnalizationPageComponent implements OnInit {
     }
 
     onSubmitHome() {
-        this.clientsocket.disconnect('auth');
+        this.clientSocket.disconnect('auth');
         this.router.navigate(['/login']);
     }
 

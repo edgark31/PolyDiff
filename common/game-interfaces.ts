@@ -205,7 +205,7 @@ export interface SessionLog {
 
 export interface ConnectionLog {
     timestamp: string;
-    isConnexion: boolean;
+    isConnection: boolean;
 }
 
 export interface Statistics {
@@ -262,11 +262,3 @@ export interface Song {
     name: string;
     link: string;
 }
-
-// export interface modifyProfile {
-//     avatar: string;
-//     name: string;
-//     theme: Theme;
-//     language: string;
-//     password: string;
-// }

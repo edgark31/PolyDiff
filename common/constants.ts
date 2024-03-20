@@ -17,11 +17,11 @@ export const DEFAULT_BEST_TIMES: PlayerTime[] = [
 export const ELEMENT_DATA: ConnectionLog[] = [
     {
         timestamp: 'connexion',
-        isConnexion: true,
+        isConnection: true,
     },
 ];
 
-export const THEME_PERSONNALIZATION: Theme[] = [
+export const THEME_PERSONALIZATION: Theme[] = [
     { name: 'Default', color: '', buttonColor: 'black', backgroundColor: 'white' },
     { name: 'oragina', color: '', buttonColor: 'Orange', backgroundColor: 'YellowOrange' },
     { name: 'cafe', color: '', buttonColor: 'brown', backgroundColor: 'black' },

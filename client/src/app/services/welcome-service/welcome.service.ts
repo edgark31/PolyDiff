@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LANGUAGES, SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONNALIZATION } from '@common/constants';
+import { LANGUAGES, SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONALIZATION } from '@common/constants';
 import { Account, Theme } from '@common/game-interfaces';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
 import { CommunicationService } from '../communication-service/communication.service';
@@ -29,7 +29,7 @@ export class WelcomeService {
     isLinkValid: boolean;
     selectLanguage: string;
     language = LANGUAGES;
-    themePersonnalization = THEME_PERSONNALIZATION;
+    themePersonnalization = THEME_PERSONALIZATION;
     constructor(private communication: CommunicationService, public gameManager: GameManagerService, private sound: SoundService) {}
 
     async validate(password: string): Promise<boolean> {
@@ -76,7 +76,7 @@ export class WelcomeService {
     }
 
     onModifyUser() {
-        this.communication.modifyUser(this.gameManager.username, this.selectName).subscribe({
+        this.communication.updateUsername(this.gameManager.username, this.selectName).subscribe({
             next: () => {
                 this.gameManager.username = this.selectName;
             },
