@@ -32,15 +32,15 @@ export class Theme {
 export const themeSchema = SchemaFactory.createForClass(Theme);
 
 @Schema({ _id: false })
-export class Song {
+export class Sound {
     @Prop({ required: true })
     name: string;
 
     @Prop({ required: false })
-    link: string;
+    path: string;
 }
 
-export const songSchema = SchemaFactory.createForClass(Song);
+export const soundSchema = SchemaFactory.createForClass(Sound);
 
 @Schema({ _id: false })
 export class ConnectionLog {
@@ -118,11 +118,11 @@ export class Profile {
     @Prop({ type: themeSchema, required: false })
     theme: Theme;
 
-    @Prop({ type: songSchema, required: false })
-    onCorrectSound: Song;
+    @Prop({ type: soundSchema, required: false })
+    onCorrectSound: Sound;
 
-    @Prop({ type: songSchema, required: false })
-    onErrorSound: Song;
+    @Prop({ type: soundSchema, required: false })
+    onErrorSound: Sound;
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);
