@@ -34,7 +34,7 @@ export const themeSchema = SchemaFactory.createForClass(Theme);
 @Schema({ _id: false })
 export class Sound {
     @Prop({ required: true })
-    onCorrectId: string;
+    name: string;
 
     @Prop({ required: false })
     path: string;
