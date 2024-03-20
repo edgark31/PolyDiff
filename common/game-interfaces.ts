@@ -141,6 +141,7 @@ export interface Player {
 }
 
 export interface Observers {
+    accountId: string;
     name: string;
 }
 
@@ -216,6 +217,7 @@ export interface Statistics {
 }
 
 export interface Friend {
+    accountId: string;
     name: string;
     avatar: string;
     friendNames: string[];
@@ -234,6 +236,7 @@ export interface Score {
 
 export interface Chat {
     raw: string;
+    accountId?: string;
     name?: string;
     tag?: MessageTag;
     timestamp?: string;

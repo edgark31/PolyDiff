@@ -107,8 +107,8 @@ export class LobbyGateway implements OnGatewayConnection {
         );
         this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(chat);
 
-        socket.emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Sent });
-        socket.broadcast.to(lobbyId).emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Received });
+        socket.emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
 
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} envoie un message`);

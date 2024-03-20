@@ -49,7 +49,7 @@ export class GameGateway implements OnGatewayConnection {
                         name: game.name,
                         original: game.originalImage,
                         modified: game.modifiedImage,
-                        gameId: game._id,
+                        gameId: game._id.toString(),
                         differences: JSON.parse(game.differences) as Coordinate[][],
                         nDifferences: JSON.parse(game.differences).length,
                     });
@@ -196,8 +196,10 @@ export class GameGateway implements OnGatewayConnection {
             message,
         );
 
-        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent });
-        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received });
+        this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(chat);
+
+        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {

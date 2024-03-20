@@ -63,8 +63,8 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         );
         this.globalChatLog.chat.push(chat);
 
-        socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Sent });
-        socket.broadcast.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Received });
+        socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
+        socket.broadcast.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
     }
 
     @SubscribeMessage(ChannelEvents.UpdateLog)
