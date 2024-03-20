@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LANGUAGES, SOUND_CORRECT_LIST, SOUND_ERROR_LIST, THEME_PERSONALIZATION } from '@common/constants';
+import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, LANGUAGES, THEME_PERSONALIZATION } from '@common/constants';
 import { Account, Theme } from '@common/game-interfaces';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
 import { CommunicationService } from '../communication-service/communication.service';
@@ -13,8 +13,8 @@ import { SoundService } from '../sound-service/sound.service';
 })
 export class WelcomeService {
     isLoggedIn = localStorage.getItem('isLogged') === 'true';
-    soundErrorList = SOUND_ERROR_LIST;
-    soundCorrectList = SOUND_CORRECT_LIST;
+    songListDifference = CORRECT_SOUND_LIST;
+    songListError = ERROR_SOUND_LIST;
     account: Account;
     isLimited: boolean;
     selectLocal: string;
@@ -76,7 +76,7 @@ export class WelcomeService {
     }
 
     onModifyUser() {
-        this.communication.modifyUser(this.gameManager.username, this.selectName).subscribe({
+        this.communication.updateUsername(this.gameManager.username, this.selectName).subscribe({
             next: () => {
                 this.gameManager.username = this.selectName;
             },
@@ -140,10 +140,10 @@ export class WelcomeService {
         });
     }
 
-    onModifySongDifference() {
-        this.communication.modifySongDifference(this.gameManager.username, this.sound.correctSoundId).subscribe({
+    onUpdateCorrectSound() {
+        this.communication.modifySongDifference(this.gameManager.username, this.sound.correctSoundEffect).subscribe({
             next: () => {
-                this.account.profile.onCorrectSoundId = this.sound.correctSoundId;
+                this.account.profile.onCorrectSound = this.sound.correctSoundEffect;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';
@@ -151,10 +151,10 @@ export class WelcomeService {
         });
     }
 
-    onModifySongError() {
-        this.communication.modifySongError(this.gameManager.username, this.sound.incorrectSoundId).subscribe({
+    onUpdateErrorSound() {
+        this.communication.modifySongError(this.gameManager.username, this.sound.incorrectSoundEffect).subscribe({
             next: () => {
-                this.account.profile.onErrorSoundId = this.sound.incorrectSoundId;
+                this.account.profile.onErrorSound = this.sound.incorrectSoundEffect;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';

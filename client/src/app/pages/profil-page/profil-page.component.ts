@@ -54,7 +54,7 @@ export class ProfilPageComponent implements AfterViewInit, OnInit {
         this.router.navigate(['/login']);
     }
 
-    onSubmitPersonnalization() {
+    onSubmitPersonalization() {
         this.router.navigate(['/personalization']);
     }
 }

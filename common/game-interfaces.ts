@@ -156,6 +156,7 @@ export interface Lobby {
     time?: number;
     timeLimit: number;
     bonusTime?: number;
+    timePlayed: number;
     chatLog?: ChatLog;
     nDifferences?: number;
 }
@@ -169,6 +170,7 @@ export interface Game {
     difficulty?: string;
     differences?: Coordinate[][];
     nDifferences?: number;
+    playedGameIds?: string[];
 }
 
 export interface Account {
@@ -192,8 +194,8 @@ export interface Profile {
     friendRequests: string[];
     desktopTheme: Theme;
     language: string;
-    onCorrectSoundId: string;
-    onErrorSoundId: string;
+    onCorrectSound: Sound;
+    onErrorSound: Sound;
 }
 
 export interface SessionLog {
@@ -257,6 +259,6 @@ export interface Theme {
 }
 
 export interface Sound {
-    id: string;
+    name: string;
     path: string;
 }

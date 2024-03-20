@@ -41,9 +41,9 @@ export class AccountController {
     }
 
     @Put('username')
-    async changePseudo(@Body('oldUsername') oldUsername: string, @Body('newUsername') newUsername: string, @Res() response: Response) {
+    async updateUsername(@Body('oldUsername') oldUsername: string, @Body('newUsername') newUsername: string, @Res() response: Response) {
         try {
-            await this.accountManager.changePseudo(oldUsername, newUsername);
+            await this.accountManager.updateUsername(oldUsername, newUsername);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
@@ -51,9 +51,9 @@ export class AccountController {
     }
 
     @Put('password')
-    async changePassword(@Body('username') username: string, @Body('newPassword') newPassword: string, @Res() response: Response) {
+    async updatePassword(@Body('username') username: string, @Body('newPassword') newPassword: string, @Res() response: Response) {
         try {
-            await this.accountManager.changePassword(username, newPassword);
+            await this.accountManager.updatePassword(username, newPassword);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
@@ -81,7 +81,17 @@ export class AccountController {
     }
 
     @Delete('delete')
-    async delete(@Res() response: Response) {
+    async delete(@Body() creds: Credentials, @Res() response: Response) {
+        try {
+            await this.accountManager.deleteAccount(creds);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.NOT_FOUND).json(error);
+        }
+    }
+
+    @Delete('erase')
+    async scratch(@Res() response: Response) {
         try {
             await this.accountManager.deleteAccounts();
             response.status(HttpStatus.OK).send();
@@ -114,26 +124,15 @@ export class AccountController {
     async updateMobileTheme(@Body('username') username: string, @Body('newTheme') newTheme: string, @Res() response: Response) {
         try {
             await this.accountManager.updateMobileTheme(username, newTheme);
-            response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
         }
     }
 
     @Put('language')
-    async updateLanguage(@Body('username') oldUsername: string, @Body('newLanguage') newLanguage: string, @Res() response: Response) {
+    async updateLanguage(@Body('username') username: string, @Body('newLanguage') newLanguage: string, @Res() response: Response) {
         try {
-            await this.accountManager.modifyLanguage(oldUsername, newLanguage);
-            response.status(HttpStatus.OK).send();
-        } catch (error) {
-            response.status(HttpStatus.CONFLICT).json(error);
-        }
-    }
-
-    @Put('sound/error')
-    async updateOnCorrectSound(@Body('username') username: string, @Body('newSoundId') newOnCorrectSoundId: string, @Res() response: Response) {
-        try {
-            await this.accountManager.updateOnCorrectSound(username, newOnCorrectSoundId);
+            await this.accountManager.modifyLanguage(username, newLanguage);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
@@ -141,9 +140,19 @@ export class AccountController {
     }
 
     @Put('sound/correct')
-    async updateOnErrorSound(@Body('username') username: string, @Body('newSoundId') newOnCorrectSoundId: string, @Res() response: Response) {
+    async updateCorrectSound(@Body('username') username: string, @Body('newSound') newSound: Sound, @Res() response: Response) {
         try {
-            await this.accountManager.updateOnErrorSound(username, newOnCorrectSoundId);
+            await this.accountManager.updateCorrectSound(username, newSound);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.CONFLICT).json(error);
+        }
+    }
+
+    @Put('sound/error')
+    async updateErrorSound(@Body('username') username: string, @Body('newSound') newSound: Sound, @Res() response: Response) {
+        try {
+            await this.accountManager.updateErrorSound(username, newSound);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);

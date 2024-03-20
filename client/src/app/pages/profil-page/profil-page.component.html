@@ -26,13 +26,13 @@
       </div>
 
       <div class="form-control">
-        <label for="Theme">{{'profile.onErrorSound' | translate }}</label>
-        <div>{{ welcomeService.account.profile.onErrorSoundId }}</div>
+        <label for="Theme">{{'profil.songError' | translate }}</label>
+        <div>{{ welcomeService.account.profile.onErrorSound.name }}</div>
       </div>
 
       <div class="form-control">
-        <label for="Theme">{{'profile.onCorrectSound' | translate }}</label>
-        <div>{{ welcomeService.account.profile.onCorrectSoundId }}</div>
+        <label for="Theme">{{'profil.songDifference' | translate }}</label>
+        <div>{{ welcomeService.account.profile.onCorrectSound.name }}</div>
       </div>
 
       <div class="form-control">
@@ -82,8 +82,8 @@
   </div>
 
   <div class="button-container">
-    <button type="submit" (click)="onSubmitPersonnalization()">{{'button.GoSettings' | translate }}</button>
-    <button type="submit" (click)="onSubmitHome()">{{'button.deconnexion' | translate }}</button>
+    <button type="submit" (click)="onSubmitPersonalization()">{{'bouton.GoReglage' | translate }}</button>
+    <button type="submit" (click)="onSubmitHome()">{{'bouton.deconnexion' | translate }}</button>
   </div>
 </body>
 

@@ -24,14 +24,12 @@ export class RoomSheetComponent {
     ) {}
 
     manageGames(lobby: Lobby): void {
-        if (lobby.players.length < 4) {
-            if (!lobby.password) {
-                this.roomManager.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
-                this.router.navigate(['/waiting-room']);
-            } else
-                this.dialog.open(ModalAccessMatchComponent, {
-                    data: lobby.password,
-                });
-        }
+        if (!lobby.password) {
+            this.roomManager.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
+            this.router.navigate(['/waiting-room']);
+        } else
+            this.dialog.open(ModalAccessMatchComponent, {
+                data: lobby,
+            });
     }
 }

@@ -1,46 +1,36 @@
 import { Injectable } from '@angular/core';
+import { Sound } from '@common/game-interfaces';
+
 @Injectable({
     providedIn: 'root',
 })
 export class SoundService {
-
-    correctSoundId: string;
-    incorrectSoundId: string;
-
-    onErrorSoundPath: string;
-    onCorrectSoundPath: string;
-
-
-    constructor() {
-        this.onErrorSoundPath = "asset/sound/error$this.incorrectSoundId.mp3";
-        this.onCorrectSoundPath = "asset/sound/correct$this.correctSoundId.mp3";
-    }
+    correctSoundEffect: Sound;
+    incorrectSoundEffect: Sound;
 
     playErrorSound(): void {
-        new Audio(this.onErrorSoundPath).play();
+        new Audio(this.incorrectSoundEffect.path).play();
     }
 
     playCorrectSound(): void {
-        new Audio(this.onCorrectSoundPath).play();
+        new Audio(this.correctSoundEffect.path).play();
     }
 
-
-    stopCorrectSound(): void {
-        new Audio(this.onCorrectSoundPath).pause();
-        new Audio(this.onErrorSoundPath).currentTime = 0;
+    playCorrectSoundDifference(song: Sound): void {
+        new Audio(song.path).play();
     }
 
-    stopIncorrectSound(): void {
-        new Audio(this.onErrorSoundPath).pause();
-        new Audio(this.onErrorSoundPath).currentTime = 0;
+    playIncorrectSound(sound: Sound): void {
+        new Audio(sound.path).play();
     }
 
-    play(sourcePath : string) {
-        new Audio(sourcePath);
+    stopCorrectSound(sound: Sound): void {
+        new Audio(sound.path).pause();
+        new Audio(sound.path).currentTime = 0;
     }
 
-    stop(sourcePath : string) {
-        new Audio(sourcePath);
-        new Audio(sourcePath).currentTime = 0;
+    stopIncorrectSound(sound: Sound): void {
+        new Audio(sound.path).pause();
+        new Audio(sound.path).currentTime = 0;
     }
 }

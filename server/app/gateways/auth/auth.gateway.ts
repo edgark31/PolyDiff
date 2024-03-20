@@ -1,6 +1,6 @@
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
-import { ChannelEvents, MessageTag } from '@common/enums';
+import { AccountEvents, ChannelEvents, MessageTag } from '@common/enums';
 import { Chat, ChatLog } from '@common/game-interfaces';
 import { Logger } from '@nestjs/common';
 import {
@@ -40,6 +40,21 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.globalChatLog = { chat: [], channelName: 'global' };
     }
 
+    @SubscribeMessage(AccountEvents.UserUpdate)
+    retrivesUsers() {
+        this.server.emit(AccountEvents.UserUpdate, Array.from(this.accountManager.users.values()));
+    }
+
+    @SubscribeMessage(AccountEvents.UserCreate)
+    handleAccountCreate() {
+        this.server.emit(AccountEvents.UserUpdate, Array.from(this.accountManager.users.values()));
+    }
+
+    @SubscribeMessage(AccountEvents.UserDelete)
+    handleAccountDelete() {
+        this.server.emit(AccountEvents.UserUpdate, Array.from(this.accountManager.users.values()));
+    }
+
     @SubscribeMessage(ChannelEvents.SendGlobalMessage)
     handleGlobalMessage(@ConnectedSocket() socket: Socket, @MessageBody() message: string) {
         const chat: Chat = this.messageManager.createMessage(
@@ -66,11 +81,13 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
+        this.accountManager.logConnection(socket.data.accountId, true);
         this.logger.log(`AUTH de ${socket.data.accountId}`);
     }
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`DEAUTH de ${socket.data.accountId}`);
+        this.logger.log(`DEATH de ${socket.data.accountId}`);
+        this.accountManager.logConnection(socket.data.accountId, false);
         this.accountManager.disconnection(socket.data.accountId);
     }
 }

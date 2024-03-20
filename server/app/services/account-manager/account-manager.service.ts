@@ -1,8 +1,9 @@
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials, Statistics, Theme } from '@app/model/database/account';
+/* eslint-disable max-params */
+/* eslint-disable no-underscore-dangle */
+import { Account, AccountDocument, Credentials, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
-import { THEME_PERSONALIZATION } from '@common/constants';
+import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, THEME_PERSONALIZATION } from '@common/constants';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -35,14 +36,19 @@ export class AccountManagerService implements OnModuleInit {
                     avatar: this.imageManager.convert(`default${id}.png`),
                     sessions: [],
                     connections: [],
-                    stats: {} as Statistics,
+                    stats: {
+                        gamesPlayed: 0,
+                        gameWon: 0,
+                        averageTime: 0,
+                        averageDifferences: 0,
+                    },
                     friends: [],
                     friendRequests: [],
-                    language: 'fr',
+                    language: 'en',
                     desktopTheme: THEME_PERSONALIZATION[0],
                     mobileTheme: 'light',
-                    onCorrectSoundId: '1',
-                    onErrorSoundId: '1',
+                    onCorrectSound: CORRECT_SOUND_LIST[0],
+                    onErrorSound: ERROR_SOUND_LIST[0],
                 },
             };
             await this.accountModel.create(newAccount);
@@ -72,7 +78,8 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
-            accountFound.save();
+            await accountFound.save();
+            accountFound.profile.avatar = '';
             this.connectedUsers.set(accountFound.id, accountFound);
             this.fetchUsers();
             this.logger.log(`${accountFound.credentials.username} has connected with password ${accountFound.credentials.password}`);
@@ -84,7 +91,7 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async changePseudo(oldUsername: string, newUsername: string): Promise<void> {
+    async updateUsername(oldUsername: string, newUsername: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
             const pseudoFound = await this.accountModel.findOne({ 'credentials.username': newUsername });
@@ -115,7 +122,7 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
             await accountFound.save();
-            this.logger.log(`${username} has changed his avatar`);
+            this.logger.log(`${username} has uploaded his avatar`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to upload avatar --> ${error.message}`);
@@ -135,7 +142,7 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
             await accountFound.save();
-            this.logger.log(`${username} has changed his avatar`);
+            this.logger.log(`${username} has choose his avatar`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to choose avatar --> ${error.message}`);
@@ -143,7 +150,7 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async changePassword(username: string, newPassword: string): Promise<void> {
+    async updatePassword(username: string, newPassword: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');
@@ -162,15 +169,15 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async updateOnErrorSound(username: string, newOnErrorSoundId: string): Promise<void> {
+    async updateErrorSound(username: string, newSound: Sound): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
-            accountFound.profile.onErrorSoundId = newOnErrorSoundId;
+            accountFound.profile.onCorrectSound = newSound;
 
             await accountFound.save();
-            this.logger.verbose('sound change');
+            this.logger.verbose(`${username} has changed his error sound effect`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change sound --> ${error.message}`);
@@ -178,16 +185,15 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async updateOnCorrectSound(username: string, newCorrectSoundId: string): Promise<void> {
+    async updateCorrectSound(username: string, newSound: Sound): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
-
             if (!accountFound) throw new Error('Account not found');
 
-            accountFound.profile.onCorrectSoundId = newCorrectSoundId;
+            accountFound.profile.onCorrectSound = newSound;
 
             await accountFound.save();
-            this.logger.verbose('sound change');
+            this.logger.verbose(`${username} has changed his difference sound effect`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change sound --> ${error.message}`);
@@ -250,8 +256,9 @@ export class AccountManagerService implements OnModuleInit {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
             if (!accountFound) throw new Error('Account not found');
-            await this.accountModel.deleteOne({ 'credentials.username': creds.username });
+
             if (!this.connectedUsers.delete(accountFound.id)) throw new Error('Account not connected');
+            await this.accountModel.deleteOne({ 'credentials.username': creds.username });
             this.fetchUsers();
             this.logger.verbose(`Account ${creds.username} has been deleted`);
             return Promise.resolve();
@@ -274,6 +281,7 @@ export class AccountManagerService implements OnModuleInit {
     async fetchUsers() {
         await this.accountModel.find().then((accounts) => {
             accounts.forEach((account) => {
+                account.profile.avatar = '';
                 this.users.set(account.credentials.username, account);
             });
         });
@@ -298,16 +306,46 @@ export class AccountManagerService implements OnModuleInit {
 
     disconnection(id: string): void {
         this.connectedUsers.delete(id);
+        this.logger.log(`Account ${id} has been disconnected`);
+        this.showProfiles();
     }
 
-    // async connexionToAdmin(password: string): Promise<boolean> {
-    //     try {
-    //         console.log(password + 'qdsdss');
-    //         if (password !== 'admin') throw new Error('Wrong password');
-    //         return Promise.resolve(password === 'admin');
-    //     } catch (error) {
-    //         this.logger.error(`Failed to connect --> ${error.message}`);
-    //         return Promise.reject(`${error}`);
-    //     }
-    // }
+    async logConnection(id: string, isConnection: boolean): Promise<void> {
+        const account = await this.accountModel.findOne({ id });
+        if (account) {
+            account.profile.connections.push({
+                timestamp: new Date().toLocaleTimeString('en-US', {
+                    timeZone: 'America/Toronto',
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                }),
+                isConnection,
+            });
+            account.save();
+        }
+    }
+
+    async logSession(id: string, isWinner: boolean, timePlayed: number, count: number): Promise<void> {
+        const account = await this.accountModel.findOne({ id });
+        account.profile.sessions.push({
+            timestamp: new Date().toLocaleTimeString('en-US', {
+                timeZone: 'America/Toronto',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            }),
+            isWinner,
+        });
+        account.profile.stats.gamesPlayed++;
+        account.profile.stats.gameWon += isWinner ? 1 : 0;
+        account.profile.stats.averageTime =
+            (account.profile.stats.averageTime * (account.profile.stats.gamesPlayed - 1) + timePlayed) / account.profile.stats.gamesPlayed;
+        account.profile.stats.averageDifferences =
+            (account.profile.stats.averageDifferences * (account.profile.stats.gamesPlayed - 1) + count) / account.profile.stats.gamesPlayed;
+        account.save();
+    }
 }

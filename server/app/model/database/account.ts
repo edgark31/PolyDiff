@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ _id: false })
 export class SessionLog {
     @Prop({ required: true })
     timestamp: string;
@@ -14,7 +14,7 @@ export class SessionLog {
 
 export const sessionLogSchema = SchemaFactory.createForClass(SessionLog);
 
-@Schema()
+@Schema({ _id: false })
 export class Theme {
     @Prop({ required: true })
     name: string;
@@ -31,20 +31,18 @@ export class Theme {
 
 export const themeSchema = SchemaFactory.createForClass(Theme);
 
-@Schema()
+@Schema({ _id: false })
 export class Sound {
-    @ApiProperty({ description: "Id du son joué lors d'une action correcte" })
     @Prop({ required: true })
     onCorrectId: string;
 
-    @ApiProperty({ description: "Id du son joué en cas d'erreur" })
-    @Prop({ required: true })
-    onErrorId: string;
+    @Prop({ required: false })
+    path: string;
 }
 
 export const soundSchema = SchemaFactory.createForClass(Sound);
 
-@Schema()
+@Schema({ _id: false })
 export class ConnectionLog {
     @Prop({ required: true })
     timestamp: string;
@@ -57,7 +55,7 @@ export const connectionLogSchema = SchemaFactory.createForClass(ConnectionLog);
 
 export class Statistics {
     @Prop({ required: true })
-    gamePlayed: number;
+    gamesPlayed: number;
 
     @Prop({ required: true })
     gameWon: number;
@@ -71,7 +69,7 @@ export class Statistics {
 
 export const statisticsSchema = SchemaFactory.createForClass(Statistics);
 
-@Schema()
+@Schema({ _id: false })
 export class Friend {
     @Prop({ required: true })
     name: string;
@@ -94,7 +92,7 @@ export class Friend {
 
 export const friendSchema = SchemaFactory.createForClass(Friend);
 
-@Schema()
+@Schema({ _id: false })
 export class Profile {
     @Prop({ required: true })
     avatar: string;
@@ -123,15 +121,16 @@ export class Profile {
     @Prop({ type: String, required: false })
     mobileTheme: string;
 
-    @Prop({ type: String, required: false })
-    onCorrectSoundId: string;
+    @Prop({ type: soundSchema, required: false })
+    onCorrectSound: Sound;
 
-    @Prop({ type: String, required: false })
-    onErrorSoundId: string;
+    @Prop({ type: soundSchema, required: false })
+    onErrorSound: Sound;
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);
-@Schema()
+
+@Schema({ _id: false })
 export class Credentials {
     @Prop({ required: true })
     username: string;

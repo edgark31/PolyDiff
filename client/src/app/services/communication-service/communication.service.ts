@@ -5,7 +5,7 @@ import { GameDetails } from '@app/interfaces/game-interfaces';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Account, CarouselPaginator, Credentials, Game, GameConfigConst, GameHistory, Theme } from './../../../../../common/game-interfaces';
+import { Account, CarouselPaginator, Credentials, Game, GameConfigConst, GameHistory, Sound, Theme } from './../../../../../common/game-interfaces';
 
 @Injectable({
     providedIn: 'root',
@@ -47,14 +47,14 @@ export class CommunicationService {
         );
     }
 
-    modifyUser(oldUsername: string, newUsername: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/username`, { oldUsername: oldUsername, newUsername: newUsername }).pipe(
+    updateUsername(oldUsername: string, newUsername: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/username`, { oldUsername, newUsername }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
-                console.log('User modify');
+                console.log('Username modified');
             }),
-            catchError(this.handleError<void>('modifyUser')),
+            catchError(this.handleError<void>('modifyUsername')),
         );
     }
 
@@ -70,7 +70,7 @@ export class CommunicationService {
     }
 
     updateAvatar(username: string, newAvatar: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { username: username, newAvatar: newAvatar }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { username, newAvatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -79,8 +79,8 @@ export class CommunicationService {
             catchError(this.handleError<void>('updateAvatar')),
         );
     }
-    chooseAvatar(name: string, newAvatar: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/avatar/choose`, { username: name, newAvatar: newAvatar }).pipe(
+    chooseAvatar(username: string, newAvatar: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/avatar/choose`, { username, newAvatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -91,7 +91,7 @@ export class CommunicationService {
     }
 
     modifyPassword(username: string, newPassword: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/password`, { username: username, newPassword: newPassword }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/password`, { username, newPassword }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -101,8 +101,8 @@ export class CommunicationService {
         );
     }
 
-    modifyTheme(oldUsername: string, newTheme: Theme): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/desktop/theme`, { oldUsername: oldUsername, newTheme: newTheme }).pipe(
+    modifyTheme(username: string, newTheme: Theme): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/theme`, { username, newTheme }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -112,44 +112,44 @@ export class CommunicationService {
         );
     }
 
-    modifySongError(username: string, newSoundId: String): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/sound/error`, { username: username, newSoundId: newSoundId }).pipe(
+    modifySongError(username: string, newErrorSound: Sound): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/sound/error`, { username, newSound: newErrorSound }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
-                console.log('sound on Error modify');
+                console.log('sound on error modified');
             }),
             catchError(this.handleError<void>('modifySongError')),
         );
     }
 
-    modifySongDifference(username: string, newCorrectSoundId: String): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/sound/correct`, { username: username, newSoundId: newCorrectSoundId }).pipe(
+    modifySongDifference(username: string, newCorrectSound: Sound): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/sound/correct`, { username, newSound: newCorrectSound }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
-                console.log('Correct sound modify');
+                console.log('on correct sound modified');
             }),
-            catchError(this.handleError<void>('modifiedCorrectSound')),
+            catchError(this.handleError<void>('modifyCorrectSound')),
         );
     }
 
     modifyLanguage(username: string, newLanguage: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/language`, { username: username, newLanguage: newLanguage }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/language`, { username, newLanguage }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
-                console.log('langage modify');
+                console.log('Language modified');
             }),
-            catchError(this.handleError<void>('modifyLanguage')),
+            catchError(this.handleError<void>('Language modified')),
         );
     }
 
     getPassword(password: string): Observable<boolean> {
-        return this.http.post<boolean>(`${this.accountUrl}/admin`, { password: password }).pipe(
+        return this.http.post<boolean>(`${this.accountUrl}/admin`, { password }).pipe(
             tap(() => {
                 // eslint-disable-next-line no-console
-                console.log('langage modify');
+                console.log('Modified password');
             }),
             catchError(this.handleError<boolean>('Recuperate Password')),
         );
