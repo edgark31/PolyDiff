@@ -200,8 +200,6 @@ export class GameGateway implements OnGatewayConnection {
 
         socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
         socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
-
-        this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
