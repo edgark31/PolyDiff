@@ -113,7 +113,7 @@ export class CommunicationService {
     }
 
     modifySongError(oldusername: string, newSongError: Song): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/song/error`, { oldUsername: oldusername, newSong: newSongError }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/sound/error`, { oldUsername: oldusername, newSong: newSongError }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -124,7 +124,7 @@ export class CommunicationService {
     }
 
     modifySongDifference(oldusername: string, newSongDifference: Song): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/song/difference`, { oldUsername: oldusername, newSong: newSongDifference }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/song/correct`, { oldUsername: oldusername, newSong: newSongDifference }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console

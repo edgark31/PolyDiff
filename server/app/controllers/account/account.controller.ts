@@ -131,7 +131,7 @@ export class AccountController {
         }
     }
 
-    @Put('song/error')
+    @Put('sound/correct')
     async modifySongDifference(@Body('oldUsername') oldUsername: string, @Body('newSong') newSongError: Song, @Res() response: Response) {
         try {
             await this.accountManager.modifySongDifference(oldUsername, newSongError);
@@ -141,7 +141,7 @@ export class AccountController {
         }
     }
 
-    @Put('song/difference')
+    @Put('sound/correct')
     async modifySongError(@Body('oldUsername') oldUsername: string, @Body('newSong') newSongDifference: Song, @Res() response: Response) {
         try {
             await this.accountManager.modifySongError(oldUsername, newSongDifference);
