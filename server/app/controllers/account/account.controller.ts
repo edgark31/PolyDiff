@@ -1,4 +1,4 @@
-import { Credentials, Theme } from '@app/model/database/account';
+import { Credentials, Sound, Theme } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MailService } from '@app/services/mail-service/mail-service';
 import { Body, Controller, Delete, HttpStatus, Post, Put, Res } from '@nestjs/common';

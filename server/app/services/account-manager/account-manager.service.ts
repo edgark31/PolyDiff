@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-params */
 /* eslint-disable no-underscore-dangle */
-import { Account, AccountDocument, Credentials, Theme } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Sound, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, THEME_PERSONALIZATION } from '@common/constants';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';

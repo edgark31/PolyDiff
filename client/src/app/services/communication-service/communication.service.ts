@@ -102,7 +102,7 @@ export class CommunicationService {
     }
 
     modifyTheme(username: string, newTheme: Theme): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/theme`, { username, newTheme }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/desktop/theme`, { username, newTheme }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console

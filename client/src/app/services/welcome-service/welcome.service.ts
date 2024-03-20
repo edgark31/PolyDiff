@@ -13,8 +13,8 @@ import { SoundService } from '../sound-service/sound.service';
 })
 export class WelcomeService {
     isLoggedIn = localStorage.getItem('isLogged') === 'true';
-    songListDifference = CORRECT_SOUND_LIST;
-    songListError = ERROR_SOUND_LIST;
+    soundCorrectList = CORRECT_SOUND_LIST;
+    soundErrorList = ERROR_SOUND_LIST;
     account: Account;
     isLimited: boolean;
     selectLocal: string;

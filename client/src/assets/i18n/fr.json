@@ -6,10 +6,10 @@
         "text": "Ce tutoriel explique comment vous pouvez facilement traduire votre application Angular.",
         "hello": "salut"
     },
-    "connection": "connexion",
+    "connexion": "connexion",
     "username": "Nom d'utilisateur ou courriel",
     "mdp": "Mot de passe",
-    "profile": {
+    "profil": {
         "information": "Informations générales",
         "username": "Nom d'utilisateur/pseudonyme",
         "theme": "Thème actuel",
@@ -19,18 +19,18 @@
         "gameWin": "nombre de parties gagnés",
         "gameAverage": "moyenne de différences trouvées par partie",
         "gameAverageTime": "temps moyen par partie",
-        "connection": "Relevé de connexion",
+        "Connexion": "Relevé de connexion",
         "gameHistoric": "historique de parties",
         "changePassword": "Changer le mot de passe",
         "confirmPassword": "Confirmer le mot de passe",
-        "errorSound": "choisissez votre son pour erreur",
-        "differenceSound": "choisissez votre son pour différence trouvé"
+        "songError": "choisissez votre son pour erreur",
+        "songDifference": "choisissez votre son pour différence trouvé"
     },
-    "button": {
-        "disconnection": "Déconnexion",
-        "returnProfile": "revenir au profil",
-        "GoSettings": "Aller dans réglage",
-        "Settings": "Réglages",
+    "bouton": {
+        "deconnexion": "Déconnexion",
+        "returnProfil": "revenir au profil",
+        "GoReglage": "Aller dans réglage",
+        "Reglage": "Réglages",
         "fr": "français",
         "en": "anglais"
     }
