@@ -194,8 +194,8 @@ export interface Profile {
     friendRequests: string[];
     theme: Theme;
     language: string;
-    songDifference: Song;
-    songError: Song;
+    onCorrectSound: Sound;
+    onErrorSound: Sound;
 }
 
 export interface SessionLog {
@@ -258,7 +258,7 @@ export interface Theme {
     buttonColor: string;
 }
 
-export interface Song {
+export interface Sound {
     name: string;
-    link: string;
+    path: string;
 }

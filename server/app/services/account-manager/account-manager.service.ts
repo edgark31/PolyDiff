@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-params */
 /* eslint-disable no-underscore-dangle */
-import { Account, AccountDocument, Credentials, Song, Theme } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Sound, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
-import { SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONALIZATION } from '@common/constants';
+import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, THEME_PERSONALIZATION } from '@common/constants';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -46,8 +46,8 @@ export class AccountManagerService implements OnModuleInit {
                     friendRequests: [],
                     language: 'en',
                     theme: THEME_PERSONALIZATION[0],
-                    onCorrectSound: SONG_LIST_DIFFERENCE[0],
-                    onErrorSound: SONG_LIST_ERROR[0],
+                    onCorrectSound: CORRECT_SOUND_LIST[0],
+                    onErrorSound: ERROR_SOUND_LIST[0],
                 },
             };
             await this.accountModel.create(newAccount);
@@ -168,12 +168,12 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async updateErrorSound(username: string, newSong: Song): Promise<void> {
+    async updateErrorSound(username: string, newSound: Sound): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
-            accountFound.profile.onCorrectSound = newSong;
+            accountFound.profile.onCorrectSound = newSound;
 
             await accountFound.save();
             this.logger.verbose(`${username} has changed his error sound effect`);
@@ -184,7 +184,7 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async updateCorrectSound(username: string, newSound: Song): Promise<void> {
+    async updateCorrectSound(username: string, newSound: Sound): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');

@@ -1,5 +1,5 @@
 import { GameModes } from './enums';
-import { ConnectionLog, PlayerTime, Song, Theme } from './game-interfaces';
+import { ConnectionLog, PlayerTime, Sound, Theme } from './game-interfaces';
 
 export const DEFAULT_COUNTDOWN_VALUE = 30;
 export const DEFAULT_HINT_PENALTY = 5;
@@ -27,16 +27,16 @@ export const THEME_PERSONALIZATION: Theme[] = [
     { name: 'cafe', color: '', buttonColor: 'brown', backgroundColor: 'black' },
 ];
 
-export const SONG_LIST_DIFFERENCE: Song[] = [
-    { name: 'DefaultSong', link: 'assets/sound/WinSoundEffect.mp3' },
-    { name: 'Song2', link: 'assets/sound/WinSoundEffect.mp3' }, // en attendant
-    { name: 'Song3', link: 'assets/sound/WinSoundEffect.mp3' }, // en attendant
+export const CORRECT_SOUND_LIST: Sound[] = [
+    { name: 'DefaultSong', path: 'assets/sound/WinSoundEffect.mp3' },
+    { name: 'Song2', path: 'assets/sound/WinSoundEffect.mp3' }, // en attendant
+    { name: 'Song3', path: 'assets/sound/WinSoundEffect.mp3' }, // en attendant
 ];
 
-export const SONG_LIST_ERROR: Song[] = [
-    { name: 'DefaultSong', link: 'assets/sound/ErrorSoundEffect.mp3' },
-    { name: 'Song2', link: 'assets/sound/ErrorSoundEffect.mp3' }, // en attendant
-    { name: 'Song3', link: 'assets/sound/ErrorSoundEffect.mp3' }, // en attendant
+export const ERROR_SOUND_LIST: Sound[] = [
+    { name: 'DefaultSong', path: 'assets/sound/ErrorSoundEffect.mp3' },
+    { name: 'Song2', path: 'assets/sound/ErrorSoundEffect.mp3' }, // en attendant
+    { name: 'Song3', path: 'assets/sound/ErrorSoundEffect.mp3' }, // en attendant
 ];
 
 export const LANGUAGES: string[] = ['fr', 'en'];

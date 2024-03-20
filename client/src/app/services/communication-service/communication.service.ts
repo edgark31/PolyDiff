@@ -5,7 +5,7 @@ import { GameDetails } from '@app/interfaces/game-interfaces';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Account, CarouselPaginator, Credentials, Game, GameConfigConst, GameHistory, Song, Theme } from './../../../../../common/game-interfaces';
+import { Account, CarouselPaginator, Credentials, Game, GameConfigConst, GameHistory, Sound, Theme } from './../../../../../common/game-interfaces';
 
 @Injectable({
     providedIn: 'root',
@@ -112,7 +112,7 @@ export class CommunicationService {
         );
     }
 
-    modifySongError(username: string, newErrorSound: Song): Observable<void> {
+    modifySongError(username: string, newErrorSound: Sound): Observable<void> {
         return this.http.put<void>(`${this.accountUrl}/sound/error`, { username, newSound: newErrorSound }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
@@ -123,7 +123,7 @@ export class CommunicationService {
         );
     }
 
-    modifySongDifference(username: string, newCorrectSound: Song): Observable<void> {
+    modifySongDifference(username: string, newCorrectSound: Sound): Observable<void> {
         return this.http.put<void>(`${this.accountUrl}/sound/correct`, { username, newSound: newCorrectSound }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {

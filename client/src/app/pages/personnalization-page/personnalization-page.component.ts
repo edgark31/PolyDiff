@@ -41,9 +41,8 @@ export class PersonnalizationPageComponent implements OnInit {
         this.welcomeService.selectAvatar = this.welcomeService.account.profile.avatar;
         this.welcomeService.selectTheme = this.welcomeService.account.profile.theme;
         this.welcomeService.selectLanguage = this.welcomeService.account.profile.language;
-        this.sound.correctSoundEffect = this.welcomeService.account.profile.songDifference;
-
-        this.sound.incorrectSoundEffect = this.welcomeService.account.profile.songError;
+        this.sound.correctSoundEffect = this.welcomeService.account.profile.onCorrectSound;
+        this.sound.incorrectSoundEffect = this.welcomeService.account.profile.onErrorSound;
     }
 
     useLanguage(language: string): void {
@@ -65,8 +64,8 @@ export class PersonnalizationPageComponent implements OnInit {
             this.welcomeService.onModifyPassword();
         if (this.welcomeService.selectTheme !== this.welcomeService.account.profile.theme) this.welcomeService.onModifyTheme();
         if (this.welcomeService.selectLanguage !== this.welcomeService.account.profile.language) this.welcomeService.onModifyLanguage();
-        if (this.sound.correctSoundEffect !== this.welcomeService.account.profile.songDifference) this.welcomeService.onModifySongDifference();
-        if (this.sound.incorrectSoundEffect !== this.welcomeService.account.profile.songError) this.welcomeService.onModifySongError();
+        if (this.sound.correctSoundEffect !== this.welcomeService.account.profile.onCorrectSound) this.welcomeService.onUpdateCorrectSound();
+        if (this.sound.incorrectSoundEffect !== this.welcomeService.account.profile.onErrorSound) this.welcomeService.onUpdateErrorSound();
 
         this.router.navigate(['/profil']);
     }

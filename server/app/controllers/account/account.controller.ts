@@ -1,7 +1,7 @@
 import { Credentials, Theme } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MailService } from '@app/services/mail-service/mail-service';
-import { Song } from '@common/game-interfaces';
+import { Sound } from '@common/game-interfaces';
 import { Body, Controller, Delete, HttpStatus, Post, Put, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -122,7 +122,7 @@ export class AccountController {
     }
 
     @Put('language')
-    async modifyLanguage(@Body('username') username: string, @Body('newLanguage') newLanguage: string, @Res() response: Response) {
+    async updateLanguage(@Body('username') username: string, @Body('newLanguage') newLanguage: string, @Res() response: Response) {
         try {
             await this.accountManager.modifyLanguage(username, newLanguage);
             response.status(HttpStatus.OK).send();
@@ -132,7 +132,7 @@ export class AccountController {
     }
 
     @Put('sound/correct')
-    async updateCorrectSound(@Body('username') username: string, @Body('newSound') newSound: Song, @Res() response: Response) {
+    async updateCorrectSound(@Body('username') username: string, @Body('newSound') newSound: Sound, @Res() response: Response) {
         try {
             await this.accountManager.updateCorrectSound(username, newSound);
             response.status(HttpStatus.OK).send();
@@ -142,7 +142,7 @@ export class AccountController {
     }
 
     @Put('sound/error')
-    async updateErrorSound(@Body('username') username: string, @Body('newSound') newSound: Song, @Res() response: Response) {
+    async updateErrorSound(@Body('username') username: string, @Body('newSound') newSound: Sound, @Res() response: Response) {
         try {
             await this.accountManager.updateErrorSound(username, newSound);
             response.status(HttpStatus.OK).send();
