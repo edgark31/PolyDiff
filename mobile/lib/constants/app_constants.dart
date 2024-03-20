@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:mobile/models/account.dart';
 
 // Background image paths
 const String EMPTY_BACKGROUND_PATH = 'assets/images/empty_background.jpg';
@@ -15,20 +16,21 @@ const String DEFAULT_ON_ERROR_SOUND_PATH_1 = 'sound/error1.mp3';
 const String DEFAULT_ON_ERROR_SOUND_PATH_2 = 'sound/error2.mp3';
 const String DEFAULT_ON_ERROR_SOUND_PATH_3 = 'sound/error3.mp3';
 
-const List<String> ERROR_SOUND_PATH_LIST = [
-  DEFAULT_ON_ERROR_SOUND_PATH_1,
-  DEFAULT_ON_ERROR_SOUND_PATH_2,
-  DEFAULT_ON_ERROR_SOUND_PATH_3,
+List<Sound> ERROR_SOUND_LIST = [
+  Sound(name: 'NOT GOOD 1', path: DEFAULT_ON_ERROR_SOUND_PATH_1),
+  Sound(name: 'NOT GOOD 2', path: DEFAULT_ON_ERROR_SOUND_PATH_2),
+  Sound(name: 'NOT GOOD 3', path: DEFAULT_ON_ERROR_SOUND_PATH_3),
 ];
+
 // Default Correct sounds
 const String DEFAULT_ON_CORRECT_SOUND_PATH_1 = 'sound/correct1.mp3';
 const String DEFAULT_ON_CORRECT_SOUND_PATH_2 = 'sound/correct2.mp3';
 const String DEFAULT_ON_CORRECT_SOUND_PATH_3 = 'sound/correct3.mp3';
 
-const List<String> CORRECT_SOUND_PATH_LIST = [
-  DEFAULT_ON_CORRECT_SOUND_PATH_1,
-  DEFAULT_ON_CORRECT_SOUND_PATH_2,
-  DEFAULT_ON_CORRECT_SOUND_PATH_3,
+List<Sound> CORRECT_SOUND_LIST = [
+  Sound(name: 'TOO GOOD 1', path: DEFAULT_ON_CORRECT_SOUND_PATH_1),
+  Sound(name: 'TOO GOOD 2', path: DEFAULT_ON_CORRECT_SOUND_PATH_2),
+  Sound(name: 'TOO GOOD 3', path: DEFAULT_ON_CORRECT_SOUND_PATH_3),
 ];
 
 // Colors

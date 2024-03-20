@@ -3,11 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:mobile/constants/app_routes.dart';
-
-enum Sound {
-  onError,
-  onFoundDifference,
-}
+import 'package:mobile/models/account.dart';
 
 // Providers are for state management
 class AccountService {
@@ -115,7 +111,7 @@ class AccountService {
         }),
       );
       if (response.statusCode == 200) {
-        print("Langugae updated to $newLanguageFormatted ");
+        print("Language updated to $newLanguageFormatted ");
         return null;
       }
     } catch (error) {
@@ -125,16 +121,16 @@ class AccountService {
     return null;
   }
 
-  Future<String?> updateCorrectSound(String username, String newSoundId) async {
+  Future<String?> updateCorrectSound(String username, Sound newSound) async {
     final url = Uri.parse("$baseUrl/account/sound/correct");
     try {
       final response = await http.put(
         url,
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"username": username, "soundId": newSoundId}),
+        body: jsonEncode({"username": username, "newSound": newSound}),
       );
       if (response.statusCode == 200) {
-        print("Correct sound updated to $newSoundId ");
+        print("Correct sound updated to $newSound");
         return null;
       }
     } catch (error) {
@@ -144,13 +140,13 @@ class AccountService {
     return null;
   }
 
-  Future<String?> updateErrorSound(String username, String newSoundId) async {
+  Future<String?> updateErrorSound(String username, Sound newSound) async {
     final url = Uri.parse("$baseUrl/account/sound/error");
     try {
       final response = await http.put(
         url,
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"username": username, "soundId": newSoundId}),
+        body: jsonEncode({"username": username, "newSound": newSound}),
       );
       if (response.statusCode == 200) {
         print("Failed to update sound preference");

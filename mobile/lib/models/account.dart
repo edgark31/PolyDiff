@@ -1,4 +1,3 @@
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/info_service.dart';
 
@@ -12,8 +11,8 @@ class User {
   final List<String> friendRequests;
   final String language;
   final String mobileTheme;
-  final String onCorrectSoundId;
-  final String onErrorSoundId;
+  final Sound onCorrectSound;
+  final Sound onErrorSound;
 
   User({
     required this.avatar,
@@ -24,8 +23,8 @@ class User {
     this.friendRequests = const [],
     this.language = 'fr',
     required this.mobileTheme,
-    required this.onCorrectSoundId,
-    required this.onErrorSoundId,
+    required this.onCorrectSound,
+    required this.onErrorSound,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -41,8 +40,8 @@ class User {
       friendRequests: List<String>.from(json['friendRequests']),
       language: json['language'],
       mobileTheme: json['mobileTheme'],
-      onCorrectSoundId: json['onCorrectSoundId'],
-      onErrorSoundId: json['onErrorSoundId'],
+      onCorrectSound: json['onCorrectSound'],
+      onErrorSound: json['onErrorSound'],
     );
   }
 }
@@ -54,8 +53,8 @@ class AccountSettings {
   final String email;
   final String theme;
   final String language;
-  final String onErrorSound;
-  final String onCorrectSound;
+  final Sound onErrorSound;
+  final Sound onCorrectSound;
 
   AccountSettings({
     required this.username,
@@ -88,8 +87,8 @@ class AccountSettings {
     String? email,
     String? theme,
     String? language,
-    String? onErrorSound,
-    String? onCorrectSound,
+    Sound? onErrorSound,
+    Sound? onCorrectSound,
   }) {
     return AccountSettings(
       username: username ?? this.username,
@@ -193,32 +192,28 @@ class UploadPredefinedAvatarBody {
 
 /// Represents sound settings with specific IDs for correct and error sounds.
 class Sound {
-  final String onCorrectSoundId;
-  final String onErrorSoundId;
+  final String name;
+  final String path;
 
   /// Constructs a [Sound] instance with IDs for correct and error sounds.
   /// If data is missing in JSON, defaults are provided to ensure the instance is in a valid state.
   Sound({
-    required this.onCorrectSoundId,
-    required this.onErrorSoundId,
+    required this.name,
+    required this.path,
   });
 
-  /// Creates a [Sound] instance from a JSON map.
-  /// Missing values are replaced with default IDs.
-  factory Sound.fromJson(Map<String, dynamic> json) {
+  static Sound fromJson(Map<String, dynamic> json) {
     return Sound(
-      onCorrectSoundId: json['onCorrectSoundId'] as String? ??
-          DEFAULT_ON_CORRECT_SOUND_PATH_1,
-      onErrorSoundId:
-          json['onErrorSoundId'] as String? ?? DEFAULT_ON_ERROR_SOUND_PATH_1,
+      name: json['name'],
+      path: json['path'],
     );
   }
 
   /// Converts a [Sound] instance to a JSON map.
   Map<String, dynamic> toJson() {
     return {
-      'onCorrectSoundId': onCorrectSoundId,
-      'onErrorSoundId': onErrorSoundId,
+      'name': name,
+      'path': path,
     };
   }
 }

@@ -28,15 +28,15 @@ export const THEME_PERSONALIZATION: Theme[] = [
 ];
 
 export const CORRECT_SOUND_LIST: Sound[] = [
-    { name: 'DefaultSong', path: 'assets/sound/WinSoundEffect.mp3' },
-    { name: 'Song2', path: 'assets/sound/WinSoundEffect.mp3' }, // en attendant
-    { name: 'Song3', path: 'assets/sound/WinSoundEffect.mp3' }, // en attendant
+    { name: 'TOO GOOD 1', path: 'assets/sound/correct1.mp3' },
+    { name: 'TOO GOOD 2', path: 'assets/sound/correct2.mp3' },
+    { name: 'TOO GOOD 3', path: 'assets/sound/correct3.mp3' },
 ];
 
 export const ERROR_SOUND_LIST: Sound[] = [
-    { name: 'DefaultSong', path: 'assets/sound/ErrorSoundEffect.mp3' },
-    { name: 'Song2', path: 'assets/sound/ErrorSoundEffect.mp3' }, // en attendant
-    { name: 'Song3', path: 'assets/sound/ErrorSoundEffect.mp3' }, // en attendant
+    { name: 'NOT GOOD 1', path: 'assets/sound/error1.mp3' },
+    { name: 'NOT GOOD 2', path: 'assets/sound/error2.mp3' },
+    { name: 'NOT GOOD 3', path: 'assets/sound/error3.mp3' },
 ];
 
 export const LANGUAGES: string[] = ['fr', 'en'];

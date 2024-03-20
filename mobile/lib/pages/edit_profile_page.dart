@@ -48,8 +48,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   AccountSettings? currentSettings;
 
   // Define the lists for dropdown items
-  final List<String> errorSounds = ['1', '2', '3'];
-  final List<String> correctSounds = ['1', '2', '3'];
   final List<String> languages = ['fr', 'en'];
   final List<String> themes = ['light', 'dark']; // Clair ou sombre
 
@@ -234,7 +232,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     SizedBox(height: 30),
                     buildUsernameField(),
                     SizedBox(height: 30),
-                    DropdownButtonFormField<String>(
+                    DropdownButtonFormField<Sound>(
                       value: currentSettings!.onErrorSound,
                       onChanged: (newValue) {
                         if (newValue != null) {
@@ -243,14 +241,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           soundService.playOnErrorSound(newValue);
                         }
                       },
-                      items: errorSounds.map((sound) {
+                      items: ERROR_SOUND_LIST.map((sound) {
                         return DropdownMenuItem(
-                            value: sound, child: Text(sound));
+                            value: sound, child: Text(sound.name));
                       }).toList(),
                       decoration: InputDecoration(labelText: "Son d'erreur"),
                     ),
 
-                    DropdownButtonFormField<String>(
+                    DropdownButtonFormField<Sound>(
                       value: currentSettings!.onCorrectSound,
                       onChanged: (newValue) {
                         if (newValue != null) {
@@ -259,9 +257,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               .copyWith(onCorrectSound: newValue);
                         }
                       },
-                      items: correctSounds.map((sound) {
+                      items: CORRECT_SOUND_LIST.map((sound) {
                         return DropdownMenuItem(
-                            value: sound, child: Text(sound));
+                            value: sound, child: Text(sound.name));
                       }).toList(),
                       decoration: InputDecoration(
                           labelText: "Son de différence trouvée"),

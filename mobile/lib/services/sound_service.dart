@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/models/account.dart';
 
 class SoundService {
   final AudioPlayer audioPlayer;
@@ -38,27 +39,25 @@ class SoundService {
     }
   }
 
-  playOnCorrectSound(String soundId) async {
-    final String soundPath = "sound/correct$soundId.mp3";
-    final AssetSource soundSource = AssetSource(soundPath);
+  playOnCorrectSound(Sound sound) async {
+    final AssetSource soundSource = AssetSource(sound.path);
     try {
       await audioPlayer.stop();
       await audioPlayer.play(soundSource);
     } catch (error) {
       print(
-          'Error while trying to play error sound $soundId with $soundPath: $error');
+          'Error while trying to play error sound $sound.name with $sound.name: $error');
     }
   }
 
-  playOnErrorSound(String soundId) async {
-    final String soundPath = "sound/error$soundId.mp3";
-    final AssetSource soundSource = AssetSource(soundPath);
+  playOnErrorSound(Sound sound) async {
+    final AssetSource soundSource = AssetSource(sound.path);
     try {
       await audioPlayer.stop();
       await audioPlayer.play(soundSource);
     } catch (error) {
       print(
-          'Error while trying to play error sound $soundId with $soundPath: $error');
+          'Error while trying to play error sound $sound.name with $sound.name: $error');
     }
   }
 }

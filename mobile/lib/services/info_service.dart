@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/models.dart';
 
 class InfoService extends ChangeNotifier {
@@ -10,8 +11,8 @@ class InfoService extends ChangeNotifier {
   static String _email = 'temp_email';
   static String _theme = 'light';
   static String _language = 'fr';
-  static String _onErrorSound = '1';
-  static String _onCorrectSound = '1';
+  static Sound _onErrorSound = ERROR_SOUND_LIST[0];
+  static Sound _onCorrectSound = CORRECT_SOUND_LIST[0];
 
   String get username => _username;
   String get id => _id;
@@ -19,8 +20,8 @@ class InfoService extends ChangeNotifier {
   String get email => _email;
   String get language => _language;
   String get theme => _theme;
-  String get onErrorSound => _onErrorSound;
-  String get onCorrectSound => _onCorrectSound;
+  Sound get onErrorSound => _onErrorSound;
+  Sound get onCorrectSound => _onCorrectSound;
 
   void setId(String newId) {
     // print('Changing id from $_id to $newId');
@@ -48,14 +49,14 @@ class InfoService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setOnErrorSound(String newOnErrorSound) {
+  void setOnErrorSound(Sound newOnErrorSound) {
     print(
         'Changing onErrorSoundId from $_onErrorSound to $newOnErrorSound for $username ($_id)');
     _onErrorSound = newOnErrorSound;
     notifyListeners();
   }
 
-  void setOnCorrectSound(String newOnCorrectSound) {
+  void setOnCorrectSound(Sound newOnCorrectSound) {
     print(
         'Changing onCorrectSoundId from $_onCorrectSound to $newOnCorrectSound for $username ($_id)');
     _onCorrectSound = newOnCorrectSound;
@@ -82,12 +83,14 @@ class InfoService extends ChangeNotifier {
 
     // print('credentials: ${result['credentials']}');
     final credentials = Credentials.fromJson(result['credentials']);
- 
+    final onErrorSound = Sound.fromJson(result['profile']['onErrorSound']);
+    final onCorrectSound = Sound.fromJson(result['profile']['onCorrectSound']);
+
     setCredentials(credentials);
 
     setTheme(result['profile']['mobileTheme']);
     setLanguage(result['profile']['language']);
-    setOnCorrectSound(result['profile']['onCorrectSoundId']);
-    setOnErrorSound(result['profile']['onErrorSoundId']);
+    setOnCorrectSound(onCorrectSound);
+    setOnErrorSound(onErrorSound);
   }
 }
