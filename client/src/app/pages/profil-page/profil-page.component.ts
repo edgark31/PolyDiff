@@ -21,7 +21,7 @@ export class ProfilPageComponent implements AfterViewInit, OnInit {
     selectedValue: string;
     language = LANGUAGES;
     showTable = false;
-    themePersonalization = THEME_PERSONALIZATION;
+    themePersonnalization = THEME_PERSONALIZATION;
     displayedColumns: string[] = ['position', 'name', 'weight'];
     dataSource = new MatTableDataSource<ConnectionLog>(ELEMENT_DATA);
 

@@ -19,7 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
     templateUrl: './personnalization-page.component.html',
     styleUrls: ['./personnalization-page.component.scss'],
 })
-export class PersonnalizationPageComponent implements OnInit {
+export class PersonalizationPageComponent implements OnInit {
     @ViewChild(ImportDialogComponent) importDialogComponent: ImportDialogComponent;
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
