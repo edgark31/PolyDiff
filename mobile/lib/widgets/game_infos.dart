@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile/services/game_manager_service.dart';
+import 'package:provider/provider.dart';
 
 class GameInfos extends StatefulWidget {
   @override
@@ -6,6 +9,7 @@ class GameInfos extends StatefulWidget {
 }
 
 class _GameInfosState extends State<GameInfos> {
+  final GameManagerService gameManagerService = Get.find();
   @override
   void initState() {
     super.initState();
@@ -13,8 +17,9 @@ class _GameInfosState extends State<GameInfos> {
 
   @override
   Widget build(BuildContext context) {
+    final gameManagerService = context.watch<GameManagerService>();
     //TODO: Connect these attributes to real values from the server or lobby
-    int timer = 240;
+    int timer = gameManagerService.time;
     int nbDifferencesPresent = 4;
     String gameMode = "Classic";
     int nbPlayers = 5;
