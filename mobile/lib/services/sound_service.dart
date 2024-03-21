@@ -1,11 +1,10 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/account.dart';
 
 class SoundService {
   final AudioPlayer audioPlayer;
-  final String correctSoundPath = DEFAULT_ON_CORRECT_SOUND_PATH_1;
-  final String errorSoundPath = DEFAULT_ON_ERROR_SOUND_PATH_1;
+  final String correctSoundPath = "sound/correct1.mp3";
+  final String errorSoundPath = "sound/error1.mp3";
 
   SoundService() : audioPlayer = AudioPlayer() {
     preloadSounds();
@@ -40,18 +39,18 @@ class SoundService {
   }
 
   playOnCorrectSound(Sound sound) async {
-    final AssetSource soundSource = AssetSource(sound.path);
+    final AssetSource soundSource = AssetSource(sound.path.substring(6));
     try {
       await audioPlayer.stop();
       await audioPlayer.play(soundSource);
     } catch (error) {
       print(
-          'Error while trying to play error sound $sound.name with $sound.name: $error');
+          'Error while trying to play error sound $sound.name with $sound $error');
     }
   }
 
   playOnErrorSound(Sound sound) async {
-    final AssetSource soundSource = AssetSource(sound.path);
+    final AssetSource soundSource = AssetSource(sound.path.substring(6));
     try {
       await audioPlayer.stop();
       await audioPlayer.play(soundSource);

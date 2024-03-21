@@ -11,8 +11,8 @@ class InfoService extends ChangeNotifier {
   static String _email = 'temp_email';
   static String _theme = 'light';
   static String _language = 'fr';
-  static Sound _onErrorSound = ERROR_SOUND_LIST[0];
-  static Sound _onCorrectSound = CORRECT_SOUND_LIST[0];
+  static Sound _onErrorSound = DEFAULT_ON_ERROR_SOUND;
+  static Sound _onCorrectSound = DEFAULT_ON_CORRECT_SOUND;
 
   String get username => _username;
   String get id => _id;

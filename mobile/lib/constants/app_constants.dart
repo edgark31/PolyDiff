@@ -11,26 +11,23 @@ const String SELECTION_BACKGROUND_PATH =
 const String GAME_BACKGROUND_PATH = 'assets/images/game_background.jpg';
 
 // Default sounds
-// Default Error sounds
-const String DEFAULT_ON_ERROR_SOUND_PATH_1 = 'sound/error1.mp3';
-const String DEFAULT_ON_ERROR_SOUND_PATH_2 = 'sound/error2.mp3';
-const String DEFAULT_ON_ERROR_SOUND_PATH_3 = 'sound/error3.mp3';
 
-List<Sound> ERROR_SOUND_LIST = [
-  Sound(name: 'NOT GOOD 1', path: DEFAULT_ON_ERROR_SOUND_PATH_1),
-  Sound(name: 'NOT GOOD 2', path: DEFAULT_ON_ERROR_SOUND_PATH_2),
-  Sound(name: 'NOT GOOD 3', path: DEFAULT_ON_ERROR_SOUND_PATH_3),
+const Sound DEFAULT_ON_ERROR_SOUND =
+    Sound(name: "NOT GOOD 1", path: "assets/sound/error1.mp3");
+const Sound DEFAULT_ON_CORRECT_SOUND =
+    Sound(name: "TOO GOOD 1", path: "assets/sound/correct1.mp3");
+
+const List<Sound> ERROR_SOUND_LIST = [
+  Sound(name: "NOT GOOD 1", path: "assets/sound/error1.mp3"),
+  Sound(name: "NOT GOOD 2", path: "assets/sound/error2.mp3"),
+  Sound(name: "NOT GOOD 3", path: "assets/sound/error3.mp3"),
 ];
 
 // Default Correct sounds
-const String DEFAULT_ON_CORRECT_SOUND_PATH_1 = 'sound/correct1.mp3';
-const String DEFAULT_ON_CORRECT_SOUND_PATH_2 = 'sound/correct2.mp3';
-const String DEFAULT_ON_CORRECT_SOUND_PATH_3 = 'sound/correct3.mp3';
-
-List<Sound> CORRECT_SOUND_LIST = [
-  Sound(name: 'TOO GOOD 1', path: DEFAULT_ON_CORRECT_SOUND_PATH_1),
-  Sound(name: 'TOO GOOD 2', path: DEFAULT_ON_CORRECT_SOUND_PATH_2),
-  Sound(name: 'TOO GOOD 3', path: DEFAULT_ON_CORRECT_SOUND_PATH_3),
+const List<Sound> CORRECT_SOUND_LIST = [
+  Sound(name: "TOO GOOD 1", path: "assets/sound/correct1.mp3"),
+  Sound(name: "TOO GOOD 2", path: "assets/sound/correct2.mp3"),
+  Sound(name: "TOO GOOD 3", path: "assets/sound/correct1.mp3"),
 ];
 
 // Colors
