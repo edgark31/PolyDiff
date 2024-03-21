@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/widgets/connection_form.dart';
-import 'package:mobile/widgets/customs/background_container.dart'; // Make sure the path is correct
+import 'package:mobile/widgets/customs/background_container.dart';
+import 'package:mobile/widgets/sign_in_form.dart';
 
 class LoginPage extends StatelessWidget {
   static const routeName = LOGIN_ROUTE;
@@ -22,7 +22,7 @@ class LoginPage extends StatelessWidget {
         children: [
           BackgroundContainer(
             backgroundImagePath: SELECTION_BACKGROUND_PATH,
-            child: ConnectionForm(),
+            child: SignInForm(),
           )
         ],
       ),

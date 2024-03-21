@@ -1,20 +1,27 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/models.dart';
 
 class InfoService extends ChangeNotifier {
   static late Credentials credentials;
-  static String _name = 'temp_name'; // TODO : fix default avatar issue
+  static String _username = 'temp_name';
   static String _id = 'temp_id';
-  static String _avatar =
-      'temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar_temp_avatar';
   static String _email = 'temp_email';
+  static String _theme = 'light';
+  static String _language = 'fr';
+  static Sound _onErrorSound = ERROR_SOUND_LIST[0];
+  static Sound _onCorrectSound = CORRECT_SOUND_LIST[0];
 
-  String get username => _name;
+  String get username => _username;
   String get id => _id;
-  String get avatar => _avatar;
+
   String get email => _email;
+  String get language => _language;
+  String get theme => _theme;
+  Sound get onErrorSound => _onErrorSound;
+  Sound get onCorrectSound => _onCorrectSound;
 
   void setId(String newId) {
     // print('Changing id from $_id to $newId');
@@ -22,9 +29,9 @@ class InfoService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setName(String newName) {
-    // print('Changing name from $_name to $newName for ($_id)');
-    _name = newName;
+  void setUsername(String newName) {
+    print('Changing name from $_username to $newName for ($_id)');
+    _username = newName;
     notifyListeners();
   }
 
@@ -36,17 +43,35 @@ class InfoService extends ChangeNotifier {
     }
   }
 
-  void setAvatar(String newAvatar) {
-    // String shortOldAvatar = _avatar.substring(0, 100);
-    // String shortNewAvatar = newAvatar.substring(0, 100);
-    // print('Changing avatar from $shortOldAvatar to  $shortNewAvatar for $username ($_id)');
-    _avatar = newAvatar;
+  void setTheme(String newTheme) {
+    print('Changing theme from $_theme to $newTheme for $username ($_id)');
+    _theme = newTheme;
+    notifyListeners();
+  }
+
+  void setOnErrorSound(Sound newOnErrorSound) {
+    print(
+        'Changing onErrorSoundId from $_onErrorSound to $newOnErrorSound for $username ($_id)');
+    _onErrorSound = newOnErrorSound;
+    notifyListeners();
+  }
+
+  void setOnCorrectSound(Sound newOnCorrectSound) {
+    print(
+        'Changing onCorrectSoundId from $_onCorrectSound to $newOnCorrectSound for $username ($_id)');
+    _onCorrectSound = newOnCorrectSound;
+  }
+
+  void setLanguage(String newLanguage) {
+    print(
+        'Changing language from $_language to $newLanguage for $username ($_id)');
+    _language = newLanguage;
     notifyListeners();
   }
 
   void setCredentials(Credentials credentialsReceived) {
     credentials = credentialsReceived;
-    setName(credentials.username);
+    setUsername(credentials.username);
     setEmail(credentials.email);
   }
 
@@ -58,11 +83,14 @@ class InfoService extends ChangeNotifier {
 
     // print('credentials: ${result['credentials']}');
     final credentials = Credentials.fromJson(result['credentials']);
-    // print('email: ${credentials.email}');
-    // print('username: ${credentials.username}');
+    final onErrorSound = Sound.fromJson(result['profile']['onErrorSound']);
+    final onCorrectSound = Sound.fromJson(result['profile']['onCorrectSound']);
+
     setCredentials(credentials);
 
-    setAvatar(
-        result['profile']['avatar']); // TODO : Add the rest of the profile
+    setTheme(result['profile']['mobileTheme']);
+    setLanguage(result['profile']['language']);
+    setOnCorrectSound(onCorrectSound);
+    setOnErrorSound(onErrorSound);
   }
 }
