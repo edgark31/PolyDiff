@@ -103,6 +103,7 @@ class _ChatBoxState extends State<ChatBox> {
                         CircleAvatar(
                           key: UniqueKey(),
                           backgroundImage:
+                          // TODO : fix to show other person avatar
                               NetworkImage(avatarProvider.currentAvatarUrl),
                           radius: 15.0,
                         ),
