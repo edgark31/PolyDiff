@@ -9,7 +9,7 @@ import { ImageManagerService } from '@app/services/image-manager/image-manager.s
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { NOT_FOUND } from '@common/constants';
-import { ChannelEvents, GameEvents, GameModes, GameState, LobbyEvents, MessageTag } from '@common/enums';
+import { ChannelEvents, GameEvents, GameModes, GameState, MessageTag } from '@common/enums';
 import { Chat, ChatLog, Coordinate, Game } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';

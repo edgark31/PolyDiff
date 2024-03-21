@@ -90,8 +90,7 @@ export enum LobbyEvents {
     Join = 'LobbyJoin',
     Leave = 'LobbyLeave',
     OptPlayer = 'OptPlayer',
-    JoinAsObserver = 'JoinAsObserver',
-    LeaveAsObserver = 'LeaveAsObserver',
+    Spectate = 'Spectate',
     UpdateLobbys = 'UpdateLobbys',
     Start = 'Start',
 }
