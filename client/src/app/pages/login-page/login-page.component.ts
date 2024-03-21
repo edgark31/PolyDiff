@@ -28,7 +28,7 @@ export class LoginPageComponent {
         private readonly clientSocket: ClientSocketService,
         private readonly communication: CommunicationService,
         private readonly router: Router,
-        private readonly welcomeservice: WelcomeService,
+        private readonly welcomeService: WelcomeService,
     ) {
         this.feedback = '';
     }
@@ -42,9 +42,9 @@ export class LoginPageComponent {
             this.communication.login(this.creds).subscribe({
                 next: (account: Account) => {
                     this.clientSocket.connect(account.id as string, 'auth');
-                    this.welcomeservice.account = account;
+                    this.welcomeService.account = account;
                     this.gameManager.username = account.credentials.username;
-                    this.welcomeservice.account.profile.avatar = `http://localhost:3000/avatar/${this.gameManager.username}.png`;
+                    this.welcomeService.account.profile.avatar = `http://localhost:3000/avatar/${this.gameManager.username}.png`;
                     this.router.navigate(['/home']);
                 },
                 error: (error: HttpErrorResponse) => {

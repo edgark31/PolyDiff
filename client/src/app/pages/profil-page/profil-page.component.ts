@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { ELEMENT_DATA, LANGUAGES, THEME_PERSONNALIZATION } from '@common/constants';
+import { ELEMENT_DATA, LANGUAGES, THEME_PERSONALIZATION } from '@common/constants';
 import { ConnectionLog } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -21,17 +21,18 @@ export class ProfilPageComponent implements AfterViewInit, OnInit {
     selectedValue: string;
     language = LANGUAGES;
     showTable = false;
-    themePersonnalization = THEME_PERSONNALIZATION;
+    themePersonnalization = THEME_PERSONALIZATION;
     displayedColumns: string[] = ['position', 'name', 'weight'];
     dataSource = new MatTableDataSource<ConnectionLog>(ELEMENT_DATA);
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
+    // eslint-disable-next-line max-params
     constructor(
         private readonly router: Router,
         public welcomeService: WelcomeService,
         public gameManager: GameManagerService,
-        private clientsocket: ClientSocketService,
+        private clientSocket: ClientSocketService,
         private translate: TranslateService,
     ) {}
 
@@ -50,11 +51,11 @@ export class ProfilPageComponent implements AfterViewInit, OnInit {
         return this.translate.instant(`bouton.${character}`);
     }
     onSubmitHome() {
-        this.clientsocket.disconnect('auth');
+        this.clientSocket.disconnect('auth');
         this.router.navigate(['/login']);
     }
 
-    onSubmitPersonnalization() {
+    onSubmitPersonalization() {
         this.router.navigate(['/personalization']);
     }
 }

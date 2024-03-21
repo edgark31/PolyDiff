@@ -27,14 +27,19 @@ class CustomButton extends StatelessWidget {
         width: size.width * widthFactor,
         height: height,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(25),
           child: ElevatedButton(
             onPressed: press,
             style: ElevatedButton.styleFrom(
               backgroundColor: backgroundColor,
+              shape: StadiumBorder(),
+              side: BorderSide.none,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               textStyle: TextStyle(
-                  color: textColor, fontSize: 15, fontWeight: FontWeight.w600),
+                color: textColor,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 5,
+              ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,

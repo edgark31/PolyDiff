@@ -11,14 +11,13 @@ import { GamePageComponent } from '@app/pages/game-page/game-page.component';
 import { LimitedTimePageComponent } from '@app/pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from '@app/pages/login-page/login-page.component';
 import { MainPageComponent } from '@app/pages/main-page/main-page.component';
-import { PersonnalizationPageComponent } from '@app/pages/personnalization-page/personnalization-page.component';
+import { PersonalizationPageComponent } from '@app/pages/personnalization-page/personnalization-page.component';
 import { ProfilPageComponent } from '@app/pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from '@app/pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from '@app/pages/registration-page/registration-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
-import { AdminGuard } from '@app/services/adminguard/admin.guard.service';
-
 import { WaitingRoomComponent } from '@app/pages/waiting-room/waiting-room.component';
+import { AdminGuard } from '@app/services/adminguard/admin.guard.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -33,7 +32,7 @@ export const routes: Routes = [
     { path: 'registration', component: RegistrationPageComponent },
     { path: 'recover-password', component: RecoverPasswordPageComponent },
     { path: 'confirm-password', component: ConfirmPasswordPageComponent },
-    { path: 'personalization', component: PersonnalizationPageComponent },
+    { path: 'personalization', component: PersonalizationPageComponent },
     { path: 'game-mode', component: GameModePageComponent },
     { path: 'profil', component: ProfilPageComponent },
     { path: 'classic', component: ClassicTimePageComponent },
