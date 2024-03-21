@@ -22,7 +22,7 @@ class Statistics {
 
   Map<String, dynamic> toJson() {
     return {
-      'gamePlayed': gamesPlayed,
+      'gamesPlayed': gamesPlayed,
       'gameWon': gameWon,
       'averageTime': averageTime,
       'averageDifferences': averageDifferences,

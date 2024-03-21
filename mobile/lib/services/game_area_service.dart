@@ -17,23 +17,25 @@ class GameAreaService extends ChangeNotifier {
     ..color = Colors.green
     ..style = PaintingStyle.fill;
   bool isCheatMode = false;
+  bool isClickDisabled = false;
 
   // This only validates the smile and the left circle
   // This won't be here when the connection between client and server is done
   void validateCoord(Coordinate coord, List<Coordinate> coordList,
       List<Coordinate> coordList2, bool isLeft) {
     currentCoord = coord;
-    if (coordList.contains(coord) || coordList2.contains(coord)) {
+    if ((coordList.contains(coord) || coordList2.contains(coord)) &&
+        !isClickDisabled) {
       if (coordList.contains(coord)) {
         showDifferenceFound(coordList);
       } else {
         showDifferenceFound(coordList2);
       }
     } else {
-      if (isLeft) {
+      if (isLeft && !isClickDisabled) {
         print("ERROR on left canvas");
         showDifferenceNotFoundLeft();
-      } else {
+      } else if (!isLeft && !isClickDisabled) {
         print("ERROR on right canvas");
         showDifferenceNotFoundRight();
       }
@@ -50,22 +52,26 @@ class GameAreaService extends ChangeNotifier {
   }
 
   void showDifferenceNotFoundLeft() {
+    isClickDisabled = true;
     soundService.playErrorSound();
     leftErrorCoord.add(currentCoord!);
     notifyListeners();
     Future.delayed(Duration(seconds: 1), () {
       leftErrorCoord = [];
       notifyListeners();
+      isClickDisabled = false;
     });
   }
 
   showDifferenceNotFoundRight() {
+    isClickDisabled = true;
     soundService.playErrorSound();
     rightErrorCoord.add(currentCoord!);
     notifyListeners();
     Future.delayed(Duration(seconds: 1), () {
       rightErrorCoord = [];
       notifyListeners();
+      isClickDisabled = false;
     });
   }
 
