@@ -94,7 +94,6 @@ export enum LobbyEvents {
     LeaveAsObserver = 'LeaveAsObserver',
     UpdateLobbys = 'UpdateLobbys',
     Start = 'Start',
-    LeaveRoom = 'LeaveRoom',
 }
 
 export enum LobbyState {
@@ -104,8 +103,9 @@ export enum LobbyState {
 }
 
 export enum AccountEvents {
-    ChangePseudo = 'ChangePseudo',
-    Update = 'Update',
+    UserUpdate = 'UserUpdate',
+    UserCreate = 'UserCreate',
+    UserDelete = 'UserDelete',
 }
 
 export enum FriendEvents {

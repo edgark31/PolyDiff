@@ -111,7 +111,6 @@ h1 {
     z-index: 1;
 }
 
-
 button .button:hover {
     background-color: #db9110;
     color: black;
@@ -134,7 +133,7 @@ button .button:hover {
 .footer > button {
     margin: 0 40px;
     bottom: 150px;
-  }
+}
 
 #background {
     background-color: #f5f5f5;
@@ -148,17 +147,17 @@ button .button:hover {
 
 .mat-slider {
     width: 300px;
-  }
+}
 
 .mat-slider-thumb-label {
     transform: rotate(45deg) !important;
     border-radius: 50% 50% 0 !important;
-  }
+}
 
 .mat-slider-thumb {
     transform: scale(0) !important;
-  }
+}
 
 .mat-slider-thumb-label-text {
     opacity: 1 !important;
-  }
+}

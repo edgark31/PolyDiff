@@ -12,22 +12,18 @@ class FormService {
 
   FormService();
 
-  Future<String?> register(Credentials credentials, String id) async {
+  Future<String?> register(SignUpCredentialsBody data) async {
     final url = '$baseUrl/account/register';
 
     try {
-      final requestBody = {
-        'creds': credentials.toJson(),
-        'id': id,
-      };
       final response = await http.post(
         Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(requestBody),
+        body: jsonEncode(data),
       );
 
       if (response.statusCode == 200) {
-        print('account sent');
+        print('credentials sent');
         return null;
       } else {
         final errorMessage = response.body;
@@ -48,7 +44,9 @@ class FormService {
       );
 
       if (response.statusCode == 200) {
-        infoService.setInfosOnConnection(response.body);
+        String info = response.body;
+        infoService.setInfosOnConnection(info);
+        print('SET INFO ON CONNECTION : $info');
         return null;
       } else {
         final errorMessage = response.body;

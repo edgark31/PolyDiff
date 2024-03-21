@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class CustomTextInputField extends StatefulWidget {
-  final Function(String)? onInputTextChanged;
+  final Function(void)? onInputTextChanged;
   final String label;
   final TextEditingController controller;
   final String hint;
   final String? helperText;
+  final String? errorText;
   final int maxLength;
   final bool isPassword;
 
@@ -18,6 +19,7 @@ class CustomTextInputField extends StatefulWidget {
     this.maxLength = 20,
     this.isPassword = false,
     this.helperText,
+    this.errorText,
   });
 
   @override
@@ -37,14 +39,14 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
           maxLength: widget.maxLength,
           onChanged: (value) {
             if (widget.onInputTextChanged != null) {
-            widget.onInputTextChanged!(value);
+              widget.onInputTextChanged!(value);
             }
-
           },
           decoration: InputDecoration(
             labelText: widget.label,
             hintText: widget.hint,
             helperText: widget.helperText,
+            errorText: widget.errorText,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30.0),
               borderSide: BorderSide.none,

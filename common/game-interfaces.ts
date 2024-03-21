@@ -156,6 +156,7 @@ export interface Lobby {
     time?: number;
     timeLimit: number;
     bonusTime?: number;
+    timePlayed: number;
     chatLog?: ChatLog;
     nDifferences?: number;
 }
@@ -169,6 +170,7 @@ export interface Game {
     difficulty?: string;
     differences?: Coordinate[][];
     nDifferences?: number;
+    playedGameIds?: string[];
 }
 
 export interface Account {
@@ -190,10 +192,10 @@ export interface Profile {
     stats: Statistics;
     friends: Friend[];
     friendRequests: string[];
-    theme: Theme;
+    desktopTheme: Theme;
     language: string;
-    songDifference: Song;
-    songError: Song;
+    onCorrectSound: Sound;
+    onErrorSound: Sound;
 }
 
 export interface SessionLog {
@@ -203,11 +205,11 @@ export interface SessionLog {
 
 export interface ConnectionLog {
     timestamp: string;
-    isConnexion: boolean;
+    isConnection: boolean;
 }
 
 export interface Statistics {
-    gamePlayed: number;
+    gamesPlayed: number;
     gameWon: number;
     averageTime: number;
     averageDifferences: number;
@@ -256,15 +258,7 @@ export interface Theme {
     buttonColor: string;
 }
 
-export interface Song {
+export interface Sound {
     name: string;
-    link: string;
+    path: string;
 }
-
-// export interface modifyProfile {
-//     avatar: string;
-//     name: string;
-//     theme: Theme;
-//     language: string;
-//     password: string;
-// }
