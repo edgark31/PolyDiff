@@ -13,7 +13,12 @@ class _GameInfosState extends State<GameInfos> {
 
   @override
   Widget build(BuildContext context) {
-    int timer = 120;
+    //TODO: Connect these attributes to real values from the server or lobby
+    int timer = 240;
+    int nbDifferencesPresent = 4;
+    String gameMode = "Classic";
+    int nbPlayers = 5;
+
     String formattedTime =
         "${(timer ~/ 60).toString().padLeft(2, '0')}:${(timer % 60).toString().padLeft(2, '0')}";
     return SizedBox(
@@ -26,7 +31,7 @@ class _GameInfosState extends State<GameInfos> {
               children: [
                 SizedBox(width: 380),
                 Text(
-                  'Mode de jeu : Classic',
+                  'Mode de jeu : $gameMode',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -47,7 +52,7 @@ class _GameInfosState extends State<GameInfos> {
               ],
             ),
             Text(
-              'Nombre de différences présentes : 5',
+              'Nombre de différences présentes : $nbDifferencesPresent',
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
@@ -75,7 +80,7 @@ class _GameInfosState extends State<GameInfos> {
                   width: 30,
                 ),
                 Text(
-                  'Différences trouvées : 3',
+                  'Différences trouvées : 0',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -104,7 +109,7 @@ class _GameInfosState extends State<GameInfos> {
                   width: 30,
                 ),
                 Text(
-                  'Différences trouvées : 3',
+                  'Différences trouvées : 0',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -116,61 +121,65 @@ class _GameInfosState extends State<GameInfos> {
             ),
             Row(
               children: [
-                Icon(
-                  Icons.person,
-                  color: Colors.black,
-                  size: 30,
-                ),
-                Text(
-                  'Edgar',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+                if (nbPlayers >= 3) ...[
+                  Icon(
+                    Icons.person,
                     color: Colors.black,
+                    size: 30,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  'Différences trouvées : 3',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+                  Text(
+                    'Edgar',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Text(
+                    'Différences trouvées : 0',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+                if (nbPlayers >= 4) ...[
+                  SizedBox(
+                    width: 130,
+                  ),
+                  Icon(
+                    Icons.person,
                     color: Colors.black,
+                    size: 30,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  width: 130,
-                ),
-                Icon(
-                  Icons.person,
-                  color: Colors.black,
-                  size: 30,
-                ),
-                Text(
-                  'Zaki',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                  Text(
+                    'Zaki',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  'Différences trouvées : 3',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                  SizedBox(
+                    width: 30,
                   ),
-                  textAlign: TextAlign.center,
-                ),
+                  Text(
+                    'Différences trouvées : 0',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ],
             )
           ],
