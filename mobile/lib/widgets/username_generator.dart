@@ -27,7 +27,7 @@ class _UsernameGeneratorState extends State<UsernameGenerator> {
       child: SingleChildScrollView(
         child: Center(
           child: Container(
-            padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: EdgeInsets.only(top: 20.0, bottom: 8.0),
             width: MediaQuery.of(context).size.width * 0.3,
             decoration: BoxDecoration(
               color: kLightOrange.withOpacity(0.7),

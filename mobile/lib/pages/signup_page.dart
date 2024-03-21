@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
-import 'package:mobile/widgets/signup_form.dart';
+import 'package:mobile/widgets/sign_up_form.dart';
 
 class SignUpPage extends StatelessWidget {
-  static const routeName = SIGNUP_ROUTE;
+  static const routeName = SIGN_UP_ROUTE;
 
   static Route<dynamic> route() {
     return MaterialPageRoute(

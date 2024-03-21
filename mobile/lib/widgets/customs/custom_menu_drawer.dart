@@ -5,29 +5,40 @@ import 'package:mobile/constants/enums.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
-import 'package:mobile/widgets/avatar.dart';
+import 'package:mobile/widgets/customs/custom_circle_avatar.dart';
 import 'package:provider/provider.dart';
 
-class CustomMenuDrawer extends StatelessWidget {
+class CustomMenuDrawer extends StatefulWidget {
   const CustomMenuDrawer({super.key});
+
+  @override
+  _CustomMenuDrawerState createState() => _CustomMenuDrawerState();
+}
+
+class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final socketService = context.watch<SocketService>();
-    final infoService = context.watch<InfoService>();
+    // Use Consumer to listen to AvatarProvider changes
+    final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
+    final InfoService infoService = context.read<InfoService>();
+    final SocketService socketService = context.read<SocketService>();
 
-    // user avatar
-    AvatarProvider.instance.setAccountAvatarUrl(infoService.username);
-    final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
     return Drawer(
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(infoService.username),
             accountEmail: Text(infoService.email),
-            currentAccountPicture: Avatar(
-              // TODO: Change avatar
-              imageUrl: avatarUrl,
-              radius: 20,
+            currentAccountPicture: CustomCircleAvatar(
+              // Provide a unique key to force widget rebuild when avatar changes
+              key: ValueKey(avatarProvider.currentAvatarUrl),
+
+              imageUrl: avatarProvider.currentAvatarUrl,
             ),
             decoration: BoxDecoration(color: kMidOrange),
           ),
@@ -58,7 +69,9 @@ class CustomMenuDrawer extends StatelessWidget {
               onTap: () => Navigator.pushNamed(context, ADMIN_ROUTE)),
           SizedBox(height: 10),
           ListTile(
-              leading: Icon(Icons.logout),
+              leading: Icon(
+                Icons.logout,
+              ),
               title: Text('Déconnexion'),
               onTap: () {
                 print('Déconnexion');

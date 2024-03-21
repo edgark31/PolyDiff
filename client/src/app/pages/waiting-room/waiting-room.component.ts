@@ -18,6 +18,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     chatSubscription: Subscription;
     lobbiesSubscription: Subscription;
     private lobbySubscription: Subscription;
+    // eslint-disable-next-line max-params
     constructor(
         public router: Router,
         public roomManagerService: RoomManagerService,

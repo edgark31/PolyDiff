@@ -19,7 +19,7 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CustomMenuDrawer(),
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(title: 'C L A V A R D A G E'),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.width,

@@ -192,10 +192,10 @@ export interface Profile {
     stats: Statistics;
     friends: Friend[];
     friendRequests: string[];
-    theme: Theme;
+    desktopTheme: Theme;
     language: string;
-    songDifference: Song;
-    songError: Song;
+    onCorrectSound: Sound;
+    onErrorSound: Sound;
 }
 
 export interface SessionLog {
@@ -205,7 +205,7 @@ export interface SessionLog {
 
 export interface ConnectionLog {
     timestamp: string;
-    isConnexion: boolean;
+    isConnection: boolean;
 }
 
 export interface Statistics {
@@ -258,15 +258,7 @@ export interface Theme {
     buttonColor: string;
 }
 
-export interface Song {
+export interface Sound {
     name: string;
-    link: string;
+    path: string;
 }
-
-// export interface modifyProfile {
-//     avatar: string;
-//     name: string;
-//     theme: Theme;
-//     language: string;
-//     password: string;
-// }
