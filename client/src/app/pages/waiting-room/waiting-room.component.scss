@@ -50,6 +50,9 @@ h1 {
     font-size: 2.8rem;
     cursor: pointer;
     width: auto;
+    font-family: 'Troika', sans-serif;
+    color: white;
+    -webkit-text-stroke: 1px black;
 }
 
 #nav-bar {
@@ -79,7 +82,7 @@ button {
 
 .element {
     border: 3px #000000 solid;
-    padding: 160px;
+    padding: 200px;
     min-height: 200px;
 }
 
@@ -108,7 +111,10 @@ button {
 }
 
 
-.right {
+.player-count {
+    font-family: 'Troika', sans-serif;
+    color: white;
+    -webkit-text-stroke: 1px black;
 }
 
 .cancel {
@@ -131,16 +137,18 @@ button {
 .players-list {
     position: absolute;
     z-index: 2;
-    left: 57%;
-    bottom: 17%;
-    margin-top: 100px;
+    left: 63%;
+    bottom: 30%;
+    // margin-top: 100px;
 }
 
 .waiting-text {
     font-family: 'Troika', sans-serif;
     font-size: 35px;
     width: 600px;
-    color: black;
+    color: white;
+    -webkit-text-stroke: 1px black;
+    padding-top: 26px;
 }
 
 .player-count {
@@ -159,6 +167,8 @@ button {
 
 .player {
     font-family: 'Troika', sans-serif;
+    color: white;
+    -webkit-text-stroke: 1px black;
     font-size: 27px;
     width: 600px;
 }

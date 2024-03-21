@@ -4,9 +4,11 @@ import { Injectable } from '@angular/core';
 import { ReplayEvent } from '@app/interfaces/replay-actions';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
+import { SONG_LIST_DIFFERENCE, SONG_LIST_ERROR } from '@common/constants';
 import { Coordinate } from '@common/coordinate';
 import { Chat, ChatMessageGlobal, Game, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
+import { SoundService } from '@app/services/sound-service/sound.service';
 @Injectable({
     providedIn: 'root',
 })
@@ -38,7 +40,8 @@ export class GameManagerService {
     // eslint-disable-next-line max-params
     constructor(
         private readonly clientSocket: ClientSocketService,
-        private readonly gameAreaService: GameAreaService, // private readonly welcomeService: WelcomeService,
+        private readonly gameAreaService: GameAreaService,
+        private readonly soundService: SoundService,
     ) {
         this.currentGame = new Subject<Game>();
         this.lobbyGame = new Subject<Lobby>(); // used
@@ -262,11 +265,11 @@ export class GameManagerService {
     private replaceDifference(differences: Coordinate[]): void {
         const hasDifferences = differences.length > 0;
         if (!hasDifferences) {
-            // this.soundService.playIncorrectSound(this.welcomeService.account.profile.songError);
+            this.soundService.playIncorrectSound(SONG_LIST_ERROR[0]);
             this.gameAreaService.showError(this.isLeftCanvas, this.gameAreaService.mousePosition);
             return;
         }
-        // this.soundService.playCorrectSoundDifference(this.welcomeService.account.profile.songDifference);
+        this.soundService.playCorrectSoundDifference(SONG_LIST_DIFFERENCE[0]);
         this.gameAreaService.setAllData();
         this.gameAreaService.replaceDifference(differences);
         // this.isFirstDifferencesFound.next(true);
