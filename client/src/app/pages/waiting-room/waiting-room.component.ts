@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
+import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { ChatState, LobbyEvents, MessageTag } from '@common/enums';
+import { LobbyEvents, MessageTag } from '@common/enums';
 import { Subscription } from 'rxjs';
 import { Chat, Lobby } from './../../../../../common/game-interfaces';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
@@ -16,7 +17,9 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     lobby: Lobby;
     lobbies: Lobby[] = [];
     messages: Chat[] = [];
+    messageGlobal: Chat[] = [];
     chatSubscription: Subscription;
+    chatSubscriptionGlobal: Subscription;
     lobbiesSubscription: Subscription;
     private lobbySubscription: Subscription;
     constructor(
@@ -25,12 +28,11 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         private clientSocketService: ClientSocketService,
         public welcome: WelcomeService,
         public gameManager: GameManagerService,
-    ) {
-        this.welcome.currentChatState = ChatState.Waiting;
-    }
+        public globalChatService: GlobalChatService,
+    ) {}
 
     ngOnInit(): void {
-        if (this.welcome.goChat) this.clientSocketService.connect(this.welcome.account.id as string, 'lobby');
+        if (this.welcome.onChatGame) this.clientSocketService.connect(this.welcome.account.id as string, 'lobby');
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         this.roomManagerService.wait = true;
@@ -45,7 +47,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         });
         this.lobbySubscription = this.roomManagerService.lobby$.subscribe((lobby: Lobby) => {
             this.lobby = lobby;
-            console.log('lobbyssss timehjghcgv' + this.lobby.time);
             this.messages = this.lobby.chatLog?.chat as Chat[];
             this.messages.forEach((message: Chat) => {
                 if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Sent;
@@ -60,8 +61,17 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         });
 
         this.clientSocketService.on('lobby', LobbyEvents.Start, () => {
+            this.welcome.onChatLobby = false;
             this.router.navigate(['/game']);
         });
+
+        if (this.clientSocketService.isSocketAlive('auth')) {
+            this.globalChatService.manage();
+            this.globalChatService.updateLog();
+            this.chatSubscriptionGlobal = this.globalChatService.message$.subscribe((message: Chat) => {
+                this.receiveMessageGlobal(message);
+            });
+        }
     }
 
     updateCurrentLobby(): void {
@@ -80,9 +90,20 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         this.roomManagerService.sendMessage(this.lobby.lobbyId, message);
     }
 
+    sendMessageGlobal(message: string): void {
+        console.log('affiche toi message: ' + message);
+        this.globalChatService.sendMessage(message);
+    }
+
     onStart(): void {
         this.roomManagerService.onStart(this.lobby.lobbyId ? this.lobby.lobbyId : '');
     }
+
+    receiveMessageGlobal(chat: Chat): void {
+        this.messageGlobal.push(chat);
+        console.log(this.messageGlobal);
+    }
+
     ngOnDestroy(): void {
         // this.onQuit();
         if (this.clientSocketService.isSocketAlive('lobby')) {
@@ -91,8 +112,10 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.chatSubscription?.unsubscribe();
             this.roomManagerService.off();
             this.gameManager.lobbyWaiting = this.lobby;
-            console.log('lobby time' + this.gameManager.lobbyWaiting.time);
         }
-        this.roomManagerService.wait = false;
+        if (this.clientSocketService.isSocketAlive('auth')) {
+            this.globalChatService.off();
+        }
+        this.chatSubscriptionGlobal?.unsubscribe();
     }
 }

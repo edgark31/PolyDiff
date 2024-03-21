@@ -16,15 +16,19 @@ export class ChatBoxComponent {
     @Output() private addLobby: EventEmitter<string>;
     @Output() private addGame: EventEmitter<string>;
 
-    constructor(private readonly router: Router, public welcome: WelcomeService) {
+    constructor(public router: Router, public welcome: WelcomeService) {
         // this.messages = [];
         this.add = new EventEmitter<string>();
         this.addLobby = new EventEmitter<string>();
         this.addGame = new EventEmitter<string>();
     }
 
-    goPageChat(): void {
-        this.welcome.goChat = !this.welcome.goChat;
+    goPageChatGame(): void {
+        this.welcome.onChatGame = !this.welcome.onChatGame;
+    }
+
+    goPageChatLobby(): void {
+        this.welcome.onChatLobby = !this.welcome.onChatLobby;
     }
     onAdd(inputField: { value: string }): void {
         switch (this.router.url) {
@@ -37,15 +41,21 @@ export class ChatBoxComponent {
                 break;
             }
             case '/waiting-room': {
-                if (inputField.value) {
-                    this.addLobby.emit(inputField.value.trim());
-                    inputField.value = '';
+                if (!this.welcome.onChatLobby) {
+                    if (inputField.value) {
+                        this.addLobby.emit(inputField.value.trim());
+                        inputField.value = '';
+                    }
+                } else {
+                    if (inputField.value) {
+                        this.add.emit(inputField.value.trim());
+                        inputField.value = '';
+                    }
                 }
-
                 break;
             }
             case '/game': {
-                if (!this.welcome.goChat) {
+                if (!this.welcome.onChatGame) {
                     if (inputField.value) {
                         this.addGame.emit(inputField.value.trim());
                         inputField.value = '';

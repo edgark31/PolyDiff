@@ -2,9 +2,19 @@
     <div class="content">
         <div class="contact-profile">
             <p class="chat">Zone de clavardage</p>
+            <!-- <button (click)="welcome.onChatGame ? goPageChat() : goPageChatLobby()"> -->
+                <button *ngIf="router.url==='/game'"(click)="goPageChatGame()">
+                    <span class="icon-circle">
+                <mat-icon>{{ welcome.onChatGame ? 'games' : 'chat' }}</mat-icon>
+            </span>
+              </button>
+
+              <button *ngIf="router.url==='/waiting-room'"(click)="goPageChatLobby()">
+                <span class="icon-circle">
+            <mat-icon>{{ welcome.onChatLobby ? 'meeting_room' : 'chat' }}</mat-icon>
+        </span>
+          </button>
         </div>
-        <button *ngIf="welcome.goChat" (click)=" goPageChat()"> aller à la chat Game</button>
-        <button *ngIf="!welcome.goChat" (click)=" goPageChat()"> aller à la chat page</button>
         <div class="messages">
             <ul>
                 <li [class]="message.tag" *ngFor="let message of messages">

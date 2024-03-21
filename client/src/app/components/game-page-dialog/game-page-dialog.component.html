@@ -1,7 +1,7 @@
     <p class = "abandon" *ngIf="data.action === 'Abandon'">{{ data.message }}</p>
     <div class = "button1" *ngIf="data.action === 'Abandon'">
         <div class="button-container">
-            <button class = "yesButton" mat-button *ngIf="data.action === 'Abandon'" mat-dialog-close (click)="abandonGame()" routerLink="/home"></button>
+            <button class = "yesButton" mat-button *ngIf="data.action === 'Abandon'" mat-dialog-close (click)="abandonGame()"></button>
             <img src="./assets/icon/PlayButton.png" alt="abandonButton">
             <div class="centered-yes">Oui</div>
         </div>

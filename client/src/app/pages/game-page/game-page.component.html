@@ -13,7 +13,6 @@
                 <span *ngIf="gameManager.lobbyWaiting.mode === gameModes.Classic"> Différences trouvées :{{ opponentDifferencesFound }}</span>
             </h1> -->
             <h1>Temps : {{ timer * 1000 | date: 'mm:ss' }}</h1>
-            <button (click)="goPageChat()"> retour page Game</button>
         </div>
         <!-- <app-game-infos [isReplayAvailable]="isReplayAvailable" [game]="game"></app-game-infos> -->
     </div>
@@ -52,11 +51,11 @@
         </div>
     </div>
 
-<div *ngIf="!welcome.goChat">
+<div *ngIf="!welcome.onChatGame">
     <app-chat-box class="chat-box" (addGame)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
 </div>
-<div *ngIf="welcome.goChat">
-    <app-chat-box class="chat-box" (add)="this.sendMessageLobby($event)" [messages]="messagesLobby"></app-chat-box>
+<div *ngIf="welcome.onChatGame">
+    <app-chat-box class="chat-box" (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
 </div>
     <button *ngIf="!isReplayAvailable" class="importantButton justified" (click)="showAbandonDialog()">
         <span id="abandon">Abandonner la partie</span>

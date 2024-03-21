@@ -13,7 +13,7 @@ import { ImageService } from '@app/services/image-service/image.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
-import { ChatState, GameEvents, GameModes, GamePageEvent } from '@common/enums';
+import { GameEvents, GameModes, GamePageEvent } from '@common/enums';
 import { Chat, ClientSideGame, Game, Players } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
@@ -34,7 +34,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     opponentDifferencesFound: number;
     timer: number;
     messages: Chat[];
-    messagesLobby: Chat[];
+    messageGlobal: Chat[];
     player: string;
     players: Players;
     hintsAssets: string[];
@@ -44,7 +44,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
-    chatSubscriptionlobby: Subscription;
+    chatSubscriptionGlobal: Subscription;
     timeSubscription: Subscription;
     private gameSubscription: Subscription;
     private canvasGameSubscription: Subscription;
@@ -67,14 +67,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.opponentDifferencesFound = 0;
         this.timer = 0;
         this.messages = [];
-        this.messagesLobby = [];
+        this.messageGlobal = [];
         this.hintsAssets = ASSETS_HINTS;
         this.player = '';
         this.players = DEFAULT_PLAYERS;
         this.canvasSize = CANVAS_MEASUREMENTS;
         this.isReplayAvailable = false;
         this.gameMode = GameModes;
-        this.welcome.currentChatState = ChatState.Game;
     }
 
     private get differences(): Coordinate[][] {
@@ -108,14 +107,14 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
         this.clientSocket.on('game', GameEvents.EndGame, (response: string) => {
             this.router.navigate(['/game-mode']);
-            this.welcome.goChat = false;
+            this.welcome.onChatGame = false;
         });
 
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.manage();
             this.globalChatService.updateLog();
-            this.chatSubscriptionlobby = this.globalChatService.message$.subscribe((message: Chat) => {
-                this.receiveMessageLobby(message);
+            this.chatSubscriptionGlobal = this.globalChatService.message$.subscribe((message: Chat) => {
+                this.receiveMessageGlobal(message);
             });
         }
     }
@@ -136,7 +135,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.gameManager.sendMessage(this.gameLobby.lobbyId, message);
     }
 
-    sendMessageLobby(message: string): void {
+    sendMessageGlobal(message: string): void {
         console.log('affiche toi message: ' + message);
         this.globalChatService.sendMessage(message);
     }
@@ -145,13 +144,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         console.log(this.messages);
     }
 
-    receiveMessageLobby(chat: Chat): void {
-        this.messagesLobby.push(chat);
-        console.log(this.messagesLobby);
+    receiveMessageGlobal(chat: Chat): void {
+        this.messageGlobal.push(chat);
+        console.log(this.messageGlobal);
     }
 
-    goPageChat(): void {
-        this.welcome.goChat = true;
+    goPageChatGame(): void {
+        this.welcome.onChatGame = true;
         this.clientSocket.disconnect('game');
         this.router.navigate(['/chat']);
     }
@@ -186,7 +185,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.off();
         }
-        this.chatSubscriptionlobby?.unsubscribe();
+        this.chatSubscriptionGlobal?.unsubscribe();
     }
 
     setUpGame(): void {

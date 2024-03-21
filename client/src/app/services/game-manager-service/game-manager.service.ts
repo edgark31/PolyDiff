@@ -154,7 +154,7 @@ export class GameManagerService {
     //     this.clientSocket.send('game', MessageEvents.LocalMessage, newMessage);
     // }
 
-    sendMessageLobby(lobbyId: string | undefined, message: string): void {
+    sendMessageGlobal(lobbyId: string | undefined, message: string): void {
         this.clientSocket.send('auth', ChannelEvents.SendGameMessage, { lobbyId, message });
     }
 

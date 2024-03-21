@@ -7,18 +7,19 @@ import { CommunicationService } from '../communication-service/communication.ser
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
 import { GameManagerService } from '../game-manager-service/game-manager.service';
 // eslint-disable-next-line no-restricted-imports
-import { ChatState } from '@common/enums';
+import { Subject } from 'rxjs';
 import { SoundService } from '../sound-service/sound.service';
 @Injectable({
     providedIn: 'root',
 })
 export class WelcomeService {
-    goChat: boolean = false;
+    onChatGame: boolean = false;
+    onChatLobby: boolean = false;
     isLoggedIn = localStorage.getItem('isLogged') === 'true';
     songListDifference = SONG_LIST_DIFFERENCE;
     songListError = SONG_LIST_ERROR;
     account: Account;
-    isLimited: boolean;
+
     selectLocal: string;
     selectAvatar: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
     selectAvatarRegister: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
@@ -32,8 +33,11 @@ export class WelcomeService {
     selectLanguage: string;
     language = LANGUAGES;
     themePersonnalization = THEME_PERSONNALIZATION;
-    currentChatState: ChatState = ChatState.Nothing;
-    constructor(private communication: CommunicationService, public gameManager: GameManagerService, private sound: SoundService) {}
+    currentLangageTranslate: Subject<string>;
+
+    constructor(private communication: CommunicationService, public gameManager: GameManagerService, private sound: SoundService) {
+        this.currentLangageTranslate = new Subject<string>();
+    }
 
     async validate(password: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
@@ -68,7 +72,9 @@ export class WelcomeService {
             });
         });
     }
-
+    updateLangageTranslate() {
+        this.currentLangageTranslate.next(this.account.profile.language);
+    }
     setLoginState(state: boolean): void {
         localStorage.setItem('isLogged', String(state));
         this.isLoggedIn = state;

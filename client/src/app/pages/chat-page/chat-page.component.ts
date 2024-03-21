@@ -2,8 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
-import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { ChatState } from '@common/enums';
 import { Chat } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
 
@@ -20,10 +18,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
         private readonly clientSocketService: ClientSocketService,
         private readonly globalChatService: GlobalChatService,
         private readonly router: Router,
-        private readonly welcome: WelcomeService,
-    ) {
-        this.welcome.currentChatState = ChatState.Global;
-    }
+    ) {}
 
     ngOnInit(): void {
         if (this.clientSocketService.isSocketAlive('auth')) {

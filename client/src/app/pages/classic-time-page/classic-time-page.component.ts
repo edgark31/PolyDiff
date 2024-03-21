@@ -79,7 +79,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
         }
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
-                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Classic);
+                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Classic); // peut etre rajouter aulieu d'un boolean pour enever les matchs à la fin de la game
                 this.updatepagedLobbies();
                 this.cdr.detectChanges();
             }
