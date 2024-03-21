@@ -19,7 +19,6 @@ import { SelectionPageComponent } from '@app/pages/selection-page/selection-page
 import { WaitingRoomComponent } from '@app/pages/waiting-room/waiting-room.component';
 import { AdminGuard } from '@app/services/adminguard/admin.guard.service';
 
-
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'home', component: MainPageComponent },

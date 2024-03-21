@@ -27,6 +27,7 @@ export class ProfilPageComponent implements AfterViewInit, OnInit {
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
+    // eslint-disable-next-line max-params
     constructor(
         private readonly router: Router,
         public welcomeService: WelcomeService,
