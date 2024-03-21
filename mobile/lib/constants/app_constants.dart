@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:mobile/models/account.dart';
 
 // Background image paths
 const String EMPTY_BACKGROUND_PATH = 'assets/images/empty_background.jpg';
@@ -8,6 +9,26 @@ const String MENU_BACKGROUND_PATH = 'assets/images/menu_background.jpg';
 const String SELECTION_BACKGROUND_PATH =
     'assets/images/selection_background.jpg';
 const String GAME_BACKGROUND_PATH = 'assets/images/game_background.jpg';
+
+// Default sounds
+
+const Sound DEFAULT_ON_ERROR_SOUND =
+    Sound(name: "NOT GOOD 1", path: "assets/sound/error1.mp3");
+const Sound DEFAULT_ON_CORRECT_SOUND =
+    Sound(name: "TOO GOOD 1", path: "assets/sound/correct1.mp3");
+
+const List<Sound> ERROR_SOUND_LIST = [
+  Sound(name: "NOT GOOD 1", path: "assets/sound/error1.mp3"),
+  Sound(name: "NOT GOOD 2", path: "assets/sound/error2.mp3"),
+  Sound(name: "NOT GOOD 3", path: "assets/sound/error3.mp3"),
+];
+
+// Default Correct sounds
+const List<Sound> CORRECT_SOUND_LIST = [
+  Sound(name: "TOO GOOD 1", path: "assets/sound/correct1.mp3"),
+  Sound(name: "TOO GOOD 2", path: "assets/sound/correct2.mp3"),
+  Sound(name: "TOO GOOD 3", path: "assets/sound/correct1.mp3"),
+];
 
 // Colors
 const kDark = Colors.black;

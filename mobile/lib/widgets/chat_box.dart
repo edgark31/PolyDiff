@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,8 @@ class _ChatBoxState extends State<ChatBox> {
   @override
   Widget build(BuildContext context) {
     final infoService = context.watch<InfoService>();
-    final username = infoService.username;
+    final avatarProvider = context.watch<AvatarProvider>();
+    dynamic username = infoService.username;
     final chatService = context.watch<ChatService>();
 
     // user avatar
@@ -99,8 +101,10 @@ class _ChatBoxState extends State<ChatBox> {
                           : CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              '$BASE_URL/avatar/${messages[index].name}.png'), // TODO : Show by userId when implement on server
+                          key: UniqueKey(),
+                          backgroundImage:
+                          // TODO : fix to show other person avatar
+                              NetworkImage(avatarProvider.currentAvatarUrl),
                           radius: 15.0,
                         ),
                         Text(

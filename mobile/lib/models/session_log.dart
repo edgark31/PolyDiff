@@ -19,23 +19,23 @@ class SessionLog {
   }
 }
 
-class ConnexionLog {
+class ConnectionLog {
   String timestamp;
-  bool isConnexion;
+  bool isConnection;
 
-  ConnexionLog({required this.timestamp, required this.isConnexion});
+  ConnectionLog({required this.timestamp, required this.isConnection});
 
-  factory ConnexionLog.fromJson(Map<String, dynamic> json) {
-    return ConnexionLog(
+  factory ConnectionLog.fromJson(Map<String, dynamic> json) {
+    return ConnectionLog(
       timestamp: json['timestamp'],
-      isConnexion: json['isConnexion'],
+      isConnection: json['isConnection'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'timestamp': timestamp,
-      'isConnexion': isConnexion,
+      'isConnection': isConnection,
     };
   }
 }

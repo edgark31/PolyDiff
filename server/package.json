@@ -64,6 +64,7 @@
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-unicorn": "^43.0.2",
         "jest": "28.1.2",
+        "jimp": "^0.22.12",
         "mongodb-memory-server": "^8.9.0",
         "ncp": "^2.0.0",
         "prettier": "^2.3.2",
