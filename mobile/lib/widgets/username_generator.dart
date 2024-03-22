@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/services/services.dart';
 
 class UsernameGenerator extends StatefulWidget {
@@ -37,7 +38,7 @@ class _UsernameGeneratorState extends State<UsernameGenerator> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Options de génération nom d'utilisateur",
+                  GENERATE_USERNAME_OPTIONS_TXT,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                   textAlign: TextAlign.center,
                 ),
@@ -60,8 +61,8 @@ class _UsernameGeneratorState extends State<UsernameGenerator> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _languageOption('En français', 1),
-              _languageOption('En anglais', 2),
+              _languageOption(IN_FRENCH_TXT, 1),
+              _languageOption(IN_ENGLISH_TXT, 2),
             ],
           ),
         ],

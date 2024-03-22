@@ -18,6 +18,11 @@ const String NO = "Non";
 const String WEAK_PASSWORD = "Faible";
 const String AVERAGE_PASSWORD = "Moyen";
 const String STRONG_PASSWORD = "Élevé";
+const String PASSWORDS_DONT_MATCH = "Les mots de passe ne correspondent pas";
+const String GENERATE_USERNAME_OPTIONS_TXT =
+    "Options de génération nom d'utilisateur";
+const String IN_FRENCH_TXT = "En français";
+const String IN_ENGLISH_TXT = "En anglais";
 
 // Game modes
 const String GAME_MODES_TXT = 'Modes de jeux';
