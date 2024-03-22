@@ -156,7 +156,7 @@ export class GameGateway implements OnGatewayConnection {
                 const game = await this.nextGame(lobbyId, this.games.get(lobbyId).playedGameIds);
                 if (!game) {
                     const { winningPlayers, message } = this.limitedEndCheck(lobbyId);
-                    this.logger.log(`Game ${lobbyId} ended with ${winningPlayers.length} winners`);
+                    this.logger.log(`Game ${lobbyId} ended with ${winningPlayers.length} winner(s)`);
                     this.server.to(lobbyId).emit(GameEvents.EndGame);
                     winningPlayers.length === 1 ? this.logOneWinner(lobbyId, winningPlayers[0].accountId) : this.logDraw(lobbyId);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
@@ -212,11 +212,8 @@ export class GameGateway implements OnGatewayConnection {
         socket.data.state = GameState.InGame;
 
         socket.on('disconnecting', () => {
-            const lobbyId: string = Array.from(socket.rooms)[1] as string;
-            if (!lobbyId) return;
             switch (socket.data.state) {
                 case GameState.InGame:
-                    this.abandonGame(socket, lobbyId);
                     break;
                 case GameState.Abandoned:
                     break;

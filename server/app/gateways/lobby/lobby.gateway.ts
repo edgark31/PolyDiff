@@ -153,18 +153,14 @@ export class LobbyGateway implements OnGatewayConnection {
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
         // HANDLE DISCONNECT-ING ***
         socket.on('disconnecting', () => {
-            const lobbyId: string = Array.from(socket.rooms)[1] as string;
-            if (!lobbyId) return;
             switch (socket.data.state) {
                 case LobbyState.Idle:
                     break;
                 case LobbyState.Waiting: // ta deja rejoint une room
-                    this.leave(socket, lobbyId);
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
                     break;
                 case LobbyState.Spectating: // ta deja rejoint une room
-                    this.leave(socket, lobbyId);
                     break;
                 default:
                     break;
