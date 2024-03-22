@@ -8,7 +8,6 @@
         </button>
         <div *ngFor="let lobby of pagedLobbies">
             <div *ngIf="lobby.mode === gameModes.Classic">
-                <img alt="background-image" id="image" src="./assets/gameSheet.png"/>
                 <app-room-sheet [lobby]="lobby"></app-room-sheet>
             </div>
         </div>

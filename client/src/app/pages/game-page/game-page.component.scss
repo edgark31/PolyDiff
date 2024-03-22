@@ -11,10 +11,10 @@
     text-align: center;
 }
 
-.right {
-    flex: 2;
-    padding-left: 800px;
-}
+// .right {
+//     flex: 2;
+//     padding-left: 800px;
+// }
 
 #game-page {
     background-color: #67a28b;
@@ -23,11 +23,16 @@
 }
 
 .canvas-container {
-    display: grid;
-    grid-template-columns: repeat(2, 700px);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    top: 0;
+    z-index: 1;
 }
+
 
 .game-canvas {
     position: relative;
@@ -42,30 +47,26 @@ canvas {
     border: 5px solid black;
     border-radius: 15px;
     left: 0;
-    top: 350px;
+    top: 0;
     width: 100%;
     height: 100%;
-    max-width: 500px;
-    max-height: 350px;
+    max-width: 640px;
+    max-height: 480px;
 }
 
 #original {
     z-index: 1;
-    left: 100px;
 }
 
 #originalFG {
     z-index: 2;
-    left: 100px;
 }
 
 #modified {
     z-index: 1;
-    right: 300px;
 }
 #modifiedFG {
     z-index: 2;
-    right: 300px;
 }
 
 .background {
@@ -82,13 +83,13 @@ canvas {
     height: 10;
     border-radius: 15px;
     padding: 10px;
-    margin: 0 20px 10px 20px;
+    padding-top: 35px;
+    margin: 0 20px 0 20px;
     border: solid none;
     z-index: 1;
 }
 
 .information-header h1 {
-    margin-top: 60px;
     font-size: 40px;
     font-weight: 700;
     font-family: 'Troika', sans-serif;
@@ -151,8 +152,8 @@ canvas {
 
 app-chat-box {
     position: absolute;
-    left: 67.5%;
-    bottom: 13%;
+    left: 35.75%;
+    bottom: 15%;
     z-index: 1;
 }
 

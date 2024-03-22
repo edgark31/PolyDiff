@@ -274,6 +274,7 @@ export class RoomManagerService {
                 this.lobbyGame = lobby;
                 this.lobby.next(lobby);
             });
+
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });
