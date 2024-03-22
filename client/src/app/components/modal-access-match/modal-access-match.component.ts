@@ -17,6 +17,7 @@ export class ModalAccessMatchComponent {
     isPasswordWrong: boolean = false;
     isAccessPassInvalid: boolean = true;
 
+    // eslint-disable-next-line max-params
     constructor(
         // private welcomeService: WelcomeService,
         private router: Router,

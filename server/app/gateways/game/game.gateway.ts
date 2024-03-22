@@ -49,7 +49,7 @@ export class GameGateway implements OnGatewayConnection {
                         name: game.name,
                         original: game.originalImage,
                         modified: game.modifiedImage,
-                        gameId: game._id,
+                        gameId: game._id.toString(),
                         differences: JSON.parse(game.differences) as Coordinate[][],
                         nDifferences: JSON.parse(game.differences).length,
                     });
@@ -148,6 +148,7 @@ export class GameGateway implements OnGatewayConnection {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
                     difference,
                 });
+                // eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-unused-expressions
                 this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
                 // Load la next game
                 const game = await this.nextGame(lobbyId, this.games.get(lobbyId).playedGameIds);

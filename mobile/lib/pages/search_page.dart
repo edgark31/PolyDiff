@@ -4,7 +4,7 @@ import 'package:mobile/constants/app_routes.dart';
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
-  static const routeName = SEARCH_ROUTE;
+  static const routeName = SEARCH_FRIEND_ROUTE;
 
   static Route<dynamic> route() {
     return MaterialPageRoute(

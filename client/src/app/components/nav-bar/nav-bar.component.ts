@@ -17,6 +17,7 @@ export class NavBarComponent {
     readonly profileRoute: string;
     readonly friendsRoute: string;
 
+    // eslint-disable-next-line max-params
     constructor(
         public welcomeService: WelcomeService,
         public gameManager: GameManagerService,
