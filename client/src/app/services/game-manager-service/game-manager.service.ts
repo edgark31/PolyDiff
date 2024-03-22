@@ -4,11 +4,11 @@ import { Injectable } from '@angular/core';
 import { ReplayEvent } from '@app/interfaces/replay-actions';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
+import { SoundService } from '@app/services/sound-service/sound.service';
 import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST } from '@common/constants';
 import { Coordinate } from '@common/coordinate';
 import { Chat, ChatMessageGlobal, Game, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
-import { SoundService } from '@app/services/sound-service/sound.service';
 @Injectable({
     providedIn: 'root',
 })
@@ -202,8 +202,6 @@ export class GameManagerService {
         this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
             this.timerLobby.next(time);
         });
-
-
         // this.clientSocket.on('game', GameEvents.GameStarted, (room: GameRoom) => {
         //     this.currentGame.next(room.clientGame);
         //     this.gameConstants = room.gameConstants;
