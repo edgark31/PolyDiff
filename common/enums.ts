@@ -11,6 +11,13 @@ export enum PlayerEvents {
     WaitingPlayerNameListUpdated = 'WaitingPlayerNameListUpdated',
 }
 
+export enum ChatState {
+    Global = 'Global',
+    Waiting = 'Waiting',
+    Game = 'Game',
+    Nothing = 'Nothing',
+}
+
 export enum GameCardEvents {
     ResetTopTime = 'ResetTopTime',
     ResetAllTopTimes = 'ResetAllTopTimes',
