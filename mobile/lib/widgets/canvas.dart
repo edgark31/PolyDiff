@@ -40,13 +40,11 @@ class OriginalCanvas extends GameCanvas {
                   GameCanvas.tabletScalingRatio;
               y.value = details.localPosition.dy.toDouble() /
                   GameCanvas.tabletScalingRatio;
-              gameManagerService.sendCoord(lobbyService.lobby.lobbyId,
-                  Coordinate(x: x.value.toInt(), y: y.value.toInt()));
-              // gameAreaService.validateCoord(
-              //     Coordinate(x: x.value.toInt(), y: y.value.toInt()),
-              //     tempGameManager.testConvert(),
-              //     tempGameManager.testConvert2(),
-              //     true);
+              if (!gameAreaService.isClickDisabled) {
+                gameManagerService.setIsLeftCanvas(true);
+                gameManagerService.sendCoord(lobbyService.lobby.lobbyId,
+                    Coordinate(x: x.value.toInt(), y: y.value.toInt()));
+              }
             },
             child: SizedBox(
               width: images.original.width.toDouble() *
@@ -97,8 +95,11 @@ class ModifiedCanvas extends GameCanvas {
                   GameCanvas.tabletScalingRatio;
               y.value = details.localPosition.dy.toDouble() /
                   GameCanvas.tabletScalingRatio;
-              gameManagerService.sendCoord(lobbyService.lobby.lobbyId,
-                  Coordinate(x: x.value.toInt(), y: y.value.toInt()));
+              if (!gameAreaService.isClickDisabled) {
+                gameManagerService.setIsLeftCanvas(false);
+                gameManagerService.sendCoord(lobbyService.lobby.lobbyId,
+                    Coordinate(x: x.value.toInt(), y: y.value.toInt()));
+              }
             },
             child: SizedBox(
               width: images.original.width.toDouble() *

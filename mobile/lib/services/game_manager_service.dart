@@ -13,6 +13,7 @@ class GameManagerService extends ChangeNotifier {
   final SocketService socketService = Get.find();
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();
+  bool isLeftCanvas = true;
 
   Game get game => _game;
   int get time => _time;
@@ -27,6 +28,10 @@ class GameManagerService extends ChangeNotifier {
     print("New time setted");
     _time = newTime;
     notifyListeners();
+  }
+
+  void setIsLeftCanvas(isLeft) {
+    isLeftCanvas = isLeft;
   }
 
   void startGame(String? lobbyId) {
@@ -62,6 +67,17 @@ class GameManagerService extends ChangeNotifier {
           .map<Coordinate>((coordinate) => Coordinate.fromJson(coordinate))
           .toList();
       gameAreaService.showDifferenceFound(coord);
+    });
+
+    socketService.on(SocketType.Game, GameEvents.NotFound.name, (data) {
+      print("showing error");
+      Coordinate currentCoord =
+          Coordinate.fromJson(data as Map<String, dynamic>);
+      if (isLeftCanvas) {
+        gameAreaService.showDifferenceNotFoundLeft(currentCoord);
+      } else {
+        gameAreaService.showDifferenceNotFoundRight(currentCoord);
+      }
     });
 
     socketService.on(SocketType.Game, GameEvents.TimerUpdate.name, (data) {

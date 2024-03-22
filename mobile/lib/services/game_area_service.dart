@@ -7,7 +7,6 @@ import 'package:mobile/services/sound_service.dart';
 class GameAreaService extends ChangeNotifier {
   final SoundService soundService = Get.put(SoundService());
   GameAreaService();
-  Coordinate? currentCoord;
   List<Coordinate> coordinates = [];
   List<Coordinate> leftErrorCoord = [];
   List<Coordinate> rightErrorCoord = [];
@@ -19,28 +18,10 @@ class GameAreaService extends ChangeNotifier {
   bool isCheatMode = false;
   bool isClickDisabled = false;
 
-  // This only validates the smile and the left circle
-  // This won't be here when the connection between client and server is done
-  void validateCoord(Coordinate coord, List<Coordinate> coordList,
-      List<Coordinate> coordList2, bool isLeft) {
-    currentCoord = coord;
-    if ((coordList.contains(coord) || coordList2.contains(coord)) &&
-        !isClickDisabled) {
-      if (coordList.contains(coord)) {
-        showDifferenceFound(coordList);
-      } else {
-        showDifferenceFound(coordList2);
-      }
-    } else {
-      if (isLeft && !isClickDisabled) {
-        print("ERROR on left canvas");
-        showDifferenceNotFoundLeft();
-      } else if (!isLeft && !isClickDisabled) {
-        print("ERROR on right canvas");
-        showDifferenceNotFoundRight();
-      }
-    }
-  }
+  // if (isLeft) {
+  //   showDifferenceNotFoundLeft();
+  // } else if (!isLeft) {
+  //   showDifferenceNotFoundRight();
 
   void showDifferenceFound(List<Coordinate> newCoordinates) {
     soundService.playCorrectSound();
@@ -51,10 +32,10 @@ class GameAreaService extends ChangeNotifier {
     startBlinking(newCoordinates);
   }
 
-  void showDifferenceNotFoundLeft() {
+  void showDifferenceNotFoundLeft(Coordinate currentCoord) {
     isClickDisabled = true;
     soundService.playErrorSound();
-    leftErrorCoord.add(currentCoord!);
+    leftErrorCoord.add(currentCoord);
     notifyListeners();
     Future.delayed(Duration(seconds: 1), () {
       leftErrorCoord = [];
@@ -63,10 +44,10 @@ class GameAreaService extends ChangeNotifier {
     });
   }
 
-  showDifferenceNotFoundRight() {
+  showDifferenceNotFoundRight(Coordinate currentCoord) {
     isClickDisabled = true;
     soundService.playErrorSound();
-    rightErrorCoord.add(currentCoord!);
+    rightErrorCoord.add(currentCoord);
     notifyListeners();
     Future.delayed(Duration(seconds: 1), () {
       rightErrorCoord = [];
