@@ -5,6 +5,7 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
 import { GamePageEvent } from '@common/enums';
+import { Lobby } from '@common/game-interfaces';
 @Component({
     selector: 'app-game-page-dialog',
     templateUrl: './game-page-dialog.component.html',
@@ -13,7 +14,7 @@ import { GamePageEvent } from '@common/enums';
 export class GamePageDialogComponent {
     isReplayPaused: boolean;
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: { action: GamePageEvent; message: string; isReplayMode: boolean },
+        @Inject(MAT_DIALOG_DATA) public data: { action: GamePageEvent; message: string; lobby: Lobby; isReplayMode: boolean },
         private readonly gameManager: GameManagerService,
         private readonly replayService: ReplayService,
         private router: Router,
@@ -23,7 +24,7 @@ export class GamePageDialogComponent {
     }
 
     abandonGame(): void {
-        this.gameManager.abandonGame();
+        this.gameManager.abandonGame(this.data.lobby.lobbyId as string);
         this.clientSocket.disconnect('game');
         this.router.navigate(['/game-mode']);
     }

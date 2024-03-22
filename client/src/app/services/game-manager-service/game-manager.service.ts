@@ -20,8 +20,8 @@ export class GameManagerService {
     isLeftCanvas: boolean;
     game: Subject<Game>;
     timerLobby: Subject<number>;
-    lobbyWaiting: Lobby;
     endGame: string;
+    lobbyWaiting: Lobby;
     private lobbyGame: Subject<Lobby>;
     private timer: Subject<number>;
     private differenceFound: Subject<Coordinate[]>;
@@ -29,6 +29,7 @@ export class GameManagerService {
     private opponentDifferencesFound: Subject<number>;
     private currentGame: Subject<Game>;
     private message: Subject<Chat>;
+    private abandon: Subject<string>;
     private endMessage: Subject<string>;
     private players: Subject<Players>;
     private isFirstDifferencesFound: Subject<boolean>;
@@ -53,6 +54,7 @@ export class GameManagerService {
         this.game = new Subject<Game>();
         this.timerLobby = new Subject<number>();
         this.message = new Subject<Chat>();
+        this.abandon = new Subject<string>();
         this.endMessage = new Subject<string>();
         this.opponentDifferencesFound = new Subject<number>();
         this.replayEventsSubject = new Subject<ReplayEvent>();
@@ -78,6 +80,10 @@ export class GameManagerService {
     }
     get message$() {
         return this.message.asObservable();
+    }
+
+    get abandon$() {
+        return this.abandon.asObservable();
     }
 
     get game$() {
@@ -144,8 +150,8 @@ export class GameManagerService {
         this.clientSocket.send('game', GameEvents.Clic, { lobbyId: id, coordClic: coords });
     }
 
-    abandonGame(): void {
-        this.clientSocket.send('game', GameEvents.AbandonGame);
+    abandonGame(lobbyId: string): void {
+        this.clientSocket.send('game', GameEvents.AbandonGame, lobbyId);
     }
 
     setIsLeftCanvas(isLeft: boolean): void {
@@ -157,7 +163,6 @@ export class GameManagerService {
     }
 
     sendMessage(lobbyId: string | undefined, message: string): void {
-        console.log('game' + message);
         this.clientSocket.send('game', ChannelEvents.SendGameMessage, { lobbyId, message });
     }
     removeAllListeners(nameSpace: string) {
@@ -200,6 +205,10 @@ export class GameManagerService {
 
         this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
             this.timerLobby.next(time);
+        });
+
+        this.clientSocket.on('game', GameEvents.EndGame, (abandon: string) => {
+            this.abandon.next(abandon);
         });
     }
 
