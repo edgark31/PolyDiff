@@ -29,11 +29,11 @@
         "songError": "choose your sound for error"
     },
 
-    "bouton": {
+    "button": {
         "deconnexion": "Disconnect",
         "returnProfil": "return to profile",
         "GoReglage": "Go to settings",
-        "Reglage": "Settings",
+        "Settings": "Settings",
         "fr": "french",
         "en": "english"
     }
