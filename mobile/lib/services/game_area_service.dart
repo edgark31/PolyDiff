@@ -18,11 +18,6 @@ class GameAreaService extends ChangeNotifier {
   bool isCheatMode = false;
   bool isClickDisabled = false;
 
-  // if (isLeft) {
-  //   showDifferenceNotFoundLeft();
-  // } else if (!isLeft) {
-  //   showDifferenceNotFoundRight();
-
   void showDifferenceFound(List<Coordinate> newCoordinates) {
     soundService.playCorrectSound();
     coordinates.addAll(newCoordinates);
