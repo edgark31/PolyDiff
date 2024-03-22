@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LANGUAGES, SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONNALIZATION } from '@common/constants';
+import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, LANGUAGES, THEME_PERSONALIZATION } from '@common/constants';
 import { Account, Theme } from '@common/game-interfaces';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
 import { CommunicationService } from '../communication-service/communication.service';
@@ -13,8 +13,8 @@ import { SoundService } from '../sound-service/sound.service';
 })
 export class WelcomeService {
     isLoggedIn = localStorage.getItem('isLogged') === 'true';
-    songListDifference = SONG_LIST_DIFFERENCE;
-    songListError = SONG_LIST_ERROR;
+    songListDifference = CORRECT_SOUND_LIST;
+    songListError = ERROR_SOUND_LIST;
     account: Account;
     isLimited: boolean;
     selectLocal: string;
@@ -29,7 +29,7 @@ export class WelcomeService {
     isLinkValid: boolean;
     selectLanguage: string;
     language = LANGUAGES;
-    themePersonnalization = THEME_PERSONNALIZATION;
+    themePersonalization = THEME_PERSONALIZATION;
     constructor(private communication: CommunicationService, public gameManager: GameManagerService, private sound: SoundService) {}
 
     async validate(password: string): Promise<boolean> {
@@ -76,7 +76,7 @@ export class WelcomeService {
     }
 
     onModifyUser() {
-        this.communication.modifyUser(this.gameManager.username, this.selectName).subscribe({
+        this.communication.updateUsername(this.gameManager.username, this.selectName).subscribe({
             next: () => {
                 this.gameManager.username = this.selectName;
             },
@@ -121,7 +121,7 @@ export class WelcomeService {
     onModifyTheme() {
         this.communication.modifyTheme(this.gameManager.username, this.selectTheme).subscribe({
             next: () => {
-                this.account.profile.theme = this.selectTheme;
+                this.account.profile.desktopTheme = this.selectTheme;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';
@@ -140,10 +140,10 @@ export class WelcomeService {
         });
     }
 
-    onModifySongDifference() {
+    onUpdateCorrectSound() {
         this.communication.modifySongDifference(this.gameManager.username, this.sound.correctSoundEffect).subscribe({
             next: () => {
-                this.account.profile.songDifference = this.sound.correctSoundEffect;
+                this.account.profile.onCorrectSound = this.sound.correctSoundEffect;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';
@@ -151,10 +151,10 @@ export class WelcomeService {
         });
     }
 
-    onModifySongError() {
+    onUpdateErrorSound() {
         this.communication.modifySongError(this.gameManager.username, this.sound.incorrectSoundEffect).subscribe({
             next: () => {
-                this.account.profile.songError = this.sound.incorrectSoundEffect;
+                this.account.profile.onErrorSound = this.sound.incorrectSoundEffect;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';

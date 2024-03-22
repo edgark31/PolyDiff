@@ -1,11 +1,11 @@
 class Statistics {
-  int gamePlayed;
+  int gamesPlayed;
   int gameWon;
   double averageTime;
   int averageDifferences;
 
   Statistics({
-    required this.gamePlayed,
+    required this.gamesPlayed,
     required this.gameWon,
     required this.averageTime,
     required this.averageDifferences,
@@ -13,7 +13,7 @@ class Statistics {
 
   factory Statistics.fromJson(Map<String, dynamic> json) {
     return Statistics(
-      gamePlayed: json['gamePlayed'],
+      gamesPlayed: json['gamesPlayed'],
       gameWon: json['gameWon'],
       averageTime: json['averageTime'].toDouble(),
       averageDifferences: json['averageDifferences'],
@@ -22,7 +22,7 @@ class Statistics {
 
   Map<String, dynamic> toJson() {
     return {
-      'gamePlayed': gamePlayed,
+      'gamePlayed': gamesPlayed,
       'gameWon': gameWon,
       'averageTime': averageTime,
       'averageDifferences': averageDifferences,

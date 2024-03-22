@@ -16,7 +16,5 @@
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "cSpell.words": [
-        "essageformat-"
-    ]
+    "cSpell.words": ["essageformat-"]
 }

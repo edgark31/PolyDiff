@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-params */
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescript-eslint/naming-convention */
-import { Account, AccountDocument, Credentials, Song, Theme } from '@app/model/database/account';
+/* eslint-disable max-lines */
+import { Account, AccountDocument, Credentials, Sound, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
-import { SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONNALIZATION } from '@common/constants';
+import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, THEME_PERSONALIZATION } from '@common/constants';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -45,9 +46,10 @@ export class AccountManagerService implements OnModuleInit {
                     friends: [],
                     friendRequests: [],
                     language: 'en',
-                    theme: THEME_PERSONNALIZATION[0],
-                    songDifference: SONG_LIST_DIFFERENCE[0],
-                    songError: SONG_LIST_ERROR[0],
+                    desktopTheme: THEME_PERSONALIZATION[0],
+                    mobileTheme: 'light',
+                    onCorrectSound: CORRECT_SOUND_LIST[0],
+                    onErrorSound: ERROR_SOUND_LIST[0],
                 },
             };
             await this.accountModel.create(newAccount);
@@ -60,7 +62,7 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async connexion(creds: Credentials): Promise<Account> {
+    async connection(creds: Credentials): Promise<Account> {
         try {
             this.logger.log(`Received connection request from ${creds.username} has connected with password ${creds.password}`);
             const accountFound = await this.accountModel.findOne({
@@ -90,7 +92,7 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async changePseudo(oldUsername: string, newUsername: string): Promise<void> {
+    async updateUsername(oldUsername: string, newUsername: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
             const pseudoFound = await this.accountModel.findOne({ 'credentials.username': newUsername });
@@ -149,12 +151,12 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async changePassword(username: string, newPasword: string): Promise<void> {
+    async updatePassword(username: string, newPassword: string): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');
 
-            accountFound.credentials.password = newPasword;
+            accountFound.credentials.password = newPassword;
 
             await accountFound.save();
             this.connectedUsers.set(accountFound.id, accountFound);
@@ -168,51 +170,68 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async modifySongError(username: string, newSong: Song): Promise<void> {
+    async updateErrorSound(username: string, newSound: Sound): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
-            accountFound.profile.songDifference = newSong;
+            accountFound.profile.onCorrectSound = newSound;
 
             await accountFound.save();
             this.logger.verbose(`${username} has changed his error sound effect`);
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to change song --> ${error.message}`);
+            this.logger.error(`Failed to change sound --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
 
-    async modifySongDifference(username: string, newSong: Song): Promise<void> {
+    async updateCorrectSound(username: string, newSound: Sound): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');
 
-            accountFound.profile.songError = newSong;
+            accountFound.profile.onCorrectSound = newSound;
 
             await accountFound.save();
             this.logger.verbose(`${username} has changed his difference sound effect`);
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to change song --> ${error.message}`);
+            this.logger.error(`Failed to change sound --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
 
-    async modifyTheme(username: string, newTheme: Theme): Promise<void> {
+    async updateDesktopTheme(username: string, newTheme: Theme): Promise<void> {
         try {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
 
-            accountFound.profile.theme = newTheme;
+            accountFound.profile.desktopTheme = newTheme;
 
             await accountFound.save();
-            this.logger.verbose(`${username} has changed his theme`);
+            this.logger.verbose('Desktop theme change');
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to change theme --> ${error.message}`);
+            this.logger.error(`Failed to change desktop theme --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async updateMobileTheme(username: string, newTheme: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.mobileTheme = newTheme;
+
+            await accountFound.save();
+            this.logger.verbose('Mobile Theme change');
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change mobile theme --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
@@ -269,7 +288,7 @@ export class AccountManagerService implements OnModuleInit {
         });
     }
 
-    async connexionToAdmin(password: string): Promise<boolean> {
+    async connectionToAdmin(password: string): Promise<boolean> {
         try {
             if (password !== 'admin') throw new Error('Wrong password');
             return Promise.resolve(password === 'admin');
@@ -286,13 +305,13 @@ export class AccountManagerService implements OnModuleInit {
         });
     }
 
-    deconnexion(id: string): void {
+    disconnection(id: string): void {
         this.connectedUsers.delete(id);
         this.logger.log(`Account ${id} has been disconnected`);
         this.showProfiles();
     }
 
-    async logConnexion(id: string, isConnexion: boolean): Promise<void> {
+    async logConnection(id: string, isConnection: boolean): Promise<void> {
         const account = await this.accountModel.findOne({ id });
         if (account) {
             account.profile.connections.push({
@@ -305,7 +324,7 @@ export class AccountManagerService implements OnModuleInit {
                     minute: '2-digit',
                     second: '2-digit',
                 }),
-                isConnexion,
+                isConnection,
             });
             account.save();
         }
@@ -330,15 +349,4 @@ export class AccountManagerService implements OnModuleInit {
             (account.profile.stats.averageDifferences * (account.profile.stats.gamesPlayed - 1) + count) / account.profile.stats.gamesPlayed;
         account.save();
     }
-
-    // async connexionToAdmin(password: string): Promise<boolean> {
-    //     try {
-    //         console.log(password + 'qdsdss');
-    //         if (password !== 'admin') throw new Error('Wrong password');
-    //         return Promise.resolve(password === 'admin');
-    //     } catch (error) {
-    //         this.logger.error(`Failed to connect --> ${error.message}`);
-    //         return Promise.reject(`${error}`);
-    //     }
-    // }
 }

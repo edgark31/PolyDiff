@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
@@ -34,7 +35,7 @@ class HomePage extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(top: startingPoint),
                     child: Text(
-                      "PolyDiff",
+                      APP_NAME_TXT,
                       style: appstyle(60, kLightOrange, FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
@@ -44,7 +45,7 @@ class HomePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomButton(
-                        text: 'C O N N E X I O N',
+                        text: SIGN_IN_BTN_TXT,
                         press: () {
                           Navigator.pushNamed(context, LOGIN_ROUTE);
                         },
@@ -52,19 +53,9 @@ class HomePage extends StatelessWidget {
                       ),
                       SizedBox(width: 125),
                       CustomButton(
-                        text: "S' I N S C R I R E",
+                        text: SIGN_UP_BTN_TXT,
                         press: () {
-                          Navigator.pushNamed(context, SIGNUP_ROUTE);
-                        },
-                        backgroundColor: kLight,
-                        textColor: kMidGreen,
-                      ),
-                      // TODO : Remove this button after testing canvas
-                      SizedBox(width: 125),
-                      CustomButton(
-                        text: "C~A~N~V~A~S",
-                        press: () {
-                          Navigator.pushNamed(context, CLASSIC_ROUTE);
+                          Navigator.pushNamed(context, SIGN_UP_ROUTE);
                         },
                         backgroundColor: kLight,
                         textColor: kMidGreen,

@@ -1,44 +1,36 @@
 import { Injectable } from '@angular/core';
-import { Song } from '@common/game-interfaces';
+import { Sound } from '@common/game-interfaces';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SoundService {
-    // correctSoundEffect: HTMLAudioElement;
-    // incorrectSoundEffect: HTMLAudioElement;
-    correctSoundEffect: Song;
-    incorrectSoundEffect: Song;
-
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-    constructor() {
-        // this.correctSoundEffect = new Audio('assets/sound/WinSoundEffect.mp3');
-        // this.incorrectSoundEffect = new Audio('assets/sound/ErrorSoundEffect.mp3');
-    }
+    correctSoundEffect: Sound;
+    incorrectSoundEffect: Sound;
 
     playErrorSound(): void {
-        new Audio(this.incorrectSoundEffect.link).play();
+        new Audio(this.incorrectSoundEffect.path).play();
     }
 
     playCorrectSound(): void {
-        new Audio(this.correctSoundEffect.link).play();
+        new Audio(this.correctSoundEffect.path).play();
     }
 
-    playCorrectSoundDifference(song: Song): void {
-        new Audio(song.link).play();
+    playCorrectSoundDifference(song: Sound): void {
+        new Audio(song.path).play();
     }
 
-    playIncorrectSound(song: Song): void {
-        new Audio(song.link).play();
+    playIncorrectSound(sound: Sound): void {
+        new Audio(sound.path).play();
     }
 
-    stopCorrectSound(song: Song): void {
-        new Audio(song.link).pause();
-        new Audio(song.link).currentTime = 0;
+    stopCorrectSound(sound: Sound): void {
+        new Audio(sound.path).pause();
+        new Audio(sound.path).currentTime = 0;
     }
 
-    stopIncorrectSound(song: Song): void {
-        new Audio(song.link).pause();
-        new Audio(song.link).currentTime = 0;
+    stopIncorrectSound(sound: Sound): void {
+        new Audio(sound.path).pause();
+        new Audio(sound.path).currentTime = 0;
     }
 }

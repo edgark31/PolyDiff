@@ -16,26 +16,12 @@ class AvatarPicker extends StatefulWidget {
 }
 
 class _AvatarPickerState extends State<AvatarPicker> {
-  // Service to communicate with server
-  final AvatarService _avatarService = AvatarService();
   // Providers
   final CameraImageProvider _imageProvider = CameraImageProvider();
 
-  ImageProvider? _selectedImage; // Placeholder image
-
-  // selected avatar displayed but not uploaded
-  void _updateSelectedImage(ImageProvider image) {
-    setState(() {
-      _selectedImage = image;
-    });
-    widget.onAvatarSelected(image);
-  }
-
   void _handlePredefinedAvatarSelection(String id) {
-    ImageProvider image = NetworkImage(_avatarService.getDefaultAvatarUrl(id));
-    setState(() {
-      _selectedImage = image;
-    });
+    ImageProvider image = NetworkImage(getDefaultAvatarUrl(id));
+
     widget.onAvatarSelected(image, id: id);
   }
 
@@ -43,11 +29,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
     final String? base64Image = await _imageProvider.pickImageFromCamera();
 
     if (base64Image != null) {
-      ImageProvider image = _avatarService.base64ToImage(base64Image);
-      setState(() {
-        _selectedImage = image;
-      });
-      print("hiiiiiiiiiiii $base64Image");
+      ImageProvider image = base64ToImage(base64Image);
 
       widget.onAvatarSelected(image, base64: base64Image);
     }
@@ -58,7 +40,6 @@ class _AvatarPickerState extends State<AvatarPicker> {
     return Center(
       child: Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.symmetric(vertical: 20.0),
         height: 120,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -71,8 +52,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                   _handlePredefinedAvatarSelection('1');
                 },
                 child: avatarContainer(
-                    NetworkImage(_avatarService.getDefaultAvatarUrl('1')),
-                    kLightGreen),
+                    NetworkImage(getDefaultAvatarUrl('1')), kLightGreen),
               ),
               SizedBox(width: 20),
               // Second predefined avatar container
@@ -81,11 +61,27 @@ class _AvatarPickerState extends State<AvatarPicker> {
                   _handlePredefinedAvatarSelection('2');
                 },
                 child: avatarContainer(
-                    NetworkImage(_avatarService.getDefaultAvatarUrl('2')),
-                    kLightGreen),
+                    NetworkImage(getDefaultAvatarUrl('2')), kLime),
+              ),
+              // Second predefined avatar container
+              SizedBox(width: 20),
+
+              GestureDetector(
+                onTap: () {
+                  _handlePredefinedAvatarSelection('3');
+                },
+                child: avatarContainer(
+                    NetworkImage(getDefaultAvatarUrl('3')), kMidGreen),
               ),
               SizedBox(width: 20),
-              // TODO: Third predefined avatar container
+              GestureDetector(
+                onTap: () {
+                  _handlePredefinedAvatarSelection('5');
+                },
+                child: avatarContainer(
+                    NetworkImage(getDefaultAvatarUrl('5')), kMidGreen),
+              ),
+              SizedBox(width: 20),
               // Tablet camera image container
               GestureDetector(
                 onTap: () => _handleCameraImageSelection(),
@@ -106,13 +102,12 @@ class _AvatarPickerState extends State<AvatarPicker> {
     );
   }
 
-  // TODO: remplace with reusable component
   Widget avatarContainer(ImageProvider image, Color backgroundColor) {
     return SizedBox(
       width: 100,
       child: CircleAvatar(
         backgroundColor: backgroundColor,
-        radius: 50,
+        radius: 70,
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           backgroundImage: image,

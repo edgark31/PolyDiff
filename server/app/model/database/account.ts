@@ -1,5 +1,4 @@
 // eslint-disable-next-line max-classes-per-file
-import { ConnectionLog } from '@common/game-interfaces';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
@@ -33,27 +32,28 @@ export class Theme {
 export const themeSchema = SchemaFactory.createForClass(Theme);
 
 @Schema({ _id: false })
-export class Song {
+export class Sound {
     @Prop({ required: true })
     name: string;
 
     @Prop({ required: false })
-    link: string;
+    path: string;
 }
 
-export const songSchema = SchemaFactory.createForClass(Song);
+export const soundSchema = SchemaFactory.createForClass(Sound);
 
 @Schema({ _id: false })
-export class ConnexionLog {
+export class ConnectionLog {
     @Prop({ required: true })
     timestamp: string;
 
     @Prop({ required: true })
-    isConnexion: boolean;
+    isConnection: boolean;
 }
 
-export const connexionLogSchema = SchemaFactory.createForClass(ConnexionLog);
+export const connectionLogSchema = SchemaFactory.createForClass(ConnectionLog);
 
+@Schema({ _id: false })
 export class Statistics {
     @Prop({ required: true })
     gamesPlayed: number;
@@ -101,7 +101,7 @@ export class Profile {
     @Prop({ type: [sessionLogSchema], default: [] })
     sessions: SessionLog[];
 
-    @Prop({ type: [connexionLogSchema], default: [] })
+    @Prop({ type: [connectionLogSchema], default: [] })
     connections: ConnectionLog[];
 
     @Prop({ type: statisticsSchema, required: true })
@@ -117,13 +117,16 @@ export class Profile {
     language: string;
 
     @Prop({ type: themeSchema, required: false })
-    theme: Theme;
+    desktopTheme: Theme;
 
-    @Prop({ type: songSchema, required: false })
-    songDifference: Song;
+    @Prop({ type: String, required: false })
+    mobileTheme: string;
 
-    @Prop({ type: songSchema, required: false })
-    songError: Song;
+    @Prop({ type: soundSchema, required: false })
+    onCorrectSound: Sound;
+
+    @Prop({ type: soundSchema, required: false })
+    onErrorSound: Sound;
 }
 
 export const profileSchema = SchemaFactory.createForClass(Profile);
