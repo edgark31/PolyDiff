@@ -99,6 +99,7 @@ export enum LobbyState {
     Idle = 'LobbyIdle',
     Waiting = 'LobbyWaiting',
     InGame = 'LobbyInGame',
+    Spectating = 'LobbySpectating',
 }
 
 export enum AccountEvents {
@@ -146,7 +147,6 @@ export enum GameEvents {
 
 export enum GameState {
     InGame = 'GameInGame',
-    Left = 'GameHasLeft',
     Abandoned = 'GameHasAbandoned',
 }
 

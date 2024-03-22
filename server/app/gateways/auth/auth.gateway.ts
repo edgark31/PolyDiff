@@ -40,16 +40,19 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.globalChatLog = { chat: [], channelName: 'global' };
     }
 
+    // Pour la recherche des users, à envoyer à chaque nouveau caractère dans la searchbar
     @SubscribeMessage(AccountEvents.UpdateUsers)
     retrivesUsers() {
         this.server.emit(AccountEvents.UpdateUsers, Array.from(this.accountManager.users.values()));
     }
 
+    // À envoyer à chaque nouveau compte créé
     @SubscribeMessage(AccountEvents.UserCreated)
     handleUserCreated() {
         this.server.emit(AccountEvents.UpdateUsers, Array.from(this.accountManager.users.values()));
     }
 
+    // À envoyer à chaque compte supprimé
     @SubscribeMessage(AccountEvents.UserDeleted)
     handleUserDeleted() {
         this.server.emit(AccountEvents.UpdateUsers, Array.from(this.accountManager.users.values()));
