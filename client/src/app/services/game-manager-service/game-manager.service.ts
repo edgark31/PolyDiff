@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { ReplayEvent } from '@app/interfaces/replay-actions';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
-import { SONG_LIST_DIFFERENCE, SONG_LIST_ERROR } from '@common/constants';
+import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST } from '@common/constants';
 import { Coordinate } from '@common/coordinate';
 import { Chat, ChatMessageGlobal, Game, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
@@ -188,7 +188,11 @@ export class GameManagerService {
         });
 
         this.clientSocket.on('game', GameEvents.Found, (data: { lobby: Lobby; difference: Coordinate[] }) => {
-            this.handleRemoveDifference(data.lobby, data.difference);
+            this.handleFound(data.lobby, data.difference);
+        });
+
+        this.clientSocket.on('game', GameEvents.NotFound, (coordClic: Coordinate) => {
+            this.handleNotFound(coordClic);
         });
 
         this.clientSocket.on('game', ChannelEvents.GameMessage, (chat: Chat) => {
@@ -198,6 +202,7 @@ export class GameManagerService {
         this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
             this.timerLobby.next(time);
         });
+
 
         // this.clientSocket.on('game', GameEvents.GameStarted, (room: GameRoom) => {
         //     this.currentGame.next(room.clientGame);
@@ -262,31 +267,20 @@ export class GameManagerService {
     //     this.clientSocket.send('game', GameEvents.CheckStatus);
     // }
 
-    private replaceDifference(differences: Coordinate[]): void {
-        const hasDifferences = differences.length > 0;
-        if (!hasDifferences) {
-            this.soundService.playIncorrectSound(SONG_LIST_ERROR[0]);
-            this.gameAreaService.showError(this.isLeftCanvas, this.gameAreaService.mousePosition);
-            return;
-        }
-        this.soundService.playCorrectSoundDifference(SONG_LIST_DIFFERENCE[0]);
+    private handleNotFound(coordClic: Coordinate): void {
+        this.soundService.playIncorrectSound(ERROR_SOUND_LIST[1]);
+        this.gameAreaService.showError(this.isLeftCanvas, coordClic);
         this.gameAreaService.setAllData();
-        this.gameAreaService.replaceDifference(differences);
-        // this.isFirstDifferencesFound.next(true);
+        return;
     }
 
-    private handleRemoveDifference(lobby: Lobby, differenceFound: Coordinate[]): void {
+    private handleFound(lobby: Lobby, differenceFound: Coordinate[]): void {
         this.differenceFound.next(differenceFound);
         this.lobbyGame.next(lobby);
-        this.replaceDifference(differenceFound);
-        // this.differencesFound.next(data.differencesData.differencesFound);
-        // this.checkStatus();
-        // this.captureService.saveReplayEvent(ReplayActions.DifferenceFoundUpdate, data.differencesData.differencesFound);
         if (differenceFound.length !== 0) {
-            this.replaceDifference(differenceFound);
-            // this.opponentDifferencesFound.next(data.differencesData.differencesFound);
-            // this.captureService.saveReplayEvent(ReplayActions.OpponentDifferencesFoundUpdate, data.differencesData.differencesFound);
+            this.soundService.playCorrectSoundDifference(CORRECT_SOUND_LIST[1]);
+            this.gameAreaService.setAllData();
+            this.gameAreaService.replaceDifference(differenceFound);
         }
-        // this.differences = data.cheatDifferences;
     }
 }
