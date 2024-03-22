@@ -125,6 +125,10 @@ export class RoomManagerService {
     off(): void {
         // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
         // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        this.clientSocket.lobbySocket.off(LobbyEvents.Create);
+        this.clientSocket.authSocket.off(LobbyEvents.Join);
+        this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        this.clientSocket.authSocket.off(ChannelEvents.LobbyMessage);
         if (this.lobby && !this.lobby.closed) {
             this.lobby?.unsubscribe();
         }
@@ -257,14 +261,20 @@ export class RoomManagerService {
     }
 
     handleRoomEvents(): void {
-        this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
-            this.lobby.next(lobby);
-            this.lobbyGame = lobby;
-        });
-        this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
-            this.lobbyGame = lobby;
-            this.lobby.next(lobby);
-        });
+        this.lobby = new Subject<Lobby>();
+        this.lobbies = new Subject<Lobby[]>();
+        this.message = new Subject<Chat>();
+        if (this.isOrganizer)
+            this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
+                this.lobby.next(lobby);
+                this.lobbyGame = lobby;
+            });
+        else
+            this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
+                this.lobbyGame = lobby;
+                this.lobby.next(lobby);
+            });
+
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });

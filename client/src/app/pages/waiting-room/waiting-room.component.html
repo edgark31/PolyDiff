@@ -5,7 +5,12 @@
     <img id="background" src="./assets/background/MenuBackground.jpg" alt="background" />
     <div class="container">
         <div class="left">
+            <div *ngIf="!welcome.onChatLobby">
             <app-chat-box (addLobby)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
+        </div>
+            <div *ngIf="welcome.onChatLobby">
+                <app-chat-box class="chat-box" (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
+            </div>
         </div>
         <div class="right">
             <div class="player-count"> {{lobby.players.length}}/4 joueurs présents</div>

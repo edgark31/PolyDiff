@@ -5,7 +5,7 @@ import { ReplayEvent } from '@app/interfaces/replay-actions';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
-import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST } from '@common/constants';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { Chat, ChatMessageGlobal, Game, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
@@ -42,6 +42,7 @@ export class GameManagerService {
         private readonly clientSocket: ClientSocketService,
         private readonly gameAreaService: GameAreaService,
         private readonly soundService: SoundService,
+        private readonly welcome: WelcomeService,
     ) {
         this.currentGame = new Subject<Game>();
         this.lobbyGame = new Subject<Lobby>(); // used
@@ -157,9 +158,13 @@ export class GameManagerService {
     //     this.clientSocket.send('game', MessageEvents.LocalMessage, newMessage);
     // }
 
+    sendMessageGlobal(lobbyId: string | undefined, message: string): void {
+        this.clientSocket.send('auth', ChannelEvents.SendGameMessage, { lobbyId, message });
+    }
+
     sendMessage(lobbyId: string | undefined, message: string): void {
+        console.log('game' + message);
         this.clientSocket.send('game', ChannelEvents.SendGameMessage, { lobbyId, message });
-        console.log('prend mon message' + message + lobbyId);
     }
     removeAllListeners(nameSpace: string) {
         switch (nameSpace) {
@@ -183,6 +188,9 @@ export class GameManagerService {
     }
 
     manageSocket(): void {
+        this.game = new Subject<Game>();
+        this.timerLobby = new Subject<number>();
+        this.message = new Subject<Chat>();
         this.clientSocket.on('game', GameEvents.StartGame, (game: Game) => {
             this.game.next(game);
         });
@@ -253,6 +261,9 @@ export class GameManagerService {
     off(): void {
         // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
         // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        this.clientSocket.authSocket.off(GameEvents.StartGame);
+        this.clientSocket.authSocket.off(ChannelEvents.GameMessage);
+        this.clientSocket.authSocket.off(GameEvents.TimerUpdate);
         if (this.game && !this.game.closed) {
             this.game?.unsubscribe();
         }
@@ -266,7 +277,7 @@ export class GameManagerService {
     // }
 
     private handleNotFound(coordClic: Coordinate): void {
-        this.soundService.playIncorrectSound(ERROR_SOUND_LIST[1]);
+        this.soundService.playIncorrectSound(this.welcome.account.profile.onErrorSound);
         this.gameAreaService.showError(this.isLeftCanvas, coordClic);
         this.gameAreaService.setAllData();
         return;
@@ -276,7 +287,7 @@ export class GameManagerService {
         this.differenceFound.next(differenceFound);
         this.lobbyGame.next(lobby);
         if (differenceFound.length !== 0) {
-            this.soundService.playCorrectSoundDifference(CORRECT_SOUND_LIST[1]);
+            this.soundService.playCorrectSoundDifference(this.welcome.account.profile.onCorrectSound);
             this.gameAreaService.setAllData();
             this.gameAreaService.replaceDifference(differenceFound);
         }

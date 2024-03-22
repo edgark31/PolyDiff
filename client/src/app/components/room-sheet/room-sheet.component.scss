@@ -14,6 +14,27 @@
     transform: scale(1.05);
 }
 
+.feedback {
+    text-align: center;
+    color: red;
+    font-style: italic;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    font-size: 1.2rem;
+    margin-top: 4px;
+    margin-bottom: 0;
+    transform: scale(1.05);
+    z-index: 1;
+}
+
+button,
+.button-container {
+    width: 135px;
+}
+
+span {
+    white-space: normal;
+}
+
 .join-button:hover {
     background-color: #db9110;
     color: black;

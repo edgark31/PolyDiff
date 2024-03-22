@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
+import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { LobbyEvents, MessageTag } from '@common/enums';
 import { Subscription } from 'rxjs';
@@ -16,7 +17,9 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     lobby: Lobby;
     lobbies: Lobby[] = [];
     messages: Chat[] = [];
+    messageGlobal: Chat[] = [];
     chatSubscription: Subscription;
+    chatSubscriptionGlobal: Subscription;
     lobbiesSubscription: Subscription;
     private lobbySubscription: Subscription;
     // eslint-disable-next-line max-params
@@ -26,9 +29,11 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         private clientSocketService: ClientSocketService,
         public welcome: WelcomeService,
         public gameManager: GameManagerService,
+        public globalChatService: GlobalChatService,
     ) {}
 
     ngOnInit(): void {
+        if (this.welcome.onChatGame) this.clientSocketService.connect(this.welcome.account.id as string, 'lobby');
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         this.roomManagerService.wait = true;
@@ -57,8 +62,17 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         });
 
         this.clientSocketService.on('lobby', LobbyEvents.Start, () => {
+            this.welcome.onChatLobby = false;
             this.router.navigate(['/game']);
         });
+
+        if (this.clientSocketService.isSocketAlive('auth')) {
+            this.globalChatService.manage();
+            this.globalChatService.updateLog();
+            this.chatSubscriptionGlobal = this.globalChatService.message$.subscribe((message: Chat) => {
+                this.receiveMessageGlobal(message);
+            });
+        }
     }
 
     updateCurrentLobby(): void {
@@ -77,9 +91,18 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         this.roomManagerService.sendMessage(this.lobby.lobbyId, message);
     }
 
+    sendMessageGlobal(message: string): void {
+        this.globalChatService.sendMessage(message);
+    }
+
     onStart(): void {
         this.roomManagerService.onStart(this.lobby.lobbyId ? this.lobby.lobbyId : '');
     }
+
+    receiveMessageGlobal(chat: Chat): void {
+        this.messageGlobal.push(chat);
+    }
+
     ngOnDestroy(): void {
         if (this.clientSocketService.isSocketAlive('lobby')) {
             this.clientSocketService.disconnect('lobby');
@@ -88,6 +111,9 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.roomManagerService.off();
             this.gameManager.lobbyWaiting = this.lobby;
         }
-        this.roomManagerService.wait = false;
+        if (this.clientSocketService.isSocketAlive('auth')) {
+            this.globalChatService.off();
+        }
+        this.chatSubscriptionGlobal?.unsubscribe();
     }
 }
