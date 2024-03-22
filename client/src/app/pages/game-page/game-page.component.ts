@@ -131,7 +131,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     sendMessageGlobal(message: string): void {
-        console.log('affiche toi message: ' + message);
         this.globalChatService.sendMessage(message);
     }
     receiveMessage(chat: Chat): void {
@@ -140,7 +139,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
     receiveMessageGlobal(chat: Chat): void {
         this.messageGlobal.push(chat);
-        console.log(this.messageGlobal);
     }
 
     goPageChatGame(): void {

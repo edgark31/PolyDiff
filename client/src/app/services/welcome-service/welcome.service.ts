@@ -3,11 +3,11 @@ import { Injectable } from '@angular/core';
 import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, LANGUAGES, THEME_PERSONALIZATION } from '@common/constants';
 import { Account, Theme } from '@common/game-interfaces';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
-import { CommunicationService } from '../communication-service/communication.service';
+import { CommunicationService } from '@app/services/communication-service/communication.service';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
 // eslint-disable-next-line no-restricted-imports
+import { SoundService } from '@app/services/sound-service/sound.service';
 import { Subject } from 'rxjs';
-import { SoundService } from '../sound-service/sound.service';
 @Injectable({
     providedIn: 'root',
 })

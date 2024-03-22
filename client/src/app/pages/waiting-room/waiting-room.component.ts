@@ -92,7 +92,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     }
 
     sendMessageGlobal(message: string): void {
-        console.log('affiche toi message: ' + message);
         this.globalChatService.sendMessage(message);
     }
 
@@ -102,7 +101,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
 
     receiveMessageGlobal(chat: Chat): void {
         this.messageGlobal.push(chat);
-        console.log(this.messageGlobal);
     }
 
     ngOnDestroy(): void {
