@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
 
 class AdminPage extends StatefulWidget {
   @override
@@ -22,8 +23,8 @@ class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Page d'administration"),
+      appBar: CustomAppBar(
+        title: "Page d'administration",
       ),
       body: Column(
         children: [

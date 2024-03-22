@@ -30,6 +30,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
     private isLimitedCoopRoomAvailableSubscription: Subscription;
     // private playerName: string;
     // private isStartingGame: boolean;
+    // eslint-disable-next-line max-params
     constructor(
         public router: Router,
         private readonly roomManagerService: RoomManagerService,

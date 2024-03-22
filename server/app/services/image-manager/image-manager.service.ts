@@ -2,6 +2,7 @@
 import { Game } from '@common/game-interfaces';
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
+// eslint-disable-next-line import/no-unresolved
 import Jimp from 'jimp';
 import * as path from 'path';
 

@@ -101,6 +101,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.gameSubscription = this.gameManager.game$.subscribe((game: Game) => {
             this.gameLobby = game;
         });
+        // if (this.gameManager.lobbyWaiting.mode === GameModes.Classic)
         this.timeSubscription = this.gameManager.timerLobby$.subscribe((timer: number) => {
             this.timer = timer;
         });

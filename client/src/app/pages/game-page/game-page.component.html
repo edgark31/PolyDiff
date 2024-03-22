@@ -50,17 +50,15 @@
             ></canvas>
         </div>
     </div>
-
-<div *ngIf="!welcome.onChatGame">
-    <app-chat-box class="chat-box" (addGame)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
-</div>
-<div *ngIf="welcome.onChatGame">
-    <app-chat-box class="chat-box" (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
-</div>
     <button *ngIf="!isReplayAvailable" class="importantButton justified" (click)="showAbandonDialog()">
         <span id="abandon">Abandonner la partie</span>
     </button>
-    <span></span>
+</div>
+<div *ngIf="!welcome.onChatGame">
+    <app-chat-box (addGame)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
+</div>
+<div *ngIf="welcome.onChatGame">
+    <app-chat-box (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
 </div>
  <img id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
 <div *ngIf="game">

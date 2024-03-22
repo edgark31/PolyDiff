@@ -82,13 +82,13 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
-        this.accountManager.logConnexion(socket.data.accountId, true);
+        this.accountManager.logConnection(socket.data.accountId, true);
         this.logger.log(`AUTH de ${socket.data.accountId}`);
     }
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`DEAUTH de ${socket.data.accountId}`);
-        this.accountManager.logConnexion(socket.data.accountId, false);
-        this.accountManager.deconnexion(socket.data.accountId);
+        this.logger.log(`DEATH de ${socket.data.accountId}`);
+        this.accountManager.logConnection(socket.data.accountId, false);
+        this.accountManager.disconnection(socket.data.accountId);
     }
 }
