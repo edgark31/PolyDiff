@@ -11,6 +11,7 @@ import 'package:mobile/services/image_converter_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/canvas.dart';
 import 'package:mobile/widgets/chat_box.dart';
+import 'package:mobile/widgets/game_infos.dart';
 import 'package:provider/provider.dart';
 
 class ClassicGamePage extends StatefulWidget {
@@ -105,8 +106,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                   SizedBox(
                     height: 200,
                     width: 1000,
-                    //child:
-                    // TODO: Place game info widget as a child here when ready
+                    child: GameInfos(),
                   ),
                 ],
               ),
