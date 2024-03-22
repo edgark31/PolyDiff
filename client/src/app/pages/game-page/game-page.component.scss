@@ -11,10 +11,10 @@
     text-align: center;
 }
 
-.right {
-    flex: 2;
-    padding-left: 800px;
-}
+// .right {
+//     flex: 2;
+//     padding-left: 800px;
+// }
 
 #game-page {
     background-color: #67a28b;
@@ -23,11 +23,16 @@
 }
 
 .canvas-container {
-    display: grid;
-    grid-template-columns: repeat(2, 700px);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    flex-direction: row;
+    top: 0;
+    z-index: 1;
 }
+
 
 .game-canvas {
     position: relative;
@@ -51,21 +56,17 @@ canvas {
 
 #original {
     z-index: 1;
-    left: 100px;
 }
 
 #originalFG {
     z-index: 2;
-    left: 100px;
 }
 
 #modified {
     z-index: 1;
-    right: 300px;
 }
 #modifiedFG {
     z-index: 2;
-    right: 300px;
 }
 
 .background {
@@ -151,8 +152,8 @@ canvas {
 
 app-chat-box {
     position: absolute;
-    left: 67.5%;
-    bottom: 13%;
+    left: 35.75%;
+    bottom: 15%;
     z-index: 1;
 }
 
