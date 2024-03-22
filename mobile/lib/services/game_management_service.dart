@@ -5,7 +5,7 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/capture_game_events_service.dart';
 import 'package:mobile/services/socket_service.dart';
 
-class GameManagerService with ChangeNotifier {
+class GameManagementService with ChangeNotifier {
   final SocketService _socketService = Get.find();
   final CaptureGameEventsService _captureService = CaptureGameEventsService();
 

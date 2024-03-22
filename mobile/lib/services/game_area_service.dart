@@ -9,7 +9,7 @@ import 'package:mobile/services/sound_service.dart';
 class GameAreaService extends ChangeNotifier {
   final SoundService soundService = Get.put(SoundService());
   final SocketService socketService = Get.find();
-  final GameManagerService gameManagerService = Get.put(GameManagerService());
+  final GameManagementService gameManagerService = Get.put(GameManagementService());
 
   GameAreaService();
   Coordinate? currentCoord;

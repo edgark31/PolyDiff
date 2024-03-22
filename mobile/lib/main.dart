@@ -12,6 +12,7 @@ import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_card_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
+import 'package:mobile/services/game_management_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
@@ -77,6 +78,11 @@ void main() async {
     }),
 
     ChangeNotifierProvider(create: (context) {
+      GameManagementService gameManagementService = Get.find();
+      return gameManagementService;
+    }),
+
+    ChangeNotifierProvider(create: (context) {
       SoundService soundService = Get.find();
       return soundService;
     }),
@@ -97,6 +103,7 @@ void initializeServices() {
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
   Get.put(GameManagerService());
+  Get.put(GameManagementService());
   Get.put(SoundService());
 }
 
