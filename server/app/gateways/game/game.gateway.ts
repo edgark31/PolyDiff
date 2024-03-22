@@ -88,8 +88,8 @@ export class GameGateway implements OnGatewayConnection {
             .differences.findIndex((difference) => difference.some((coord: Coordinate) => coord.x === coordClic.x && coord.y === coordClic.y));
         const commonMessage =
             index !== NOT_FOUND
-                ? `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username}, 'a trouvé une différence !`
-                : `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username}, 's'est trompé !`;
+                ? `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a trouvé une différence !`
+                : `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} s'est trompé !`;
         // ------------------ CLASSIC MODE ------------------
         if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
             // Si trouvé
@@ -183,6 +183,8 @@ export class GameGateway implements OnGatewayConnection {
             .players.filter((player) => player.accountId !== socket.data.accountId);
         socket.leave(lobbyId);
         this.logger.log(`${socket.data.accountId} abandoned game ${lobbyId}`);
+        const abandonMessage = `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a abandonné la partie !`;
+        this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: abandonMessage, tag: MessageTag.Common } as Chat);
         if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
             this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
             clearInterval(this.timers.get(lobbyId));
