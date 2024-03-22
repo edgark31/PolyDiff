@@ -40,19 +40,22 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.globalChatLog = { chat: [], channelName: 'global' };
     }
 
-    @SubscribeMessage(AccountEvents.UserUpdate)
+    // Pour la recherche des users, à envoyer à chaque nouveau caractère dans la searchbar
+    @SubscribeMessage(AccountEvents.UpdateUsers)
     retrivesUsers() {
-        this.server.emit(AccountEvents.UserUpdate, Array.from(this.accountManager.users.values()));
+        this.server.emit(AccountEvents.UpdateUsers, Array.from(this.accountManager.users.values()));
     }
 
-    @SubscribeMessage(AccountEvents.UserCreate)
-    handleAccountCreate() {
-        this.server.emit(AccountEvents.UserUpdate, Array.from(this.accountManager.users.values()));
+    // À envoyer à chaque nouveau compte créé
+    @SubscribeMessage(AccountEvents.UserCreated)
+    handleUserCreated() {
+        this.server.emit(AccountEvents.UpdateUsers, Array.from(this.accountManager.users.values()));
     }
 
-    @SubscribeMessage(AccountEvents.UserDelete)
-    handleAccountDelete() {
-        this.server.emit(AccountEvents.UserUpdate, Array.from(this.accountManager.users.values()));
+    // À envoyer à chaque compte supprimé
+    @SubscribeMessage(AccountEvents.UserDeleted)
+    handleUserDeleted() {
+        this.server.emit(AccountEvents.UpdateUsers, Array.from(this.accountManager.users.values()));
     }
 
     @SubscribeMessage(ChannelEvents.SendGlobalMessage)
@@ -63,8 +66,8 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         );
         this.globalChatLog.chat.push(chat);
 
-        socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Sent });
-        socket.broadcast.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Received });
+        socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
+        socket.broadcast.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
     }
 
     @SubscribeMessage(ChannelEvents.UpdateLog)
