@@ -1,10 +1,9 @@
-/* eslint-disable no-case-declarations */
 /* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { ChannelEvents, LobbyEvents, LobbyState, MessageTag } from '@common/enums';
-import { Chat, ChatLog, Lobby, Observer, Player } from '@common/game-interfaces';
+import { Chat, ChatLog, Lobby, Player } from '@common/game-interfaces';
 import { Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -63,36 +62,9 @@ export class LobbyGateway implements OnGatewayConnection {
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} rejoint le lobby ${lobbyId}`);
     }
 
-    @SubscribeMessage(LobbyEvents.Spectate)
-    spectate(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        if (this.roomsManager.lobbies.get(lobbyId).isAvailable) return;
-        socket.data.state = LobbyState.Spectating;
-        socket.join(lobbyId);
-        const observer: Observer = {
-            accountId: socket.data.accountId,
-            name: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
-        };
-        this.roomsManager.lobbies.get(lobbyId).observers.push(observer);
-        socket.emit(LobbyEvents.Spectate, this.roomsManager.lobbies.get(lobbyId));
-        this.server.to(lobbyId).emit(LobbyEvents.Join, this.roomsManager.lobbies.get(lobbyId));
-        this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
-        this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} spectate le lobby ${lobbyId}`);
-    }
-
     // un joueur quitte le lobby intentionnellement
     @SubscribeMessage(LobbyEvents.Leave)
     async leave(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        // Si tu spectate
-        if (socket.data.state === LobbyState.Spectating) {
-            socket.leave(lobbyId);
-            this.roomsManager.lobbies.get(lobbyId).observers = this.roomsManager.lobbies
-                .get(lobbyId)
-                .observers.filter((observer) => observer.accountId !== socket.data.accountId);
-            socket.emit(LobbyEvents.Leave);
-            this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
-            this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} unspectate le lobby ${lobbyId}`);
-            return;
-        }
         socket.data.state = LobbyState.Idle;
         // Si t'es le host
         if (socket.data.accountId === this.roomsManager.lobbies.get(lobbyId).players[0].accountId) {
@@ -128,17 +100,18 @@ export class LobbyGateway implements OnGatewayConnection {
     }
 
     @SubscribeMessage(ChannelEvents.SendLobbyMessage)
-    handleLobbyMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
+    handleMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
         const chat: Chat = this.messageManager.createMessage(
             this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
             message,
         );
         this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(chat);
 
-        socket.emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
-        socket.broadcast.to(lobbyId).emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
+        socket.emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Sent });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Received });
 
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
+        this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} envoie un message`);
     }
 
     @SubscribeMessage(LobbyEvents.UpdateLobbys)
@@ -150,7 +123,8 @@ export class LobbyGateway implements OnGatewayConnection {
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
         socket.data.state = LobbyState.Idle;
-        this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
+        const lobbies = Array.from(this.roomsManager.lobbies.values());
+        this.server.emit(LobbyEvents.UpdateLobbys, lobbies);
         // HANDLE DISCONNECT-ING ***
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
@@ -165,6 +139,8 @@ export class LobbyGateway implements OnGatewayConnection {
                 default:
                     break;
             }
+            const lobbiesFromManager = Array.from(this.roomsManager.lobbies.values());
+            this.server.emit(LobbyEvents.UpdateLobbys, lobbiesFromManager);
             this.logger.log(`LOBBY OUT de ${socket.data.accountId}`);
         });
         this.logger.log(`LOBBY IN de ${socket.data.accountId}`);
