@@ -51,6 +51,19 @@ enum ChannelEvents {
   FriendConnection,
 }
 
+enum GameEvents {
+  TimerUpdate, // Still used by server to emit time
+  StartGame,
+  UpdateTimer,
+  Clic,
+  Found,
+  NotFound,
+  Cheat,
+  NextGame,
+  AbandonGame,
+  EndGame
+}
+
 enum LobbyEvents {
   Create,
   Join,
@@ -60,8 +73,8 @@ enum LobbyEvents {
   LeaveAsObserver,
   UpdateLobbys,
   Start,
-  LeaveRoom,
 }
+
 
 extension LobbyEventsExtension on LobbyEvents {
   String get name {
@@ -82,8 +95,6 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'UpdateLobbys';
       case LobbyEvents.Start:
         return 'Start';
-      case LobbyEvents.LeaveRoom:
-        return 'LeaveRoom';
       default:
         return '';
     }
@@ -107,8 +118,6 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'UpdateLobbys';
       case LobbyEvents.Start:
         return 'Start';
-      case LobbyEvents.LeaveRoom:
-        return 'LeaveRoom';
       default:
         return '';
     }
@@ -136,4 +145,10 @@ enum GameEvent {
   NextGame,
   AbandonGame,
   EndGame,
+}
+
+enum AccountEvents {
+  UserUpdate,
+  UserCreate,
+  UserDelete,
 }

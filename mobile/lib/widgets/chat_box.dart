@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/chat_service.dart';
@@ -13,17 +14,30 @@ class ChatBox extends StatefulWidget {
 class _ChatBoxState extends State<ChatBox> {
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
+  FocusNode textFocusNode = FocusNode();
   bool isTyping = false;
+  bool isGlobalChat = true;
+  bool canDisplayLobbyMessages = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _setInitialChatMode());
+  }
 
   @override
   void dispose() {
+    messageController.dispose();
     scrollController.dispose();
+    textFocusNode.dispose();
     super.dispose();
   }
 
   void scrollToBottom() {
     if (!scrollController.hasClients) return;
-    print("scrolling to bottom");
+    bool isUserScrolling =
+        scrollController.position.userScrollDirection != ScrollDirection.idle;
+    if (isUserScrolling) return;
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
       duration: Duration(milliseconds: 180),
@@ -31,19 +45,45 @@ class _ChatBoxState extends State<ChatBox> {
     );
   }
 
+  void _setInitialChatMode() {
+    final routeName = ModalRoute.of(context)?.settings.name;
+    setState(() {
+      canDisplayLobbyMessages = routeName == LOBBY_ROUTE ||
+          routeName == CLASSIC_ROUTE ||
+          routeName == LIMITED_TIME_ROUTE;
+      isGlobalChat = !canDisplayLobbyMessages;
+    });
+  }
+
+  void _handleMessageSubmit(String message) {
+    final chatService = context.read<ChatService>();
+    if (message.isNotEmpty && message.trim().isNotEmpty) {
+      if (isGlobalChat) {
+        chatService.sendGlobalMessage(message);
+      } else {
+        chatService.sendLobbyMessage(message);
+      }
+      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        scrollToBottom();
+      });
+    }
+    messageController.clear();
+    FocusScope.of(context).requestFocus(textFocusNode);
+  }
+
+  void _switchChatMode() {
+    setState(() {
+      isGlobalChat = !isGlobalChat;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final infoService = context.watch<InfoService>();
     final avatarProvider = context.watch<AvatarProvider>();
-    dynamic username = infoService.username;
     final chatService = context.watch<ChatService>();
 
-    // user avatar
-    String? route = ModalRoute.of(context)?.settings.name;
-    bool isGlobalChat = true;
-    if (route != null) {
-      isGlobalChat = route == CHAT_ROUTE;
-    }
     final messages =
         isGlobalChat ? chatService.globalMessages : chatService.lobbyMessages;
     return Container(
@@ -68,7 +108,7 @@ class _ChatBoxState extends State<ChatBox> {
           Container(
             height: 80,
             color: Color(0xFF7DAF9C),
-            child: Row(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -78,6 +118,29 @@ class _ChatBoxState extends State<ChatBox> {
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: canDisplayLobbyMessages
+                      ? MainAxisAlignment.spaceBetween
+                      : MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      isGlobalChat ? "Chat Global" : "Chat",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    canDisplayLobbyMessages
+                        ? ElevatedButton(
+                            onPressed: _switchChatMode,
+                            child: Text(isGlobalChat
+                                ? "Retour au Chat"
+                                : "Changer pour le Chat Global"),
+                          )
+                        : Container(),
+                  ],
                 ),
               ],
             ),
@@ -91,7 +154,10 @@ class _ChatBoxState extends State<ChatBox> {
                 itemBuilder: (BuildContext context, int index) {
                   // TODO : Change logic to id when implemented on server
                   // bool isSent = messages[index].id == infoService.id;
-                  bool isSent = messages[index].name == username;
+                  bool isSent = messages[index].name == infoService.username;
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    scrollToBottom();
+                  });
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
@@ -103,6 +169,7 @@ class _ChatBoxState extends State<ChatBox> {
                         CircleAvatar(
                           key: UniqueKey(),
                           backgroundImage:
+                              // TODO : fix to show other person avatar
                               NetworkImage(avatarProvider.currentAvatarUrl),
                           radius: 15.0,
                         ),
@@ -144,6 +211,7 @@ class _ChatBoxState extends State<ChatBox> {
               children: [
                 Expanded(
                   child: TextField(
+                    focusNode: textFocusNode,
                     controller: messageController,
                     onChanged: (text) {
                       setState(() {
@@ -156,28 +224,16 @@ class _ChatBoxState extends State<ChatBox> {
                       filled: true,
                       fillColor: Colors.white,
                     ),
+                    onSubmitted: _handleMessageSubmit,
                   ),
                 ),
                 SizedBox(width: 10),
                 if (isTyping)
                   IconButton(
-                    icon: Icon(Icons.send),
-                    onPressed: () {
-                      String message = messageController.text;
-                      if (message.isNotEmpty) {
-                        if (isGlobalChat) {
-                          chatService.sendGlobalMessage(message);
-                        } else {
-                          chatService.sendLobbyMessage(message);
-                        }
-                        setState(() {});
-                        messageController.clear();
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          scrollToBottom();
-                        });
-                      }
-                    },
-                  ),
+                      icon: Icon(Icons.send),
+                      onPressed: () {
+                        _handleMessageSubmit(messageController.text);
+                      }),
               ],
             ),
           ),
