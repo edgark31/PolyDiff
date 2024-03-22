@@ -134,8 +134,8 @@ export class LobbyGateway implements OnGatewayConnection {
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
                     break;
-                case LobbyState.Spectating: // ta deja rejoint une room
-                    break;
+                // case LobbyState.Spectating: // ta deja rejoint une room
+                //     break;
                 default:
                     break;
             }
