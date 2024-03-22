@@ -11,6 +11,7 @@ export 'game_history.dart';
 export 'lobby_model.dart';
 export 'observers_model.dart';
 export 'players.dart';
+export 'replay_model.dart';
 export 'session_log.dart';
 export 'statistics.dart';
 export 'theme.dart';

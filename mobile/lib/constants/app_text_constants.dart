@@ -1,4 +1,6 @@
 // App name
+// ignore_for_file: constant_identifier_names
+
 const APP_NAME_TXT = "PolyDiff";
 
 // Button texts

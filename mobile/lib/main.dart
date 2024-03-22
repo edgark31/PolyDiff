@@ -11,10 +11,12 @@ import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_card_service.dart';
+import 'package:mobile/services/game_management_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
+import 'package:mobile/widgets/game_widget.dart';
 import 'package:provider/provider.dart';
 
 Widget defaultHome = HomePage();
@@ -63,6 +65,10 @@ void main() async {
       AvatarProvider avatarProvider = Get.find();
       return avatarProvider;
     }),
+    ChangeNotifierProvider(
+      create: (_) => GameManagerService(SocketService()),
+      child: GameWidget(),
+    ),
     ChangeNotifierProvider(create: (context) => ThemeProvider()),
   ], child: const MyApp()));
 }

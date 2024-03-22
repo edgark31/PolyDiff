@@ -114,3 +114,26 @@ extension LobbyEventsExtension on LobbyEvents {
     }
   }
 }
+
+enum GameEvents {
+  ValidateCoords,
+  CheckStatus,
+  TimerUpdate,
+  RemoveDifference,
+  GameStarted,
+  StartGameByRoomId,
+  StartNextGame,
+  RequestHint,
+  UpdateDifferencesFound,
+  GameModeChanged,
+  GamePageRefreshed,
+  StartGame,
+  UpdateTimer,
+  Click,
+  Found,
+  NotFound,
+  Cheat,
+  NextGame,
+  AbandonGame,
+  EndGame,
+}
