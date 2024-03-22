@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/enums.dart';
@@ -65,7 +63,7 @@ class GameManagerService extends ChangeNotifier {
 
     socketService.on(SocketType.Game, GameEvents.TimerUpdate.name, (data) {
       print("Time received");
-      setTime(jsonDecode(data as String));
+      setTime(data as int);
     });
 
     // socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
