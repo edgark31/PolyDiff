@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:mobile/services/info_service.dart';
 
 class SoundService extends ChangeNotifier {
-  final InfoService infoService = Get.put(InfoService());
+  final InfoService infoService = Get.find();
   final AudioPlayer audioPlayer;
 
   SoundService() : audioPlayer = AudioPlayer();
