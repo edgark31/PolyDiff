@@ -71,6 +71,7 @@ export class GameGateway implements OnGatewayConnection {
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Temps écoulé !');
                     this.logDraw(lobbyId);
                     clearInterval(timerId);
+                    this.deleteLobby(lobbyId);
                     return;
                 }
                 this.roomsManager.lobbies.get(lobbyId).time -= 1;
@@ -115,6 +116,7 @@ export class GameGateway implements OnGatewayConnection {
                         tag: MessageTag.Common,
                     } as Chat);
                     clearInterval(this.timers.get(lobbyId));
+                    this.deleteLobby(lobbyId);
                     return;
                 }
                 // Vérifier s'il reste des differences
@@ -126,6 +128,7 @@ export class GameGateway implements OnGatewayConnection {
                         tag: MessageTag.Common,
                     } as Chat);
                     clearInterval(this.timers.get(lobbyId));
+                    this.deleteLobby(lobbyId);
                 }
                 return;
             }
@@ -148,7 +151,6 @@ export class GameGateway implements OnGatewayConnection {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
                     difference,
                 });
-                // eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-unused-expressions
                 this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
                 // Load la next game
                 const game = await this.nextGame(lobbyId, this.games.get(lobbyId).playedGameIds);
@@ -162,8 +164,10 @@ export class GameGateway implements OnGatewayConnection {
                         tag: MessageTag.Common,
                     } as Chat);
                     clearInterval(this.timers.get(lobbyId));
+                    this.deleteLobby(lobbyId);
                     return;
                 }
+                this.server.to(lobbyId).emit(GameEvents.NextGame, game);
                 this.roomsManager.lobbies.get(lobbyId).isCheatEnabled
                     ? this.server.to(lobbyId).emit(GameEvents.Cheat, this.games.get(lobbyId).differences)
                     : null;
@@ -197,8 +201,10 @@ export class GameGateway implements OnGatewayConnection {
             message,
         );
 
-        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent });
-        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received });
+        this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(chat);
+
+        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
@@ -206,20 +212,13 @@ export class GameGateway implements OnGatewayConnection {
         socket.data.state = GameState.InGame;
 
         socket.on('disconnecting', () => {
+            const lobbyId: string = Array.from(socket.rooms)[1] as string;
+            if (!lobbyId) return;
             switch (socket.data.state) {
                 case GameState.InGame:
-                    const lobbyId: string = Array.from(socket.rooms)[1] as string;
-                    this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
-                        .get(lobbyId)
-                        .players.filter((player) => player.accountId !== socket.data.accountId);
-                    if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
-                        this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
-                        clearInterval(this.timers.get(lobbyId));
-                    }
+                    this.abandonGame(socket, lobbyId);
                     break;
                 case GameState.Abandoned:
-                    break;
-                case GameState.Left:
                     break;
                 default:
                     break;
@@ -309,5 +308,21 @@ export class GameGateway implements OnGatewayConnection {
         this.roomsManager.lobbies.get(lobbyId).players.forEach((player) => {
             this.accountManager.logSession(player.accountId, false, this.roomsManager.lobbies.get(lobbyId).timePlayed, player.count);
         });
+    }
+
+    // ------------------ DELETTE ROOM/LOBBY/GAME ------------------
+    private deleteLobby(lobbyId: string) {
+        this.roomsManager.lobbies.delete(lobbyId);
+        this.games.delete(lobbyId);
+        clearInterval(this.timers.get(lobbyId));
+        this.timers.delete(lobbyId);
+        this.server
+            .in(lobbyId)
+            .fetchSockets()
+            .then((sockets) => {
+                sockets.forEach((socket) => {
+                    socket.leave(lobbyId);
+                });
+            });
     }
 }

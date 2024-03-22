@@ -140,7 +140,8 @@ export interface Player {
     count?: number;
 }
 
-export interface Observers {
+export interface Observer {
+    accountId: string;
     name: string;
 }
 
@@ -149,7 +150,7 @@ export interface Lobby {
     gameId?: string; // creer en classique
     isAvailable: boolean; // true
     players: Player[]; // vide
-    observers: Observers[]; // vide
+    observers: Observer[]; // vide
     isCheatEnabled: boolean; // false
     mode: GameModes; // classique ou limited
     password?: string; // oui
@@ -216,6 +217,7 @@ export interface Statistics {
 }
 
 export interface Friend {
+    accountId: string;
     name: string;
     avatar: string;
     friendNames: string[];
@@ -234,6 +236,7 @@ export interface Score {
 
 export interface Chat {
     raw: string;
+    accountId?: string;
     name?: string;
     tag?: MessageTag;
     timestamp?: string;
