@@ -141,6 +141,7 @@ export enum GameEvents {
     NextGame = 'NextGame',
     AbandonGame = 'AbandonGame',
     EndGame = 'EndGame',
+    Spectate = 'Spectate',
 }
 
 export enum GameState {
