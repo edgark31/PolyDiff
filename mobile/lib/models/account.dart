@@ -197,7 +197,7 @@ class Sound {
 
   /// Constructs a [Sound] instance with IDs for correct and error sounds.
   /// If data is missing in JSON, defaults are provided to ensure the instance is in a valid state.
-  Sound({
+  const Sound({
     required this.name,
     required this.path,
   });
@@ -208,6 +208,14 @@ class Sound {
       path: json['path'],
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Sound && runtimeType == other.runtimeType && name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
 
   /// Converts a [Sound] instance to a JSON map.
   Map<String, dynamic> toJson() {

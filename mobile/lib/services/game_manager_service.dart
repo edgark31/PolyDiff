@@ -10,6 +10,7 @@ import 'package:mobile/services/socket_service.dart';
 class GameManagerService extends ChangeNotifier {
   static Game _game = Game.initial();
   static int _time = 0;
+  static int _time = 0;
   final SocketService socketService = Get.find();
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();

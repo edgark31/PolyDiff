@@ -53,6 +53,7 @@ export class ConnectionLog {
 
 export const connectionLogSchema = SchemaFactory.createForClass(ConnectionLog);
 
+@Schema({ _id: false })
 export class Statistics {
     @Prop({ required: true })
     gamesPlayed: number;
