@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { LobbyEvents, MessageTag } from '@common/enums';
-import { Chat, Lobby } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
+import { Chat, Lobby } from './../../../../../common/game-interfaces';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
 @Component({
     selector: 'app-waiting-room',
@@ -24,6 +25,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         public roomManagerService: RoomManagerService,
         private clientSocketService: ClientSocketService,
         public welcome: WelcomeService,
+        public gameManager: GameManagerService,
     ) {}
 
     ngOnInit(): void {
@@ -53,6 +55,10 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {
             this.router.navigate(['/game-mode']);
         });
+
+        this.clientSocketService.on('lobby', LobbyEvents.Start, () => {
+            this.router.navigate(['/game']);
+        });
     }
 
     updateCurrentLobby(): void {
@@ -72,15 +78,15 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     }
 
     onStart(): void {
-        this.router.navigate(['/game']);
+        this.roomManagerService.onStart(this.lobby.lobbyId ? this.lobby.lobbyId : '');
     }
     ngOnDestroy(): void {
-        this.onQuit();
         if (this.clientSocketService.isSocketAlive('lobby')) {
             this.clientSocketService.disconnect('lobby');
             this.lobbySubscription?.unsubscribe();
             this.chatSubscription?.unsubscribe();
             this.roomManagerService.off();
+            this.gameManager.lobbyWaiting = this.lobby;
         }
         this.roomManagerService.wait = false;
     }

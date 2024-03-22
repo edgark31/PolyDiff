@@ -1,14 +1,21 @@
-<img alt="background-image" id="image" src="./assets/gameSheet.png" />
-<div *ngIf="lobby.mode===gameModes.Limited" class="game-mode-image">
-    <img alt="game-mode-image" id="game-mode-image" src="./assets/LimitedTime.png" />
-</div>
-<div *ngIf="lobby.gameId && lobby.mode===gameModes.Classic" class="game-mode-image-classic">
-    <img alt="game-mode-image" id="game-mode-image-classic" src="{{'http://34.118.163.79:3000/' + lobby.gameId + '/original.bmp'}}" />
-</div>
-
 <div class="container">
-    <div class="game-mode">
-        Mode de jeu
+    <img alt="background-image" id="background-image" src="./assets/gameSheet.png" />
+    <div *ngIf="lobby.mode===gameModes.Limited" class="game-mode-image">
+        <img alt="game-mode-image" id="game-mode-image" src="./assets/LimitedTime.png" />
+    </div>
+    <div *ngIf="lobby.gameId && lobby.mode===gameModes.Classic" class="game-mode-image-classic">
+        <!-- <img alt="game-mode-image" id="game-mode-image-classic" src="{{'http://34.118.163.79:3000/' + lobby.gameId + '/original.bmp'}}" />  vu qu'on travaille sur localhost actuellement-->
+        <img alt="game-mode-image" id="game-mode-image" src="{{'http://localhost:3000/' + lobby.gameId + '/original.bmp'}}" />
+    </div>
+    <div *ngIf="lobby.mode===gameModes.Limited" class="game-mode-image">
+        <div class="game-mode">
+            Mode de jeu
+        </div>
+    </div>
+    <div *ngIf="lobby.gameId && lobby.mode===gameModes.Classic" class="game-mode-image-classic">
+        <div class="game-mode">
+            Image
+        </div>
     </div>
     <div class="difference-number">
         Nombre de différences : {{lobby.nDifferences}}

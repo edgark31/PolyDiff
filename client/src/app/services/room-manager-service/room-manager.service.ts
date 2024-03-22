@@ -203,6 +203,9 @@ export class RoomManagerService {
         this.clientSocket.send('lobby', PlayerEvents.AcceptPlayer, { gameId, roomId, playerName });
     }
 
+    onStart(id: string) {
+        this.clientSocket.send('lobby', LobbyEvents.Start, id);
+    }
     cancelJoining(gameId: string): void {
         this.clientSocket.send('lobby', PlayerEvents.CancelJoining, gameId);
     }
@@ -254,19 +257,14 @@ export class RoomManagerService {
     }
 
     handleRoomEvents(): void {
-        this.lobby = new Subject<Lobby>();
-        this.lobbies = new Subject<Lobby[]>();
-        this.message = new Subject<Chat>();
-        if (this.isOrganizer)
-            this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
-                this.lobby.next(lobby);
-                this.lobbyGame = lobby;
-            });
-        else
-            this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
-                this.lobbyGame = lobby;
-                this.lobby.next(lobby);
-            });
+        this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
+            this.lobby.next(lobby);
+            this.lobbyGame = lobby;
+        });
+        this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
+            this.lobbyGame = lobby;
+            this.lobby.next(lobby);
+        });
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
         });

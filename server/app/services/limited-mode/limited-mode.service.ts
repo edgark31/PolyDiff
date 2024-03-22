@@ -85,7 +85,6 @@ export class LimitedModeService {
             server.to(room.roomId).emit(GameEvents.UpdateDifferencesFound, room.player1.differenceData.differencesFound);
         }
     }
-
     private sendEndMessage(room: GameRoom, server: io.Server): void {
         room.endMessage = `Vous avez trouvé les ${room.player1.differenceData.differencesFound} différences! Bravo!`;
         server.to(room.roomId).emit(GameEvents.EndGame, room.endMessage);

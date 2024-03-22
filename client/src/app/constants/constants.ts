@@ -30,6 +30,6 @@ export const INPUT_TAG_NAME = 'INPUT';
 export const SOLO_GAME_ID = 'Solo';
 
 export const DEFAULT_PLAYERS = {
-    player1: { name: '', differenceData: { currentDifference: [], differencesFound: 0 } },
-    player2: { name: '', differenceData: { currentDifference: [], differencesFound: 0 } },
+    player1: { name: '', differenceData: { currentDifference: [], differencesFound: 0 }, count: 0 },
+    player2: { name: '', differenceData: { currentDifference: [], differencesFound: 0 }, count: 0 },
 };
