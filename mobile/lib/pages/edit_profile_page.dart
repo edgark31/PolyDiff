@@ -238,7 +238,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         if (newValue != null) {
                           currentSettings =
                               currentSettings!.copyWith(onErrorSound: newValue);
-                          soundService.playOnErrorSound(newValue);
+                          soundService.playSound(newValue.path);
                         }
                       },
                       items: ERROR_SOUND_LIST.map((sound) {
@@ -252,7 +252,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       value: currentSettings!.onCorrectSound,
                       onChanged: (newValue) {
                         if (newValue != null) {
-                          soundService.playOnCorrectSound(newValue);
+                          soundService.playSound(newValue.path);
                           currentSettings = currentSettings!
                               .copyWith(onCorrectSound: newValue);
                         }

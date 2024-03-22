@@ -27,7 +27,7 @@ const List<Sound> ERROR_SOUND_LIST = [
 const List<Sound> CORRECT_SOUND_LIST = [
   Sound(name: "TOO GOOD 1", path: "assets/sound/correct1.mp3"),
   Sound(name: "TOO GOOD 2", path: "assets/sound/correct2.mp3"),
-  Sound(name: "TOO GOOD 3", path: "assets/sound/correct1.mp3"),
+  Sound(name: "TOO GOOD 3", path: "assets/sound/correct3.mp3"),
 ];
 
 // Colors

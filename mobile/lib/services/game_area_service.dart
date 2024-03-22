@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/services/game_management_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/services/sound_service.dart';
 
 class GameAreaService extends ChangeNotifier {
   final SoundService soundService = Get.put(SoundService());
+  final SocketService socketService = Get.find();
+  final GameManagerService gameManagerService = Get.put(GameManagerService());
+
   GameAreaService();
   Coordinate? currentCoord;
   List<Coordinate> coordinates = [];
@@ -23,10 +28,19 @@ class GameAreaService extends ChangeNotifier {
   void validateCoord(Coordinate coord, List<Coordinate> coordList,
       List<Coordinate> coordList2, bool isLeft) {
     currentCoord = coord;
+
+    Map<String, dynamic> eventData = {
+      'x': coord.x,
+      'y': coord.y,
+      'isLeft': isLeft,
+    };
+
     if (coordList.contains(coord) || coordList2.contains(coord)) {
       if (coordList.contains(coord)) {
         showDifferenceFound(coordList);
+        gameManagerService.validateCoordinates(eventData);
       } else {
+        gameManagerService.foundDifference(eventData);
         showDifferenceFound(coordList2);
       }
     } else {

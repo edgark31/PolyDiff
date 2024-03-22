@@ -16,7 +16,7 @@ import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
-import 'package:mobile/widgets/game_widget.dart';
+import 'package:mobile/services/sound_service.dart';
 import 'package:provider/provider.dart';
 
 Widget defaultHome = HomePage();
@@ -27,6 +27,7 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageProvider()),
+
     ChangeNotifierProvider(create: (context) {
       RegisterProvider registerProvider = Get.find();
       return registerProvider;
@@ -65,10 +66,17 @@ void main() async {
       AvatarProvider avatarProvider = Get.find();
       return avatarProvider;
     }),
-    ChangeNotifierProvider(
-      create: (_) => GameManagerService(SocketService()),
-      child: GameWidget(),
-    ),
+
+    ChangeNotifierProvider(create: (context) {
+      GameManagerService gameManagerService = Get.find();
+      return gameManagerService;
+    }),
+
+    ChangeNotifierProvider(create: (context) {
+      SoundService soundService = Get.find();
+      return soundService;
+    }),
+
     ChangeNotifierProvider(create: (context) => ThemeProvider()),
   ], child: const MyApp()));
 }
@@ -83,6 +91,8 @@ void initializeServices() {
   Get.put(GameCardService());
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
+  Get.put(GameManagerService());
+  Get.put(SoundService());
 }
 
 class MyApp extends StatelessWidget {

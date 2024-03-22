@@ -8,7 +8,7 @@ class GameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final captureService = Provider.of<CaptureGameEventsService>(context);
 
-    return StreamBuilder<ReplayEvent>(
+    return StreamBuilder<ReplayGameEvent>(
       stream: captureService.replayEventsStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {

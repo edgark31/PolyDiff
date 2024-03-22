@@ -115,7 +115,7 @@ extension LobbyEventsExtension on LobbyEvents {
   }
 }
 
-enum GameEvents {
+enum GameEvent {
   ValidateCoords,
   CheckStatus,
   TimerUpdate,
