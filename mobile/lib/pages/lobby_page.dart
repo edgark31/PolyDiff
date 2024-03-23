@@ -96,6 +96,7 @@ class _LobbyPageState extends State<LobbyPage> {
                       Navigator.pushNamed(context, DASHBOARD_ROUTE);
                     },
                     backgroundColor: kMidOrange,
+                    widthFactor: 0.3,
                   ),
                 ],
               ),
