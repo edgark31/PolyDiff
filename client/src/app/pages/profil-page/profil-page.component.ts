@@ -48,7 +48,7 @@ export class ProfilPageComponent implements AfterViewInit, OnInit {
         this.showTable = !this.showTable;
     }
     translateCharacter(character: string): string {
-        return this.translate.instant(`bouton.${character}`);
+        return this.translate.instant(`button.${character}`);
     }
     onSubmitHome() {
         this.clientSocket.disconnect('auth');
