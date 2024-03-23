@@ -77,27 +77,29 @@ class _GameInfosState extends State<GameInfos> {
                   color: Colors.black,
                   size: 30,
                 ),
-                Text(
-                  players[0].name!,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                if (nbPlayers > 0) ...[
+                  Text(
+                    players[0].name!,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  'Différences trouvées : ${players[0].count}',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                  SizedBox(
+                    width: 30,
                   ),
-                  textAlign: TextAlign.center,
-                ),
+                  Text(
+                    'Différences trouvées : ${players[0].count}',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
                 SizedBox(
                   width: 130,
                 ),
