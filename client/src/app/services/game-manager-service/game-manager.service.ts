@@ -19,9 +19,10 @@ export class GameManagerService {
     username: string;
     isLeftCanvas: boolean;
     game: Subject<Game>;
+    nextGame: Subject<Game>;
     timerLobby: Subject<number>;
-    lobbyWaiting: Lobby;
     endGame: string;
+    lobbyWaiting: Lobby;
     private lobbyGame: Subject<Lobby>;
     private timer: Subject<number>;
     private differenceFound: Subject<Coordinate[]>;
@@ -51,6 +52,7 @@ export class GameManagerService {
         this.timer = new Subject<number>();
         this.players = new Subject<Players>();
         this.game = new Subject<Game>();
+        this.nextGame = new Subject<Game>();
         this.timerLobby = new Subject<number>();
         this.message = new Subject<Chat>();
         this.endMessage = new Subject<string>();
@@ -84,9 +86,14 @@ export class GameManagerService {
         return this.game.asObservable();
     }
 
+    get nextGame$() {
+        return this.nextGame.asObservable();
+    }
+
     get timerLobby$() {
         return this.timerLobby.asObservable();
     }
+
     get endMessage$() {
         return this.endMessage.asObservable().pipe(filter((message) => !!message));
     }
@@ -144,26 +151,19 @@ export class GameManagerService {
         this.clientSocket.send('game', GameEvents.Clic, { lobbyId: id, coordClic: coords });
     }
 
-    abandonGame(): void {
-        this.clientSocket.send('game', GameEvents.AbandonGame);
+    abandonGame(lobbyId: string): void {
+        this.clientSocket.send('game', GameEvents.AbandonGame, lobbyId);
     }
 
     setIsLeftCanvas(isLeft: boolean): void {
         this.isLeftCanvas = isLeft;
     }
 
-    // sendMessage(textMessage: string): void {
-    //     const newMessage = { tag: MessageTag.Received, message: textMessage };
-    //     this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, { tag: MessageTag.Sent, message: textMessage } as ChatMessage);
-    //     this.clientSocket.send('game', MessageEvents.LocalMessage, newMessage);
-    // }
-
     sendMessageGlobal(lobbyId: string | undefined, message: string): void {
         this.clientSocket.send('auth', ChannelEvents.SendGameMessage, { lobbyId, message });
     }
 
     sendMessage(lobbyId: string | undefined, message: string): void {
-        console.log('game' + message);
         this.clientSocket.send('game', ChannelEvents.SendGameMessage, { lobbyId, message });
     }
     removeAllListeners(nameSpace: string) {
@@ -188,11 +188,12 @@ export class GameManagerService {
     }
 
     manageSocket(): void {
-        this.game = new Subject<Game>();
-        this.timerLobby = new Subject<number>();
-        this.message = new Subject<Chat>();
         this.clientSocket.on('game', GameEvents.StartGame, (game: Game) => {
             this.game.next(game);
+        });
+
+        this.clientSocket.on('game', GameEvents.NextGame, (nextGame: Game) => {
+            this.nextGame.next(nextGame);
         });
 
         this.clientSocket.on('game', GameEvents.Found, (data: { lobby: Lobby; difference: Coordinate[] }) => {
@@ -208,62 +209,17 @@ export class GameManagerService {
         });
 
         this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
+            console.log('timer update', time);
             this.timerLobby.next(time);
         });
-        // this.clientSocket.on('game', GameEvents.GameStarted, (room: GameRoom) => {
-        //     this.currentGame.next(room.clientGame);
-        //     this.gameConstants = room.gameConstants;
-        //     this.players.next({ player1: room.player1, player2: room.player2 });
-        //     this.differences = room.originalDifferences;
-        //     this.captureService.saveReplayEvent(ReplayActions.StartGame, room);
-        // });
 
-        // this.clientSocket.on(
-        //     'game',
-        //     GameEvents.RemoveDifference,
-        //     (data: { differencesData: Differences; playerId: string; cheatDifferences: Coordinate[][] }) => {
-        //         this.handleRemoveDifference(data);
-        //     },
-        // );
-
-        // this.clientSocket.on('game', GameEvents.TimerUpdate, (timer: number) => {
-        //     this.timer.next(timer);
-        //     this.captureService.saveReplayEvent(ReplayActions.TimerUpdate, timer);
-        // });
-
-        // this.clientSocket.on('game', GameEvents.EndGame, (endGameMessage: string) => {
-        //     this.endMessage.next(endGameMessage);
-        // });
-
-        // this.clientSocket.on('game', MessageEvents.GlobalMessage, (receivedMessage: ChatMessageGlobal) => {
-        //     if (receivedMessage.userName === this.username) {
-        //         receivedMessage.tag = MessageTag.Sent;
-        //     } else {
-        //         receivedMessage.tag = MessageTag.Received;
-        //     }
-        //     this.globalMessage.next(receivedMessage);
-        //     // this.captureService.saveReplayEvent(ReplayActions.CaptureMessage, receivedMessage);
-        // });
-
-        // this.clientSocket.on('game', GameEvents.UpdateDifferencesFound, (differencesFound: number) => {
-        //     this.differencesFound.next(differencesFound);
-        // });
-
-        // this.clientSocket.on('game', GameEvents.GameModeChanged, () => {
-        //     this.isGameModeChanged.next(true);
-        // });
-
-        // this.clientSocket.on('game', GameEvents.GamePageRefreshed, () => {
-        //     this.isGamePageRefreshed.next(true);
-        // });
+        this.clientSocket.on('game', GameEvents.EndGame, (endMessage: string) => {
+            console.log(endMessage);
+            this.endMessage.next(endMessage);
+        });
     }
 
     off(): void {
-        // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
-        // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
-        this.clientSocket.authSocket.off(GameEvents.StartGame);
-        this.clientSocket.authSocket.off(ChannelEvents.GameMessage);
-        this.clientSocket.authSocket.off(GameEvents.TimerUpdate);
         if (this.game && !this.game.closed) {
             this.game?.unsubscribe();
         }
@@ -271,10 +227,6 @@ export class GameManagerService {
         if (this.timerLobby && !this.timerLobby.closed) this.timerLobby?.unsubscribe();
         if (this.currentGame && !this.currentGame.closed) this.currentGame?.unsubscribe();
     }
-
-    // private checkStatus(): void {
-    //     this.clientSocket.send('game', GameEvents.CheckStatus);
-    // }
 
     private handleNotFound(coordClic: Coordinate): void {
         this.soundService.playIncorrectSound(this.welcome.account.profile.onErrorSound);

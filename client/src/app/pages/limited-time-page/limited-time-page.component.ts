@@ -3,17 +3,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
-// import { NoGameAvailableDialogComponent } from '@app/components/no-game-available-dialog/no-game-available-dialog.component';
-// import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
-// import { WaitingForPlayerToJoinComponent } from '@app/components/waiting-player-to-join/waiting-player-to-join.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { NavigationService } from '@app/services/navigation-service/navigation.service';
+// import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { ChannelEvents, GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
-// import { PlayerData } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
+
 @Component({
     selector: 'app-limited-time-page',
     templateUrl: './limited-time-page.component.html',
@@ -73,7 +71,6 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     updatepagedLobbies() {
         const startIndex = this.currentPage * this.pageSize;
         const endIndex = startIndex + this.pageSize;
-        this.lobbies = this.lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
         this.pagedLobbies = this.lobbies.slice(startIndex, endIndex);
     }
 
@@ -83,7 +80,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         }
         this.lobbiesSubscription = this.roomManagerService.lobbies$.subscribe((lobbies) => {
             if (lobbies.length > 0) {
-                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Limited && lobby.isAvailable);
+                this.lobbies = lobbies.filter((lobby) => lobby.mode === GameModes.Limited);
                 this.updatepagedLobbies();
                 this.cdr.detectChanges();
             }
