@@ -45,6 +45,7 @@ class GameManagerService extends ChangeNotifier {
 
   void startGame(String? lobbyId) {
     print("Calling gamemanager start game");
+    gameAreaService.coordinates = [];
     socketService.send(SocketType.Game, GameEvents.StartGame.name, lobbyId);
   }
 
