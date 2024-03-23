@@ -59,6 +59,8 @@ export class GameGateway implements OnGatewayConnection {
                 this.logger.log(`Game started in lobby -> ${lobbyId}`);
             } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
                 await this.nextGame(lobbyId, []);
+                this.server.to(lobbyId).emit(GameEvents.StartGame, this.games.get(lobbyId));
+                this.logger.log(`Game started in lobby -> ${lobbyId}`);
             }
             // Set timer indivually for each lobby
             const timerId = setInterval(() => {
@@ -139,10 +141,11 @@ export class GameGateway implements OnGatewayConnection {
                 // Update tout correctement
                 this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
                 // Update le time
-                this.roomsManager.lobbies.get(lobbyId).time + this.roomsManager.lobbies.get(lobbyId).bonusTime >=
-                this.roomsManager.lobbies.get(lobbyId).timeLimit
-                    ? (this.roomsManager.lobbies.get(lobbyId).time = this.roomsManager.lobbies.get(lobbyId).timeLimit)
-                    : (this.roomsManager.lobbies.get(lobbyId).time += this.roomsManager.lobbies.get(lobbyId).bonusTime);
+                // this.roomsManager.lobbies.get(lobbyId).time + this.roomsManager.lobbies.get(lobbyId).bonusTime >=
+                // this.roomsManager.lobbies.get(lobbyId).timeLimit
+                //     ? (this.roomsManager.lobbies.get(lobbyId).time = this.roomsManager.lobbies.get(lobbyId).timeLimit)
+                //     : (this.roomsManager.lobbies.get(lobbyId).time += this.roomsManager.lobbies.get(lobbyId).bonusTime);
+                this.roomsManager.lobbies.get(lobbyId).time += 10; // TODO : Get info from lobby creation
                 const difference = this.games.get(lobbyId).differences[index];
                 this.server.to(lobbyId).emit(GameEvents.Found, {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
@@ -163,6 +166,8 @@ export class GameGateway implements OnGatewayConnection {
                     } as Chat);
                     clearInterval(this.timers.get(lobbyId));
                     return;
+                } else {
+                    this.server.to(lobbyId).emit(GameEvents.StartGame, this.games.get(lobbyId));
                 }
                 this.roomsManager.lobbies.get(lobbyId).isCheatEnabled
                     ? this.server.to(lobbyId).emit(GameEvents.Cheat, this.games.get(lobbyId).differences)
@@ -280,7 +285,8 @@ export class GameGateway implements OnGatewayConnection {
         // Randomly picking one difference to keep
         const keepIndex: number = Math.floor(Math.random() * clonedGame.differences.length);
         const gameCopy = structuredClone(clonedGame);
-        clonedGame.modified = await this.imageManager.modifyImage(gameCopy, keepIndex);
+        // TODO : Handle other image types
+        clonedGame.modified = 'data:image/png;base64,' + (await this.imageManager.modifyImage(gameCopy, keepIndex));
         clonedGame.differences = clonedGame.differences.filter((_, index) => index === keepIndex);
         this.games.set(lobbyId, clonedGame);
         return game;

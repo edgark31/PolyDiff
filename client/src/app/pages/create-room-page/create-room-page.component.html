@@ -5,27 +5,28 @@
     <!-- <header class="header">
         <h1 class="header-item flex-column">Bienvenue</h1>
     </header> -->
-    <img id = "background" src = "./assets/background/CreationBackground.jpg" alt="background"/>
+    <img id="background" src="./assets/background/CreationBackground.jpg" alt="background" />
     <div class="flex-column">
         <button class="settings-button">
-            <span id = "classic">Temps : </span>
-            <mat-slider color="warn" thumbLabel [displayWith]="formatLabel.bind(this)" tickInterval="1" min="30" max="60"></mat-slider>
+            <span id="classic">Temps : </span>
+            <mat-slider color="warn" thumbLabel [displayWith]="formatLabel.bind(this)" tickInterval="1" min="30"
+                max="60"></mat-slider>
         </button>
         <button class="settings-button">
-            <span id = "classic">Mode triche : </span>
+            <span id="classic">Mode triche : </span>
             <mat-checkbox id="config" color="warn" [(ngModel)]="isCheatModeEnabled"></mat-checkbox>
         </button>
         <button class="settings-button">
-            <span id = "classic">Mot de passe : </span>
+            <span id="classic">Mot de passe : </span>
             <input matInput type="password" placeholder="Veuillez entrer votre mot de passe" [(ngModel)]="password">
         </button>
     </div>
     <footer class="footer flex-column">
         <button class="button">
-            <span id = "classic" routerLink="/waiting-room" (click)="onSubmit()">Créer la salle</span>
+            <span id="classic" routerLink="/waiting-room" (click)="onSubmit()">Créer la salle</span>
         </button>
         <button class="button">
-            <span id = "classic">Mode pratique</span>
+            <span id="classic">Mode pratique</span>
         </button>
     </footer>
 </div>

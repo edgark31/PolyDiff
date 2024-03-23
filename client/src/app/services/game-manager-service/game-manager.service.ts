@@ -199,6 +199,7 @@ export class GameManagerService {
         });
 
         this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
+            console.log('timer update', time);
             this.timerLobby.next(time);
         });
 
