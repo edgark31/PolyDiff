@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/services/game_manager_service.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:provider/provider.dart';
 
 class AbandonPopup extends StatelessWidget {
+  final LobbyService lobbyService = Get.find();
+  final GameManagerService gameManagerService = Get.find();
+
   @override
   Widget build(BuildContext context) {
+    final lobbyService = context.watch<LobbyService>(); 
+    final gameManagerService = context.watch<GameManagerService>(); 
     return Center(
       child: SizedBox(
         width: 600.0,
@@ -31,6 +40,7 @@ class AbandonPopup extends StatelessWidget {
               CustomButton(
                 text: 'Oui',
                 press: () {
+                  gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
                   Navigator.pushNamed(context, DASHBOARD_ROUTE);
                 },
                 backgroundColor: kMidGreen,

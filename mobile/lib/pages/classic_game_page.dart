@@ -9,6 +9,7 @@ import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
 import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/widgets/abandon_popup.dart';
 import 'package:mobile/widgets/canvas.dart';
 import 'package:mobile/widgets/chat_box.dart';
 import 'package:mobile/widgets/end_game_popup.dart';
@@ -60,7 +61,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
     return imageConverterService.fromImagesBase64(
       gameManagerService.game.original,
       gameManagerService.game.modified,
-    ); // TODO : replace with specific image when http is setup
+    );
   }
 
   @override
@@ -170,7 +171,16 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             bottom: 8.0,
             child: ElevatedButton(
               onPressed: () {
-                print('Abandon');
+                Future.delayed(Duration.zero, () {
+                  if (ModalRoute.of(context)?.isCurrent ?? false) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AbandonPopup();
+                      },
+                    );
+                  }
+                });
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Color(0xFFEF6151),
