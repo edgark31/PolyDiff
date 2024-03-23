@@ -13,6 +13,7 @@ class GameManagerService extends ChangeNotifier {
   final SocketService socketService = Get.find();
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();
+  bool isLeftCanvas = true;
 
   Game get game => _game;
   int get time => _time;
@@ -29,12 +30,18 @@ class GameManagerService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setIsLeftCanvas(isLeft) {
+    isLeftCanvas = isLeft;
+  }
+
   void startGame(String? lobbyId) {
     print("Calling gamemanager start game");
     socketService.send(SocketType.Game, GameEvents.StartGame.name, lobbyId);
   }
 
   void sendCoord(String? lobbyID, Coordinate coord) {
+    print(
+        'SendCoord is called with id: $lobbyID and coord: x: ${coord.x} y: ${coord.y}');
     socketService.send(
       SocketType.Game,
       GameEvents.Clic.name,
@@ -52,6 +59,7 @@ class GameManagerService extends ChangeNotifier {
     });
 
     socketService.on(SocketType.Game, GameEvents.Found.name, (data) {
+      print("Difference Found");
       Map<String, dynamic> returnedInfo = data as Map<String, dynamic>;
       lobbyService.setLobby(
           Lobby.fromJson(returnedInfo['lobby'] as Map<String, dynamic>));
@@ -61,17 +69,22 @@ class GameManagerService extends ChangeNotifier {
       gameAreaService.showDifferenceFound(coord);
     });
 
+    socketService.on(SocketType.Game, GameEvents.NotFound.name, (data) {
+      print("showing error");
+      Coordinate currentCoord =
+          Coordinate.fromJson(data as Map<String, dynamic>);
+      if (isLeftCanvas) {
+        gameAreaService.showDifferenceNotFoundLeft(currentCoord);
+      } else {
+        gameAreaService.showDifferenceNotFoundRight(currentCoord);
+      }
+    });
+
     socketService.on(SocketType.Game, GameEvents.TimerUpdate.name, (data) {
-      print("Time received");
       setTime(data as int);
     });
 
     // socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
-    //   print(data as String?); // Server sending 'Temps écoulé !'
-    //   print('GameEvents.EndGame.name event received');
-    // });
-
-    // socketService.on(SocketType.Game, GameEvents.TimerUpdate.name, (data) {
     //   print(data as String?); // Server sending 'Temps écoulé !'
     //   print('GameEvents.EndGame.name event received');
     // });
