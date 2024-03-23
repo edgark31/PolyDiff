@@ -100,7 +100,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
         Slider(
           value: gameDuration,
           min: 30,
-          max: 60,
+          max: 600, // TODO: Change back to 50 when testing is done
           divisions: 60,
           label: gameDuration.round().toString(),
           onChanged: (double newValue) {
