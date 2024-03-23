@@ -84,7 +84,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.lobby = this.gameManager.lobbyWaiting;
 
         this.chatSubscription = this.gameManager.message$.subscribe((message: Chat) => {
-            console.log('retour' + message);
             this.receiveMessage(message);
         });
         this.gameSubscription = this.gameManager.game$.subscribe((game: Game) => {
@@ -126,7 +125,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
     sendMessage(message: string): void {
         this.gameManager.sendMessage(this.gameLobby.lobbyId, message);
-        console.log('yo' + message);
     }
 
     sendMessageGlobal(message: string): void {
