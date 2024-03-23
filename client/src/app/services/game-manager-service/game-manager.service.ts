@@ -19,6 +19,7 @@ export class GameManagerService {
     username: string;
     isLeftCanvas: boolean;
     game: Subject<Game>;
+    nextGame: Subject<Game>;
     timerLobby: Subject<number>;
     endGame: string;
     lobbyWaiting: Lobby;
@@ -52,6 +53,7 @@ export class GameManagerService {
         this.timer = new Subject<number>();
         this.players = new Subject<Players>();
         this.game = new Subject<Game>();
+        this.nextGame = new Subject<Game>();
         this.timerLobby = new Subject<number>();
         this.message = new Subject<Chat>();
         this.abandon = new Subject<string>();
@@ -90,9 +92,14 @@ export class GameManagerService {
         return this.game.asObservable();
     }
 
+    get nextGame$() {
+        return this.nextGame.asObservable();
+    }
+
     get timerLobby$() {
         return this.timerLobby.asObservable();
     }
+
     get endMessage$() {
         return this.endMessage.asObservable().pipe(filter((message) => !!message));
     }
@@ -192,9 +199,15 @@ export class GameManagerService {
         this.message = new Subject<Chat>();
         this.lobbyGame = new Subject<Lobby>();
         this.differenceFound = new Subject<Coordinate[]>();
+        this.endMessage = new Subject<string>();
+        this.nextGame = new Subject<Game>();
         this.clientSocket.on('game', GameEvents.StartGame, (game: Game) => {
             this.game.next(game);
             this.lobbyGame.next(this.lobbyWaiting);
+        });
+
+        this.clientSocket.on('game', GameEvents.NextGame, (nextGame: Game) => {
+            this.nextGame.next(nextGame);
         });
 
         this.clientSocket.on('game', GameEvents.Found, (data: { lobby: Lobby; difference: Coordinate[] }) => {
@@ -210,7 +223,13 @@ export class GameManagerService {
         });
 
         this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
+            console.log('timer update', time);
             this.timerLobby.next(time);
+        });
+
+        this.clientSocket.on('game', GameEvents.EndGame, (endMessage: string) => {
+            console.log(endMessage);
+            this.endMessage.next(endMessage);
         });
     }
 
@@ -222,6 +241,8 @@ export class GameManagerService {
         if (this.timerLobby && !this.timerLobby.closed) this.timerLobby?.unsubscribe();
         if (this.lobbyGame && !this.lobbyGame.closed) this.lobbyGame?.unsubscribe();
         if (this.differenceFound && !this.differenceFound.closed) this.differenceFound?.unsubscribe();
+        if (this.endMessage && !this.endMessage.closed) this.endMessage?.unsubscribe();
+        if (this.nextGame && !this.nextGame.closed) this.nextGame?.unsubscribe();
         this.clientSocket.disconnect('game');
     }
 

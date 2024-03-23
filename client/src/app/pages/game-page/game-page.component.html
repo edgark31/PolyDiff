@@ -14,7 +14,7 @@
                     </h1>
                 </div>
             </div>
-        <!-- <app-game-infos [isReplayAvailable]="isReplayAvailable" [game]="game"></app-game-infos> -->
+        <!-- <app-game-infos [isReplayAvailable]="isReplayAvailable" [game]="gameLobby"></app-game-infos> -->
     </div>
     <div class="canvas-container">
         <div class="game-canvas">
@@ -62,8 +62,8 @@
     <app-chat-box (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
 </div>
  <img id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
-<!-- <div *ngIf="game">
-    <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages" [isReplaying]="isReplayAvailable" [gameMode]="game.mode"></app-chat-box>
+<div>
+    <!-- <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages" [isReplaying]="isReplayAvailable" [gameMode]="game.mode"></app-chat-box> -->
     <app-replay-buttons [isReplayAvailable]="isReplayAvailable"></app-replay-buttons>
-</div> -->
+</div>
 
