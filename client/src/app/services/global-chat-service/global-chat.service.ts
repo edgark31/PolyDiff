@@ -28,18 +28,18 @@ export class GlobalChatService {
     }
 
     manage(): void {
+        this.message = new Subject<Chat>();
         this.clientSocketService.on('auth', ChannelEvents.GlobalMessage, (chat: Chat) => {
             this.message.next(chat);
         });
         this.clientSocketService.on('auth', ChannelEvents.UpdateLog, (chatLog: ChatLog) => {
-            if (chatLog.channelName === 'global') {
-                chatLog.chat.forEach((chat) => {
-                    this.message.next({
-                        ...chat,
-                        tag: chat.name === this.welcomeService.account.credentials.username ? MessageTag.Sent : MessageTag.Received,
-                    });
+            // if (chatLog.channelName === 'global') {
+            chatLog.chat.forEach((chat) => {
+                this.message.next({
+                    ...chat,
+                    tag: chat.name === this.welcomeService.account.credentials.username ? MessageTag.Sent : MessageTag.Received,
                 });
-            }
+            });
         });
     }
 

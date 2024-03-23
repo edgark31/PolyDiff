@@ -49,6 +49,7 @@ export class CreateRoomPageComponent implements AfterViewInit {
             isCheatEnabled: this.isCheatModeEnabled,
             mode: this.mode,
             timeLimit: this.time as number,
+            time: this.time as number, // vue que le serveur l'utilise pour diminueer le temps
             password: this.password,
             nDifferences: this.nDifferences,
             gameId: this.gameId,

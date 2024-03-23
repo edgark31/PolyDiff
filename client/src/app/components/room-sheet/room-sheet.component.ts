@@ -24,12 +24,20 @@ export class RoomSheetComponent {
     ) {}
 
     manageGames(lobby: Lobby): void {
-        if (!lobby.password) {
-            this.roomManager.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
-            this.router.navigate(['/waiting-room']);
-        } else
-            this.dialog.open(ModalAccessMatchComponent, {
-                data: lobby,
-            });
+        if (this.lobby.isAvailable && this.lobby.players.length < 4) {
+            if (!lobby.password) {
+                this.roomManager.joinRoom(lobby.lobbyId ? lobby.lobbyId : '');
+                this.router.navigate(['/waiting-room']);
+            } else
+                this.dialog.open(ModalAccessMatchComponent, {
+                    data: lobby,
+                });
+        } else if (!this.lobby.isAvailable) {
+            // rentrer en tant qu'observateur
+        }
+    }
+    feedbackLobby(): string {
+        if (this.lobby.players.length === 4) return 'Partie pleine';
+        return '';
     }
 }

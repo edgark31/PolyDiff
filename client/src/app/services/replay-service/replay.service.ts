@@ -8,7 +8,7 @@ import { GameAreaService } from '@app/services/game-area-service/game-area.servi
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
-import { ChatMessage, Coordinate, GameRoom } from '@common/game-interfaces';
+import { Coordinate, GameRoom } from '@common/game-interfaces';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Injectable({
@@ -139,7 +139,7 @@ export class ReplayService implements OnDestroy {
                 this.replayClickError(replayData.data as ReplayPayload);
                 break;
             case ReplayActions.CaptureMessage:
-                this.replayCaptureMessage(replayData.data as ReplayPayload);
+                // this.replayCaptureMessage(replayData.data as ReplayPayload);
                 break;
             case ReplayActions.ActivateCheat:
                 this.replayActivateCheat(replayData.data as ReplayPayload);
@@ -244,9 +244,9 @@ export class ReplayService implements OnDestroy {
         );
     }
 
-    private replayCaptureMessage(replayData: ReplayPayload): void {
-        this.gameManager.setMessage(replayData as ChatMessage);
-    }
+    // private replayCaptureMessage(replayData: ReplayPayload): void {
+    //     this.gameManager.setMessage(replayData as Chat);
+    // }
 
     private replayActivateCheat(replayData: ReplayPayload): void {
         this.isCheatMode = true;

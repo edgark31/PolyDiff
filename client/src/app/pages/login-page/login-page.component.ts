@@ -9,6 +9,7 @@ import { CommunicationService } from '@app/services/communication-service/commun
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Account, Credentials } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-login-page',
@@ -28,7 +29,8 @@ export class LoginPageComponent {
         private readonly clientSocket: ClientSocketService,
         private readonly communication: CommunicationService,
         private readonly router: Router,
-        private readonly welcomeService: WelcomeService,
+        private readonly welcomeservice: WelcomeService,
+        private translate: TranslateService,
     ) {
         this.feedback = '';
     }
@@ -42,9 +44,11 @@ export class LoginPageComponent {
             this.communication.login(this.creds).subscribe({
                 next: (account: Account) => {
                     this.clientSocket.connect(account.id as string, 'auth');
-                    this.welcomeService.account = account;
+                    this.welcomeservice.account = account;
                     this.gameManager.username = account.credentials.username;
-                    this.welcomeService.account.profile.avatar = `http://localhost:3000/avatar/${this.gameManager.username}.png`;
+                    this.translate.setDefaultLang(this.welcomeservice.account.profile.language);
+                    this.translate.use(this.welcomeservice.account.profile.language);
+                    this.welcomeservice.account.profile.avatar = `http://localhost:3000/avatar/${this.gameManager.username}.png`;
                     this.router.navigate(['/home']);
                 },
                 error: (error: HttpErrorResponse) => {
