@@ -7,9 +7,9 @@
     </header> -->
     <img id = "background" src = "./assets/background/CreationBackground.jpg" alt="background"/>
     <div class="flex-column">
-        <button class="settings-button" *ngIf="onVerifyClassic()">
+        <button class="settings-button">
             <span id = "classic">Temps : </span>
-            <mat-slider color="warn" thumbLabel [displayWith]="formatLabel.bind(this)" tickInterval="1" min="1" max="120"></mat-slider>
+            <mat-slider color="warn" thumbLabel [displayWith]="formatLabel.bind(this)" tickInterval="1" min="30" max="60"></mat-slider>
         </button>
         <button class="settings-button">
             <span id = "classic">Mode triche : </span>
