@@ -29,7 +29,6 @@ export class GameManagerService {
     private opponentDifferencesFound: Subject<number>;
     private currentGame: Subject<Game>;
     private message: Subject<Chat>;
-    private abandon: Subject<string>;
     private endMessage: Subject<string>;
     private players: Subject<Players>;
     private isFirstDifferencesFound: Subject<boolean>;
@@ -54,7 +53,6 @@ export class GameManagerService {
         this.game = new Subject<Game>();
         this.timerLobby = new Subject<number>();
         this.message = new Subject<Chat>();
-        this.abandon = new Subject<string>();
         this.endMessage = new Subject<string>();
         this.opponentDifferencesFound = new Subject<number>();
         this.replayEventsSubject = new Subject<ReplayEvent>();
@@ -82,10 +80,6 @@ export class GameManagerService {
         return this.message.asObservable();
     }
 
-    get abandon$() {
-        return this.abandon.asObservable();
-    }
-
     get game$() {
         return this.game.asObservable();
     }
@@ -93,6 +87,7 @@ export class GameManagerService {
     get timerLobby$() {
         return this.timerLobby.asObservable();
     }
+
     get endMessage$() {
         return this.endMessage.asObservable().pipe(filter((message) => !!message));
     }
@@ -207,8 +202,9 @@ export class GameManagerService {
             this.timerLobby.next(time);
         });
 
-        this.clientSocket.on('game', GameEvents.EndGame, (abandon: string) => {
-            this.abandon.next(abandon);
+        this.clientSocket.on('game', GameEvents.EndGame, (endMessage: string) => {
+            console.log(endMessage);
+            this.endMessage.next(endMessage);
         });
     }
 
