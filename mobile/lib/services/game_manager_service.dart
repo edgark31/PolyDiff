@@ -48,6 +48,13 @@ class GameManagerService extends ChangeNotifier {
     socketService.send(SocketType.Game, GameEvents.StartGame.name, lobbyId);
   }
 
+  void setupGame() {
+    setListeners();
+    setEndGameMessage(null);
+    setGame(Game.initial());
+    startGame(lobbyService.lobby.lobbyId);
+  }
+
   void sendCoord(String? lobbyID, Coordinate coord) {
     print(
         'SendCoord is called with id: $lobbyID and coord: x: ${coord.x} y: ${coord.y}');
