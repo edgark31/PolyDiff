@@ -73,6 +73,7 @@ export class GameGateway implements OnGatewayConnection {
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Temps écoulé !');
                     this.logDraw(lobbyId);
                     clearInterval(timerId);
+                    this.deleteLobby(lobbyId);
                     return;
                 }
                 this.roomsManager.lobbies.get(lobbyId).time -= 1;
@@ -117,6 +118,7 @@ export class GameGateway implements OnGatewayConnection {
                         tag: MessageTag.Common,
                     } as Chat);
                     clearInterval(this.timers.get(lobbyId));
+                    this.deleteLobby(lobbyId);
                     return;
                 }
                 // Vérifier s'il reste des differences
@@ -128,6 +130,7 @@ export class GameGateway implements OnGatewayConnection {
                         tag: MessageTag.Common,
                     } as Chat);
                     clearInterval(this.timers.get(lobbyId));
+                    this.deleteLobby(lobbyId);
                 }
                 return;
             }
@@ -165,9 +168,10 @@ export class GameGateway implements OnGatewayConnection {
                         tag: MessageTag.Common,
                     } as Chat);
                     clearInterval(this.timers.get(lobbyId));
+                    this.deleteLobby(lobbyId);
                     return;
                 } else {
-                    this.server.to(lobbyId).emit(GameEvents.StartGame, this.games.get(lobbyId));
+                    this.server.to(lobbyId).emit(GameEvents.NextGame, this.games.get(lobbyId));
                 }
                 this.roomsManager.lobbies.get(lobbyId).isCheatEnabled
                     ? this.server.to(lobbyId).emit(GameEvents.Cheat, this.games.get(lobbyId).differences)
@@ -309,5 +313,21 @@ export class GameGateway implements OnGatewayConnection {
         this.roomsManager.lobbies.get(lobbyId).players.forEach((player) => {
             this.accountManager.logSession(player.accountId, false, this.roomsManager.lobbies.get(lobbyId).timePlayed, player.count);
         });
+    }
+
+    // ------------------ DELETTE ROOM/LOBBY/GAME ------------------
+    private deleteLobby(lobbyId: string) {
+        this.roomsManager.lobbies.delete(lobbyId);
+        this.games.delete(lobbyId);
+        clearInterval(this.timers.get(lobbyId));
+        this.timers.delete(lobbyId);
+        this.server
+            .in(lobbyId)
+            .fetchSockets()
+            .then((sockets) => {
+                sockets.forEach((socket) => {
+                    socket.leave(lobbyId);
+                });
+            });
     }
 }

@@ -19,6 +19,7 @@ export class GameManagerService {
     username: string;
     isLeftCanvas: boolean;
     game: Subject<Game>;
+    nextGame: Subject<Game>;
     timerLobby: Subject<number>;
     endGame: string;
     lobbyWaiting: Lobby;
@@ -51,6 +52,7 @@ export class GameManagerService {
         this.timer = new Subject<number>();
         this.players = new Subject<Players>();
         this.game = new Subject<Game>();
+        this.nextGame = new Subject<Game>();
         this.timerLobby = new Subject<number>();
         this.message = new Subject<Chat>();
         this.endMessage = new Subject<string>();
@@ -82,6 +84,10 @@ export class GameManagerService {
 
     get game$() {
         return this.game.asObservable();
+    }
+
+    get nextGame$() {
+        return this.nextGame.asObservable();
     }
 
     get timerLobby$() {
@@ -184,6 +190,10 @@ export class GameManagerService {
     manageSocket(): void {
         this.clientSocket.on('game', GameEvents.StartGame, (game: Game) => {
             this.game.next(game);
+        });
+
+        this.clientSocket.on('game', GameEvents.NextGame, (nextGame: Game) => {
+            this.nextGame.next(nextGame);
         });
 
         this.clientSocket.on('game', GameEvents.Found, (data: { lobby: Lobby; difference: Coordinate[] }) => {
