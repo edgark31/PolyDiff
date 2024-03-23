@@ -75,6 +75,15 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
         ],
       );
     }
+
+     if (gameManagerService.endGameMessage != null) {
+      Future.delayed(Duration.zero, () {
+        if (ModalRoute.of(context)?.isCurrent ?? false) {
+          print('End game pop up appears !');
+        }
+      });
+    }
+
     return Scaffold(
       body: Stack(
         children: [
