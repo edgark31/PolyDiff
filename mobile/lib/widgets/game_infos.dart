@@ -101,7 +101,7 @@ class _GameInfosState extends State<GameInfos> {
                 SizedBox(
                   width: 130,
                 ),
-                if (nbPlayers >= 1) ...[
+                if (nbPlayers > 1) ...[
                   Icon(
                     Icons.person,
                     color: Colors.black,
