@@ -43,8 +43,8 @@ enum GameModes {
 enum ChannelEvents {
   SendLobbyMessage,
   LobbyMessage,
-  SendLocalMessage,
-  LocalMessage,
+  SendGameMessage,
+  GameMessage,
   SendGlobalMessage,
   GlobalMessage,
   UpdateLog,

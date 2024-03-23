@@ -48,6 +48,11 @@ class ChatService extends ChangeNotifier {
     setLobbyChatListeners();
   }
 
+  void setupGame() {
+    clearLobbyMessages();
+    setGameChatListeners();
+  }
+
   void setLobbyMessages(List<Chat> messages) {
     _lobbyMessages.clear();
     _lobbyMessages.addAll(messages);
@@ -67,6 +72,12 @@ class ChatService extends ChangeNotifier {
 
   void setLobbyChatListeners() {
     socketService.on(SocketType.Lobby, ChannelEvents.LobbyMessage.name, (data) {
+      addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
+    });
+  }
+
+  void setGameChatListeners() {
+    socketService.on(SocketType.Game, ChannelEvents.GameMessage.name, (data) {
       addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
     });
   }
