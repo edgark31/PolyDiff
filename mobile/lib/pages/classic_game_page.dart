@@ -11,6 +11,7 @@ import 'package:mobile/services/image_converter_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/canvas.dart';
 import 'package:mobile/widgets/chat_box.dart';
+import 'package:mobile/widgets/end_game_popup.dart';
 import 'package:mobile/widgets/game_infos.dart';
 import 'package:provider/provider.dart';
 
@@ -67,7 +68,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
     final gameAreaService = Provider.of<GameAreaService>(context);
     final gameManagerService = context.watch<GameManagerService>();
     final lobbyService = context.watch<LobbyService>();
-    if (gameManagerService.game.gameId == null) {
+    if (gameManagerService.game.gameId == '') {
       return Column(
         children: [
           CircularProgressIndicator(),
@@ -75,6 +76,23 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
         ],
       );
     }
+
+    if (gameManagerService.endGameMessage != null) {
+      Future.delayed(Duration.zero, () {
+        if (ModalRoute.of(context)?.isCurrent ?? false) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return EndGamePopup(
+                endMessage: gameManagerService.endGameMessage!,
+                gameMode: lobbyService.lobby.mode,
+              );
+            },
+          );
+        }
+      });
+    }
+
     return Scaffold(
       body: Stack(
         children: [

@@ -10,6 +10,7 @@ import 'package:mobile/services/socket_service.dart';
 class GameManagerService extends ChangeNotifier {
   static Game _game = Game.initial();
   static int _time = 0;
+  static String? _endGameMessage;
   final SocketService socketService = Get.find();
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();
@@ -17,9 +18,11 @@ class GameManagerService extends ChangeNotifier {
 
   Game get game => _game;
   int get time => _time;
+  String? get endGameMessage => _endGameMessage;
 
   void setGame(Game newGame) {
     print('new Game has been setted $game');
+    _endGameMessage = null;
     _game = newGame;
     notifyListeners();
   }
@@ -30,13 +33,27 @@ class GameManagerService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setEndGameMessage(String? newEndGameMessage) {
+    print("New EndGameMessage setted : $newEndGameMessage");
+    _endGameMessage = newEndGameMessage;
+    notifyListeners();
+  }
+
   void setIsLeftCanvas(isLeft) {
     isLeftCanvas = isLeft;
   }
 
   void startGame(String? lobbyId) {
     print("Calling gamemanager start game");
+    gameAreaService.coordinates = [];
     socketService.send(SocketType.Game, GameEvents.StartGame.name, lobbyId);
+  }
+
+  void setupGame() {
+    setListeners();
+    setEndGameMessage(null);
+    setGame(Game.initial());
+    startGame(lobbyService.lobby.lobbyId);
   }
 
   void sendCoord(String? lobbyID, Coordinate coord) {
@@ -84,9 +101,10 @@ class GameManagerService extends ChangeNotifier {
       setTime(data as int);
     });
 
-    // socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
-    //   print(data as String?); // Server sending 'Temps écoulé !'
-    //   print('GameEvents.EndGame.name event received');
-    // });
+    socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
+      setEndGameMessage(data as String?);
+      socketService.disconnect(SocketType.Game);
+      lobbyService.endLobby();
+    });
   }
 }

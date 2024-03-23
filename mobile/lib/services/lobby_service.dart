@@ -73,16 +73,12 @@ class LobbyService extends ChangeNotifier {
       _lobby.lobbyId,
     );
     setLobby(Lobby.initial());
+    endLobby();
   }
 
-  // TODO : Implement end of lobby logic
-  // void endLobby() {
-  //   print('Ending lobby');
-  //   _isLobbyStarted = false;
-  //   print('_isLobbyStarted is now : $_isLobbyStarted');
-  //   notifyListeners();
-  //   socketService.disconnect(SocketType.Lobby);
-  // }
+  void endLobby() {
+    socketService.disconnect(SocketType.Lobby);
+  }
 
   void setupLobby(GameModes mode) {
     setListeners();

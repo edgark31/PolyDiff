@@ -25,6 +25,7 @@ class _GameInfosState extends State<GameInfos> {
     int timer = gameManagerService.time;
     int? nbDifferencesPresent = gameManagerService.game.nDifferences;
     List<Player> players = lobbyService.lobby.players;
+    print("Game infos players : $players");
     String gameMode = lobbyService.lobby.mode.name;
     int nbPlayers = lobbyService.lobby.players.length;
 
@@ -76,56 +77,60 @@ class _GameInfosState extends State<GameInfos> {
                   color: Colors.black,
                   size: 30,
                 ),
-                Text(
-                  players[0].name!,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                if (nbPlayers > 0) ...[
+                  Text(
+                    players[0].name!,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  'Différences trouvées : ${players[0].count}',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                  SizedBox(
+                    width: 30,
                   ),
-                  textAlign: TextAlign.center,
-                ),
+                  Text(
+                    'Différences trouvées : ${players[0].count}',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
                 SizedBox(
                   width: 130,
                 ),
-                Icon(
-                  Icons.person,
-                  color: Colors.black,
-                  size: 30,
-                ),
-                Text(
-                  players[1].name as String,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+                if (nbPlayers > 1) ...[
+                  Icon(
+                    Icons.person,
                     color: Colors.black,
+                    size: 30,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  'Différences trouvées : ${players[1].count}',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                  Text(
+                    players[1].name as String,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  Text(
+                    'Différences trouvées : ${players[1].count}',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ],
             ),
             Row(
