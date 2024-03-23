@@ -234,7 +234,6 @@ export interface Score {
 
 export interface Chat {
     raw: string;
-    accountId?: string;
     name?: string;
     tag?: MessageTag;
     timestamp?: string;

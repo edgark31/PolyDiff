@@ -2,63 +2,66 @@
 
   <!-- [ngStyle]="{'background-color': (welcomeService.chooseTheme.BackgroundColor), 'color': (welcomeService.chooseTheme.ButtonColor)}" -->
   <!-- <app-menu></app-menu> -->
+  <div class="header">
   <app-nav-bar id ="nav-bar"></app-nav-bar>
+  </div>
+  <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
   <div class="container-information">
-    <div class="information">{{'profile.information' | translate }}</div>
+    <div class="information">{{'profil.information' | translate }}</div>
   </div>
   <div class="container">
     <div class="left">
       <div class="form-control">
-        <label for="username">{{'profile.username' | translate }}</label>
+        <div class="profil">{{'profil.username' | translate }}</div>
         <div> {{ welcomeService.account.credentials.username }}</div>
       </div>
 
       <div class="form-avatar">
-        <label for="avatar">Avatar</label>
+        <div  class="profil">Avatar</div>
         <img [src]="welcomeService.account.profile.avatar" alt="Image" style="width: 100px; height: 100px;">
         <span class="status-indicator"></span>
       </div>
 
 
       <div class="form-control">
-        <label for="Theme">{{'profile.theme' | translate }}</label>
+        <div  class="profil">{{'profil.theme' | translate }}</div>
         <div>{{ welcomeService.account.profile.desktopTheme.name }}</div>
       </div>
 
       <div class="form-control">
-        <label for="Theme">{{'profil.songError' | translate }}</label>
+        <div  class="profil">{{'profil.songError' | translate }}</div>
         <div>{{ welcomeService.account.profile.onErrorSound.name }}</div>
       </div>
 
       <div class="form-control">
-        <label for="Theme">{{'profil.songDifference' | translate }}</label>
+        <div  class="profil">{{'profil.songDifference' | translate }}</div>
         <div>{{ welcomeService.account.profile.onCorrectSound.name }}</div>
       </div>
 
       <div class="form-control">
-        <label for="Langage">{{'profile.language' | translate }}</label>
+        <div  class="profil">{{'profil.language' | translate }}</div>
         <div>{{ translateCharacter(welcomeService.account.profile.language) }}</div>
       </div>
     </div>
 
     <div class="right">
       <div class="section">
-        <h1>{{'profile.statistic' | translate }}</h1>
+        <h1  class="profil">{{'profil.statistic' | translate }}</h1>
       </div>
       <div class="form-control">
-        <label>{{'profile.gamePlayed' | translate }}: </label>
+        <div  class="profil">{{'profil.gamePlayed' | translate }}: </div>
         <p>0</p>
       </div>
       <div class="form-control">
-        <label>{{'profile.gameWin' | translate }}: </label>
+        <div  class="profil">{{'profil.gameWin' | translate }}: </div>
         <p>0</p>
       </div>
       <div class="form-control">
-        <label>{{'profile.gameAverage' | translate }}: </label>
+        <div  class="profil">{{'profil.gameAverage' | translate }}: </div>
         <p>0</p>
       </div>
       <div class="form-control">
-        <label>{{'profile.gameAverageTime' | translate }}: </label>
+        <div  class="profil">{{'profil.gameAverageTime' | translate }}: </div>
         <p>0</p>
       </div>
 
@@ -68,13 +71,13 @@
   <div class="container">
     <div class="left">
       <div class="section">
-        <h1> {{'profile.Connexion' | translate }}</h1>
+        <h1  class="profil"> {{'profil.Connexion' | translate }}</h1>
       </div>
       <div> <button class="button-plus" (click)="toggleTable()"><mat-icon>history</mat-icon> </button> </div>
     </div>
     <div class="right">
       <div class="section">
-        <h1>{{'profile.gameHistoric' | translate }} </h1>
+        <h1  class="profil">{{'profil.gameHistoric' | translate }} </h1>
         <div> <button class="button-plus"><mat-icon>list</mat-icon> </button> </div>
       </div>
     </div>
@@ -82,8 +85,8 @@
   </div>
 
   <div class="button-container">
-    <button type="submit" (click)="onSubmitPersonalization()">{{'bouton.GoReglage' | translate }}</button>
-    <button type="submit" (click)="onSubmitHome()">{{'bouton.deconnexion' | translate }}</button>
+    <button type="submit" (click)="onSubmitPersonalization()">{{'button.GoReglage' | translate }}</button>
+    <button type="submit" (click)="onSubmitHome()">{{'button.deconnexion' | translate }}</button>
   </div>
 </body>
 

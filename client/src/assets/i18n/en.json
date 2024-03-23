@@ -24,16 +24,16 @@
         "Connexion": "Login statement",
         "gameHistoric": "game history",
         "changePassword": "Change password",
-        "confirmePassword": "Confirm password",
+        "confirmPassword": "Confirm password",
         "songDifference": "choose your sound for difference found",
         "songError": "choose your sound for error"
     },
 
-    "bouton": {
+    "button": {
         "deconnexion": "Disconnect",
         "returnProfil": "return to profile",
         "GoReglage": "Go to settings",
-        "Reglage": "Settings",
+        "Settings": "Settings",
         "fr": "french",
         "en": "english"
     }
