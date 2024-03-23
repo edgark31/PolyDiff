@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
@@ -152,12 +153,29 @@ class _ChatBoxState extends State<ChatBox> {
                 controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (BuildContext context, int index) {
-                  // TODO : Change logic to id when implemented on server
-                  // bool isSent = messages[index].id == infoService.id;
-                  bool isSent = messages[index].name == infoService.username;
+                  final message = messages[index];
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     scrollToBottom();
                   });
+                  if (message.tag == MessageTag.Common) {
+                    return Center(
+                      child: Container(
+                        width: 250,
+                        margin: EdgeInsets.symmetric(vertical: 5),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(message.raw,
+                            style: TextStyle(color: Colors.black),
+                            textAlign: TextAlign.center),
+                      ),
+                    );
+                  }
+                  bool isSent = message.accountId == infoService.id;
+                  String avatarURL =
+                      '$BASE_URL/avatar/${message.accountId}.png';
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
@@ -168,13 +186,11 @@ class _ChatBoxState extends State<ChatBox> {
                       children: [
                         CircleAvatar(
                           key: UniqueKey(),
-                          backgroundImage:
-                              // TODO : fix to show other person avatar
-                              NetworkImage(avatarProvider.currentAvatarUrl),
+                          backgroundImage: NetworkImage(avatarURL),
                           radius: 15.0,
                         ),
                         Text(
-                          messages[index].name,
+                          messages[index].name!,
                           style: TextStyle(color: Colors.black),
                         ),
                         Container(
@@ -193,7 +209,7 @@ class _ChatBoxState extends State<ChatBox> {
                         Container(
                           padding: EdgeInsets.only(bottom: 15),
                           child: Text(
-                            messages[index].timestamp,
+                            messages[index].timestamp!,
                             style: TextStyle(color: Colors.black, fontSize: 12),
                             textAlign: TextAlign.end,
                           ),

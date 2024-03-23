@@ -52,8 +52,8 @@ class _LobbyPageState extends State<LobbyPage> {
       Future.delayed(Duration.zero, () {
         if (ModalRoute.of(context)?.isCurrent ?? false) {
           print('Current Lobby is started navigating to GamePage');
-          chatService.clearLobbyMessages();
           socketService.setup(SocketType.Game, infoService.id);
+          chatService.setupGame();
           gameManagerService.setListeners();
           // if (lobbyService.isCreator) {
           lobbyService.setIsCreator(false); // TODO: clean this
