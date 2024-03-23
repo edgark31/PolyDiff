@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/models/players.dart';
 import 'package:mobile/services/game_manager_service.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:provider/provider.dart';
 
 class GameInfos extends StatefulWidget {
@@ -10,6 +12,7 @@ class GameInfos extends StatefulWidget {
 
 class _GameInfosState extends State<GameInfos> {
   final GameManagerService gameManagerService = Get.find();
+  final LobbyService lobbyService = Get.find();
   @override
   void initState() {
     super.initState();
@@ -18,11 +21,12 @@ class _GameInfosState extends State<GameInfos> {
   @override
   Widget build(BuildContext context) {
     final gameManagerService = context.watch<GameManagerService>();
-    //TODO: Connect these attributes to real values from the server or lobby
+    final lobbyService = context.watch<LobbyService>();
     int timer = gameManagerService.time;
-    int nbDifferencesPresent = 4;
-    String gameMode = "Classic";
-    int nbPlayers = 5;
+    int? nbDifferencesPresent = gameManagerService.game.nDifferences;
+    List<Player> players = lobbyService.lobby.players;
+    String gameMode = lobbyService.lobby.mode.name;
+    int nbPlayers = lobbyService.lobby.players.length;
 
     String formattedTime =
         "${(timer ~/ 60).toString().padLeft(2, '0')}:${(timer % 60).toString().padLeft(2, '0')}";
@@ -73,7 +77,7 @@ class _GameInfosState extends State<GameInfos> {
                   size: 30,
                 ),
                 Text(
-                  'Jerem',
+                  players[0].name!,
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -85,7 +89,7 @@ class _GameInfosState extends State<GameInfos> {
                   width: 30,
                 ),
                 Text(
-                  'Différences trouvées : 0',
+                  'Différences trouvées : ${players[0].count}',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -102,7 +106,7 @@ class _GameInfosState extends State<GameInfos> {
                   size: 30,
                 ),
                 Text(
-                  'MP',
+                  players[1].name as String,
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -114,7 +118,7 @@ class _GameInfosState extends State<GameInfos> {
                   width: 30,
                 ),
                 Text(
-                  'Différences trouvées : 0',
+                  'Différences trouvées : ${players[1].count}',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -133,7 +137,7 @@ class _GameInfosState extends State<GameInfos> {
                     size: 30,
                   ),
                   Text(
-                    'Edgar',
+                    players[2].name as String,
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
@@ -145,7 +149,7 @@ class _GameInfosState extends State<GameInfos> {
                     width: 30,
                   ),
                   Text(
-                    'Différences trouvées : 0',
+                    'Différences trouvées : ${players[2].count}',
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
@@ -164,7 +168,7 @@ class _GameInfosState extends State<GameInfos> {
                     size: 30,
                   ),
                   Text(
-                    'Zaki',
+                    players[3].name as String,
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
@@ -176,7 +180,7 @@ class _GameInfosState extends State<GameInfos> {
                     width: 30,
                   ),
                   Text(
-                    'Différences trouvées : 0',
+                    'Différences trouvées : ${players[3].count}',
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,

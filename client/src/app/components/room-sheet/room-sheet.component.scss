@@ -1,16 +1,38 @@
-#image {
-    position: absolute;
-    top: 220px;
-    left: 50.7%;
-    transform: translateX(-50%);
-    width: 50%;
-    height: 30%;
+#background-image {
+    position: relative;
+    // top: 220px;
+    // left: 50.7%;
+    // transform: translateX(-50%);
+    transform: rotate(90deg);
+    width: 400px;
+    height: 900px;
 }
 
 .create-button:hover {
     background-color: #db9110;
     color: black;
     transform: scale(1.05);
+}
+
+.feedback {
+    text-align: center;
+    color: red;
+    font-style: italic;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    font-size: 1.2rem;
+    margin-top: 4px;
+    margin-bottom: 0;
+    transform: scale(1.05);
+    z-index: 1;
+}
+
+button,
+.button-container {
+    width: 135px;
+}
+
+span {
+    white-space: normal;
 }
 
 .join-button:hover {
@@ -20,7 +42,7 @@
 }
 
 .player-count {
-    bottom: 175px;
+    bottom: 920px;
     left: 250px;
     font-weight: bold;
     position: relative;
@@ -33,22 +55,12 @@
     -webkit-text-stroke: 1px black;
 }
 
-.game-mode-image {
-    position: relative;
-    right: 330px;
-    top: 320px;
-    width: 1px;
-    height: 1px;
-    z-index: 2;
-    object-fit: cover;
-}
-
 .game-mode-image-classic img {
     position: relative;
-    right: 220px;
-    top: 220px;
+    right: 120px;
+    bottom: 520px;
     width: 180px;
-    height: auto;
+    height: 135px;
     z-index: 2;
     object-fit: cover;
 }
@@ -74,8 +86,8 @@
 }
 
 .join-button {
-    top: 40px;
-    left: 20px;
+    bottom: 700px;
+    left: 130px;
     cursor: pointer;
     position: relative;
     text-align: center;
@@ -95,7 +107,7 @@
 }
 
 .difference-number {
-    top: 25px;
+    bottom: 720px;
     font-weight: bold;
     position: relative;
     text-align: center;
@@ -108,7 +120,7 @@
 }
 
 .game-mode {
-    top: 50px;
+    bottom: 560px;
     right: 230px;
     font-weight: bold;
     position: relative;
@@ -122,7 +134,7 @@
 }
 
 .player-container {
-    bottom: 150px;
+    bottom: 900px;
     left: 250px;
     font-weight: bold;
     position: relative;

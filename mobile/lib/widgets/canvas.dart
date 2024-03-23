@@ -7,6 +7,8 @@ import 'package:mobile/painters/foreground_pt_modified.dart';
 import 'package:mobile/painters/foreground_pt_original.dart';
 import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
+import 'package:mobile/services/game_manager_service.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/game_canvas.dart';
 import 'package:provider/provider.dart';
 
@@ -15,10 +17,13 @@ class OriginalCanvas extends GameCanvas {
   final String gameId;
   final tempGameManager = CoordinateConversionService();
   final GameAreaService gameAreaService = Get.find();
+  final LobbyService lobbyService = Get.find();
+  final GameManagerService gameManagerService = Get.find();
 
   @override
   Widget build(BuildContext context) {
     final gameAreaService = Provider.of<GameAreaService>(context);
+    final lobbyService = context.watch<LobbyService>();
     return Column(
       children: <Widget>[
         Container(
@@ -35,11 +40,11 @@ class OriginalCanvas extends GameCanvas {
                   GameCanvas.tabletScalingRatio;
               y.value = details.localPosition.dy.toDouble() /
                   GameCanvas.tabletScalingRatio;
-              gameAreaService.validateCoord(
-                  Coordinate(x: x.value.toInt(), y: y.value.toInt()),
-                  tempGameManager.testConvert(),
-                  tempGameManager.testConvert2(),
-                  true);
+              if (!gameAreaService.isClickDisabled) {
+                gameManagerService.setIsLeftCanvas(true);
+                gameManagerService.sendCoord(lobbyService.lobby.lobbyId,
+                    Coordinate(x: x.value.toInt(), y: y.value.toInt()));
+              }
             },
             child: SizedBox(
               width: images.original.width.toDouble() *
@@ -65,9 +70,12 @@ class OriginalCanvas extends GameCanvas {
 class ModifiedCanvas extends GameCanvas {
   ModifiedCanvas(images, this.gameId) : super(images);
   final String gameId;
+  final LobbyService lobbyService = Get.find();
+  final GameManagerService gameManagerService = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    final lobbyService = context.watch<LobbyService>();
     final tempGameManager = CoordinateConversionService();
     final GameAreaService gameAreaService =
         Provider.of<GameAreaService>(context);
@@ -87,12 +95,11 @@ class ModifiedCanvas extends GameCanvas {
                   GameCanvas.tabletScalingRatio;
               y.value = details.localPosition.dy.toDouble() /
                   GameCanvas.tabletScalingRatio;
-              gameAreaService.validateCoord(
-                  Coordinate(x: x.value.toInt(), y: y.value.toInt()),
-                  tempGameManager.testConvert(),
-                  tempGameManager.testConvert2(),
-                  false);
-              print('sent: x:${x.value.toInt()}, y:${y.value.toInt()}');
+              if (!gameAreaService.isClickDisabled) {
+                gameManagerService.setIsLeftCanvas(false);
+                gameManagerService.sendCoord(lobbyService.lobby.lobbyId,
+                    Coordinate(x: x.value.toInt(), y: y.value.toInt()));
+              }
             },
             child: SizedBox(
               width: images.original.width.toDouble() *

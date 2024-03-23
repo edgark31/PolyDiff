@@ -12,12 +12,32 @@ class ForegroundPtModified extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.scale(GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
+
     if (gameAreaService.cheatBlinkingDifference != null) {
       canvas.drawPath(gameAreaService.cheatBlinkingDifference!,
           gameAreaService.blinkingColor);
     }
+
+    canvas.save();
+
+    final path = Path();
+    for (var coord in gameAreaService.coordinates) {
+      path.addRect(Rect.fromPoints(
+          Offset(coord.x.toDouble(), coord.y.toDouble()),
+          Offset(coord.x + 1, coord.y + 1)));
+    }
+    canvas.clipPath(path);
+
+    canvas.drawImage(images.original, Offset.zero, Paint());
+
+    canvas.restore();
+
+    if (gameAreaService.blinkingDifference != null) {
+      canvas.drawPath(
+          gameAreaService.blinkingDifference!, gameAreaService.blinkingColor);
+    }
+
     if (gameAreaService.rightErrorCoord.isNotEmpty) {
-      print('called error');
       final textPainter = TextPainter(
         text: TextSpan(
           text: 'ERREUR',
@@ -35,19 +55,6 @@ class ForegroundPtModified extends CustomPainter {
             (gameAreaService.rightErrorCoord[0].y).toDouble()),
       );
       gameAreaService.rightErrorCoord = [];
-    }
-    final path = Path();
-    for (var coord in gameAreaService.coordinates) {
-      path.addRect(Rect.fromPoints(
-          Offset(coord.x.toDouble(), coord.y.toDouble()),
-          Offset(coord.x + 1, coord.y + 1)));
-    }
-    canvas.clipPath(path);
-    canvas.drawImage(images.original, Offset.zero, Paint());
-
-    if (gameAreaService.blinkingDifference != null) {
-      canvas.drawPath(
-          gameAreaService.blinkingDifference!, gameAreaService.blinkingColor);
     }
   }
 

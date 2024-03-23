@@ -47,7 +47,6 @@ import { GamePageDialogComponent } from './components/game-page-dialog/game-page
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
 import { ImportDialogComponent } from './components/import-dialog-box/import-dialog-box.component';
-import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { ModalAccessMatchComponent } from './components/modal-access-match/modal-access-match.component';
 import { ModalAdminComponent } from './components/modal-admin/modal-admin.component';
@@ -56,7 +55,6 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { RoomSheetComponent } from './components/room-sheet/room-sheet.component';
-import { WaitingForPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { ClassicTimePageComponent } from './pages/classic-time-page/classic-time-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
@@ -94,10 +92,8 @@ export const createTranslateLoader = (http: HttpClient) => {
         ConfigPageComponent,
         CreationGameDialogComponent,
         GamePageDialogComponent,
-        WaitingForPlayerToJoinComponent,
         CanvasTopButtonsComponent,
         MenuComponent,
-        JoinedPlayerDialogComponent,
         NavBarComponent,
         ChatBoxComponent,
         CanvasMiddleButtonsComponent,
