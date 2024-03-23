@@ -208,8 +208,10 @@ export class GameGateway implements OnGatewayConnection {
             message,
         );
 
-        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent });
-        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received });
+        this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(chat);
+
+        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
