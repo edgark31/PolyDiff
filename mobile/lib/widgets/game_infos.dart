@@ -22,7 +22,6 @@ class _GameInfosState extends State<GameInfos> {
   Widget build(BuildContext context) {
     final gameManagerService = context.watch<GameManagerService>();
     final lobbyService = context.watch<LobbyService>();
-    //TODO: Connect these attributes to real values from the server or lobby
     int timer = gameManagerService.time;
     int? nbDifferencesPresent = gameManagerService.game.nDifferences;
     List<Player> players = lobbyService.lobby.players;
