@@ -95,7 +95,7 @@ class GameManagerService extends ChangeNotifier {
 
     socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
       setEndGameMessage(data as String?);
-      print('GameEvents.EndGame.name event received');
+      socketService.disconnect(SocketType.Game);
     });
   }
 }
