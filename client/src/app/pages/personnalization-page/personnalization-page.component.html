@@ -1,12 +1,17 @@
 <body>
   <!--     [ngStyle]="{'background-color': (welcomeService.chooseTheme.BackgroundColor), 'color': (welcomeService.chooseTheme.ButtonColor)}"> -->
-  <app-nav-bar id ="nav-bar"></app-nav-bar>
+  <div class="header">
+    <app-nav-bar id ="nav-bar"></app-nav-bar>
+    </div>
+    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
   <!-- <app-menu></app-menu> -->
-  <div class="information">{{'profil.information' | translate }}</div>
+  <div class="container-information">
+    <div class="information">{{'profil.information' | translate }}</div>
+  </div>
   <div class="container">
     <div class="left">
       <div class="form-control">
-        <label for="username">{{'profil.username' | translate }}</label>
+        <div class="profil">{{'profil.username' | translate }}</div>
         <mat-form-field>
           <mat-label>Name</mat-label>
           <input matInput placeholder="veuillez écrire votre nom" [(ngModel)]="welcomeService.selectName" required>
@@ -15,7 +20,7 @@
       </div>
 
       <div class="form-control">
-        <label for="username"> {{'profil.changePassword' | translate }}</label>
+        <div class="profil"> {{'profil.changePassword' | translate }}</div>
         <mat-form-field>
           <mat-label>Mot de passe</mat-label>
           <input matInput type="password" placeholder="veuillez écrire votre mot de passe" [(ngModel)]="welcomeService.selectPassword" required>
@@ -24,18 +29,19 @@
       </div>
 
       <div class="form-control">
-        <label for="username"> {{'profil.confirmePassword' | translate }}</label>
+        <div class="profil"> {{'profil.confirmPassword' | translate }}</div>
         <mat-form-field>
           <mat-label>Mot de passe</mat-label>
           <input matInput type="password" placeholder="veuillez ré-écrire votre mot de passe" [(ngModel)]="welcomeService.selectPasswordConfirm"
             required>
+            <div class="error-message" *ngIf="welcomeService.selectPasswordConfirm!==welcomeService.selectPassword"> mettez un mot de passe identique</div>
         </mat-form-field>
         <!-- <input type="text" formControlName="username" id="username"/> -->
       </div>
 
 
       <div class="form-avatar">
-        <label for="avatar">Avatar</label>
+        <div class="profil">Avatar</div>
         <img [src]="welcomeService.selectAvatar" alt="Image" style="width: 100px; height: 100px;">
         <div style="display: flex; justify-content: space-between;">
           <button mat-icon-button (click)="importDialog(true)"
@@ -53,7 +59,7 @@
 
 
         <div class="form-control section">
-          <label for="Theme">{{'profil.theme' | translate }}</label>
+          <div class="profil">{{'profil.theme' | translate }}</div>
           <mat-form-field>
             <mat-label>{{'profil.theme' | translate }}</mat-label>
             <mat-select [(value)]="welcomeService.selectTheme">
@@ -68,7 +74,7 @@
         </div>
 
 
-        <div class="form-control section"> <label for="Theme"> {{'profil.language' | translate }}</label>
+        <div class="form-control section"> <div class="profil"> {{'profil.language' | translate }}</div>
           <mat-form-field>
             <mat-label>{{'profil.language' | translate }}</mat-label>
             <mat-select [(value)]="welcomeService.selectLanguage" (valueChange)="useLanguage(welcomeService.selectLanguage)">
@@ -83,7 +89,7 @@
     </div>
 
     <div class="right">
-       <div class="form-control section"> <label for="Theme"> {{'profil.songError' | translate }}</label>
+       <div class="form-control section"> <div class="profil"> {{'profil.songError' | translate }}</div>
         <mat-form-field>
           <mat-label>{{'profil.songError' | translate }}</mat-label>
           <mat-select [(value)]="sound.correctSoundEffect">
@@ -98,7 +104,7 @@
       </div>
 
 
-      <div class="form-control section"> <label for="Theme"> {{'profil.songDifference' | translate }}</label>
+      <div class="form-control section"> <div class="profil"> {{'profil.songDifference' | translate }}</div>
         <mat-form-field>
           <mat-label>{{'profil.songDifference' | translate }}</mat-label>
           <mat-select [(value)]="sound.incorrectSoundEffect">
