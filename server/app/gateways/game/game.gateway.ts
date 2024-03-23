@@ -108,7 +108,7 @@ export class GameGateway implements OnGatewayConnection {
                 // Vérifier si un seuil est atteint pour un joueur
                 const { isGameFinished, potentialWinner } = this.thresholdCheck(lobbyId);
                 if (isGameFinished && potentialWinner) {
-                    this.server.to(lobbyId).emit(GameEvents.EndGame);
+                    this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
                     this.logOneWinner(lobbyId, potentialWinner.accountId);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
                         raw: `${this.accountManager.connectedUsers.get(potentialWinner.accountId).credentials.username} a gagné !`,
@@ -119,7 +119,7 @@ export class GameGateway implements OnGatewayConnection {
                 }
                 // Vérifier s'il reste des differences
                 if (this.games.get(lobbyId).differences.length <= 0) {
-                    this.server.to(lobbyId).emit(GameEvents.EndGame);
+                    this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
                     this.logDraw(lobbyId);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
                         raw: 'MATCH NUL',
@@ -155,7 +155,7 @@ export class GameGateway implements OnGatewayConnection {
                 if (!game) {
                     const { winningPlayers, message } = this.limitedEndCheck(lobbyId);
                     this.logger.log(`Game ${lobbyId} ended with ${winningPlayers.length} winner(s)`);
-                    this.server.to(lobbyId).emit(GameEvents.EndGame);
+                    this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
                     winningPlayers.length === 1 ? this.logOneWinner(lobbyId, winningPlayers[0].accountId) : this.logDraw(lobbyId);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
                         raw: message,

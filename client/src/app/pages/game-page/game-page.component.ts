@@ -14,8 +14,9 @@ import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent } from '@common/enums';
 import { Chat, Game, Lobby } from '@common/game-interfaces';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
+import { ReplayService } from '@app/services/replay-service/replay.service';
 @Component({
     selector: 'app-game-page',
     templateUrl: './game-page.component.html',
@@ -29,6 +30,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
     timer: number;
     nDifferencesFound: number;
+    endMessage: string;
     messages: Chat[];
     messageGlobal: Chat[];
     isReplayAvailable: boolean;
@@ -42,17 +44,19 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     lobbySubscription: Subscription;
     private gameSubscription: Subscription;
     private canvasGameSubscription: Subscription;
-    private abandonSubscription: Subscription;
+    private endMessageSubscription: Subscription;
+    private onDestroy$: Subject<void>;
 
     // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
     constructor(
         private router: Router,
         private imageService: ImageService,
+        private clientSocket: ClientSocketService,
         private readonly gameAreaService: GameAreaService,
         private readonly gameManager: GameManagerService,
         private readonly roomManager: RoomManagerService,
-        private clientSocket: ClientSocketService,
+        private readonly replayService: ReplayService,
         private readonly matDialog: MatDialog,
         public welcome: WelcomeService,
         public globalChatService: GlobalChatService,
@@ -65,6 +69,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.canvasSize = CANVAS_MEASUREMENTS;
         this.isReplayAvailable = false;
         this.gameMode = GameModes;
+        this.onDestroy$ = new Subject();
     }
 
     private get differences(): Coordinate[][] {
@@ -82,6 +87,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             }
         }
     }
+
     ngOnInit(): void {
         this.clientSocket.connect(this.welcome.account.id as string, 'game');
         this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
@@ -96,11 +102,14 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.timer = timer;
         });
         this.clientSocket.on('game', GameEvents.EndGame, () => {
-            this.router.navigate(['/game-mode']);
+            this.showEndGameDialog(this.endMessage);
+            // this.router.navigate(['/game-mode']);
             this.welcome.onChatGame = false;
         });
-        this.abandonSubscription = this.gameManager.abandon$.subscribe(() => {
-            this.router.navigate(['/game-mode']);
+        this.endMessageSubscription = this.gameManager.endMessage$.subscribe((endMessage: string) => {
+            this.endMessage = endMessage;
+            this.showEndGameDialog(this.endMessage);
+            // this.router.navigate(['/game-mode']);
             this.welcome.onChatGame = false;
         });
 
@@ -115,7 +124,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         //     // this.gameManager.startGame();
         this.setUpGame();
-        //     // this.setUpReplay();
+        this.setUpReplay();
         //     // this.updateTimer();
         //     // this.handleDifferences();
         //     // this.handleMessages();
@@ -127,6 +136,24 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
         });
     }
+
+    ngOnDestroy(): void {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+        if (this.clientSocket.isSocketAlive('game')) {
+            this.gameSubscription?.unsubscribe();
+            this.chatSubscription?.unsubscribe();
+            this.timeSubscription?.unsubscribe();
+            this.endMessageSubscription?.unsubscribe();
+            this.canvasGameSubscription?.unsubscribe();
+            this.gameManager.off();
+        }
+        if (this.clientSocket.isSocketAlive('auth')) {
+            this.globalChatService.off();
+        }
+        this.chatSubscriptionGlobal?.unsubscribe();
+    }
+
     sendMessage(message: string): void {
         this.gameManager.sendMessage(this.gameLobby.lobbyId, message);
     }
@@ -134,6 +161,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     sendMessageGlobal(message: string): void {
         this.globalChatService.sendMessage(message);
     }
+
     receiveMessage(chat: Chat): void {
         this.messages.push(chat);
     }
@@ -147,6 +175,16 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.clientSocket.disconnect('game');
         this.router.navigate(['/chat']);
     }
+
+    showEndGameDialog(endingMessage: string): void {
+        this.matDialog.open(GamePageDialogComponent, {
+            data: { action: GamePageEvent.EndGame, message: endingMessage, isReplayMode: this.lobby.mode === this.gameMode.Classic },
+            disableClose: true,
+            panelClass: 'dialog',
+        });
+        if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
+    }
+
     showAbandonDialog(): void {
         this.matDialog.open(GamePageDialogComponent, {
             data: { action: GamePageEvent.Abandon, message: 'Êtes-vous certain de vouloir abandonner la partie ? ', lobby: this.lobby },
@@ -160,21 +198,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.gameAreaService.setAllData();
         this.gameManager.setIsLeftCanvas(isLeft);
         this.gameManager.requestVerification(this.lobby.lobbyId as string, this.gameAreaService.getMousePosition());
-    }
-
-    ngOnDestroy(): void {
-        if (this.clientSocket.isSocketAlive('game')) {
-            this.gameSubscription?.unsubscribe();
-            this.chatSubscription?.unsubscribe();
-            this.timeSubscription?.unsubscribe();
-            this.abandonSubscription?.unsubscribe();
-            this.canvasGameSubscription?.unsubscribe();
-            this.gameManager.off();
-        }
-        if (this.clientSocket.isSocketAlive('auth')) {
-            this.globalChatService.off();
-        }
-        this.chatSubscriptionGlobal?.unsubscribe();
     }
 
     setUpGame(): void {
@@ -201,5 +224,16 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.imageService.loadImage(this.gameAreaService.getOriginalContext(), this.gameLobby.original);
         this.imageService.loadImage(this.gameAreaService.getModifiedContext(), this.gameLobby.modified);
         this.gameAreaService.setAllData();
+    }
+
+    private setUpReplay(): void {
+        this.replayService.replayTimer$.pipe(takeUntil(this.onDestroy$)).subscribe((replayTimer: number) => {
+            if (this.isReplayAvailable) {
+                this.timer = replayTimer;
+                if (replayTimer === 0) {
+                    this.messages = [];
+                }
+            }
+        });
     }
 }
