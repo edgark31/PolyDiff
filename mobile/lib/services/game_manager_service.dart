@@ -56,17 +56,25 @@ class GameManagerService extends ChangeNotifier {
     startGame(lobbyService.lobby.lobbyId);
   }
 
-  void sendCoord(String? lobbyID, Coordinate coord) {
+  void sendCoord(String? lobbyId, Coordinate coord) {
     print(
-        'SendCoord is called with id: $lobbyID and coord: x: ${coord.x} y: ${coord.y}');
+        'SendCoord is called with id: $lobbyId and coord: x: ${coord.x} y: ${coord.y}');
     socketService.send(
       SocketType.Game,
       GameEvents.Clic.name,
       {
-        'lobbyId': lobbyID,
+        'lobbyId': lobbyId,
         'coordClic': coord,
       },
     );
+  }
+
+  void abandonGame(String? lobbyId) {
+    socketService.send(SocketType.Game, GameEvents.AbandonGame.name, lobbyId);
+    socketService.disconnect(SocketType.Game);
+    if (lobbyService.lobby.players.length < 2) {
+      lobbyService.endLobby();
+    }
   }
 
   void setListeners() {

@@ -137,8 +137,11 @@ class LobbyService extends ChangeNotifier {
         .where((lobby) =>
             lobby.mode == _gameModes &&
             lobby.players.isNotEmpty &&
-            lobby.password ==
-                null) // Password lobbies are not displayed on mobile
+            doesLobbyHavePassword()) // Password lobbies are not displayed on mobile
         .toList();
+  }
+
+  bool doesLobbyHavePassword() {
+    return lobby.password == null || lobby.password == ''; // Password lobbies are not displayed on mobile
   }
 }

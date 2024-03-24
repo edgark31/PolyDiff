@@ -15,36 +15,46 @@ class EndGamePopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          child: Text(
-            endMessage,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+    return Center(
+      child: SizedBox(
+        width: 400.0,
+        height: 500.0,
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/woodenPopUp.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                endMessage,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              if (gameMode == GameModes.Classic) ...[
+                CustomButton(
+                  text: 'Accueil',
+                  press: () {
+                    Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                  },
+                  backgroundColor: kMidOrange,
+                ),
+                SizedBox(height: 10),
+                CustomButton(
+                  text: 'Reprise Vidéo',
+                  press: () {
+                    print('Navigate to replay video page');
+                  },
+                  backgroundColor: kMidOrange,
+                ),
+              ],
+            ],
           ),
         ),
-        if (gameMode == GameModes.Classic) ...[
-          CustomButton(
-            text: 'Accueil',
-            press: () {
-              Navigator.pushNamed(context, DASHBOARD_ROUTE);
-            },
-            backgroundColor: kMidOrange,
-          ),
-          SizedBox(height: 10), // Space between buttons
-           CustomButton(
-            text: 'Reprise Vidéo',
-            press: () {
-              
-              print('Navigate to replay video page');
-            },
-            backgroundColor: kMidOrange,
-          ),
-        ],
-      ],
+      ),
     );
   }
 }
