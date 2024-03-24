@@ -8,6 +8,8 @@ import { LobbyEvents, MessageTag } from '@common/enums';
 import { Subscription } from 'rxjs';
 import { Chat, Lobby } from './../../../../../common/game-interfaces';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
+import { WaitingGameDialogComponent } from '@app/components/waiting-game-dialog/waiting-game-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
     selector: 'app-waiting-room',
     templateUrl: './waiting-room.component.html',
@@ -30,6 +32,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         public welcome: WelcomeService,
         public gameManager: GameManagerService,
         public globalChatService: GlobalChatService,
+        private readonly matDialog: MatDialog,
     ) {}
 
     ngOnInit(): void {
@@ -97,10 +100,23 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
 
     onStart(): void {
         this.roomManagerService.onStart(this.lobby.lobbyId ? this.lobby.lobbyId : '');
+        this.showLoadingDialog();
     }
 
     receiveMessageGlobal(chat: Chat): void {
         this.messageGlobal.push(chat);
+    }
+
+    showLoadingDialog(): void {
+        this.matDialog.open(WaitingGameDialogComponent, {
+            data: { lobby: this.lobby },
+            disableClose: true,
+            panelClass: 'dialog',
+        });
+
+        setTimeout(() => {
+            this.matDialog.closeAll();
+        }, 2000);
     }
 
     ngOnDestroy(): void {
