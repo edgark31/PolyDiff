@@ -107,11 +107,11 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.timeSubscription = this.gameManager.timerLobby$.subscribe((timer: number) => {
             this.timer = timer;
         });
-        this.clientSocket.on('game', GameEvents.EndGame, () => {
-            this.showEndGameDialog(this.endMessage);
-            // this.router.navigate(['/game-mode']);
-            this.welcome.onChatGame = false;
-        });
+        // this.clientSocket.on('game', GameEvents.EndGame, () => {
+        //     this.showEndGameDialog(this.endMessage);
+        //     // this.router.navigate(['/game-mode']);
+        //     this.welcome.onChatGame = false;
+        // });
         this.endMessageSubscription = this.gameManager.endMessage$.subscribe((endMessage: string) => {
             this.endMessage = endMessage;
             this.showEndGameDialog(this.endMessage);
@@ -183,12 +183,12 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     showEndGameDialog(endingMessage: string): void {
+        if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
         this.matDialog.open(GamePageDialogComponent, {
             data: { action: GamePageEvent.EndGame, message: endingMessage, isReplayMode: this.lobby.mode === this.gameMode.Classic },
             disableClose: true,
             panelClass: 'dialog',
         });
-        if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
     }
 
     showAbandonDialog(): void {

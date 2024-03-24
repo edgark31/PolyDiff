@@ -14,12 +14,14 @@ export class CreateRoomPageComponent implements AfterViewInit {
     mode: GameModes;
     gameModes: typeof GameModes;
     time: number | null;
+    bonusTime: number | null;
     password: string = '';
     nDifferences: number;
     gameId: string;
     lobby: Lobby;
     constructor(private readonly roomManagerService: RoomManagerService, private readonly navigationService: NavigationService) {
-        this.time = 0;
+        this.time = 30;
+        this.bonusTime = 10;
         this.nDifferences = 0;
         const previousUrl = this.navigationService.getPreviousUrl();
         this.mode = previousUrl === '/limited' ? GameModes.Limited : GameModes.Classic;
@@ -33,8 +35,13 @@ export class CreateRoomPageComponent implements AfterViewInit {
         });
     }
 
-    formatLabel(value: number | null) {
+    formatLabelTime(value: number | null) {
         this.time = value;
+        return value + ' sec';
+    }
+
+    formatLabelBonusTime(value: number | null) {
+        this.bonusTime = value;
         return value + ' sec';
     }
 
@@ -50,6 +57,7 @@ export class CreateRoomPageComponent implements AfterViewInit {
             mode: this.mode,
             timeLimit: this.time as number,
             time: this.time as number, // vue que le serveur l'utilise pour diminueer le temps
+            bonusTime: this.bonusTime as number,
             password: this.password,
             nDifferences: this.nDifferences,
             gameId: this.gameId,
