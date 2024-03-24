@@ -38,30 +38,25 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
   final GameManagerService gameManagerService = Get.find();
   late Future<CanvasModel> imagesFuture;
   bool isChatBoxVisible = false;
-  bool _initialLoad = false;
   final tempGameManager = CoordinateConversionService();
 
   @override
   void initState() {
     super.initState();
+    gameManagerService.onGameChange = () {
+      print('Loading new images');
+      imagesFuture = loadImage(
+        gameManagerService.game.original,
+        gameManagerService.game.modified,
+      );
+    };
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (gameManagerService.game.gameId != '' && !_initialLoad) {
-      print("initial hack");
-      _initialLoad = true;
-      imagesFuture = loadImage();
-    }
-  }
-
-  Future<CanvasModel> loadImage() async {
-    final gameManagerService = context.watch<GameManagerService>();
-    return imageConverterService.fromImagesBase64(
-      gameManagerService.game.original,
-      gameManagerService.game.modified,
-    );
+  Future<CanvasModel> loadImage(
+    String originalImage,
+    String modifiedImage,
+  ) async {
+    return imageConverterService.fromImagesBase64(originalImage, modifiedImage);
   }
 
   @override
@@ -73,7 +68,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
       return Column(
         children: [
           CircularProgressIndicator(),
-          Text('Game is loading'),
+          Text('Chargement de la salle de jeu...'),
         ],
       );
     }
@@ -142,6 +137,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                       ],
                     );
                   } else {
+                    print('NOT DONE');
                     return CircularProgressIndicator();
                   }
                 },

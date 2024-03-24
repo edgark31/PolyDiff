@@ -34,14 +34,14 @@ class EndGamePopup extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
+              CustomButton(
+                text: 'Accueil',
+                press: () {
+                  Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                },
+                backgroundColor: kMidOrange,
+              ),
               if (gameMode == GameModes.Classic) ...[
-                CustomButton(
-                  text: 'Accueil',
-                  press: () {
-                    Navigator.pushNamed(context, DASHBOARD_ROUTE);
-                  },
-                  backgroundColor: kMidOrange,
-                ),
                 SizedBox(height: 10),
                 CustomButton(
                   text: 'Reprise Vidéo',
