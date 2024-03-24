@@ -33,6 +33,17 @@ class ChatService extends ChangeNotifier {
     );
   }
 
+  void sendGameMessage(String message) {
+    socketService.send(
+      SocketType.Game,
+      ChannelEvents.SendGameMessage.name,
+      {
+        'lobbyId': lobbyService.lobby.lobbyId,
+        'message': message,
+      },
+    );
+  }
+
   void addGlobalMessage(Chat message) {
     _globalMessages.add(message);
     notifyListeners();

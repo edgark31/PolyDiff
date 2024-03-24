@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
-import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:provider/provider.dart';
@@ -58,11 +57,14 @@ class _ChatBoxState extends State<ChatBox> {
 
   void _handleMessageSubmit(String message) {
     final chatService = context.read<ChatService>();
+    final routeName = ModalRoute.of(context)?.settings.name;
     if (message.isNotEmpty && message.trim().isNotEmpty) {
       if (isGlobalChat) {
         chatService.sendGlobalMessage(message);
-      } else {
+      } else if (routeName == LOBBY_ROUTE) {
         chatService.sendLobbyMessage(message);
+      } else {
+        chatService.sendGameMessage(message);
       }
       setState(() {});
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -82,7 +84,6 @@ class _ChatBoxState extends State<ChatBox> {
   @override
   Widget build(BuildContext context) {
     final infoService = context.watch<InfoService>();
-    final avatarProvider = context.watch<AvatarProvider>();
     final chatService = context.watch<ChatService>();
 
     final messages =
@@ -174,9 +175,8 @@ class _ChatBoxState extends State<ChatBox> {
                     );
                   }
                   bool isSent = message.accountId == infoService.id;
-                  // String avatarURL =
-                  //     '$BASE_URL/avatar/${message.accountId}.png';
-                  String avatarURL = avatarProvider.currentAvatarUrl; // TODO: Fix avatar issue and readjust avatars
+                  String avatarURL =
+                      '$BASE_URL/avatar/${message.accountId}.png';
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
