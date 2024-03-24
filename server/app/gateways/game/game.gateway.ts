@@ -196,6 +196,7 @@ export class GameGateway implements OnGatewayConnection {
         if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
             this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
             clearInterval(this.timers.get(lobbyId));
+            this.deleteLobby(lobbyId);
             this.logger.log(`Game ${lobbyId} ended because of not enough players`);
         }
     }
