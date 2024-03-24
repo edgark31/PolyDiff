@@ -3,22 +3,24 @@
         <div class="contact-profile">
             <p class="chat">Zone de clavardage</p>
             <!-- <button (click)="welcome.onChatGame ? goPageChat() : goPageChatLobby()"> -->
-                <button *ngIf="router.url==='/game'"(click)="goPageChatGame()" title= "{{ welcome.onChatGame ? 'Cliquez pour passer en chat de la game' : 'Cliquez pour passer en chat global' }}">
-                    <span class="icon-circle">
-                <mat-icon>{{ welcome.onChatGame ? 'games' : 'chat' }}</mat-icon>
-            </span>
-              </button>
-
-              <button *ngIf="router.url==='/waiting-room'"(click)="goPageChatLobby()" title= "{{ welcome.onChatLobby ? 'Cliquez pour passer en chat du lobby' : 'Cliquez pour passer en chat global' }}">
+            <button *ngIf="router.url==='/game'" (click)="goPageChatGame()"
+                title="{{ welcome.onChatGame ? 'Cliquez pour passer en chat de la game' : 'Cliquez pour passer en chat global' }}">
                 <span class="icon-circle">
-            <mat-icon>{{ welcome.onChatLobby ? 'hourglass_empty' : 'chat' }}</mat-icon>
-        </span>
-          </button>
+                    <mat-icon>{{ welcome.onChatGame ? 'games' : 'chat' }}</mat-icon>
+                </span>
+            </button>
+
+            <button *ngIf="router.url==='/waiting-room'" (click)="goPageChatLobby()"
+                title="{{ welcome.onChatLobby ? 'Cliquez pour passer en chat du lobby' : 'Cliquez pour passer en chat global' }}">
+                <span class="icon-circle">
+                    <mat-icon>{{ welcome.onChatLobby ? 'hourglass_empty' : 'chat' }}</mat-icon>
+                </span>
+            </button>
         </div>
         <div class="messages">
             <ul>
                 <li [class]="message.tag" *ngFor="let message of messages">
-                    <img src="{{'http://34.118.163.79:3000/avatar/' + message.name + '.png'}}" alt="avatar" />
+                    <img src="{{'http://34.118.163.79:3000/avatar/' + message.accountId + '.png'}}" alt="avatar" />
                     <h4>{{ message.name }}</h4>
                     <p>{{ message.raw }}</p>
                     <h4>{{ message.timestamp }}</h4>
