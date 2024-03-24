@@ -6,7 +6,7 @@ import { GlobalChatService } from '@app/services/global-chat-service/global-chat
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { LobbyEvents, MessageTag } from '@common/enums';
 import { Subscription } from 'rxjs';
-import { Chat, Lobby } from './../../../../../common/game-interfaces';
+import { Chat, Lobby, Player } from './../../../../../common/game-interfaces';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
 @Component({
     selector: 'app-waiting-room',
@@ -75,6 +75,10 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         }
     }
 
+    getPlayers(): Player[] {
+        if (this.lobby) return this.lobby.players;
+        return [];
+    }
     updateCurrentLobby(): void {
         this.lobby = this.lobbies.find((lobby) => lobby.lobbyId === this.lobby.lobbyId) || this.lobby;
     }

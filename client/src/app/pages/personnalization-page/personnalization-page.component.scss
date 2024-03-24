@@ -195,14 +195,20 @@ button {
 .button-container button {
     font-size: 16px;
     margin-left: 10px;
+    color: rgba(253, 250, 151, 255);
+    border: none;
+    // border-radius: 25px;
+    background-color: #e8a430;
 }
 
 .information {
     color: #ffa500;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
     font-weight: bold;
     display: inline-block;
     text-align: left;
-    font-size: 32px;
+    font-size: 38px;
     font-weight: bold;
     padding: 10px;
     margin-bottom: 10px;
@@ -225,10 +231,9 @@ button {
 .left {
     flex: 1;
     padding-right: 10px;
-    color: #000000;
-    font-size: large;
-    font-weight: bold;
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    color: white;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
     font-weight: bold;
     text-transform: uppercase;
 }
@@ -248,10 +253,9 @@ button {
 }
 
 .container {
-    color: #000000;
-    font-size: large;
-    font-weight: bold;
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    color: white;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
     text-transform: uppercase;
     display: flex;
     justify-content: space-between;
