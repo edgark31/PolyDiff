@@ -66,6 +66,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         });
 
         this.clientSocketService.on('lobby', LobbyEvents.Start, () => {
+            this.showLoadingDialog();
             this.welcome.onChatLobby = false;
             this.router.navigate(['/game']);
         });
@@ -101,7 +102,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
 
     onStart(): void {
         this.roomManagerService.onStart(this.lobby.lobbyId ? this.lobby.lobbyId : '');
-        this.showLoadingDialog();
     }
 
     receiveMessageGlobal(chat: Chat): void {
