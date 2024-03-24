@@ -176,7 +176,7 @@ class _ChatBoxState extends State<ChatBox> {
                   bool isSent = message.accountId == infoService.id;
                   // String avatarURL =
                   //     '$BASE_URL/avatar/${message.accountId}.png';
-                  String avatarURL = avatarProvider.currentAvatarUrl;
+                  String avatarURL = avatarProvider.currentAvatarUrl; // TODO: Fix avatar issue and readjust avatars
                   return Align(
                     alignment:
                         isSent ? Alignment.centerRight : Alignment.centerLeft,
