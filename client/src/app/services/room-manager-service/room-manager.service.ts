@@ -2,8 +2,8 @@
 import { Injectable } from '@angular/core';
 
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
-import { ChannelEvents, GameCardEvents, LobbyEvents } from '@common/enums';
-import { Chat, Game, Lobby } from '@common/game-interfaces';
+import { ChannelEvents, GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
+import { Chat, Game, Lobby, PlayerData } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -66,6 +66,26 @@ export class RoomManagerService {
         return this.message.asObservable();
     }
 
+    // get playerNameAvailability$() {
+    //     return this.playerNameAvailability.asObservable();
+    // }
+
+    // get roomOneVsOneId$() {
+    //     return this.roomOneVsOneId.asObservable();
+    // }
+
+    // get roomSoloId$() {
+    //     return this.roomSoloId.asObservable();
+    // }
+
+    // get roomLimitedId$() {
+    //     return this.roomLimitedId.asObservable();
+    // }
+
+    // get oneVsOneRoomsAvailabilityByRoomId$() {
+    //     return this.rooms1V1AvailabilityByGameId.asObservable();
+    // }
+
     get isPlayerAccepted$() {
         return this.isPlayerAccepted.asObservable();
     }
@@ -82,6 +102,14 @@ export class RoomManagerService {
         return this.isGameCardsReloadNeeded.asObservable();
     }
 
+    // get isLimitedCoopRoomAvailable$() {
+    //     return this.isLimitedCoopRoomAvailable.asObservable();
+    // }
+
+    // get hasNoGameAvailable$() {
+    //     return this.hasNoGameAvailable.asObservable();
+    // }
+
     get isGameHistoryReloadNeeded$() {
         return this.isGameHistoryReloadNeeded.asObservable();
     }
@@ -95,6 +123,12 @@ export class RoomManagerService {
     }
 
     off(): void {
+        // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
+        // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        this.clientSocket.lobbySocket.off(LobbyEvents.Create);
+        this.clientSocket.authSocket.off(LobbyEvents.Join);
+        this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
+        this.clientSocket.authSocket.off(ChannelEvents.LobbyMessage);
         if (this.lobby && !this.lobby.closed) {
             this.lobby?.unsubscribe();
         }
@@ -123,9 +157,37 @@ export class RoomManagerService {
         this.clientSocket.send('lobby', LobbyEvents.Join, { lobbyId, password });
     }
 
+    createOneVsOneRoom(playerPayLoad: PlayerData): void {
+        this.clientSocket.send('game', RoomEvents.CreateOneVsOneRoom, playerPayLoad);
+    }
+
     createLimitedRoom(roomPayload: Lobby): void {
         this.isOrganizer = true;
         this.clientSocket.send('lobby', LobbyEvents.Create, roomPayload);
+    }
+
+    updateRoomOneVsOneAvailability(gameId: string): void {
+        this.clientSocket.send('game', RoomEvents.UpdateRoomOneVsOneAvailability, gameId);
+    }
+
+    checkRoomOneVsOneAvailability(gameId: string): void {
+        this.clientSocket.send('lobby', RoomEvents.CheckRoomOneVsOneAvailability, gameId);
+    }
+
+    deleteCreatedOneVsOneRoom(roomId: string) {
+        this.clientSocket.send('game', RoomEvents.DeleteCreatedOneVsOneRoom, roomId);
+    }
+
+    deleteCreatedCoopRoom(roomId: string) {
+        this.clientSocket.send('game', RoomEvents.DeleteCreatedCoopRoom, roomId);
+    }
+
+    getJoinedPlayerNames(gameId: string): void {
+        this.clientSocket.send('game', PlayerEvents.GetJoinedPlayerNames, gameId);
+    }
+
+    updateWaitingPlayerNameList(playerPayLoad: PlayerData): void {
+        this.clientSocket.send('lobby', PlayerEvents.UpdateWaitingPlayerNameList, playerPayLoad);
     }
 
     onQuit(lobby: Lobby): void {
@@ -133,8 +195,27 @@ export class RoomManagerService {
         if (this.isOrganizer) this.isOrganizer = false;
     }
 
+    isPlayerNameIsAlreadyTaken(playerPayLoad: PlayerData): void {
+        this.clientSocket.send('lobby', PlayerEvents.CheckIfPlayerNameIsAvailable, playerPayLoad);
+    }
+
+    refusePlayer(playerPayLoad: PlayerData): void {
+        this.clientSocket.send('lobby', PlayerEvents.RefusePlayer, playerPayLoad);
+    }
+
+    acceptPlayer(gameId: string, roomId: string, playerName: string) {
+        this.clientSocket.send('lobby', PlayerEvents.AcceptPlayer, { gameId, roomId, playerName });
+    }
+
     onStart(id: string) {
         this.clientSocket.send('lobby', LobbyEvents.Start, id);
+    }
+    cancelJoining(gameId: string): void {
+        this.clientSocket.send('lobby', PlayerEvents.CancelJoining, gameId);
+    }
+
+    checkIfAnyCoopRoomExists(playerPayLoad: PlayerData) {
+        this.clientSocket.send('game', RoomEvents.CheckIfAnyCoopRoomExists, playerPayLoad);
     }
 
     notifyGameCardCreated() {
@@ -173,7 +254,16 @@ export class RoomManagerService {
         this.clientSocket.lobbySocket.off();
     }
 
+    async setPlayers() {
+        // this.lobby$.subscribe((lobby: Lobby) => {
+        //     this.player = lobby.players;
+        // });
+    }
+
     handleRoomEvents(): void {
+        this.lobby = new Subject<Lobby>();
+        this.lobbies = new Subject<Lobby[]>();
+        this.message = new Subject<Chat>();
         if (this.isOrganizer)
             this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby.next(lobby);

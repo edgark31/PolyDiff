@@ -9,14 +9,13 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ImageService } from '@app/services/image-service/image.service';
-import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
+import { ReplayService } from '@app/services/replay-service/replay.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent } from '@common/enums';
 import { Chat, Game, Lobby } from '@common/game-interfaces';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
-import { ReplayService } from '@app/services/replay-service/replay.service';
 @Component({
     selector: 'app-game-page',
     templateUrl: './game-page.component.html',
@@ -43,7 +42,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     timeSubscription: Subscription;
     lobbySubscription: Subscription;
     private gameSubscription: Subscription;
-    private canvasGameSubscription: Subscription;
+    private nextGameSubscription: Subscription;
     private endMessageSubscription: Subscription;
     private onDestroy$: Subject<void>;
 
@@ -55,14 +54,12 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         private clientSocket: ClientSocketService,
         private readonly gameAreaService: GameAreaService,
         private readonly gameManager: GameManagerService,
-        private readonly roomManager: RoomManagerService,
         private readonly replayService: ReplayService,
         private readonly matDialog: MatDialog,
         public welcome: WelcomeService,
         public globalChatService: GlobalChatService,
     ) {
         this.nDifferencesFound = 0;
-        this.lobby = this.roomManager.lobbyGame;
         this.timer = 0;
         this.messages = [];
         this.messageGlobal = [];
@@ -92,24 +89,29 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.clientSocket.connect(this.welcome.account.id as string, 'game');
         this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
         this.gameManager.manageSocket();
+        this.lobby = this.gameManager.lobbyWaiting;
+        this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
+            this.lobby = lobby;
+            this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
+        });
         this.chatSubscription = this.gameManager.message$.subscribe((message: Chat) => {
             this.receiveMessage(message);
         });
         this.gameSubscription = this.gameManager.game$.subscribe((game: Game) => {
             this.gameLobby = game;
         });
-        this.gameSubscription = this.gameManager.nextGame$.subscribe((nextGame: Game) => {
+        this.nextGameSubscription = this.gameManager.nextGame$.subscribe((nextGame: Game) => {
             this.gameLobby = nextGame;
             this.setUpGame();
         });
         this.timeSubscription = this.gameManager.timerLobby$.subscribe((timer: number) => {
             this.timer = timer;
         });
-        this.clientSocket.on('game', GameEvents.EndGame, () => {
-            this.showEndGameDialog(this.endMessage);
-            // this.router.navigate(['/game-mode']);
-            this.welcome.onChatGame = false;
-        });
+        // this.clientSocket.on('game', GameEvents.EndGame, () => {
+        //     this.showEndGameDialog(this.endMessage);
+        //     // this.router.navigate(['/game-mode']);
+        //     this.welcome.onChatGame = false;
+        // });
         this.endMessageSubscription = this.gameManager.endMessage$.subscribe((endMessage: string) => {
             this.endMessage = endMessage;
             this.showEndGameDialog(this.endMessage);
@@ -127,6 +129,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
     ngAfterViewInit(): void {
         //     // this.gameManager.startGame();
+        // if (this.lobbySubscription) {
+        //     this.lobbySubscription?.unsubscribe();
+        // }
         this.setUpGame();
         this.setUpReplay();
         //     // this.updateTimer();
@@ -135,10 +140,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         //     // this.showEndMessage();
         //     // this.updateGameMode();
         //     // this.handlePageRefresh();
-        this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
-            this.lobby = lobby;
-            this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
-        });
     }
 
     ngOnDestroy(): void {
@@ -146,10 +147,11 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.onDestroy$.complete();
         if (this.clientSocket.isSocketAlive('game')) {
             this.gameSubscription?.unsubscribe();
+            this.nextGameSubscription?.unsubscribe();
             this.chatSubscription?.unsubscribe();
+            this.lobbySubscription?.unsubscribe();
             this.timeSubscription?.unsubscribe();
             this.endMessageSubscription?.unsubscribe();
-            this.canvasGameSubscription?.unsubscribe();
             this.gameManager.off();
         }
         if (this.clientSocket.isSocketAlive('auth')) {
@@ -181,12 +183,12 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     showEndGameDialog(endingMessage: string): void {
+        if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
         this.matDialog.open(GamePageDialogComponent, {
             data: { action: GamePageEvent.EndGame, message: endingMessage, isReplayMode: this.lobby.mode === this.gameMode.Classic },
             disableClose: true,
             panelClass: 'dialog',
         });
-        if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
     }
 
     showAbandonDialog(): void {

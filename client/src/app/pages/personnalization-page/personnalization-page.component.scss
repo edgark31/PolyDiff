@@ -7,6 +7,44 @@ form {
     margin: auto;
 }
 
+.profil {
+    color: #ffa500;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #000000;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+.error-message {
+    color: red;
+}
+.information {
+    color: #ffa500;
+    font-weight: bold;
+    display: inline-block;
+    text-align: left;
+    font-size: 32px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding-right: 14px;
+    width: 500px;
+    height: 50px;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+app-nav-bar {
+    float: right;
+    font-family: 'Troika', sans-serif;
+    font-size: 20px;
+    position: relative;
+    right: 480px;
+}
+
 h1 {
     font-size: 1.5rem;
     color: #333;
@@ -26,17 +64,17 @@ h1 {
     text-align: left;
 }
 
-.form-avatar label {
+.form-avatar div {
     margin-bottom: 10px;
-    color: #333;
+    color: #ffa500;
     font-size: 1.2rem;
     font-weight: bold;
 
-    label {
+    div {
         font-size: 0.9rem;
         font-weight: 500;
         margin-bottom: 4px;
-        color: black;
+        color: #ffa500;
     }
 }
 
@@ -88,14 +126,14 @@ h1 {
 }
 
 button:hover {
-    background: rgb(11, 145, 15);
+    background: rgb(136, 15, 15);
 }
 .option-icon {
     margin-right: 8px;
 }
 button {
     margin-bottom: 10px;
-    background-color: rgb(8, 109, 11);
+    background-color: rgb(220, 14, 31);
     color: #fff;
     padding: 8px 24px;
     border-radius: 4px;
@@ -111,7 +149,7 @@ button {
     left: 0;
     z-index: -1;
     width: 100%;
-    height: 100%;
+    height: 110%;
     object-fit: cover;
 }
 
@@ -160,14 +198,18 @@ button {
 }
 
 .information {
-    text-align: center;
+    color: #ffa500;
+    font-weight: bold;
+    display: inline-block;
+    text-align: left;
     font-size: 32px;
     font-weight: bold;
     padding: 10px;
     margin-bottom: 10px;
-    margin-top: 20px;
-
-    padding-right: 600px;
+    margin-top: 10px;
+    padding-right: 14px;
+    width: 500px;
+    height: 50px;
 }
 
 .personalisation {
@@ -183,6 +225,12 @@ button {
 .left {
     flex: 1;
     padding-right: 10px;
+    color: #000000;
+    font-size: large;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 .right {
@@ -190,13 +238,26 @@ button {
     padding-left: 800px;
 }
 
+.container-information {
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.85);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+}
+
 .container {
+    color: #000000;
+    font-size: large;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    text-transform: uppercase;
     display: flex;
     justify-content: space-between;
     margin: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    // background-color: #b7f1c6de;
 }
 .form-stat div {
     margin-bottom: 4px;
@@ -224,7 +285,7 @@ button {
 
 button[mat-icon-button] {
     margin-right: 10px;
-    background: rgb(11, 145, 15);
+    background-color: rgb(220, 14, 31);
     color: #fff;
     border: none;
     padding: 10px;
@@ -234,5 +295,5 @@ button[mat-icon-button] {
 }
 
 button[mat-icon-button]:hover {
-    background: rgba(11, 145, 15, 0.76);
+    background: rgb(136, 15, 15);
 }

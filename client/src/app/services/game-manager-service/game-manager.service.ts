@@ -30,6 +30,7 @@ export class GameManagerService {
     private opponentDifferencesFound: Subject<number>;
     private currentGame: Subject<Game>;
     private message: Subject<Chat>;
+    private abandon: Subject<string>;
     private endMessage: Subject<string>;
     private players: Subject<Players>;
     private isFirstDifferencesFound: Subject<boolean>;
@@ -55,6 +56,7 @@ export class GameManagerService {
         this.nextGame = new Subject<Game>();
         this.timerLobby = new Subject<number>();
         this.message = new Subject<Chat>();
+        this.abandon = new Subject<string>();
         this.endMessage = new Subject<string>();
         this.opponentDifferencesFound = new Subject<number>();
         this.replayEventsSubject = new Subject<ReplayEvent>();
@@ -80,6 +82,10 @@ export class GameManagerService {
     }
     get message$() {
         return this.message.asObservable();
+    }
+
+    get abandon$() {
+        return this.abandon.asObservable();
     }
 
     get game$() {
@@ -188,8 +194,16 @@ export class GameManagerService {
     }
 
     manageSocket(): void {
+        this.game = new Subject<Game>();
+        this.timerLobby = new Subject<number>();
+        this.message = new Subject<Chat>();
+        this.lobbyGame = new Subject<Lobby>();
+        this.differenceFound = new Subject<Coordinate[]>();
+        this.endMessage = new Subject<string>();
+        this.nextGame = new Subject<Game>();
         this.clientSocket.on('game', GameEvents.StartGame, (game: Game) => {
             this.game.next(game);
+            this.lobbyGame.next(this.lobbyWaiting);
         });
 
         this.clientSocket.on('game', GameEvents.NextGame, (nextGame: Game) => {
@@ -209,12 +223,10 @@ export class GameManagerService {
         });
 
         this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
-            console.log('timer update', time);
             this.timerLobby.next(time);
         });
 
         this.clientSocket.on('game', GameEvents.EndGame, (endMessage: string) => {
-            console.log(endMessage);
             this.endMessage.next(endMessage);
         });
     }
@@ -225,7 +237,11 @@ export class GameManagerService {
         }
         if (this.message && !this.message.closed) this.message?.unsubscribe();
         if (this.timerLobby && !this.timerLobby.closed) this.timerLobby?.unsubscribe();
-        if (this.currentGame && !this.currentGame.closed) this.currentGame?.unsubscribe();
+        if (this.lobbyGame && !this.lobbyGame.closed) this.lobbyGame?.unsubscribe();
+        if (this.differenceFound && !this.differenceFound.closed) this.differenceFound?.unsubscribe();
+        if (this.endMessage && !this.endMessage.closed) this.endMessage?.unsubscribe();
+        if (this.nextGame && !this.nextGame.closed) this.nextGame?.unsubscribe();
+        this.clientSocket.disconnect('game');
     }
 
     private handleNotFound(coordClic: Coordinate): void {

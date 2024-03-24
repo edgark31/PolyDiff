@@ -107,8 +107,8 @@ export class LobbyGateway implements OnGatewayConnection {
         );
         this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(chat);
 
-        socket.emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
-        socket.broadcast.to(lobbyId).emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
+        socket.emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Sent });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Received });
 
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} envoie un message`);
@@ -134,8 +134,6 @@ export class LobbyGateway implements OnGatewayConnection {
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
                     break;
-                // case LobbyState.Spectating: // ta deja rejoint une room
-                //     break;
                 default:
                     break;
             }

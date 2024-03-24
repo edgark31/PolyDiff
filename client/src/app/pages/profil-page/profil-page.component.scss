@@ -7,6 +7,11 @@ form {
     margin: auto;
 }
 
+.header {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .mat-header-cell,
 .mat-cell {
     padding: 10px;
@@ -15,9 +20,17 @@ form {
 .mat-header-cell {
     font-weight: bold;
 }
-#nav-bar {
+// #nav-bar {
+//     font-family: 'Troika', sans-serif;
+//     z-index: 2;
+// }
+
+app-nav-bar {
+    float: right;
     font-family: 'Troika', sans-serif;
-    z-index: 2;
+    font-size: 20px;
+    position: relative;
+    right: 480px;
 }
 .mat-cell {
 }
@@ -59,17 +72,19 @@ h1 {
     text-align: left;
 }
 
-.form-avatar label {
+.form-avatar div {
     margin-bottom: 10px;
-    color: #333;
+    color: #ffa500;
     font-size: 1.2rem;
     font-weight: bold;
+    text-transform: uppercase;
 
-    label {
+    div {
         font-size: 0.9rem;
         font-weight: 500;
         margin-bottom: 4px;
-        color: black;
+        color: #ffa500;
+        text-transform: uppercase;
     }
 }
 
@@ -121,12 +136,12 @@ h1 {
 }
 
 button:hover {
-    background: rgb(11, 145, 15);
+    background: rgb(136, 15, 15);
 }
 
 button {
     margin-bottom: 10px;
-    background-color: rgb(8, 109, 11);
+    background-color: rgb(220, 14, 31);
     color: #fff;
     padding: 8px 24px;
     border-radius: 4px;
@@ -184,19 +199,33 @@ button {
 }
 
 .container-information {
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.85);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+    text-transform: uppercase;
     text-align: center;
 }
 
+.profil {
+    color: #ffa500;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #000000;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
 .information {
+    color: #ffa500;
+    font-weight: bold;
     display: inline-block;
     text-align: left;
     font-size: 32px;
     font-weight: bold;
     padding: 10px;
     margin-bottom: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
     padding-right: 14px;
-    width: 350px;
+    width: 500px;
     height: 50px;
 }
 
@@ -213,6 +242,12 @@ button {
 .left {
     flex: 1;
     padding-right: 10px;
+    color: #000000;
+    font-size: large;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 .right {
@@ -221,6 +256,11 @@ button {
 }
 
 .container {
+    color: #000000;
+    font-size: large;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    text-transform: uppercase;
     display: flex;
     justify-content: space-between;
     margin: 20px;
@@ -234,7 +274,7 @@ button {
 .form-stat div:not(:empty) {
     font-size: 1.1rem;
     font-weight: bold;
-    color: #333;
+    // color: #333;
 }
 
 .form-control img {
@@ -265,4 +305,14 @@ button {
     border-radius: 50%;
     background: green;
     border: 2px solid white;
+}
+
+#background {
+    background-color: #f5f5f5;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
