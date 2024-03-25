@@ -6,6 +6,7 @@
     <mat-menu #menu="matMenu" class="custom-menu">
         <button mat-menu-item routerLink="/profil">Profil</button>
         <button mat-menu-item routerLink="/personalization">{{'button.Settings' | translate }}</button>
+        <button mat-menu-item (click)="onSubmitHome()">{{'button.deconnexion' | translate }}</button>
       </mat-menu>
 
       <button mat-icon-button [matMenuTriggerFor]="menu" class="button-back" >

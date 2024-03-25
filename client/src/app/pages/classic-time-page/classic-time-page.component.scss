@@ -6,7 +6,10 @@ body {
     background-position: center center;
     background-repeat: no-repeat;
 }
-
+.header {
+    display: flex;
+    justify-content: flex-end;
+}
 .flex-column {
     display: flex;
     flex-direction: column;
@@ -142,13 +145,12 @@ button:hover {
     transform: scale(1.05);
 }
 
-#nav-bar {
-    right: 0;
-    position: absolute;
+app-nav-bar {
+    float: right;
     font-family: 'Troika', sans-serif;
-    z-index: 1;
-    font-size: 30px;
-    margin-right: 20px;
+    font-size: 20px;
+    position: relative;
+    right: 480px;
 }
 .button-container {
     display: flex;

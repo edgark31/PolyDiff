@@ -37,6 +37,7 @@ import { SelectionPageComponent } from '@app/pages/selection-page/selection-page
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { AccountDialogComponent } from './components/account-dialog/account-dialog.component';
 import { CanvasMiddleButtonsComponent } from './components/canvas-middle-buttons/canvas-middle-buttons.component';
 import { CanvasTopButtonsComponent } from './components/canvas-top-buttons/canvas-top-buttons.component';
 import { CanvasUnderButtonsComponent } from './components/canvas-under-buttons/canvas-under-buttons.component';
@@ -121,6 +122,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         ClassicTimePageComponent,
         CanvasUnderButtonsComponent,
         RegistrationPageComponent,
+        AccountDialogComponent,
     ],
     imports: [
         AppMaterialModule,

@@ -165,10 +165,6 @@ export class GameManagerService {
         this.isLeftCanvas = isLeft;
     }
 
-    sendMessageGlobal(lobbyId: string | undefined, message: string): void {
-        this.clientSocket.send('auth', ChannelEvents.SendGameMessage, { lobbyId, message });
-    }
-
     sendMessage(lobbyId: string | undefined, message: string): void {
         this.clientSocket.send('game', ChannelEvents.SendGameMessage, { lobbyId, message });
     }

@@ -1,5 +1,5 @@
 @import url('https://fonts.cdnfonts.com/css/troika-2');
-  
+
 body {
     background-image: url('../../../assets/LimitedTimeBackground.jpg');
     background-size: cover;
@@ -12,6 +12,19 @@ body {
     flex-direction: column;
     // justify-content: center;
     align-items: center;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+app-nav-bar {
+    float: right;
+    font-family: 'Troika', sans-serif;
+    font-size: 20px;
+    position: relative;
+    right: 480px;
 }
 
 .create-button {
@@ -38,15 +51,6 @@ button:hover {
     background-color: #5cbf99;
     color: black;
     transform: scale(1.05);
-}
-
-#nav-bar {
-    right: 0;
-    position: absolute;
-    font-family: 'Troika', sans-serif;
-    z-index: 1;
-    font-size: 30px;
-    margin-right: 20px;
 }
 
 .button-container {

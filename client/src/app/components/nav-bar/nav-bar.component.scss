@@ -13,7 +13,7 @@ ul a {
 }
 
 ::ng-deep .mat-menu-panel {
-    background-color: #d2b48c;
+    background-color: #fffdd0;
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 200px;
@@ -21,6 +21,8 @@ ul a {
 
 ::ng-deep .mat-menu-item {
     color: white;
+    -webkit-text-stroke: 0.5px #000000;
+    font-family: 'Troika', sans-serif;
     padding: 8px 16px;
 }
 

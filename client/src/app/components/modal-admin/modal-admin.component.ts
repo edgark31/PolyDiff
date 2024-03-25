@@ -1,6 +1,6 @@
 /* eslint-disable max-params */
-import { Component, EventEmitter, Output } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
@@ -18,6 +18,7 @@ export class ModalAdminComponent {
     showModal: boolean = false;
 
     constructor(
+        @Inject(MAT_DIALOG_DATA) public data: {},
         private welcomeService: WelcomeService,
         private router: Router,
         public dialogRef: MatDialogRef<ModalAdminComponent>,
