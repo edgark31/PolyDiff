@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 
 class AdminPage extends StatefulWidget {
+  static const routeName = ADMIN_ROUTE;
+
+  static Route<dynamic> route() {
+    return MaterialPageRoute(
+      builder: (_) => AdminPage(),
+      settings: RouteSettings(name: routeName),
+    );
+  }
+
   @override
   State<AdminPage> createState() => _AdminPageState();
 }

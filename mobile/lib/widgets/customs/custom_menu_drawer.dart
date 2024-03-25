@@ -5,6 +5,7 @@ import 'package:mobile/constants/enums.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
+import 'package:mobile/widgets/admin_popup.dart';
 import 'package:mobile/widgets/customs/custom_circle_avatar.dart';
 import 'package:provider/provider.dart';
 
@@ -66,7 +67,14 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
           ListTile(
               leading: Icon(Icons.lock_person_rounded),
               title: Text('Admin'),
-              onTap: () => Navigator.pushNamed(context, ADMIN_ROUTE)),
+              onTap: () => {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AdminPopup();
+                      },
+                    )
+                  }),
           SizedBox(height: 10),
           ListTile(
               leading: Icon(

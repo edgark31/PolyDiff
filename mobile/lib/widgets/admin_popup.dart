@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile/pages/admin_page.dart';
+import 'package:mobile/constants/app_routes.dart';
 
 class AdminPopup extends StatefulWidget {
   @override
@@ -114,11 +114,7 @@ class _AdminPopupState extends State<AdminPopup> {
                       onPressed: () {
                         //Juste pour tester
                         if (passwordController.text == "12345") {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => AdminPage(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, ADMIN_ROUTE);
                         } else {
                           setState(() {
                             errorMessage =
