@@ -15,6 +15,7 @@ import 'package:mobile/utils/credentials_validation.dart';
 import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
+import 'package:mobile/widgets/password_reset_popup.dart';
 import 'package:provider/provider.dart';
 
 class SignInForm extends StatefulWidget {
@@ -169,6 +170,19 @@ class _SignInFormState extends State<SignInForm> {
                       textAlign: TextAlign.center,
                     ),
                   ),
+                SizedBox(height: 30),
+                CustomButton(
+                    text: FORGOT_PASSWORD_TXT,
+                    press: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return PasswordResetPopup();
+                        },
+                      );
+                    },
+                    backgroundColor: kMidOrange,
+                    textColor: kLight),
                 SizedBox(height: 30),
                 CustomButton(
                     text: SIGN_UP_BTN_TXT,

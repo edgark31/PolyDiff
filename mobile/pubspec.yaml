@@ -46,6 +46,11 @@ flutter:
     #-------------------- LOCAL ASSETS ----------------#
     assets:
         - assets/images/
-        - assets/sound/
+        - assets/sound/correct1.mp3
+        - assets/sound/correct2.mp3
+        - assets/sound/correct3.mp3
+        - assets/sound/error1.mp3
+        - assets/sound/error2.mp3
+        - assets/sound/error3.mp3
 
     #-------------------- LOCAL FONTS ----------------#

@@ -3,6 +3,7 @@ const APP_NAME_TXT = "PolyDiff";
 
 // Button texts
 const String SIGN_IN_BTN_TXT = "CONNEXION";
+const String FORGOT_PASSWORD_TXT = "MOT DE PASSE OUBLIÉ";
 const String SIGN_UP_BTN_TXT = "INSCRIPTION";
 const String SIGN_OUT_BTN_TXT = "DÉCONNEXION";
 const String SAVE_BTN_TXT = "SAUVEGARDER";
