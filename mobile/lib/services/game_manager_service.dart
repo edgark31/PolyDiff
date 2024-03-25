@@ -16,6 +16,7 @@ class GameManagerService extends ChangeNotifier {
   final LobbyService lobbyService = Get.find();
   bool isLeftCanvas = true;
 
+  VoidCallback? onGameChange;
   Game get game => _game;
   int get time => _time;
   String? get endGameMessage => _endGameMessage;
@@ -25,10 +26,11 @@ class GameManagerService extends ChangeNotifier {
     _endGameMessage = null;
     _game = newGame;
     notifyListeners();
+    onGameChange?.call();
+    notifyListeners();
   }
 
   void setTime(int newTime) {
-    print("New time setted");
     _time = newTime;
     notifyListeners();
   }
@@ -107,6 +109,11 @@ class GameManagerService extends ChangeNotifier {
 
     socketService.on(SocketType.Game, GameEvents.TimerUpdate.name, (data) {
       setTime(data as int);
+    });
+
+    socketService.on(SocketType.Game, GameEvents.NextGame.name, (data) {
+      gameAreaService.coordinates = [];
+      setGame(Game.fromJson(data as Map<String, dynamic>));
     });
 
     socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {

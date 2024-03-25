@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/players.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/lobby_service.dart';
@@ -25,7 +26,6 @@ class _GameInfosState extends State<GameInfos> {
     int timer = gameManagerService.time;
     int? nbDifferencesPresent = gameManagerService.game.nDifferences;
     List<Player> players = lobbyService.lobby.players;
-    print("Game infos players : $players");
     String gameMode = lobbyService.lobby.mode.name;
     int nbPlayers = lobbyService.lobby.players.length;
 
@@ -61,15 +61,17 @@ class _GameInfosState extends State<GameInfos> {
                 )
               ],
             ),
-            Text(
-              'Nombre de différences présentes : $nbDifferencesPresent',
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+            if (lobbyService.lobby.mode == GameModes.Classic) ...[
+              Text(
+                'Nombre de différences présentes : $nbDifferencesPresent',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
+            ],
             Row(
               children: [
                 Icon(
