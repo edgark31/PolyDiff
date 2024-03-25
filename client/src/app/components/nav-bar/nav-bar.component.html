@@ -1,10 +1,10 @@
 <ul class="navBar">
     <li class="navElement"><a [routerLink]="homeRoute"> <mat-icon>home</mat-icon>&nbsp;Accueil</a></li>
     <li class="navElement"><a [routerLink]="chatRoute"><mat-icon>chat icon</mat-icon>&nbsp;Clavardage</a></li>
-    <li class="navElement"><a [routerLink]="profileRoute"><mat-icon>person</mat-icon>&nbsp;Profil</a></li>
+    <li class="navElement"><a [routerLink]="profileRoute"><mat-icon>person</mat-icon>&nbsp;Profile</a></li>
     <li class="navElement"><a [routerLink]="friendsRoute"><mat-icon>people</mat-icon>&nbsp;Amis</a></li>
     <mat-menu #menu="matMenu" class="custom-menu">
-        <button mat-menu-item routerLink="/profil">Profil</button>
+        <button mat-menu-item routerLink="/profil">Profile</button>
         <button mat-menu-item routerLink="/personalization">{{'button.Settings' | translate }}</button>
         <button mat-menu-item (click)="onSubmitHome()">{{'button.deconnexion' | translate }}</button>
       </mat-menu>
