@@ -30,7 +30,7 @@ span {
 }
 
 .player-count {
-    bottom: -55px;
+    bottom: 55px;
     left: 295px;
     font-weight: bold;
     position: relative;
@@ -84,7 +84,7 @@ span {
 }
 
 .join-button {
-    top: 290px;
+    top: 180px;
     left: 83px;
     cursor: pointer;
     position: relative;
@@ -105,7 +105,7 @@ span {
 }
 
 .difference-number {
-    top: 255px;
+    top: 145px;
     left: 63px;
     font-weight: bold;
     position: relative;
@@ -119,7 +119,7 @@ span {
 }
 
 .game-mode {
-    top: 290px; //560
+    top: 300px; //560
     right: 230px;
     font-weight: bold;
     position: relative;
@@ -133,7 +133,7 @@ span {
 }
 
 .player-container {
-    bottom: -80px;
+    bottom: 20px;
     left: 295px;
     font-weight: bold;
     position: relative;
