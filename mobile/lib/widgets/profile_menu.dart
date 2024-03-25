@@ -22,6 +22,7 @@ class ProfileMenuWidget extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
       elevation: 3,
+      color: kMidOrange.withOpacity(0.8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
@@ -32,7 +33,7 @@ class ProfileMenuWidget extends StatelessWidget {
           height: 30,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
-            color: kLime.withOpacity(0.3),
+            color: kLightGreen.withOpacity(0.1),
           ),
           child: Icon(icon, color: kLight),
         ),
@@ -48,7 +49,7 @@ class ProfileMenuWidget extends StatelessWidget {
                   color: Colors.grey.withOpacity(0.3),
                 ),
                 child: const Icon(Icons.arrow_forward_ios_rounded,
-                    size: 18.0, color: Colors.grey),
+                    size: 18.0, color: kLight),
               )
             : SizedBox.shrink(),
       ),
