@@ -18,6 +18,7 @@ export class ModalAdminComponent {
     showModal: boolean = false;
 
     constructor(
+        // eslint-disable-next-line @typescript-eslint/ban-types
         @Inject(MAT_DIALOG_DATA) public data: {},
         private welcomeService: WelcomeService,
         private router: Router,

@@ -196,6 +196,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     setUpGame(): void {
+        // eslint-disable-next-line no-unused-vars
         this.gameManager.game$.subscribe((game: Game) => {
             this.gameAreaService.setOriginalContext(
                 this.originalCanvas.nativeElement.getContext('2d', {
