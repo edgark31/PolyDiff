@@ -67,6 +67,7 @@ export enum GameModes {
     LimitedCoop = 'Limited->Coop',
     Classic = 'Classic',
     Limited = 'Limited',
+    Practice = 'Practice',
 }
 
 export enum MessageEvents {
