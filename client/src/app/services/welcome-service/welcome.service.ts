@@ -1,22 +1,23 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LANGUAGES, SONG_LIST_DIFFERENCE, SONG_LIST_ERROR, THEME_PERSONNALIZATION } from '@common/constants';
+import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, LANGUAGES, THEME_PERSONALIZATION } from '@common/constants';
 import { Account, Theme } from '@common/game-interfaces';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
-import { CommunicationService } from '../communication-service/communication.service';
+import { CommunicationService } from '@app/services/communication-service/communication.service';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
-import { GameManagerService } from '../game-manager-service/game-manager.service';
 // eslint-disable-next-line no-restricted-imports
-import { SoundService } from '../sound-service/sound.service';
+import { SoundService } from '@app/services/sound-service/sound.service';
+import { Subject } from 'rxjs';
 @Injectable({
     providedIn: 'root',
 })
 export class WelcomeService {
+    onChatGame: boolean = false;
+    onChatLobby: boolean = false;
     isLoggedIn = localStorage.getItem('isLogged') === 'true';
-    songListDifference = SONG_LIST_DIFFERENCE;
-    songListError = SONG_LIST_ERROR;
+    songListDifference = CORRECT_SOUND_LIST;
+    songListError = ERROR_SOUND_LIST;
     account: Account;
-    isLimited: boolean;
     selectLocal: string;
     selectAvatar: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
     selectAvatarRegister: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
@@ -29,8 +30,12 @@ export class WelcomeService {
     isLinkValid: boolean;
     selectLanguage: string;
     language = LANGUAGES;
-    themePersonnalization = THEME_PERSONNALIZATION;
-    constructor(private communication: CommunicationService, public gameManager: GameManagerService, private sound: SoundService) {}
+    themePersonalization = THEME_PERSONALIZATION;
+    currentLangageTranslate: Subject<string>;
+
+    constructor(private communication: CommunicationService, private sound: SoundService) {
+        this.currentLangageTranslate = new Subject<string>();
+    }
 
     async validate(password: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
@@ -65,7 +70,9 @@ export class WelcomeService {
             });
         });
     }
-
+    updateLangageTranslate() {
+        this.currentLangageTranslate.next(this.account.profile.language);
+    }
     setLoginState(state: boolean): void {
         localStorage.setItem('isLogged', String(state));
         this.isLoggedIn = state;
@@ -76,9 +83,9 @@ export class WelcomeService {
     }
 
     onModifyUser() {
-        this.communication.modifyUser(this.gameManager.username, this.selectName).subscribe({
+        this.communication.updateUsername(this.account.credentials.username, this.selectName).subscribe({
             next: () => {
-                this.gameManager.username = this.selectName;
+                this.account.credentials.username = this.selectName;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';
@@ -87,7 +94,7 @@ export class WelcomeService {
     }
 
     onUpdateAvatar() {
-        this.communication.updateAvatar(this.gameManager.username, this.selectAvatar).subscribe({
+        this.communication.updateAvatar(this.account.credentials.username, this.selectAvatar).subscribe({
             next: () => {
                 this.account.profile.avatar = this.selectAvatar;
             },
@@ -98,7 +105,7 @@ export class WelcomeService {
     }
 
     onChooseAvatar() {
-        this.communication.chooseAvatar(this.gameManager.username, this.selectLocal).subscribe({
+        this.communication.chooseAvatar(this.account.credentials.username, this.selectLocal).subscribe({
             next: () => {
                 this.account.profile.avatar = this.selectAvatar;
             },
@@ -109,7 +116,7 @@ export class WelcomeService {
     }
 
     onModifyPassword() {
-        this.communication.modifyPassword(this.gameManager.username, this.selectPassword).subscribe({
+        this.communication.modifyPassword(this.account.credentials.username, this.selectPassword).subscribe({
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             next: () => {},
             error: (error: HttpErrorResponse) => {
@@ -119,9 +126,9 @@ export class WelcomeService {
     }
 
     onModifyTheme() {
-        this.communication.modifyTheme(this.gameManager.username, this.selectTheme).subscribe({
+        this.communication.modifyTheme(this.account.credentials.username, this.selectTheme).subscribe({
             next: () => {
-                this.account.profile.theme = this.selectTheme;
+                this.account.profile.desktopTheme = this.selectTheme;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';
@@ -130,7 +137,7 @@ export class WelcomeService {
     }
 
     onModifyLanguage() {
-        this.communication.modifyLanguage(this.gameManager.username, this.selectLanguage).subscribe({
+        this.communication.modifyLanguage(this.account.credentials.username, this.selectLanguage).subscribe({
             next: () => {
                 this.account.profile.language = this.selectLanguage;
             },
@@ -140,10 +147,10 @@ export class WelcomeService {
         });
     }
 
-    onModifySongDifference() {
-        this.communication.modifySongDifference(this.gameManager.username, this.sound.correctSoundEffect).subscribe({
+    onUpdateCorrectSound() {
+        this.communication.modifySongDifference(this.account.credentials.username, this.sound.correctSoundEffect).subscribe({
             next: () => {
-                this.account.profile.songDifference = this.sound.correctSoundEffect;
+                this.account.profile.onCorrectSound = this.sound.correctSoundEffect;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';
@@ -151,10 +158,10 @@ export class WelcomeService {
         });
     }
 
-    onModifySongError() {
-        this.communication.modifySongError(this.gameManager.username, this.sound.incorrectSoundEffect).subscribe({
+    onUpdateErrorSound() {
+        this.communication.modifySongError(this.account.credentials.username, this.sound.incorrectSoundEffect).subscribe({
             next: () => {
-                this.account.profile.songError = this.sound.incorrectSoundEffect;
+                this.account.profile.onErrorSound = this.sound.incorrectSoundEffect;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';

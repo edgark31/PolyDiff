@@ -44,7 +44,7 @@ class LobbyService extends ChangeNotifier {
   }
 
   void startLobby() {
-    setIsCreator(false);
+    // setIsCreator(false);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Start.name,
@@ -73,16 +73,12 @@ class LobbyService extends ChangeNotifier {
       _lobby.lobbyId,
     );
     setLobby(Lobby.initial());
+    endLobby();
   }
 
-  // TODO : Implement end of lobby logic
-  // void endLobby() {
-  //   print('Ending lobby');
-  //   _isLobbyStarted = false;
-  //   print('_isLobbyStarted is now : $_isLobbyStarted');
-  //   notifyListeners();
-  //   socketService.disconnect(SocketType.Lobby);
-  // }
+  void endLobby() {
+    socketService.disconnect(SocketType.Lobby);
+  }
 
   void setupLobby(GameModes mode) {
     setListeners();
@@ -141,8 +137,11 @@ class LobbyService extends ChangeNotifier {
         .where((lobby) =>
             lobby.mode == _gameModes &&
             lobby.players.isNotEmpty &&
-            lobby.password ==
-                null) // Password lobbies are not displayed on mobile
+            doesLobbyHavePassword()) // Password lobbies are not displayed on mobile
         .toList();
+  }
+
+  bool doesLobbyHavePassword() {
+    return lobby.password == null || lobby.password == ''; // Password lobbies are not displayed on mobile
   }
 }

@@ -26,11 +26,11 @@
         "songError": "choisissez votre son pour erreur",
         "songDifference": "choisissez votre son pour différence trouvé"
     },
-    "bouton": {
+    "button": {
         "deconnexion": "Déconnexion",
         "returnProfil": "revenir au profil",
         "GoReglage": "Aller dans réglage",
-        "Reglage": "Réglages",
+        "Settings": "Réglages",
         "fr": "français",
         "en": "anglais"
     }

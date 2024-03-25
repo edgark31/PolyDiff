@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
-import 'package:mobile/widgets/avatar.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
-import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
+import 'package:mobile/widgets/profile_menu.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -27,78 +28,134 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
-  Widget build(BuildContext context) {
-    final infoService = context.watch<InfoService>();
+  void initState() {
+    super.initState();
+  }
 
-    // user avatar
-    AvatarProvider.instance.setAccountAvatarUrl(infoService.username);
-    final avatarUrl = AvatarProvider.instance.currentAvatarUrl;
+  @override
+  Widget build(BuildContext context) {
+    final socketService = context.watch<SocketService>();
+    final infoService = context.watch<InfoService>();
+    final avatarProvider = context.watch<AvatarProvider>();
+
     return Scaffold(
-      drawer: CustomMenuDrawer(),
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(title: "P R O F I L"),
       body: SingleChildScrollView(
         child: Column(
           children: [
             BackgroundContainer(
               backgroundImagePath: SELECTION_BACKGROUND_PATH,
               child: Padding(
-                padding: const EdgeInsets.all(50),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    const SizedBox(height: 40),
-                    Avatar(
-                      imageUrl: avatarUrl,
-                      radius: 70,
-                    ),
-                    const SizedBox(height: 20),
-                    itemProfile(infoService.username, Icons.person),
-                    const SizedBox(height: 20),
-                    itemProfile(infoService.email, Icons.mail),
-                    const SizedBox(height: 20),
-                    itemProfile('Reprises vidéo', Icons.video_collection),
-                    const SizedBox(height: 20),
-                    itemProfile('Historique de parties jouées', Icons.games),
-                    const SizedBox(height: 20),
-                    itemProfile('Statistiques', Icons.trending_up),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(15),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, EDIT_PROFILE_ROUTE);
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              key: ValueKey(avatarProvider.currentAvatarUrl),
+                              width: 130,
+                              height: 130,
+                              decoration: BoxDecoration(
+                                  border: Border.all(width: 4, color: kLight),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      spreadRadius: 2,
+                                      blurRadius: 10,
+                                      color: kDark.withOpacity(0.1),
+                                    ),
+                                  ],
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        avatarProvider.currentAvatarUrl),
+                                  )),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    width: 4,
+                                    color: kLight,
+                                  ),
+                                  color: kMidOrange,
+                                ),
+                                child: Icon(
+                                  Icons.edit,
+                                  color: kLight,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                        child: const Text('Personnalisation du profil'),
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Column(children: [
+                        Text(infoService.username),
+                        SizedBox(height: 5),
+                        Text(infoService.email),
+                      ]),
+                    ),
+
+                    const SizedBox(height: 20),
+                    const Divider(),
+                    const SizedBox(height: 10),
+                    // Account information item
+                    ProfileMenuWidget(
+                        title: "Paramètres",
+                        icon: Icons.settings,
+                        onPress: () {
+                          Navigator.pushNamed(context, SETTINGS_ROUTE);
+                        }),
+                    SizedBox(height: 10),
+                    ProfileMenuWidget(
+                        title: "Historique",
+                        icon: Icons.games,
+                        onPress: () {
+                          Navigator.pushNamed(context, HISTORY_ROUTE);
+                        }),
+                    SizedBox(height: 10),
+                    ProfileMenuWidget(
+                        title: "Statistiques",
+                        icon: Icons.trending_up,
+                        onPress: () {
+                          Navigator.pushNamed(context, STATISTICS_ROUTE);
+                        }),
+                    SizedBox(height: 10),
+                    ProfileMenuWidget(
+                        title: "Reprises vidéos",
+                        icon: Icons.video_collection,
+                        onPress: () => {}),
+
+                    Divider(),
+                    SizedBox(height: 20),
+                    ProfileMenuWidget(
+                      title: "Déconnexion",
+                      icon: Icons.logout_rounded,
+                      onPress: () {
+                        socketService.disconnect(SocketType.Auth);
+                        Navigator.pushNamed(context, HOME_ROUTE);
+                      },
+                      endIcon: false,
+                    )
                   ],
                 ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget itemProfile(String title, IconData iconData) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, 5),
-            color: kMidOrange.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 10,
-          ),
-        ],
-      ),
-      child: ListTile(
-        title: Text(title),
-        leading: Icon(iconData),
-        tileColor: Colors.white,
       ),
     );
   }

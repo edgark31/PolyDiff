@@ -5,13 +5,17 @@
     <img id="background" src="./assets/background/MenuBackground.jpg" alt="background" />
     <div class="container">
         <div class="left">
+            <div *ngIf="!welcome.onChatLobby">
             <app-chat-box (addLobby)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
+        </div>
+            <div *ngIf="welcome.onChatLobby">
+                <app-chat-box class="chat-box" (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
+            </div>
         </div>
         <div class="right">
             <div class="player-count"> {{lobby.players.length}}/4 joueurs présents</div>
             <div class="element">
                 <div class="players-list">
-
                     <p class="waiting-text"> Joueur(s) en attente : </p>
                     <div class="player-container">
                         <div class="players" *ngFor="let playerName of lobby.players">
@@ -21,7 +25,6 @@
                 </div>
             </div>
         </div>
-
         <div class="button-container">
             <button (click)="onStart()" *ngIf="roomManagerService.isOrganizer && lobby.players.length>=2" type="submit">Commencer la partie</button>
             <button (click)="onQuit()" type="submit">Quitter</button>

@@ -11,6 +11,13 @@ export enum PlayerEvents {
     WaitingPlayerNameListUpdated = 'WaitingPlayerNameListUpdated',
 }
 
+export enum ChatState {
+    Global = 'Global',
+    Waiting = 'Waiting',
+    Game = 'Game',
+    Nothing = 'Nothing',
+}
+
 export enum GameCardEvents {
     ResetTopTime = 'ResetTopTime',
     ResetAllTopTimes = 'ResetAllTopTimes',
@@ -94,7 +101,6 @@ export enum LobbyEvents {
     LeaveAsObserver = 'LeaveAsObserver',
     UpdateLobbys = 'UpdateLobbys',
     Start = 'Start',
-    LeaveRoom = 'LeaveRoom',
 }
 
 export enum LobbyState {
@@ -104,8 +110,9 @@ export enum LobbyState {
 }
 
 export enum AccountEvents {
-    ChangePseudo = 'ChangePseudo',
-    Update = 'Update',
+    UserUpdate = 'UserUpdate',
+    UserCreate = 'UserCreate',
+    UserDelete = 'UserDelete',
 }
 
 export enum FriendEvents {

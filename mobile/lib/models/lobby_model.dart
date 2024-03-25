@@ -4,7 +4,6 @@ import 'package:mobile/models/models.dart';
 class Lobby {
   String? lobbyId;
   String? gameId;
-  Game? game;
   bool isAvailable;
   List<Player> players;
   final List<Observers> observers;
@@ -14,13 +13,13 @@ class Lobby {
   int? time;
   int timeLimit;
   int? bonusTime;
+  int timePlayed;
   ChatLog? chatLog;
   int? nDifferences;
 
   Lobby(
     this.lobbyId,
     this.gameId,
-    this.game,
     this.isAvailable,
     this.players,
     this.observers,
@@ -30,6 +29,7 @@ class Lobby {
     this.time,
     this.timeLimit,
     this.bonusTime,
+    this.timePlayed,
     this.chatLog,
     this.nDifferences,
   );
@@ -45,7 +45,6 @@ class Lobby {
   }) : this(
           null, // lobbyId
           gameId, // gameId
-          null, // game
           true, // isAvailable : initial lobby is available
           [], // players : initial lobby has no players
           [], // observers : initial lobby has no observers
@@ -55,6 +54,7 @@ class Lobby {
           time, // time
           timeLimit,
           null, // bonusTime
+          0, // timePlayed
           null, // chatLog
           nDifferences,
         );
@@ -63,7 +63,6 @@ class Lobby {
       : this(
           null, // lobbyId
           null, // gameId
-          null, // game
           false, // isAvailable
           [], // players
           [], // observers
@@ -73,6 +72,7 @@ class Lobby {
           0, // time
           0, // timeLimit
           null, // bonusTime
+          0, // timePlayed
           null, // chatLog
           null, // nDifferences
         );
@@ -84,11 +84,9 @@ class Lobby {
     if (json['players'] == []) {
       json['players'] = List<Player>.empty();
     }
-    Game? game = json['game'] != null ? Game.fromJson(json['game']) : null;
     return Lobby(
       json['lobbyId'],
       json['gameId'],
-      game,
       json['isAvailable'],
       json['players'].map<Player>((player) => Player.fromJson(player)).toList(),
       json['observers']
@@ -100,6 +98,7 @@ class Lobby {
       json['time'],
       json['timeLimit'],
       json['bonusTime'],
+      json['timePlayed'],
       ChatLog.fromJson(json['chatLog']),
       json['nDifferences'],
     );
@@ -109,7 +108,6 @@ class Lobby {
     return {
       'lobbyId': lobbyId,
       'gameId': gameId,
-      'game': game?.toJson(),
       'isAvailable': isAvailable,
       'players': players.map((player) => player.toJson()).toList(),
       'observers': observers.map((observer) => observer.toJson()).toList(),
@@ -119,6 +117,7 @@ class Lobby {
       'time': time,
       'timeLimit': timeLimit,
       'bonusTime': bonusTime,
+      'timePlayed': timePlayed,
       'chatLog': chatLog?.toJson(),
       'nDifferences': nDifferences,
     };

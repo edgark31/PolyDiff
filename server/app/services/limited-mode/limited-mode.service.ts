@@ -1,9 +1,9 @@
+import { HistoryService } from '@app/services/history/history.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
-import { GameEvents, RoomEvents, GameModes } from '@common/enums';
+import { GameEvents, GameModes, RoomEvents } from '@common/enums';
 import { GameRoom, PlayerData } from '@common/game-interfaces';
 import { Injectable } from '@nestjs/common';
 import * as io from 'socket.io';
-import { HistoryService } from '@app/services/history/history.service';
 
 @Injectable()
 export class LimitedModeService {
@@ -85,7 +85,6 @@ export class LimitedModeService {
             server.to(room.roomId).emit(GameEvents.UpdateDifferencesFound, room.player1.differenceData.differencesFound);
         }
     }
-
     private sendEndMessage(room: GameRoom, server: io.Server): void {
         room.endMessage = `Vous avez trouvé les ${room.player1.differenceData.differencesFound} différences! Bravo!`;
         server.to(room.roomId).emit(GameEvents.EndGame, room.endMessage);
