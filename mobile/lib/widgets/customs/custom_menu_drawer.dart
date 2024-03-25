@@ -43,6 +43,11 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
             decoration: BoxDecoration(color: kMidOrange),
           ),
           ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Accueil'),
+              onTap: () => Navigator.pushNamed(context, DASHBOARD_ROUTE)),
+          SizedBox(height: 10),
+          ListTile(
               leading: Icon(Icons.account_circle),
               title: Text('Profile'),
               onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE)),
