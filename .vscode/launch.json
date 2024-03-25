@@ -11,6 +11,12 @@
             "program": "${workspaceFolder}/mobile/lib/main.dart"
         },
         {
+            "name": "Flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug"
+        },
+        {
             "name": "Flutter in Chrome",
             "request": "launch",
             "type": "dart",

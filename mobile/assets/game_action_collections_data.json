@@ -1,0 +1,46 @@
+{
+    "gameSessionId": "123456789",
+    "startTime": "2024-03-23T14:00:00Z",
+    "endTime": "2024-03-23T14:45:00Z",
+    "actions": [
+        {
+            "timestamp": "2024-03-23T14:00:10Z",
+            "playerId": "player1",
+            "gameEvent": "move",
+            "details": {
+                "direction": "north",
+                "distance": 5
+            }
+        },
+        {
+            "timestamp": "2024-03-23T14:02:15Z",
+            "playerId": "player2",
+            "type": "action",
+            "details": {
+                "actionType": "shoot",
+                "target": "player3"
+            }
+        }
+    ],
+    "stateSnapshots": [
+        {
+            "timestamp": "2024-03-23T14:00:00Z",
+            "state": {
+                "player1": {
+                    "position": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "health": 100
+                },
+                "player2": {
+                    "position": {
+                        "x": 10,
+                        "y": 10
+                    },
+                    "health": 100
+                }
+            }
+        }
+    ]
+}

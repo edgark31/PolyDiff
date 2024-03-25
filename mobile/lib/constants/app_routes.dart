@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/canvas_test_page.dart';
 import 'package:mobile/pages/chat_page.dart';
 import 'package:mobile/pages/classic_game_page.dart';
 import 'package:mobile/pages/create_room_card_page.dart';
@@ -25,8 +26,8 @@ import 'package:mobile/pages/statistics_page.dart';
 
 // Change this URL to your local machine's IP address when testing on tablet
 // const String BASE_URL = 'http://192.168.0.100:3000'; // Testing on tablet
-// const String BASE_URL = 'http://34.118.163.79:3000'; // Testing on real server
-const String BASE_URL = 'http://localhost:3000'; // Testing on chrome
+const String BASE_URL = 'http://34.118.163.79:3000'; // Testing on real server
+// const String BASE_URL = 'http://localhost:3000'; // Testing on chrome
 const String API_URL = '$BASE_URL/api';
 
 // MAIN PAGES
@@ -37,6 +38,7 @@ const String SIGN_UP_ROUTE = '/signup';
 const String LOGOUT_ROUTE = '/';
 const String DASHBOARD_ROUTE = '/dashboard';
 const String CHAT_ROUTE = '/chat';
+const String CANVAS_ROUTE = '/canvas';
 
 // ACCOUNT/PROFILE
 const String ADMIN_ROUTE = '/admin';
@@ -93,6 +95,9 @@ class AppRouter {
 
       case HistoryPage.routeName:
         return HistoryPage.route();
+
+      case InteractiveCanvasWidget.routeName:
+        return InteractiveCanvasWidget.route();
 
       case LobbySelectionPage.routeName:
         return LobbySelectionPage.route();

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="07a4b5ae-7110-4884-a884-d58f4f1a1d95" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.vscode/c_cpp_properties.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/assets/sound/ErrorSoundEffect.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/assets/sound/WinSoundEffect.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/assets/game_action_collections_data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/assets/video_collection_data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/assets/videos_data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/command/canvas_command.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/models/friend.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/models/game_session.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/pages/canvas_test_page.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/pages/history_page.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/pages/password_reset_page.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/pages/saved_video_library_page.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/pages/sign_up_page.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/services/canvas_service.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/utils/seconds_utils.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/widgets/avatar.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/widgets/connection_form.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/widgets/material_page_router.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mobile/lib/widgets/replay_pop_up.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mobile/lib/constants/app_routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/mobile/lib/constants/app_routes.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2e9Qrp6Vaw6pcreV0752x6tgBf3" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "feat/mobile/replay",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "AndroidSdkUpdater"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="07a4b5ae-7110-4884-a884-d58f4f1a1d95" name="Changes" comment="" />
+      <created>1711314518293</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1711314518293</updated>
+    </task>
+    <servers />
+  </component>
+</project>
