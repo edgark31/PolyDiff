@@ -14,6 +14,7 @@ import 'package:mobile/widgets/canvas.dart';
 import 'package:mobile/widgets/chat_box.dart';
 import 'package:mobile/widgets/end_game_popup.dart';
 import 'package:mobile/widgets/game_infos.dart';
+import 'package:mobile/widgets/game_loading.dart';
 import 'package:provider/provider.dart';
 
 class ClassicGamePage extends StatefulWidget {
@@ -70,11 +71,14 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
     final gameManagerService = context.watch<GameManagerService>();
     final lobbyService = context.watch<LobbyService>();
     if (gameManagerService.game.gameId == '') {
-      return Column(
-        children: [
-          CircularProgressIndicator(),
-          Text('Game is loading'),
-        ],
+      return Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/game_background.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(child: GameLoading()),
       );
     }
 
@@ -110,18 +114,20 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             children: [
               Row(
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.vpn_key_sharp),
-                    iconSize: 70.0,
-                    color: Colors.red,
-                    onPressed: () {
-                      List<List<Coordinate>> differences =
-                          tempGameManager.testCheat();
-                      List<Coordinate> mergedDifferences =
-                          differences.expand((x) => x).toList();
-                      gameAreaService.toggleCheatMode(mergedDifferences);
-                    },
-                  ),
+                  if (lobbyService.lobby.isCheatEnabled) ...[
+                    IconButton(
+                      icon: Icon(Icons.vpn_key_sharp),
+                      iconSize: 70.0,
+                      color: Colors.red,
+                      onPressed: () {
+                        List<List<Coordinate>> differences =
+                            tempGameManager.testCheat();
+                        List<Coordinate> mergedDifferences =
+                            differences.expand((x) => x).toList();
+                        gameAreaService.toggleCheatMode(mergedDifferences);
+                      },
+                    ),
+                  ],
                   SizedBox(
                     height: 200,
                     width: 1000,
