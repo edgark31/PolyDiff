@@ -5,11 +5,10 @@ body {
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
+    width: 150%;
+    height: 150%;
 }
-.header {
-    display: flex;
-    justify-content: flex-end;
-}
+
 .flex-column {
     display: flex;
     flex-direction: column;
@@ -145,12 +144,19 @@ button:hover {
     transform: scale(1.05);
 }
 
+.header {
+    display: flex;
+    justify-content: flex-end;
+    z-index: 1;
+}
+
 app-nav-bar {
     float: right;
     font-family: 'Troika', sans-serif;
     font-size: 20px;
     position: relative;
-    right: 480px;
+    right: 80px;
+    z-index: 1;
 }
 .button-container {
     display: flex;
@@ -160,6 +166,10 @@ app-nav-bar {
     position: absolute;
     width: 100%;
     bottom: 0;
+}
+
+.lobby {
+    margin-bottom: 70px;
 }
 
 .button-container button {
