@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+/* eslint-disable complexity */
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-unused-expressions */
@@ -41,7 +43,10 @@ export class GameGateway implements OnGatewayConnection {
         // Pour démarrer tout le monde en même temps
         if (Array.from(await this.server.in(lobbyId).fetchSockets()).length === this.roomsManager.lobbies.get(lobbyId).players.length) {
             this.roomsManager.lobbies.get(lobbyId).chatLog = { chat: [], channelName: 'game' } as ChatLog;
-            if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
+            if (
+                this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic ||
+                this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Practice
+            ) {
                 await this.gameService.getGameById(this.roomsManager.lobbies.get(lobbyId).gameId).then((game) => {
                     // Mettre une copie de game(db) vers game(game) et l'identifier par le lobbyId
                     const clonedGame: Game = structuredClone({
@@ -62,6 +67,7 @@ export class GameGateway implements OnGatewayConnection {
                 this.server.to(lobbyId).emit(GameEvents.StartGame, this.games.get(lobbyId));
                 this.logger.log(`Game started in lobby -> ${lobbyId}`);
             }
+            if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Practice) return;
             // Set timer indivually for each lobby
             const timerId = setInterval(() => {
                 if (!this.roomsManager.lobbies.get(lobbyId)) {
@@ -179,6 +185,28 @@ export class GameGateway implements OnGatewayConnection {
             }
             // Si pas trouvé
             this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
+            socket.emit(GameEvents.NotFound, coordClic);
+        } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Practice) {
+            // Si trouvé
+            if (index !== NOT_FOUND) {
+                // Update tout correctement
+                this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
+                const difference = this.games.get(lobbyId).differences[index];
+                this.games.get(lobbyId).differences.splice(index, 1);
+                this.server.to(lobbyId).emit(GameEvents.Found, {
+                    lobby: this.roomsManager.lobbies.get(lobbyId),
+                    difference,
+                });
+                // Vérifier s'il reste des differences
+                if (this.games.get(lobbyId).differences.length <= 0) {
+                    this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la pratique');
+                    this.roomsManager.lobbies.delete(lobbyId);
+                    this.games.delete(lobbyId);
+                    socket.leave(lobbyId);
+                }
+                return;
+            }
+            // Si pas trouvé
             socket.emit(GameEvents.NotFound, coordClic);
         }
     }

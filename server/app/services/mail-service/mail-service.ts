@@ -20,11 +20,11 @@ export class MailService {
             subject: 'Oubli de mot de passe',
             html: `<p>Dear ${user.credentials.username},</p>
             <p>Please change your password by clicking on the following link:
-            <a href="http://localhost:4200/confirm-password?token=${token}">Confirm password</a></p>`,
+            <a href="http://34.118.163.79:3000/confirm-password?token=${token}">Confirm password</a></p>`,
             // template: 'confirmation',
             context: {
                 name: user.credentials.username,
-                url: `http://localhost:4200/confirm-password?token=${token}`,
+                url: `http://34.118.163.79:3000/confirm-password?token=${token}`,
             },
         });
     }
