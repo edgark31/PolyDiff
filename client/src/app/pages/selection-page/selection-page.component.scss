@@ -12,13 +12,7 @@
     background-color: (#67a28b);
     z-index: 1;
 }
-app-nav-bar {
-    float: right;
-    font-family: 'Troika', sans-serif;
-    font-size: 20px;
-    position: relative;
-    right: 480px;
-}
+
 .header {
     display: flex;
     flex-direction: row;
@@ -44,14 +38,9 @@ h2 {
     font-family: 'Troika', sans-serif;
 }
 
-.header {
-    display: flex;
-    justify-content: flex-end;
+#nav-bar {
+    font-family: 'Troika', sans-serif;
 }
-
-// #nav-bar {
-//     font-family: 'Troika', sans-serif;
-// }
 
 .button {
     z-index: 999;
