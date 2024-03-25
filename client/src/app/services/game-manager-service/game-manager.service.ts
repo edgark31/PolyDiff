@@ -219,12 +219,10 @@ export class GameManagerService {
         });
 
         this.clientSocket.on('game', GameEvents.TimerUpdate, (time: number) => {
-            console.log('timer update', time);
             this.timerLobby.next(time);
         });
 
         this.clientSocket.on('game', GameEvents.EndGame, (endMessage: string) => {
-            console.log(endMessage);
             this.endMessage.next(endMessage);
         });
     }

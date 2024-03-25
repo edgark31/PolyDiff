@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
@@ -8,6 +9,8 @@ import { LobbyEvents, MessageTag } from '@common/enums';
 import { Subscription } from 'rxjs';
 import { Chat, Lobby, Player } from './../../../../../common/game-interfaces';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
+import { WaitingGameDialogComponent } from '@app/components/waiting-game-dialog/waiting-game-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
     selector: 'app-waiting-room',
     templateUrl: './waiting-room.component.html',
@@ -30,6 +33,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         public welcome: WelcomeService,
         public gameManager: GameManagerService,
         public globalChatService: GlobalChatService,
+        private readonly matDialog: MatDialog,
     ) {}
 
     ngOnInit(): void {
@@ -62,6 +66,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         });
 
         this.clientSocketService.on('lobby', LobbyEvents.Start, () => {
+            this.showLoadingDialog();
             this.welcome.onChatLobby = false;
             this.router.navigate(['/game']);
         });
@@ -105,6 +110,18 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
 
     receiveMessageGlobal(chat: Chat): void {
         this.messageGlobal.push(chat);
+    }
+
+    showLoadingDialog(): void {
+        this.matDialog.open(WaitingGameDialogComponent, {
+            data: { lobby: this.lobby },
+            disableClose: true,
+            panelClass: 'dialog',
+        });
+
+        setTimeout(() => {
+            this.matDialog.closeAll();
+        }, 2000);
     }
 
     ngOnDestroy(): void {

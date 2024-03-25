@@ -107,18 +107,12 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.timeSubscription = this.gameManager.timerLobby$.subscribe((timer: number) => {
             this.timer = timer;
         });
-        this.clientSocket.on('game', GameEvents.EndGame, () => {
-            this.showEndGameDialog(this.endMessage);
-            // this.router.navigate(['/game-mode']);
-            this.welcome.onChatGame = false;
-        });
         this.endMessageSubscription = this.gameManager.endMessage$.subscribe((endMessage: string) => {
             this.endMessage = endMessage;
             this.showEndGameDialog(this.endMessage);
             // this.router.navigate(['/game-mode']);
             this.welcome.onChatGame = false;
         });
-
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.manage();
             this.globalChatService.updateLog();
@@ -128,18 +122,8 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         }
     }
     ngAfterViewInit(): void {
-        //     // this.gameManager.startGame();
-        // if (this.lobbySubscription) {
-        //     this.lobbySubscription?.unsubscribe();
-        // }
         this.setUpGame();
         this.setUpReplay();
-        //     // this.updateTimer();
-        //     // this.handleDifferences();
-        //     // this.handleMessages();
-        //     // this.showEndMessage();
-        //     // this.updateGameMode();
-        //     // this.handlePageRefresh();
     }
 
     getGameName(): string {
@@ -187,12 +171,12 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     showEndGameDialog(endingMessage: string): void {
+        if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
         this.matDialog.open(GamePageDialogComponent, {
             data: { action: GamePageEvent.EndGame, message: endingMessage, isReplayMode: this.lobby.mode === this.gameMode.Classic },
             disableClose: true,
             panelClass: 'dialog',
         });
-        if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
     }
 
     showAbandonDialog(): void {
@@ -201,6 +185,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             disableClose: true,
             panelClass: 'dialog',
         });
+        this.gameManager.abandonGame(this.lobby.lobbyId as string);
     }
 
     mouseClickOnCanvas(event: MouseEvent, isLeft: boolean) {

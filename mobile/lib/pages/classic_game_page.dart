@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/constants/temp_images.dart'; // TODO : replace with specific image when http is setup
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
+import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
+import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/widgets/abandon_popup.dart';
 import 'package:mobile/widgets/canvas.dart';
 import 'package:mobile/widgets/chat_box.dart';
+import 'package:mobile/widgets/end_game_popup.dart';
+import 'package:mobile/widgets/game_infos.dart';
 import 'package:provider/provider.dart';
 
 class ClassicGamePage extends StatefulWidget {
@@ -31,6 +35,7 @@ class ClassicGamePage extends StatefulWidget {
 class _ClassicGamePageState extends State<ClassicGamePage> {
   final ImageConverterService imageConverterService = ImageConverterService();
   final GameAreaService gameAreaService = Get.find();
+  final GameManagerService gameManagerService = Get.find();
   late Future<CanvasModel> imagesFuture;
   bool isChatBoxVisible = false;
   final tempGameManager = CoordinateConversionService();
@@ -38,18 +43,52 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
   @override
   void initState() {
     super.initState();
-    imagesFuture = loadImage();
+    gameManagerService.onGameChange = () {
+      print('Loading new images');
+      imagesFuture = loadImage(
+        gameManagerService.game.original,
+        gameManagerService.game.modified,
+      );
+    };
   }
 
-  Future<CanvasModel> loadImage() async {
-    return imageConverterService.fromImagesBase64(originalImageTempBase64,
-        modifiedImageTempBase64); // TODO : replace with specific image when http is setup
+  Future<CanvasModel> loadImage(
+    String originalImage,
+    String modifiedImage,
+  ) async {
+    return imageConverterService.fromImagesBase64(originalImage, modifiedImage);
   }
 
   @override
   Widget build(BuildContext context) {
     final gameAreaService = Provider.of<GameAreaService>(context);
-    //final lobbyService = context.watch<LobbyService>();
+    final gameManagerService = context.watch<GameManagerService>();
+    final lobbyService = context.watch<LobbyService>();
+    if (gameManagerService.game.gameId == '') {
+      return Column(
+        children: [
+          CircularProgressIndicator(),
+          Text('Chargement de la salle de jeu...'),
+        ],
+      );
+    }
+
+    if (gameManagerService.endGameMessage != null) {
+      Future.delayed(Duration.zero, () {
+        if (ModalRoute.of(context)?.isCurrent ?? false) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return EndGamePopup(
+                endMessage: gameManagerService.endGameMessage!,
+                gameMode: lobbyService.lobby.mode,
+              );
+            },
+          );
+        }
+      });
+    }
+
     return Scaffold(
       body: Stack(
         children: [
@@ -81,8 +120,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                   SizedBox(
                     height: 200,
                     width: 1000,
-                    //child:
-                    // TODO: Place game info widget as a child here when ready
+                    child: GameInfos(),
                   ),
                 ],
               ),
@@ -99,6 +137,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                       ],
                     );
                   } else {
+                    print('NOT DONE');
                     return CircularProgressIndicator();
                   }
                 },
@@ -128,7 +167,16 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             bottom: 8.0,
             child: ElevatedButton(
               onPressed: () {
-                print('Abandon');
+                Future.delayed(Duration.zero, () {
+                  if (ModalRoute.of(context)?.isCurrent ?? false) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AbandonPopup();
+                      },
+                    );
+                  }
+                });
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Color(0xFFEF6151),

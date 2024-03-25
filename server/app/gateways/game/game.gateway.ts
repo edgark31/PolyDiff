@@ -144,11 +144,10 @@ export class GameGateway implements OnGatewayConnection {
                 // Update tout correctement
                 this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
                 // Update le time
-                // this.roomsManager.lobbies.get(lobbyId).time + this.roomsManager.lobbies.get(lobbyId).bonusTime >=
-                // this.roomsManager.lobbies.get(lobbyId).timeLimit
-                //     ? (this.roomsManager.lobbies.get(lobbyId).time = this.roomsManager.lobbies.get(lobbyId).timeLimit)
-                //     : (this.roomsManager.lobbies.get(lobbyId).time += this.roomsManager.lobbies.get(lobbyId).bonusTime);
-                this.roomsManager.lobbies.get(lobbyId).time += 10; // TODO : Get info from lobby creation
+                this.roomsManager.lobbies.get(lobbyId).time + this.roomsManager.lobbies.get(lobbyId).bonusTime >=
+                this.roomsManager.lobbies.get(lobbyId).timeLimit
+                    ? (this.roomsManager.lobbies.get(lobbyId).time = this.roomsManager.lobbies.get(lobbyId).timeLimit)
+                    : (this.roomsManager.lobbies.get(lobbyId).time += this.roomsManager.lobbies.get(lobbyId).bonusTime);
                 const difference = this.games.get(lobbyId).differences[index];
                 this.server.to(lobbyId).emit(GameEvents.Found, {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
@@ -197,6 +196,7 @@ export class GameGateway implements OnGatewayConnection {
         if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
             this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
             clearInterval(this.timers.get(lobbyId));
+            this.deleteLobby(lobbyId);
             this.logger.log(`Game ${lobbyId} ended because of not enough players`);
         }
     }
@@ -284,7 +284,7 @@ export class GameGateway implements OnGatewayConnection {
             name: game.name,
             original: game.originalImage,
             modified: game.modifiedImage,
-            gameId: game._id,
+            gameId: game._id.toString(),
             differences: JSON.parse(game.differences) as Coordinate[][],
             playedGameIds: [...gamesPlayed, game._id.toString()],
         });

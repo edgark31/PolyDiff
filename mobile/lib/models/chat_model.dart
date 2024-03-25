@@ -2,10 +2,17 @@ import 'package:mobile/constants/enums.dart';
 
 class Chat {
   String raw;
-  String name;
+  String? accountId;
+  String? name;
   MessageTag? tag;
-  String timestamp;
-  Chat(this.raw, this.name, this.tag, this.timestamp);
+  String? timestamp;
+  Chat(
+    this.raw,
+    this.accountId,
+    this.name,
+    this.tag,
+    this.timestamp,
+  );
 
   static Chat fromJson(Map<String, dynamic> json) {
     MessageTag? tag;
@@ -15,6 +22,7 @@ class Chat {
     }
     return Chat(
       json['raw'],
+      json['accountId'],
       json['name'],
       tag,
       json['timestamp'],
@@ -24,6 +32,7 @@ class Chat {
   Map<String, dynamic> toJson() {
     return {
       'raw': raw,
+      'accountId': accountId,
       'name': name,
       'tag': tag?.name,
       'timestamp': timestamp,

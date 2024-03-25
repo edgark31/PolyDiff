@@ -5,8 +5,14 @@ class Player {
   String? accountId;
   String? name;
   Differences? differenceData;
+  int? count;
 
-  Player({this.accountId, required this.name, required this.differenceData});
+  Player({
+    this.accountId,
+    required this.name,
+    required this.differenceData,
+    this.count,
+  });
 
   factory Player.fromJson(Map<String, dynamic> json) => Player(
         accountId: json['accountId'],
@@ -14,12 +20,14 @@ class Player {
         differenceData: json['differenceData'] != null
             ? Differences.fromJson(json['differenceData'])
             : null,
+        count: json['count'],
       );
 
   Map<String, dynamic> toJson() => {
         'accountId': accountId,
         'name': name,
         'differenceData': differenceData?.toJson(),
+        'count': count,
       };
 }
 

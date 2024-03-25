@@ -56,6 +56,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { RoomSheetComponent } from './components/room-sheet/room-sheet.component';
+import { WaitingGameDialogComponent } from './components/waiting-game-dialog/waiting-game-dialog.component';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { ClassicTimePageComponent } from './pages/classic-time-page/classic-time-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
@@ -123,6 +124,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         CanvasUnderButtonsComponent,
         RegistrationPageComponent,
         AccountDialogComponent,
+        WaitingGameDialogComponent,
     ],
     imports: [
         AppMaterialModule,

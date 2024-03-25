@@ -46,6 +46,7 @@ class _DashboardPageState extends State<DashboardPage> {
         socketService.setup(SocketType.Lobby, infoService.id);
         chatService.setupLobby();
         lobbyService.setupLobby(type);
+        
         _navigateTo(LOBBY_SELECTION_ROUTE);
       },
       backgroundColor: color,
