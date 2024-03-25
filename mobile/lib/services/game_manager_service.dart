@@ -23,6 +23,7 @@ class GameManagerService extends ChangeNotifier {
 
   void setGame(Game newGame) {
     print('new Game has been setted $game');
+    print(newGame);
     _endGameMessage = null;
     _game = newGame;
     notifyListeners();
@@ -72,11 +73,9 @@ class GameManagerService extends ChangeNotifier {
   }
 
   void abandonGame(String? lobbyId) {
+    print('Calling abandonGame with $lobbyId');
     socketService.send(SocketType.Game, GameEvents.AbandonGame.name, lobbyId);
     socketService.disconnect(SocketType.Game);
-    if (lobbyService.lobby.players.length < 2) {
-      lobbyService.endLobby();
-    }
   }
 
   void setListeners() {

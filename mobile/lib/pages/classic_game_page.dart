@@ -45,6 +45,8 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
     super.initState();
     gameManagerService.onGameChange = () {
       print('Loading new images');
+      print(gameManagerService.game.original);
+      print(gameManagerService.game.modified);
       imagesFuture = loadImage(
         gameManagerService.game.original,
         gameManagerService.game.modified,

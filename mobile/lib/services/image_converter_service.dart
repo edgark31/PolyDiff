@@ -19,6 +19,9 @@ class ImageConverterService {
 
   Future<CanvasModel> fromImagesBase64(
       String originalImageBase64, String modifiedImageBase64) async {
+    print('fromImagesBase64');
+    print(originalImageBase64);
+    print(modifiedImageBase64);
     final ui.Image originalImage =
         await imageFromBase64String(originalImageBase64);
     final ui.Image modifiedImage =
