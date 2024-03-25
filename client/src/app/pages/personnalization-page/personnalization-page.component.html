@@ -58,37 +58,38 @@
       <div class="form-control">
 
 
-        <div class="form-control section">
-          <div class="profil">{{'profil.theme' | translate }}</div>
-          <mat-form-field>
-            <mat-label>{{'profil.theme' | translate }}</mat-label>
-            <mat-select [(value)]="welcomeService.selectTheme">
-                <mat-select-trigger>
-                    {{ welcomeService.selectTheme.name }}
-                  </mat-select-trigger>
-                <mat-option *ngFor="let theme of welcomeService.themePersonalization" [value]="theme">
-                  {{ theme.name }}
-                </mat-option>
-              </mat-select>
-          </mat-form-field>
-        </div>
 
-
-        <div class="form-control section"> <div class="profil"> {{'profil.language' | translate }}</div>
-          <mat-form-field>
-            <mat-label>{{'profil.language' | translate }}</mat-label>
-            <mat-select [(value)]="welcomeService.selectLanguage" (valueChange)="useLanguage(welcomeService.selectLanguage)">
-              <mat-option [value]="welcomeService.language[0]">{{'button.fr' | translate }}</mat-option>
-              <mat-option [value]="welcomeService.language[1]">{{'button.en' | translate }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
       </div>
 
 
     </div>
 
     <div class="right">
+        <div class="form-control section">
+            <div class="profil">{{'profil.theme' | translate }}</div>
+            <mat-form-field>
+              <mat-label>{{'profil.theme' | translate }}</mat-label>
+              <mat-select [(value)]="welcomeService.selectTheme">
+                  <mat-select-trigger>
+                      {{ welcomeService.selectTheme.name }}
+                    </mat-select-trigger>
+                  <mat-option *ngFor="let theme of welcomeService.themePersonalization" [value]="theme">
+                    {{ theme.name }}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
+          </div>
+
+
+          <div class="form-control section"> <div class="profil"> {{'profil.language' | translate }}</div>
+            <mat-form-field>
+              <mat-label>{{'profil.language' | translate }}</mat-label>
+              <mat-select [(value)]="welcomeService.selectLanguage" (valueChange)="useLanguage(welcomeService.selectLanguage)">
+                <mat-option [value]="welcomeService.language[0]">{{'button.fr' | translate }}</mat-option>
+                <mat-option [value]="welcomeService.language[1]">{{'button.en' | translate }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
        <div class="form-control section"> <div class="profil"> {{'profil.songError' | translate }}</div>
         <mat-form-field>
           <mat-label>{{'profil.songError' | translate }}</mat-label>
