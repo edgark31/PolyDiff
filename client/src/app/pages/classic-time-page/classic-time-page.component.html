@@ -7,7 +7,7 @@
             <span>Créer une salle</span>
         </button>
         <div *ngFor="let lobby of pagedLobbies">
-            <div *ngIf="lobby.mode === gameModes.Classic" class="lobby">
+            <div *ngIf="lobby.mode === gameModes.Classic">
                 <app-room-sheet [lobby]="lobby"></app-room-sheet>
             </div>
         </div>
@@ -17,3 +17,4 @@
         </div>
     </div>
 </body>
+
