@@ -70,7 +70,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Text('Création d\'une salle de jeu - Mode Classique'),
+            Text('Création d\'une salle de jeu'),
             Text('Choisissez une fiche'),
             isLoading
                 ? Center(child: CircularProgressIndicator())
