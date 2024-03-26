@@ -71,16 +71,6 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
               backgroundColor: kMidOrange,
               widthFactor: 0.25,
             ),
-            CustomButton(
-              press: () {
-                // TODO: Make sure the page does not count stats + no clock
-                // TODO: Think if we need to disconnect the lobby socket
-                print("Navigate to game page but stats do not count");
-                Navigator.pushNamed(context, CLASSIC_ROUTE);
-              },
-              text: 'Mode pratique',
-              backgroundColor: kMidOrange,
-            ),
           ],
         ),
       ),
