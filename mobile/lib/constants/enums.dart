@@ -73,8 +73,7 @@ enum LobbyEvents {
   Join,
   Leave,
   OptPlayer,
-  JoinAsObserver,
-  LeaveAsObserver,
+  Spectate,
   UpdateLobbys,
   Start,
 }
@@ -91,10 +90,8 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'LobbyLeave';
       case LobbyEvents.OptPlayer:
         return 'OptPlayer';
-      case LobbyEvents.JoinAsObserver:
-        return 'JoinAsObserver';
-      case LobbyEvents.LeaveAsObserver:
-        return 'LeaveAsObserver';
+      case LobbyEvents.Spectate:
+        return 'Spectate';
       case LobbyEvents.UpdateLobbys:
         return 'UpdateLobbys';
       case LobbyEvents.Start:
@@ -114,10 +111,8 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'LobbyLeave';
       case LobbyEvents.OptPlayer:
         return 'OptPlayer';
-      case LobbyEvents.JoinAsObserver:
-        return 'JoinAsObserver';
-      case LobbyEvents.LeaveAsObserver:
-        return 'LeaveAsObserver';
+      case LobbyEvents.Spectate:
+        return 'Spectate';
       case LobbyEvents.UpdateLobbys:
         return 'UpdateLobbys';
       case LobbyEvents.Start:
