@@ -58,14 +58,13 @@ export class CommunicationService {
         );
     }
 
-    sendMail(mail: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/mail`, { email: mail }).pipe(
+    sendMail(mail: string): Observable<Account> {
+        return this.http.put<Account>(`${this.accountUrl}/mail`, { email: mail }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
                 console.log('mail modify');
             }),
-            catchError(this.handleError<void>('modifyUser')),
         );
     }
 

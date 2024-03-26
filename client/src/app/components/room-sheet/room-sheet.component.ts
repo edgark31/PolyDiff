@@ -36,6 +36,7 @@ export class RoomSheetComponent {
             // rentrer en tant qu'observateur
         }
     }
+
     feedbackLobby(): string {
         if (this.lobby.players.length === 4 && this.lobby.isAvailable) return 'Partie pleine';
         return '';

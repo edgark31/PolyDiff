@@ -36,6 +36,7 @@ export class LoginPageComponent {
     }
 
     onSubmit() {
+        this.welcomeservice.account = {} as Account;
         if (this.loginForm.value.username && this.loginForm.value.password) {
             this.creds = {
                 username: this.loginForm.value.username,

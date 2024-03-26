@@ -30,6 +30,7 @@ export class WelcomeService {
     isLinkValid: boolean;
     selectLanguage: string;
     language = LANGUAGES;
+    isHistoryLogin: boolean;
     themePersonalization = THEME_PERSONALIZATION;
     currentLangageTranslate: Subject<string>;
 

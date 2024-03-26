@@ -19,12 +19,12 @@ export class MailService {
             from: 'TeamRaccoon@polymtl.ca',
             subject: 'Oubli de mot de passe',
             html: `<p>Dear ${user.credentials.username},</p>
-            <p>Please change your password by clicking on the following link:
-            <a href="http://34.118.163.79:3000/confirm-password?token=${token}">Confirm password</a></p>`,
+            <p>Your code to reset your password is:
+            <div>${user.credentials.recuperatePasswordCode}</div>`,
             // template: 'confirmation',
             context: {
                 name: user.credentials.username,
-                url: `http://34.118.163.79:3000/confirm-password?token=${token}`,
+                // url: `http://34.118.163.79:3000/confirm-password?token=${token}`,
             },
         });
     }
@@ -37,12 +37,12 @@ export class MailService {
             if (!accountFound) throw new Error('Account not found');
             const token = accountFound.credentials.username;
 
-            // const linked = Math.floor(1000 + Math.random() * 9000).toString();
+            accountFound.credentials.recuperatePasswordCode = Math.floor(1000 + Math.random() * 9000).toString();
             // await this.mailService.sendUserConfirmation(accountFound);
             await this.sendUserConfirmation(accountFound, token);
             await accountFound.save();
             this.logger.verbose(`send a mail with this adress  ${accountFound.credentials.email} `);
-            return Promise.resolve();
+            return Promise.resolve(accountFound);
         } catch (error) {
             this.logger.error(`Failed to send mail --> ${error.message}`);
             return Promise.reject(`${error}`);

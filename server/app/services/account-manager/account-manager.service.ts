@@ -74,6 +74,7 @@ export class AccountManagerService implements OnModuleInit {
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.id = accountFound._id.toString();
+            console.log(this.connectedUsers.has(accountFound.id));
             if (this.connectedUsers.has(accountFound.id)) throw new Error('Account already connected');
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
@@ -159,7 +160,6 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.credentials.password = newPassword;
 
             await accountFound.save();
-            this.connectedUsers.set(accountFound.id, accountFound);
             await this.fetchUsers();
 
             this.logger.verbose(`${username} has changed his password`);

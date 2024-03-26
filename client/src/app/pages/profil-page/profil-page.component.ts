@@ -2,14 +2,17 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { HistoryLoginComponent } from '@app/components/history-login/history-login.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { ELEMENT_DATA, LANGUAGES, THEME_PERSONALIZATION } from '@common/constants';
-import { ConnectionLog } from '@common/game-interfaces';
+import { AccountEvents } from '@common/enums';
+import { Account, ConnectionLog } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -34,9 +37,17 @@ export class ProfilPageComponent implements AfterViewInit, OnInit {
         public gameManager: GameManagerService,
         private clientSocket: ClientSocketService,
         private translate: TranslateService,
+        private readonly matDialog: MatDialog,
     ) {}
 
     ngOnInit() {
+        this.clientSocket.on('auth', AccountEvents.RefreshAccount, (account: Account) => {
+            this.welcomeService.account = account;
+        });
+        this.welcomeService.account.profile.sessions.forEach((session) => {
+            console.log(session);
+        });
+        console.log();
         console.log(this.welcomeService.account);
     }
 
@@ -45,7 +56,9 @@ export class ProfilPageComponent implements AfterViewInit, OnInit {
     }
 
     toggleTable() {
-        this.showTable = !this.showTable;
+        this.welcomeService.isHistoryLogin = true;
+        this.matDialog.open(HistoryLoginComponent);
+        this.clientSocket.send('auth', AccountEvents.RefreshAccount, this.welcomeService.account.id);
     }
     translateCharacter(character: string): string {
         return this.translate.instant(`button.${character}`);

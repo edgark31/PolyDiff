@@ -15,9 +15,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ConfirmPasswordPageComponent implements OnInit {
     feedback: string;
     name: string;
+    code = false;
+    isCode: boolean;
     recoverPasswordForm = new FormGroup({
         confirmPassword: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
         password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
+    });
+
+    recoverCode = new FormGroup({
+        code: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
     });
 
     constructor(
@@ -30,9 +36,14 @@ export class ConfirmPasswordPageComponent implements OnInit {
     ngOnInit() {
         this.name = this.route.snapshot.queryParams['token'];
     }
+    onSubmitCode() {
+        if (this.recoverCode.value.code === this.welcomeService.account.credentials.recuperatePasswordCode && this.recoverCode.value.code) {
+            this.isCode = true;
+        }
+    }
     onSubmit() {
         if (this.recoverPasswordForm.value.password === this.recoverPasswordForm.value.confirmPassword && this.recoverPasswordForm.value.password) {
-            this.communication.modifyPassword(this.name, this.recoverPasswordForm.value.password).subscribe({
+            this.communication.modifyPassword(this.welcomeService.account.credentials.username, this.recoverPasswordForm.value.password).subscribe({
                 next: () => {
                     this.router.navigate(['/login']);
                 },
