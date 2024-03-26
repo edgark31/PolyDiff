@@ -37,7 +37,7 @@ export class RoomSheetComponent {
         }
     }
     feedbackLobby(): string {
-        if (this.lobby.players.length === 4) return 'Partie pleine';
+        if (this.lobby.players.length === 4 && this.lobby.isAvailable) return 'Partie pleine';
         return '';
     }
 }
