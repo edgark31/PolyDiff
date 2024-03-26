@@ -60,7 +60,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         const chat: Chat = this.messageManager.createMessage(
             this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
             message,
-            socket.data.id,
+            socket.data.accountId,
         );
         this.globalChatLog.chat.push(chat);
 
