@@ -1,11 +1,11 @@
 <body>
 <div class="modal">
     <div class="modal-content">
-<h2 mat-dialog-title>ENTRER LE CODE D'ACCES</h2>
+<h2 mat-dialog-title  class="title">ENTRER LE CODE D'ACCES</h2>
 <mat-dialog-content>
   <mat-form-field>
-    <mat-label>Mot de passe</mat-label>
-    <input matInput type="password" placeholder="Code d'accès" (keyup.enter)="onSubmitAccess()" [(ngModel)]="codeAccess">
+    <mat-label >Mot de passe</mat-label>
+    <input  class="title" matInput type="password" placeholder="Code d'accès" (keyup.enter)="onSubmitAccess()" [(ngModel)]="codeAccess">
   </mat-form-field>
   <div *ngIf="codeAccess !== data.password" class="error-message">Mot de passe incorrect. Veuillez réessayer.</div>
 </mat-dialog-content>

@@ -7,15 +7,16 @@ import 'package:mobile/pages/create_room_card_page.dart';
 import 'package:mobile/pages/create_room_options_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/edit_profile_page.dart';
-import 'package:mobile/pages/histoy_page.dart';
+import 'package:mobile/pages/history_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
-import 'package:mobile/pages/login_page.dart';
+import 'package:mobile/pages/practice_game_page.dart';
 import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/pages/settings_page.dart';
-import 'package:mobile/pages/signup_page.dart';
+import 'package:mobile/pages/sign_in_page.dart';
+import 'package:mobile/pages/sign_up_page.dart';
 import 'package:mobile/pages/statistics_page.dart';
 
 // Important if testing on a real device with a local server
@@ -32,7 +33,7 @@ const String API_URL = '$BASE_URL/api';
 // MAIN PAGES
 const String HOME_ROUTE = '/';
 const String ERROR_ROUTE = '/error';
-const String LOGIN_ROUTE = '/login';
+const String SIGN_IN_ROUTE = '/signin';
 const String SIGN_UP_ROUTE = '/signup';
 const String LOGOUT_ROUTE = '/';
 const String DASHBOARD_ROUTE = '/dashboard';
@@ -54,6 +55,7 @@ const String SEARCH_FRIEND_ROUTE = '$FRIENDS_ROUTE/search';
 const String GAME_ROUTE = '/game';
 const String CLASSIC_ROUTE = '$GAME_ROUTE/classic';
 const String LIMITED_TIME_ROUTE = '$GAME_ROUTE/limited';
+const String PRACTICE_ROUTE = '$GAME_ROUTE/practice';
 
 // LOBBY
 const String LOBBY_ROUTE = '/lobby';
@@ -111,6 +113,10 @@ class AppRouter {
 
       case ClassicGamePage.routeName:
         return ClassicGamePage.route();
+
+      case PracticeGamePage.routeName:
+        return PracticeGamePage.route();
+
       default:
         return _errorRoute();
     }

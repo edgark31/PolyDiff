@@ -37,6 +37,7 @@ import { SelectionPageComponent } from '@app/pages/selection-page/selection-page
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { AccountDialogComponent } from './components/account-dialog/account-dialog.component';
 import { CanvasMiddleButtonsComponent } from './components/canvas-middle-buttons/canvas-middle-buttons.component';
 import { CanvasTopButtonsComponent } from './components/canvas-top-buttons/canvas-top-buttons.component';
 import { CanvasUnderButtonsComponent } from './components/canvas-under-buttons/canvas-under-buttons.component';
@@ -76,7 +77,7 @@ import { WaitingRoomComponent } from './pages/waiting-room/waiting-room.componen
  * Otherwise Angular Cli will not know in which module to put new component
  */
 export const createTranslateLoader = (http: HttpClient) => {
-    return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 };
 @NgModule({
     declarations: [
@@ -122,6 +123,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         ClassicTimePageComponent,
         CanvasUnderButtonsComponent,
         RegistrationPageComponent,
+        AccountDialogComponent,
         WaitingGameDialogComponent,
     ],
     imports: [
