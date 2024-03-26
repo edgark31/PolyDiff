@@ -95,7 +95,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 100),
+                  SizedBox(height: 50),
                   _gameModeOption(
                     GameModes.Classic,
                     Icons.class_,

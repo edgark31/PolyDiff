@@ -4,6 +4,7 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:mobile/widgets/customs/stroked_text_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key});
@@ -20,7 +21,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double startingPoint = screenHeight * 0.5;
+    double startingPoint = screenHeight * 0.4;
     return Stack(
       children: [
         BackgroundContainer(),
@@ -33,9 +34,15 @@ class HomePage extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(top: startingPoint),
-                    child: Text(
-                      APP_NAME_TXT,
-                      textAlign: TextAlign.center,
+                    child: StrokedTextWidget(
+                      text: APP_NAME_TXT,
+                      textStyle: TextStyle(
+                        fontFamily: 'troika',
+                        fontSize: 140,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFE8A430),
+                        letterSpacing: 0.0,
+                      ),
                     ),
                   ),
                   SizedBox(height: 50),
