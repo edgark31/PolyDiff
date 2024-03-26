@@ -93,7 +93,7 @@ class _AdminPageState extends State<AdminPage> {
                         setState(() {
                           isLoading = true;
                         });
-                        Future.delayed(Duration(milliseconds: 500), () {
+                        Future.delayed(Duration(milliseconds: 2000), () {
                           _fetchGameCards();
                         });
                       });
