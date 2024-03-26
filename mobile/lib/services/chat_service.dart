@@ -49,9 +49,20 @@ class ChatService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addGlobalChatList(List<Chat> messages) {
+    _globalMessages.clear(); // safety check
+    _globalMessages.addAll(messages);
+    notifyListeners();
+  }
+
   void addLobbyMessage(Chat message) {
     _lobbyMessages.add(message);
     notifyListeners();
+  }
+
+  void setupGlobalChat() {
+    setGlobalChatListeners();
+    getGlobalMessages();
   }
 
   void setupLobby() {
@@ -75,9 +86,18 @@ class ChatService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void getGlobalMessages() {
+    socketService.send(SocketType.Auth, ChannelEvents.UpdateLog.name);
+  }
+
   void setGlobalChatListeners() {
     socketService.on(SocketType.Auth, ChannelEvents.GlobalMessage.name, (data) {
       addGlobalMessage(Chat.fromJson(data as Map<String, dynamic>));
+    });
+
+    socketService.on(SocketType.Auth, ChannelEvents.UpdateLog.name, (data) {
+      final ChatLog chatLog = ChatLog.fromJson(data as Map<String, dynamic>);
+      addGlobalChatList(chatLog.chat);
     });
   }
 
