@@ -30,7 +30,7 @@ export class ImageManagerService {
         return 'Hello World!';
     }
 
-    async modifyImage(game: Game, keepIndex: number): Promise<string> {
+    async limitedImage(game: Game, keepIndex: number): Promise<string> {
         const originalImage = await Jimp.read(Buffer.from(game.original.replace(/^data:image\/\w+;base64,/, ''), 'base64'));
         const modifiedImage = await Jimp.read(Buffer.from(game.modified.replace(/^data:image\/\w+;base64,/, ''), 'base64'));
 
@@ -40,6 +40,23 @@ export class ImageManagerService {
             const { x, y } = coord;
             const originalPixelColor = originalImage.getPixelColor(x, y);
             modifiedImage.setPixelColor(originalPixelColor, x, y);
+        });
+
+        const newBuffer = await modifiedImage.getBufferAsync(Jimp.MIME_PNG);
+        return newBuffer.toString('base64');
+    }
+
+    async observerImage(game: Game): Promise<string> {
+        const originalImage = await Jimp.read(Buffer.from(game.original.replace(/^data:image\/\w+;base64,/, ''), 'base64'));
+        const modifiedImage = await Jimp.read(Buffer.from(game.modified.replace(/^data:image\/\w+;base64,/, ''), 'base64'));
+
+        const differencesSet = new Set(game.differences.flat().map(({ x, y }) => `${x},${y}`));
+
+        originalImage.scan(0, 0, originalImage.bitmap.width, originalImage.bitmap.height, (x, y) => {
+            if (!differencesSet.has(`${x},${y}`)) {
+                const originalPixelColor = originalImage.getPixelColor(x, y);
+                modifiedImage.setPixelColor(originalPixelColor, x, y);
+            }
         });
 
         const newBuffer = await modifiedImage.getBufferAsync(Jimp.MIME_PNG);
