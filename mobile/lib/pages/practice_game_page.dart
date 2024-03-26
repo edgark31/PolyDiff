@@ -3,36 +3,34 @@ import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/canvas_model.dart';
-import 'package:mobile/models/game.dart';
 import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
 import 'package:mobile/services/lobby_service.dart';
-import 'package:mobile/widgets/abandon_popup.dart';
 import 'package:mobile/widgets/canvas.dart';
 import 'package:mobile/widgets/chat_box.dart';
 import 'package:mobile/widgets/end_game_popup.dart';
 import 'package:mobile/widgets/game_infos.dart';
 import 'package:provider/provider.dart';
 
-class ClassicGamePage extends StatefulWidget {
-  static const routeName = CLASSIC_ROUTE;
+class PracticeGamePage extends StatefulWidget {
+  static const routeName = PRACTICE_ROUTE;
 
-  ClassicGamePage();
+  PracticeGamePage();
 
   @override
-  State<ClassicGamePage> createState() => _ClassicGamePageState();
+  State<PracticeGamePage> createState() => _PracticeGamePageState();
 
   static Route<dynamic> route() {
     return MaterialPageRoute(
-      builder: (_) => ClassicGamePage(),
+      builder: (_) => PracticeGamePage(),
       settings: RouteSettings(name: routeName),
     );
   }
 }
 
-class _ClassicGamePageState extends State<ClassicGamePage> {
+class _PracticeGamePageState extends State<PracticeGamePage> {
   final ImageConverterService imageConverterService = ImageConverterService();
   final GameAreaService gameAreaService = Get.find();
   final GameManagerService gameManagerService = Get.find();
@@ -44,7 +42,6 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
   void initState() {
     super.initState();
     gameManagerService.onGameChange = () {
-      print('Loading new images');
       if (gameManagerService.game.original == '' ||
           gameManagerService.game.modified == '') return;
       imagesFuture = loadImage(
@@ -63,7 +60,6 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
 
   @override
   Widget build(BuildContext context) {
-    final gameAreaService = Provider.of<GameAreaService>(context);
     final gameManagerService = context.watch<GameManagerService>();
     final lobbyService = context.watch<LobbyService>();
     if (gameManagerService.game.gameId == '') {
@@ -107,18 +103,6 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             children: [
               Row(
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.vpn_key_sharp),
-                    iconSize: 70.0,
-                    color: Colors.red,
-                    onPressed: () {
-                      List<List<Coordinate>> differences =
-                          tempGameManager.testCheat();
-                      List<Coordinate> mergedDifferences =
-                          differences.expand((x) => x).toList();
-                      gameAreaService.toggleCheatMode(mergedDifferences);
-                    },
-                  ),
                   SizedBox(
                     height: 200,
                     width: 1000,
@@ -164,36 +148,6 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                 ),
               ),
             ),
-          Positioned(
-            left: 8.0,
-            bottom: 8.0,
-            child: ElevatedButton(
-              onPressed: () {
-                Future.delayed(Duration.zero, () {
-                  if (ModalRoute.of(context)?.isCurrent ?? false) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AbandonPopup();
-                      },
-                    );
-                  }
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Color(0xFFEF6151),
-                backgroundColor: Color(0xFF2D1E16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              ),
-              child: Text(
-                'Abandonner',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(

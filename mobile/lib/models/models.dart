@@ -12,4 +12,4 @@ export 'observers_model.dart';
 export 'players.dart';
 export 'session_log.dart';
 export 'statistics.dart';
-export 'theme.dart';
+export 'theme_model.dart';

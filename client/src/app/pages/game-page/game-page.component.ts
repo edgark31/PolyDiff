@@ -192,6 +192,8 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     setUpGame(): void {
+        // eslint-disable-next-line no-unused-vars
+
         this.gameAreaService.setOriginalContext(
             this.originalCanvas.nativeElement.getContext('2d', {
                 willReadFrequently: true,
@@ -212,6 +214,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
                 willReadFrequently: true,
             }) as CanvasRenderingContext2D,
         );
+
         this.imageService.loadImage(this.gameAreaService.getOriginalContext(), this.gameLobby.original);
         this.imageService.loadImage(this.gameAreaService.getModifiedContext(), this.gameLobby.modified);
         this.gameAreaService.setAllData();

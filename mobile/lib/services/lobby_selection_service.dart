@@ -34,8 +34,8 @@ class LobbySelectionService extends ChangeNotifier {
       _gameId = null; // Limited has no game id
       _nDifferences = null; // Limited has no differences
     }
-    if (gameMode == GameModes.Classic) {
-      _gameBonus = null; // Classic has no bonus
+    if (gameMode == GameModes.Classic || gameMode == GameModes.Practice) {
+      _gameBonus = null; // Classic or Practice has no bonus
     }
     // TODO : Add game bonus when implemented on server
     return Lobby.create(

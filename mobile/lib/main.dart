@@ -16,6 +16,7 @@ import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
+import 'package:mobile/utils/text_theme.dart';
 import 'package:provider/provider.dart';
 
 Widget defaultHome = HomePage();
@@ -92,10 +93,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: APP_NAME_TXT,
+      themeMode: ThemeMode.system,
       theme: ThemeData(
         useMaterial3: true,
+        fontFamily: 'troika',
+        textTheme: CustomTextTheme.lightTextTheme,
         colorScheme: ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),
       ),
+      darkTheme: ThemeData(),
       onGenerateRoute: AppRouter.onGenerateRoute,
       initialRoute: HomePage.routeName,
     );
