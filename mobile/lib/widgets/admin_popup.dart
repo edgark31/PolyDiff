@@ -23,6 +23,16 @@ class _AdminPopupState extends State<AdminPopup> {
     });
   }
 
+  void handleSubmission(String password) {
+    if (password == "admin") {
+      Navigator.pushNamed(context, ADMIN_ROUTE);
+    } else {
+      setState(() {
+        errorMessage = "Le mot de passe entré est incorrecte";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -90,6 +100,7 @@ class _AdminPopupState extends State<AdminPopup> {
                   child: Padding(
                     padding: EdgeInsets.only(),
                     child: TextField(
+                      onSubmitted: handleSubmission,
                       controller: passwordController,
                       obscureText: true,
                       inputFormatters: [
@@ -112,15 +123,7 @@ class _AdminPopupState extends State<AdminPopup> {
                     height: 40,
                     child: ElevatedButton(
                       onPressed: () {
-                        //Juste pour tester
-                        if (passwordController.text == "12345") {
-                          Navigator.pushNamed(context, ADMIN_ROUTE);
-                        } else {
-                          setState(() {
-                            errorMessage =
-                                "Le mot de passe entré est incorrecte";
-                          });
-                        }
+                        handleSubmission(passwordController.text);
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(

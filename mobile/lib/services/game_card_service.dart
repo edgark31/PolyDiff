@@ -30,18 +30,21 @@ class GameCardService extends ChangeNotifier {
   }
 
   Future<String?> deleteGameById(String id) async {
-    String url = '$API_URL/games:$id';
+    String url = '$API_URL/games/$id';
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+      );
 
-    final response = await http.delete(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      onGameChange?.call();
-      notifyListeners();
-      print("Le jeu a ete delete");
-      return null;
-    } else {
-      final errorMessage = response.body;
-      return errorMessage;
+      if (response.statusCode == 200) {
+        notifyListeners();
+        return null;
+      } else {
+        final errorMessage = response.body;
+        return errorMessage;
+      }
+    } catch (error) {
+      return 'Error: $error';
     }
   }
 }

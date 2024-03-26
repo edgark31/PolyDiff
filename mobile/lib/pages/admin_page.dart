@@ -54,6 +54,7 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context) {
     final gameCardService = context.watch<GameCardService>();
     final gameCardsFromServer = gameCardService.gameCards;
+    if (isLoading) return CircularProgressIndicator();
     return Scaffold(
       appBar: CustomAppBar(
         title: "Page d'administration",
@@ -87,8 +88,14 @@ class _AdminPageState extends State<AdminPage> {
                     game: gameCardsFromServer[index],
                     onDelete: () {
                       setState(() {
-                        gameCardsFromServer.removeAt(index);
-                        //TODO: Implementer le vrai delete
+                        gameCardService
+                            .deleteGameById(gameCardsFromServer[index].id);
+                        setState(() {
+                          isLoading = true;
+                        });
+                        Future.delayed(Duration(milliseconds: 500), () {
+                          _fetchGameCards();
+                        });
                       });
                     },
                   );
