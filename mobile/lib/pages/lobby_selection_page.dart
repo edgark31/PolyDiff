@@ -4,7 +4,10 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/game_manager_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/services/services.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
 
@@ -86,6 +89,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     String observerNames = lobby.observers.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
     final chatService = context.watch<ChatService>();
+    final gameManagerService = context.watch<GameManagerService>();
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -112,6 +116,10 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                     child: Text('Joueurs: $playerNames',
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
+                  Expanded(
+                    child: Text('Observateurs: $observerNames',
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                  ),
                 ],
               ),
             ),
@@ -134,9 +142,14 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                     : CustomButton(
                         text: 'Observer cette partie',
                         press: () {
-                          // TODO : Add join as Observer logic
                           print(
                               'Player is joining as observer in lobby ${lobby.lobbyId}');
+                          lobbyService.spectateLobby(lobby.lobbyId);
+                          chatService.setLobbyMessages(lobby.chatLog!.chat);
+                          gameManagerService.spectateLobby(lobby.lobbyId);
+                          chatService.setGameChatListeners();
+                          lobbyService.setIsCreator(false); // TODO : Check if this is needed
+                          Navigator.pushNamed(context, CLASSIC_ROUTE);
                         },
                         backgroundColor: kMidGreen,
                       ),

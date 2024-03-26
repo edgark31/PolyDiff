@@ -4,6 +4,7 @@ import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/models/lobby_model.dart';
 import 'package:mobile/services/game_area_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
 
@@ -14,6 +15,7 @@ class GameManagerService extends ChangeNotifier {
   final SocketService socketService = Get.find();
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();
+  final InfoService infoService = Get.find();
   bool isLeftCanvas = true;
 
   VoidCallback? onGameChange;
@@ -73,10 +75,32 @@ class GameManagerService extends ChangeNotifier {
 
   void abandonGame(String? lobbyId) {
     socketService.send(SocketType.Game, GameEvents.AbandonGame.name, lobbyId);
-    socketService.disconnect(SocketType.Game);
+    disconnectSocket();
     if (lobbyService.lobby.players.length < 2) {
       lobbyService.endLobby();
     }
+  }
+
+  void spectateLobby(String? lobbyId) {
+    socketService.setup(SocketType.Game, infoService.id);
+    setListeners();
+    setObserverListener();
+    setEndGameMessage(null);
+    setGame(Game.initial());
+    socketService.send(SocketType.Game, GameEvents.Spectate.name, lobbyId);
+  }
+
+  void setObserverListener() {
+    socketService.on(SocketType.Game, GameEvents.Spectate.name, (data) {
+      Map<String, dynamic> returnedInfo = data as Map<String, dynamic>;
+      lobbyService.setLobby(
+          Lobby.fromJson(returnedInfo['lobby'] as Map<String, dynamic>));
+      setGame(Game.fromJson(returnedInfo['game'] as Map<String, dynamic>));
+    });
+  }
+
+  void disconnectSocket() {
+    socketService.disconnect(SocketType.Game);
   }
 
   void setListeners() {
@@ -117,8 +141,9 @@ class GameManagerService extends ChangeNotifier {
     });
 
     socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
+      lobbyService.setIsObserver(false);
       setEndGameMessage(data as String?);
-      socketService.disconnect(SocketType.Game);
+      disconnectSocket();
       lobbyService.endLobby();
     });
   }
