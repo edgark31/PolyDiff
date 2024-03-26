@@ -1,7 +1,6 @@
 /* Export all the model files */
 
 export 'account.dart';
-export 'admin_games_model.dart';
 export 'chat_log_model.dart';
 export 'chat_model.dart';
 export 'friend_model.dart';
