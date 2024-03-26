@@ -62,7 +62,9 @@ enum GameEvents {
   Cheat,
   NextGame,
   AbandonGame,
-  EndGame
+  EndGame,
+  CheatActivated,
+  CheatDeactivated
 }
 
 enum LobbyEvents {
@@ -75,7 +77,6 @@ enum LobbyEvents {
   UpdateLobbys,
   Start,
 }
-
 
 extension LobbyEventsExtension on LobbyEvents {
   String get name {

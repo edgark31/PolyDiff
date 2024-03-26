@@ -39,6 +39,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
   final GameManagerService gameManagerService = Get.find();
   late Future<CanvasModel> imagesFuture;
   bool isChatBoxVisible = false;
+  bool isCheatActivated = false;
   final tempGameManager = CoordinateConversionService();
 
   @override
@@ -52,6 +53,9 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
         gameManagerService.game.original,
         gameManagerService.game.modified,
       );
+    };
+    gameAreaService.onCheatModeDeactivated = () {
+      gameManagerService.deactivateCheat();
     };
   }
 
@@ -112,17 +116,33 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
               Row(
                 children: [
                   if (lobbyService.lobby.isCheatEnabled) ...[
-                    IconButton(
-                      icon: Icon(Icons.vpn_key_sharp),
-                      iconSize: 70.0,
-                      color: Colors.red,
+                    ElevatedButton(
                       onPressed: () {
-                        List<List<Coordinate>> differences =
-                            tempGameManager.testCheat();
+                        isCheatActivated = !isCheatActivated;
+                        List<List<Coordinate>>? differences =
+                            gameManagerService.game.differences;
                         List<Coordinate> mergedDifferences =
-                            differences.expand((x) => x).toList();
+                            differences!.expand((x) => x).toList();
                         gameAreaService.toggleCheatMode(mergedDifferences);
+                        if (gameAreaService.isCheatMode) {
+                          gameManagerService.activateCheat();
+                        } else {
+                          gameManagerService.deactivateCheat();
+                        }
                       },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Color(0xFFEF6151),
+                        backgroundColor: Color(0xFF2D1E16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      ),
+                      child: Text(
+                        'TRICHE',
+                        style: TextStyle(fontSize: 30),
+                      ),
                     ),
                   ],
                   SizedBox(

@@ -49,7 +49,7 @@ class _GameInfosState extends State<GameInfos> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(width: 170),
+                SizedBox(width: 100),
                 if (lobbyService.lobby.mode != GameModes.Practice) ...[
                   Text(
                     'Temps : $formattedTime',
