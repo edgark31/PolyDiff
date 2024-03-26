@@ -113,7 +113,7 @@ export class DatabaseService implements OnModuleInit {
         }
     }
 
-    saveFiles(newGame: Game): void {
+    async saveFiles(newGame: Game): Promise<void> {
         const dirName = `assets/${newGame._id.toString()}`;
         const dataOfOriginalImage = Buffer.from(newGame.originalImage.replace(/^data:image\/\w+;base64,/, ''), 'base64');
         const dataOfModifiedImage = Buffer.from(newGame.modifiedImage.replace(/^data:image\/\w+;base64,/, ''), 'base64');
@@ -138,8 +138,9 @@ export class DatabaseService implements OnModuleInit {
             const id = (await this.gameModel.create(newGameInDB))._id.toString();
             this.gameIds.push(id);
             newGameInDB._id = id;
-            this.saveFiles(newGameInDB);
-            this.copyDirSync(`../../../assets/${newGameInDB._id}`, `../../../out/server/assets/${newGameInDB._id}`);
+            await this.saveFiles(newGameInDB).then(() => {
+                this.copyDirSync(`../../../assets/${newGameInDB._id}`, `../../../out/server/assets/${newGameInDB._id}`);
+            });
             const gameCard = this.gameListManager.buildGameCardFromGame(newGameInDB);
             await this.gameCardModel.create(gameCard);
             this.gameListManager.addGameCarousel(gameCard);
