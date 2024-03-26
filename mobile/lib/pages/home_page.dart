@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
-import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 
@@ -36,7 +35,6 @@ class HomePage extends StatelessWidget {
                     padding: EdgeInsets.only(top: startingPoint),
                     child: Text(
                       APP_NAME_TXT,
-                      style: appstyle(60, kLightOrange, FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   ),

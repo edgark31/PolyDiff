@@ -94,6 +94,7 @@ class MyApp extends StatelessWidget {
       title: APP_NAME_TXT,
       theme: ThemeData(
         useMaterial3: true,
+        fontFamily: 'troika',
         colorScheme: ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),
       ),
       onGenerateRoute: AppRouter.onGenerateRoute,
