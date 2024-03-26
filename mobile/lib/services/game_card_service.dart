@@ -7,7 +7,7 @@ import 'package:mobile/models/models.dart';
 
 class GameCardService extends ChangeNotifier {
   static List<GameCard> _gameCards = [];
-
+  VoidCallback? onGameChange;
   List<GameCard> get gameCards => _gameCards;
 
   Future<String?> getGameCards() async {
@@ -22,6 +22,22 @@ class GameCardService extends ChangeNotifier {
           .map((gameCardJson) => GameCard.fromJson(gameCardJson))
           .toList();
       notifyListeners();
+      return null;
+    } else {
+      final errorMessage = response.body;
+      return errorMessage;
+    }
+  }
+
+  Future<String?> deleteGameById(String id) async {
+    String url = '$API_URL/games:$id';
+
+    final response = await http.delete(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      onGameChange?.call();
+      notifyListeners();
+      print("Le jeu a ete delete");
       return null;
     } else {
       final errorMessage = response.body;
