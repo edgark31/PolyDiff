@@ -53,8 +53,7 @@ class _DashboardPageState extends State<DashboardPage> {
         chatService.setupLobby();
         lobbyService.setupLobby(type);
         if (type == GameModes.Practice) {
-          print('Handle practice mode');
-          // Navigator.pushNamed(context, CREATE_ROOM_CARD_ROUTE);
+          Navigator.pushNamed(context, CREATE_ROOM_CARD_ROUTE);
         } else {
           Navigator.pushNamed(context, LOBBY_SELECTION_ROUTE);
         }

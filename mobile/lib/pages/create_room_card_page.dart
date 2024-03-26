@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/game_card_service.dart';
+import 'package:mobile/services/game_manager_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
+import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/services/services.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +46,38 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
       _isFetchingGameCards = true;
       _fetchGameCards();
     }
+  }
+
+  void startPracticeGame() {
+    final LobbyService lobbyService = Get.find();
+    final SocketService socketService = Get.find();
+    final GameManagerService gameManagerService = Get.find();
+    final LobbySelectionService lobbySelectionService = Get.find();
+    final infoService = context.read<InfoService>();
+    lobbySelectionService.setIsCheatEnabled(false); // Practice has no cheat
+    lobbySelectionService.setGameDuration(0); // Practice has no time limit
+    lobbyService.createLobby();
+    print('createLobby() called');
+    Future.delayed(Duration(milliseconds: 500), () {
+      // Waiting for server to emit the created lobby from creator
+      lobbyService.startLobby();
+      setState(() => isLoading = true);
+      print('startLobby() called');
+      Future.delayed(Duration(milliseconds: 500), () { // Waiting for server to  start Lobby
+        if (lobbyService.isCurrentLobbyStarted()) {
+          Future.delayed(Duration.zero, () { // Safety check
+            if (ModalRoute.of(context)?.isCurrent ?? false) { // Safety check
+              print('Current Lobby is started navigating to GamePage');
+              socketService.setup(SocketType.Game, infoService.id);
+              gameManagerService.setupGame();
+              lobbyService.setIsCreator(false); // TODO: clean this
+              setState(() => isLoading = false);
+              Navigator.pushNamed(context, CLASSIC_ROUTE);
+            }
+          });
+        }
+      });
+    });
   }
 
   Future<void> _fetchGameCards() async {
@@ -97,6 +135,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
 
   Widget buildGameCard(BuildContext context, GameCard card) {
     final lobbySelectionService = context.watch<LobbySelectionService>();
+    final lobbyService = context.watch<LobbyService>();
     String imagePath = '$BASE_URL/${card.id}/original.bmp';
     String differenceText = 'Différences: ${card.nDifference}';
     return Padding(
@@ -117,7 +156,11 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
                   press: () {
                     lobbySelectionService.setGameId(card.id);
                     lobbySelectionService.setNDifferences(card.nDifference);
-                    Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
+                    if (lobbyService.gameModes == GameModes.Practice) {
+                      startPracticeGame();
+                    } else {
+                      Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
+                    }
                   },
                   text: 'Choisir cette fiche',
                   backgroundColor: kMidOrange,
