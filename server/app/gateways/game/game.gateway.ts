@@ -247,17 +247,30 @@ export class GameGateway implements OnGatewayConnection {
         }
     }
 
+    @SubscribeMessage(GameEvents.CheatActivated)
+    cheatActivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        this.logger.log(`${username}(${socket.data.accountId}) activated cheat in ${lobbyId}`);
+    }
+
+    @SubscribeMessage(GameEvents.CheatDeactivated)
+    cheatDeactivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        this.logger.log(`${username}(${socket.data.accountId}) deactivated cheat in ${lobbyId}`);
+    }
+
     @SubscribeMessage(ChannelEvents.SendGameMessage)
     handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
         const chat: Chat = this.messageManager.createMessage(
             this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
             message,
+            socket.data.accountId,
         );
 
         this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(chat);
 
-        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
-        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
+        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received });
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {

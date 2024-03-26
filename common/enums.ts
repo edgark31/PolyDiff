@@ -152,6 +152,8 @@ export enum GameEvents {
     AbandonGame = 'AbandonGame',
     EndGame = 'EndGame',
     Spectate = 'Spectate',
+    CheatActivated = 'CheatActivated',
+    CheatDeactivated = 'CheatDeactivated',
 }
 
 export enum GameState {

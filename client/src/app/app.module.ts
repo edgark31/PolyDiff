@@ -77,7 +77,7 @@ import { WaitingRoomComponent } from './pages/waiting-room/waiting-room.componen
  * Otherwise Angular Cli will not know in which module to put new component
  */
 export const createTranslateLoader = (http: HttpClient) => {
-    return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 };
 @NgModule({
     declarations: [
