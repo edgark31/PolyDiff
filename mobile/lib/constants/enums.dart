@@ -78,7 +78,6 @@ enum LobbyEvents {
   Start,
 }
 
-
 extension LobbyEventsExtension on LobbyEvents {
   String get name {
     switch (this) {

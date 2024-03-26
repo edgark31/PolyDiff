@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 // Id comes from database to allow _id
 /* eslint-disable no-underscore-dangle */
 import { Game, GameDocument } from '@app/model/database/game';
@@ -119,6 +121,11 @@ export class DatabaseService implements OnModuleInit {
             fs.writeFileSync(`assets/${newGame._id.toString()}/original.bmp`, dataOfOriginalImage);
             fs.writeFileSync(`assets/${newGame._id.toString()}/modified.bmp`, dataOfModifiedImage);
             fs.writeFileSync(`assets/${newGame._id.toString()}/differences.json`, JSON.stringify(newGame.differences));
+            if (!fs.existsSync('out')) return;
+            fs.mkdirSync(`out/server/${dirName}`, { recursive: true });
+            fs.writeFileSync(`out/server/assets/${newGame._id.toString()}/original.bmp`, dataOfOriginalImage);
+            fs.writeFileSync(`out/server/assets/${newGame._id.toString()}/modified.bmp`, dataOfModifiedImage);
+            fs.writeFileSync(`out/server/assets/${newGame._id.toString()}/differences.json`, JSON.stringify(newGame.differences));
         }
     }
 
