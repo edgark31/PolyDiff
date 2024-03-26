@@ -12,7 +12,7 @@ import { MessageManagerService } from '@app/services/message-manager/message-man
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { NOT_FOUND } from '@common/constants';
 import { ChannelEvents, GameEvents, GameModes, GameState, MessageTag } from '@common/enums';
-import { Chat, ChatLog, Coordinate, Game } from '@common/game-interfaces';
+import { Chat, Coordinate, Game } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -91,11 +91,12 @@ export class GameGateway implements OnGatewayConnection {
 
     @SubscribeMessage(GameEvents.Spectate)
     async spectateGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        if (this.roomsManager.lobbies.get(lobbyId).isAvailable) return;
         socket.data.state = GameState.Spectate;
         socket.join(lobbyId);
         if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
             const game = structuredClone(this.games.get(lobbyId));
-            
+
             socket.emit(GameEvents.Spectate, {
                 lobby: this.roomsManager.lobbies.get(lobbyId),
                 game,
@@ -334,7 +335,6 @@ export class GameGateway implements OnGatewayConnection {
         // Randomly picking one difference to keep
         const keepIndex: number = Math.floor(Math.random() * clonedGame.differences.length);
         const gameCopy = structuredClone(clonedGame);
-        // TODO : Handle other image types
         clonedGame.modified = 'data:image/png;base64,' + (await this.imageManager.limitedImage(gameCopy, keepIndex));
         clonedGame.differences = clonedGame.differences.filter((_, index) => index === keepIndex);
         this.games.set(lobbyId, clonedGame);
@@ -374,5 +374,6 @@ export class GameGateway implements OnGatewayConnection {
                     socket.leave(lobbyId);
                 });
             });
+        this.accountManager.fetchUsers();
     }
 }

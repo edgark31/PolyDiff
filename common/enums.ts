@@ -114,6 +114,7 @@ export enum AccountEvents {
     UserUpdate = 'UserUpdate',
     UserCreate = 'UserCreate',
     UserDelete = 'UserDelete',
+    RefreshAccount = 'RefreshAccount',
 }
 
 export enum FriendEvents {
