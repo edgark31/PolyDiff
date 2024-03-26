@@ -42,7 +42,6 @@ export class GameGateway implements OnGatewayConnection {
         socket.join(lobbyId);
         // Pour démarrer tout le monde en même temps
         if (Array.from(await this.server.in(lobbyId).fetchSockets()).length === this.roomsManager.lobbies.get(lobbyId).players.length) {
-            this.roomsManager.lobbies.get(lobbyId).chatLog = { chat: [], channelName: 'game' } as ChatLog;
             if (
                 this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic ||
                 this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Practice
