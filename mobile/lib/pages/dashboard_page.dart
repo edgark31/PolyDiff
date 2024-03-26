@@ -7,9 +7,9 @@ import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
-import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:mobile/widgets/customs/stroked_text_widget.dart';
 import 'package:mobile/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -84,13 +84,18 @@ class _DashboardPageState extends State<DashboardPage> {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(top: startingPoint),
-                    child: Text(
-                      GAME_MODES_TXT,
-                      style: appstyle(60, kLightOrange, FontWeight.bold),
-                      textAlign: TextAlign.center,
+                    child: StrokedTextWidget(
+                      text: WELCOME_TXT,
+                      textStyle: TextStyle(
+                        fontFamily: 'troika',
+                        fontSize: 140,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFE8A430),
+                        letterSpacing: 0.0,
+                      ),
                     ),
                   ),
-                  SizedBox(height: 100),
+                  SizedBox(height: 50),
                   _gameModeOption(
                     GameModes.Classic,
                     Icons.class_,

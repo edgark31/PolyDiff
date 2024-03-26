@@ -1,5 +1,6 @@
 // App name
 const APP_NAME_TXT = "PolyDiff";
+const WELCOME_TXT = "Bienvenue";
 
 // Button texts
 const String SIGN_IN_BTN_TXT = "CONNEXION";
