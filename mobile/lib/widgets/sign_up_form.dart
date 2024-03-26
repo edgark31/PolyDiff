@@ -139,7 +139,7 @@ class _SignUpFormState extends State<SignUpForm> {
             predefinedAvatarBody, AvatarType.predefined);
 
         if (registerProvider.isBack) {
-          Navigator.pushNamed(context, LOGIN_ROUTE);
+          Navigator.pushNamed(context, SIGN_IN_ROUTE);
         }
       } else if (_selectedAvatarBase64 != null) {
         UploadAvatarBody avatarBody = UploadAvatarBody(
@@ -340,7 +340,7 @@ class _SignUpFormState extends State<SignUpForm> {
         padding: EdgeInsets.only(top: 10),
         child: CustomButton(
             text: SIGN_IN_BTN_TXT,
-            press: () => Navigator.pushNamed(context, LOGIN_ROUTE),
+            press: () => Navigator.pushNamed(context, SIGN_IN_ROUTE),
             backgroundColor: kMidGreen,
             textColor: kLight),
       ),

@@ -5,7 +5,7 @@ import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/sign_in_form.dart';
 
 class LoginPage extends StatelessWidget {
-  static const routeName = LOGIN_ROUTE;
+  static const routeName = SIGN_IN_ROUTE;
 
   static Route route() {
     return MaterialPageRoute(

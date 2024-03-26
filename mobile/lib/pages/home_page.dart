@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
                       CustomButton(
                         text: SIGN_IN_BTN_TXT,
                         press: () {
-                          Navigator.pushNamed(context, LOGIN_ROUTE);
+                          Navigator.pushNamed(context, SIGN_IN_ROUTE);
                         },
                         backgroundColor: kMidGreen,
                       ),
