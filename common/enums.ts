@@ -98,8 +98,7 @@ export enum LobbyEvents {
     Join = 'LobbyJoin',
     Leave = 'LobbyLeave',
     OptPlayer = 'OptPlayer',
-    JoinAsObserver = 'JoinAsObserver',
-    LeaveAsObserver = 'LeaveAsObserver',
+    Spectate = 'Spectate',
     UpdateLobbys = 'UpdateLobbys',
     Start = 'Start',
 }
@@ -108,6 +107,7 @@ export enum LobbyState {
     Idle = 'LobbyIdle',
     Waiting = 'LobbyWaiting',
     InGame = 'LobbyInGame',
+    Spectate = 'LobbySpectate',
 }
 
 export enum AccountEvents {
@@ -150,12 +150,13 @@ export enum GameEvents {
     NextGame = 'NextGame',
     AbandonGame = 'AbandonGame',
     EndGame = 'EndGame',
+    Spectate = 'Spectate',
 }
 
 export enum GameState {
     InGame = 'GameInGame',
-    Left = 'GameHasLeft',
     Abandoned = 'GameHasAbandoned',
+    Spectate = 'GameSpectate',
 }
 
 export enum ChannelEvents {

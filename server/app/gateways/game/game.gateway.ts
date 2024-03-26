@@ -90,6 +90,22 @@ export class GameGateway implements OnGatewayConnection {
         }
     }
 
+    @SubscribeMessage(GameEvents.Spectate)
+    async spectateGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        socket.data.state = GameState.Spectate;
+        socket.join(lobbyId);
+        if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
+            const game = structuredClone(this.games.get(lobbyId));
+            
+            socket.emit(GameEvents.Spectate, {
+                lobby: this.roomsManager.lobbies.get(lobbyId),
+                game,
+            });
+            return;
+        }
+        socket.emit(GameEvents.Spectate, this.games.get(lobbyId));
+    }
+
     @SubscribeMessage(GameEvents.Clic)
     async clic(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('coordClic') coordClic: Coordinate) {
         const index: number = this.games
@@ -252,7 +268,7 @@ export class GameGateway implements OnGatewayConnection {
                     break;
                 case GameState.Abandoned:
                     break;
-                case GameState.Left:
+                case GameState.Spectate:
                     break;
                 default:
                     break;
@@ -320,7 +336,7 @@ export class GameGateway implements OnGatewayConnection {
         const keepIndex: number = Math.floor(Math.random() * clonedGame.differences.length);
         const gameCopy = structuredClone(clonedGame);
         // TODO : Handle other image types
-        clonedGame.modified = 'data:image/png;base64,' + (await this.imageManager.modifyImage(gameCopy, keepIndex));
+        clonedGame.modified = 'data:image/png;base64,' + (await this.imageManager.limitedImage(gameCopy, keepIndex));
         clonedGame.differences = clonedGame.differences.filter((_, index) => index === keepIndex);
         this.games.set(lobbyId, clonedGame);
         return game;

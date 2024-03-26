@@ -30,7 +30,7 @@ export class ImageManagerService {
         return 'Hello World!';
     }
 
-    async modifyImage(game: Game, keepIndex: number): Promise<string> {
+    async limitedImage(game: Game, keepIndex: number): Promise<string> {
         const originalImage = await Jimp.read(Buffer.from(game.original.replace(/^data:image\/\w+;base64,/, ''), 'base64'));
         const modifiedImage = await Jimp.read(Buffer.from(game.modified.replace(/^data:image\/\w+;base64,/, ''), 'base64'));
 
