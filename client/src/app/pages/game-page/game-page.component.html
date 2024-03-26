@@ -1,6 +1,6 @@
 <div id="game-page" class="justified">
     <div  class="game-infos information-header justified">
-        <h1 id = "title">{{ getGameName() }}</h1>
+        <h1 id = "title">{{ gameLobby.name }}</h1>
             <div class="game-feedback">
                 <h1>Mode : {{ lobby.mode }}</h1>
                 &nbsp;
@@ -66,4 +66,5 @@
     <!-- <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages" [isReplaying]="isReplayAvailable" [gameMode]="game.mode"></app-chat-box> -->
     <app-replay-buttons [isReplayAvailable]="isReplayAvailable"></app-replay-buttons>
 </div>
+
 

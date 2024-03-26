@@ -147,7 +147,7 @@ class _SignInFormState extends State<SignInForm> {
                       });
                       if (serverErrorMessage == null) {
                         socketService.setup(SocketType.Auth, infoService.id);
-                        chatService.setGlobalChatListeners();
+                        chatService.setupGlobalChat();
                         avatarProvider.setAccountAvatarUrl();
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       }
