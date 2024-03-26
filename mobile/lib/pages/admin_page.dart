@@ -65,8 +65,13 @@ class _AdminPageState extends State<AdminPage> {
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
-                  gameCardsFromServer.clear();
-                  //TODO: Implementer le vrai delete all
+                  gameCardService.deleteAllGames();
+                  setState(() {
+                    isLoading = true;
+                  });
+                  Future.delayed(Duration(milliseconds: 1000), () {
+                    Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                  });
                 });
               },
               child: Text('Supprimer tous les jeux'),

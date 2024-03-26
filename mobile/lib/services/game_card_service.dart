@@ -47,4 +47,23 @@ class GameCardService extends ChangeNotifier {
       return 'Error: $error';
     }
   }
+
+  Future<String?> deleteAllGames() async {
+    String url = '$API_URL/games';
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+      );
+
+      if (response.statusCode == 200) {
+        notifyListeners();
+        return null;
+      } else {
+        final errorMessage = response.body;
+        return errorMessage;
+      }
+    } catch (error) {
+      return 'Error: $error';
+    }
+  }
 }
