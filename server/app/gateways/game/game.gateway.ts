@@ -234,12 +234,13 @@ export class GameGateway implements OnGatewayConnection {
         const chat: Chat = this.messageManager.createMessage(
             this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
             message,
+            socket.data.accountId,
         );
 
         this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(chat);
 
-        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
-        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
+        socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent });
+        socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received });
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
