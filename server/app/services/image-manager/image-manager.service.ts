@@ -46,18 +46,17 @@ export class ImageManagerService {
         return newBuffer.toString('base64');
     }
 
-    async observerImage(game: Game, keepIndexes: number[]): Promise<string> {
+    async observerImage(game: Game): Promise<string> {
         const originalImage = await Jimp.read(Buffer.from(game.original.replace(/^data:image\/\w+;base64,/, ''), 'base64'));
         const modifiedImage = await Jimp.read(Buffer.from(game.modified.replace(/^data:image\/\w+;base64,/, ''), 'base64'));
 
-        keepIndexes.forEach((index) => {
-            game.differences.splice(index, 1);
-        });
+        const differencesSet = new Set(game.differences.flat().map(({ x, y }) => `${x},${y}`));
 
-        game.differences.flat().forEach((coord) => {
-            const { x, y } = coord;
-            const originalPixelColor = originalImage.getPixelColor(x, y);
-            modifiedImage.setPixelColor(originalPixelColor, x, y);
+        originalImage.scan(0, 0, originalImage.bitmap.width, originalImage.bitmap.height, (x, y) => {
+            if (!differencesSet.has(`${x},${y}`)) {
+                const originalPixelColor = originalImage.getPixelColor(x, y);
+                modifiedImage.setPixelColor(originalPixelColor, x, y);
+            }
         });
 
         const newBuffer = await modifiedImage.getBufferAsync(Jimp.MIME_PNG);

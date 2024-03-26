@@ -24,7 +24,7 @@ export class MessageManagerService {
         return this.createMessage(playerName, content);
     }
 
-    createMessage(name: string, content: string): Chat {
+    createMessage(name: string, content: string, accountId: string = null): Chat {
         const timestamp = new Date().toLocaleTimeString('en-US', {
             timeZone: 'America/Toronto',
             hour: '2-digit',
@@ -32,6 +32,6 @@ export class MessageManagerService {
             second: '2-digit',
         });
         const raw = content;
-        return { raw, name, timestamp };
+        return { raw, accountId, name, timestamp };
     }
 }

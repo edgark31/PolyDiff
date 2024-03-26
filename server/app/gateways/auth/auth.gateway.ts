@@ -40,6 +40,11 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.globalChatLog = { chat: [], channelName: 'global' };
     }
 
+    @SubscribeMessage(AccountEvents.RefreshAccount)
+    handleRefreshAccount(@ConnectedSocket() socket: Socket) {
+        socket.emit(AccountEvents.RefreshAccount, this.accountManager.users.get(socket.data.accountId));
+    }
+
     @SubscribeMessage(AccountEvents.UserUpdate)
     retrivesUsers() {
         this.server.emit(AccountEvents.UserUpdate, Array.from(this.accountManager.users.values()));
@@ -60,11 +65,12 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         const chat: Chat = this.messageManager.createMessage(
             this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
             message,
+            socket.data.accountId,
         );
         this.globalChatLog.chat.push(chat);
 
-        socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Sent, accountId: socket.data.accountId });
-        socket.broadcast.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Received, accountId: socket.data.accountId });
+        socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Sent });
+        socket.broadcast.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Received });
     }
 
     @SubscribeMessage(ChannelEvents.UpdateLog)
