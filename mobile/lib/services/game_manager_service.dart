@@ -31,8 +31,8 @@ class GameManagerService extends ChangeNotifier {
   }
 
   void updateRemainingDifferences(List<List<Coordinate>>? remaining) {
-      _game.differences = remaining;
-      notifyListeners();
+    _game.differences = remaining;
+    notifyListeners();
   }
 
   void setTime(int newTime) {
@@ -126,8 +126,15 @@ class GameManagerService extends ChangeNotifier {
       socketService.disconnect(SocketType.Game);
       lobbyService.endLobby();
     });
-    socketService.on(SocketType.Game,GameEvents.Cheat.name, (data) {
-      
+    socketService.on(SocketType.Game, GameEvents.Cheat.name, (data) {
+      Map<String, dynamic> receivedData = data as Map<String, dynamic>;
+      print("Cheat Received : $receivedData");
+      final List<List<Coordinate>> remainingDifferences = receivedData.entries
+          .map<List<Coordinate>>((entry) => entry.value
+              .map<Coordinate>((coordinate) => Coordinate.fromJson(coordinate))
+              .toList())
+          .toList();
+      print("Remaining Differences : $remainingDifferences");
     });
   }
 }
