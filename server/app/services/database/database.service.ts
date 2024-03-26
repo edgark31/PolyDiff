@@ -139,7 +139,7 @@ export class DatabaseService implements OnModuleInit {
             this.gameIds.push(id);
             newGameInDB._id = id;
             this.saveFiles(newGameInDB);
-            this.copyDir(`../../../assets/${newGameInDB._id}`, `../../../out/server/assets/${newGameInDB._id}`);
+            this.copyDirSync(`../../../assets/${newGameInDB._id}`, `../../../out/server/assets/${newGameInDB._id}`);
             const gameCard = this.gameListManager.buildGameCardFromGame(newGameInDB);
             await this.gameCardModel.create(gameCard);
             this.gameListManager.addGameCarousel(gameCard);
