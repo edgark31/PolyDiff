@@ -44,3 +44,5 @@ const kDarkGreen = Color.fromARGB(255, 4, 41, 7);
 const Color kLightOrange = Color.fromRGBO(245, 124, 0, 1);
 const Color kMidOrange = Color.fromRGBO(239, 108, 0, 1);
 const Color kDarkOrange = Color.fromRGBO(230, 81, 0, 1);
+
+const Color kMidPink = Color.fromRGBO(255, 105, 180, 1);

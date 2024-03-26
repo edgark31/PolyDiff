@@ -1,5 +1,5 @@
 #background-image {
-    position: relative;
+    position: absolute;
     // top: 220px;
     // left: 50.7%;
     // transform: translateX(-50%);
@@ -8,31 +8,15 @@
     height: 900px;
 }
 
+.all {
+    // margin-top: 620px;
+    // left: 50.7%;
+}
+
 .create-button:hover {
     background-color: #db9110;
     color: black;
     transform: scale(1.05);
-}
-
-.feedback {
-    text-align: center;
-    color: red;
-    font-style: italic;
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    font-size: 1.2rem;
-    margin-top: 4px;
-    margin-bottom: 0;
-    transform: scale(1.05);
-    z-index: 1;
-}
-
-button,
-.button-container {
-    width: 135px;
-}
-
-span {
-    white-space: normal;
 }
 
 .join-button:hover {
@@ -41,9 +25,13 @@ span {
     transform: scale(1.05);
 }
 
+span {
+    white-space: normal;
+}
+
 .player-count {
-    bottom: 920px;
-    left: 250px;
+    bottom: -55px;
+    left: 295px;
     font-weight: bold;
     position: relative;
     text-align: center;
@@ -55,12 +43,22 @@ span {
     -webkit-text-stroke: 1px black;
 }
 
+.game-mode-image {
+    position: absolute;
+    right: 310px;
+    top: 320px;
+    //     width: 1px;
+    //     height: 1px;
+    //     z-index: 2;
+    //     object-fit: cover;
+}
+
 .game-mode-image-classic img {
     position: relative;
-    right: 120px;
-    bottom: 520px;
+    right: 179px;
+    top: 350px;
     width: 180px;
-    height: 135px;
+    height: auto;
     z-index: 2;
     object-fit: cover;
 }
@@ -86,8 +84,8 @@ span {
 }
 
 .join-button {
-    bottom: 700px;
-    left: 130px;
+    top: 290px;
+    left: 83px;
     cursor: pointer;
     position: relative;
     text-align: center;
@@ -107,7 +105,8 @@ span {
 }
 
 .difference-number {
-    bottom: 720px;
+    top: 255px;
+    left: 63px;
     font-weight: bold;
     position: relative;
     text-align: center;
@@ -120,7 +119,7 @@ span {
 }
 
 .game-mode {
-    bottom: 560px;
+    top: 290px; //560
     right: 230px;
     font-weight: bold;
     position: relative;
@@ -134,8 +133,8 @@ span {
 }
 
 .player-container {
-    bottom: 900px;
-    left: 250px;
+    bottom: -80px;
+    left: 295px;
     font-weight: bold;
     position: relative;
     text-align: center;

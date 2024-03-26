@@ -30,24 +30,33 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  void _navigateTo(String routeName) {
-    Navigator.pushNamed(context, routeName);
-  }
-
   Widget _gameModeOption(GameModes type, IconData icon, Color color) {
     final lobbyService = context.watch<LobbyService>();
-
     final socketService = context.watch<SocketService>();
     final infoService = context.watch<InfoService>();
     final chatService = context.watch<ChatService>();
+    String typeText = '';
+    switch (type) {
+      case GameModes.Classic:
+        typeText = 'Classique';
+      case GameModes.Limited:
+        typeText = 'Temps limité';
+      case GameModes.Practice:
+        typeText = 'Pratique';
+      default:
+    }
+
     return CustomButton(
-      text: type == GameModes.Classic ? 'Classique' : 'Temps limité',
+      text: typeText,
       press: () {
         socketService.setup(SocketType.Lobby, infoService.id);
         chatService.setupLobby();
         lobbyService.setupLobby(type);
-        
-        _navigateTo(LOBBY_SELECTION_ROUTE);
+        if (type == GameModes.Practice) {
+          Navigator.pushNamed(context, CREATE_ROOM_CARD_ROUTE);
+        } else {
+          Navigator.pushNamed(context, LOBBY_SELECTION_ROUTE);
+        }
       },
       backgroundColor: color,
       icon: icon,
@@ -92,6 +101,12 @@ class _DashboardPageState extends State<DashboardPage> {
                     GameModes.Limited,
                     Icons.hourglass_bottom,
                     kMidGreen,
+                  ),
+                  SizedBox(height: 20),
+                  _gameModeOption(
+                    GameModes.Practice,
+                    Icons.fitness_center,
+                    kMidPink,
                   ),
                   SizedBox(height: 50),
                 ],

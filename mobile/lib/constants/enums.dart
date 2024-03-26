@@ -38,6 +38,7 @@ enum SocketType {
 enum GameModes {
   Classic,
   Limited,
+  Practice,
 }
 
 enum ChannelEvents {
