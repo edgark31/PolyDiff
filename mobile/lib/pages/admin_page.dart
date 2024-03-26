@@ -65,11 +65,14 @@ class _AdminPageState extends State<AdminPage> {
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
-                  gameCardService.deleteAllGames();
+                  for (GameCard gameCard in gameCardsFromServer) {
+                    gameCardService.deleteGameById(gameCard.id);
+                  }
                   setState(() {
                     isLoading = true;
                   });
-                  Future.delayed(Duration(milliseconds: 1000), () {
+                  Future.delayed(Duration(milliseconds: 2000), () {
+                    _fetchGameCards();
                     Navigator.pushNamed(context, DASHBOARD_ROUTE);
                   });
                 });
