@@ -12,6 +12,7 @@ import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
 import 'package:mobile/pages/login_page.dart';
+import 'package:mobile/pages/practice_game_page.dart';
 import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/pages/settings_page.dart';
@@ -54,6 +55,7 @@ const String SEARCH_FRIEND_ROUTE = '$FRIENDS_ROUTE/search';
 const String GAME_ROUTE = '/game';
 const String CLASSIC_ROUTE = '$GAME_ROUTE/classic';
 const String LIMITED_TIME_ROUTE = '$GAME_ROUTE/limited';
+const String PRACTICE_ROUTE = '$GAME_ROUTE/practice';
 
 // LOBBY
 const String LOBBY_ROUTE = '/lobby';
@@ -111,6 +113,10 @@ class AppRouter {
 
       case ClassicGamePage.routeName:
         return ClassicGamePage.route();
+
+      case PracticeGamePage.routeName:
+        return PracticeGamePage.route();
+
       default:
         return _errorRoute();
     }

@@ -50,15 +50,17 @@ class _GameInfosState extends State<GameInfos> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(width: 170),
-                Text(
-                  'Temps : $formattedTime',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                if (lobbyService.lobby.mode != GameModes.Practice) ...[
+                  Text(
+                    'Temps : $formattedTime',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                )
+                ],
               ],
             ),
             if (lobbyService.lobby.mode == GameModes.Classic) ...[
