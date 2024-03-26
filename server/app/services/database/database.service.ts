@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 // Id comes from database to allow _id
 /* eslint-disable no-underscore-dangle */
 import { Game, GameDocument } from '@app/model/database/game';
@@ -14,6 +16,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as fs from 'fs';
 import { Model } from 'mongoose';
+import path from 'path';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit {
@@ -136,6 +139,7 @@ export class DatabaseService implements OnModuleInit {
             this.gameIds.push(id);
             newGameInDB._id = id;
             this.saveFiles(newGameInDB);
+            this.copyDir(`../../../assets/${newGameInDB._id}`, `../../../out/server/assets/${newGameInDB._id}`);
             const gameCard = this.gameListManager.buildGameCardFromGame(newGameInDB);
             await this.gameCardModel.create(gameCard);
             this.gameListManager.addGameCarousel(gameCard);
@@ -270,5 +274,18 @@ export class DatabaseService implements OnModuleInit {
     private async rebuildGameCarousel(): Promise<void> {
         const gameCardsList: GameCard[] = await this.gameCardModel.find().exec();
         this.gameListManager.buildGameCarousel(gameCardsList);
+    }
+
+    private async copyDir(src: string, dest: string) {
+        await fs.promises.mkdir(dest, { recursive: true });
+
+        const entries = await fs.promises.readdir(src, { withFileTypes: true });
+
+        for (const entry of entries) {
+            const srcPath = path.join(src, entry.name);
+            const destPath = path.join(dest, entry.name);
+
+            entry.isDirectory() ? await this.copyDir(srcPath, destPath) : await fs.promises.copyFile(srcPath, destPath);
+        }
     }
 }

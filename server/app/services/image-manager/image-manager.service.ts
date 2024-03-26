@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable max-params */
 import { Game } from '@common/game-interfaces';
 import { Injectable } from '@nestjs/common';
