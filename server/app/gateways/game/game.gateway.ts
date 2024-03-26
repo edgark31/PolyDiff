@@ -95,8 +95,10 @@ export class GameGateway implements OnGatewayConnection {
         socket.data.state = GameState.Spectate;
         socket.join(lobbyId);
         if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
-            const game = structuredClone(this.games.get(lobbyId));
-
+            const game: Game = structuredClone(this.games.get(lobbyId));
+            await this.imageManager.observerImage(game).then((image) => {
+                game.modified = 'data:image/png;base64,' + image;
+            });
             socket.emit(GameEvents.Spectate, {
                 lobby: this.roomsManager.lobbies.get(lobbyId),
                 game,
