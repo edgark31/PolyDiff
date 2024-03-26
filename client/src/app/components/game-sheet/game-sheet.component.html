@@ -47,10 +47,12 @@
                 <div class="reinitializeText" *ngIf="router.url === '/admin'">Réinitialiser</div>
             </div> -->
             <div class="button-container">
-                <button mat-raised-button *ngIf="router.url === '/selection'" routerLink="/create-room" (click)="setGameId()">{{"Créer"}}</button>
+                <button mat-raised-button *ngIf="getMode() !== '/practice'" routerLink="/create-room" (click)="setGameId()">{{"Créer"}}</button>
+                <button mat-raised-button *ngIf="getMode() === '/practice'" routerLink="/game" (click)="setGameId()">{{"Jouer"}}</button>
                 <button mat-raised-button *ngIf="router.url === '/admin'" (click)="openConfirmationDialog(actions.ResetTopTime)">Réinitialiser</button>
                 <img class="createButton" alt="button" src="./assets/icon/CreateButton.png"/>
-                <div class="createText" *ngIf="router.url === '/selection'">{{"Créer"}} </div>
+                <div class="createText" *ngIf="getMode() !== '/practice'">{{"Créer"}} </div>
+                <div class="createText" *ngIf="getMode() === '/practice'">{{"Jouer"}}</div>
                 <div class="reinitializeText" *ngIf="router.url === '/admin'">Réinitialiser</div>
             </div>
         </div>
