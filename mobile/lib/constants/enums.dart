@@ -62,7 +62,10 @@ enum GameEvents {
   Cheat,
   NextGame,
   AbandonGame,
-  EndGame
+  EndGame,
+  Spectate,
+  CheatActivated,
+  CheatDeactivated,
 }
 
 enum LobbyEvents {
@@ -129,4 +132,5 @@ enum AccountEvents {
   UserUpdate,
   UserCreate,
   UserDelete,
+  RefreshAccount,
 }

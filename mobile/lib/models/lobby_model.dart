@@ -6,7 +6,7 @@ class Lobby {
   String? gameId;
   bool isAvailable;
   List<Player> players;
-  final List<Observers> observers;
+  final List<Observer> observers;
   final bool isCheatEnabled;
   final GameModes mode;
   final String? password;
