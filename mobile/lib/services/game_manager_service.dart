@@ -30,6 +30,11 @@ class GameManagerService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateRemainingDifferences(List<List<Coordinate>>? remaining) {
+      _game.differences = remaining;
+      notifyListeners();
+  }
+
   void setTime(int newTime) {
     _time = newTime;
     notifyListeners();
@@ -120,6 +125,9 @@ class GameManagerService extends ChangeNotifier {
       setEndGameMessage(data as String?);
       socketService.disconnect(SocketType.Game);
       lobbyService.endLobby();
+    });
+    socketService.on(SocketType.Game,GameEvents.Cheat.name, (data) {
+      
     });
   }
 }
