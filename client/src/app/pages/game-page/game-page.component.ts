@@ -16,6 +16,7 @@ import { GameEvents, GameModes, GamePageEvent } from '@common/enums';
 import { Chat, Game, Lobby } from '@common/game-interfaces';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
+import { NavigationService } from '@app/services/navigation-service/navigation.service';
 @Component({
     selector: 'app-game-page',
     templateUrl: './game-page.component.html',
@@ -58,6 +59,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         private readonly matDialog: MatDialog,
         public welcome: WelcomeService,
         public globalChatService: GlobalChatService,
+        private navigationService: NavigationService,
     ) {
         this.nDifferencesFound = 0;
         this.timer = 0;
@@ -83,6 +85,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
                 this.gameAreaService.toggleCheatMode(differencesCoordinates);
             }
         }
+    }
+
+    getMode(): string {
+        return this.navigationService.getPreviousUrl();
     }
 
     ngOnInit(): void {
