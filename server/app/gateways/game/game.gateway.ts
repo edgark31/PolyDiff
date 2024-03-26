@@ -90,7 +90,7 @@ export class GameGateway implements OnGatewayConnection {
     }
 
     @SubscribeMessage(GameEvents.Spectate)
-    async spectateGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+    async spectate(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         if (this.roomsManager.lobbies.get(lobbyId).isAvailable) return;
         socket.data.state = GameState.Spectate;
         socket.join(lobbyId);
