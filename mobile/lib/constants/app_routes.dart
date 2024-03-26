@@ -7,7 +7,7 @@ import 'package:mobile/pages/create_room_card_page.dart';
 import 'package:mobile/pages/create_room_options_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/edit_profile_page.dart';
-import 'package:mobile/pages/histoy_page.dart';
+import 'package:mobile/pages/history_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
