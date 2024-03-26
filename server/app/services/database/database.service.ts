@@ -16,7 +16,6 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as fs from 'fs';
 import { Model } from 'mongoose';
-import path from 'path';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit {
@@ -122,7 +121,7 @@ export class DatabaseService implements OnModuleInit {
             fs.writeFileSync(`assets/${newGame._id.toString()}/original.bmp`, dataOfOriginalImage);
             fs.writeFileSync(`assets/${newGame._id.toString()}/modified.bmp`, dataOfModifiedImage);
             fs.writeFileSync(`assets/${newGame._id.toString()}/differences.json`, JSON.stringify(newGame.differences));
-            if (!fs.existsSync('out')) return;
+            if (!fs.existsSync('out') || !fs.existsSync(`out/server/${dirName}`)) return;
             fs.mkdirSync(`out/server/${dirName}`);
             fs.writeFileSync(`out/server/assets/${newGame._id.toString()}/original.bmp`, dataOfOriginalImage);
             fs.writeFileSync(`out/server/assets/${newGame._id.toString()}/modified.bmp`, dataOfModifiedImage);
@@ -278,19 +277,5 @@ export class DatabaseService implements OnModuleInit {
     private async rebuildGameCarousel(): Promise<void> {
         const gameCardsList: GameCard[] = await this.gameCardModel.find().exec();
         this.gameListManager.buildGameCarousel(gameCardsList);
-    }
-
-    private copyDirSync(src: string, dest: string) {
-        if (!fs.existsSync(dest)) {
-            fs.mkdirSync(dest, { recursive: true });
-        }
-
-        const entries = fs.readdirSync(src, { withFileTypes: true });
-
-        for (const entry of entries) {
-            const srcPath = path.join(src, entry.name);
-            const destPath = path.join(dest, entry.name);
-            fs.copyFileSync(srcPath, destPath);
-        }
     }
 }
