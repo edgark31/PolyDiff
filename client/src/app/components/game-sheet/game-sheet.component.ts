@@ -71,10 +71,6 @@ export class GameSheetComponent implements OnDestroy, OnInit {
             disableClose: true,
             panelClass: 'dialog',
         });
-
-        setTimeout(() => {
-            this.dialog.closeAll();
-        }, 2000);
     }
 
     setGameId(): void {
@@ -104,6 +100,7 @@ export class GameSheetComponent implements OnDestroy, OnInit {
             this.clientSocketService.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby = lobby;
                 this.gameManagerService.lobbyWaiting = this.lobby;
+                this.showLoadingDialog();
                 this.router.navigate(['/game']);
                 this.roomManagerService.onStart(this.lobby.lobbyId as string);
             });
@@ -112,6 +109,7 @@ export class GameSheetComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
+        this.dialog.closeAll();
         this.lobbySubscription?.unsubscribe();
     }
 }

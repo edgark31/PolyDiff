@@ -51,7 +51,7 @@
             ></canvas>
         </div>
     </div>
-    <button *ngIf="!isReplayAvailable && getMode() !== '/practice'" class="importantButton justified" (click)="showAbandonDialog()">
+    <button *ngIf="!isReplayAvailable" class="importantButton justified" (click)="showAbandonDialog()">
         <span id="abandon">Abandonner la partie</span>
     </button>
 </div>

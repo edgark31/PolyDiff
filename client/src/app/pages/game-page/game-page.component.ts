@@ -116,7 +116,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.endMessageSubscription = this.gameManager.endMessage$.subscribe((endMessage: string) => {
             this.endMessage = endMessage;
             this.showEndGameDialog(this.endMessage);
-            // this.router.navigate(['/game-mode']);
             this.welcome.onChatGame = false;
         });
         if (this.clientSocket.isSocketAlive('auth')) {
