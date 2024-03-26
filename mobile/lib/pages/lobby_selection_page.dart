@@ -83,6 +83,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
         isLobbyClassic ? 'Différences: ${lobby.nDifferences}, ' : '';
     String nPlayers = 'Nombre de joueurs: ${lobby.players.length}/4';
     String playerNames = lobby.players.map((e) => e.name).join(', ');
+    String observerNames = lobby.observers.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
     final chatService = context.watch<ChatService>();
 
