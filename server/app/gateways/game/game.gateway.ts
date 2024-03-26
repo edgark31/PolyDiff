@@ -229,6 +229,18 @@ export class GameGateway implements OnGatewayConnection {
         }
     }
 
+    @SubscribeMessage(GameEvents.CheatActivated)
+    cheatActivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        this.logger.log(`${username}(${socket.data.accountId}) activated cheat in ${lobbyId}`);
+    }
+
+    @SubscribeMessage(GameEvents.CheatDeactivated)
+    cheatDeactivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        this.logger.log(`${username}(${socket.data.accountId}) deactivated cheat in ${lobbyId}`);
+    }
+
     @SubscribeMessage(ChannelEvents.SendGameMessage)
     handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
         const chat: Chat = this.messageManager.createMessage(
