@@ -4,7 +4,9 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:provider/provider.dart';
 
 class CreateRoomOptionsPage extends StatefulWidget {
@@ -35,8 +37,8 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     final gameModeName = lobbyService.gameModes.name;
 
     return Scaffold(
-      // appBar: CustomAppBar(),
-      // drawer: CustomMenuDrawer(),
+      appBar: CustomAppBar(title : 'Configurations des options'),
+      drawer: CustomMenuDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -61,6 +63,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
               press: () {
                 lobbySelectionService.setIsCheatEnabled(cheatMode);
                 lobbySelectionService.setGameDuration(gameDuration.round());
+                lobbySelectionService.setGameBonus(gameBonus.round());
                 lobbyService.createLobby();
                 Future.delayed(Duration(milliseconds: 500), () {
                   // Waiting for server to emit the created lobby from creator
@@ -102,7 +105,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
         Slider(
           value: gameDuration,
           min: 30,
-          max: 600, // TODO: Change back to 50 when testing is done
+          max: 600, // TODO: Change back to 60 when testing is done
           divisions: 30,
           label: gameDuration.round().toString(),
           onChanged: (double newValue) {
@@ -123,7 +126,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
         Slider(
           value: gameBonus,
           min: 10,
-          max: 20, // TODO: Change back to 50 when testing is done
+          max: 20,
           divisions: 10,
           label: gameBonus.round().toString(),
           onChanged: (double newValue) {
