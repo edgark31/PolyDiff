@@ -8,6 +8,7 @@ import 'package:mobile/pages/create_room_card_page.dart';
 import 'package:mobile/pages/create_room_options_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/edit_profile_page.dart';
+import 'package:mobile/pages/friends_page.dart';
 import 'package:mobile/pages/history_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
@@ -121,6 +122,8 @@ class AppRouter {
       case PracticeGamePage.routeName:
         return PracticeGamePage.route();
 
+      case FriendsPage.routeName:
+        return FriendsPage.route();
       default:
         return _errorRoute();
     }

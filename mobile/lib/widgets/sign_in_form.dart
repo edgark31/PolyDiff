@@ -189,6 +189,11 @@ class _SignInFormState extends State<SignInForm> {
                     press: () => Navigator.pushNamed(context, SIGN_UP_ROUTE),
                     backgroundColor: kMidOrange,
                     textColor: kLight),
+                CustomButton(
+                    text: "Friends",
+                    press: () => Navigator.pushNamed(context, FRIENDS_ROUTE),
+                    backgroundColor: kMidOrange,
+                    textColor: kLight),
               ],
             ),
           ),
