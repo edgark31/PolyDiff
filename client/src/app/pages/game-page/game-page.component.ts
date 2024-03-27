@@ -185,7 +185,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             disableClose: true,
             panelClass: 'dialog',
         });
-        this.gameManager.abandonGame(this.lobby.lobbyId as string);
     }
 
     mouseClickOnCanvas(event: MouseEvent, isLeft: boolean) {
