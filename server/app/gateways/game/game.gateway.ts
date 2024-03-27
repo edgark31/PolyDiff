@@ -12,7 +12,7 @@ import { MessageManagerService } from '@app/services/message-manager/message-man
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { NOT_FOUND } from '@common/constants';
 import { ChannelEvents, GameEvents, GameModes, GameState, MessageTag } from '@common/enums';
-import { Chat, ChatLog, Coordinate, Game } from '@common/game-interfaces';
+import { Chat, Coordinate, Game } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -42,7 +42,6 @@ export class GameGateway implements OnGatewayConnection {
         socket.join(lobbyId);
         // Pour démarrer tout le monde en même temps
         if (Array.from(await this.server.in(lobbyId).fetchSockets()).length === this.roomsManager.lobbies.get(lobbyId).players.length) {
-            this.roomsManager.lobbies.get(lobbyId).chatLog = { chat: [], channelName: 'game' } as ChatLog;
             if (
                 this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic ||
                 this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Practice
@@ -88,6 +87,25 @@ export class GameGateway implements OnGatewayConnection {
             }, DELAY_BEFORE_EMITTING_TIME);
             this.timers.set(lobbyId, timerId);
         }
+    }
+
+    @SubscribeMessage(GameEvents.Spectate)
+    async spectate(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        if (this.roomsManager.lobbies.get(lobbyId).isAvailable) return;
+        socket.data.state = GameState.Spectate;
+        socket.join(lobbyId);
+        if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
+            const game: Game = structuredClone(this.games.get(lobbyId));
+            await this.imageManager.observerImage(game).then((image) => {
+                game.modified = 'data:image/png;base64,' + image;
+            });
+            socket.emit(GameEvents.Spectate, {
+                lobby: this.roomsManager.lobbies.get(lobbyId),
+                game,
+            });
+            return;
+        }
+        socket.emit(GameEvents.Spectate, this.games.get(lobbyId));
     }
 
     @SubscribeMessage(GameEvents.Clic)
@@ -229,6 +247,18 @@ export class GameGateway implements OnGatewayConnection {
         }
     }
 
+    @SubscribeMessage(GameEvents.CheatActivated)
+    cheatActivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        this.logger.log(`${username}(${socket.data.accountId}) activated cheat in ${lobbyId}`);
+    }
+
+    @SubscribeMessage(GameEvents.CheatDeactivated)
+    cheatDeactivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        this.logger.log(`${username}(${socket.data.accountId}) deactivated cheat in ${lobbyId}`);
+    }
+
     @SubscribeMessage(ChannelEvents.SendGameMessage)
     handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
         const chat: Chat = this.messageManager.createMessage(
@@ -253,7 +283,7 @@ export class GameGateway implements OnGatewayConnection {
                     break;
                 case GameState.Abandoned:
                     break;
-                case GameState.Left:
+                case GameState.Spectate:
                     break;
                 default:
                     break;
@@ -320,8 +350,7 @@ export class GameGateway implements OnGatewayConnection {
         // Randomly picking one difference to keep
         const keepIndex: number = Math.floor(Math.random() * clonedGame.differences.length);
         const gameCopy = structuredClone(clonedGame);
-        // TODO : Handle other image types
-        clonedGame.modified = 'data:image/png;base64,' + (await this.imageManager.modifyImage(gameCopy, keepIndex));
+        clonedGame.modified = 'data:image/png;base64,' + (await this.imageManager.limitedImage(gameCopy, keepIndex));
         clonedGame.differences = clonedGame.differences.filter((_, index) => index === keepIndex);
         this.games.set(lobbyId, clonedGame);
         return game;
@@ -360,5 +389,6 @@ export class GameGateway implements OnGatewayConnection {
                     socket.leave(lobbyId);
                 });
             });
+        this.accountManager.fetchUsers();
     }
 }

@@ -40,6 +40,11 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.globalChatLog = { chat: [], channelName: 'global' };
     }
 
+    @SubscribeMessage(AccountEvents.RefreshAccount)
+    handleRefreshAccount(@ConnectedSocket() socket: Socket) {
+        socket.emit(AccountEvents.RefreshAccount, this.accountManager.users.get(socket.data.accountId));
+    }
+
     @SubscribeMessage(AccountEvents.UserUpdate)
     retrivesUsers() {
         this.server.emit(AccountEvents.UserUpdate, Array.from(this.accountManager.users.values()));
