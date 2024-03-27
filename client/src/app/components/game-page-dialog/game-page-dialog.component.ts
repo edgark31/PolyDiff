@@ -22,7 +22,7 @@ export class GamePageDialogComponent {
     ) {
         this.isReplayPaused = false;
         this.roomManager.isObserver = false;
-        this.roomManager.isOrganizer = true;
+        this.roomManager.isOrganizer = false;
     }
 
     abandonGame(): void {
