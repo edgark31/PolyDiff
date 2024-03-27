@@ -73,6 +73,8 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
     final lobbyService = context.watch<LobbyService>();
     final isPlayerAnObserver = lobbyService.isObserver;
 
+    final canPlayerInteract = !isPlayerAnObserver; // TODO: Add condition for replay
+
     if (gameManagerService.game.gameId == '') {
       return Container(
         decoration: BoxDecoration(
@@ -118,7 +120,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             children: [
               Row(
                 children: [
-                  if (lobbyService.lobby.isCheatEnabled) ...[
+                  if (lobbyService.lobby.isCheatEnabled && !isPlayerAnObserver) ...[
                     ElevatedButton(
                       onPressed: () {
                         isCheatActivated = !isCheatActivated;
@@ -162,9 +164,9 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        OriginalCanvas(snapshot.data, '123'),
+                        OriginalCanvas(snapshot.data, '123', canPlayerInteract),
                         SizedBox(width: 50),
-                        ModifiedCanvas(snapshot.data, '123'),
+                        ModifiedCanvas(snapshot.data, '123', canPlayerInteract),
                       ],
                     );
                   } else {

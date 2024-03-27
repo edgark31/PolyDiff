@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
-import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 
 class EndGamePopup extends StatelessWidget {
