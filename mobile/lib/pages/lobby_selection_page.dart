@@ -6,7 +6,9 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:provider/provider.dart';
 
 class LobbySelectionPage extends StatefulWidget {
@@ -42,32 +44,37 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     final lobbiesFromServer = lobbyService.filterLobbies();
     final gameModeName = lobbyService.gameModes.name;
     return Scaffold(
-      // drawer: CustomMenuDrawer(),
-      // appBar: CustomAppBar(),
+      drawer: CustomMenuDrawer(),
+      appBar: CustomAppBar(title: 'Sélection de la salle de jeu'),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              child: Column(
-                children: [
-                  ElevatedButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, creationRoute),
-                      child: Text(
-                        'Créer une salle pour le mode $gameModeName',
-                      )),
-                  lobbiesFromServer.isEmpty
-                      ? Text(
-                          'Aucune salle d\'attente disponible pour le Mode $gameModeName')
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: lobbiesFromServer.length,
-                          itemBuilder: (context, index) {
-                            return buildLobbyCard(
-                                context, lobbiesFromServer[index]);
-                          },
-                        ),
-                ],
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 10),
+                    CustomButton(
+                      text: 'Créer une salle pour le mode $gameModeName',
+                      press: () => Navigator.pushNamed(context, creationRoute),
+                      backgroundColor: kMidOrange,
+                      widthFactor: 0.5,
+                    ),
+                    const SizedBox(height: 10),
+                    lobbiesFromServer.isEmpty
+                        ? Text(
+                            'Aucune salle d\'attente disponible pour le Mode $gameModeName')
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: lobbiesFromServer.length,
+                            itemBuilder: (context, index) {
+                              return buildLobbyCard(
+                                  context, lobbiesFromServer[index]);
+                            },
+                          ),
+                  ],
+                ),
               ),
             ),
     );
@@ -146,7 +153,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                           chatService.setLobbyMessages(lobby.chatLog!.chat);
                           gameManagerService.spectateLobby(lobby.lobbyId);
                           chatService.setGameChatListeners();
-                          lobbyService.setIsCreator(false); // TODO : Check if this is needed
+                          lobbyService.setIsCreator(
+                              false); // TODO : Check if this is needed
                           Navigator.pushNamed(context, CLASSIC_ROUTE);
                         },
                         backgroundColor: kMidGreen,
