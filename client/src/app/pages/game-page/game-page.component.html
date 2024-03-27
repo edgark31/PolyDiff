@@ -23,14 +23,14 @@
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
                 #originalCanvasFG
-                (click)="mouseClickOnCanvas($event, true)"
+                (click)="!roomManager.isObserver ? mouseClickOnCanvas($event, true) : ''"
             ></canvas>
             <canvas
                 id="original"
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
                 #originalCanvas
-                (click)="mouseClickOnCanvas($event, true)"
+                (click)="!roomManager.isObserver ? mouseClickOnCanvas($event, true): ''"
             ></canvas>
         </div>
         <app-chat-box class="chat-box" (addGame)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
@@ -40,14 +40,14 @@
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
                 #modifiedCanvasFG
-                (click)="mouseClickOnCanvas($event, false)"
+                (click)="!roomManager.isObserver ? mouseClickOnCanvas($event, false): ''"
             ></canvas>
             <canvas
                 id="modified"
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
                 #modifiedCanvas
-                (click)="mouseClickOnCanvas($event, false)"
+                (click)="!roomManager.isObserver ? mouseClickOnCanvas($event, false): ''"
             ></canvas>
         </div>
     </div>

@@ -16,7 +16,7 @@ export class RoomManagerService {
     lobby: Subject<Lobby>;
     wait: boolean;
     game: Game;
-
+    isObserver: boolean;
     private lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
     // private playerNameAvailability: Subject<PlayerNameAvailability>;
@@ -151,6 +151,12 @@ export class RoomManagerService {
 
     joinRoom(lobbyId: string) {
         this.clientSocket.send('lobby', LobbyEvents.Join, { lobbyId });
+    }
+
+    joinRoomObserver(lobbyId: string) {
+        this.isObserver = true;
+        console.log("tu rejoins en tant qu'observateur" + lobbyId);
+        this.clientSocket.send('lobby', LobbyEvents.Spectate, lobbyId);
     }
 
     joinRoomAcces(lobbyId: string, password: string) {

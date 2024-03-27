@@ -33,6 +33,8 @@ export class RoomSheetComponent {
                     data: lobby,
                 });
         } else if (!this.lobby.isAvailable) {
+            this.roomManager.joinRoomObserver(lobby.lobbyId ? lobby.lobbyId : '');
+
             // rentrer en tant qu'observateur
         }
     }

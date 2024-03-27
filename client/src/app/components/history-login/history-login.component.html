@@ -10,9 +10,13 @@
       <!-- Name Column -->
       <ng-container matColumnDef="connection">
         <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.isConnection}} </td>
-      </ng-container>
-
+        <td mat-cell *matCellDef="let session" >
+            <ng-container *ngFor="let session of welcome.account.profile.connections">
+                <span *ngIf="session.isConnection">Connexion</span>
+                <span *ngIf="!session.isConnection">Déconnexion</span>
+            </ng-container>
+        </td>
+    </ng-container>
 
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

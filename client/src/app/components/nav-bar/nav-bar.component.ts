@@ -36,6 +36,11 @@ export class NavBarComponent {
         this.friendsRoute = '/friend';
     }
 
+    goProfile(): void {
+        // this.clientsocket.send('auth', AccountEvents.RefreshAccount);
+        this.router.navigate(['/profil']);
+    }
+
     onSubmitHome(): void {
         this.clientsocket.disconnect('auth');
         // this.clientsocket.disconnect('lobby');

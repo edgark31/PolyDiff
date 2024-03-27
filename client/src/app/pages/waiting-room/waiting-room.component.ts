@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { WaitingGameDialogComponent } from '@app/components/waiting-game-dialog/waiting-game-dialog.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
@@ -9,8 +11,6 @@ import { LobbyEvents, MessageTag } from '@common/enums';
 import { Subscription } from 'rxjs';
 import { Chat, Lobby, Player } from './../../../../../common/game-interfaces';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
-import { WaitingGameDialogComponent } from '@app/components/waiting-game-dialog/waiting-game-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 @Component({
     selector: 'app-waiting-room',
     templateUrl: './waiting-room.component.html',

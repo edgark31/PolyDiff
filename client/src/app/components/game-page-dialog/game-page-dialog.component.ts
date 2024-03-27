@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
+import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GamePageEvent } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 @Component({
@@ -17,8 +18,11 @@ export class GamePageDialogComponent {
         private readonly gameManager: GameManagerService,
         private readonly replayService: ReplayService,
         private router: Router,
+        public roomManager: RoomManagerService,
     ) {
         this.isReplayPaused = false;
+        this.roomManager.isObserver = false;
+        this.roomManager.isOrganizer = true;
     }
 
     abandonGame(): void {

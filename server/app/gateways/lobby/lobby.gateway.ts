@@ -113,6 +113,7 @@ export class LobbyGateway implements OnGatewayConnection {
     spectate(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         if (this.roomsManager.lobbies.get(lobbyId).isAvailable) return;
         socket.data.state = LobbyState.Spectate;
+        socket.join(lobbyId);
         const observer: Observer = {
             accountId: socket.data.accountId,
             name: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,

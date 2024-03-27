@@ -1,4 +1,4 @@
-import { ChannelEvents, GameEvents, MessageEvents, MessageTag } from './../../../../../common/enums';
+import { ChannelEvents, GameEvents, GameModes, MessageEvents, MessageTag } from './../../../../../common/enums';
 /* eslint-disable no-console */
 import { Injectable } from '@angular/core';
 import { ReplayEvent } from '@app/interfaces/replay-actions';
@@ -202,6 +202,22 @@ export class GameManagerService {
             this.lobbyGame.next(this.lobbyWaiting);
         });
 
+        if (this.lobbyWaiting.mode === GameModes.Classic)
+            this.clientSocket.on('game', GameEvents.Spectate, (data: { lobby: Lobby; game: Game }) => {
+                console.log('prend la game' + data.game.lobbyId);
+                this.game.next(data.game);
+                this.lobbyGame.next(data.lobby);
+            });
+        else
+            this.clientSocket.on('game', GameEvents.Spectate, (game: Game) => {
+                console.log('prend la ' + game.lobbyId);
+                this.game.next(game);
+            });
+
+        // this.clientSocket.on('game', GameEvents.Spectate, (nextGame: Game) => {
+        //     console.log('prend la ' + game.lobbyId);
+        //     this.nextGame.next(nextGame);
+        // });
         this.clientSocket.on('game', GameEvents.NextGame, (nextGame: Game) => {
             this.nextGame.next(nextGame);
         });

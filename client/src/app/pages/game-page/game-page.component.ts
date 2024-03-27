@@ -10,6 +10,7 @@ import { GameAreaService } from '@app/services/game-area-service/game-area.servi
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
+import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent } from '@common/enums';
@@ -56,6 +57,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         private readonly gameManager: GameManagerService,
         private readonly replayService: ReplayService,
         private readonly matDialog: MatDialog,
+        public roomManager: RoomManagerService,
         public welcome: WelcomeService,
         public globalChatService: GlobalChatService,
     ) {
@@ -76,18 +78,22 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     @HostListener('window:keydown', ['$event'])
     keyboardEvent(event: KeyboardEvent) {
         const eventHTMLElement = event.target as HTMLElement;
-        if (eventHTMLElement.tagName !== INPUT_TAG_NAME) {
-            if (event.key === 't') {
-                const differencesCoordinates = ([] as Coordinate[]).concat(...this.differences);
-                this.clientSocket.send('game', GameEvents.Clic, { lobbyId: this.gameLobby.lobbyId, coordClic: differencesCoordinates });
-                this.gameAreaService.toggleCheatMode(differencesCoordinates);
+        console.log(this.roomManager.isObserver);
+        if (!this.roomManager.isObserver) {
+            if (eventHTMLElement.tagName !== INPUT_TAG_NAME) {
+                if (event.key === 't') {
+                    const differencesCoordinates = ([] as Coordinate[]).concat(...this.differences);
+                    this.clientSocket.send('game', GameEvents.Clic, { lobbyId: this.gameLobby.lobbyId, coordClic: differencesCoordinates });
+                    this.gameAreaService.toggleCheatMode(differencesCoordinates);
+                }
             }
         }
     }
 
     ngOnInit(): void {
         this.clientSocket.connect(this.welcome.account.id as string, 'game');
-        this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
+        if (!this.roomManager.isObserver) this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
+        else this.clientSocket.send('game', GameEvents.Spectate, this.gameManager.lobbyWaiting.lobbyId);
         this.gameManager.manageSocket();
         this.lobby = this.gameManager.lobbyWaiting;
         this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
