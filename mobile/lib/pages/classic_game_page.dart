@@ -4,6 +4,7 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game.dart';
+import 'package:mobile/models/observers_model.dart';
 import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
@@ -73,7 +74,8 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
     final lobbyService = context.watch<LobbyService>();
     final isPlayerAnObserver = lobbyService.isObserver;
 
-    final canPlayerInteract = !isPlayerAnObserver; // TODO: Add condition for replay
+    final canPlayerInteract =
+        !isPlayerAnObserver; // TODO: Add condition for replay
 
     if (gameManagerService.game.gameId == '') {
       return Container(
@@ -120,7 +122,8 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             children: [
               Row(
                 children: [
-                  if (lobbyService.lobby.isCheatEnabled && !isPlayerAnObserver) ...[
+                  if (lobbyService.lobby.isCheatEnabled &&
+                      !isPlayerAnObserver) ...[
                     ElevatedButton(
                       onPressed: () {
                         isCheatActivated = !isCheatActivated;
@@ -196,63 +199,36 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
               ),
             ),
           isPlayerAnObserver
-              ? Positioned(
-                  left: 8.0,
-                  bottom: 8.0,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
-                      gameManagerService.disconnectSocket(); // No event sent to server
-                      lobbyService.setIsObserver(false);
-                      lobbyService.leaveLobby();
-                      Navigator.pushNamed(context, DASHBOARD_ROUTE);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Color(0xFFEF6151),
-                      backgroundColor: Color(0xFF2D1E16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    ),
-                    child: Text(
-                      'Quitter',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
+              ? _actionButton(
+                  context,
+                  'Quitter',
+                  () {
+                    gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
+                    gameManagerService
+                        .disconnectSocket(); // No event sent to server
+                    lobbyService.setIsObserver(false);
+                    lobbyService.leaveLobby();
+                    Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                  },
                 )
-              : Positioned(
-                  left: 8.0,
-                  bottom: 8.0,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Future.delayed(Duration.zero, () {
-                        if (ModalRoute.of(context)?.isCurrent ?? false) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AbandonPopup();
-                            },
-                          );
-                        }
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Color(0xFFEF6151),
-                      backgroundColor: Color(0xFF2D1E16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    ),
-                    child: Text(
-                      'Abandonner',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
+              : _actionButton(
+                  context,
+                  'Abandonner',
+                  () {
+                    Future.delayed(Duration.zero, () {
+                      if (ModalRoute.of(context)?.isCurrent ?? false) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AbandonPopup();
+                          },
+                        );
+                      }
+                    });
+                  },
                 ),
+          if (lobbyService.lobby.observers.isNotEmpty)
+            _observerInfos(lobbyService.lobby.observers),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -270,6 +246,58 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _actionButton(
+    BuildContext context,
+    String text,
+    VoidCallback onPressed,
+  ) {
+    return Positioned(
+      left: 8.0,
+      bottom: 8.0,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Color(0xFFEF6151),
+          backgroundColor: Color(0xFF2D1E16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        ),
+        child: Text(text, style: TextStyle(fontSize: 20)),
+      ),
+    );
+  }
+
+  Widget _observerInfos(List<Observer> observers) {
+    String observerNames = observers.map((e) => e.name).join(', ');
+    return Positioned(
+      right: 8.0,
+      bottom: 8.0,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.remove_red_eye, color: Colors.white),
+            SizedBox(width: 8),
+            Text(
+              observerNames,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

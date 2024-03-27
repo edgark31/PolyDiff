@@ -27,9 +27,6 @@ class _GameInfosState extends State<GameInfos> {
     int? nbDifferencesPresent = gameManagerService.game.nDifferences;
     List<Player> players = lobbyService.lobby.players;
     String gameMode = lobbyService.lobby.mode.name;
-    int nbPlayers = lobbyService.lobby.players.length;
-    String observerNames =
-        lobbyService.lobby.observers.map((e) => e.name).join(', ');
 
     String formattedTime =
         "${(timer ~/ 60).toString().padLeft(2, '0')}:${(timer % 60).toString().padLeft(2, '0')}";
@@ -44,11 +41,7 @@ class _GameInfosState extends State<GameInfos> {
                 SizedBox(width: 380),
                 Text(
                   'Mode de jeu : $gameMode',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                  style: _textStyle(),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(width: 100),
@@ -68,152 +61,70 @@ class _GameInfosState extends State<GameInfos> {
             if (lobbyService.lobby.mode == GameModes.Classic) ...[
               Text(
                 'Nombre de différences présentes : $nbDifferencesPresent',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-            if (lobbyService.lobby.observers.isNotEmpty) ...[ // TODO : pretty this up
-              Text(
-                'Observateurs : $observerNames',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+                style:_textStyle(),
                 textAlign: TextAlign.center,
               ),
             ],
             Row(
               children: [
-                Icon(
-                  Icons.person,
-                  color: Colors.black,
-                  size: 30,
-                ),
-                if (nbPlayers > 0) ...[
-                  Text(
-                    players[0].name!,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Text(
-                    'Différences trouvées : ${players[0].count}',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                if (players.isNotEmpty) ...[
+                  _playerInfo(players[0]),
                 ],
                 SizedBox(
                   width: 130,
                 ),
-                if (nbPlayers > 1) ...[
-                  Icon(
-                    Icons.person,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-                  Text(
-                    players[1].name as String,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Text(
-                    'Différences trouvées : ${players[1].count}',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                if (players.length > 1) ...[
+                  _playerInfo(players[1]),
                 ],
               ],
             ),
             Row(
               children: [
-                if (nbPlayers >= 3) ...[
-                  Icon(
-                    Icons.person,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-                  Text(
-                    players[2].name as String,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Text(
-                    'Différences trouvées : ${players[2].count}',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                if (players.length >= 3) ...[
+                  _playerInfo(players[2]),
                 ],
-                if (nbPlayers >= 4) ...[
+                if (players.length >= 4) ...[
                   SizedBox(
                     width: 130,
                   ),
-                  Icon(
-                    Icons.person,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-                  Text(
-                    players[3].name as String,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Text(
-                    'Différences trouvées : ${players[3].count}',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  _playerInfo(players[3]),
                 ],
               ],
             )
           ],
         ));
+  }
+
+  Widget _playerInfo(Player player) {
+    return Row(
+      children: [
+        Icon(
+          Icons.person,
+          color: Colors.black,
+          size: 30,
+        ),
+        Text(
+          player.name!,
+          style: _textStyle(),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(
+          width: 30,
+        ),
+        Text(
+          'Différences trouvées : ${player.count}',
+          style: _textStyle(),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  TextStyle _textStyle() {
+    return TextStyle(
+      fontSize: 25,
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+    );
   }
 }
