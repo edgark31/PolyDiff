@@ -26,7 +26,7 @@ class CreateRoomOptionsPage extends StatefulWidget {
 }
 
 class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
-  bool cheatMode = false;
+  bool cheatMode = true;
   double gameDuration = 30;
   double gameBonus = 10;
 
@@ -37,7 +37,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     final gameModeName = lobbyService.gameModes.name;
 
     return Scaffold(
-      appBar: CustomAppBar(title : 'Configurations des options'),
+      appBar: CustomAppBar(title: 'Configurations des options'),
       drawer: CustomMenuDrawer(),
       body: Center(
         child: Column(
