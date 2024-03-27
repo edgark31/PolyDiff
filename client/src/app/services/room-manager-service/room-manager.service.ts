@@ -35,20 +35,11 @@ export class RoomManagerService {
     private message: Subject<Chat>;
 
     constructor(private readonly clientSocket: ClientSocketService) {
-        // this.playerNameAvailability = new Subject<PlayerNameAvailability>();
-        // this.roomOneVsOneId = new Subject<string>();
-        // this.isPlayerAccepted = new Subject<boolean>();
         this.lobby = new Subject<Lobby>();
         this.lobbies = new Subject<Lobby[]>();
         this.joinedPlayerNames = new Subject<string[]>();
-        // this.rooms1V1AvailabilityByGameId = new Subject<RoomAvailability>();
         this.deletedGameId = new Subject<string>();
-        // this.refusedPlayerId = new Subject<string>();
         this.isGameCardsReloadNeeded = new Subject<boolean>();
-        // this.isLimitedCoopRoomAvailable = new Subject<boolean>();
-        // this.hasNoGameAvailable = new Subject<boolean>();
-        // this.roomSoloId = new Subject<string>();
-        // this.roomLimitedId = new Subject<string>();
         this.isGameHistoryReloadNeeded = new Subject<boolean>();
         this.messages = new Subject<Chat[]>();
         this.message = new Subject<Chat>();
@@ -66,26 +57,6 @@ export class RoomManagerService {
         return this.message.asObservable();
     }
 
-    // get playerNameAvailability$() {
-    //     return this.playerNameAvailability.asObservable();
-    // }
-
-    // get roomOneVsOneId$() {
-    //     return this.roomOneVsOneId.asObservable();
-    // }
-
-    // get roomSoloId$() {
-    //     return this.roomSoloId.asObservable();
-    // }
-
-    // get roomLimitedId$() {
-    //     return this.roomLimitedId.asObservable();
-    // }
-
-    // get oneVsOneRoomsAvailabilityByRoomId$() {
-    //     return this.rooms1V1AvailabilityByGameId.asObservable();
-    // }
-
     get isPlayerAccepted$() {
         return this.isPlayerAccepted.asObservable();
     }
@@ -102,14 +73,6 @@ export class RoomManagerService {
         return this.isGameCardsReloadNeeded.asObservable();
     }
 
-    // get isLimitedCoopRoomAvailable$() {
-    //     return this.isLimitedCoopRoomAvailable.asObservable();
-    // }
-
-    // get hasNoGameAvailable$() {
-    //     return this.hasNoGameAvailable.asObservable();
-    // }
-
     get isGameHistoryReloadNeeded$() {
         return this.isGameHistoryReloadNeeded.asObservable();
     }
@@ -123,8 +86,6 @@ export class RoomManagerService {
     }
 
     off(): void {
-        // this.clientSocket.lobbySocket.off(ChannelEvents.LobbyMessage);
-        // this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
         this.clientSocket.lobbySocket.off(LobbyEvents.Create);
         this.clientSocket.authSocket.off(LobbyEvents.Join);
         this.clientSocket.lobbySocket.off(LobbyEvents.UpdateLobbys);
@@ -162,6 +123,11 @@ export class RoomManagerService {
     }
 
     createLimitedRoom(roomPayload: Lobby): void {
+        this.isOrganizer = true;
+        this.clientSocket.send('lobby', LobbyEvents.Create, roomPayload);
+    }
+
+    createPracticeRoom(roomPayload: Lobby): void {
         this.isOrganizer = true;
         this.clientSocket.send('lobby', LobbyEvents.Create, roomPayload);
     }
