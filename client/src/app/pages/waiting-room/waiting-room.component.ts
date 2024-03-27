@@ -118,10 +118,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             disableClose: true,
             panelClass: 'dialog',
         });
-
-        setTimeout(() => {
-            this.matDialog.closeAll();
-        }, 2000);
     }
 
     ngOnDestroy(): void {
@@ -136,5 +132,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.globalChatService.off();
         }
         this.chatSubscriptionGlobal?.unsubscribe();
+        this.matDialog.closeAll();
     }
 }

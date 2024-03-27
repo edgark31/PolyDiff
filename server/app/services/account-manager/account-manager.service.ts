@@ -76,7 +76,6 @@ export class AccountManagerService implements OnModuleInit {
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.id = accountFound._id.toString();
-            console.log(this.connectedUsers.has(accountFound.id));
             if (this.connectedUsers.has(accountFound.id)) throw new Error('Account already connected');
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
@@ -285,7 +284,7 @@ export class AccountManagerService implements OnModuleInit {
         await this.accountModel.find().then((accounts) => {
             accounts.forEach((account) => {
                 account.profile.avatar = '';
-                this.users.set(account.credentials.username, account);
+                this.users.set(account.id, account);
                 this.connectedUsers.get(account.id) ? this.connectedUsers.set(account.id, account) : null;
             });
         });

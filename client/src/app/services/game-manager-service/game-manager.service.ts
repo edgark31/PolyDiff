@@ -32,6 +32,7 @@ export class GameManagerService {
     private message: Subject<Chat>;
     private abandon: Subject<string>;
     private endMessage: Subject<string>;
+    private remainingDifference: Subject<Coordinate[][]>;
     private players: Subject<Players>;
     private isFirstDifferencesFound: Subject<boolean>;
     private isGameModeChanged: Subject<boolean>;
@@ -58,6 +59,7 @@ export class GameManagerService {
         this.message = new Subject<Chat>();
         this.abandon = new Subject<string>();
         this.endMessage = new Subject<string>();
+        this.remainingDifference = new Subject<Coordinate[][]>();
         this.opponentDifferencesFound = new Subject<number>();
         this.replayEventsSubject = new Subject<ReplayEvent>();
         this.isFirstDifferencesFound = new Subject<boolean>();
@@ -90,6 +92,10 @@ export class GameManagerService {
 
     get game$() {
         return this.game.asObservable();
+    }
+
+    get remainingDifference$() {
+        return this.remainingDifference.asObservable();
     }
 
     get nextGame$() {
@@ -197,6 +203,7 @@ export class GameManagerService {
         this.differenceFound = new Subject<Coordinate[]>();
         this.endMessage = new Subject<string>();
         this.nextGame = new Subject<Game>();
+        this.remainingDifference = new Subject<Coordinate[][]>();
         this.clientSocket.on('game', GameEvents.StartGame, (game: Game) => {
             this.game.next(game);
             this.lobbyGame.next(this.lobbyWaiting);
@@ -228,6 +235,11 @@ export class GameManagerService {
 
         this.clientSocket.on('game', GameEvents.NotFound, (coordClic: Coordinate) => {
             this.handleNotFound(coordClic);
+        });
+
+        this.clientSocket.on('game', GameEvents.Cheat, (remainingDifference: Coordinate[][]) => {
+            console.log('Receiving new remaining differences');
+            this.remainingDifference.next(remainingDifference);
         });
 
         this.clientSocket.on('game', ChannelEvents.GameMessage, (chat: Chat) => {

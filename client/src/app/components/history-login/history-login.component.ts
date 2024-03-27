@@ -5,7 +5,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { ConnectionLog, SessionLog } from '@common/game-interfaces';
-import { ImportDialogComponent } from '../import-dialog-box/import-dialog-box.component';
 @Component({
     selector: 'app-history-login',
     templateUrl: './history-login.component.html',
@@ -19,7 +18,7 @@ export class HistoryLoginComponent implements AfterViewInit, OnInit {
     displayedColumnsGame: string[] = ['timestamp', 'Session'];
     dataSourceLogin: MatTableDataSource<ConnectionLog>;
     dataSourceGame: MatTableDataSource<SessionLog>;
-    constructor(public welcome: WelcomeService, private dialogRef: MatDialogRef<ImportDialogComponent>) {
+    constructor(public welcome: WelcomeService, private dialogRef: MatDialogRef<HistoryLoginComponent>) {
         this.dataSourceLogin = new MatTableDataSource<ConnectionLog>(this.welcome.account.profile.connections);
         this.dataSourceGame = new MatTableDataSource<SessionLog>(this.welcome.account.profile.sessions);
     }

@@ -13,5 +13,4 @@ export class FriendPageComponent {
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     // eslint-disable-next-line max-params
-    constructor() {}
 }

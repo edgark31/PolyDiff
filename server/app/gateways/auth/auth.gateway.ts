@@ -42,8 +42,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(AccountEvents.RefreshAccount)
     handleRefreshAccount(@ConnectedSocket() socket: Socket) {
-        socket.emit(AccountEvents.RefreshAccount, this.accountManager.connectedUsers.get(socket.data.accountId));
-        // changer à connectedUsers car la clé défini dans fetchUsers de AccounManager est un nom et non id
+        socket.emit(AccountEvents.RefreshAccount, this.accountManager.users.get(socket.data.accountId));
     }
 
     @SubscribeMessage(AccountEvents.UserUpdate)

@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AccountDialogComponent } from '@app/components/account-dialog/account-dialog.component';
@@ -20,7 +20,7 @@ import { TranslateService } from '@ngx-translate/core';
     templateUrl: './personnalization-page.component.html',
     styleUrls: ['./personnalization-page.component.scss'],
 })
-export class PersonalizationPageComponent implements OnInit, OnDestroy {
+export class PersonalizationPageComponent implements OnInit {
     @ViewChild(ImportDialogComponent) importDialogComponent: ImportDialogComponent;
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
@@ -45,8 +45,6 @@ export class PersonalizationPageComponent implements OnInit, OnDestroy {
         this.sound.correctSoundEffect = this.welcomeService.account.profile.onCorrectSound;
         this.sound.incorrectSoundEffect = this.welcomeService.account.profile.onErrorSound;
     }
-
-    ngOnDestroy() {}
 
     useLanguage(language: string): void {
         this.translate.use(language);

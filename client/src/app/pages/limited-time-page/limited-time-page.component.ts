@@ -8,7 +8,6 @@ import { GameManagerService } from '@app/services/game-manager-service/game-mana
 import { NavigationService } from '@app/services/navigation-service/navigation.service';
 // import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { ChannelEvents, GameModes, LobbyEvents } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
@@ -38,7 +37,6 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         private readonly gameManager: GameManagerService,
         private readonly dialog: MatDialog,
         private readonly clientSocket: ClientSocketService,
-        private readonly welcomeService: WelcomeService,
         private readonly navigationService: NavigationService,
         private cdr: ChangeDetectorRef,
     ) {
@@ -49,7 +47,6 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnInit(): void {
-        this.clientSocket.connect(this.welcomeService.account.id as string, 'lobby');
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         this.updatePagedImages();

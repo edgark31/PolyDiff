@@ -65,9 +65,9 @@ export class LobbyGateway implements OnGatewayConnection {
     // un joueur quitte le lobby intentionnellement
     @SubscribeMessage(LobbyEvents.Leave)
     async leave(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        socket.data.state = LobbyState.Idle;
         // Si t'es un spectateur
         if (socket.data.state === LobbyState.Spectate) {
+            socket.data.state = LobbyState.Idle;
             socket.leave(lobbyId);
             this.roomsManager.lobbies.get(lobbyId).observers = this.roomsManager.lobbies
                 .get(lobbyId)
@@ -76,6 +76,7 @@ export class LobbyGateway implements OnGatewayConnection {
             this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} unspectate le lobby ${lobbyId}`);
             return;
         }
+        socket.data.state = LobbyState.Idle;
         // Si t'es le host
         if (socket.data.accountId === this.roomsManager.lobbies.get(lobbyId).players[0].accountId) {
             const sockets = await this.server.in(lobbyId).fetchSockets();
@@ -156,10 +157,16 @@ export class LobbyGateway implements OnGatewayConnection {
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
                 case LobbyState.Idle:
+                    this.logger.log(`${socket.data.accountId} is IDLE`);
                     break;
                 case LobbyState.Waiting: // ta deja rejoint une room
+                    this.logger.log(`${socket.data.accountId} is WAITING`);
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
+                    this.logger.log(`${socket.data.accountId} is INGAME`);
+                    break;
+                case LobbyState.Spectate: // t'es dans une room en tant que spectateur
+                    this.logger.log(`${socket.data.accountId} is SPECTATING`);
                     break;
                 default:
                     break;

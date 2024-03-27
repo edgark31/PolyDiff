@@ -1,4 +1,5 @@
 import { Account, AccountDocument } from '@app/model/database/account';
+import { MAX_ACCESS_CODE, MIN_ACCESS_CODE } from '@common/constants';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,7 +13,7 @@ export class MailService {
         @InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>,
     ) {}
 
-    async sendUserConfirmation(user: Account, token: string) {
+    async sendUserConfirmation(user: Account) {
         // const url = `example.com/auth/confirm?token=${token}`;
         await this.mailerService.sendMail({
             to: user.credentials.email,
@@ -35,11 +36,10 @@ export class MailService {
             const accountFound = await this.accountModel.findOne({ 'credentials.email': mail });
 
             if (!accountFound) throw new Error('Account not found');
-            const token = accountFound.credentials.username;
 
-            accountFound.credentials.recuperatePasswordCode = Math.floor(1000 + Math.random() * 9000).toString();
+            accountFound.credentials.recuperatePasswordCode = Math.floor(MIN_ACCESS_CODE + Math.random() * MAX_ACCESS_CODE).toString();
             // await this.mailService.sendUserConfirmation(accountFound);
-            await this.sendUserConfirmation(accountFound, token);
+            await this.sendUserConfirmation(accountFound);
             await accountFound.save();
             this.logger.verbose(`send a mail with this adress  ${accountFound.credentials.email} `);
             return Promise.resolve(accountFound);
