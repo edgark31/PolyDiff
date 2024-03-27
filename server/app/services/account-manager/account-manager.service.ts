@@ -284,7 +284,7 @@ export class AccountManagerService implements OnModuleInit {
         await this.accountModel.find().then((accounts) => {
             accounts.forEach((account) => {
                 account.profile.avatar = '';
-                this.users.set(account.id, account);
+                this.users.set(account._id.toString(), account);
                 this.connectedUsers.get(account.id) ? this.connectedUsers.set(account.id, account) : null;
             });
         });

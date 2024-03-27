@@ -114,14 +114,13 @@ export class LobbyGateway implements OnGatewayConnection {
     spectate(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         if (this.roomsManager.lobbies.get(lobbyId).isAvailable) return;
         socket.data.state = LobbyState.Spectate;
-        socket.join(lobbyId);
         // Ajouter car le socket observateur ne rejoint aucune salle avant ça
         const observer: Observer = {
             accountId: socket.data.accountId,
             name: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
         };
         this.roomsManager.lobbies.get(lobbyId).observers.push(observer);
-        this.server.to(lobbyId).emit(LobbyEvents.Spectate, this.roomsManager.lobbies.get(lobbyId));
+        socket.emit(LobbyEvents.Spectate, this.roomsManager.lobbies.get(lobbyId));
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} spectate le lobby ${lobbyId}`);
     }
