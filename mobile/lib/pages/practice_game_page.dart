@@ -80,6 +80,8 @@ class _PracticeGamePageState extends State<PracticeGamePage> {
               return EndGamePopup(
                 endMessage: gameManagerService.endGameMessage!,
                 gameMode: lobbyService.lobby.mode,
+                isObserver: false,
+
               );
             },
           );
@@ -117,9 +119,9 @@ class _PracticeGamePageState extends State<PracticeGamePage> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        OriginalCanvas(snapshot.data, '123'),
+                        OriginalCanvas(snapshot.data, '123', true),
                         SizedBox(width: 50),
-                        ModifiedCanvas(snapshot.data, '123'),
+                        ModifiedCanvas(snapshot.data, '123', true),
                       ],
                     );
                   } else {

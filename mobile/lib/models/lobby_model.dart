@@ -6,7 +6,7 @@ class Lobby {
   String? gameId;
   bool isAvailable;
   List<Player> players;
-  final List<Observers> observers;
+  final List<Observer> observers;
   final bool isCheatEnabled;
   final GameModes mode;
   final String? password;
@@ -79,7 +79,7 @@ class Lobby {
 
   static Lobby fromJson(Map<String, dynamic> json) {
     if (json['observers'] == []) {
-      json['observers'] = List<Observers>.empty();
+      json['observers'] = List<Observer>.empty();
     }
     if (json['players'] == []) {
       json['players'] = List<Player>.empty();
@@ -90,7 +90,7 @@ class Lobby {
       json['isAvailable'],
       json['players'].map<Player>((player) => Player.fromJson(player)).toList(),
       json['observers']
-          .map<Observers>((observers) => Observers.fromJson(observers))
+          .map<Observer>((observers) => Observer.fromJson(observers))
           .toList(),
       json['isCheatEnabled'],
       GameModes.values.firstWhere((element) => element.name == json['mode']),

@@ -71,6 +71,10 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
     final gameAreaService = Provider.of<GameAreaService>(context);
     final gameManagerService = context.watch<GameManagerService>();
     final lobbyService = context.watch<LobbyService>();
+    final isPlayerAnObserver = lobbyService.isObserver;
+
+    final canPlayerInteract = !isPlayerAnObserver; // TODO: Add condition for replay
+
     if (gameManagerService.game.gameId == '') {
       return Container(
         decoration: BoxDecoration(
@@ -92,6 +96,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
               return EndGamePopup(
                 endMessage: gameManagerService.endGameMessage!,
                 gameMode: lobbyService.lobby.mode,
+                isObserver: isPlayerAnObserver,
               );
             },
           );
@@ -115,7 +120,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             children: [
               Row(
                 children: [
-                  if (lobbyService.lobby.isCheatEnabled) ...[
+                  if (lobbyService.lobby.isCheatEnabled && !isPlayerAnObserver) ...[
                     ElevatedButton(
                       onPressed: () {
                         isCheatActivated = !isCheatActivated;
@@ -159,9 +164,9 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        OriginalCanvas(snapshot.data, '123'),
+                        OriginalCanvas(snapshot.data, '123', canPlayerInteract),
                         SizedBox(width: 50),
-                        ModifiedCanvas(snapshot.data, '123'),
+                        ModifiedCanvas(snapshot.data, '123', canPlayerInteract),
                       ],
                     );
                   } else {
@@ -190,36 +195,64 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                 ),
               ),
             ),
-          Positioned(
-            left: 8.0,
-            bottom: 8.0,
-            child: ElevatedButton(
-              onPressed: () {
-                Future.delayed(Duration.zero, () {
-                  if (ModalRoute.of(context)?.isCurrent ?? false) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AbandonPopup();
-                      },
-                    );
-                  }
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Color(0xFFEF6151),
-                backgroundColor: Color(0xFF2D1E16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+          isPlayerAnObserver
+              ? Positioned(
+                  left: 8.0,
+                  bottom: 8.0,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
+                      gameManagerService.disconnectSocket(); // No event sent to server
+                      lobbyService.setIsObserver(false);
+                      lobbyService.leaveLobby();
+                      Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Color(0xFFEF6151),
+                      backgroundColor: Color(0xFF2D1E16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    child: Text(
+                      'Quitter',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                )
+              : Positioned(
+                  left: 8.0,
+                  bottom: 8.0,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Future.delayed(Duration.zero, () {
+                        if (ModalRoute.of(context)?.isCurrent ?? false) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AbandonPopup();
+                            },
+                          );
+                        }
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Color(0xFFEF6151),
+                      backgroundColor: Color(0xFF2D1E16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    child: Text(
+                      'Abandonner',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              ),
-              child: Text(
-                'Abandonner',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(

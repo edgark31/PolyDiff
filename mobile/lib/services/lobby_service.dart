@@ -8,11 +8,13 @@ import 'package:mobile/services/socket_service.dart';
 class LobbyService extends ChangeNotifier {
   static GameModes _gameModes = GameModes.Classic;
   static bool _isCreator = false;
+  static bool _isObserver = false;
   static List<Lobby> _lobbies = [];
   static Lobby _lobby = Lobby.initial();
 
   GameModes get gameModes => _gameModes;
   bool get isCreator => _isCreator;
+  bool get isObserver => _isObserver;
   List<Lobby> get lobbies => _lobbies;
   Lobby get lobby => _lobby;
 
@@ -26,6 +28,11 @@ class LobbyService extends ChangeNotifier {
 
   void setIsCreator(bool newIsCreator) {
     _isCreator = newIsCreator;
+    notifyListeners();
+  }
+
+  void setIsObserver(bool newIsObserver) {
+    _isObserver = newIsObserver;
     notifyListeners();
   }
 
@@ -62,6 +69,16 @@ class LobbyService extends ChangeNotifier {
         'lobbyId': joinedLobbyId,
         'password': null, // mobile can't see or join password lobbies
       },
+    );
+  }
+
+  void spectateLobby(String? joinedLobbyId) {
+    setIsObserver(true);
+    setLobby(getLobbyFromLobbies(joinedLobbyId));
+    socketService.send(
+      SocketType.Lobby,
+      LobbyEvents.Spectate.name,
+      joinedLobbyId,
     );
   }
 
@@ -142,6 +159,7 @@ class LobbyService extends ChangeNotifier {
   }
 
   bool doesLobbyHavePassword() {
-    return lobby.password == null || lobby.password == ''; // Password lobbies are not displayed on mobile
+    return lobby.password == null ||
+        lobby.password == ''; // Password lobbies are not displayed on mobile
   }
 }

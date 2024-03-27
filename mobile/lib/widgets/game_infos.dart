@@ -28,6 +28,8 @@ class _GameInfosState extends State<GameInfos> {
     List<Player> players = lobbyService.lobby.players;
     String gameMode = lobbyService.lobby.mode.name;
     int nbPlayers = lobbyService.lobby.players.length;
+    String observerNames =
+        lobbyService.lobby.observers.map((e) => e.name).join(', ');
 
     String formattedTime =
         "${(timer ~/ 60).toString().padLeft(2, '0')}:${(timer % 60).toString().padLeft(2, '0')}";
@@ -66,6 +68,17 @@ class _GameInfosState extends State<GameInfos> {
             if (lobbyService.lobby.mode == GameModes.Classic) ...[
               Text(
                 'Nombre de différences présentes : $nbDifferencesPresent',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+            if (lobbyService.lobby.observers.isNotEmpty) ...[ // TODO : pretty this up
+              Text(
+                'Observateurs : $observerNames',
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,

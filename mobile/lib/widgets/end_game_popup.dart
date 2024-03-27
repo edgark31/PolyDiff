@@ -8,10 +8,12 @@ class EndGamePopup extends StatelessWidget {
   const EndGamePopup({
     required this.endMessage,
     required this.gameMode,
+    required this.isObserver,
   });
 
   final String endMessage;
   final GameModes gameMode;
+  final bool isObserver;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,7 @@ class EndGamePopup extends StatelessWidget {
                 },
                 backgroundColor: kMidOrange,
               ),
-              if (gameMode == GameModes.Classic) ...[
+              if (gameMode == GameModes.Classic && !isObserver) ...[
                 SizedBox(height: 10),
                 CustomButton(
                   text: 'Reprise Vidéo',
