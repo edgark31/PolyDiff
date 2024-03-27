@@ -27,6 +27,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     @ViewChild('originalCanvasFG', { static: false }) originalCanvasForeground!: ElementRef<HTMLCanvasElement>;
     @ViewChild('modifiedCanvasFG', { static: false }) modifiedCanvasForeground!: ElementRef<HTMLCanvasElement>;
 
+    remainingDifference: Coordinate[][];
     timer: number;
     nDifferencesFound: number;
     endMessage: string;
@@ -44,6 +45,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     private gameSubscription: Subscription;
     private nextGameSubscription: Subscription;
     private endMessageSubscription: Subscription;
+    private remainingDifferenceSubscription: Subscription;
     private onDestroy$: Subject<void>;
 
     // Services are needed for the dialog and dialog needs to talk to the parent component
@@ -70,17 +72,17 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.onDestroy$ = new Subject();
     }
 
-    private get differences(): Coordinate[][] {
-        return this.gameManager.differences;
-    }
-
     @HostListener('window:keydown', ['$event'])
     keyboardEvent(event: KeyboardEvent) {
         const eventHTMLElement = event.target as HTMLElement;
         if (eventHTMLElement.tagName !== INPUT_TAG_NAME) {
-            if (event.key === 't') {
-                const differencesCoordinates = ([] as Coordinate[]).concat(...this.differences);
-                this.clientSocket.send('game', GameEvents.Clic, { lobbyId: this.gameLobby.lobbyId, coordClic: differencesCoordinates });
+            if (event.key === 't' && this.lobby.isCheatEnabled && this.lobby.mode !== this.gameMode.Practice) {
+                if (this.gameAreaService.isCheatModeActivated) {
+                    this.clientSocket.send('game', GameEvents.CheatDeactivated);
+                } else {
+                    this.clientSocket.send('game', GameEvents.CheatActivated);
+                }
+                const differencesCoordinates = this.gameLobby?.differences ? ([] as Coordinate[]).concat(...this.remainingDifference) : [];
                 this.gameAreaService.toggleCheatMode(differencesCoordinates);
             }
         }
@@ -104,6 +106,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         });
         this.gameSubscription = this.gameManager.game$.subscribe((game: Game) => {
             this.gameLobby = game;
+            this.remainingDifference = this.gameLobby.differences as Coordinate[][];
         });
         this.nextGameSubscription = this.gameManager.nextGame$.subscribe((nextGame: Game) => {
             this.gameLobby = nextGame;
@@ -117,6 +120,11 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.showEndGameDialog(this.endMessage);
             this.welcome.onChatGame = false;
         });
+
+        this.remainingDifferenceSubscription = this.gameManager.remainingDifference$.subscribe((remainingDifference: Coordinate[][]) => {
+            this.remainingDifference = remainingDifference;
+        });
+
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.manage();
             this.globalChatService.updateLog();
@@ -140,6 +148,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.lobbySubscription?.unsubscribe();
             this.timeSubscription?.unsubscribe();
             this.endMessageSubscription?.unsubscribe();
+            this.remainingDifferenceSubscription?.unsubscribe();
             this.gameManager.off();
         }
         if (this.clientSocket.isSocketAlive('auth')) {
