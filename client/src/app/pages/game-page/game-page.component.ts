@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { GamePageDialogComponent } from '@app/components/game-page-dialog/game-page-dialog.component';
 import { INPUT_TAG_NAME } from '@app/constants/constants';
 import { CANVAS_MEASUREMENTS } from '@app/constants/image';
@@ -9,6 +8,7 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ImageService } from '@app/services/image-service/image.service';
+import { NavigationService } from '@app/services/navigation-service/navigation.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
@@ -49,7 +49,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
     constructor(
-        private router: Router,
+        // private router: Router,
         private imageService: ImageService,
         private clientSocket: ClientSocketService,
         private readonly gameAreaService: GameAreaService,
@@ -58,6 +58,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         private readonly matDialog: MatDialog,
         public welcome: WelcomeService,
         public globalChatService: GlobalChatService,
+        private navigationService: NavigationService,
     ) {
         this.nDifferencesFound = 0;
         this.timer = 0;
@@ -85,6 +86,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         }
     }
 
+    getMode(): string {
+        return this.navigationService.getPreviousUrl();
+    }
+
     ngOnInit(): void {
         this.clientSocket.connect(this.welcome.account.id as string, 'game');
         this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
@@ -110,7 +115,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.endMessageSubscription = this.gameManager.endMessage$.subscribe((endMessage: string) => {
             this.endMessage = endMessage;
             this.showEndGameDialog(this.endMessage);
-            // this.router.navigate(['/game-mode']);
             this.welcome.onChatGame = false;
         });
         if (this.clientSocket.isSocketAlive('auth')) {
@@ -160,11 +164,11 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.messageGlobal.push(chat);
     }
 
-    goPageChatGame(): void {
-        this.welcome.onChatGame = true;
-        this.clientSocket.disconnect('game');
-        this.router.navigate(['/chat']);
-    }
+    // goPageChatGame(): void {
+    //     this.welcome.onChatGame = true;
+    //     this.clientSocket.disconnect('game');
+    //     this.router.navigate(['/chat']);
+    // }
 
     showEndGameDialog(endingMessage: string): void {
         if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
@@ -181,7 +185,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             disableClose: true,
             panelClass: 'dialog',
         });
-        this.gameManager.abandonGame(this.lobby.lobbyId as string);
     }
 
     mouseClickOnCanvas(event: MouseEvent, isLeft: boolean) {
