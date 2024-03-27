@@ -6,7 +6,9 @@ import { Account, Theme } from '@common/game-interfaces';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
 // eslint-disable-next-line no-restricted-imports
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
+import { AccountEvents } from '@common/enums';
 import { Subject } from 'rxjs';
 @Injectable({
     providedIn: 'root',
@@ -29,13 +31,19 @@ export class WelcomeService {
     selectPasswordConfirm: string;
     isLinkValid: boolean;
     selectLanguage: string;
+
     language = LANGUAGES;
     isHistoryLogin: boolean;
     themePersonalization = THEME_PERSONALIZATION;
     currentLangageTranslate: Subject<string>;
+    private accountObservable: Subject<Account>;
 
-    constructor(private communication: CommunicationService, private sound: SoundService) {
+    constructor(private communication: CommunicationService, private sound: SoundService, private readonly clientSocket: ClientSocketService) {
         this.currentLangageTranslate = new Subject<string>();
+        this.accountObservable = new Subject<Account>();
+    }
+    get accountObservable$() {
+        return this.accountObservable.asObservable();
     }
 
     async validate(password: string): Promise<boolean> {
@@ -73,6 +81,18 @@ export class WelcomeService {
     }
     updateLangageTranslate() {
         this.currentLangageTranslate.next(this.account.profile.language);
+    }
+
+    updateAccountObservable() {
+        this.accountObservable = new Subject<Account>();
+        this.clientSocket.on('auth', AccountEvents.RefreshAccount, (account: Account) => {
+            this.accountObservable.next(account);
+        });
+    }
+    off(): void {
+        if (this.accountObservable && !this.accountObservable.closed) {
+            this.accountObservable?.unsubscribe();
+        }
     }
     setLoginState(state: boolean): void {
         localStorage.setItem('isLogged', String(state));

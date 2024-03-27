@@ -157,6 +157,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         MatSidenavModule,
         MatListModule,
         MatSliderModule,
+        MatPaginatorModule,
         RouterModule.forRoot(routes),
         TranslateModule.forRoot({
             loader: {

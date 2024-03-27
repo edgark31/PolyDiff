@@ -24,7 +24,7 @@ export class NavBarComponent {
     constructor(
         public welcomeService: WelcomeService,
         public gameManager: GameManagerService,
-        public clientsocket: ClientSocketService,
+        public clientSocket: ClientSocketService,
         public translate: TranslateService,
         public router: Router,
         public sound: SoundService,
@@ -42,7 +42,13 @@ export class NavBarComponent {
     }
 
     onSubmitHome(): void {
-        this.clientsocket.disconnect('auth');
+        this.clientSocket.disconnect('auth');
+        if (this.clientSocket.isSocketAlive('lobby')) {
+            this.clientSocket.disconnect('lobby');
+        }
+        if (this.clientSocket.isSocketAlive('game')) {
+            this.clientSocket.disconnect('game');
+        }
         // this.clientsocket.disconnect('lobby');
         // this.clientsocket.disconnect('game');
         this.welcomeService.selectName = '';

@@ -155,7 +155,7 @@ export class RoomManagerService {
 
     joinRoomObserver(lobbyId: string) {
         this.isObserver = true;
-        console.log("tu rejoins en tant qu'observateur" + lobbyId);
+
         this.clientSocket.send('lobby', LobbyEvents.Spectate, lobbyId);
     }
 

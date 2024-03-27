@@ -114,6 +114,7 @@ export class LobbyGateway implements OnGatewayConnection {
         if (this.roomsManager.lobbies.get(lobbyId).isAvailable) return;
         socket.data.state = LobbyState.Spectate;
         socket.join(lobbyId);
+        // Ajouter car le socket observateur ne rejoint aucune salle avant ça
         const observer: Observer = {
             accountId: socket.data.accountId,
             name: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
