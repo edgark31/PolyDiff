@@ -95,12 +95,13 @@ export class GameSheetComponent implements OnDestroy, OnInit {
                 timePlayed: 0,
             };
             this.clientSocketService.on('lobby', LobbyEvents.Start, () => {
-                this.welcomeService.onChatLobby = false;
+                this.welcomeService.onChatGame = true;
             });
             this.clientSocketService.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby = lobby;
                 this.gameManagerService.lobbyWaiting = this.lobby;
                 this.showLoadingDialog();
+                this.welcomeService.onChatGame = true;
                 this.router.navigate(['/game']);
                 this.roomManagerService.onStart(this.lobby.lobbyId as string);
             });

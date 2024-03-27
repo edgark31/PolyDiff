@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { NavigationService } from '@app/services/navigation-service/navigation.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Chat } from '@common/game-interfaces';
 
@@ -16,11 +17,15 @@ export class ChatBoxComponent {
     @Output() private addLobby: EventEmitter<string>;
     @Output() private addGame: EventEmitter<string>;
 
-    constructor(public router: Router, public welcome: WelcomeService) {
+    constructor(public router: Router, public welcome: WelcomeService, public navigationService: NavigationService) {
         // this.messages = [];
         this.add = new EventEmitter<string>();
         this.addLobby = new EventEmitter<string>();
         this.addGame = new EventEmitter<string>();
+    }
+
+    getMode(): string {
+        return this.navigationService.getPreviousUrl();
     }
 
     goPageChatGame(): void {
