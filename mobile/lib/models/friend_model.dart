@@ -1,40 +1,39 @@
 class Friend {
   String username;
-  String avatar;
-  List<String> friendUsernames;
-  List<String> commonFriendUsernames;
-  bool isFavorite;
+  String id;
+  List<Friend?> friends;
+  List<Friend?> commonFriends;
   bool isOnline;
+  bool isFavorite;
 
   Friend({
     required this.username,
-    required this.avatar,
-    this.friendUsernames = const [],
-    this.commonFriendUsernames = const [],
-    required this.isFavorite,
+    required this.id,
+    this.friends = const [],
+    this.commonFriends = const [],
     required this.isOnline,
+    required this.isFavorite,
   });
 
   factory Friend.fromJson(Map<String, dynamic> json) {
     return Friend(
       username: json['username'],
-      avatar: json['avatar'],
-      friendUsernames: List<String>.from(json['friendUsernames'] ?? []),
-      commonFriendUsernames:
-          List<String>.from(json['commonFriendUsernames'] ?? []),
-      isFavorite: json['isFavorite'],
+      id: json['id'],
+      friends: List<Friend>.from(json['friends'] ?? []),
+      commonFriends: List<Friend>.from(json['commonFriends'] ?? []),
       isOnline: json['isOnline'],
+      isFavorite: json['isFavorite'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'name': username,
-      'avatar': avatar,
-      'friendUsernames': friendUsernames,
-      'commonFriendNames': commonFriendUsernames,
-      'isFavorite': isFavorite,
+      'id': id,
+      'friends': friends,
+      'commonFriends': commonFriends,
       'isOnline': isOnline,
+      'isFavorite': isFavorite,
     };
   }
 
