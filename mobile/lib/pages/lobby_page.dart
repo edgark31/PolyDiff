@@ -63,7 +63,7 @@ class _LobbyPageState extends State<LobbyPage> {
           // }
           // Future.delayed(Duration(milliseconds: 2000), () {
           // Waiting for server to emit the created game from creator
-          Navigator.pushNamed(context, CLASSIC_ROUTE);
+          Navigator.pushNamed(context, GAME_ROUTE);
           // });
         }
       });
@@ -120,7 +120,7 @@ class _LobbyPageState extends State<LobbyPage> {
           print('Starting the lobby');
           lobbyService.startLobby();
           // TODO: Add loading message for creator
-          // Navigator.pushNamed(context, CLASSIC_ROUTE);
+          // Navigator.pushNamed(context, GAME_ROUTE);
         },
         backgroundColor: kMidGreen,
       );

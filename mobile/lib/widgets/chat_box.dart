@@ -50,9 +50,8 @@ class _ChatBoxState extends State<ChatBox> {
     final routeName = ModalRoute.of(context)?.settings.name;
     final lobbyService = context.read<LobbyService>();
     setState(() {
-      bool canPageShowLobbyMessages = routeName == LOBBY_ROUTE ||
-          routeName == CLASSIC_ROUTE ||
-          routeName == LIMITED_TIME_ROUTE;
+      bool canPageShowLobbyMessages =
+          routeName == LOBBY_ROUTE || routeName == GAME_ROUTE;
       canDisplayLobbyMessages = canPageShowLobbyMessages &&
           lobbyService.gameModes != GameModes.Practice;
       isGlobalChat = !canDisplayLobbyMessages;

@@ -74,7 +74,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
               gameManagerService.setupGame();
               lobbyService.setIsCreator(false); // TODO: clean this
               setState(() => isLoading = false);
-              Navigator.pushNamed(context, CLASSIC_ROUTE);
+              Navigator.pushNamed(context, GAME_ROUTE);
             }
           });
         }

@@ -17,23 +17,23 @@ import 'package:mobile/widgets/game_infos.dart';
 import 'package:mobile/widgets/game_loading.dart';
 import 'package:provider/provider.dart';
 
-class ClassicGamePage extends StatefulWidget {
-  static const routeName = CLASSIC_ROUTE;
+class GamePage extends StatefulWidget {
+  static const routeName = GAME_ROUTE;
 
-  ClassicGamePage();
+  GamePage();
 
   @override
-  State<ClassicGamePage> createState() => _ClassicGamePageState();
+  State<GamePage> createState() => _GamePageState();
 
   static Route<dynamic> route() {
     return MaterialPageRoute(
-      builder: (_) => ClassicGamePage(),
+      builder: (_) => GamePage(),
       settings: RouteSettings(name: routeName),
     );
   }
 }
 
-class _ClassicGamePageState extends State<ClassicGamePage> {
+class _GamePageState extends State<GamePage> {
   final ImageConverterService imageConverterService = ImageConverterService();
   final GameAreaService gameAreaService = Get.find();
   final GameManagerService gameManagerService = Get.find();
