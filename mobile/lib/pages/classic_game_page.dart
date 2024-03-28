@@ -4,7 +4,6 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game.dart';
-import 'package:mobile/models/observers_model.dart';
 import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
@@ -38,10 +37,10 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
   final ImageConverterService imageConverterService = ImageConverterService();
   final GameAreaService gameAreaService = Get.find();
   final GameManagerService gameManagerService = Get.find();
+  final tempGameManager = CoordinateConversionService();
   late Future<CanvasModel> imagesFuture;
   bool isChatBoxVisible = false;
   bool isCheatActivated = false;
-  final tempGameManager = CoordinateConversionService();
 
   @override
   void initState() {
@@ -206,7 +205,6 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                     gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
                     gameManagerService
                         .disconnectSocket(); // No event sent to server
-                    lobbyService.setIsObserver(false);
                     lobbyService.leaveLobby();
                     Navigator.pushNamed(context, DASHBOARD_ROUTE);
                   },
@@ -227,8 +225,9 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                     });
                   },
                 ),
-          if (lobbyService.lobby.observers.isNotEmpty)
-            _observerInfos(lobbyService.lobby.observers),
+          if (lobbyService.lobby.observers
+              .isNotEmpty) // TODO : Confirm with heavy client behavior if 0 observer
+            _observerInfos(lobbyService.lobby.observers.length),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -273,8 +272,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
     );
   }
 
-  Widget _observerInfos(List<Observer> observers) {
-    String observerNames = observers.map((e) => e.name).join(', ');
+  Widget _observerInfos(int nObservers) {
     return Positioned(
       right: 8.0,
       bottom: 8.0,
@@ -290,7 +288,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             Icon(Icons.remove_red_eye, color: Colors.white),
             SizedBox(width: 8),
             Text(
-              observerNames,
+              nObservers as String,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
