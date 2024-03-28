@@ -10,6 +10,8 @@ export 'game_history.dart';
 export 'lobby_model.dart';
 export 'observers_model.dart';
 export 'players.dart';
+export 'replay_game_model.dart';
+export 'replay_player_model.dart';
 export 'session_log.dart';
 export 'statistics.dart';
 export 'theme_model.dart';

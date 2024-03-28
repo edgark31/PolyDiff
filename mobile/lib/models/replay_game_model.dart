@@ -1,3 +1,5 @@
+import 'package:mobile/models/game.dart';
+
 class ReplayGame {
   String lobbyId;
   String gameId;
@@ -78,41 +80,4 @@ class Difference {
       isFound: isFound ?? this.isFound,
     );
   }
-}
-
-class Coordinate {
-  int x;
-  int y;
-
-  // To test canvas coordinate validation
-  Coordinate({required this.x, required this.y});
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Coordinate && other.x == x && other.y == y;
-  }
-
-  @override
-  int get hashCode => Object.hash(x, y);
-
-  factory Coordinate.fromJson(Map<String, dynamic> json) => Coordinate(
-        x: json['x'] ?? 0,
-        y: json['y'] ?? 0,
-      );
-
-  Coordinate copyWith({
-    int? x,
-    int? y,
-  }) {
-    return Coordinate(
-      x: x ?? this.x,
-      y: y ?? this.y,
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-        'x': x,
-        'y': y,
-      };
 }
