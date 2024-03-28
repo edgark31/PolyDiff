@@ -1,0 +1,82 @@
+{
+    "lobbyId": "lobby123",
+    "gameId": "66057aecdc8761442dcb68d7",
+    "nPlayers": 4,
+    "isCheatEnabled": true,
+    "timeLimit": 600,
+    "accountId": "player456",
+    "duration": 10,
+    "startTime": "2024-01-15T08:00:00Z",
+    "endTime": "2024-01-15T08:10:00Z",
+    "gameEvents": [
+        {
+            "timestamp": "2024-01-15T08:00:10Z",
+            "username": "player1",
+            "gameEvent": "StartGame"
+        },
+        {
+            "timestamp": "2024-01-15T08:01:30Z",
+            "username": "player2",
+            "gameEvent": "Click",
+            "coordinates": { "x": 50, "y": 100 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:02:15Z",
+            "username": "player3",
+            "gameEvent": "Found",
+            "coordinates": { "x": 120, "y": 200 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:03:45Z",
+            "username": "player4",
+            "gameEvent": "NotFound",
+            "coordinates": { "x": 300, "y": 400 },
+            "isMainCanvas": false
+        },
+        {
+            "timestamp": "2024-01-15T08:04:30Z",
+            "username": "player1",
+            "gameEvent": "Click",
+            "coordinates": { "x": 75, "y": 150 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:05:00Z",
+            "username": "player3",
+            "gameEvent": "Found",
+            "coordinates": { "x": 180, "y": 220 },
+            "isMainCanvas": false
+        },
+        {
+            "timestamp": "2024-01-15T08:06:30Z",
+            "username": "player4",
+            "gameEvent": "CheatActivated"
+        },
+        {
+            "timestamp": "2024-01-15T08:07:15Z",
+            "username": "player3",
+            "gameEvent": "CheatDeactivated"
+        },
+        {
+            "timestamp": "2024-01-15T08:08:00Z",
+            "username": "playerTwo",
+            "gameEvent": "Click",
+            "coordinates": { "x": 85, "y": 160 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:09:45Z",
+            "username": "playerFour",
+            "gameEvent": "NotFound",
+            "coordinates": { "x": 190, "y": 230 },
+            "isMainCanvas": false
+        },
+        {
+            "timestamp": "2024-01-15T08:10:00Z",
+            "username": "playerOne",
+            "gameEvent": "EndGame"
+        }
+    ]
+}
