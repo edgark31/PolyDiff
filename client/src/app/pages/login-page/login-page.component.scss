@@ -1,31 +1,46 @@
+@import url('https://fonts.cdnfonts.com/css/troika-2');
+
 form {
+    font-family: 'Troika', sans-serif;
+    -webkit-text-stroke: 1px rgb(0, 0, 0);
     max-width: 400px;
     padding: 16px 16px 24px;
     box-shadow: 0 2px 32px rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
-    background-color: rgb(8, 109, 11);
-    margin: auto;
+    background-color: #e8a430;
+    margin-top: 16%;
+    margin-left: 38%;
+    border-radius: 10px;
+    
 
     h1 {
         color: #ffffff;
         padding-bottom: 2px;
         border-bottom: 1px solid #ccc;
+        font-family: 'Troika', sans-serif;
+        -webkit-text-stroke: 1px rgb(0, 0, 0);
     }
+}
+
+.test {
+    font-family: 'Troika', sans-serif;
+    font-size: 20px;
 }
 
 .form-control {
     vertical-align: middle;
     margin-bottom: 16px;
+    font-family: 'Troika', sans-serif;
+    -webkit-text-stroke: 1px rgb(0, 0, 0);
     input,
     label {
         display: block;
     }
 
     label {
-        font-size: 0.9rem;
+        font-size: 1.2rem;
         font-weight: 500;
         margin-bottom: 4px;
-        color: white;
+        color: rgb(255, 255, 255);
     }
 
     input {
@@ -39,13 +54,14 @@ form {
 }
 
 button:hover {
-    background: rgb(11, 145, 15);
+    background: #dd9d2e;
 }
 
 button {
+    font-family: 'Troika', sans-serif;
     margin-bottom: 10px;
-    background-color: rgb(8, 109, 11);
-    color: #fff;
+    background-color: #e8a430;
+    color: #ffffff;
     padding: 8px 24px;
     border-radius: 4px;
     border: 1px solid #000000;
@@ -65,11 +81,12 @@ button {
 }
 
 .feedback {
+  font-family: 'Troika', sans-serif;
   text-align: center;
   color: red;
   font-style: italic;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-  font-size: 0.8rem;
+  font-size: 1rem;
   margin-top: 4px;
   margin-bottom: 0;
 }
