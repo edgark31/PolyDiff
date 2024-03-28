@@ -122,10 +122,10 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         if (this.clientSocketService.isSocketAlive('lobby')) {
-            this.clientSocketService.disconnect('lobby');
+            // this.clientSocketService.disconnect('lobby');
             this.lobbySubscription?.unsubscribe();
             this.chatSubscription?.unsubscribe();
-            this.roomManagerService.off();
+            // this.roomManagerService.off();
             this.gameManager.lobbyWaiting = this.lobby;
         }
         if (this.clientSocketService.isSocketAlive('auth')) {

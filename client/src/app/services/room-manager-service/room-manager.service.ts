@@ -17,7 +17,8 @@ export class RoomManagerService {
     wait: boolean;
     game: Game;
     isObserver: boolean;
-    private lobbies: Subject<Lobby[]>;
+    lobbiesGame: Lobby[];
+    lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
     // private playerNameAvailability: Subject<PlayerNameAvailability>;
     // private rooms1V1AvailabilityByGameId: Subject<RoomAvailability>;
@@ -94,7 +95,6 @@ export class RoomManagerService {
             this.lobby?.unsubscribe();
         }
         if (this.message && !this.message.closed) this.message?.unsubscribe();
-        if (this.lobbies && !this.lobbies.closed) this.lobbies?.unsubscribe();
     }
 
     sendMessage(lobbyId: string | undefined, message: string): void {
@@ -249,11 +249,16 @@ export class RoomManagerService {
 
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
+            this.lobbiesGame = lobbies;
         });
 
-        this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
-            this.lobbies.next(lobbies);
-        });
+        // this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
+        //     this.lobbies.next(lobbies);
+        //     this.lobbiesGame = lobbies;
+        //     lobbies.forEach((element) => {
+        //         console.log(element.observers.length);
+        //     });
+        // });
         this.clientSocket.on('lobby', ChannelEvents.LobbyMessage, (chat: Chat) => {
             this.message.next(chat);
         });

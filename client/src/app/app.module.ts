@@ -44,6 +44,7 @@ import { CanvasUnderButtonsComponent } from './components/canvas-under-buttons/c
 import { ChatBoxComponent } from './components/chat-box/chat-box.component';
 import { ConfigDialogComponent } from './components/config-dialog/config-dialog.component';
 import { DeleteResetConfirmationDialogComponent } from './components/delete-reset-confirmation-dialog/delete-reset-confirmation-dialog.component';
+import { FriendsInfosComponent } from './components/friends-infos/friends-infos.component';
 import { GamePageDialogComponent } from './components/game-page-dialog/game-page-dialog.component';
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
 import { HistoryLoginComponent } from './components/history-login/history-login.component';
@@ -129,6 +130,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         WaitingGameDialogComponent,
         FriendPageComponent,
         HistoryLoginComponent,
+        FriendsInfosComponent,
     ],
     imports: [
         AppMaterialModule,

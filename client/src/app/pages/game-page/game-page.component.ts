@@ -13,7 +13,7 @@ import { ReplayService } from '@app/services/replay-service/replay.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
-import { GameEvents, GameModes, GamePageEvent } from '@common/enums';
+import { GameEvents, GameModes, GamePageEvent, MessageTag } from '@common/enums';
 import { Chat, Game, Lobby } from '@common/game-interfaces';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
@@ -35,14 +35,18 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     messages: Chat[];
     messageGlobal: Chat[];
     isReplayAvailable: boolean;
+    lobbies: Lobby[] = [];
     gameLobby: Game;
     lobby: Lobby;
+    observer: number;
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
     chatSubscriptionGlobal: Subscription;
     timeSubscription: Subscription;
     lobbySubscription: Subscription;
+    lobbiesSubscription: Subscription;
+    observersSubscription: Subscription;
     private gameSubscription: Subscription;
     private nextGameSubscription: Subscription;
     private endMessageSubscription: Subscription;
@@ -98,17 +102,16 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.clientSocket.connect(this.welcome.account.id as string, 'game');
-        if (!this.roomManager.isObserver) this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
-        else this.clientSocket.send('game', GameEvents.Spectate, this.gameManager.lobbyWaiting.lobbyId);
         this.gameManager.manageSocket();
-        this.lobby = this.gameManager.lobbyWaiting;
-        this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
-            this.lobby = lobby;
-            this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
-        });
+        if (this.roomManager.isObserver) {
+            this.clientSocket.send('game', GameEvents.Spectate, this.gameManager.lobbyWaiting.lobbyId);
+        }
+        this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
+
         this.chatSubscription = this.gameManager.message$.subscribe((message: Chat) => {
             this.receiveMessage(message);
         });
+
         this.gameSubscription = this.gameManager.game$.subscribe((game: Game) => {
             this.gameLobby = game;
             this.remainingDifference = this.gameLobby.differences as Coordinate[][];
@@ -130,6 +133,16 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.remainingDifference = remainingDifference;
         });
 
+        this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
+            this.lobby = lobby;
+            this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
+            this.messages = this.lobby.chatLog?.chat as Chat[];
+            this.messages.forEach((message: Chat) => {
+                if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Sent;
+                else message.tag = MessageTag.Received;
+            });
+        });
+        // this.lobby = this.gameManager.lobbyWaiting;
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.manage();
             this.globalChatService.updateLog();
@@ -147,13 +160,17 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.onDestroy$.next();
         this.onDestroy$.complete();
         if (this.clientSocket.isSocketAlive('game')) {
+            this.clientSocket.disconnect('lobby');
             this.gameSubscription?.unsubscribe();
             this.nextGameSubscription?.unsubscribe();
             this.chatSubscription?.unsubscribe();
             this.lobbySubscription?.unsubscribe();
             this.timeSubscription?.unsubscribe();
             this.endMessageSubscription?.unsubscribe();
+            this.lobbySubscription?.unsubscribe();
             this.remainingDifferenceSubscription?.unsubscribe();
+            this.observersSubscription?.unsubscribe();
+            this.roomManager.off();
             this.gameManager.off();
         }
         if (this.clientSocket.isSocketAlive('auth')) {

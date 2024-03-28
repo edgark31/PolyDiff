@@ -100,10 +100,10 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
-        if (this.clientSocket.isSocketAlive('lobby') && this.roomManagerService.isObserver) {
-            this.clientSocket.disconnect('lobby');
-            this.roomManagerService.off();
-        }
+        // if (this.clientSocket.isSocketAlive('lobby') && this.roomManagerService.isObserver) {
+        //     // this.clientSocket.disconnect('lobby');
+        //     this.roomManagerService.off();
+        // }
         this.navigationService.setPreviousUrl('/classic');
         this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();

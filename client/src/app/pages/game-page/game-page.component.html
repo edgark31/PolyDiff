@@ -1,5 +1,13 @@
 <div id="game-page" class="justified">
     <div  class="game-infos information-header justified">
+        <mat-icon
+        class="eye-icon"
+        [class.eye-open]="lobby.observers.length>0"
+        [class.eye-closed]="lobby.observers.length===0"
+      >
+        {{ lobby.observers.length>0 ? 'visibility' : 'visibility_off' }}
+      </mat-icon>
+      <h1 *ngIf="lobby.observers.length>0" id="length"> {{ lobby.observers.length }} </h1>
         <h1 id = "title">{{ gameLobby.name }}</h1>
             <div class="game-feedback">
                 <h1>Mode : {{ lobby.mode }}</h1>

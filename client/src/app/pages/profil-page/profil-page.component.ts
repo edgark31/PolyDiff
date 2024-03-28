@@ -57,7 +57,6 @@ export class ProfilPageComponent implements AfterViewInit, OnInit, OnDestroy {
             console.log(session.isWinner);
         });
         this.clientSocket.send('auth', AccountEvents.RefreshAccount);
-        console.log();
         console.log(this.welcomeService.account);
     }
 
