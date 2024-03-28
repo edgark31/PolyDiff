@@ -7,7 +7,7 @@ import 'package:mobile/services/socket_service.dart';
 
 class ChatService extends ChangeNotifier {
   static final List<Chat> _globalMessages = [];
-  static final List<Chat> _lobbyMessages = [];
+  static List<Chat> _lobbyMessages = [];
   final SocketService socketService = Get.find();
   final LobbyService lobbyService = Get.find();
 
@@ -34,7 +34,7 @@ class ChatService extends ChangeNotifier {
   }
 
   void sendGameMessage(String message) {
-    socketService.send(
+  socketService.send(
       SocketType.Game,
       ChannelEvents.SendGameMessage.name,
       {
@@ -55,36 +55,24 @@ class ChatService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addLobbyMessage(Chat message) {
-    _lobbyMessages.add(message);
-    notifyListeners();
-  }
-
   void setupGlobalChat() {
     setGlobalChatListeners();
     getGlobalMessages();
   }
 
   void setupLobby() {
-    clearLobbyMessages();
-    setLobbyChatListeners();
+    _lobbyMessages.clear(); // safety check
+    if (lobbyService.lobby.chatLog != null) {
+      _lobbyMessages = lobbyService.lobby.chatLog!.chat;
+    } else {
+      _lobbyMessages = [];
+    }
+    
   }
 
-  void setupGame() {
-    clearLobbyMessages();
-    setGameChatListeners();
-  }
-
-  void setLobbyMessages(List<Chat> messages) {
-    _lobbyMessages.clear();
-    _lobbyMessages.addAll(messages);
-    notifyListeners();
-  }
-
-  void clearLobbyMessages() {
-    _lobbyMessages.clear();
-    notifyListeners();
-  }
+  // void setupGame() {
+  //   setGameChatListeners();
+  // }
 
   void getGlobalMessages() {
     socketService.send(SocketType.Auth, ChannelEvents.UpdateLog.name);
@@ -101,15 +89,15 @@ class ChatService extends ChangeNotifier {
     });
   }
 
-  void setLobbyChatListeners() {
-    socketService.on(SocketType.Lobby, ChannelEvents.LobbyMessage.name, (data) {
-      addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
-    });
-  }
+  // void setLobbyChatListeners() {
+  //   socketService.on(SocketType.Lobby, ChannelEvents.LobbyMessage.name, (data) {
+  //     addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
+  //   });
+  // }
 
-  void setGameChatListeners() {
-    socketService.on(SocketType.Game, ChannelEvents.GameMessage.name, (data) {
-      addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
-    });
-  }
+  // void setGameChatListeners() {
+  //   socketService.on(SocketType.Game, ChannelEvents.GameMessage.name, (data) {
+  //     addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
+  //   });
+  // }
 }

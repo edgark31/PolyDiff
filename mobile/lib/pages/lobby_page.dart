@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
-import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
@@ -32,7 +31,6 @@ class _LobbyPageState extends State<LobbyPage> {
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
-    final chatService = context.watch<ChatService>();
     final socketService = context.watch<SocketService>();
     final infoService = context.watch<InfoService>();
     final gameManagerService = context.watch<GameManagerService>();
@@ -53,18 +51,9 @@ class _LobbyPageState extends State<LobbyPage> {
         if (ModalRoute.of(context)?.isCurrent ?? false) {
           print('Current Lobby is started navigating to GamePage');
           socketService.setup(SocketType.Game, infoService.id);
-          chatService.setupGame();
           gameManagerService.setupGame();
-          // gameManagerService.setListeners(); // in setup
-          // gameManagerService.setEndGameMessage(null); // in setup
-          // if (lobbyService.isCreator) {
           lobbyService.setIsCreator(false); // TODO: clean this
-          // gameManagerService.startGame(lobbyService.lobby.lobbyId); // in setup
-          // }
-          // Future.delayed(Duration(milliseconds: 2000), () {
-          // Waiting for server to emit the created game from creator
           Navigator.pushNamed(context, GAME_ROUTE);
-          // });
         }
       });
     }

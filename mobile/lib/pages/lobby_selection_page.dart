@@ -3,7 +3,6 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
-import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
@@ -93,7 +92,6 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     String playerNames = lobby.players.map((e) => e.name).join(', ');
     String observerNames = lobby.observers.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
-    final chatService = context.watch<ChatService>();
     final gameManagerService = context.watch<GameManagerService>();
 
     return Padding(
@@ -137,7 +135,6 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                         : CustomButton(
                             press: () {
                               lobbyService.joinLobby(lobby.lobbyId);
-                              chatService.setLobbyMessages(lobby.chatLog!.chat);
                               Navigator.pushNamed(context, LOBBY_ROUTE);
                             },
                             text: 'Rejoindre cette salle d\'attente',
@@ -150,11 +147,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                           print(
                               'Player is joining as observer in lobby ${lobby.lobbyId}');
                           lobbyService.spectateLobby(lobby.lobbyId);
-                          chatService.setLobbyMessages(lobby.chatLog!.chat);
                           gameManagerService.spectateLobby(lobby.lobbyId);
-                          chatService.setGameChatListeners();
-                          lobbyService.setIsCreator(
-                              false); // TODO : Check if this is needed
                           Navigator.pushNamed(context, GAME_ROUTE);
                         },
                         backgroundColor: kMidGreen,

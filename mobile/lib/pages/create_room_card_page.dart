@@ -72,7 +72,6 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
               print('Current Lobby is started navigating to GamePage');
               socketService.setup(SocketType.Game, infoService.id);
               gameManagerService.setupGame();
-              lobbyService.setIsCreator(false); // TODO: clean this
               setState(() => isLoading = false);
               Navigator.pushNamed(context, GAME_ROUTE);
             }
