@@ -1,0 +1,131 @@
+{
+    "lobbyId": "lobby123",
+    "gameId": "66057aecdc8761442dcb68d7",
+    "numberOfPlayers": 4,
+    "isCheatEnabled": true,
+    "timeLimit": 600,
+    "accountId": "player456",
+    "duration": 124,
+    "startTime": "2024-01-15T08:01:10Z",
+    "endTime": "2024-01-15T08:03:14Z",
+    "gameEvents": [
+        {
+            "timestamp": "2024-01-15T08:01:10Z",
+            "username": "player1",
+            "gameEvent": "StartGame"
+        },
+        {
+            "timestamp": "2024-01-15T08:01:30Z",
+            "username": "player2",
+            "gameEvent": "Click",
+            "coordinates": { "x": 50, "y": 100 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:01:32Z",
+            "username": "player2",
+            "gameEvent": "Found",
+            "coordinates": { "x": 50, "y": 100 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:01:34Z",
+            "username": "player3",
+            "gameEvent": "Click",
+            "coordinates": { "x": 120, "y": 200 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:01:36Z",
+            "username": "player3",
+            "gameEvent": "Found",
+            "coordinates": { "x": 120, "y": 200 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:01:36Z",
+            "username": "player4",
+            "gameEvent": "Click",
+            "coordinates": { "x": 150, "y": 100 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:01:38Z",
+            "username": "player4",
+            "gameEvent": "NotFound",
+            "coordinates": { "x": 150, "y": 100 },
+            "isMainCanvas": false
+        },
+        {
+            "timestamp": "2024-01-15T08:01:50Z",
+            "username": "player1",
+            "gameEvent": "Click",
+            "coordinates": { "x": 75, "y": 150 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:01:52Z",
+            "username": "player1",
+            "gameEvent": "Found",
+            "coordinates": { "x": 75, "y": 150 },
+            "isMainCanvas": false
+        },
+        {
+            "timestamp": "2024-01-15T08:02:00Z",
+            "username": "player4",
+            "gameEvent": "CheatActivated"
+        },
+        {
+            "timestamp": "2024-01-15T08:02:05Z",
+            "username": "player4",
+            "gameEvent": "CheatDeactivated"
+        },
+        {
+            "timestamp": "2024-01-15T08:03:10Z",
+            "username": "player4",
+            "gameEvent": "Click",
+            "coordinates": { "x": 85, "y": 160 },
+            "isMainCanvas": false
+        },
+        {
+            "timestamp": "2024-01-15T08:03:12Z",
+            "username": "player4",
+            "gameEvent": "Found",
+            "coordinates": { "x": 85, "y": 160 },
+            "isMainCanvas": false
+        },
+        {
+            "timestamp": "2024-01-15T08:03:10Z",
+            "username": "player3",
+            "gameEvent": "Click",
+            "coordinates": { "x": 85, "y": 160 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:03:12Z",
+            "username": "player3",
+            "gameEvent": "Found",
+            "coordinates": { "x": 85, "y": 160 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:03:10Z",
+            "username": "player4",
+            "gameEvent": "Click",
+            "coordinates": { "x": 100, "y": 165 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:03:12Z",
+            "username": "player4",
+            "gameEvent": "Found",
+            "coordinates": { "x": 100, "y": 165 },
+            "isMainCanvas": true
+        },
+        {
+            "timestamp": "2024-01-15T08:3:14Z",
+            "username": "player4",
+            "gameEvent": "EndGame"
+        }
+    ]
+}
