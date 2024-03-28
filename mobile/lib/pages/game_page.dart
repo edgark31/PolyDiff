@@ -288,7 +288,7 @@ class _GamePageState extends State<GamePage> {
             Icon(Icons.remove_red_eye, color: Colors.white),
             SizedBox(width: 8),
             Text(
-              nObservers as String,
+              nObservers.toString(),
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

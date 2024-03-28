@@ -7,12 +7,10 @@ import 'package:mobile/services/socket_service.dart';
 
 class ChatService extends ChangeNotifier {
   static final List<Chat> _globalMessages = [];
-  static List<Chat> _lobbyMessages = [];
   final SocketService socketService = Get.find();
   final LobbyService lobbyService = Get.find();
 
   List<Chat> get globalMessages => List.unmodifiable(_globalMessages);
-  List<Chat> get lobbyMessages => List.unmodifiable(_lobbyMessages);
 
   void sendGlobalMessage(String message) {
     socketService.send(
@@ -60,20 +58,6 @@ class ChatService extends ChangeNotifier {
     getGlobalMessages();
   }
 
-  void setupLobby() {
-    _lobbyMessages.clear(); // safety check
-    if (lobbyService.lobby.chatLog != null) {
-      _lobbyMessages = lobbyService.lobby.chatLog!.chat;
-    } else {
-      _lobbyMessages = [];
-    }
-    
-  }
-
-  // void setupGame() {
-  //   setGameChatListeners();
-  // }
-
   void getGlobalMessages() {
     socketService.send(SocketType.Auth, ChannelEvents.UpdateLog.name);
   }
@@ -88,16 +72,4 @@ class ChatService extends ChangeNotifier {
       addGlobalChatList(chatLog.chat);
     });
   }
-
-  // void setLobbyChatListeners() {
-  //   socketService.on(SocketType.Lobby, ChannelEvents.LobbyMessage.name, (data) {
-  //     addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
-  //   });
-  // }
-
-  // void setGameChatListeners() {
-  //   socketService.on(SocketType.Game, ChannelEvents.GameMessage.name, (data) {
-  //     addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
-  //   });
-  // }
 }

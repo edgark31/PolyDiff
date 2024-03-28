@@ -88,9 +88,11 @@ class _ChatBoxState extends State<ChatBox> {
   Widget build(BuildContext context) {
     final infoService = context.watch<InfoService>();
     final chatService = context.watch<ChatService>();
+    final lobbyService = context.read<LobbyService>();
 
-    final messages =
-        isGlobalChat ? chatService.globalMessages : chatService.lobbyMessages;
+    final messages = isGlobalChat
+        ? chatService.globalMessages
+        : lobbyService.lobby.chatLog?.chat ?? [];
     return Container(
       width: 500,
       height: 700,
