@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/replay_game_model.dart';
 import 'package:mobile/models/replay_player_model.dart';
 
-class RoomDataProvider extends ChangeNotifier {
+class ReplayDataProvider extends ChangeNotifier {
   Map<String, dynamic> _roomData = {};
   List<Difference> _displayDifference = [];
   int _removedDifferences = 0;
