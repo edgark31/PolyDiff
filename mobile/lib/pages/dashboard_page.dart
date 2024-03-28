@@ -50,6 +50,7 @@ class _DashboardPageState extends State<DashboardPage> {
       text: typeText,
       press: () {
         socketService.setup(SocketType.Lobby, infoService.id);
+        chatService.setupLobby();
         lobbyService.setupLobby(type);
         if (type == GameModes.Practice) {
           Navigator.pushNamed(context, CREATE_ROOM_CARD_ROUTE);

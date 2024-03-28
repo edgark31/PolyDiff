@@ -7,10 +7,12 @@ import 'package:mobile/services/socket_service.dart';
 
 class ChatService extends ChangeNotifier {
   static final List<Chat> _globalMessages = [];
+  static List<Chat> _lobbyMessages = []; // Remove when ChatLog set up
   final SocketService socketService = Get.find();
   final LobbyService lobbyService = Get.find();
 
   List<Chat> get globalMessages => List.unmodifiable(_globalMessages);
+  List<Chat> get lobbyMessages => List.unmodifiable(_lobbyMessages);  // Remove when ChatLog set up
 
   void sendGlobalMessage(String message) {
     socketService.send(
@@ -53,10 +55,52 @@ class ChatService extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  void addLobbyMessage(Chat message) { // Remove when ChatLog set up
+    _lobbyMessages.add(message);
+    notifyListeners();
+  }
+
+
   void setupGlobalChat() {
     setGlobalChatListeners();
     getGlobalMessages();
   }
+
+  void setupLobby () { // Remove when ChatLog set up
+    clearLobbyMessages();
+    setLobbyChatListeners();
+  }
+
+  void setupGame() { // Remove when ChatLog set up
+    clearLobbyMessages();
+    setGameChatListeners();
+  }
+
+  void setLobbyMessages(List<Chat> messages) { // Remove when ChatLog set up
+    _lobbyMessages.clear();
+    _lobbyMessages.addAll(messages);
+    notifyListeners();
+  }
+
+  void clearLobbyMessages() { // Remove when ChatLog set up
+    _lobbyMessages.clear();
+    notifyListeners();
+  }
+
+  // void setupLobby() {  // Remove when ChatLog set up
+  //   _lobbyMessages.clear(); // safety check
+  //   if (lobbyService.lobby.chatLog != null) {
+  //     _lobbyMessages = lobbyService.lobby.chatLog!.chat;
+  //   } else {
+  //     _lobbyMessages = [];
+  //   }
+    
+  // }
+
+  // void setupGame() { // Remove when ChatLog set up
+  //   setGameChatListeners();
+  // }
 
   void getGlobalMessages() {
     socketService.send(SocketType.Auth, ChannelEvents.UpdateLog.name);
@@ -72,4 +116,17 @@ class ChatService extends ChangeNotifier {
       addGlobalChatList(chatLog.chat);
     });
   }
+
+    void setLobbyChatListeners() { // Remove when ChatLog set up
+    socketService.on(SocketType.Lobby, ChannelEvents.LobbyMessage.name, (data) {
+      addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
+    });
+  }
+
+  void setGameChatListeners() { // Remove when ChatLog set up
+    socketService.on(SocketType.Game, ChannelEvents.GameMessage.name, (data) {
+      addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
+    });
+  }
+
 }
