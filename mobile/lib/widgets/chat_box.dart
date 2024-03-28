@@ -4,6 +4,7 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
+import 'package:mobile/services/lobby_service.dart';
 import 'package:provider/provider.dart';
 
 class ChatBox extends StatefulWidget {
@@ -47,10 +48,13 @@ class _ChatBoxState extends State<ChatBox> {
 
   void _setInitialChatMode() {
     final routeName = ModalRoute.of(context)?.settings.name;
+    final lobbyService = context.read<LobbyService>();
     setState(() {
-      canDisplayLobbyMessages = routeName == LOBBY_ROUTE ||
+      bool canPageShowLobbyMessages = routeName == LOBBY_ROUTE ||
           routeName == CLASSIC_ROUTE ||
           routeName == LIMITED_TIME_ROUTE;
+      canDisplayLobbyMessages = canPageShowLobbyMessages &&
+          lobbyService.gameModes != GameModes.Practice;
       isGlobalChat = !canDisplayLobbyMessages;
     });
   }

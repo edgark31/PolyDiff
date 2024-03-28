@@ -54,10 +54,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     final LobbyService lobbyService = Get.find();
     final SocketService socketService = Get.find();
     final GameManagerService gameManagerService = Get.find();
-    final LobbySelectionService lobbySelectionService = Get.find();
     final infoService = context.read<InfoService>();
-    lobbySelectionService.setIsCheatEnabled(false); // Practice has no cheat
-    lobbySelectionService.setGameDuration(0); // Practice has no time limit
     lobbyService.createLobby();
     print('createLobby() called');
     Future.delayed(Duration(milliseconds: 500), () {
