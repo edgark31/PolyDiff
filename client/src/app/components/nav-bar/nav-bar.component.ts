@@ -2,7 +2,9 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
+import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
+import { Sound, Theme } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -22,20 +24,40 @@ export class NavBarComponent {
     constructor(
         public welcomeService: WelcomeService,
         public gameManager: GameManagerService,
-        public clientsocket: ClientSocketService,
+        public clientSocket: ClientSocketService,
         public translate: TranslateService,
         public router: Router,
+        public sound: SoundService,
     ) {
         this.configRoute = '/admin';
         this.homeRoute = '/home';
         this.chatRoute = '/chat';
         this.profileRoute = '/profil';
+        this.friendsRoute = '/friend';
+    }
+
+    goProfile(): void {
+        // this.clientsocket.send('auth', AccountEvents.RefreshAccount);
+        this.router.navigate(['/profil']);
     }
 
     onSubmitHome(): void {
-        this.clientsocket.disconnect('auth');
+        this.clientSocket.disconnect('auth');
+        if (this.clientSocket.isSocketAlive('lobby')) {
+            this.clientSocket.disconnect('lobby');
+        }
+        if (this.clientSocket.isSocketAlive('game')) {
+            this.clientSocket.disconnect('game');
+        }
         // this.clientsocket.disconnect('lobby');
         // this.clientsocket.disconnect('game');
+        this.welcomeService.selectName = '';
+        this.welcomeService.selectAvatar = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
+        this.welcomeService.selectAvatarRegister = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
+        this.welcomeService.selectTheme = {} as Theme;
+        this.welcomeService.selectLanguage = '';
+        this.sound.correctSoundEffect = {} as Sound;
+        this.sound.incorrectSoundEffect = {} as Sound;
         this.router.navigate(['/login']);
     }
     onManageGames(): void {

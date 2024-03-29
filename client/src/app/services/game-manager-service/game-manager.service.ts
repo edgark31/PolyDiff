@@ -1,9 +1,10 @@
-import { ChannelEvents, GameEvents, MessageEvents, MessageTag } from './../../../../../common/enums';
+import { ChannelEvents, GameEvents, GameModes, LobbyEvents, MessageEvents, MessageTag } from './../../../../../common/enums';
 /* eslint-disable no-console */
 import { Injectable } from '@angular/core';
 import { ReplayEvent } from '@app/interfaces/replay-actions';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
+import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
@@ -33,6 +34,7 @@ export class GameManagerService {
     private abandon: Subject<string>;
     private endMessage: Subject<string>;
     private remainingDifference: Subject<Coordinate[][]>;
+    private lobbies: Subject<Lobby[]>;
     private players: Subject<Players>;
     private isFirstDifferencesFound: Subject<boolean>;
     private isGameModeChanged: Subject<boolean>;
@@ -46,6 +48,7 @@ export class GameManagerService {
         private readonly gameAreaService: GameAreaService,
         private readonly soundService: SoundService,
         private readonly welcome: WelcomeService,
+        public roomManager: RoomManagerService,
     ) {
         this.currentGame = new Subject<Game>();
         this.lobbyGame = new Subject<Lobby>(); // used
@@ -55,6 +58,7 @@ export class GameManagerService {
         this.players = new Subject<Players>();
         this.game = new Subject<Game>();
         this.nextGame = new Subject<Game>();
+        this.lobbies = new Subject<Lobby[]>();
         this.timerLobby = new Subject<number>();
         this.message = new Subject<Chat>();
         this.abandon = new Subject<string>();
@@ -82,6 +86,11 @@ export class GameManagerService {
     get differencesFound$() {
         return this.differencesFound.asObservable().pipe(filter((differencesFound) => !!differencesFound));
     }
+
+    get lobbies$() {
+        return this.lobbies.asObservable();
+    }
+
     get message$() {
         return this.message.asObservable();
     }
@@ -164,7 +173,9 @@ export class GameManagerService {
     }
 
     abandonGame(lobbyId: string): void {
+        console.log('on y est presque' + this.roomManager.isObserver);
         this.clientSocket.send('game', GameEvents.AbandonGame, lobbyId);
+        console.log('ALLLEZZZ');
     }
 
     setIsLeftCanvas(isLeft: boolean): void {
@@ -206,9 +217,27 @@ export class GameManagerService {
         this.remainingDifference = new Subject<Coordinate[][]>();
         this.clientSocket.on('game', GameEvents.StartGame, (game: Game) => {
             this.game.next(game);
-            this.lobbyGame.next(this.lobbyWaiting);
+            this.lobbyGame.next(
+                this.roomManager.lobbiesGame.find((lobby: Lobby) => this.lobbyWaiting.lobbyId === lobby.lobbyId) ?? this.lobbyWaiting,
+            );
         });
 
+        if (this.lobbyWaiting.mode === GameModes.Classic)
+            this.clientSocket.on('game', GameEvents.Spectate, (data: { lobby: Lobby; game: Game }) => {
+                if (data.game) this.game.next(data.game);
+                this.lobbyGame.next(data.lobby);
+                console.log(data.lobby.observers.length);
+            });
+        else
+            this.clientSocket.on('game', GameEvents.Spectate, (data: { lobby: Lobby; game: Game }) => {
+                if (data.game) this.game.next(data.game);
+                this.lobbyGame.next(data.lobby);
+            });
+        this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
+            console.log('aaaaaaaaa');
+            this.lobbies.next(lobbies);
+            this.lobbyGame.next(lobbies.find((lobby: Lobby) => this.lobbyWaiting.lobbyId === lobby.lobbyId) ?? this.lobbyWaiting);
+        });
         this.clientSocket.on('game', GameEvents.NextGame, (nextGame: Game) => {
             this.nextGame.next(nextGame);
         });
@@ -239,16 +268,16 @@ export class GameManagerService {
         });
     }
 
+    // eslint-disable-next-line complexity
     off(): void {
-        if (this.game && !this.game.closed) {
-            this.game?.unsubscribe();
-        }
+        if (this.game && !this.game.closed) this.game?.unsubscribe();
         if (this.message && !this.message.closed) this.message?.unsubscribe();
         if (this.timerLobby && !this.timerLobby.closed) this.timerLobby?.unsubscribe();
         if (this.lobbyGame && !this.lobbyGame.closed) this.lobbyGame?.unsubscribe();
         if (this.differenceFound && !this.differenceFound.closed) this.differenceFound?.unsubscribe();
         if (this.endMessage && !this.endMessage.closed) this.endMessage?.unsubscribe();
         if (this.nextGame && !this.nextGame.closed) this.nextGame?.unsubscribe();
+        if (this.roomManager.lobbies && !this.roomManager.lobbies.closed) this.roomManager.lobbies?.unsubscribe();
         this.clientSocket.disconnect('game');
     }
 
