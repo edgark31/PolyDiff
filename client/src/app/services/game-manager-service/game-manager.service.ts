@@ -180,7 +180,6 @@ export class GameManagerService {
 
     abandonGame(lobbyId: string): void {
         console.log('on y est presque' + this.roomManager.isObserver);
-        if (this.roomManager.isObserver) this.roomManager.isObserver = false;
         this.clientSocket.send('game', GameEvents.AbandonGame, lobbyId);
         console.log('ALLLEZZZ');
     }
