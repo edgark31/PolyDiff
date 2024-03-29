@@ -85,7 +85,6 @@ class ThemeClass {
     iconTheme: IconThemeData(color: _themeClass.kLight),
     iconButtonTheme: IconButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(_themeClass.kDark),
         foregroundColor: MaterialStateProperty.all<Color>(_themeClass.kLight),
       ),
     ),
