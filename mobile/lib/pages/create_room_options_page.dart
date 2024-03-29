@@ -35,8 +35,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     final lobbyService = context.watch<LobbyService>();
     final lobbySelectionService = context.watch<LobbySelectionService>();
     final gameModeName = lobbyService.gameModes.name;
-    final chatService = context.read<ChatService>();
-    final chat = lobbyService.lobby.chatLog!.chat;
+    final chatService = context.watch<ChatService>();
 
     return Scaffold(
       // TODO : Put back when disconnect logic in place
