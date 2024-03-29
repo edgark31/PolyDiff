@@ -49,11 +49,13 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     ngOnInit(): void {
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
-        this.updatePagedImages();
+        // if (this.roomManagerService.isObserver)
         this.clientSocket.on('lobby', LobbyEvents.Spectate, (lobby: Lobby) => {
+            this.roomManagerService.actualRoomId = lobby.lobbyId ?? '';
             this.gameManager.lobbyWaiting = lobby;
             this.router.navigate(['/game']);
         });
+        this.updatePagedImages();
     }
     previousPage() {
         if (this.currentPage > 0) {

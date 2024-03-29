@@ -59,7 +59,6 @@ export class GameManagerService {
         this.game = new Subject<Game>();
         this.nextGame = new Subject<Game>();
         this.lobbies = new Subject<Lobby[]>();
-        this.Observer = new Subject<number>();
         this.timerLobby = new Subject<number>();
         this.message = new Subject<Chat>();
         this.abandon = new Subject<string>();
@@ -90,10 +89,6 @@ export class GameManagerService {
 
     get lobbies$() {
         return this.lobbies.asObservable();
-    }
-
-    get observer$() {
-        return this.Observer.asObservable();
     }
 
     get message$() {
@@ -219,7 +214,6 @@ export class GameManagerService {
         this.differenceFound = new Subject<Coordinate[]>();
         this.endMessage = new Subject<string>();
         this.nextGame = new Subject<Game>();
-        this.Observer = new Subject<number>();
         this.remainingDifference = new Subject<Coordinate[][]>();
         this.clientSocket.on('game', GameEvents.StartGame, (game: Game) => {
             this.game.next(game);
@@ -235,11 +229,9 @@ export class GameManagerService {
                 console.log(data.lobby.observers.length);
             });
         else
-            this.clientSocket.on('game', GameEvents.Spectate, (game: Game) => {
-                if (game) this.game.next(game);
-                this.lobbyGame.next(
-                    this.roomManager.lobbiesGame.find((lobby: Lobby) => this.lobbyWaiting.lobbyId === lobby.lobbyId) ?? this.lobbyWaiting,
-                );
+            this.clientSocket.on('game', GameEvents.Spectate, (data: { lobby: Lobby; game: Game }) => {
+                if (data.game) this.game.next(data.game);
+                this.lobbyGame.next(data.lobby);
             });
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             console.log('aaaaaaaaa');
@@ -285,7 +277,6 @@ export class GameManagerService {
         if (this.differenceFound && !this.differenceFound.closed) this.differenceFound?.unsubscribe();
         if (this.endMessage && !this.endMessage.closed) this.endMessage?.unsubscribe();
         if (this.nextGame && !this.nextGame.closed) this.nextGame?.unsubscribe();
-        if (this.Observer && !this.Observer.closed) this.Observer?.unsubscribe();
         if (this.roomManager.lobbies && !this.roomManager.lobbies.closed) this.roomManager.lobbies?.unsubscribe();
         this.clientSocket.disconnect('game');
     }
