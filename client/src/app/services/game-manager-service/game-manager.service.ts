@@ -4,12 +4,12 @@ import { Injectable } from '@angular/core';
 import { ReplayEvent } from '@app/interfaces/replay-actions';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
+import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { Chat, ChatMessageGlobal, Game, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
-import { RoomManagerService } from '../room-manager-service/room-manager.service';
 @Injectable({
     providedIn: 'root',
 })
@@ -25,7 +25,6 @@ export class GameManagerService {
     endGame: string;
     lobbyWaiting: Lobby;
     private lobbyGame: Subject<Lobby>;
-    private Observer: Subject<number>;
     private timer: Subject<number>;
     private differenceFound: Subject<Coordinate[]>;
     private differencesFound: Subject<number>;

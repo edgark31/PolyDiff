@@ -11,5 +11,6 @@ import { Friend } from '@common/game-interfaces';
 export class FriendsInfosComponent {
     @Input() friend: Friend;
 
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
     constructor() {}
 }

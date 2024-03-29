@@ -208,7 +208,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             disableClose: true,
             panelClass: 'dialog',
         });
-        console.log('tu abandines');
     }
 
     showAbandonDialog(): void {
@@ -217,7 +216,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             disableClose: true,
             panelClass: 'dialog',
         });
-        console.log('tu finis');
     }
 
     mouseClickOnCanvas(event: MouseEvent, isLeft: boolean) {

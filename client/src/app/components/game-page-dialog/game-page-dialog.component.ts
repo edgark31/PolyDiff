@@ -28,7 +28,6 @@ export class GamePageDialogComponent {
 
     abandonGame(): void {
         this.gameManager.abandonGame(this.data.lobby.lobbyId as string);
-        console.log('On y va');
 
         this.router.navigate(['/game-mode']);
     }

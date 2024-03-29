@@ -23,6 +23,7 @@ export class FriendPageComponent {
             isOnline: true,
         },
     ];
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
     constructor() {}
     // eslint-disable-next-line max-params
 }
