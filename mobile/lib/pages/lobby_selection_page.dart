@@ -57,7 +57,6 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                     CustomButton(
                       text: 'Créer une salle pour le mode $gameModeName',
                       press: () => Navigator.pushNamed(context, creationRoute),
-                      backgroundColor: kMidOrange,
                       widthFactor: 0.5,
                     ),
                     const SizedBox(height: 10),

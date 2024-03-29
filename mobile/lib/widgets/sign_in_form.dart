@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/constants/enums.dart';
@@ -11,7 +10,6 @@ import 'package:mobile/services/form_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/utils/credentials_validation.dart';
-import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
 import 'package:mobile/widgets/password_reset_popup.dart';
@@ -100,7 +98,6 @@ class _SignInFormState extends State<SignInForm> {
               children: [
                 Text(
                   APP_NAME_TXT,
-                  style: appstyle(60, kLightOrange, FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 40),
