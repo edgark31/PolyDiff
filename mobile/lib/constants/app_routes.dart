@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/admin_page.dart';
 import 'package:mobile/pages/chat_page.dart';
-import 'package:mobile/pages/classic_game_page.dart';
+import 'package:mobile/pages/game_page.dart';
 import 'package:mobile/pages/create_room_card_page.dart';
 import 'package:mobile/pages/create_room_options_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
@@ -54,8 +54,6 @@ const String SEARCH_FRIEND_ROUTE = '$FRIENDS_ROUTE/search';
 
 // GAMES
 const String GAME_ROUTE = '/game';
-const String CLASSIC_ROUTE = '$GAME_ROUTE/classic';
-const String LIMITED_TIME_ROUTE = '$GAME_ROUTE/limited';
 const String PRACTICE_ROUTE = '$GAME_ROUTE/practice';
 
 // LOBBY
@@ -115,8 +113,8 @@ class AppRouter {
       case CreateRoomOptionsPage.routeName:
         return CreateRoomOptionsPage.route();
 
-      case ClassicGamePage.routeName:
-        return ClassicGamePage.route();
+      case GamePage.routeName:
+        return GamePage.route();
 
       case PracticeGamePage.routeName:
         return PracticeGamePage.route();

@@ -48,9 +48,8 @@ class _ChatBoxState extends State<ChatBox> {
   void _setInitialChatMode() {
     final routeName = ModalRoute.of(context)?.settings.name;
     setState(() {
-      canDisplayLobbyMessages = routeName == LOBBY_ROUTE ||
-          routeName == CLASSIC_ROUTE ||
-          routeName == LIMITED_TIME_ROUTE;
+      canDisplayLobbyMessages =
+          routeName == LOBBY_ROUTE || routeName == GAME_ROUTE;
       isGlobalChat = !canDisplayLobbyMessages;
     });
   }
