@@ -67,6 +67,21 @@ class ThemeClass {
         foregroundColor: MaterialStateProperty.all<Color>(_themeClass.kLight),
       ),
     ),
+    listTileTheme: ListTileThemeData(
+      tileColor: _themeClass.kDarkGreen,
+      selectedTileColor: _themeClass.kMidGreen,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+    cardTheme: CardTheme(
+      color: _themeClass.kDarkGreen,
+      margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 3,
+    ),
     iconTheme: IconThemeData(color: _themeClass.kLight),
     colorScheme: const ColorScheme.dark().copyWith(
       primary: _themeClass.kDarkGreen,
