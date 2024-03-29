@@ -55,12 +55,6 @@ class _LobbyPageState extends State<LobbyPage> {
           socketService.setup(SocketType.Game, infoService.id);
           chatService.setupGame();
           gameManagerService.setupGame();
-          // gameManagerService.setListeners(); // in setup
-          // gameManagerService.setEndGameMessage(null); // in setup
-          // if (lobbyService.isCreator) {
-          lobbyService.setIsCreator(false); // TODO: clean this
-          // gameManagerService.startGame(lobbyService.lobby.lobbyId); // in setup
-          // }
           // Future.delayed(Duration(milliseconds: 2000), () {
           // Waiting for server to emit the created game from creator
           Navigator.pushNamed(context, GAME_ROUTE);

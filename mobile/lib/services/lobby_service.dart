@@ -51,7 +51,6 @@ class LobbyService extends ChangeNotifier {
   }
 
   void startLobby() {
-    // setIsCreator(false);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Start.name,
@@ -60,7 +59,6 @@ class LobbyService extends ChangeNotifier {
   }
 
   void joinLobby(String? joinedLobbyId) {
-    setIsCreator(false);
     setLobby(getLobbyFromLobbies(joinedLobbyId));
     socketService.send(
       SocketType.Lobby,
@@ -83,7 +81,6 @@ class LobbyService extends ChangeNotifier {
   }
 
   void leaveLobby() {
-    setIsCreator(false);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Leave.name,
@@ -98,6 +95,7 @@ class LobbyService extends ChangeNotifier {
   }
 
   void setupLobby(GameModes mode) {
+    setIsCreator(false); // Make sure default value is false
     setListeners();
     setGameModes(mode);
   }
