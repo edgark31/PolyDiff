@@ -20,6 +20,7 @@ class FriendsPage extends StatefulWidget {
 
 class _FriendsPageState extends State<FriendsPage> {
   int _selectedViewIndex = 0;
+  
 
   void _selectView(int index) {
     setState(() {
@@ -50,7 +51,7 @@ class _FriendsPageState extends State<FriendsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              for (int i = 0; i < 3; i++)
+              for (int i = 0; i < 3; i++) ...[
                 ElevatedButton(
                   onPressed: () => _selectView(i),
                   style: ButtonStyle(
@@ -70,6 +71,7 @@ class _FriendsPageState extends State<FriendsPage> {
                           : (i == 1 ? "En attente" : "Ajouter un ami"),
                       style: TextStyle(fontSize: 25, color: Colors.white)),
                 ),
+              ]
             ],
           ),
           Expanded(
