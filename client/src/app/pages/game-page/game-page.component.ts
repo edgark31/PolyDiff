@@ -36,6 +36,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     isReplayAvailable: boolean;
     gameLobby: Game;
     lobby: Lobby;
+    mode: string;
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
@@ -66,6 +67,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.timer = 0;
         this.messages = [];
         this.messageGlobal = [];
+        this.mode = '';
         this.canvasSize = CANVAS_MEASUREMENTS;
         this.isReplayAvailable = false;
         this.gameMode = GameModes;
@@ -100,6 +102,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
             this.lobby = lobby;
             this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
+            this.mode = this.translateGameMode(lobby.mode);
         });
         this.chatSubscription = this.gameManager.message$.subscribe((message: Chat) => {
             this.receiveMessage(message);
@@ -155,6 +158,19 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.globalChatService.off();
         }
         this.chatSubscriptionGlobal?.unsubscribe();
+    }
+
+    translateGameMode(mode: GameModes): string {
+        switch (mode) {
+            case GameModes.Classic:
+                return 'Classique';
+            case GameModes.Limited:
+                return 'Temps limité';
+            case GameModes.Practice:
+                return 'Pratique';
+            default:
+                return '';
+        }
     }
 
     sendMessage(message: string): void {
