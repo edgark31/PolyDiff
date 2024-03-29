@@ -21,7 +21,7 @@
             <ul>
                 <li [class]="message.tag" *ngFor="let message of messages">
                     <div *ngIf="message.tag !== 'Common'">
-                        <img src="{{'http://34.118.163.79:3000/avatar/' + message.accountId + '.png'}}" alt="avatar" />
+                        <img src="{{'http://localhost:3000/avatar/' + message.accountId + '.png'}}" alt="avatar" />
                     </div>
                     <h4>{{ message.name }}</h4>
                     <p>{{ message.raw }}</p>

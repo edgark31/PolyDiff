@@ -42,7 +42,7 @@ body {
 .icone {
     position: absolute;
     top: -210px;
-    right: -200px;
+    right: -400px;
     font-size: 39px;
     margin: 100px;
     width: 80px;
@@ -62,7 +62,7 @@ body {
 .icone-delete {
     position: absolute;
     top: -250px;
-    right: -600px;
+    right: -700px;
     font-size: 39px;
     margin: 100px;
     width: 80px;
@@ -71,7 +71,7 @@ body {
     color: rgba(253, 250, 151, 255);
     -webkit-text-stroke: 0.2px black;
     border: none;
-    background-color: #e8a430;
+    background-color: #e8304c;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -86,6 +86,42 @@ body {
     background-color: darkred;
 }
 
+.form-avatar {
+    // margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    border-radius: 8px;
+}
+
+.form-avatar div {
+    margin-bottom: 10px;
+    color: #ffa500;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+
+    div {
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 4px;
+        color: #ffa500;
+        text-transform: uppercase;
+    }
+}
+
+.form-avatar input {
+    height: 35px;
+    border-radius: 4px;
+    width: 95%;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    transition: border-color 0.3s;
+    font-size: 1.2rem;
+    padding: 10px;
+}
+
 #background {
     background-color: #f5f5f5;
     height: 100%;
@@ -98,18 +134,18 @@ body {
 
 .friends-container {
     display: flex;
-    background-color: #df0707;
+    background-color: #dfd40700;
     flex-direction: column;
     align-items: center;
     gap: 24px;
     padding: 20px;
-    max-width: 30%;
+    max-width: 50%;
 }
 .card-container {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    width: 700px;
+    width: 1000px;
     overflow-y: auto;
     max-height: 70vh;
     padding: 12px;
@@ -131,7 +167,7 @@ body {
     flex-direction: column;
     gap: 12px;
     padding: 20px;
-    background-color: #dfbf0742;
+    background-color: #ffd900;
 }
 
 .username {
@@ -143,10 +179,12 @@ body {
 }
 
 .name {
+    position: relative;
     font-weight: bold;
     font-size: 20px;
     // color: #3f51b5;
-    margin-left: 40px;
+    margin-left: 120px;
+    top: -50px;
     display: inline-block;
 }
 

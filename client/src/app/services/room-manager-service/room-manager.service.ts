@@ -253,13 +253,6 @@ export class RoomManagerService {
             this.lobbiesGame = lobbies;
         });
 
-        // this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
-        //     this.lobbies.next(lobbies);
-        //     this.lobbiesGame = lobbies;
-        //     lobbies.forEach((element) => {
-        //         console.log(element.observers.length);
-        //     });
-        // });
         this.clientSocket.on('lobby', ChannelEvents.LobbyMessage, (chat: Chat) => {
             this.message.next(chat);
         });
