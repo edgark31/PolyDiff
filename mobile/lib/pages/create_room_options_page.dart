@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
@@ -71,7 +70,6 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
                 });
               },
               text: 'Créer la salle de jeu',
-              backgroundColor: kMidOrange,
               widthFactor: 0.25,
             ),
           ],

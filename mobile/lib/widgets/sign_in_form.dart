@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/constants/enums.dart';
@@ -12,7 +10,6 @@ import 'package:mobile/services/form_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/utils/credentials_validation.dart';
-import 'package:mobile/widgets/customs/app_style.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
 import 'package:mobile/widgets/password_reset_popup.dart';
@@ -101,7 +98,6 @@ class _SignInFormState extends State<SignInForm> {
               children: [
                 Text(
                   APP_NAME_TXT,
-                  style: appstyle(60, kLightOrange, FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 40),
@@ -153,8 +149,6 @@ class _SignInFormState extends State<SignInForm> {
                       }
                     }
                   },
-                  backgroundColor: kMidGreen,
-                  textColor: kLight,
                   text: SIGN_IN_BTN_TXT,
                 ),
                 if (serverErrorMessage != null)
@@ -172,23 +166,21 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                 SizedBox(height: 30),
                 CustomButton(
-                    text: FORGOT_PASSWORD_TXT,
-                    press: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return PasswordResetPopup();
-                        },
-                      );
-                    },
-                    backgroundColor: kMidOrange,
-                    textColor: kLight),
+                  text: FORGOT_PASSWORD_TXT,
+                  press: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return PasswordResetPopup();
+                      },
+                    );
+                  },
+                ),
                 SizedBox(height: 30),
                 CustomButton(
-                    text: SIGN_UP_BTN_TXT,
-                    press: () => Navigator.pushNamed(context, SIGN_UP_ROUTE),
-                    backgroundColor: kMidOrange,
-                    textColor: kLight),
+                  text: SIGN_UP_BTN_TXT,
+                  press: () => Navigator.pushNamed(context, SIGN_UP_ROUTE),
+                ),
               ],
             ),
           ),

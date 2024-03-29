@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
@@ -41,7 +40,6 @@ class EndGamePopup extends StatelessWidget {
                 press: () {
                   Navigator.pushNamed(context, DASHBOARD_ROUTE);
                 },
-                backgroundColor: kMidOrange,
               ),
               if (gameMode == GameModes.Classic && !isObserver) ...[
                 SizedBox(height: 10),
@@ -50,7 +48,6 @@ class EndGamePopup extends StatelessWidget {
                   press: () {
                     print('Navigate to replay video page');
                   },
-                  backgroundColor: kMidOrange,
                 ),
               ],
             ],
