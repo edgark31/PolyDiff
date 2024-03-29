@@ -58,7 +58,6 @@ class _DashboardPageState extends State<DashboardPage> {
           Navigator.pushNamed(context, LOBBY_SELECTION_ROUTE);
         }
       },
-      backgroundColor: color,
       icon: icon,
       widthFactor: 0.30,
       height: 80,

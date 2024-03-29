@@ -58,7 +58,6 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                     CustomButton(
                       text: 'Créer une salle pour le mode $gameModeName',
                       press: () => Navigator.pushNamed(context, creationRoute),
-                      backgroundColor: kMidOrange,
                       widthFactor: 0.5,
                     ),
                     const SizedBox(height: 10),
@@ -143,7 +142,6 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                             },
                             text: 'Rejoindre cette salle d\'attente',
                             widthFactor: 1.5,
-                            backgroundColor: kMidOrange,
                           ))
                     : CustomButton(
                         text: 'Observer cette partie',
@@ -157,7 +155,6 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                           chatService.setGameChatListeners();
                           Navigator.pushNamed(context, GAME_ROUTE);
                         },
-                        backgroundColor: kMidGreen,
                       ),
               ],
             ),

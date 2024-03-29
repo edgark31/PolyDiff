@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
@@ -68,7 +67,8 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
             // Safety check
             if (ModalRoute.of(context)?.isCurrent ?? false) {
               // Safety check
-              print('Current Lobby is started navigating to GamePage for Practice Game');
+              print(
+                  'Current Lobby is started navigating to GamePage for Practice Game');
               socketService.setup(SocketType.Game, infoService.id);
               gameManagerService.setupGame();
               setState(() => isLoading = false);
@@ -168,7 +168,6 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
                 }
               },
               text: 'Choisir cette fiche',
-              backgroundColor: kMidOrange,
             ),
           ],
         ),

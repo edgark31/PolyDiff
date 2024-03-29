@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/pages/home_page.dart';
@@ -16,7 +15,7 @@ import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
-import 'package:mobile/utils/text_theme.dart';
+import 'package:mobile/utils/theme_utils.dart';
 import 'package:provider/provider.dart';
 
 Widget defaultHome = HomePage();
@@ -94,13 +93,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: APP_NAME_TXT,
       themeMode: ThemeMode.system,
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: 'troika',
-        textTheme: CustomTextTheme.lightTextTheme,
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(kLightGreen.value)),
-      ),
-      darkTheme: ThemeData(),
+      theme: ThemeClass.lightTheme,
+      darkTheme: ThemeClass.darkTheme,
       onGenerateRoute: AppRouter.onGenerateRoute,
       initialRoute: HomePage.routeName,
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
@@ -54,7 +53,6 @@ class HomePage extends StatelessWidget {
                         press: () {
                           Navigator.pushNamed(context, SIGN_IN_ROUTE);
                         },
-                        backgroundColor: kMidGreen,
                       ),
                       SizedBox(width: 125),
                       CustomButton(
@@ -62,8 +60,6 @@ class HomePage extends StatelessWidget {
                         press: () {
                           Navigator.pushNamed(context, SIGN_UP_ROUTE);
                         },
-                        backgroundColor: kLight,
-                        textColor: kMidGreen,
                       ),
                     ],
                   ),

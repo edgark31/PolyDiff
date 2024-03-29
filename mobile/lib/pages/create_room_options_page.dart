@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/services/chat_service.dart';
@@ -26,7 +24,6 @@ class CreateRoomOptionsPage extends StatefulWidget {
 }
 
 class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
-  final ChatService chatService = Get.find();
   bool cheatMode = true;
   double gameDuration = 30;
   double gameBonus = 10;
@@ -35,6 +32,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
     final lobbySelectionService = context.watch<LobbySelectionService>();
+    final chatService = context.watch<ChatService>();
     final gameModeName = lobbyService.gameModes.name;
     final chat = lobbyService.lobby.chatLog!.chat;
 
@@ -75,7 +73,6 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
                 });
               },
               text: 'Créer la salle de jeu',
-              backgroundColor: kMidOrange,
               widthFactor: 0.25,
             ),
           ],
