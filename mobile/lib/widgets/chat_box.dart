@@ -98,13 +98,13 @@ class _ChatBoxState extends State<ChatBox> {
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        color: Color(0xFFE6EAEA),
-        borderRadius: BorderRadius.circular(10),
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
+            spreadRadius: 5,
+            blurRadius: 7,
             offset: Offset(0, 3),
           ),
         ],
@@ -113,17 +113,23 @@ class _ChatBoxState extends State<ChatBox> {
         children: [
           Container(
             height: 80,
-            color: Color(0xFF7DAF9C),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondary,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   "ZONE DE CLAVARDAGE",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
                 ),
                 Row(
                   mainAxisAlignment: canDisplayLobbyMessages
@@ -132,11 +138,6 @@ class _ChatBoxState extends State<ChatBox> {
                   children: [
                     Text(
                       isGlobalChat ? "Chat Global" : "Chat",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
                     ),
                     canDisplayLobbyMessages
                         ? ElevatedButton(
@@ -169,7 +170,7 @@ class _ChatBoxState extends State<ChatBox> {
                         margin: EdgeInsets.symmetric(vertical: 5),
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.grey[300],
+                          color: ThemeData.dark().primaryColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(message.raw,
@@ -243,7 +244,6 @@ class _ChatBoxState extends State<ChatBox> {
                       hintText: "Entrez un message...",
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Colors.white,
                     ),
                     onSubmitted: _handleMessageSubmit,
                   ),
