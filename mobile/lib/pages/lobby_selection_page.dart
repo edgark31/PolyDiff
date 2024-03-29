@@ -44,8 +44,9 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     final lobbiesFromServer = lobbyService.filterLobbies();
     final gameModeName = lobbyService.gameModes.name;
     return Scaffold(
-      drawer: CustomMenuDrawer(),
-      appBar: CustomAppBar(title: 'Sélection de la salle de jeu'),
+      // TODO : Put back when disconnect logic in place
+      // drawer: CustomMenuDrawer(),
+      // appBar: CustomAppBar(title: 'Sélection de la salle de jeu'),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -121,7 +122,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
                   Expanded(
-                    child: Text('Observateurs: ${lobby.observers.length.toString()}',
+                    child: Text(
+                        'Observateurs: ${lobby.observers.length.toString()}',
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ],
