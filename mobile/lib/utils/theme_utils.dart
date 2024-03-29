@@ -43,7 +43,7 @@ class ThemeClass {
   );
 
   static ThemeData darkTheme = ThemeData(
-    primaryColor: ThemeData.dark().scaffoldBackgroundColor,
+    primaryColor: ColorScheme.dark().primary,
     fontFamily: 'troika',
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
@@ -59,6 +59,15 @@ class ThemeClass {
         ),
       ),
     ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: _themeClass.kDarkGreen,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all<Color>(_themeClass.kLight),
+      ),
+    ),
+    iconTheme: IconThemeData(color: _themeClass.kLight),
     colorScheme: const ColorScheme.dark().copyWith(
       primary: _themeClass.kDarkGreen,
       onPrimary: _themeClass.kLight,
