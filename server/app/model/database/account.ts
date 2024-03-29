@@ -76,22 +76,21 @@ export class Friend {
     name: string;
 
     @Prop({ required: true })
-    avatar: string;
+    accountId: string;
 
-    @Prop({ type: [String] })
-    friendNames: string[];
+    @Prop({ required: false })
+    isFavorite?: boolean;
 
-    @Prop({ type: [String] })
-    commonFriendNames: string[];
-
-    @Prop({ required: true })
-    isFavorite: boolean;
-
-    @Prop({ required: true })
-    isOnline: boolean;
+    @Prop({ required: false })
+    isOnline?: boolean;
 }
 
 export const friendSchema = SchemaFactory.createForClass(Friend);
+
+friendSchema.add({
+    friends: { type: [friendSchema], default: [] },
+    commonFriends: { type: [friendSchema], default: [] },
+});
 
 @Schema({ _id: false })
 export class Profile {
