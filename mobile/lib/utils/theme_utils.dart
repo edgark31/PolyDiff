@@ -82,7 +82,7 @@ class ThemeClass {
       ),
       elevation: 3,
     ),
-    iconTheme: IconThemeData(color: _themeClass.kLight),
+    iconTheme: IconThemeData(color: _themeClass.kDark),
     iconButtonTheme: IconButtonThemeData(
       style: ButtonStyle(
         foregroundColor: MaterialStateProperty.all<Color>(_themeClass.kLight),

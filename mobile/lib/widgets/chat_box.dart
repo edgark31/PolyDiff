@@ -251,6 +251,10 @@ class _ChatBoxState extends State<ChatBox> {
                 SizedBox(width: 10),
                 if (isTyping)
                   IconButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.secondary),
+                      ),
                       icon: Icon(Icons.send),
                       onPressed: () {
                         _handleMessageSubmit(messageController.text);
