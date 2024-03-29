@@ -167,7 +167,6 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
                 }
               },
               text: 'Choisir cette fiche',
-              backgroundColor: kMidOrange,
             ),
           ],
         ),
