@@ -153,9 +153,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                           chatService.setLobbyMessages(lobby.chatLog!.chat);
                           gameManagerService.spectateLobby(lobby.lobbyId);
                           chatService.setGameChatListeners();
-                          lobbyService.setIsCreator(
-                              false); // TODO : Check if this is needed
-                          Navigator.pushNamed(context, CLASSIC_ROUTE);
+                          Navigator.pushNamed(context, GAME_ROUTE);
                         },
                         backgroundColor: kMidGreen,
                       ),

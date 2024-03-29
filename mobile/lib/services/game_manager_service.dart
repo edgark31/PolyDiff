@@ -109,11 +109,19 @@ class GameManagerService extends ChangeNotifier {
   }
 
   void activateCheat() {
-    socketService.send(SocketType.Game, GameEvents.CheatActivated.name);
+    socketService.send(
+      SocketType.Game,
+      GameEvents.CheatActivated.name,
+      lobbyService.lobby.lobbyId,
+    );
   }
 
   void deactivateCheat() {
-    socketService.send(SocketType.Game, GameEvents.CheatDeactivated.name);
+    socketService.send(
+      SocketType.Game,
+      GameEvents.CheatDeactivated.name,
+      lobbyService.lobby.lobbyId,
+    );
   }
 
   void setListeners() {
