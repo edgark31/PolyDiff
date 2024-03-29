@@ -1,15 +1,21 @@
-class Observers {
+class Observer {
+  final String accountId;
   final String name;
-  Observers(this.name);
+  Observer(
+    this.accountId,
+    this.name,
+  );
 
-  factory Observers.fromJson(Map<String, dynamic> json) {
-    return Observers(
+  factory Observer.fromJson(Map<String, dynamic> json) {
+    return Observer(
+      json['accountId'],
       json['name'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'accountId': accountId,
       'name': name,
     };
   }

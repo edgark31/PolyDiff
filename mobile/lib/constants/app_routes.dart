@@ -1,8 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/admin_page.dart';
 import 'package:mobile/pages/chat_page.dart';
-import 'package:mobile/pages/classic_game_page.dart';
+import 'package:mobile/pages/game_page.dart';
 import 'package:mobile/pages/create_room_card_page.dart';
 import 'package:mobile/pages/create_room_options_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
@@ -11,7 +12,6 @@ import 'package:mobile/pages/history_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
-import 'package:mobile/pages/practice_game_page.dart';
 import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/pages/settings_page.dart';
@@ -53,8 +53,6 @@ const String SEARCH_FRIEND_ROUTE = '$FRIENDS_ROUTE/search';
 
 // GAMES
 const String GAME_ROUTE = '/game';
-const String CLASSIC_ROUTE = '$GAME_ROUTE/classic';
-const String LIMITED_TIME_ROUTE = '$GAME_ROUTE/limited';
 const String PRACTICE_ROUTE = '$GAME_ROUTE/practice';
 
 // LOBBY
@@ -74,6 +72,9 @@ class AppRouter {
 
       case SignUpPage.routeName:
         return SignUpPage.route();
+
+      case AdminPage.routeName:
+        return AdminPage.route();
 
       case DashboardPage.routeName:
         return DashboardPage.route();
@@ -111,11 +112,8 @@ class AppRouter {
       case CreateRoomOptionsPage.routeName:
         return CreateRoomOptionsPage.route();
 
-      case ClassicGamePage.routeName:
-        return ClassicGamePage.route();
-
-      case PracticeGamePage.routeName:
-        return PracticeGamePage.route();
+      case GamePage.routeName:
+        return GamePage.route();
 
       default:
         return _errorRoute();

@@ -3,7 +3,7 @@ import { AccountManagerService } from '@app/services/account-manager/account-man
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { ChannelEvents, LobbyEvents, LobbyState, MessageTag } from '@common/enums';
-import { Chat, ChatLog, Lobby, Player } from '@common/game-interfaces';
+import { Chat, ChatLog, Lobby, Observer, Player } from '@common/game-interfaces';
 import { Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -65,6 +65,17 @@ export class LobbyGateway implements OnGatewayConnection {
     // un joueur quitte le lobby intentionnellement
     @SubscribeMessage(LobbyEvents.Leave)
     async leave(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        // Si t'es un spectateur
+        if (socket.data.state === LobbyState.Spectate) {
+            socket.data.state = LobbyState.Idle;
+            socket.leave(lobbyId);
+            this.roomsManager.lobbies.get(lobbyId).observers = this.roomsManager.lobbies
+                .get(lobbyId)
+                .observers.filter((observer) => observer.accountId !== socket.data.accountId);
+            socket.emit(LobbyEvents.Leave);
+            this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} unspectate le lobby ${lobbyId}`);
+            return;
+        }
         socket.data.state = LobbyState.Idle;
         // Si t'es le host
         if (socket.data.accountId === this.roomsManager.lobbies.get(lobbyId).players[0].accountId) {
@@ -99,6 +110,21 @@ export class LobbyGateway implements OnGatewayConnection {
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} démarre le lobby ${lobbyId}`);
     }
 
+    @SubscribeMessage(LobbyEvents.Spectate)
+    spectate(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        if (this.roomsManager.lobbies.get(lobbyId).isAvailable) return;
+        socket.data.state = LobbyState.Spectate;
+        const observer: Observer = {
+            accountId: socket.data.accountId,
+            name: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+        };
+        this.roomsManager.lobbies.get(lobbyId).observers.push(observer);
+        socket.emit(LobbyEvents.Spectate, this.roomsManager.lobbies.get(lobbyId));
+        this.server.to(lobbyId).emit(LobbyEvents.Spectate, this.roomsManager.lobbies.get(lobbyId));
+        this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
+        this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} spectate le lobby ${lobbyId}`);
+    }
+
     @SubscribeMessage(ChannelEvents.SendLobbyMessage)
     handleMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
         const chat: Chat = this.messageManager.createMessage(
@@ -130,10 +156,16 @@ export class LobbyGateway implements OnGatewayConnection {
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
                 case LobbyState.Idle:
+                    this.logger.log(`${socket.data.accountId} is IDLE`);
                     break;
                 case LobbyState.Waiting: // ta deja rejoint une room
+                    this.logger.log(`${socket.data.accountId} is WAITING`);
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
+                    this.logger.log(`${socket.data.accountId} is INGAME`);
+                    break;
+                case LobbyState.Spectate: // t'es dans une room en tant que spectateur
+                    this.logger.log(`${socket.data.accountId} is SPECTATING`);
                     break;
                 default:
                     break;

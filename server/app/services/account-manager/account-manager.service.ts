@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-params */
 /* eslint-disable no-underscore-dangle */
@@ -283,7 +285,8 @@ export class AccountManagerService implements OnModuleInit {
         await this.accountModel.find().then((accounts) => {
             accounts.forEach((account) => {
                 account.profile.avatar = '';
-                this.users.set(account.credentials.username, account);
+                this.users.set(account._id.toString(), account);
+                this.connectedUsers.get(account.id) ? this.connectedUsers.set(account.id, account) : null;
             });
         });
     }
