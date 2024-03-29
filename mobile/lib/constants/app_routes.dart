@@ -12,7 +12,6 @@ import 'package:mobile/pages/history_page.dart';
 import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
-import 'package:mobile/pages/practice_game_page.dart';
 import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/pages/settings_page.dart';
@@ -115,9 +114,6 @@ class AppRouter {
 
       case GamePage.routeName:
         return GamePage.route();
-
-      case PracticeGamePage.routeName:
-        return PracticeGamePage.route();
 
       default:
         return _errorRoute();
