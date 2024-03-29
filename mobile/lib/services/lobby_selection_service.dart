@@ -34,9 +34,15 @@ class LobbySelectionService extends ChangeNotifier {
       _gameId = null; // Limited has no game id
       _nDifferences = null; // Limited has no differences
     }
-    if (gameMode == GameModes.Classic || gameMode == GameModes.Practice) {
-      _gameBonus = null; // Classic or Practice has no bonus
+    if (gameMode == GameModes.Classic) {
+      _gameBonus = null; // Classic has no bonus
     }
+    if (gameMode == GameModes.Practice) {
+      _gameBonus = null; // Practice has no bonus
+      _isCheatEnabled = false; // Practice has no cheat
+      _gameDuration = 0; // Practice has no time limit
+    }
+
     return Lobby.create(
       gameId: _gameId,
       isCheatEnabled: _isCheatEnabled,
