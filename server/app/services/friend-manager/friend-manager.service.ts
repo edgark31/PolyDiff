@@ -80,7 +80,10 @@ export class FriendManagerService {
         sender.profile.friends.forEach((senderFriend) => {
             potential.profile.friends.forEach((friendFriend) => {
                 if (senderFriend.accountId === friendFriend.accountId && sender.id !== friendFriend.accountId) {
-                    commonFriends.push(senderFriend);
+                    commonFriends.push({
+                        name: this.accountManager.users.get(friendFriend.accountId).credentials.username,
+                        accountId: friendFriend.accountId,
+                    });
                 }
             });
         });
