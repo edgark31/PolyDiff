@@ -162,7 +162,6 @@ class GameManagerService extends ChangeNotifier {
     });
 
     socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
-      lobbyService.setIsObserver(false);
       setEndGameMessage(data as String?);
       disconnectSocket();
       lobbyService.endLobby();

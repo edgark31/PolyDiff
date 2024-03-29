@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/models/observers_model.dart';
@@ -76,7 +77,9 @@ class _GamePageState extends State<GamePage> {
     final isPlayerAnObserver = lobbyService.isObserver;
 
     final canPlayerInteract =
-        !isPlayerAnObserver; // TODO: Add condition for replay
+        !isPlayerAnObserver; // TODO: Add condition for replay ?
+    bool canPlayerReplay = lobbyService.gameModes == GameModes.Classic &&
+        !isPlayerAnObserver; // TODO: Add condition for replay ?
 
     if (gameManagerService.game.gameId == '') {
       return Container(
@@ -98,8 +101,7 @@ class _GamePageState extends State<GamePage> {
             builder: (BuildContext context) {
               return EndGamePopup(
                 endMessage: gameManagerService.endGameMessage!,
-                gameMode: lobbyService.lobby.mode,
-                isObserver: isPlayerAnObserver,
+                canPlayerReplay: canPlayerReplay,
               );
             },
           );
@@ -207,7 +209,6 @@ class _GamePageState extends State<GamePage> {
                     gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
                     gameManagerService
                         .disconnectSocket(); // No event sent to server
-                    lobbyService.setIsObserver(false);
                     lobbyService.leaveLobby();
                     Navigator.pushNamed(context, DASHBOARD_ROUTE);
                   },

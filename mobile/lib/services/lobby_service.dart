@@ -96,6 +96,7 @@ class LobbyService extends ChangeNotifier {
 
   void setupLobby(GameModes mode) {
     setIsCreator(false); // Make sure default value is false
+    setIsObserver(false); // Make sure default value is false
     setListeners();
     setGameModes(mode);
   }
