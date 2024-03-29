@@ -87,9 +87,9 @@ class StatisticCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.all(10),
       child: ListTile(
-        leading: Icon(statistic.icon, color: kMidOrange),
+        leading: Icon(statistic.icon),
         title: Text(statistic.title),
-        trailing: Text(statistic.value, style: TextStyle(color: kMidOrange)),
+        trailing: Text(statistic.value),
       ),
     );
   }

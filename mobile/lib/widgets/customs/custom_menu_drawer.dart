@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
@@ -13,7 +13,7 @@ class CustomMenuDrawer extends StatefulWidget {
   const CustomMenuDrawer({super.key});
 
   @override
-  _CustomMenuDrawerState createState() => _CustomMenuDrawerState();
+  State<CustomMenuDrawer> createState() => _CustomMenuDrawerState();
 }
 
 class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
@@ -24,7 +24,6 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    // Use Consumer to listen to AvatarProvider changes
     final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
     final InfoService infoService = context.read<InfoService>();
     final SocketService socketService = context.read<SocketService>();
@@ -41,11 +40,10 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
 
               imageUrl: avatarProvider.currentAvatarUrl,
             ),
-            decoration: BoxDecoration(color: kMidOrange),
           ),
           ListTile(
               leading: Icon(Icons.account_circle),
-              title: Text('Profile'),
+              title: Text('Profil'),
               onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE)),
           SizedBox(height: 10),
           ListTile(
@@ -80,9 +78,9 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
               leading: Icon(
                 Icons.logout,
               ),
-              title: Text('Déconnexion'),
+              title: Text(SIGN_OUT_BTN_TXT),
               onTap: () {
-                print('Déconnexion');
+                print(SIGN_OUT_BTN_TXT);
                 socketService.disconnect(SocketType.Auth);
                 Navigator.pushNamed(context, HOME_ROUTE);
               }),
