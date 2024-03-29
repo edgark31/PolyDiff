@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
@@ -24,6 +26,7 @@ class CreateRoomOptionsPage extends StatefulWidget {
 }
 
 class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
+  final ChatService chatService = Get.find();
   bool cheatMode = true;
   double gameDuration = 30;
   double gameBonus = 10;
@@ -33,6 +36,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     final lobbyService = context.watch<LobbyService>();
     final lobbySelectionService = context.watch<LobbySelectionService>();
     final gameModeName = lobbyService.gameModes.name;
+    final chat = lobbyService.lobby.chatLog!.chat;
 
     return Scaffold(
       // TODO : Put back when disconnect logic in place
@@ -66,6 +70,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
                 lobbyService.createLobby();
                 Future.delayed(Duration(milliseconds: 500), () {
                   // Waiting for server to emit the created lobby from creator
+                  chatService.setLobbyMessages(chat);
                   Navigator.pushNamed(context, LOBBY_ROUTE);
                 });
               },
