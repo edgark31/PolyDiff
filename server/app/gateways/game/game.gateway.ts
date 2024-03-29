@@ -105,7 +105,10 @@ export class GameGateway implements OnGatewayConnection {
             });
             return;
         }
-        socket.emit(GameEvents.Spectate, this.games.get(lobbyId));
+        socket.emit(GameEvents.Spectate, {
+            lobby: this.roomsManager.lobbies.get(lobbyId),
+            game: this.games.get(lobbyId),
+        });
     }
 
     @SubscribeMessage(GameEvents.Clic)
