@@ -104,6 +104,7 @@ class LobbyService extends ChangeNotifier {
     setIsCreator(false); // Make sure default value is false
     setIsObserver(false); // Make sure default value is false
     setListeners();
+    socketService.send(SocketType.Auth, LobbyEvents.UpdateLobbys.name);
     setGameModes(mode);
   }
 

@@ -66,23 +66,18 @@ class ChatService extends ChangeNotifier {
   }
 
   void setupLobby() {
-    clearLobbyMessages();
     setLobbyChatListeners();
   }
 
   void setupGame() {
-    clearLobbyMessages();
     setGameChatListeners();
   }
 
   void setLobbyMessages(List<Chat> messages) {
     _lobbyMessages.clear(); // safety check
     _lobbyMessages.addAll(messages);
-    notifyListeners();
-  }
-
-  void clearLobbyMessages() {
-    _lobbyMessages.clear();
+    print('addAll - _lobbyMessages:');
+    print(_lobbyMessages);
     notifyListeners();
   }
 
