@@ -91,7 +91,6 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
         isLobbyClassic ? 'Différences: ${lobby.nDifferences}, ' : '';
     String nPlayers = 'Nombre de joueurs: ${lobby.players.length}/4';
     String playerNames = lobby.players.map((e) => e.name).join(', ');
-    String observerNames = lobby.observers.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
     final chatService = context.watch<ChatService>();
     final gameManagerService = context.watch<GameManagerService>();
@@ -122,7 +121,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
                   Expanded(
-                    child: Text('Observateurs: $observerNames',
+                    child: Text('Observateurs: ${lobby.observers.length.toString()}',
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ],
