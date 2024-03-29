@@ -5,9 +5,9 @@ import 'package:mobile/constants/enums.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
-import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/profile_menu.dart';
+import 'package:mobile/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -40,6 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: CustomAppBar(title: "P R O F I L"),
+      drawer: CustomMenuDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -88,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     width: 4,
                                     color: kLight,
                                   ),
-                                  color: kMidOrange,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                                 child: Icon(
                                   Icons.edit,

@@ -43,7 +43,7 @@ class ThemeClass {
   );
 
   static ThemeData darkTheme = ThemeData(
-    primaryColor: ThemeData.dark().scaffoldBackgroundColor,
+    primaryColor: _themeClass.kDarkGreen,
     fontFamily: 'troika',
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
@@ -59,10 +59,39 @@ class ThemeClass {
         ),
       ),
     ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: _themeClass.kDarkGreen,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all<Color>(_themeClass.kLight),
+      ),
+    ),
+    listTileTheme: ListTileThemeData(
+      tileColor: _themeClass.kDarkGreen,
+      selectedTileColor: _themeClass.kMidGreen,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+    cardTheme: CardTheme(
+      color: _themeClass.kDarkGreen,
+      margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 3,
+    ),
+    iconTheme: IconThemeData(color: _themeClass.kDark),
+    iconButtonTheme: IconButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all<Color>(_themeClass.kLight),
+      ),
+    ),
     colorScheme: const ColorScheme.dark().copyWith(
       primary: _themeClass.kDarkGreen,
       onPrimary: _themeClass.kLight,
-      secondary: _themeClass.kMidGreen,
+      secondary: _themeClass.kDark,
       onSecondary: _themeClass.kLight,
     ),
   );
