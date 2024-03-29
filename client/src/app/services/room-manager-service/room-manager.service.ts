@@ -10,6 +10,7 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class RoomManagerService {
+    actualRoomId: string;
     password: string;
     lobbyGame: Lobby;
     isOrganizer: boolean;

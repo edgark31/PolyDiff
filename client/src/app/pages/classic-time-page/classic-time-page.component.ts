@@ -51,6 +51,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
         this.roomManagerService.retrieveLobbies();
         // if (this.roomManagerService.isObserver)
         this.clientSocket.on('lobby', LobbyEvents.Spectate, (lobby: Lobby) => {
+            this.roomManagerService.actualRoomId = lobby.lobbyId ?? '';
             this.gameManager.lobbyWaiting = lobby;
             this.router.navigate(['/game']);
         });

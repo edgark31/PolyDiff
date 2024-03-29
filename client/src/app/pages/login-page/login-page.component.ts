@@ -49,7 +49,7 @@ export class LoginPageComponent {
                     this.gameManager.username = account.credentials.username;
                     this.translate.setDefaultLang(this.welcomeservice.account.profile.language);
                     this.translate.use(this.welcomeservice.account.profile.language);
-                    this.welcomeservice.account.profile.avatar = `http://localhost:3000/avatar/${this.gameManager.username}.png`;
+                    this.welcomeservice.account.profile.avatar = `http://34.118.163.79:3000/avatar/${this.gameManager.username}.png`;
                     this.router.navigate(['/home']);
                 },
                 error: (error: HttpErrorResponse) => {

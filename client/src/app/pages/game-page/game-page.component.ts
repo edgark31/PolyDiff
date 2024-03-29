@@ -38,7 +38,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     lobbies: Lobby[] = [];
     gameLobby: Game;
     lobby: Lobby;
-    observer: number;
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
@@ -170,6 +169,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.lobbySubscription?.unsubscribe();
             this.remainingDifferenceSubscription?.unsubscribe();
             this.observersSubscription?.unsubscribe();
+
             this.roomManager.off();
             this.gameManager.off();
         }
@@ -208,6 +208,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             disableClose: true,
             panelClass: 'dialog',
         });
+        console.log('tu abandines');
     }
 
     showAbandonDialog(): void {
@@ -216,6 +217,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             disableClose: true,
             panelClass: 'dialog',
         });
+        console.log('tu finis');
     }
 
     mouseClickOnCanvas(event: MouseEvent, isLeft: boolean) {

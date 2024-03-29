@@ -21,12 +21,14 @@ export class GamePageDialogComponent {
         public roomManager: RoomManagerService,
     ) {
         this.isReplayPaused = false;
-        this.roomManager.isObserver = false;
+
         this.roomManager.isOrganizer = false;
     }
 
     abandonGame(): void {
         this.gameManager.abandonGame(this.data.lobby.lobbyId as string);
+        console.log('On y va');
+
         this.router.navigate(['/game-mode']);
     }
 

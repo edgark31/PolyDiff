@@ -235,6 +235,9 @@ export class GameGateway implements OnGatewayConnection {
         this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
             .get(lobbyId)
             .players.filter((player) => player.accountId !== socket.data.accountId);
+        this.roomsManager.lobbies.get(lobbyId).observers = this.roomsManager.lobbies
+            .get(lobbyId)
+            .observers.filter((observer) => observer.accountId !== socket.data.accountId);
         socket.leave(lobbyId);
         this.logger.log(`${socket.data.accountId} abandoned game ${lobbyId}`);
         const abandonMessage = `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a abandonné la partie !`;
