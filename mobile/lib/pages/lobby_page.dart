@@ -95,7 +95,6 @@ class _LobbyPageState extends State<LobbyPage> {
                       lobbyService.leaveLobby();
                       Navigator.pushNamed(context, DASHBOARD_ROUTE);
                     },
-                    backgroundColor: kMidOrange,
                     widthFactor: 0.3,
                   ),
                 ],
@@ -122,7 +121,6 @@ class _LobbyPageState extends State<LobbyPage> {
           // TODO: Add loading message for creator
           // Navigator.pushNamed(context, CLASSIC_ROUTE);
         },
-        backgroundColor: kMidGreen,
       );
     } else {
       return Text(

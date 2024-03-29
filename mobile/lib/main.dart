@@ -15,7 +15,7 @@ import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
-import 'package:mobile/utils/app_theme_utils.dart';
+import 'package:mobile/utils/theme_utils.dart';
 import 'package:provider/provider.dart';
 
 Widget defaultHome = HomePage();

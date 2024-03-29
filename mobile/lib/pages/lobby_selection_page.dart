@@ -128,7 +128,6 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                             },
                             text: 'Rejoindre cette salle d\'attente',
                             widthFactor: 1.5,
-                            backgroundColor: kMidOrange,
                           ))
                     : CustomButton(
                         text: 'Observer cette partie',
@@ -137,7 +136,6 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                           print(
                               'Player is joining as observer in lobby ${lobby.lobbyId}');
                         },
-                        backgroundColor: kMidGreen,
                       ),
               ],
             ),

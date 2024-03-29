@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
@@ -166,7 +165,6 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
                     }
                   },
                   text: 'Choisir cette fiche',
-                  backgroundColor: kMidOrange,
                   widthFactor: 0.25,
                 ),
               ],

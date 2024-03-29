@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
@@ -153,8 +152,6 @@ class _SignInFormState extends State<SignInForm> {
                       }
                     }
                   },
-                  backgroundColor: kMidGreen,
-                  textColor: kLight,
                   text: SIGN_IN_BTN_TXT,
                 ),
                 if (serverErrorMessage != null)
@@ -172,23 +169,21 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                 SizedBox(height: 30),
                 CustomButton(
-                    text: FORGOT_PASSWORD_TXT,
-                    press: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return PasswordResetPopup();
-                        },
-                      );
-                    },
-                    backgroundColor: kMidOrange,
-                    textColor: kLight),
+                  text: FORGOT_PASSWORD_TXT,
+                  press: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return PasswordResetPopup();
+                      },
+                    );
+                  },
+                ),
                 SizedBox(height: 30),
                 CustomButton(
-                    text: SIGN_UP_BTN_TXT,
-                    press: () => Navigator.pushNamed(context, SIGN_UP_ROUTE),
-                    backgroundColor: kMidOrange,
-                    textColor: kLight),
+                  text: SIGN_UP_BTN_TXT,
+                  press: () => Navigator.pushNamed(context, SIGN_UP_ROUTE),
+                ),
               ],
             ),
           ),
