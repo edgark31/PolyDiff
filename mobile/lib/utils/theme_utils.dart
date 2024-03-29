@@ -20,6 +20,21 @@ class ThemeClass {
 
   static ThemeData lightTheme = ThemeData(
     primaryColor: ThemeData.light().scaffoldBackgroundColor,
+    fontFamily: 'troika',
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.all<Color>(_themeClass.kMidOrange),
+        foregroundColor: MaterialStateProperty.all<Color>(_themeClass.kLight),
+        shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
+        side: MaterialStateProperty.all<BorderSide>(
+          BorderSide(
+            color: _themeClass.kLightOrange,
+            width: 2,
+          ),
+        ),
+      ),
+    ),
     colorScheme: const ColorScheme.light().copyWith(
       primary: _themeClass.kLightOrange,
       secondary: _themeClass.kMidOrange,
@@ -29,30 +44,28 @@ class ThemeClass {
 
   static ThemeData darkTheme = ThemeData(
     primaryColor: ThemeData.dark().scaffoldBackgroundColor,
+    fontFamily: 'troika',
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.all<Color>(_themeClass.kDarkGreen),
+        foregroundColor: MaterialStateProperty.all<Color>(_themeClass.kLight),
+        shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
+        side: MaterialStateProperty.all<BorderSide>(
+          BorderSide(
+            color: _themeClass.kLightGreen,
+            width: 2,
+          ),
+        ),
+      ),
+    ),
     colorScheme: const ColorScheme.dark().copyWith(
       primary: _themeClass.kDarkGreen,
+      onPrimary: _themeClass.kLight,
       secondary: _themeClass.kMidGreen,
       onSecondary: _themeClass.kLight,
     ),
   );
-
-  // static ThemeData lightTheme = ThemeData(
-  //   useMaterial3: true,
-  //   fontFamily: 'troika',
-  //   brightness: Brightness.light,
-  //   scaffoldBackgroundColor: Colors.white,
-  //   primaryColor: Colors.orangeAccent.shade400,
-  //   textTheme: CustomTextTheme.lightTextTheme,
-  // );
-
-  // static ThemeData darkTheme = ThemeData(
-  //   useMaterial3: true,
-  //   fontFamily: 'troika',
-  //   scaffoldBackgroundColor: Colors.grey.shade900,
-  //   brightness: Brightness.dark,
-  //   primaryColor: Colors.black,
-  //   textTheme: CustomTextTheme.darkTextTheme,
-  // );
 }
 
 ThemeClass _themeClass = ThemeClass();

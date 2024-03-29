@@ -26,16 +26,6 @@ class CustomButton extends StatelessWidget {
         child: ClipRRect(
           child: ElevatedButton(
             onPressed: press,
-            style: ElevatedButton.styleFrom(
-              shape: StadiumBorder(),
-              side: BorderSide.none,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              textStyle: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 5,
-              ),
-            ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
