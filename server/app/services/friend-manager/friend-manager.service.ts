@@ -121,7 +121,7 @@ export class FriendManagerService {
                 friend.isFavorite = isFavorite;
             }
         });
-
+        await account.save();
         await this.accountManager.fetchUsers();
     }
 }

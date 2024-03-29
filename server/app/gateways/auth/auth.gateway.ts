@@ -114,7 +114,8 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(FriendEvents.OptFavorite)
     async optFavorite(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string, @MessageBody('isFavorite') isFavorite: boolean) {
-        
+        await this.friendManager.optFavorite(socket.data.accountId, friendId, isFavorite);
+        socket.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(socket.data.accountId).profile.friends);
     }
 
     @SubscribeMessage(ChannelEvents.SendGlobalMessage)
