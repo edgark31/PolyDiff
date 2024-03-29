@@ -38,10 +38,11 @@ class _GamePageState extends State<GamePage> {
   final ImageConverterService imageConverterService = ImageConverterService();
   final GameAreaService gameAreaService = Get.find();
   final GameManagerService gameManagerService = Get.find();
+  final tempGameManager = CoordinateConversionService();
+
   late Future<CanvasModel> imagesFuture;
   bool isChatBoxVisible = false;
   bool isCheatActivated = false;
-  final tempGameManager = CoordinateConversionService();
 
   @override
   void initState() {
