@@ -78,6 +78,21 @@ class GameManagerService extends ChangeNotifier {
     );
   }
 
+  // sendCoord with Modified Payload
+  // void sendCoord(String? lobbyId, Coordinate coord) {
+  //   print(
+  //       'SendCoord is called with id: $lobbyId and coord: x: ${coord.x} y: ${coord.y}');
+  //   socketService.send(
+  //     SocketType.Game,
+  //     GameEvents.Clic.name,
+  //     {
+  //       'lobbyId': lobbyId,
+  //       'coordClic': coord,
+  //       'isMainCanvas': isLeftCanvas,
+  //     },
+  //   );
+  // }
+
   void abandonGame(String? lobbyId) {
     socketService.send(SocketType.Game, GameEvents.AbandonGame.name, lobbyId);
     disconnectSockets();
