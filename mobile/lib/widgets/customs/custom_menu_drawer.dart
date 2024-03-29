@@ -42,27 +42,32 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
             ),
           ),
           ListTile(
+              tileColor: Colors.transparent,
               leading: Icon(Icons.account_circle),
               title: Text('Profil'),
               onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE)),
           SizedBox(height: 10),
           ListTile(
+              tileColor: Colors.transparent,
               leading: Icon(Icons.message_rounded),
               title: Text('Message'),
               onTap: () => Navigator.pushNamed(context, CHAT_ROUTE)),
           SizedBox(height: 10),
           ListTile(
+              tileColor: Colors.transparent,
               leading: Icon(Icons.line_axis),
               title: Text('Statistiques'),
               onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE)),
           SizedBox(height: 10),
           ListTile(
+              tileColor: Colors.transparent,
               leading: Icon(Icons.settings),
               title: Text('Réglages'),
               onTap: () => Navigator.pushNamed(context, SETTINGS_ROUTE)),
           SizedBox(height: 10),
           Divider(),
           ListTile(
+              tileColor: Colors.transparent,
               leading: Icon(Icons.lock_person_rounded),
               title: Text('Admin'),
               onTap: () => {
@@ -75,6 +80,7 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
                   }),
           SizedBox(height: 10),
           ListTile(
+              tileColor: Colors.transparent,
               leading: Icon(
                 Icons.logout,
               ),

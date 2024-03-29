@@ -43,7 +43,7 @@ class ThemeClass {
   );
 
   static ThemeData darkTheme = ThemeData(
-    primaryColor: ColorScheme.dark().primary,
+    primaryColor: _themeClass.kDarkGreen,
     fontFamily: 'troika',
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
@@ -82,11 +82,16 @@ class ThemeClass {
       ),
       elevation: 3,
     ),
-    iconTheme: IconThemeData(color: _themeClass.kLight),
+    iconTheme: IconThemeData(color: _themeClass.kDark),
+    iconButtonTheme: IconButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all<Color>(_themeClass.kLight),
+      ),
+    ),
     colorScheme: const ColorScheme.dark().copyWith(
       primary: _themeClass.kDarkGreen,
       onPrimary: _themeClass.kLight,
-      secondary: _themeClass.kMidGreen,
+      secondary: _themeClass.kDark,
       onSecondary: _themeClass.kLight,
     ),
   );
