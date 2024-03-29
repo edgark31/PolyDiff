@@ -1,5 +1,7 @@
 /* Export all the model files */
 
+export '../replay/replay_game_model.dart';
+export '../replay/replay_player_model.dart';
 export 'account.dart';
 export 'admin_games_model.dart';
 export 'chat_log_model.dart';

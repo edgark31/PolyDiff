@@ -55,7 +55,7 @@ enum GameEvents {
   TimerUpdate, // Still used by server to emit time
   StartGame,
   UpdateTimer,
-  Clic,
+  Click,
   Found,
   NotFound,
   Cheat,

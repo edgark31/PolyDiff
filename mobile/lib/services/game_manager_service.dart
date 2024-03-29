@@ -37,7 +37,7 @@ class GameManagerService extends ChangeNotifier {
   void sendCoord(String? lobbyID, Coordinate coord) {
     socketService.send(
       SocketType.Game,
-      GameEvents.Clic.name,
+      GameEvents.Click.name,
       {
         'lobbyId': lobbyID,
         'coordClic': coord,
