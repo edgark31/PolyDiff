@@ -35,7 +35,7 @@ class _FriendsPageState extends State<FriendsPage> {
         id: "14",
         friends: [],
         commonFriends: [],
-        isOnline: true,
+        isOnline: false,
         isFavorite: false),
     Friend(
         username: "Mj",
@@ -64,7 +64,96 @@ class _FriendsPageState extends State<FriendsPage> {
   Widget _buildContent() {
     switch (_selectedViewIndex) {
       case 0:
-        return Text("Contenu pour Tous les amis");
+        return ListView.builder(
+          itemCount: simulatedFriends.length,
+          itemBuilder: (BuildContext context, int index) {
+            final friend = simulatedFriends[index];
+            return Container(
+              alignment: Alignment.center,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 750),
+                child: Card(
+                  margin: EdgeInsets.all(8),
+                  child: ListTile(
+                    leading: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.grey[200],
+                          backgroundImage:
+                              AssetImage('assets/images/hallelujaRaccoon.jpeg'),
+                        ),
+                        Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: Container(
+                            padding: EdgeInsets.all(1),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.circle,
+                              color:
+                                  friend.isOnline ? Colors.green : Colors.red,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    title: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(friend.username, style: TextStyle(fontSize: 25)),
+                        SizedBox(width: 5),
+                        IconButton(
+                          icon: Icon(
+                            friend.isFavorite
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: friend.isFavorite ? Colors.red : null,
+                            size: 35,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              friend.isFavorite = !friend.isFavorite;
+                            });
+                            // TODO: notify the server
+                          },
+                        ),
+                        SizedBox(width: 20),
+                        TextButton(
+                          onPressed: () {
+                            print("Show friends");
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            disabledForegroundColor:
+                                Colors.grey.withOpacity(0.38),
+                          ),
+                          child: Text('Amis', style: TextStyle(fontSize: 18)),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(friend.isOnline ? 'Online' : 'Offline'),
+                    onTap: () {
+                      print("Pressed");
+                    },
+                    trailing: IconButton(
+                      iconSize: 40,
+                      icon: Icon(Icons.person_remove),
+                      onPressed: () {
+                        print("delete ${friend.username}");
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
       case 1:
         return Text("Contenu pour En attente");
       case 2:
