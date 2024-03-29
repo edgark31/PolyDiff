@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { FriendManagerService } from '@app/services/friend-manager/friend-manager.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
