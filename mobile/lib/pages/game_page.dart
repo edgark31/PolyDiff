@@ -206,9 +206,6 @@ class _GamePageState extends State<GamePage> {
                   'Quitter',
                   () {
                     gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
-                    gameManagerService
-                        .disconnectSocket(); // No event sent to server
-                    lobbyService.leaveLobby();
                     Navigator.pushNamed(context, DASHBOARD_ROUTE);
                   },
                 )

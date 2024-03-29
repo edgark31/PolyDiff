@@ -80,10 +80,7 @@ class GameManagerService extends ChangeNotifier {
 
   void abandonGame(String? lobbyId) {
     socketService.send(SocketType.Game, GameEvents.AbandonGame.name, lobbyId);
-    disconnectSocket();
-    if (lobbyService.lobby.players.length < 2) {
-      lobbyService.endLobby();
-    }
+    disconnectSockets();
   }
 
   void spectateLobby(String? lobbyId) {
@@ -97,6 +94,7 @@ class GameManagerService extends ChangeNotifier {
 
   void setObserverListener() {
     socketService.on(SocketType.Game, GameEvents.Spectate.name, (data) {
+      print('Spectate received');
       Map<String, dynamic> returnedInfo = data as Map<String, dynamic>;
       lobbyService.setLobby(
           Lobby.fromJson(returnedInfo['lobby'] as Map<String, dynamic>));
@@ -104,8 +102,9 @@ class GameManagerService extends ChangeNotifier {
     });
   }
 
-  void disconnectSocket() {
+  void disconnectSockets() {
     socketService.disconnect(SocketType.Game);
+    lobbyService.disconnectLobbySocket();
   }
 
   void activateCheat() {
@@ -163,8 +162,7 @@ class GameManagerService extends ChangeNotifier {
 
     socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
       setEndGameMessage(data as String?);
-      disconnectSocket();
-      lobbyService.endLobby();
+      disconnectSockets();
     });
 
     socketService.on(SocketType.Game, GameEvents.Cheat.name, (data) {

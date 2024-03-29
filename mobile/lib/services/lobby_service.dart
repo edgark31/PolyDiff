@@ -59,7 +59,7 @@ class LobbyService extends ChangeNotifier {
   }
 
   void joinLobby(String? joinedLobbyId) {
-    setLobby(getLobbyFromLobbies(joinedLobbyId));
+    setUpLobbyInitial(joinedLobbyId);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Join.name,
@@ -72,12 +72,18 @@ class LobbyService extends ChangeNotifier {
 
   void spectateLobby(String? joinedLobbyId) {
     setIsObserver(true);
-    setLobby(getLobbyFromLobbies(joinedLobbyId));
+    setUpLobbyInitial(joinedLobbyId);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Spectate.name,
       joinedLobbyId,
     );
+  }
+
+  void setUpLobbyInitial(String? joinedLobbyId) {
+    // Safety check to unsure latest lobbies are up to date
+    socketService.send(SocketType.Auth, LobbyEvents.UpdateLobbys.name);
+    setLobby(getLobbyFromLobbies(joinedLobbyId));
   }
 
   void leaveLobby() {
@@ -87,10 +93,10 @@ class LobbyService extends ChangeNotifier {
       _lobby.lobbyId,
     );
     setLobby(Lobby.initial());
-    endLobby();
+    disconnectLobbySocket();
   }
 
-  void endLobby() {
+  void disconnectLobbySocket() {
     socketService.disconnect(SocketType.Lobby);
   }
 

@@ -76,7 +76,7 @@ class ChatService extends ChangeNotifier {
   }
 
   void setLobbyMessages(List<Chat> messages) {
-    _lobbyMessages.clear();
+    _lobbyMessages.clear(); // safety check
     _lobbyMessages.addAll(messages);
     notifyListeners();
   }

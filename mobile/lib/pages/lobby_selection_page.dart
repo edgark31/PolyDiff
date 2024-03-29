@@ -150,6 +150,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                               'Player is joining as observer in lobby ${lobby.lobbyId}');
                           lobbyService.spectateLobby(lobby.lobbyId);
                           chatService.setLobbyMessages(lobby.chatLog!.chat);
+                          // Directly jump to GameLogic
                           gameManagerService.spectateLobby(lobby.lobbyId);
                           chatService.setGameChatListeners();
                           Navigator.pushNamed(context, GAME_ROUTE);
