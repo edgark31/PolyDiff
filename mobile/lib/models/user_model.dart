@@ -1,20 +1,20 @@
 import 'package:mobile/models/friend_model.dart';
 
-class User {
+class UserFriend {
   String username;
   String id;
   List<Friend?> friends;
   List<String?> friendRequests;
 
-  User({
+  UserFriend({
     required this.username,
     required this.id,
     this.friends = const [],
     this.friendRequests = const [],
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory UserFriend.fromJson(Map<String, dynamic> json) {
+    return UserFriend(
       username: json['username'],
       id: json['id'],
       friends: List<Friend>.from(json['friends'] ?? []),
@@ -31,7 +31,8 @@ class User {
     };
   }
 
-  static List<User> usersFromSnapshot(List<Map<String, dynamic>> snapshot) {
-    return snapshot.map((e) => User.fromJson(e)).toList();
+  static List<UserFriend> usersFromSnapshot(
+      List<Map<String, dynamic>> snapshot) {
+    return snapshot.map((e) => UserFriend.fromJson(e)).toList();
   }
 }

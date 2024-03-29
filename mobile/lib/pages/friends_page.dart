@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/models/friend_model.dart';
+import 'package:mobile/models/user_model.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 
@@ -20,7 +22,38 @@ class FriendsPage extends StatefulWidget {
 
 class _FriendsPageState extends State<FriendsPage> {
   int _selectedViewIndex = 0;
-  
+  List<Friend> simulatedFriends = [
+    Friend(
+        username: "Mp",
+        id: "11",
+        friends: [],
+        commonFriends: [],
+        isOnline: true,
+        isFavorite: false),
+    Friend(
+        username: "Edgar",
+        id: "14",
+        friends: [],
+        commonFriends: [],
+        isOnline: true,
+        isFavorite: false),
+    Friend(
+        username: "Mj",
+        id: "13",
+        friends: [],
+        commonFriends: [],
+        isOnline: true,
+        isFavorite: false),
+  ];
+
+  //Utilisé pour la recherche
+  List<UserFriend> simulatedUsers = [
+    UserFriend(username: "Mp", id: "11", friends: [], friendRequests: []),
+    UserFriend(username: "Mj", id: "13", friends: [], friendRequests: []),
+    UserFriend(username: "Edgar", id: "14", friends: [], friendRequests: []),
+    UserFriend(username: "Moha", id: "15", friends: [], friendRequests: []),
+    UserFriend(username: "Zaki", id: "16", friends: [], friendRequests: []),
+  ];
 
   void _selectView(int index) {
     setState(() {
