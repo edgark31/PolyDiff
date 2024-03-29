@@ -2,6 +2,8 @@
 * {
     font-family: 'Troika', sans-serif;
     font-size: 20px;
+    color:rgb(255, 255, 255);
+    -webkit-text-stroke: 1px rgb(0, 0, 0);
 }
 
 *:not(#selection) {
@@ -40,16 +42,19 @@
 
 .dialog-image {
     position: absolute;
-    top: 180px;
+    top: 400px;
     left: 49%;
     transform: translateX(-50%) rotate(180deg);
     width: 45%;
-    height: 45%;
+    height: 25%;
 }
 
 .checkbox {
     display: inline-flex;
     flex-direction: row;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   
   .checkbox-button {

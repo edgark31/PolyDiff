@@ -14,7 +14,9 @@ import { GREEN_PIXEL, N_PIXEL_ATTRIBUTE, RED_PIXEL, YELLOW_PIXEL } from '@app/co
 import { SPEED_X1 } from '@app/constants/replay';
 import { ReplayActions } from '@app/enum/replay-actions';
 import { CaptureService } from '@app/services/capture-service/capture.service';
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { Coordinate } from '@common/coordinate';
+import { GameEvents } from '@common/enums';
 
 @Injectable({
     providedIn: 'root',
@@ -33,10 +35,14 @@ export class GameAreaService {
     private isCheatMode: boolean;
     private cheatModeInterval: number;
 
-    constructor(private readonly captureService: CaptureService) {
+    constructor(private readonly captureService: CaptureService, private readonly clientSocket: ClientSocketService) {
         this.mousePosition = { x: 0, y: 0 };
         this.isClickDisabled = false;
         this.isCheatMode = false;
+    }
+
+    get isCheatModeActivated(): boolean {
+        return this.isCheatMode;
     }
 
     @HostListener('keydown', ['$event'])
@@ -72,6 +78,9 @@ export class GameAreaService {
             }
         }
         this.modifiedContext.putImageData(this.modifiedPixelData, 0, 0);
+        if (this.isCheatMode) {
+            this.clientSocket.send('game', GameEvents.CheatDeactivated);
+        }
         this.resetCheatMode();
         this.captureService.saveReplayEvent(ReplayActions.ClickFound, differenceCoord);
         this.flashPixels(differenceCoord, flashingSpeed, isPaused);
