@@ -225,9 +225,7 @@ class _GamePageState extends State<GamePage> {
                     });
                   },
                 ),
-          if (lobbyService.lobby.observers
-              .isNotEmpty) // TODO : Confirm with heavy client behavior if 0 observer
-            _observerInfos(lobbyService.lobby.observers.length),
+          _observerInfos(lobbyService.lobby.observers.length),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -273,6 +271,24 @@ class _GamePageState extends State<GamePage> {
   }
 
   Widget _observerInfos(int nObservers) {
+    if (nObservers == 0) {
+      return Positioned(
+        right: 8.0,
+        bottom: 8.0,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [Icon(Icons.visibility_off, color: Colors.white)],
+          ),
+        ),
+      );
+    }
+
     return Positioned(
       right: 8.0,
       bottom: 8.0,
