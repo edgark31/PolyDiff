@@ -200,6 +200,22 @@ export interface Profile {
     onErrorSound: Sound;
 }
 
+export interface Friend {
+    name: string;
+    accountId: string;
+    friends?: Friend[];
+    commonFriends?: Friend[];
+    isFavorite?: boolean;
+    isOnline?: boolean;
+}
+
+export interface User {
+    name: string;
+    accountId: string;
+    friends: Friend[]; // Ne contient que name et accountId
+    friendRequests: string[];
+}
+
 export interface SessionLog {
     timestamp: string;
     isWinner: boolean;
@@ -215,23 +231,6 @@ export interface Statistics {
     gameWon: number;
     averageTime: number;
     averageDifferences: number;
-}
-
-export interface Friend {
-    name: string;
-    avatar: string;
-    friendNames: string[];
-    commonFriendNames: string[];
-    isFavorite: boolean;
-    isOnline: boolean;
-}
-
-export interface Score {
-    value: number;
-    mode: string;
-    duration: number;
-    diffFound: number;
-    difficulty: string;
 }
 
 export interface Chat {

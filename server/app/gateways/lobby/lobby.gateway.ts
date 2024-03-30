@@ -69,9 +69,6 @@ export class LobbyGateway implements OnGatewayConnection {
         if (socket.data.state === LobbyState.Spectate) {
             socket.data.state = LobbyState.Idle;
             socket.leave(lobbyId);
-            // this.roomsManager.lobbies.get(lobbyId).observers = this.roomsManager.lobbies
-            //     .get(lobbyId)
-            //     .observers.filter((observer) => observer.accountId !== socket.data.accountId);
             socket.emit(LobbyEvents.Leave);
             this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} unspectate le lobby ${lobbyId}`);
             return;

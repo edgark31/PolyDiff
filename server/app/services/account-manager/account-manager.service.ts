@@ -18,7 +18,7 @@ export class AccountManagerService implements OnModuleInit {
 
     constructor(
         private readonly logger: Logger,
-        @InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>,
+        @InjectModel(Account.name) public accountModel: Model<AccountDocument>,
         private readonly imageManager: ImageManagerService,
     ) {}
 

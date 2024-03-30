@@ -111,20 +111,23 @@ export enum LobbyState {
 }
 
 export enum AccountEvents {
-    UserUpdate = 'UserUpdate',
-    UserCreate = 'UserCreate',
-    UserDelete = 'UserDelete',
-    RefreshAccount = 'RefreshAccount',
+    RefreshAccount = 'RefreshAccount', // Pour rafraichir son propre compte
+}
+
+export enum UserEvents {
+    UpdateUsers = 'UpdateUsers', // Pour chercher les users, même offline
 }
 
 export enum FriendEvents {
-    Invite = 'Invite',
-    OptInvite = 'OptInvite',
-    CancelInvite = 'CancelInvite',
-    AddFavorite = 'AddFavorite',
-    Update = 'Update',
-    SendScore = 'SendScore',
-    ShareScore = 'ShareScore',
+    SendRequest = 'SendRequest', // Envoyer une demande - ROLE de l'envoyeur
+    CancelRequest = 'CancelRequest', // Annuler une demande -  ROLE de l'envoyeur
+    OptRequest = 'OptRequest', // Accepter ou refuser une demande - ROLE du recepteur
+    OptFavorite = 'OptFavorite', // Ajouter ou retirer un ami des favoris
+    UpdateFriends = 'UpdateFriends', // Pour rafraichir la liste d'amis
+    UpdateSentFriends = 'UpdateSentFriends', // Pour rafraichir la liste des demandes envoyées
+    UpdatePendingFriends = 'UpdatePendingFriends', // Pour rafraichir la liste des demandes en attente
+    DeleteFriend = 'DeleteFriend', // Pour supprimer un ami
+    ShareScore = 'ShareScore', // Pour partager un score -- CLIENT LOURD seulement
 }
 
 export enum GameEvents {

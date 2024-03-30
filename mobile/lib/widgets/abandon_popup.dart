@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/lobby_service.dart';
@@ -13,8 +12,8 @@ class AbandonPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lobbyService = context.watch<LobbyService>(); 
-    final gameManagerService = context.watch<GameManagerService>(); 
+    final lobbyService = context.watch<LobbyService>();
+    final gameManagerService = context.watch<GameManagerService>();
     return Center(
       child: SizedBox(
         width: 600.0,
@@ -43,7 +42,6 @@ class AbandonPopup extends StatelessWidget {
                   gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
                   Navigator.pushNamed(context, DASHBOARD_ROUTE);
                 },
-                backgroundColor: kMidGreen,
               ),
               SizedBox(height: 10),
               CustomButton(
@@ -51,7 +49,6 @@ class AbandonPopup extends StatelessWidget {
                 press: () {
                   Navigator.pop(context);
                 },
-                backgroundColor: kMidOrange,
               ),
             ],
           ),
