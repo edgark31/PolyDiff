@@ -72,6 +72,7 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
               title: Text('Admin'),
               onTap: () => {
                     showDialog(
+                      barrierDismissible: false,
                       context: context,
                       builder: (BuildContext context) {
                         return AdminPopup();

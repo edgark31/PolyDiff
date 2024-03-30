@@ -169,6 +169,7 @@ class _SignInFormState extends State<SignInForm> {
                   text: FORGOT_PASSWORD_TXT,
                   press: () {
                     showDialog(
+                      barrierDismissible: false,
                       context: context,
                       builder: (BuildContext context) {
                         return PasswordResetPopup();
