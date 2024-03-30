@@ -244,7 +244,9 @@ export class GameGateway implements OnGatewayConnection {
             clearInterval(this.timers.get(lobbyId));
             this.deleteLobby(lobbyId);
             this.logger.log(`Game ${lobbyId} ended because of not enough players`);
+            return;
         }
+        socket.emit(GameEvents.AbandonGame);
     }
 
     @SubscribeMessage(GameEvents.CheatActivated)
