@@ -55,7 +55,6 @@ enum ChannelEvents {
 enum GameEvents {
   TimerUpdate, // Still used by server to emit time
   StartGame,
-  Spectate,
   UpdateTimer,
   Clic,
   Found,
@@ -64,6 +63,8 @@ enum GameEvents {
   NextGame,
   AbandonGame,
   EndGame,
+  // observer
+  Spectate,
   // Cheat system
   CheatActivated,
   CheatDeactivated,

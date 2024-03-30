@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/game_card_service.dart';
+import 'package:mobile/services/game_manager_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
+import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/services/services.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:provider/provider.dart';
 
 class CreateRoomCardPage extends StatefulWidget {
@@ -42,6 +49,37 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     }
   }
 
+  void startPracticeGame() {
+    final LobbyService lobbyService = Get.find();
+    final SocketService socketService = Get.find();
+    final GameManagerService gameManagerService = Get.find();
+    final infoService = context.read<InfoService>();
+    lobbyService.createLobby();
+    print('createLobby() called');
+    Future.delayed(Duration(milliseconds: 500), () {
+      // Waiting for server to emit the created lobby from creator
+      lobbyService.startLobby();
+      setState(() => isLoading = true);
+      Future.delayed(Duration(milliseconds: 500), () {
+        // Waiting for server to  start Lobby
+        if (lobbyService.isCurrentLobbyStarted()) {
+          Future.delayed(Duration.zero, () {
+            // Safety check
+            if (ModalRoute.of(context)?.isCurrent ?? false) {
+              // Safety check
+              print(
+                  'Current Lobby is started navigating to GamePage for Practice Game');
+              socketService.setup(SocketType.Game, infoService.id);
+              gameManagerService.setupGame();
+              setState(() => isLoading = false);
+              Navigator.pushNamed(context, GAME_ROUTE);
+            }
+          });
+        }
+      });
+    });
+  }
+
   Future<void> _fetchGameCards() async {
     setState(() => isLoading = true);
     final gameCardService =
@@ -61,35 +99,37 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
   Widget build(BuildContext context) {
     final gameCardService = context.watch<GameCardService>();
     final gameCardsFromServer = gameCardService.gameCards;
-    // TODO : Reload game cards if new games are added to the server
+    // TODO : Reload game cards if new games are added or deleted to the server
 
     return Scaffold(
-      // TODO : Think problems if drawer and appbar are used
+      // TODO : Put back when disconnect logic in place
       // drawer: CustomMenuDrawer(),
-      // appBar: CustomAppBar(),
+      // appBar:
+      //     CustomAppBar(title: 'Création d\'une salle de jeu - Choix de fiche'),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Text('Création d\'une salle de jeu - Mode Classique'),
-            Text('Choisissez une fiche'),
-            isLoading
-                ? Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: gameCardsFromServer.length,
-                    itemBuilder: (context, index) {
-                      return buildGameCard(context, gameCardsFromServer[index]);
-                    },
-                  ),
-            Text(
-              errorMessage,
-              style: TextStyle(
-                  color: const Color.fromARGB(255, 240, 16, 0),
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
+        child: Center(
+          child: Column(
+            children: [
+              isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: gameCardsFromServer.length,
+                      itemBuilder: (context, index) {
+                        return buildGameCard(
+                            context, gameCardsFromServer[index]);
+                      },
+                    ),
+              Text(
+                errorMessage,
+                style: TextStyle(
+                    color: const Color.fromARGB(255, 240, 16, 0),
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -97,6 +137,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
 
   Widget buildGameCard(BuildContext context, GameCard card) {
     final lobbySelectionService = context.watch<LobbySelectionService>();
+    final lobbyService = context.watch<LobbyService>();
     String imagePath = '$BASE_URL/${card.id}/original.bmp';
     String differenceText = 'Différences: ${card.nDifference}';
     return Padding(
@@ -104,26 +145,29 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
       child: Card(
         elevation: 5,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ListTile(
-              leading: Image.network(imagePath),
-              title: Text(card.name),
-              subtitle: Text(differenceText),
+            Positioned(
+              top: 1,
+              child: Column(
+                children: [
+                  Text(card.name),
+                  Image.network(imagePath, height: 100, width: 100),
+                  Text(differenceText),
+                ],
+              ),
             ),
-            ButtonBar(
-              alignment: MainAxisAlignment.start,
-              children: [
-                CustomButton(
-                  press: () {
-                    lobbySelectionService.setGameId(card.id);
-                    lobbySelectionService.setNDifferences(card.nDifference);
-                    Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
-                  },
-                  text: 'Choisir cette fiche',
-                  backgroundColor: kMidOrange,
-                  widthFactor: 0.25,
-                ),
-              ],
+            CustomButton(
+              press: () {
+                lobbySelectionService.setGameId(card.id);
+                lobbySelectionService.setNDifferences(card.nDifference);
+                if (lobbyService.gameModes == GameModes.Practice) {
+                  startPracticeGame();
+                } else {
+                  Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
+                }
+              },
+              text: 'Choisir cette fiche',
             ),
           ],
         ),

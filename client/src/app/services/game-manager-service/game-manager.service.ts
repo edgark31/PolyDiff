@@ -238,6 +238,11 @@ export class GameManagerService {
             this.lobbies.next(lobbies);
             this.lobbyGame.next(lobbies.find((lobby: Lobby) => this.lobbyWaiting.lobbyId === lobby.lobbyId) ?? this.lobbyWaiting);
         });
+
+        this.clientSocket.on('game', GameEvents.AbandonGame, (lobby: Lobby) => {
+            console.log('aaaaaaaaa');
+            this.lobbyGame.next(lobby);
+        });
         this.clientSocket.on('game', GameEvents.NextGame, (nextGame: Game) => {
             this.nextGame.next(nextGame);
         });
@@ -278,7 +283,6 @@ export class GameManagerService {
         if (this.endMessage && !this.endMessage.closed) this.endMessage?.unsubscribe();
         if (this.nextGame && !this.nextGame.closed) this.nextGame?.unsubscribe();
         if (this.roomManager.lobbies && !this.roomManager.lobbies.closed) this.roomManager.lobbies?.unsubscribe();
-        this.clientSocket.disconnect('game');
     }
 
     private handleNotFound(coordClic: Coordinate): void {

@@ -8,11 +8,13 @@ import 'package:mobile/services/socket_service.dart';
 class LobbyService extends ChangeNotifier {
   static GameModes _gameModes = GameModes.Classic;
   static bool _isCreator = false;
+  static bool _isObserver = false;
   static List<Lobby> _lobbies = [];
   static Lobby _lobby = Lobby.initial();
 
   GameModes get gameModes => _gameModes;
   bool get isCreator => _isCreator;
+  bool get isObserver => _isObserver;
   List<Lobby> get lobbies => _lobbies;
   Lobby get lobby => _lobby;
 
@@ -26,6 +28,11 @@ class LobbyService extends ChangeNotifier {
 
   void setIsCreator(bool newIsCreator) {
     _isCreator = newIsCreator;
+    notifyListeners();
+  }
+
+  void setIsObserver(bool newIsObserver) {
+    _isObserver = newIsObserver;
     notifyListeners();
   }
 
@@ -44,7 +51,6 @@ class LobbyService extends ChangeNotifier {
   }
 
   void startLobby() {
-    // setIsCreator(false);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Start.name,
@@ -53,8 +59,7 @@ class LobbyService extends ChangeNotifier {
   }
 
   void joinLobby(String? joinedLobbyId) {
-    setIsCreator(false);
-    setLobby(getLobbyFromLobbies(joinedLobbyId));
+    setUpLobbyInitial(joinedLobbyId);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Join.name,
@@ -65,23 +70,41 @@ class LobbyService extends ChangeNotifier {
     );
   }
 
+  void spectateLobby(String? joinedLobbyId) {
+    setIsObserver(true);
+    setUpLobbyInitial(joinedLobbyId);
+    socketService.send(
+      SocketType.Lobby,
+      LobbyEvents.Spectate.name,
+      joinedLobbyId,
+    );
+  }
+
+  void setUpLobbyInitial(String? joinedLobbyId) {
+    // Safety check to unsure latest lobbies are up to date
+    socketService.send(SocketType.Auth, LobbyEvents.UpdateLobbys.name);
+    setLobby(getLobbyFromLobbies(joinedLobbyId));
+  }
+
   void leaveLobby() {
-    setIsCreator(false);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Leave.name,
       _lobby.lobbyId,
     );
     setLobby(Lobby.initial());
-    endLobby();
+    disconnectLobbySocket();
   }
 
-  void endLobby() {
+  void disconnectLobbySocket() {
     socketService.disconnect(SocketType.Lobby);
   }
 
   void setupLobby(GameModes mode) {
+    setIsCreator(false); // Make sure default value is false
+    setIsObserver(false); // Make sure default value is false
     setListeners();
+    socketService.send(SocketType.Auth, LobbyEvents.UpdateLobbys.name);
     setGameModes(mode);
   }
 
@@ -142,6 +165,7 @@ class LobbyService extends ChangeNotifier {
   }
 
   bool doesLobbyHavePassword() {
-    return lobby.password == null || lobby.password == ''; // Password lobbies are not displayed on mobile
+    return lobby.password == null ||
+        lobby.password == ''; // Password lobbies are not displayed on mobile
   }
 }

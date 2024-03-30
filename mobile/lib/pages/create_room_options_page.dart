@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
+import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
@@ -24,7 +25,8 @@ class CreateRoomOptionsPage extends StatefulWidget {
 }
 
 class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
-  bool cheatMode = false;
+  final ChatService chatService = Get.find();
+  bool cheatMode = true;
   double gameDuration = 30;
   double gameBonus = 10;
 
@@ -33,9 +35,11 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     final lobbyService = context.watch<LobbyService>();
     final lobbySelectionService = context.watch<LobbySelectionService>();
     final gameModeName = lobbyService.gameModes.name;
+    final chatService = context.watch<ChatService>();
 
     return Scaffold(
-      // appBar: CustomAppBar(),
+      // TODO : Put back when disconnect logic in place
+      // appBar: CustomAppBar(title: 'Configurations des options'),
       // drawer: CustomMenuDrawer(),
       body: Center(
         child: Column(
@@ -61,25 +65,16 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
               press: () {
                 lobbySelectionService.setIsCheatEnabled(cheatMode);
                 lobbySelectionService.setGameDuration(gameDuration.round());
+                lobbySelectionService.setGameBonus(gameBonus.round());
                 lobbyService.createLobby();
+                chatService.setLobbyMessages([]); // Creator has no messages
                 Future.delayed(Duration(milliseconds: 500), () {
                   // Waiting for server to emit the created lobby from creator
                   Navigator.pushNamed(context, LOBBY_ROUTE);
                 });
               },
               text: 'Créer la salle de jeu',
-              backgroundColor: kMidOrange,
               widthFactor: 0.25,
-            ),
-            CustomButton(
-              press: () {
-                // TODO: Make sure the page does not count stats + no clock
-                // TODO: Think if we need to disconnect the lobby socket
-                print("Navigate to game page but stats do not count");
-                Navigator.pushNamed(context, CLASSIC_ROUTE);
-              },
-              text: 'Mode pratique',
-              backgroundColor: kMidOrange,
             ),
           ],
         ),
@@ -112,7 +107,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
         Slider(
           value: gameDuration,
           min: 30,
-          max: 600, // TODO: Change back to 50 when testing is done
+          max: 600, // TODO: Change back to 60 when testing is done
           divisions: 30,
           label: gameDuration.round().toString(),
           onChanged: (double newValue) {
@@ -133,7 +128,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
         Slider(
           value: gameBonus,
           min: 10,
-          max: 20, // TODO: Change back to 50 when testing is done
+          max: 20,
           divisions: 10,
           label: gameBonus.round().toString(),
           onChanged: (double newValue) {
