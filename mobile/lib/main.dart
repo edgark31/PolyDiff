@@ -93,8 +93,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: APP_NAME_TXT,
       themeMode: ThemeMode.system,
-      theme: ThemeClass.lightTheme,
-      darkTheme: ThemeClass.darkTheme,
+      theme: ThemeClass.darkTheme, // TODO Change theme according to user settings
+      // darkTheme: ThemeClass.darkTheme,
       onGenerateRoute: AppRouter.onGenerateRoute,
       initialRoute: HomePage.routeName,
     );

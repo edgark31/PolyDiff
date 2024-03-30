@@ -205,6 +205,7 @@ class _GamePageState extends State<GamePage> {
                   context,
                   'Quitter',
                   () {
+                    print('Quitter pressed');
                     gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
                     Navigator.pushNamed(context, DASHBOARD_ROUTE);
                   },
