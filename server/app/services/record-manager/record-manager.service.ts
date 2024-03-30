@@ -1,6 +1,7 @@
 import { GameRecord, GameRecordDocument } from '@app/model/database/game-record';
 import { DatabaseService } from '@app/services/database/database.service';
 import { DEFAULT_COUNTDOWN_VALUE, PADDING_N_DIGITS } from '@common/constants';
+import { GameEvents } from '@common/enums';
 import { Game, GameEventData } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -23,8 +24,9 @@ export class RecordManagerService {
 
         const gameEventData: GameEventData = {
             username,
+            players: [],
             timestamp: Date.now(),
-            gameEvent: 'StartGame',
+            gameEvent: GameEvents.StartGame,
         };
 
         const newRecord = new this.gameRecordModel({
@@ -54,8 +56,13 @@ export class RecordManagerService {
     }
 
     async saveGameRecord(lobbyId: string): Promise<void> {
-        const endTime = this.getFormattedTime(new Date());
-        await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { endTime }, { new: true });
+        const endTime = Date.now();
+        try {
+            await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { endTime }, { new: true });
+        } catch (error) {
+            this.logger.error(`Record Manager from lobby :${lobbyId} has failed
+            to save the game record with error: ${error}`);
+        }
     }
 
     async getRecordedGameByLobbyId(lobbyId: string): Promise<GameRecord> {

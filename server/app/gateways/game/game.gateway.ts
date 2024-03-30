@@ -127,11 +127,11 @@ export class GameGateway implements OnGatewayConnection {
     }
 
     @SubscribeMessage(GameEvents.Clic)
-    async click(
+    async clic(
         @ConnectedSocket() socket: Socket,
-        @MessageBody() lobbyId: string,
-        @MessageBody() coordClic: Coordinate,
-        @MessageBody() isMainCanvas: boolean,
+        @MessageBody('lobbyId') lobbyId: string,
+        @MessageBody('coordClic') coordClic: Coordinate,
+        @MessageBody('isMainCanvas') isMainCanvas: boolean,
     ) {
         this.logger.log(`Click event received from ${socket.data.accountId} in lobby ${lobbyId}`);
 
@@ -142,7 +142,7 @@ export class GameGateway implements OnGatewayConnection {
             index !== NOT_FOUND
                 ? `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a trouvé une différence !`
                 : `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} s'est trompé !`;
-        // TODO: Add accountId to found/not found events and activateCheatMode/desactivateCheatMode events
+
         // ------------------ CLASSIC MODE ------------------
         if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
             // Difference found, update state of game
@@ -211,8 +211,10 @@ export class GameGateway implements OnGatewayConnection {
             // If user did not click on a difference
             /* --------- Record Event -------- */
             this.recordManager.addGameEvent(lobbyId, {
+                accountId: socket.data.accountId,
                 username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
                 gameEvent: GameEvents.NotFound,
+                players: this.roomsManager.lobbies.get(lobbyId).players,
                 coordClic,
                 isMainCanvas,
             });
@@ -291,6 +293,8 @@ export class GameGateway implements OnGatewayConnection {
     @SubscribeMessage(GameEvents.AbandonGame)
     abandonGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        const accountId = socket.data.accountId;
+        const players = this.roomsManager.lobbies.get(lobbyId).players;
         socket.data.state = GameState.Abandoned;
 
         this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
@@ -301,8 +305,8 @@ export class GameGateway implements OnGatewayConnection {
             .observers.filter((observer) => observer.accountId !== socket.data.accountId);
         socket.leave(lobbyId);
 
-        /* ------------------ Record Event ------------------ */
-        this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.AbandonGame, username } as GameEventData);
+        /* ------------------ Record Abandon Event ------------------ */
+        this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.AbandonGame, username, accountId } as GameEventData);
 
         this.logger.log(`${socket.data.accountId} abandoned game ${lobbyId}`);
         const abandonMessage = `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a abandonné la partie !`;
@@ -311,7 +315,7 @@ export class GameGateway implements OnGatewayConnection {
             this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
 
             /* ------------------ Record Event ------------------ */
-            this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.EndGame } as GameEventData);
+            this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.EndGame, players } as GameEventData);
             this.recordManager.saveGameRecord(lobbyId);
 
             clearInterval(this.timers.get(lobbyId));
@@ -325,9 +329,11 @@ export class GameGateway implements OnGatewayConnection {
     @SubscribeMessage(GameEvents.CheatActivated)
     cheatActivated(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string) {
         const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        const accountId = socket.data.accountId;
+        const players = this.roomsManager.lobbies.get(lobbyId).players;
 
         /* ------------------ Record Event ------------------ */
-        this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.CheatActivated, username } as GameEventData);
+        this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.CheatActivated, username, accountId, players } as GameEventData);
         this.logger.log(`${username}(${socket.data.accountId}) activated cheat in ${lobbyId}`);
     }
 

@@ -269,6 +269,7 @@ export interface GameEventData {
     timestamp?: number;
     username: string;
     accountId?: string;
+    players: Player[];
     gameEvent: string;
     coordClic?: Coordinate;
     isMainCanvas?: boolean;

@@ -169,7 +169,7 @@ export class GameManagerService {
     }
 
     requestVerification(id: string, coords: Coordinate): void {
-        this.clientSocket.send('game', GameEvents.Clic, { lobbyId: id, coordClic: coords });
+        this.clientSocket.send('game', GameEvents.Clic, { lobbyId: id, coordClic: coords, isMainCanvas: this.isLeftCanvas });
     }
 
     abandonGame(lobbyId: string): void {
