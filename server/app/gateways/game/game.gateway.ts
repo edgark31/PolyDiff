@@ -9,10 +9,11 @@ import { AccountManagerService } from '@app/services/account-manager/account-man
 import { GameService } from '@app/services/game/game.service';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
+import { RecordManagerService } from '@app/services/record-manager/record-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { NOT_FOUND } from '@common/constants';
 import { ChannelEvents, GameEvents, GameModes, GameState, MessageTag } from '@common/enums';
-import { Chat, Coordinate, Game } from '@common/game-interfaces';
+import { Chat, Coordinate, Game, GameEventData } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -34,19 +35,22 @@ export class GameGateway implements OnGatewayConnection {
         private readonly roomsManager: RoomsManagerService,
         private readonly messageManager: MessageManagerService,
         private readonly imageManager: ImageManagerService,
+        private readonly recordManager: RecordManagerService,
     ) {}
 
     // ------------------ CLASSIC MODE && LIMITED MODE ------------------
     @SubscribeMessage(GameEvents.StartGame)
     async startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         socket.join(lobbyId);
-        // Pour démarrer tout le monde en même temps
+        // To start the game at the same time for each player
         if (Array.from(await this.server.in(lobbyId).fetchSockets()).length === this.roomsManager.lobbies.get(lobbyId).players.length) {
             if (
                 this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic ||
                 this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Practice
             ) {
-                await this.gameService.getGameById(this.roomsManager.lobbies.get(lobbyId).gameId).then((game) => {
+                const lobby = this.roomsManager.lobbies.get(lobbyId);
+                const gameId = lobby.gameId;
+                await this.gameService.getGameById(gameId).then((game) => {
                     // Mettre une copie de game(db) vers game(game) et l'identifier par le lobbyId
                     const clonedGame: Game = structuredClone({
                         lobbyId,
@@ -58,6 +62,17 @@ export class GameGateway implements OnGatewayConnection {
                         nDifferences: JSON.parse(game.differences).length,
                     });
                     this.games.set(lobbyId, clonedGame);
+                    if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
+                        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+                        /* --------- Record StartGame Event -------- */
+                        this.recordManager.createGameRecord(
+                            clonedGame,
+                            username,
+                            lobby.isCheatEnabled,
+                            this.roomsManager.lobbies.get(lobbyId).timeLimit,
+                        );
+                        this.logger.verbose('Record Manager : Game Event StartGame, Game `${clonedGame.name}` created');
+                    }
                 });
                 this.server.to(lobbyId).emit(GameEvents.StartGame, this.games.get(lobbyId));
                 this.logger.log(`Game started in lobby -> ${lobbyId}`);
@@ -67,7 +82,7 @@ export class GameGateway implements OnGatewayConnection {
                 this.logger.log(`Game started in lobby -> ${lobbyId}`);
             }
             if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Practice) return;
-            // Set timer indivually for each lobby
+            // Set timer individually for each lobby
             const timerId = setInterval(() => {
                 if (!this.roomsManager.lobbies.get(lobbyId)) {
                     clearInterval(timerId);
@@ -109,19 +124,36 @@ export class GameGateway implements OnGatewayConnection {
     }
 
     @SubscribeMessage(GameEvents.Clic)
-    async clic(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('coordClic') coordClic: Coordinate) {
+    async click(
+        @ConnectedSocket() socket: Socket,
+        @MessageBody() lobbyId: string,
+        @MessageBody() coordClic: Coordinate,
+        @MessageBody() isMainCanvas: boolean,
+    ) {
+        this.logger.log(`Click event received from ${socket.data.accountId} in lobby ${lobbyId}`);
+
         const index: number = this.games
             .get(lobbyId)
-            .differences.findIndex((difference) => difference.some((coord: Coordinate) => coord.x === coordClic.x && coord.y === coordClic.y));
+            .differences.findIndex((difference) => difference.some((coord: Coordinate) => coord.x === coordinates.x && coord.y === coordinates.y));
         const commonMessage =
             index !== NOT_FOUND
                 ? `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a trouvé une différence !`
                 : `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} s'est trompé !`;
+        // TODO: Add accountId to found/not found events and activateCheatMode/desactivateCheatMode events
         // ------------------ CLASSIC MODE ------------------
         if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
-            // Si trouvé
+            // Difference found, update state of game
             if (index !== NOT_FOUND) {
-                // Update tout correctement
+                this.logger.log(`Found event received from ${socket.data.accountId.name} in lobby ${lobbyId}`);
+                /* --------- Record Difference Found Event -------- */
+                this.recordManager.addGameEvent(lobbyId, {
+                    username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+                    gameEvent: GameEvents.Found,
+                    players: this.roomsManager.lobbies.get(lobbyId).players,
+                    coordClic,
+                    isMainCanvas,
+                } as GameEventData);
+
                 this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
                 const difference = this.games.get(lobbyId).differences[index];
                 this.games.get(lobbyId).differences.splice(index, 1);
@@ -130,11 +162,20 @@ export class GameGateway implements OnGatewayConnection {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
                     difference,
                 });
+
                 this.roomsManager.lobbies.get(lobbyId).isCheatEnabled ? this.server.to(lobbyId).emit(GameEvents.Cheat, remainingDifferences) : null;
                 this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
+
                 // Vérifier si un seuil est atteint pour un joueur
                 const { isGameFinished, potentialWinner } = this.thresholdCheck(lobbyId);
+
                 if (isGameFinished && potentialWinner) {
+                    /* --------- Record EndGame Event -------- */
+                    this.recordManager.addGameEvent(lobbyId, {
+                        gameEvent: GameEvents.EndGame,
+                    } as GameEventData);
+                    this.recordManager.saveGameRecord(lobbyId);
+
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
                     this.logOneWinner(lobbyId, potentialWinner.accountId);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
@@ -147,6 +188,12 @@ export class GameGateway implements OnGatewayConnection {
                 }
                 // Vérifier s'il reste des differences
                 if (this.games.get(lobbyId).differences.length <= 0) {
+                    /* --------- Record EndGame Event -------- */
+                    this.recordManager.addGameEvent(lobbyId, {
+                        gameEvent: GameEvents.EndGame,
+                    } as GameEventData);
+                    this.recordManager.saveGameRecord(lobbyId);
+
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
                     this.logDraw(lobbyId);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, {
@@ -158,9 +205,18 @@ export class GameGateway implements OnGatewayConnection {
                 }
                 return;
             }
-            // Si pas trouvé
+            // If user did not click on a difference
+            /* --------- Record Event -------- */
+            this.recordManager.addGameEvent(lobbyId, {
+                username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+                gameEvent: GameEvents.NotFound,
+                coordinates,
+                isMainCanvas,
+            });
+
             this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
-            socket.emit(GameEvents.NotFound, coordClic);
+            socket.emit(GameEvents.NotFound, coordinates);
+
             // ------------------ LIMITED MODE ------------------
         } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
             // Si trouvé
@@ -203,7 +259,7 @@ export class GameGateway implements OnGatewayConnection {
             }
             // Si pas trouvé
             this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
-            socket.emit(GameEvents.NotFound, coordClic);
+            socket.emit(GameEvents.NotFound, coordinates);
         } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Practice) {
             // Si trouvé
             if (index !== NOT_FOUND) {
@@ -225,42 +281,61 @@ export class GameGateway implements OnGatewayConnection {
                 return;
             }
             // Si pas trouvé
-            socket.emit(GameEvents.NotFound, coordClic);
+            socket.emit(GameEvents.NotFound, coordinates);
         }
     }
 
     @SubscribeMessage(GameEvents.AbandonGame)
     abandonGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
         socket.data.state = GameState.Abandoned;
+
         this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
             .get(lobbyId)
             .players.filter((player) => player.accountId !== socket.data.accountId);
         socket.leave(lobbyId);
+
+        /* ------------------ Record Event ------------------ */
+        this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.AbandonGame, username } as GameEventData);
+
         this.logger.log(`${socket.data.accountId} abandoned game ${lobbyId}`);
         const abandonMessage = `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a abandonné la partie !`;
         this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: abandonMessage, tag: MessageTag.Common } as Chat);
         if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
             this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
+
+            /* ------------------ Record Event ------------------ */
+            this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.EndGame } as GameEventData);
+            this.recordManager.saveGameRecord(lobbyId);
+
             clearInterval(this.timers.get(lobbyId));
             this.deleteLobby(lobbyId);
             this.logger.log(`Game ${lobbyId} ended because of not enough players`);
         }
     }
 
+    // TODO :
+
     @SubscribeMessage(GameEvents.CheatActivated)
-    cheatActivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+    cheatActivated(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string) {
         const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+
+        /* ------------------ Record Event ------------------ */
+        this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.CheatActivated, username } as GameEventData);
         this.logger.log(`${username}(${socket.data.accountId}) activated cheat in ${lobbyId}`);
     }
 
     @SubscribeMessage(GameEvents.CheatDeactivated)
     cheatDeactivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+
+        /* ------------------ Record Event ------------------ */
+        this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.CheatDeactivated, username } as GameEventData);
         this.logger.log(`${username}(${socket.data.accountId}) deactivated cheat in ${lobbyId}`);
     }
 
     @SubscribeMessage(ChannelEvents.SendGameMessage)
-    handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
+    handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string, @MessageBody('message') message: string) {
         const chat: Chat = this.messageManager.createMessage(
             this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
             message,
@@ -375,7 +450,7 @@ export class GameGateway implements OnGatewayConnection {
         });
     }
 
-    // ------------------ DELETTE ROOM/LOBBY/GAME ------------------
+    // ------------------ DELETE ROOM/LOBBY/GAME ------------------
     private deleteLobby(lobbyId: string) {
         this.roomsManager.lobbies.delete(lobbyId);
         this.games.delete(lobbyId);

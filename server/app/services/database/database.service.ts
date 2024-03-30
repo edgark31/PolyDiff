@@ -6,6 +6,7 @@ import { Game, GameDocument } from '@app/model/database/game';
 import { GameCard, GameCardDocument } from '@app/model/database/game-card';
 import { GameConstants, GameConstantsDocument } from '@app/model/database/game-config-constants';
 import { GameHistory, GameHistoryDocument } from '@app/model/database/game-history';
+import { GameRecord, GameRecordDocument } from '@app/model/database/game-record';
 import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 import { GameConstantsDto } from '@app/model/dto/game/game-constants.dto';
 import { GameListsManagerService } from '@app/services/game-lists-manager/game-lists-manager.service';
@@ -32,6 +33,7 @@ export class DatabaseService implements OnModuleInit {
         @InjectModel(GameCard.name) private readonly gameCardModel: Model<GameCardDocument>,
         @InjectModel(GameConstants.name) private readonly gameConstantsModel: Model<GameConstantsDocument>,
         @InjectModel(GameHistory.name) private readonly gameHistoryModel: Model<GameHistoryDocument>,
+        @InjectModel(GameRecord.name) private readonly gameRecordModel: Model<GameRecordDocument>,
         private readonly gameListManager: GameListsManagerService,
     ) {
         this.gameIds = [];
@@ -87,6 +89,7 @@ export class DatabaseService implements OnModuleInit {
             return Promise.reject(`Failed to get top times: ${error}`);
         }
     }
+
     async getGameById(id: string): Promise<Game> {
         try {
             return await this.gameModel.findById(id, '-__v').exec();
@@ -109,6 +112,14 @@ export class DatabaseService implements OnModuleInit {
             return Boolean(await this.gameModel.exists({ name: gameName }));
         } catch (error) {
             return Promise.reject(`Failed to verify if game exists: ${error}`);
+        }
+    }
+
+    async getGameRecords(): Promise<GameRecordDocument[]> {
+        try {
+            return await this.gameRecordModel.find().exec();
+        } catch (error) {
+            return Promise.reject(`Failed to get game records: ${error}`);
         }
     }
 
@@ -185,6 +196,19 @@ export class DatabaseService implements OnModuleInit {
         }
     }
 
+    async deleteAllGameRecords() {
+        try {
+            await this.gameRecordModel.deleteMany({}); // Ensure passing an empty filter object
+            // eslint-disable-next-line no-console
+            console.log('All game records have been deleted'); // For debugging
+            return 'All game records have been deleted'; // Since you're in an async function, no need for Promise.resolve
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(`Failed to delete all games records --> ${error}`); // For debugging
+            throw new Error(`Failed to delete all games records --> ${error}`); // Throwing an error for consistency
+        }
+    }
+
     async updateTopTimesGameById(id: string, gameMode: string, topTimes: PlayerTime[]): Promise<void> {
         try {
             const mode = gameMode === GameModes.ClassicSolo ? 'soloTopTime' : 'oneVsOneTopTime';
@@ -236,6 +260,17 @@ export class DatabaseService implements OnModuleInit {
             return await this.gameHistoryModel.find().select('-__v -_id').exec();
         } catch (error) {
             return Promise.reject(`Failed to get games history --> ${error}`);
+        }
+    }
+
+    async getLobbyRecordById(lobbyId: string) {
+        try {
+            const gameRecord = await this.gameRecordModel.findOne({ lobbyId }).exec();
+            if (gameRecord) {
+                return gameRecord;
+            }
+        } catch (error) {
+            return Promise.reject(`Failed to get game: ${error}`);
         }
     }
 

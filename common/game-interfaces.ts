@@ -263,3 +263,12 @@ export interface Sound {
     name: string;
     path: string;
 }
+
+export interface GameEventData {
+    timestamp?: number;
+    username: string;
+    accountId?: string;
+    gameEvent: string;
+    coordinates?: Coordinate;
+    isMainCanvas?: boolean;
+}

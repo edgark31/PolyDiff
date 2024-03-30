@@ -38,6 +38,7 @@ enum SocketType {
 enum GameModes {
   Classic,
   Limited,
+  Practice,
 }
 
 enum ChannelEvents {
@@ -54,6 +55,7 @@ enum ChannelEvents {
 enum GameEvents {
   TimerUpdate, // Still used by server to emit time
   StartGame,
+  Spectate,
   UpdateTimer,
   Clic,
   Found,
@@ -61,7 +63,13 @@ enum GameEvents {
   Cheat,
   NextGame,
   AbandonGame,
-  EndGame
+  EndGame,
+  // Cheat system
+  CheatActivated,
+  CheatDeactivated,
+  // Relay system
+  ReplayGame,
+  SaveGameRecord,
 }
 
 enum LobbyEvents {
@@ -69,12 +77,10 @@ enum LobbyEvents {
   Join,
   Leave,
   OptPlayer,
-  JoinAsObserver,
-  LeaveAsObserver,
+  Spectate,
   UpdateLobbys,
-  Start,
+  Start
 }
-
 
 extension LobbyEventsExtension on LobbyEvents {
   String get name {
@@ -87,10 +93,8 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'LobbyLeave';
       case LobbyEvents.OptPlayer:
         return 'OptPlayer';
-      case LobbyEvents.JoinAsObserver:
-        return 'JoinAsObserver';
-      case LobbyEvents.LeaveAsObserver:
-        return 'LeaveAsObserver';
+      case LobbyEvents.Spectate:
+        return 'Spectate';
       case LobbyEvents.UpdateLobbys:
         return 'UpdateLobbys';
       case LobbyEvents.Start:
@@ -110,10 +114,8 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'LobbyLeave';
       case LobbyEvents.OptPlayer:
         return 'OptPlayer';
-      case LobbyEvents.JoinAsObserver:
-        return 'JoinAsObserver';
-      case LobbyEvents.LeaveAsObserver:
-        return 'LeaveAsObserver';
+      case LobbyEvents.Spectate:
+        return 'Spectate';
       case LobbyEvents.UpdateLobbys:
         return 'UpdateLobbys';
       case LobbyEvents.Start:
@@ -128,4 +130,5 @@ enum AccountEvents {
   UserUpdate,
   UserCreate,
   UserDelete,
+  RefreshAccount,
 }

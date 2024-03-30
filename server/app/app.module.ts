@@ -6,7 +6,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AccountController } from './controllers/account/account.controller';
-
 import { GameController } from './controllers/game/game.controller';
 import { AuthGateway } from './gateways/auth/auth.gateway';
 import { GameGateway } from './gateways/game/game.gateway';
@@ -16,6 +15,7 @@ import { Game, gameSchema } from './model/database/game';
 import { GameCard, gameCardSchema } from './model/database/game-card';
 import { GameConstants, gameConstantsSchema } from './model/database/game-config-constants';
 import { GameHistory, gameHistorySchema } from './model/database/game-history';
+import { GameRecord, gameRecordSchema } from './model/database/game-record';
 import { AccountManagerService } from './services/account-manager/account-manager.service';
 import { ClassicModeService } from './services/classic-mode/classic-mode.service';
 import { DatabaseService } from './services/database/database.service';
@@ -28,6 +28,7 @@ import { LimitedModeService } from './services/limited-mode/limited-mode.service
 import { MailService } from './services/mail-service/mail-service';
 import { MessageManagerService } from './services/message-manager/message-manager.service';
 import { PlayersListManagerService } from './services/players-list-manager/players-list-manager.service';
+import { RecordManagerService } from './services/record-manager/record-manager.service';
 import { RoomsManagerService } from './services/rooms-manager/rooms-manager.service';
 
 @Module({
@@ -73,6 +74,7 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
             { name: GameCard.name, schema: gameCardSchema },
             { name: GameConstants.name, schema: gameConstantsSchema },
             { name: GameHistory.name, schema: gameHistorySchema },
+            { name: GameRecord.name, schema: gameRecordSchema },
         ]),
     ],
     controllers: [GameController, AccountController],
@@ -95,6 +97,7 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
         ImageManagerService,
         MailService,
         FriendManagerService,
+        RecordManagerService,
     ],
     exports: [MailService],
 })
