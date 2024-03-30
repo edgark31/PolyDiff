@@ -141,11 +141,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
             this.lobby = lobby;
             this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
+            if (this.roomManager.isObserver) {
             this.messages = this.lobby.chatLog?.chat as Chat[];
             this.messages.forEach((message: Chat) => {
                 if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Sent;
                 else message.tag = MessageTag.Received;
             });
+        }
         });
         // this.lobby = this.gameManager.lobbyWaiting;
         if (this.clientSocket.isSocketAlive('auth')) {
