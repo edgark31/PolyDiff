@@ -147,6 +147,33 @@ span {
     -webkit-text-stroke: 0.5px black;
 }
 
+// .eye {
+//     margin-top: -960px; /* Déplace vers le haut par rapport à sa position d'origine */
+//     margin-left: 450px; /* Déplace vers la droite par rapport à sa position d'origine */
+
+//     font-weight: bold;
+//     position: absolute;
+//     animation: titleFadeIn 1s ease-in-out;
+//     z-index: 1;
+//     font-size: 15px;
+//     font-family: 'Troika', sans-serif;
+//     -webkit-text-stroke: 0.5px black;
+// }
+.eye-icon {
+    font-size: 16px;
+    transition: transform 0.3s ease-in-out;
+    // transform-origin: center;
+    color: red;
+    // left: 250px;
+}
+
+.eye-open {
+    transform: translate(-140px, -1058px) scale(4) rotate(0deg);
+}
+
+.eye-closed {
+    transform: translate(-140px, -1058px) scale(4) rotate(180deg);
+}
 .player {
     padding: 7.5px;
 }

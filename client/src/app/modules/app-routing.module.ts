@@ -6,6 +6,7 @@ import { ConfigPageComponent } from '@app/pages/config-page/config-page.componen
 import { ConfirmPasswordPageComponent } from '@app/pages/confirm-password-page/confirm-password-page.component';
 import { CreateRoomPageComponent } from '@app/pages/create-room-page/create-room-page.component';
 import { CreationPageComponent } from '@app/pages/creation-page/creation-page.component';
+import { FriendPageComponent } from '@app/pages/friend-page/friend-page.component';
 import { GameModePageComponent } from '@app/pages/game-mode-page/game-mode-page.component';
 import { GamePageComponent } from '@app/pages/game-page/game-page.component';
 import { LimitedTimePageComponent } from '@app/pages/limited-time-page/limited-time-page.component';
@@ -36,6 +37,7 @@ export const routes: Routes = [
     { path: 'game-mode', component: GameModePageComponent },
     { path: 'profil', component: ProfilPageComponent },
     { path: 'classic', component: ClassicTimePageComponent },
+    { path: 'friend', component: FriendPageComponent },
 
     { path: 'waiting-room', component: WaitingRoomComponent },
     { path: 'admin', component: ConfigPageComponent, canActivate: [AdminGuard] },

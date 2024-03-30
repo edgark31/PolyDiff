@@ -13,7 +13,8 @@ export const DEFAULT_BEST_TIMES: PlayerTime[] = [
     { name: 'Jane Doe', time: 200 },
     { name: 'the scream', time: 250 },
 ];
-
+export const MIN_ACCESS_CODE = 1000;
+export const MAX_ACCESS_CODE = 8999;
 export const ELEMENT_DATA: ConnectionLog[] = [
     {
         timestamp: 'connexion',

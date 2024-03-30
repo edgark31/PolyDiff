@@ -78,12 +78,24 @@ class GameManagerService extends ChangeNotifier {
     );
   }
 
+  // sendCoord with Modified Payload
+  // void sendCoord(String? lobbyId, Coordinate coord) {
+  //   print(
+  //       'SendCoord is called with id: $lobbyId and coord: x: ${coord.x} y: ${coord.y}');
+  //   socketService.send(
+  //     SocketType.Game,
+  //     GameEvents.Clic.name,
+  //     {
+  //       'lobbyId': lobbyId,
+  //       'coordClic': coord,
+  //       'isMainCanvas': isLeftCanvas,
+  //     },
+  //   );
+  // }
+
   void abandonGame(String? lobbyId) {
+    print('AbandonGame called with id: $lobbyId');
     socketService.send(SocketType.Game, GameEvents.AbandonGame.name, lobbyId);
-    disconnectSocket();
-    if (lobbyService.lobby.players.length < 2) {
-      lobbyService.endLobby();
-    }
   }
 
   void spectateLobby(String? lobbyId) {
@@ -97,6 +109,7 @@ class GameManagerService extends ChangeNotifier {
 
   void setObserverListener() {
     socketService.on(SocketType.Game, GameEvents.Spectate.name, (data) {
+      print('Spectate received');
       Map<String, dynamic> returnedInfo = data as Map<String, dynamic>;
       lobbyService.setLobby(
           Lobby.fromJson(returnedInfo['lobby'] as Map<String, dynamic>));
@@ -104,8 +117,10 @@ class GameManagerService extends ChangeNotifier {
     });
   }
 
-  void disconnectSocket() {
+  void disconnectSockets() {
+    print('disconnectSockets called');
     socketService.disconnect(SocketType.Game);
+    lobbyService.disconnectLobbySocket();
   }
 
   void activateCheat() {
@@ -162,10 +177,13 @@ class GameManagerService extends ChangeNotifier {
     });
 
     socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
-      lobbyService.setIsObserver(false);
       setEndGameMessage(data as String?);
-      disconnectSocket();
-      lobbyService.endLobby();
+      disconnectSockets();
+    });
+
+    socketService.on(SocketType.Game, GameEvents.AbandonGame.name, (data) {
+      // Returned payload (lobby) is not used
+      disconnectSockets();
     });
 
     socketService.on(SocketType.Game, GameEvents.Cheat.name, (data) {

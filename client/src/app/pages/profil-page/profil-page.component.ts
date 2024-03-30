@@ -1,26 +1,31 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { HistoryLoginComponent } from '@app/components/history-login/history-login.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { ELEMENT_DATA, LANGUAGES, THEME_PERSONALIZATION } from '@common/constants';
-import { ConnectionLog } from '@common/game-interfaces';
+import { AccountEvents } from '@common/enums';
+import { Account, ConnectionLog } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-profil-page',
     templateUrl: './profil-page.component.html',
     styleUrls: ['./profil-page.component.scss'],
 })
-export class ProfilPageComponent implements AfterViewInit, OnInit {
+export class ProfilPageComponent implements AfterViewInit, OnInit, OnDestroy {
     selectedValue: string;
     language = LANGUAGES;
     showTable = false;
+    accountSubscription: Subscription;
     themePersonnalization = THEME_PERSONALIZATION;
     displayedColumns: string[] = ['position', 'name', 'weight'];
     dataSource = new MatTableDataSource<ConnectionLog>(ELEMENT_DATA);
@@ -34,9 +39,24 @@ export class ProfilPageComponent implements AfterViewInit, OnInit {
         public gameManager: GameManagerService,
         private clientSocket: ClientSocketService,
         private translate: TranslateService,
+        private readonly matDialog: MatDialog,
     ) {}
 
     ngOnInit() {
+        this.welcomeService.updateAccountObservable();
+        this.accountSubscription = this.welcomeService.accountObservable$.subscribe((account: Account) => {
+            this.welcomeService.account = account;
+            account.profile.sessions.forEach((session) => {
+                console.log("est-ce que c'est bon ?" + session.isWinner);
+            });
+
+            this.welcomeService.account = account;
+            console.log("t'es là?" + this.welcomeService.account.credentials.username);
+        });
+        this.welcomeService.account.profile.sessions.forEach((session) => {
+            console.log(session.isWinner);
+        });
+        this.clientSocket.send('auth', AccountEvents.RefreshAccount);
         console.log(this.welcomeService.account);
     }
 
@@ -44,8 +64,19 @@ export class ProfilPageComponent implements AfterViewInit, OnInit {
         this.dataSource.paginator = this.paginator;
     }
 
-    toggleTable() {
-        this.showTable = !this.showTable;
+    ngOnDestroy() {
+        this.accountSubscription?.unsubscribe();
+        this.welcomeService.off();
+    }
+
+    toggleTableLogin() {
+        this.welcomeService.isHistoryLogin = true;
+        this.matDialog.open(HistoryLoginComponent);
+    }
+
+    toggleTableSession() {
+        this.welcomeService.isHistoryLogin = false;
+        this.matDialog.open(HistoryLoginComponent);
     }
     translateCharacter(character: string): string {
         return this.translate.instant(`button.${character}`);

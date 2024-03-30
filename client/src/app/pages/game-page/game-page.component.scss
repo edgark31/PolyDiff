@@ -192,6 +192,28 @@ app-replay-buttons {
     font-family: 'Troika', sans-serif;
 }
 
+.eye-icon {
+    font-size: 16px;
+    transition: transform 0.3s ease-in-out;
+    transform-origin: center;
+    color: red;
+    left: 250px;
+}
+// translate(-600px, -118px)
+.eye-open {
+    transform: translate(-800px, 50px) scale(4) rotate(0deg);
+}
+
+.eye-closed {
+    transform: translate(-800px, 0px) scale(4) rotate(180deg);
+}
+
 #title {
     font-size: 70px;
+}
+
+#length {
+    right: 100px;
+    font-size: 70px;
+    transform: translateX(-700px);
 }
