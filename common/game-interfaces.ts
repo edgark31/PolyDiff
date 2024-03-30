@@ -202,8 +202,8 @@ export interface Profile {
 export interface Friend {
     name: string;
     accountId: string;
-    friends?: Friend[];
-    commonFriends?: Friend[];
+    friends?: Friend[]; // Ne contient que name et accountId
+    commonFriends?: Friend[]; // Ne contient que name et accountId
     isFavorite?: boolean;
     isOnline?: boolean;
 }

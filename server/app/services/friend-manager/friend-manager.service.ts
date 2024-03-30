@@ -54,7 +54,6 @@ export class FriendManagerService {
                 friends: potentialFriendAccount.profile.friends,
                 commonFriends,
             };
-            senderFriendAccount.profile.friends.push(potentialFriend);
             // Add friend in sender's friends
             const senderFriend: Friend = {
                 name: senderFriendAccount.credentials.username,
@@ -62,6 +61,8 @@ export class FriendManagerService {
                 friends: senderFriendAccount.profile.friends,
                 commonFriends,
             };
+
+            senderFriendAccount.profile.friends.push(potentialFriend);
             potentialFriendAccount.profile.friends.push(senderFriend);
         }
         // Remove sender from potential's friend requests

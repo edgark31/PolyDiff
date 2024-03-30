@@ -109,6 +109,9 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             if (senderFriendSocket) {
                 senderFriendSocket.emit(FriendEvents.UpdateSentFriends, this.friendManager.calculateSentFriends(senderFriendSocket.data.accountId));
             }
+            sockets.map((s) => {
+                s.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(s.data.accountId).profile.friends);
+            });
         });
         socket.emit(FriendEvents.UpdatePendingFriends, this.friendManager.calculatePendingFriends(socket.data.accountId));
     }
