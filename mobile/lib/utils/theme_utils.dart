@@ -21,6 +21,7 @@ class ThemeClass {
   static ThemeData lightTheme = ThemeData(
     primaryColor: ThemeData.light().scaffoldBackgroundColor,
     fontFamily: 'troika',
+    brightness: Brightness.light,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor:
@@ -45,6 +46,7 @@ class ThemeClass {
   static ThemeData darkTheme = ThemeData(
     primaryColor: _themeClass.kDarkGreen,
     fontFamily: 'troika',
+    brightness: Brightness.dark,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor:

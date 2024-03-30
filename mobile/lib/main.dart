@@ -83,6 +83,7 @@ void initializeServices() {
   Get.put(GameCardService());
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
+  Get.put(ThemeProvider());
 }
 
 class MyApp extends StatelessWidget {
@@ -90,9 +91,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       title: APP_NAME_TXT,
-      themeMode: ThemeMode.system,
+      themeMode: themeProvider.themeMode,
       theme: ThemeClass.lightTheme,
       darkTheme: ThemeClass.darkTheme,
       onGenerateRoute: AppRouter.onGenerateRoute,
