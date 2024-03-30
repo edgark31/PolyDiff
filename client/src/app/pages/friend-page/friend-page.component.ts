@@ -14,14 +14,14 @@ export class FriendPageComponent {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     friends: Friend[] = [
         // variable temporaire
-        {
-            name: 'ami',
-            avatar: 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp',
-            friendNames: ["l'ami de mon ami"],
-            commonFriendNames: ['mon ami en commun'],
-            isFavorite: true,
-            isOnline: true,
-        },
+        // {
+        //     name: 'ami',
+        //     avatar: 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp',
+        //     friendNames: ["l'ami de mon ami"],
+        //     commonFriendNames: ['mon ami en commun'],
+        //     isFavorite: true,
+        //     isOnline: true,
+        // },
     ];
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
     constructor() {}
