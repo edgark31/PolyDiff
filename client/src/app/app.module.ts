@@ -44,8 +44,10 @@ import { CanvasUnderButtonsComponent } from './components/canvas-under-buttons/c
 import { ChatBoxComponent } from './components/chat-box/chat-box.component';
 import { ConfigDialogComponent } from './components/config-dialog/config-dialog.component';
 import { DeleteResetConfirmationDialogComponent } from './components/delete-reset-confirmation-dialog/delete-reset-confirmation-dialog.component';
+import { FriendsInfosComponent } from './components/friends-infos/friends-infos.component';
 import { GamePageDialogComponent } from './components/game-page-dialog/game-page-dialog.component';
 import { HistoryBoxComponent } from './components/history-box/history-box.component';
+import { HistoryLoginComponent } from './components/history-login/history-login.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
 import { ImportDialogComponent } from './components/import-dialog-box/import-dialog-box.component';
 import { MenuComponent } from './components/menu/menu.component';
@@ -62,6 +64,7 @@ import { ClassicTimePageComponent } from './pages/classic-time-page/classic-time
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
 import { ConfirmPasswordPageComponent } from './pages/confirm-password-page/confirm-password-page.component';
 import { CreateRoomPageComponent } from './pages/create-room-page/create-room-page.component';
+import { FriendPageComponent } from './pages/friend-page/friend-page.component';
 import { GameModePageComponent } from './pages/game-mode-page/game-mode-page.component';
 import { LimitedTimePageComponent } from './pages/limited-time-page/limited-time-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
@@ -125,6 +128,9 @@ export const createTranslateLoader = (http: HttpClient) => {
         RegistrationPageComponent,
         AccountDialogComponent,
         WaitingGameDialogComponent,
+        FriendPageComponent,
+        HistoryLoginComponent,
+        FriendsInfosComponent,
     ],
     imports: [
         AppMaterialModule,
@@ -153,6 +159,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         MatSidenavModule,
         MatListModule,
         MatSliderModule,
+        MatPaginatorModule,
         RouterModule.forRoot(routes),
         TranslateModule.forRoot({
             loader: {

@@ -38,6 +38,7 @@ enum SocketType {
 enum GameModes {
   Classic,
   Limited,
+  Practice,
 }
 
 enum ChannelEvents {
@@ -61,7 +62,10 @@ enum GameEvents {
   Cheat,
   NextGame,
   AbandonGame,
-  EndGame
+  EndGame,
+  Spectate,
+  CheatActivated,
+  CheatDeactivated,
 }
 
 enum LobbyEvents {
@@ -69,12 +73,10 @@ enum LobbyEvents {
   Join,
   Leave,
   OptPlayer,
-  JoinAsObserver,
-  LeaveAsObserver,
+  Spectate,
   UpdateLobbys,
   Start,
 }
-
 
 extension LobbyEventsExtension on LobbyEvents {
   String get name {
@@ -87,10 +89,8 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'LobbyLeave';
       case LobbyEvents.OptPlayer:
         return 'OptPlayer';
-      case LobbyEvents.JoinAsObserver:
-        return 'JoinAsObserver';
-      case LobbyEvents.LeaveAsObserver:
-        return 'LeaveAsObserver';
+      case LobbyEvents.Spectate:
+        return 'Spectate';
       case LobbyEvents.UpdateLobbys:
         return 'UpdateLobbys';
       case LobbyEvents.Start:
@@ -110,10 +110,8 @@ extension LobbyEventsExtension on LobbyEvents {
         return 'LobbyLeave';
       case LobbyEvents.OptPlayer:
         return 'OptPlayer';
-      case LobbyEvents.JoinAsObserver:
-        return 'JoinAsObserver';
-      case LobbyEvents.LeaveAsObserver:
-        return 'LeaveAsObserver';
+      case LobbyEvents.Spectate:
+        return 'Spectate';
       case LobbyEvents.UpdateLobbys:
         return 'UpdateLobbys';
       case LobbyEvents.Start:
@@ -128,4 +126,5 @@ enum AccountEvents {
   UserUpdate,
   UserCreate,
   UserDelete,
+  RefreshAccount,
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile/pages/login_page.dart';
+import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/services/form_service.dart';
 
 class PasswordResetPopup extends StatefulWidget {
@@ -114,8 +114,8 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                     child: ElevatedButton(
                       onPressed: () async {
                         String? serverErrorMessage =
-                          await formService.sendMail(emailController.text);
-                        
+                            await formService.sendMail(emailController.text);
+
                         if (serverErrorMessage == null) {
                           Navigator.of(context).push(
                             MaterialPageRoute(

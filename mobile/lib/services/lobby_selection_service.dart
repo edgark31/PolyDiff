@@ -37,13 +37,19 @@ class LobbySelectionService extends ChangeNotifier {
     if (gameMode == GameModes.Classic) {
       _gameBonus = null; // Classic has no bonus
     }
-    // TODO : Add game bonus when implemented on server
+    if (gameMode == GameModes.Practice) {
+      _gameBonus = null; // Practice has no bonus
+      _isCheatEnabled = false; // Practice has no cheat
+      _gameDuration = 0; // Practice has no time limit
+    }
+
     return Lobby.create(
       gameId: _gameId,
       isCheatEnabled: _isCheatEnabled,
       mode: gameMode,
       time: _gameDuration,
       timeLimit: _gameDuration,
+      bonusTime: _gameBonus,
       nDifferences: _nDifferences,
     );
   }

@@ -1,5 +1,13 @@
 <div id="game-page" class="justified">
     <div  class="game-infos information-header justified">
+        <mat-icon
+        class="eye-icon"
+        [class.eye-open]="lobby.observers.length>0"
+        [class.eye-closed]="lobby.observers.length===0"
+      >
+        {{ lobby.observers.length>0 ? 'visibility' : 'visibility_off' }}
+      </mat-icon>
+      <h1 *ngIf="lobby.observers.length>0" id="length"> {{ lobby.observers.length }} </h1>
         <h1 id = "title">{{ gameLobby.name }}</h1>
             <div class="game-feedback">
                 <h1>Mode : {{ mode }}</h1>
@@ -23,14 +31,14 @@
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
                 #originalCanvasFG
-                (click)="mouseClickOnCanvas($event, true)"
+                (click)="!roomManager.isObserver ? mouseClickOnCanvas($event, true) : ''"
             ></canvas>
             <canvas
                 id="original"
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
                 #originalCanvas
-                (click)="mouseClickOnCanvas($event, true)"
+                (click)="!roomManager.isObserver ? mouseClickOnCanvas($event, true): ''"
             ></canvas>
         </div>
         <app-chat-box class="chat-box" (addGame)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
@@ -40,14 +48,14 @@
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
                 #modifiedCanvasFG
-                (click)="mouseClickOnCanvas($event, false)"
+                (click)="!roomManager.isObserver ? mouseClickOnCanvas($event, false): ''"
             ></canvas>
             <canvas
                 id="modified"
                 [attr.height]="canvasSize.height"
                 [attr.width]="canvasSize.width"
                 #modifiedCanvas
-                (click)="mouseClickOnCanvas($event, false)"
+                (click)="!roomManager.isObserver ? mouseClickOnCanvas($event, false): ''"
             ></canvas>
         </div>
     </div>

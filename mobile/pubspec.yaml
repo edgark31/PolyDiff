@@ -54,3 +54,7 @@ flutter:
         - assets/sound/error3.mp3
 
     #-------------------- LOCAL FONTS ----------------#
+    fonts:
+        - family: troika
+          fonts:
+              - asset: assets/fonts/troika/troika.otf
