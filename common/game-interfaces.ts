@@ -269,6 +269,6 @@ export interface GameEventData {
     username: string;
     accountId?: string;
     gameEvent: string;
-    coordinates?: Coordinate;
+    coordClic?: Coordinate;
     isMainCanvas?: boolean;
 }

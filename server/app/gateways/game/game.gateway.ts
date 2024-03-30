@@ -134,7 +134,7 @@ export class GameGateway implements OnGatewayConnection {
 
         const index: number = this.games
             .get(lobbyId)
-            .differences.findIndex((difference) => difference.some((coord: Coordinate) => coord.x === coordinates.x && coord.y === coordinates.y));
+            .differences.findIndex((difference) => difference.some((coord: Coordinate) => coord.x === coordClic.x && coord.y === coordClic.y));
         const commonMessage =
             index !== NOT_FOUND
                 ? `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a trouvé une différence !`
@@ -210,12 +210,12 @@ export class GameGateway implements OnGatewayConnection {
             this.recordManager.addGameEvent(lobbyId, {
                 username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
                 gameEvent: GameEvents.NotFound,
-                coordinates,
+                coordClic,
                 isMainCanvas,
             });
 
             this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
-            socket.emit(GameEvents.NotFound, coordinates);
+            socket.emit(GameEvents.NotFound, coordClic);
 
             // ------------------ LIMITED MODE ------------------
         } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Limited) {
@@ -259,7 +259,7 @@ export class GameGateway implements OnGatewayConnection {
             }
             // Si pas trouvé
             this.server.to(lobbyId).emit(ChannelEvents.GameMessage, { raw: commonMessage, tag: MessageTag.Common } as Chat);
-            socket.emit(GameEvents.NotFound, coordinates);
+            socket.emit(GameEvents.NotFound, coordClic);
         } else if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Practice) {
             // Si trouvé
             if (index !== NOT_FOUND) {
@@ -281,7 +281,7 @@ export class GameGateway implements OnGatewayConnection {
                 return;
             }
             // Si pas trouvé
-            socket.emit(GameEvents.NotFound, coordinates);
+            socket.emit(GameEvents.NotFound, coordClic);
         }
     }
 

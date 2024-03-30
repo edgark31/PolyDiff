@@ -41,7 +41,7 @@ export class GameRecord {
     endTime: number;
 
     @ApiProperty()
-    @Prop({ required: true })
+    @Prop()
     duration: number;
 
     @ApiProperty()
