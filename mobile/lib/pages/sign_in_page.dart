@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/sign_in_form.dart';
@@ -21,7 +20,6 @@ class LoginPage extends StatelessWidget {
       body: Stack(
         children: [
           BackgroundContainer(
-            backgroundImagePath: SELECTION_BACKGROUND_PATH,
             child: SignInForm(),
           )
         ],
