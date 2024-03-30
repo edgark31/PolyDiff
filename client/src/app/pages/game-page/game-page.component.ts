@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { GamePageDialogComponent } from '@app/components/game-page-dialog/game-page-dialog.component';
 import { INPUT_TAG_NAME } from '@app/constants/constants';
 import { CANVAS_MEASUREMENTS } from '@app/constants/image';
@@ -55,7 +56,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
     constructor(
-        // private router: Router,
+        private router: Router,
         private imageService: ImageService,
         private clientSocket: ClientSocketService,
         private readonly gameAreaService: GameAreaService,
@@ -107,6 +108,11 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         }
         this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
 
+        this.clientSocket.on('game', GameEvents.AbandonGame, (lobby: Lobby) => {
+            this.router.navigate(['/game-mode']);
+            this.clientSocket.disconnect('lobby');
+            this.clientSocket.disconnect('game');
+        });
         this.chatSubscription = this.gameManager.message$.subscribe((message: Chat) => {
             this.receiveMessage(message);
         });
@@ -159,7 +165,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.onDestroy$.next();
         this.onDestroy$.complete();
         if (this.clientSocket.isSocketAlive('game')) {
-            this.clientSocket.disconnect('lobby');
             this.gameSubscription?.unsubscribe();
             this.nextGameSubscription?.unsubscribe();
             this.chatSubscription?.unsubscribe();
