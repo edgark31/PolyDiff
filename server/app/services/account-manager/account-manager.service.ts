@@ -18,7 +18,7 @@ export class AccountManagerService implements OnModuleInit {
 
     constructor(
         private readonly logger: Logger,
-        @InjectModel(Account.name) private readonly accountModel: Model<AccountDocument>,
+        @InjectModel(Account.name) public accountModel: Model<AccountDocument>,
         private readonly imageManager: ImageManagerService,
     ) {}
 
@@ -161,7 +161,6 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.credentials.password = newPassword;
 
             await accountFound.save();
-            this.connectedUsers.set(accountFound.id, accountFound);
             await this.fetchUsers();
 
             this.logger.verbose(`${username} has changed his password`);

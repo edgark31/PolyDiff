@@ -1,7 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 @Schema({ _id: false })
 export class SessionLog {
@@ -76,19 +76,33 @@ export class Friend {
     name: string;
 
     @Prop({ required: true })
-    avatar: string;
+    accountId: string;
 
-    @Prop({ type: [String] })
-    friendNames: string[];
+    @Prop(
+        raw([
+            {
+                type: Types.ObjectId,
+                ref: 'Friend',
+            },
+        ]),
+    )
+    friends?: Friend[];
 
-    @Prop({ type: [String] })
-    commonFriendNames: string[];
+    @Prop(
+        raw([
+            {
+                type: Types.ObjectId,
+                ref: 'Friend',
+            },
+        ]),
+    )
+    commonFriends?: Friend[];
 
-    @Prop({ required: true })
-    isFavorite: boolean;
+    @Prop({ required: false })
+    isFavorite?: boolean;
 
-    @Prop({ required: true })
-    isOnline: boolean;
+    @Prop({ required: false })
+    isOnline?: boolean;
 }
 
 export const friendSchema = SchemaFactory.createForClass(Friend);
@@ -141,6 +155,9 @@ export class Credentials {
 
     @Prop()
     email: string;
+
+    @Prop({ required: false })
+    recuperatePasswordCode: string;
 }
 
 export const credentialsSchema = SchemaFactory.createForClass(Credentials);
