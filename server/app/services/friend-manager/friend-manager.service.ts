@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Account } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { Friend, User } from '@common/game-interfaces';
@@ -51,12 +52,14 @@ export class FriendManagerService {
             const potentialFriend: Friend = {
                 name: potentialFriendAccount.credentials.username,
                 accountId: potentialFriendId,
+                friends: [],
                 commonFriends,
             };
             // Add friend in sender's friends
             const senderFriend: Friend = {
                 name: senderFriendAccount.credentials.username,
                 accountId: senderFriendId,
+                friends: [],
                 commonFriends,
             };
 
@@ -71,7 +74,32 @@ export class FriendManagerService {
         });
         await potentialFriendAccount.save();
         await senderFriendAccount.save();
+        await this.updateAllUsersFoFs();
         await this.accountManager.fetchUsers();
+    }
+
+    async updateAllUsersFoFs() {
+        this.accountManager.users.forEach(async (user) => {
+            await this.updateUserFoFs(user);
+        });
+    }
+
+    // ******** Update friends of friends of 1 USER *********
+    async updateUserFoFs(userAccount: any) {
+        const friends = userAccount.profile.friends;
+        const friendsOfFriends = new Set();
+
+        for (const friendRef of friends) {
+            const friendAccount = await this.accountManager.accountModel.findOne({ id: friendRef.accountId });
+            for (const foFRef of friendAccount.profile.friends) {
+                if (foFRef.accountId !== userAccount.id && !friends.some((f) => f.accountId === foFRef.accountId)) {
+                    friendsOfFriends.add({ name: foFRef.name, accountId: foFRef.accountId });
+                }
+            }
+        }
+
+        userAccount.profile.friendsOfFriends = Array.from(friendsOfFriends);
+        await userAccount.save();
     }
 
     async deleteFriend(senderFriendId: string, friendId: string): Promise<void> {
