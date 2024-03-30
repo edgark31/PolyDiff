@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
-import 'package:mobile/pages/home_page.dart';
+import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
@@ -18,7 +18,7 @@ import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/utils/theme_utils.dart';
 import 'package:provider/provider.dart';
 
-Widget defaultHome = HomePage();
+Widget defaultHome = SignInPage();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -99,7 +99,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeClass.lightTheme,
       darkTheme: ThemeClass.darkTheme,
       onGenerateRoute: AppRouter.onGenerateRoute,
-      initialRoute: HomePage.routeName,
+      initialRoute: SignInPage.routeName,
     );
   }
 }
