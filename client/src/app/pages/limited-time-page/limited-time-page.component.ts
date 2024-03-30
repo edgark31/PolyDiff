@@ -101,10 +101,10 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
-        if (this.clientSocket.isSocketAlive('lobby') && this.roomManagerService.isObserver) {
-            this.clientSocket.disconnect('lobby');
-            this.roomManagerService.off();
-        }
+        // if (this.clientSocket.isSocketAlive('lobby') && this.roomManagerService.isObserver) {
+        //     this.clientSocket.disconnect('lobby');
+        //     this.roomManagerService.off();
+        // }
         this.navigationService.setPreviousUrl('/limited');
         this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();
