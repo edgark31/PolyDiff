@@ -10,14 +10,16 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class RoomManagerService {
+    actualRoomId: string;
     password: string;
     lobbyGame: Lobby;
     isOrganizer: boolean;
     lobby: Subject<Lobby>;
     wait: boolean;
     game: Game;
-
-    private lobbies: Subject<Lobby[]>;
+    isObserver: boolean;
+    lobbiesGame: Lobby[];
+    lobbies: Subject<Lobby[]>;
     private joinedPlayerNames: Subject<string[]>;
     // private playerNameAvailability: Subject<PlayerNameAvailability>;
     // private rooms1V1AvailabilityByGameId: Subject<RoomAvailability>;
@@ -94,7 +96,6 @@ export class RoomManagerService {
             this.lobby?.unsubscribe();
         }
         if (this.message && !this.message.closed) this.message?.unsubscribe();
-        if (this.lobbies && !this.lobbies.closed) this.lobbies?.unsubscribe();
     }
 
     sendMessage(lobbyId: string | undefined, message: string): void {
@@ -112,6 +113,12 @@ export class RoomManagerService {
 
     joinRoom(lobbyId: string) {
         this.clientSocket.send('lobby', LobbyEvents.Join, { lobbyId });
+    }
+
+    joinRoomObserver(lobbyId: string) {
+        this.isObserver = true;
+
+        this.clientSocket.send('lobby', LobbyEvents.Spectate, lobbyId);
     }
 
     joinRoomAcces(lobbyId: string, password: string) {
@@ -243,11 +250,16 @@ export class RoomManagerService {
 
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
+            this.lobbiesGame = lobbies;
         });
 
-        this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
-            this.lobbies.next(lobbies);
-        });
+        // this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
+        //     this.lobbies.next(lobbies);
+        //     this.lobbiesGame = lobbies;
+        //     lobbies.forEach((element) => {
+        //         console.log(element.observers.length);
+        //     });
+        // });
         this.clientSocket.on('lobby', ChannelEvents.LobbyMessage, (chat: Chat) => {
             this.message.next(chat);
         });

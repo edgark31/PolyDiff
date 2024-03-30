@@ -155,6 +155,9 @@ export class Credentials {
 
     @Prop()
     email: string;
+
+    @Prop({ required: false })
+    recuperatePasswordCode: string;
 }
 
 export const credentialsSchema = SchemaFactory.createForClass(Credentials);

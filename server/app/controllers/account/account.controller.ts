@@ -113,8 +113,8 @@ export class AccountController {
     @Put('mail')
     async sendMail(@Body('email') mail: string, @Res() response: Response) {
         try {
-            await this.mailService.signUp(mail);
-            response.status(HttpStatus.OK).send();
+            const accountFound = await this.mailService.signUp(mail);
+            response.status(HttpStatus.OK).send(accountFound);
         } catch (error) {
             response.status(HttpStatus.NOT_FOUND).json(error);
         }
