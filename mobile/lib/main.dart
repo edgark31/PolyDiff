@@ -91,9 +91,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: APP_NAME_TXT,
       themeMode: ThemeMode.system,
-      theme: ThemeClass.darkTheme, // TODO Change theme according to user settings
+      theme: ThemeClass.darkTheme, // TODO Change according to settings
       // darkTheme: ThemeClass.darkTheme,
       onGenerateRoute: AppRouter.onGenerateRoute,
       initialRoute: HomePage.routeName,
