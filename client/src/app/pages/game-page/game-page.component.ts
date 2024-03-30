@@ -108,6 +108,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         }
         this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
 
+        // eslint-disable-next-line no-unused-vars
         this.clientSocket.on('game', GameEvents.AbandonGame, (lobby: Lobby) => {
             this.router.navigate(['/game-mode']);
             this.clientSocket.disconnect('lobby');
@@ -142,12 +143,12 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.lobby = lobby;
             this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
             if (this.roomManager.isObserver) {
-            this.messages = this.lobby.chatLog?.chat as Chat[];
-            this.messages.forEach((message: Chat) => {
-                if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Sent;
-                else message.tag = MessageTag.Received;
-            });
-        }
+                this.messages = this.lobby.chatLog?.chat as Chat[];
+                this.messages.forEach((message: Chat) => {
+                    if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Sent;
+                    else message.tag = MessageTag.Received;
+                });
+            }
         });
         // this.lobby = this.gameManager.lobbyWaiting;
         if (this.clientSocket.isSocketAlive('auth')) {
