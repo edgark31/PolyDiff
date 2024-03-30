@@ -1,0 +1,37 @@
+{
+    "videos": [
+        {
+            "id": "1",
+            "title": "Epic Battle in World of Warcraft",
+            "description": "Join me as I navigate through an epic battle in World of Warcraft.",
+            "game": "World of Warcraft",
+            "creator": "GamerXYZ",
+            "videoURL": "http://example.com/video/1",
+            "thumbnailURL": "http://example.com/thumbnail/1",
+            "publishedDate": "2024-03-24",
+            "duration": 208
+        },
+        {
+            "id": "2",
+            "title": "Minecraft Adventures",
+            "description": "Exploring new territories in Minecraft.",
+            "game": "Minecraft",
+            "streamer": "BlockBuilder",
+            "videoURL": "http://example.com/video/2",
+            "thumbnailURL": "http://example.com/thumbnail/2",
+            "publishedDate": "2024-03-23",
+            "duration": 208
+        },
+        {
+            "id": "3",
+            "title": "Speedrun Through Super Mario",
+            "description": "Watch me complete Super Mario in record time.",
+            "game": "Super Mario",
+            "streamer": "MarioSpeedster",
+            "videoURL": "http://example.com/video/3",
+            "thumbnailURL": "http://example.com/thumbnail/3",
+            "publishedDate": "2024-03-22",
+            "duration": 208
+        }
+    ]
+}
