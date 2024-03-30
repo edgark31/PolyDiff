@@ -4,6 +4,7 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
@@ -41,32 +42,37 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     final lobbiesFromServer = lobbyService.filterLobbies();
     final gameModeName = lobbyService.gameModes.name;
     return Scaffold(
+      // TODO : Put back when disconnect logic in place
       // drawer: CustomMenuDrawer(),
-      // appBar: CustomAppBar(),
+      // appBar: CustomAppBar(title: 'Sélection de la salle de jeu'),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              child: Column(
-                children: [
-                  ElevatedButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, creationRoute),
-                      child: Text(
-                        'Créer une salle pour le mode $gameModeName',
-                      )),
-                  lobbiesFromServer.isEmpty
-                      ? Text(
-                          'Aucune salle d\'attente disponible pour le Mode $gameModeName')
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: lobbiesFromServer.length,
-                          itemBuilder: (context, index) {
-                            return buildLobbyCard(
-                                context, lobbiesFromServer[index]);
-                          },
-                        ),
-                ],
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 10),
+                    CustomButton(
+                      text: 'Créer une salle pour le mode $gameModeName',
+                      press: () => Navigator.pushNamed(context, creationRoute),
+                      widthFactor: 0.5,
+                    ),
+                    const SizedBox(height: 10),
+                    lobbiesFromServer.isEmpty
+                        ? Text(
+                            'Aucune salle d\'attente disponible pour le Mode $gameModeName')
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: lobbiesFromServer.length,
+                            itemBuilder: (context, index) {
+                              return buildLobbyCard(
+                                  context, lobbiesFromServer[index]);
+                            },
+                          ),
+                  ],
+                ),
               ),
             ),
     );
@@ -85,6 +91,9 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     String playerNames = lobby.players.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
     final chatService = context.watch<ChatService>();
+    final gameManagerService = context.watch<GameManagerService>();
+
+    bool areObservers = lobby.observers.isNotEmpty;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -105,14 +114,23 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text('Joueurs: $playerNames',
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                ],
-              ),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text('Joueurs: $playerNames',
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    Expanded(
+                        child: areObservers
+                            ? const Icon(
+                                Icons.remove_red_eye,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                Icons.visibility_off,
+                                color: Colors.white,
+                              )),
+                  ]),
             ),
             ButtonBar(
               alignment: MainAxisAlignment.start,
@@ -128,16 +146,19 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                             },
                             text: 'Rejoindre cette salle d\'attente',
                             widthFactor: 1.5,
-                            backgroundColor: kMidOrange,
                           ))
                     : CustomButton(
                         text: 'Observer cette partie',
                         press: () {
-                          // TODO : Add join as Observer logic
                           print(
                               'Player is joining as observer in lobby ${lobby.lobbyId}');
+                          lobbyService.spectateLobby(lobby.lobbyId);
+                          chatService.setLobbyMessages(lobby.chatLog!.chat);
+                          // Directly jump to GameLogic
+                          gameManagerService.spectateLobby(lobby.lobbyId);
+                          chatService.setGameChatListeners();
+                          Navigator.pushNamed(context, GAME_ROUTE);
                         },
-                        backgroundColor: kMidGreen,
                       ),
               ],
             ),

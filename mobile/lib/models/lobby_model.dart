@@ -6,7 +6,7 @@ class Lobby {
   String? gameId;
   bool isAvailable;
   List<Player> players;
-  final List<Observers> observers;
+  final List<Observer> observers;
   final bool isCheatEnabled;
   final GameModes mode;
   final String? password;
@@ -41,6 +41,7 @@ class Lobby {
     required GameModes mode,
     required int time,
     required int timeLimit,
+    required int? bonusTime,
     required int? nDifferences,
   }) : this(
           null, // lobbyId
@@ -53,7 +54,7 @@ class Lobby {
           null, // password
           time, // time
           timeLimit,
-          null, // bonusTime
+          bonusTime, // bonusTime
           0, // timePlayed
           null, // chatLog
           nDifferences,
@@ -79,7 +80,7 @@ class Lobby {
 
   static Lobby fromJson(Map<String, dynamic> json) {
     if (json['observers'] == []) {
-      json['observers'] = List<Observers>.empty();
+      json['observers'] = List<Observer>.empty();
     }
     if (json['players'] == []) {
       json['players'] = List<Player>.empty();
@@ -90,7 +91,7 @@ class Lobby {
       json['isAvailable'],
       json['players'].map<Player>((player) => Player.fromJson(player)).toList(),
       json['observers']
-          .map<Observers>((observers) => Observers.fromJson(observers))
+          .map<Observer>((observers) => Observer.fromJson(observers))
           .toList(),
       json['isCheatEnabled'],
       GameModes.values.firstWhere((element) => element.name == json['mode']),

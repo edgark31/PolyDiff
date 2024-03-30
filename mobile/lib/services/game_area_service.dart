@@ -17,10 +17,14 @@ class GameAreaService extends ChangeNotifier {
     ..style = PaintingStyle.fill;
   bool isCheatMode = false;
   bool isClickDisabled = false;
+  Function? onCheatModeDeactivated;
 
   void showDifferenceFound(List<Coordinate> newCoordinates) {
     soundService.playCorrectSound();
     coordinates.addAll(newCoordinates);
+    if(isCheatMode) {
+      onCheatModeDeactivated?.call();
+    }
     isCheatMode = false;
     resetCheatBlinkingDifference();
     notifyListeners();

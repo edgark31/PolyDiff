@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:provider/provider.dart';
@@ -33,11 +32,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
     return AppBar(
       centerTitle: true,
-      titleTextStyle:
-          TextStyle(fontSize: 20, color: kLight, fontWeight: FontWeight.bold),
-      title: Text(widget.title, style: const TextStyle(letterSpacing: 3)),
-      backgroundColor: kMidOrange,
-      iconTheme: const IconThemeData(color: kLight),
+      title: Text(widget.title),
       actions: <Widget>[
         Padding(
           padding: const EdgeInsets.only(right: 10.0),

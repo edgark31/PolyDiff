@@ -13,8 +13,13 @@ import 'package:mobile/widgets/game_canvas.dart';
 import 'package:provider/provider.dart';
 
 class OriginalCanvas extends GameCanvas {
-  OriginalCanvas(images, this.gameId) : super(images);
+  OriginalCanvas(
+    images,
+    this.gameId,
+    this.canPlayerInteract,
+  ) : super(images);
   final String gameId;
+  final bool canPlayerInteract;
   final tempGameManager = CoordinateConversionService();
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();
@@ -35,6 +40,7 @@ class OriginalCanvas extends GameCanvas {
           ),
           child: GestureDetector(
             onTapUp: (details) {
+              if (!canPlayerInteract) return;
               print('original canvas tapped');
               x.value = details.localPosition.dx.toDouble() /
                   GameCanvas.tabletScalingRatio;
@@ -68,8 +74,13 @@ class OriginalCanvas extends GameCanvas {
 }
 
 class ModifiedCanvas extends GameCanvas {
-  ModifiedCanvas(images, this.gameId) : super(images);
+  ModifiedCanvas(
+    images,
+    this.gameId,
+    this.canPlayerInteract,
+  ) : super(images);
   final String gameId;
+  final bool canPlayerInteract;
   final LobbyService lobbyService = Get.find();
   final GameManagerService gameManagerService = Get.find();
 
@@ -90,6 +101,7 @@ class ModifiedCanvas extends GameCanvas {
           ),
           child: GestureDetector(
             onTapUp: (details) {
+              if (!canPlayerInteract) return;
               print('Modified canvas tapped');
               x.value = details.localPosition.dx.toDouble() /
                   GameCanvas.tabletScalingRatio;
