@@ -5,6 +5,7 @@ import 'package:mobile/models/friend_model.dart';
 import 'package:mobile/models/user_model.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
+import 'package:mobile/widgets/friends_popup.dart';
 
 class FriendsPage extends StatefulWidget {
   static const routeName = FRIENDS_ROUTE;
@@ -26,8 +27,45 @@ class _FriendsPageState extends State<FriendsPage> {
     Friend(
         username: "Mp",
         id: "11",
-        friends: [],
-        commonFriends: [],
+        friends: [
+          Friend(
+              username: "AHHH",
+              id: "17",
+              friends: [],
+              commonFriends: [],
+              isOnline: true,
+              isFavorite: false),
+          Friend(
+              username: "Edgar",
+              id: "14",
+              friends: [],
+              commonFriends: [],
+              isOnline: false,
+              isFavorite: false),
+          Friend(
+              username: "Mj",
+              id: "13",
+              friends: [],
+              commonFriends: [],
+              isOnline: true,
+              isFavorite: false),
+        ],
+        commonFriends: [
+          Friend(
+              username: "Zaki",
+              id: "15",
+              friends: [],
+              commonFriends: [],
+              isOnline: true,
+              isFavorite: false),
+          Friend(
+              username: "Moh",
+              id: "16",
+              friends: [],
+              commonFriends: [],
+              isOnline: true,
+              isFavorite: false),
+        ],
         isOnline: true,
         isFavorite: false),
     Friend(
@@ -40,6 +78,20 @@ class _FriendsPageState extends State<FriendsPage> {
     Friend(
         username: "Mj",
         id: "13",
+        friends: [],
+        commonFriends: [],
+        isOnline: true,
+        isFavorite: false),
+    Friend(
+        username: "Zaki",
+        id: "15",
+        friends: [],
+        commonFriends: [],
+        isOnline: true,
+        isFavorite: false),
+    Friend(
+        username: "Moh",
+        id: "16",
         friends: [],
         commonFriends: [],
         isOnline: true,
@@ -125,11 +177,20 @@ class _FriendsPageState extends State<FriendsPage> {
                         SizedBox(width: 20),
                         TextButton(
                           onPressed: () {
-                            print("Show friends");
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return FriendsPopup(
+                                  username: friend.username,
+                                  allFriends: friend.friends,
+                                  commonFriends: friend.commonFriends,
+                                );
+                              },
+                            );
                           },
                           style: TextButton.styleFrom(
                             foregroundColor: Colors.white,
-                            backgroundColor: Theme.of(context).primaryColor,
+                            backgroundColor: kLightGreen,
                             disabledForegroundColor:
                                 Colors.grey.withOpacity(0.38),
                           ),
@@ -138,9 +199,6 @@ class _FriendsPageState extends State<FriendsPage> {
                       ],
                     ),
                     subtitle: Text(friend.isOnline ? 'Online' : 'Offline'),
-                    onTap: () {
-                      print("Pressed");
-                    },
                     trailing: IconButton(
                       iconSize: 40,
                       icon: Icon(Icons.person_remove),
@@ -168,38 +226,46 @@ class _FriendsPageState extends State<FriendsPage> {
     return Scaffold(
       drawer: CustomMenuDrawer(),
       appBar: CustomAppBar(title: "Page d'amis"),
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              for (int i = 0; i < 3; i++) ...[
-                ElevatedButton(
-                  onPressed: () => _selectView(i),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        if (_selectedViewIndex == i) {
-                          return Color.fromARGB(255, 2, 70, 22);
-                        } else {
-                          return kLightGreen;
-                        }
-                      },
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/LimitedTimeBackground.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                for (int i = 0; i < 3; i++) ...[
+                  ElevatedButton(
+                    onPressed: () => _selectView(i),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                          if (_selectedViewIndex == i) {
+                            return Color.fromARGB(255, 2, 70, 22);
+                          } else {
+                            return kLightGreen;
+                          }
+                        },
+                      ),
                     ),
+                    child: Text(
+                        i == 0
+                            ? "Tous les amis"
+                            : (i == 1 ? "En attente" : "Ajouter un ami"),
+                        style: TextStyle(fontSize: 25, color: Colors.white)),
                   ),
-                  child: Text(
-                      i == 0
-                          ? "Tous les amis"
-                          : (i == 1 ? "En attente" : "Ajouter un ami"),
-                      style: TextStyle(fontSize: 25, color: Colors.white)),
-                ),
-              ]
-            ],
-          ),
-          Expanded(
-            child: _buildContent(),
-          ),
-        ],
+                ]
+              ],
+            ),
+            Expanded(
+              child: _buildContent(),
+            ),
+          ],
+        ),
       ),
     );
   }
