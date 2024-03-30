@@ -1,6 +1,10 @@
+/* eslint-disable max-params */
+import { AuthGateway } from '@app/gateways/auth/auth.gateway';
 import { Credentials, Sound, Theme } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
+import { FriendManagerService } from '@app/services/friend-manager/friend-manager.service';
 import { MailService } from '@app/services/mail-service/mail-service';
+import { UserEvents } from '@common/enums';
 import { Body, Controller, Delete, HttpStatus, Post, Put, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -8,13 +12,19 @@ import { Response } from 'express';
 @ApiTags('Accounts')
 @Controller('account')
 export class AccountController {
-    constructor(private readonly accountManager: AccountManagerService, private readonly mailService: MailService) {}
+    constructor(
+        private readonly accountManager: AccountManagerService,
+        private readonly friendManager: FriendManagerService,
+        private readonly mailService: MailService,
+        private readonly auth: AuthGateway,
+    ) {}
 
     @Post('register')
     async register(@Body('creds') creds: Credentials, @Body('id') id: string, @Res() response: Response) {
         try {
             await this.accountManager.register(creds, id);
             response.status(HttpStatus.OK).send();
+            this.auth.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers());
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
         }
