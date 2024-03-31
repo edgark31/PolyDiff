@@ -62,9 +62,13 @@ export class LobbyGateway implements OnGatewayConnection {
 
     // un joueur annule sa requete pour rejoindre le lobby
     @SubscribeMessage(LobbyEvents.CancelRequestAcess)
-    handleCancelRequestAccess(@ConnectedSocket() socket: Socket, @MessageBody() data: { lobbyId: string }) {
-        const { lobbyId } = data;
-        socket.emit(LobbyEvents.CancelRequestAcessHost);
+    handleCancelRequestAccess(@ConnectedSocket() socket: Socket, @MessageBody() data: { lobbyId: string; username: string }) {
+        const { lobbyId, username } = data;
+        const joinerId = Array.from(this.accountManager.users.values()).find((user) => user.credentials.username === username).id;
+        this.server.fetchSockets().then((sockets) => {
+            const guest = sockets.find((s) => s.data.accountId === joinerId);
+            guest.emit(LobbyEvents.CancelRequestAcessHost);
+        });
         this.logger.log(
             `${
                 this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username

@@ -20,7 +20,7 @@ export class JoinedPlayerDialogComponent implements OnInit, OnDestroy {
     // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
     constructor(
-        @Inject(MAT_DIALOG_DATA) private data: { lobbyId: string },
+        @Inject(MAT_DIALOG_DATA) private data: { lobbyId: string; username: string },
         private readonly roomManagerService: RoomManagerService,
         private dialogRef: MatDialogRef<JoinedPlayerDialogComponent>,
         // private readonly router: Router,
@@ -35,7 +35,7 @@ export class JoinedPlayerDialogComponent implements OnInit, OnDestroy {
     }
 
     cancelJoining() {
-        this.roomManagerService.cancelRequestToJoinRoom(this.data.lobbyId);
+        this.roomManagerService.cancelRequestToJoinRoom(this.data.lobbyId, this.data.username);
     }
 
     ngOnDestroy(): void {

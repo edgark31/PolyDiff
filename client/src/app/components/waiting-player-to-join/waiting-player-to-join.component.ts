@@ -56,19 +56,4 @@ export class WaitingPlayerToJoinComponent implements OnInit, OnDestroy {
     //             this.playerNames = playerNamesList;
     //         });
     // }
-
-    // private countDownBeforeClosing() {
-    //     this.countdown = COUNTDOWN_TIME;
-    //     const countdown$ = interval(WAITING_TIME).pipe(takeWhile(() => this.countdown > 0));
-    //     const countdownObserver = {
-    //         next: () => {
-    //             this.countdown--;
-    //             this.refusedMessage = `La fiche de jeu a été supprimée . Vous serez redirigé dans ${this.countdown} secondes`;
-    //         },
-    //         complete: () => {
-    //             this.dialogRef.close();
-    //         },
-    //     };
-    //     this.countdownSubscription = countdown$.subscribe(countdownObserver);
-    // }
 }

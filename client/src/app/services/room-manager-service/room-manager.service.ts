@@ -202,8 +202,8 @@ export class RoomManagerService {
         this.clientSocket.send('lobby', LobbyEvents.OptPlayer, { lobbyId, username, isPlayerAccepted });
     }
 
-    cancelRequestToJoinRoom(lobbyId: string): void {
-        this.clientSocket.send('lobby', LobbyEvents.CancelRequestAcess, lobbyId);
+    cancelRequestToJoinRoom(lobbyId: string, username: string): void {
+        this.clientSocket.send('lobby', LobbyEvents.CancelRequestAcess, { lobbyId, username });
     }
 
     checkIfAnyCoopRoomExists(playerPayLoad: PlayerData) {

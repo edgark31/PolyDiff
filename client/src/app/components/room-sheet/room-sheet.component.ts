@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 
@@ -21,6 +22,7 @@ export class RoomSheetComponent {
         public router: Router, // private readonly dialog: MatDialog
         public roomManager: RoomManagerService,
         private readonly dialog: MatDialog,
+        private readonly welcomeService: WelcomeService,
     ) {}
 
     manageGames(lobby: Lobby): void {
@@ -30,7 +32,7 @@ export class RoomSheetComponent {
                 this.router.navigate(['/waiting-room']);
             } else
                 this.dialog.open(ModalAccessMatchComponent, {
-                    data: lobby,
+                    data: { room: lobby, username: this.welcomeService.account.credentials.username },
                 });
         } else if (!this.lobby.isAvailable) {
             this.roomManager.joinRoomObserver(lobby.lobbyId ? lobby.lobbyId : '');

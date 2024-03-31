@@ -71,13 +71,8 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
                 panelClass: 'dialog',
             });
         });
-        this.requestSubscription = this.roomManagerService.isPlayerAccepted$.subscribe((isPlayerAccepted: boolean) => {
-            if (isPlayerAccepted) {
-                
-                this.dialog.closeAll();
-            }
-        });
         this.clientSocketService.on('lobby', LobbyEvents.CancelRequestAcessHost, () => {
+            console.log('CancelRequestAcessHost');
             this.dialog.closeAll();
         });
         this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {

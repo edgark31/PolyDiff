@@ -10,7 +10,7 @@
             <div class = "players">
                 <p class = "player"><span class = "player-name">{{ this.playerName }}</span></p>
                 <button class = "choice2" mat-button mat-dialog-close (click)="acceptPlayer()">Accepter</button>
-                <button class = "choice1" mat-button (click)="refusePlayer()">Refuser</button>
+                <button class = "choice1" mat-button mat-dialog-close (click)="refusePlayer()">Refuser</button>
             </div>
         </div>
     </div>
