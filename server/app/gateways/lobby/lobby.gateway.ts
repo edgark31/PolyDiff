@@ -82,13 +82,19 @@ export class LobbyGateway implements OnGatewayConnection {
             const guest = sockets.find((s) => s.data.accountId === joinerId);
             if (this.roomsManager.lobbies.get(lobbyId) && isPlayerAccepted) {
                 guest.emit(LobbyEvents.NotifyGuest, true);
-                console.log('accepted');
-                // log acceptation
+                this.logger.log(
+                    `${username} a été accepté par ${
+                        this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username
+                    } pour rejoindre le lobby ${lobbyId}`,
+                );
                 return;
             } else if (this.roomsManager.lobbies.get(lobbyId) && !isPlayerAccepted) {
                 guest.emit(LobbyEvents.NotifyGuest, false);
-                console.log('denied');
-                // log refus
+                this.logger.log(
+                    `${username} a été refusé par ${
+                        this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username
+                    } pour rejoindre le lobby ${lobbyId}`,
+                );
                 return;
             }
         });
