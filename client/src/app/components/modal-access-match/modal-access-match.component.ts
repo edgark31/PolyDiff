@@ -44,8 +44,6 @@ export class ModalAccessMatchComponent implements OnInit {
                 this.roomManager.joinRoomAcces(this.data.lobbyId ? this.data.lobbyId : '', this.codeAccess);
                 this.router.navigate(['/waiting-room']);
                 this.dialog.closeAll();
-            } else {
-                // vous avez ete refuse
             }
         });
     }
