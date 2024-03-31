@@ -50,8 +50,8 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     // ---------------------- LES GETTERS de users à chaque RECHERCHE  --------------------------------
     @SubscribeMessage(UserEvents.UpdateUsers)
-    updateUsers(@ConnectedSocket() socket: Socket) {
-        socket.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers()); // User[]
+    async updateUsers(@ConnectedSocket() socket: Socket) {
+        socket.emit(UserEvents.UpdateUsers, await this.friendManager.queryUsers()); // User[]
     }
 
     // ---------------------- LES GETTERS de friends INITIAUX --------------------------------
@@ -73,6 +73,8 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     // ---------------------- LES SCÉNARIOS --------------------------------
     @SubscribeMessage(FriendEvents.SendRequest)
     async sendRequest(@ConnectedSocket() socket: Socket, @MessageBody('potentialFriendId') potentialFriendId: string) {
+        if (this.accountManager.users.get(socket.data.accountId).profile.friends.find((f) => f.accountId === potentialFriendId)) return;
+        if (this.accountManager.users.get(potentialFriendId).profile.friendRequests.find((f) => f === socket.data.accountId)) return;
         await this.friendManager.sendFriendRequest(socket.data.accountId, potentialFriendId);
         this.server.fetchSockets().then((sockets) => {
             const potentialFriendSocket = sockets.find((s) => s.data.accountId === potentialFriendId);
@@ -114,7 +116,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             });
         });
         socket.emit(FriendEvents.UpdatePendingFriends, this.friendManager.calculatePendingFriends(socket.data.accountId));
-        this.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers());
+        this.server.emit(UserEvents.UpdateUsers, await this.friendManager.queryUsers());
     }
 
     @SubscribeMessage(FriendEvents.OptFavorite)
@@ -133,7 +135,13 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             }
         });
         socket.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(socket.data.accountId).profile.friends);
-        this.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers());
+        this.server.emit(UserEvents.UpdateUsers, await this.friendManager.queryUsers());
+    }
+
+    @SubscribeMessage('HardResetFriend')
+    async hardResetFriend() {
+        await this.friendManager.deleteAllFriends();
+        this.server.emit(UserEvents.UpdateUsers, await this.friendManager.queryUsers());
     }
 
     @SubscribeMessage(ChannelEvents.SendGlobalMessage)

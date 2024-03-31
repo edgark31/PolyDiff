@@ -8,8 +8,8 @@ import { Injectable } from '@nestjs/common';
 export class FriendManagerService {
     constructor(private readonly accountManager: AccountManagerService) {}
 
-    queryUsers(): User[] {
-        this.accountManager.fetchUsers();
+    async queryUsers(): Promise<User[]> {
+        await this.accountManager.fetchUsers();
         const users: User[] = [];
         this.accountManager.users.forEach((value, key) => {
             users.push({
@@ -38,7 +38,6 @@ export class FriendManagerService {
             }
         });
         await potentialFriendAccount.save();
-        await this.accountManager.fetchUsers();
     }
 
     async optFriendRequest(potentialFriendId: string, senderFriendId: string, isOpt: boolean): Promise<void> {
@@ -74,13 +73,13 @@ export class FriendManagerService {
         });
         await potentialFriendAccount.save();
         await senderFriendAccount.save();
-        await this.updateAllUsersFoFs();
-        await this.accountManager.fetchUsers();
+        // await this.updateAllUsersFoFs(potentialFriendAccount, senderFriendAccount);
+        // await this.updateAllUsersCommonFriends(potentialFriendAccount, senderFriendAccount);
     }
 
-    async updateAllUsersFoFs() {
+    async updateAllUsersFoFs(excludeAccount1, excludeAccount2) {
         this.accountManager.users.forEach(async (user) => {
-            await this.updateUserFoFs(user);
+            if (user.id !== excludeAccount1.id && user.id !== excludeAccount2.id) await this.updateUserFoFs(user);
         });
     }
 
@@ -92,13 +91,29 @@ export class FriendManagerService {
         for (const friendRef of friends) {
             const friendAccount = await this.accountManager.accountModel.findOne({ id: friendRef.accountId });
             for (const foFRef of friendAccount.profile.friends) {
-                if (foFRef.accountId !== userAccount.id && !friends.some((f) => f.accountId === foFRef.accountId)) {
+                if (foFRef.accountId !== userAccount.id) {
                     friendsOfFriends.add({ name: foFRef.name, accountId: foFRef.accountId });
                 }
             }
         }
 
-        userAccount.profile.friendsOfFriends = Array.from(friendsOfFriends);
+        await userAccount.save();
+    }
+
+    async updateAllUsersCommonFriends(excludeAccount1, excludeAccount2) {
+        this.accountManager.users.forEach(async (user) => {
+            if (user.id !== excludeAccount1.id && user.id !== excludeAccount2.id) await this.updateCommonFriends(user);
+        });
+    }
+
+    // ********* Update common friends of each friend of 1 USER *********
+    async updateCommonFriends(userAccount: any) {
+        const friends = userAccount.profile.friends;
+        for (const friendRef of friends) {
+            const friendAccount = await this.accountManager.accountModel.findOne({ id: friendRef.accountId });
+            const commonFriends = this.calculateCommonFriends(userAccount, friendAccount);
+            friendRef.commonFriends = commonFriends;
+        }
         await userAccount.save();
     }
 
@@ -119,7 +134,14 @@ export class FriendManagerService {
         });
         await senderAccount.save();
         await friendAccount.save();
-        await this.accountManager.fetchUsers();
+    }
+
+    async deleteAllFriends() {
+        const accounts = await this.accountManager.accountModel.find();
+        accounts.forEach(async (account) => {
+            account.profile.friends = [];
+            await account.save();
+        });
     }
 
     calculateCommonFriends(sender: Account, potential: Account): Friend[] {
@@ -172,6 +194,5 @@ export class FriendManagerService {
             }
         });
         await account.save();
-        await this.accountManager.fetchUsers();
     }
 }
