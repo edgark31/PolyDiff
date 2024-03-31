@@ -23,6 +23,7 @@ export class AccountManagerService implements OnModuleInit {
     ) {}
 
     onModuleInit() {
+        this.loadAllAvatars();
         this.fetchUsers();
     }
 
@@ -351,5 +352,14 @@ export class AccountManagerService implements OnModuleInit {
         account.profile.stats.averageDifferences =
             (account.profile.stats.averageDifferences * (account.profile.stats.gamesPlayed - 1) + count) / account.profile.stats.gamesPlayed;
         account.save();
+    }
+
+    private loadAllAvatars(): void {
+        this.accountModel.find().then((accounts) => {
+            accounts.forEach((account) => {
+                this.imageManager.save(account.id, account.profile.avatar);
+                this.imageManager.save(account.credentials.username, account.profile.avatar);
+            });
+        });
     }
 }
