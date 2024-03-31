@@ -55,6 +55,8 @@ export class AccountManagerService implements OnModuleInit {
                     onErrorSound: ERROR_SOUND_LIST[0],
                 },
             };
+            this.imageManager.save(newAccount.id, newAccount.profile.avatar);
+            this.imageManager.save(newAccount.credentials.username, newAccount.profile.avatar);
             await this.accountModel.create(newAccount);
             this.logger.verbose(`Account ${creds.username} has registered successfully`);
             this.fetchUsers();
