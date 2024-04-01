@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { GameRecord, GameRecordDocument } from '@app/model/database/game-record';
 import { DatabaseService } from '@app/services/database/database.service';
 import { DEFAULT_COUNTDOWN_VALUE } from '@common/constants';
@@ -40,7 +41,7 @@ export class RecordManagerService {
     async addGameEvent(lobbyId: string, eventData: GameEventData): Promise<void> {
         eventData.timestamp = Date.now();
         try {
-            await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { $push: { gameEvents: eventData } }, { new: true });
+            await this.gameRecordModel.findOneAndUpdate({ 'game.lobbyId': lobbyId }, { $push: { gameEvents: eventData } }, { new: true });
             this.logger.verbose(`Record Manager from lobby :${lobbyId} has registered ${eventData} successfully`);
         } catch (error) {
             this.logger.error(`Record Manager from lobby :${lobbyId} has failed to register ${eventData} with error: ${error}`);
@@ -49,13 +50,13 @@ export class RecordManagerService {
 
     // account id is added to the gameRecord when players saves it
     async addAccountId(lobbyId: string, accountId: string): Promise<void> {
-        await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { $push: { accountIds: accountId } }, { new: true });
+        await this.gameRecordModel.findOneAndUpdate({ 'game.lobbyId': lobbyId }, { $push: { accountIds: accountId } }, { new: true });
     }
 
     async saveGameRecord(lobbyId: string): Promise<void> {
         const endTime = Date.now();
         try {
-            await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { endTime }, { new: true });
+            await this.gameRecordModel.findOneAndUpdate({ 'game.lobbyId': lobbyId }, { endTime }, { new: true });
         } catch (error) {
             this.logger.error(`Record Manager from lobby :${lobbyId} has failed
             to save the game record with error: ${error}`);
@@ -63,7 +64,14 @@ export class RecordManagerService {
     }
 
     async get(lobbyId: string): Promise<GameRecord> {
-        return this.gameRecordModel.findOne({ lobbyId });
+        try {
+            const record = await this.gameRecordModel.findOne({ 'game.lobbyId': lobbyId });
+            this.logger.log(`Record Manager from lobby :${lobbyId} has fetched the game record successfully`);
+            this.logger.log(`Record Manager from lobby :${lobbyId} has fetched the game record successfully`);
+            return record;
+        } catch (error) {
+            this.logger.error(`Record Manager from lobby :${lobbyId} has failed to get the game record with error: ${error}`);
+        }
     }
 
     // all saved game records are fetch when user wants to see his profile
@@ -77,12 +85,12 @@ export class RecordManagerService {
 
     // player account id is removed from the gameRecord when he wants to delete it from his profile
     async deleteAccountId(lobbyId: string, accountId: string): Promise<void> {
-        await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { $pull: { accountIds: accountId } }, { new: true });
+        await this.gameRecordModel.findOneAndUpdate({ 'game.lobbyId': lobbyId }, { $pull: { accountIds: accountId } }, { new: true });
     }
 
     // if no player saves the record, it can be deleted from the database
     async deleteOneGameRecordByLobbyId(lobbyId: string): Promise<void> {
-        await this.gameRecordModel.deleteOne({ lobbyId });
+        await this.gameRecordModel.deleteOne({ 'game.lobbyId': lobbyId });
     }
 
     async deleteAllGameRecords(): Promise<void> {
