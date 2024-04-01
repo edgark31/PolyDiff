@@ -97,6 +97,33 @@ class _FriendsPageState extends State<FriendsPage> {
         isOnline: true,
         isFavorite: false),
   ];
+  //simulatedRequestsReceived and simulatedRequestsSent won't have this version of Friend
+  List<Friend> simulatedRequestsReceived = [
+    Friend(
+        username: "Zaki",
+        id: "15",
+        friends: [],
+        commonFriends: [],
+        isOnline: true,
+        isFavorite: false),
+    Friend(
+        username: "Mj",
+        id: "13",
+        friends: [],
+        commonFriends: [],
+        isOnline: true,
+        isFavorite: false),
+  ];
+
+  List<Friend> simulatedRequestsSent = [
+    Friend(
+        username: "Edgar",
+        id: "14",
+        friends: [],
+        commonFriends: [],
+        isOnline: false,
+        isFavorite: false),
+  ];
 
   //Utilisé pour la recherche
   List<UserFriend> simulatedUsers = [
@@ -113,6 +140,7 @@ class _FriendsPageState extends State<FriendsPage> {
     });
   }
 
+// TODO: When the real connection is done, move each returned widget into separate files
   Widget _buildContent() {
     switch (_selectedViewIndex) {
       case 0:
@@ -213,7 +241,131 @@ class _FriendsPageState extends State<FriendsPage> {
           },
         );
       case 1:
-        return Text("Contenu pour En attente");
+        return Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                "Liste de demande d'amis en attente reçues",
+                style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: simulatedRequestsReceived.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final friend = simulatedRequestsReceived[index];
+                  return Container(
+                    alignment: Alignment.center,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 500),
+                      child: Card(
+                        margin: EdgeInsets.all(8),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            radius: 40,
+                            backgroundColor: Colors.grey[200],
+                            backgroundImage: AssetImage(
+                                'assets/images/hallelujaRaccoon.jpeg'),
+                          ),
+                          title: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(friend.username,
+                                  style: TextStyle(fontSize: 25)),
+                            ],
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              IconButton(
+                                color: const Color.fromARGB(255, 2, 173, 90),
+                                iconSize: 40,
+                                icon: Icon(Icons.person_add),
+                                onPressed: () {
+                                  print("Accepted Friend invite");
+                                },
+                              ),
+                              SizedBox(width: 50),
+                              IconButton(
+                                color: Colors.redAccent,
+                                iconSize: 40,
+                                icon: Icon(Icons.person_remove),
+                                onPressed: () {
+                                  print("Unaccepted Friend invite");
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Container(
+                child: Text(
+                  "Liste de demande d'amis en attente envoyées",
+                  style: TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: simulatedRequestsSent.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final friend = simulatedRequestsSent[index];
+                  return Container(
+                    alignment: Alignment.center,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 500),
+                      child: Card(
+                        margin: EdgeInsets.all(8),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            radius: 40,
+                            backgroundColor: Colors.grey[200],
+                            backgroundImage: AssetImage(
+                                'assets/images/hallelujaRaccoon.jpeg'),
+                          ),
+                          title: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(friend.username,
+                                  style: TextStyle(fontSize: 25)),
+                            ],
+                          ),
+                          trailing: TextButton(
+                            onPressed: () {
+                              print("Cancelled request");
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: kLightGreen,
+                              disabledForegroundColor:
+                                  Colors.grey.withOpacity(0.38),
+                            ),
+                            child:
+                                Text('Annuler', style: TextStyle(fontSize: 18)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
       case 2:
         return Text("Contenu pour Ajouter un ami");
       default:
