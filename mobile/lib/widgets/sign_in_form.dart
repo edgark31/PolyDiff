@@ -90,7 +90,7 @@ class _SignInFormState extends State<SignInForm> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 StrokedTextWidget(
@@ -160,34 +160,28 @@ class _SignInFormState extends State<SignInForm> {
                     child: Text(
                       serverErrorMessage!,
                       style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight
-                              .bold // Use a color that makes the error message stand out
-                          ),
+                          color: Colors.red, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                const SizedBox(height: 2),
                 Align(
                   alignment: Alignment.center,
                   child: TextButton(
                     onPressed: () {
                       showDialog(
                         barrierDismissible: false,
-                      context: context,
+                        context: context,
                         builder: (BuildContext context) {
                           return PasswordResetPopup();
                         },
                       );
                     },
                     style: TextButton.styleFrom(
-                      foregroundColor:
-                          Theme.of(context).colorScheme.onSurface, // Text color
+                      foregroundColor: Theme.of(context).colorScheme.onSurface,
                     ),
                     child: Text(FORGOT_PASSWORD_TXT),
                   ),
                 ),
-                SizedBox(height: 30),
                 CustomButton(
                   text: SIGN_UP_BTN_TXT,
                   press: () => Navigator.pushNamed(context, SIGN_UP_ROUTE),
