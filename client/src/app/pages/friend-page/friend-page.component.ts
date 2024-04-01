@@ -8,7 +8,8 @@ import { FriendsInfosComponent } from '@app/components/friends-infos/friends-inf
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { FriendService } from '@app/services/friend-service/friend.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { Friend, User } from '@common/game-interfaces';
+import { AccountEvents } from '@common/enums';
+import { Account, Friend, User } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -18,6 +19,7 @@ import { Subscription } from 'rxjs';
 })
 export class FriendPageComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator) paginator: MatPaginator;
+    accountSubscription: Subscription;
     pageFriendupdate: string = 'friendUpdate';
     searchQuery: string = '';
     friendSentList: Friend[] = [];
@@ -74,6 +76,11 @@ export class FriendPageComponent implements OnInit, OnDestroy {
     }
     ngOnInit(): void {
         this.friendService.manageSocket();
+        this.welcome.updateAccountObservable();
+        this.accountSubscription = this.welcome.accountObservable$.subscribe((account: Account) => {
+            this.welcome.account = account;
+        });
+        this.clientSocket.send('auth', AccountEvents.RefreshAccount);
         this.friendService.recuperateFriendSend();
         this.friendService.recuperateFriend();
         this.friendService.recuperateFriendPending();
@@ -99,10 +106,13 @@ export class FriendPageComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         if (this.clientSocket.isSocketAlive('auth')) {
+            this.accountSubscription?.unsubscribe();
+            this.welcome.off();
             this.userSubscription?.unsubscribe();
             this.friendListSubscription?.unsubscribe();
             this.friendSendListSubscription?.unsubscribe();
             this.friendPendingListSubscription?.unsubscribe();
+            this.friendService.off();
         }
     }
 
