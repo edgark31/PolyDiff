@@ -22,7 +22,10 @@ class FriendsPage extends StatefulWidget {
 }
 
 class _FriendsPageState extends State<FriendsPage> {
+  TextEditingController usernameController = TextEditingController();
   int _selectedViewIndex = 0;
+  FocusNode textFocusNode = FocusNode();
+  bool isTyping = false;
   List<Friend> simulatedFriends = [
     Friend(
         username: "Mp",
@@ -127,12 +130,41 @@ class _FriendsPageState extends State<FriendsPage> {
 
   //Utilisé pour la recherche
   List<UserFriend> simulatedUsers = [
-    UserFriend(username: "Mp", id: "11", friends: [], friendRequests: []),
+    UserFriend(username: "Mp", id: "11", friends: [
+      Friend(
+          username: "AHHH",
+          id: "17",
+          friends: [],
+          commonFriends: [],
+          isOnline: true,
+          isFavorite: false),
+      Friend(
+          username: "Edgar",
+          id: "14",
+          friends: [],
+          commonFriends: [],
+          isOnline: false,
+          isFavorite: false),
+      Friend(
+          username: "Mj",
+          id: "13",
+          friends: [],
+          commonFriends: [],
+          isOnline: true,
+          isFavorite: false),
+    ], friendRequests: []),
     UserFriend(username: "Mj", id: "13", friends: [], friendRequests: []),
     UserFriend(username: "Edgar", id: "14", friends: [], friendRequests: []),
     UserFriend(username: "Moha", id: "15", friends: [], friendRequests: []),
     UserFriend(username: "Zaki", id: "16", friends: [], friendRequests: []),
   ];
+  void _handleUsernameSubmit(String username) {
+    if (username.isNotEmpty && username.trim().isNotEmpty) {
+      print("Searched");
+      setState(() {});
+      FocusScope.of(context).requestFocus(textFocusNode);
+    }
+  }
 
   void _selectView(int index) {
     setState(() {
@@ -367,7 +399,102 @@ class _FriendsPageState extends State<FriendsPage> {
           ],
         );
       case 2:
-        return Text("Contenu pour Ajouter un ami");
+        return Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Center(
+                child: Container(
+                  width: 520,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          focusNode: textFocusNode,
+                          controller: usernameController,
+                          onChanged: (text) {
+                            setState(() {
+                              isTyping = text.isNotEmpty;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Entrez le nom d'un utilisateur",
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          onSubmitted: _handleUsernameSubmit,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      if (isTyping)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: kMidGreen,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: IconButton(
+                            color: Colors.white,
+                            icon: Icon(Icons.search),
+                            onPressed: () {
+                              _handleUsernameSubmit(usernameController.text);
+                            },
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: simulatedRequestsSent.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final friend = simulatedRequestsSent[index];
+                  return Container(
+                    alignment: Alignment.center,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 500),
+                      child: Card(
+                        margin: EdgeInsets.all(8),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            radius: 40,
+                            backgroundColor: Colors.grey[200],
+                            backgroundImage: AssetImage(
+                                'assets/images/hallelujaRaccoon.jpeg'),
+                          ),
+                          title: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(friend.username,
+                                  style: TextStyle(fontSize: 25)),
+                            ],
+                          ),
+                          trailing: TextButton(
+                            onPressed: () {
+                              print("Cancelled request");
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: kLightGreen,
+                              disabledForegroundColor:
+                                  Colors.grey.withOpacity(0.38),
+                            ),
+                            child:
+                                Text('Annuler', style: TextStyle(fontSize: 18)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
+        );
+
       default:
         return Text("Contenu non disponible");
     }
