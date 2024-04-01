@@ -43,6 +43,7 @@ const String PROFILE_ROUTE = '/profile';
 const String EDIT_PROFILE_ROUTE = '$PROFILE_ROUTE/edit';
 const String STATISTICS_ROUTE = '$PROFILE_ROUTE/statistics';
 const String HISTORY_ROUTE = '$PROFILE_ROUTE/history';
+const String VIDEOS_ROUTE = '$PROFILE_ROUTE/videos';
 
 // FRIENDS
 const String FRIENDS_ROUTE = '/friends';
