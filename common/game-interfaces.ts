@@ -266,10 +266,10 @@ export interface Sound {
 }
 
 export interface GameEventData {
-    timestamp?: number;
-    username: string;
     accountId?: string;
-    players: Player[];
+    username?: string;
+    timestamp?: number;
+    players?: Player[];
     gameEvent: string;
     coordClic?: Coordinate;
     isMainCanvas?: boolean;

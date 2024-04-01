@@ -63,15 +63,16 @@ export class GameGateway implements OnGatewayConnection {
                     });
                     this.games.set(lobbyId, clonedGame);
                     if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
-                        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+                        const players = this.roomsManager.lobbies.get(lobbyId).players;
+
                         /* --------- Record StartGame Event -------- */
                         this.recordManager.createGameRecord(
                             clonedGame,
-                            username,
+                            players,
                             lobby.isCheatEnabled,
                             this.roomsManager.lobbies.get(lobbyId).timeLimit,
                         );
-                        this.logger.verbose('Record Manager : Game Event StartGame, Game `${clonedGame.name}` created');
+                        this.logger.verbose(`Record Manager : Game Event StartGame, Game ${clonedGame.name} created`);
                     }
                 });
                 this.server.to(lobbyId).emit(GameEvents.StartGame, this.games.get(lobbyId));

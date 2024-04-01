@@ -1,16 +1,14 @@
 import { GameRecord, GameRecordDocument } from '@app/model/database/game-record';
 import { DatabaseService } from '@app/services/database/database.service';
-import { DEFAULT_COUNTDOWN_VALUE, PADDING_N_DIGITS } from '@common/constants';
+import { DEFAULT_COUNTDOWN_VALUE } from '@common/constants';
 import { GameEvents } from '@common/enums';
-import { Game, GameEventData } from '@common/game-interfaces';
+import { Game, GameEventData, Player } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 @Injectable()
 export class RecordManagerService {
-    private pendingGames: Map<string, GameRecord>;
-
     constructor(
         @InjectModel(GameRecord.name) private gameRecordModel: Model<GameRecordDocument>,
         private readonly logger: Logger,
@@ -18,19 +16,18 @@ export class RecordManagerService {
     ) {}
 
     // eslint-disable-next-line max-params
-    async createGameRecord(game: Game, username: string, isCheatEnabled?: boolean, timeLimit?: number): Promise<GameRecord> {
+    async createGameRecord(game: Game, players: Player[], isCheatEnabled?: boolean, timeLimit?: number): Promise<GameRecord> {
         this.logger.verbose(`Record Manager from lobby :${game.lobbyId} is creating a new record for game :${game.gameId} `);
         const date = new Date();
 
         const gameEventData: GameEventData = {
-            username,
-            players: [],
             timestamp: Date.now(),
             gameEvent: GameEvents.StartGame,
         };
 
         const newRecord = new this.gameRecordModel({
             game,
+            players,
             date,
             startTime: Date.now(),
             isCheatEnabled: isCheatEnabled != null ? isCheatEnabled : false,
@@ -50,7 +47,7 @@ export class RecordManagerService {
         }
     }
 
-    // the player account id is added to the gameRecord when he wants to save it to view in his profile
+    // account id is added to the gameRecord when players saves it
     async addAccountId(lobbyId: string, accountId: string): Promise<void> {
         await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { $push: { accountIds: accountId } }, { new: true });
     }
@@ -69,7 +66,7 @@ export class RecordManagerService {
         return this.gameRecordModel.findOne({ lobbyId });
     }
 
-    // the player account id is removed from the gameRecord when he wants to delete it from his profile
+    // player account id is removed from the gameRecord when he wants to delete it from his profile
     async deleteAccountId(lobbyId: string, accountId: string): Promise<void> {
         await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { $pull: { accountIds: accountId } }, { new: true });
     }
@@ -81,25 +78,5 @@ export class RecordManagerService {
 
     async deleteAllGameRecords(): Promise<void> {
         await this.databaseService.deleteAllGameRecords();
-    }
-
-    private getFormattedDate(date: Date): string {
-        const month = this.padValue(date.getMonth() + 1);
-        const day = this.padValue(date.getDate());
-        const year = date.getFullYear();
-
-        return `${year}-${month}-${day}`;
-    }
-
-    private getFormattedTime(date: Date): string {
-        const hours = this.padValue(date.getHours());
-        const minutes = this.padValue(date.getMinutes());
-        const seconds = this.padValue(date.getSeconds());
-
-        return `${hours}:${minutes}:${seconds}`;
-    }
-
-    private padValue(value: number): string {
-        return value.toString().padStart(PADDING_N_DIGITS, '0');
     }
 }

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 // eslint-disable-next-line max-classes-per-file
-import { Coordinate, Game, GameEventData } from '@common/game-interfaces';
+import { Game, GameEventData } from '@common/game-interfaces';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -9,21 +9,14 @@ export type GameRecordDocument = GameRecord & Document;
 @Schema()
 export class GameRecord {
     @ApiProperty()
-    @Prop({
-        required: true,
-        type: () => ({
-            lobbyId: String,
-            gameId: String,
-            name: String,
-            original: String,
-            modified: String,
-            difficulty: String,
-            differences: Array<Coordinate[]>,
-            nDifferences: Number,
-        }),
-    })
+    @Prop({ required: true })
     game: Game;
 
+    @ApiProperty()
+    @Prop({ required: true })
+    playerUsernames: string[];
+
+    // account ids of the players who saved the recorded game
     @ApiProperty()
     @Prop()
     accountIds: string[];
