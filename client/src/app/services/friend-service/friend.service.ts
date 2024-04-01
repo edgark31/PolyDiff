@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { FriendEvents, UserEvents } from '@common/enums';
 import { Friend, User } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
-import { ClientSocketService } from '../client-socket-service/client-socket.service';
 
 @Injectable({
     providedIn: 'root',
@@ -53,6 +53,7 @@ export class FriendService {
     }
 
     sendFavorite(accountId: string, isFavorite: boolean): void {
+        console.log('yooooooooooooooooooo' + accountId + isFavorite);
         this.clientSocket.send('auth', FriendEvents.OptFavorite, { friendId: accountId, isFavorite });
     }
 
@@ -66,6 +67,7 @@ export class FriendService {
     }
 
     sendFriendDelete(accountId: string): void {
+        console.log(accountId);
         this.clientSocket.send('auth', FriendEvents.DeleteFriend, { friendId: accountId });
     }
     manageSocket(): void {
@@ -79,6 +81,7 @@ export class FriendService {
         });
 
         this.clientSocket.on('auth', FriendEvents.UpdateSentFriends, (friends: Friend[]) => {
+            console.log('allez' + friends.length);
             this.friendsSendSubject.next(friends);
         });
 

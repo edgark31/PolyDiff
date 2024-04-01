@@ -1,1 +1,28 @@
+<h2 class="header" *ngIf="typeFriend==='allFriends'">liste d'amis de {{data.friend.name }}</h2>
+<h2 class="header" *ngIf="typeFriend==='commonFriends' && data.showCommonFriend ">liste d'amis en commun entre toi et {{data.friend.name }}</h2>
+<div class="container">
+    <div class="header" *ngIf="!data.showCommonFriend">Tous les amis</div>
+    <div *ngIf="data.showCommonFriend">
+        <mat-radio-group class="all-radio-button" [(ngModel)]="typeFriend" (change)="onTypeChange(typeFriend)">
+            <mat-radio-button value="commonFriends"  class="radio-button">ami en commun</mat-radio-button>
+            <mat-radio-button value="allFriends">Tous les amis</mat-radio-button>
+        </mat-radio-group>
+    </div>
+
+<div *ngFor="let friend of  friends; let last = last" class="separator">
+     <!-- <mat-form-field class="full-width-field"> -->
+        <div class="form-avatar">
+            <img [src]="'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'" alt="Image" style="width: 50px; height: 50px; border-radius: 16px;">
+          </div>
+            <span class="name">{{ friend.name }}</span>
+
+            <span *ngIf="!last"></span>
+
+    <!-- </mat-form-field> -->
+</div>
+
+
+    <button mat-button (click)="dialogRef.close()">fermer</button>
+</div>
+
 

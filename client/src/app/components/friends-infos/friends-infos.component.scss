@@ -1,0 +1,47 @@
+.header {
+    padding: 16px;
+    text-align: center;
+    font-size: 27px;
+}
+
+.container {
+    padding: 16px;
+
+    .header {
+        padding: 16px;
+        text-align: center;
+        font-size: 27px;
+        margin-top: -7px;
+    }
+}
+
+.mat-dialog-container {
+    max-width: 800px;
+    width: 80%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.name {
+    font-size: 18px;
+    margin-right: 20px;
+}
+
+div {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.radio-button {
+    margin-right: 20px;
+}
+
+.all-radio-button {
+    margin-top: -30px;
+    font-size: 22px;
+}
+
+.separator {
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}

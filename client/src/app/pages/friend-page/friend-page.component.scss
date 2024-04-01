@@ -59,6 +59,46 @@ body {
     transition: background-color 0.3s;
 }
 
+.materialIcon2 {
+    position: absolute;
+    top: -160px;
+    right: -250px;
+    font-size: 56px;
+    margin: 100px;
+    width: 80px;
+    height: 80px;
+    z-index: 1;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #e8a430;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.materialIcon {
+    position: absolute;
+    top: -160px;
+    right: -250px;
+    font-size: 56px;
+    margin: 100px;
+    width: 80px;
+    height: 80px;
+    z-index: 1;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #e8a430;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
 .icone-group {
     position: absolute;
     top: -150px;
@@ -85,9 +125,30 @@ body {
     width: 20px;
     // height: 80px;
 }
-.icone-delete {
+
+.icone-close {
     position: absolute;
     top: -170px;
+    right: -900px;
+    font-size: 39px;
+    margin: 100px;
+    width: 80px;
+    height: 80px;
+    z-index: 1;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #e8304c;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.icone-delete {
+    position: absolute;
+    top: -203px;
     right: -900px;
     font-size: 39px;
     margin: 100px;
