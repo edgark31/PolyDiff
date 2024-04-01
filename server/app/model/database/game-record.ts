@@ -20,7 +20,6 @@ export class GameRecord {
             difficulty: String,
             differences: Array<Coordinate[]>,
             nDifferences: Number,
-            playedGameIds: [String],
         }),
     })
     game: Game;
