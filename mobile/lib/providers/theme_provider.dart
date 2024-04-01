@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/utils/theme_utils.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.system;
+  // ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = ThemeMode.dark;
   ThemeData _lightTheme = ThemeClass.lightTheme;
   ThemeData _darkTheme = ThemeClass.darkTheme;
 
@@ -11,6 +12,8 @@ class ThemeProvider extends ChangeNotifier {
   // Determine the current theme based on the theme mode
   ThemeData get theme =>
       _themeMode == ThemeMode.dark ? _darkTheme : _lightTheme;
+  // ThemeData get theme =>
+  //     _themeMode == ThemeMode.dark ? _darkTheme : _lightTheme;
 
   bool get isDarkMode {
     if (_themeMode == ThemeMode.system) {
