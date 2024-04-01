@@ -12,6 +12,7 @@ import { Lobby } from '@common/game-interfaces';
 })
 export class GamePageDialogComponent {
     isReplayPaused: boolean;
+    // eslint-disable-next-line max-params
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: { action: GamePageEvent; message: string; lobby: Lobby; isReplayMode: boolean },
         private readonly gameManager: GameManagerService,
