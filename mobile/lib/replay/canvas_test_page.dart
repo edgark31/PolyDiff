@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/command/canvas_command.dart';
-import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/replay/canvas_command.dart';
 
 class CanvasAreaPainter extends CustomPainter {
   final List<Offset> differences;
@@ -28,15 +27,6 @@ class CanvasAreaPainter extends CustomPainter {
 
 class InteractiveCanvasWidget extends StatefulWidget {
   const InteractiveCanvasWidget({super.key});
-
-  static const routeName = CANVAS_ROUTE;
-
-  static Route<dynamic> route() {
-    return MaterialPageRoute(
-      builder: (_) => const InteractiveCanvasWidget(),
-      settings: RouteSettings(name: routeName),
-    );
-  }
 
   @override
   State<InteractiveCanvasWidget> createState() =>

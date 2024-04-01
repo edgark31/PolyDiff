@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/models/replay_model.dart';
-import 'package:mobile/services/capture_game_events_service.dart';
+import 'package:mobile/replay/capture_game_events_service.dart';
+import 'package:mobile/replay/replay_model.dart';
 import 'package:provider/provider.dart';
 
 // TODO: If we want to take a snapshot of the canvas state, we can use this widget

@@ -1,7 +1,7 @@
 import 'package:mobile/constants/enums.dart';
 
 class ReplayGameEvent {
-  final GameEvent action;
+  final GameEvents action;
   final int timestamp;
   final dynamic data;
 
@@ -20,7 +20,7 @@ class Replay {
       gameId: json['gameId'],
       events: events
           .map((event) => ReplayGameEvent(
-                action: GameEvent.values
+                action: GameEvents.values
                     .firstWhere((element) => element == event['event']),
                 timestamp: event['timestamp'],
                 data: event['data'],
