@@ -3,6 +3,9 @@ import { CommunicationService } from '@app/services/communication-service/commun
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
+import { Account } from '@common/game-interfaces';
 
 @Component({
     selector: 'app-recover-password-page',
@@ -17,13 +20,16 @@ export class RecoverPasswordPageComponent {
         email: new FormControl('', []),
     });
 
-    constructor(private readonly communication: CommunicationService) {}
+    constructor(private readonly communication: CommunicationService, private readonly router: Router, public welcome: WelcomeService) {}
 
     onSubmit() {
         if (this.recoverPasswordForm.value.email) {
             this.communication.sendMail(this.recoverPasswordForm.value.email).subscribe({
                 // eslint-disable-next-line @typescript-eslint/no-empty-function
-                next: () => {},
+                next: (account: Account) => {
+                    this.welcome.account = account;
+                    this.router.navigate(['/confirm-password']);
+                },
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';
                 },

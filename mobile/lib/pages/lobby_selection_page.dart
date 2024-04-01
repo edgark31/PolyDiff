@@ -6,9 +6,7 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/lobby_service.dart';
-import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
-import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:provider/provider.dart';
 
 class LobbySelectionPage extends StatefulWidget {
@@ -44,8 +42,9 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     final lobbiesFromServer = lobbyService.filterLobbies();
     final gameModeName = lobbyService.gameModes.name;
     return Scaffold(
-      drawer: CustomMenuDrawer(),
-      appBar: CustomAppBar(title: 'Sélection de la salle de jeu'),
+      // TODO : Put back when disconnect logic in place
+      // drawer: CustomMenuDrawer(),
+      // appBar: CustomAppBar(title: 'Sélection de la salle de jeu'),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -90,10 +89,11 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
         isLobbyClassic ? 'Différences: ${lobby.nDifferences}, ' : '';
     String nPlayers = 'Nombre de joueurs: ${lobby.players.length}/4';
     String playerNames = lobby.players.map((e) => e.name).join(', ');
-    String observerNames = lobby.observers.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
     final chatService = context.watch<ChatService>();
     final gameManagerService = context.watch<GameManagerService>();
+
+    bool areObservers = lobby.observers.isNotEmpty;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -114,18 +114,23 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text('Joueurs: $playerNames',
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                  Expanded(
-                    child: Text('Observateurs: $observerNames',
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                ],
-              ),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text('Joueurs: $playerNames',
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    Expanded(
+                        child: areObservers
+                            ? const Icon(
+                                Icons.remove_red_eye,
+                                color: Colors.white,
+                              )
+                            : const Icon(
+                                Icons.visibility_off,
+                                color: Colors.white,
+                              )),
+                  ]),
             ),
             ButtonBar(
               alignment: MainAxisAlignment.start,
@@ -149,6 +154,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                               'Player is joining as observer in lobby ${lobby.lobbyId}');
                           lobbyService.spectateLobby(lobby.lobbyId);
                           chatService.setLobbyMessages(lobby.chatLog!.chat);
+                          // Directly jump to GameLogic
                           gameManagerService.spectateLobby(lobby.lobbyId);
                           chatService.setGameChatListeners();
                           Navigator.pushNamed(context, GAME_ROUTE);

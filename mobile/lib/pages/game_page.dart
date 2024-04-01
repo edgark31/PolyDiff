@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game.dart';
-import 'package:mobile/models/observers_model.dart';
 import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
@@ -76,7 +76,9 @@ class _GamePageState extends State<GamePage> {
     final isPlayerAnObserver = lobbyService.isObserver;
 
     final canPlayerInteract =
-        !isPlayerAnObserver; // TODO: Add condition for replay
+        !isPlayerAnObserver; // TODO: Add condition for replay ?
+    bool canPlayerReplay = lobbyService.gameModes == GameModes.Classic &&
+        !isPlayerAnObserver; // TODO: Add condition for replay ?
 
     if (gameManagerService.game.gameId == '') {
       return Container(
@@ -94,12 +96,12 @@ class _GamePageState extends State<GamePage> {
       Future.delayed(Duration.zero, () {
         if (ModalRoute.of(context)?.isCurrent ?? false) {
           showDialog(
+            barrierDismissible: false,
             context: context,
             builder: (BuildContext context) {
               return EndGamePopup(
                 endMessage: gameManagerService.endGameMessage!,
-                gameMode: lobbyService.lobby.mode,
-                isObserver: isPlayerAnObserver,
+                canPlayerReplay: canPlayerReplay,
               );
             },
           );
@@ -153,6 +155,11 @@ class _GamePageState extends State<GamePage> {
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
+                    if (lobbyService.lobby.observers
+                        .isNotEmpty) // TODO : Remove when observers are fully done
+                      Text(lobbyService.lobby.observers
+                          .map((o) => o.name)
+                          .join(', '))
                   ],
                   SizedBox(
                     height: 200,
@@ -204,11 +211,8 @@ class _GamePageState extends State<GamePage> {
                   context,
                   'Quitter',
                   () {
+                    print('Quitter pressed');
                     gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
-                    gameManagerService
-                        .disconnectSocket(); // No event sent to server
-                    lobbyService.setIsObserver(false);
-                    lobbyService.leaveLobby();
                     Navigator.pushNamed(context, DASHBOARD_ROUTE);
                   },
                 )
@@ -219,6 +223,7 @@ class _GamePageState extends State<GamePage> {
                     Future.delayed(Duration.zero, () {
                       if (ModalRoute.of(context)?.isCurrent ?? false) {
                         showDialog(
+                          barrierDismissible: false,
                           context: context,
                           builder: (BuildContext context) {
                             return AbandonPopup();
@@ -228,8 +233,7 @@ class _GamePageState extends State<GamePage> {
                     });
                   },
                 ),
-          if (lobbyService.lobby.observers.isNotEmpty)
-            _observerInfos(lobbyService.lobby.observers),
+          _observerInfos(lobbyService.lobby.observers.length),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -274,8 +278,25 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  Widget _observerInfos(List<Observer> observers) {
-    String observerNames = observers.map((e) => e.name).join(', ');
+  Widget _observerInfos(int nObservers) {
+    if (nObservers == 0) {
+      return Positioned(
+        right: 8.0,
+        bottom: 8.0,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [Icon(Icons.visibility_off, color: Colors.white)],
+          ),
+        ),
+      );
+    }
+
     return Positioned(
       right: 8.0,
       bottom: 8.0,
@@ -291,7 +312,7 @@ class _GamePageState extends State<GamePage> {
             Icon(Icons.remove_red_eye, color: Colors.white),
             SizedBox(width: 8),
             Text(
-              observerNames,
+              nObservers.toString(),
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

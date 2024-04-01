@@ -105,7 +105,10 @@ export class GameGateway implements OnGatewayConnection {
             });
             return;
         }
-        socket.emit(GameEvents.Spectate, this.games.get(lobbyId));
+        socket.emit(GameEvents.Spectate, {
+            lobby: this.roomsManager.lobbies.get(lobbyId),
+            game: this.games.get(lobbyId),
+        });
     }
 
     @SubscribeMessage(GameEvents.Clic)
@@ -235,6 +238,9 @@ export class GameGateway implements OnGatewayConnection {
         this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
             .get(lobbyId)
             .players.filter((player) => player.accountId !== socket.data.accountId);
+        this.roomsManager.lobbies.get(lobbyId).observers = this.roomsManager.lobbies
+            .get(lobbyId)
+            .observers.filter((observer) => observer.accountId !== socket.data.accountId);
         socket.leave(lobbyId);
         this.logger.log(`${socket.data.accountId} abandoned game ${lobbyId}`);
         const abandonMessage = `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a abandonné la partie !`;
@@ -244,7 +250,9 @@ export class GameGateway implements OnGatewayConnection {
             clearInterval(this.timers.get(lobbyId));
             this.deleteLobby(lobbyId);
             this.logger.log(`Game ${lobbyId} ended because of not enough players`);
+            return;
         }
+        socket.emit(GameEvents.AbandonGame, this.roomsManager.lobbies.get(lobbyId));
     }
 
     @SubscribeMessage(GameEvents.CheatActivated)

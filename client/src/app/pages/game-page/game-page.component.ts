@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { GamePageDialogComponent } from '@app/components/game-page-dialog/game-page-dialog.component';
 import { INPUT_TAG_NAME } from '@app/constants/constants';
 import { CANVAS_MEASUREMENTS } from '@app/constants/image';
@@ -10,9 +11,10 @@ import { GameManagerService } from '@app/services/game-manager-service/game-mana
 import { ImageService } from '@app/services/image-service/image.service';
 import { NavigationService } from '@app/services/navigation-service/navigation.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
+import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
-import { GameEvents, GameModes, GamePageEvent } from '@common/enums';
+import { GameEvents, GameModes, GamePageEvent, MessageTag } from '@common/enums';
 import { Chat, Game, Lobby } from '@common/game-interfaces';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
@@ -34,6 +36,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     messages: Chat[];
     messageGlobal: Chat[];
     isReplayAvailable: boolean;
+    lobbies: Lobby[] = [];
     gameLobby: Game;
     lobby: Lobby;
     gameMode: typeof GameModes;
@@ -42,6 +45,8 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     chatSubscriptionGlobal: Subscription;
     timeSubscription: Subscription;
     lobbySubscription: Subscription;
+    lobbiesSubscription: Subscription;
+    observersSubscription: Subscription;
     private gameSubscription: Subscription;
     private nextGameSubscription: Subscription;
     private endMessageSubscription: Subscription;
@@ -51,13 +56,14 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
     constructor(
-        // private router: Router,
+        private router: Router,
         private imageService: ImageService,
         private clientSocket: ClientSocketService,
         private readonly gameAreaService: GameAreaService,
         private readonly gameManager: GameManagerService,
         private readonly replayService: ReplayService,
         private readonly matDialog: MatDialog,
+        public roomManager: RoomManagerService,
         public welcome: WelcomeService,
         public globalChatService: GlobalChatService,
         private navigationService: NavigationService,
@@ -75,15 +81,17 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     @HostListener('window:keydown', ['$event'])
     keyboardEvent(event: KeyboardEvent) {
         const eventHTMLElement = event.target as HTMLElement;
-        if (eventHTMLElement.tagName !== INPUT_TAG_NAME) {
-            if (event.key === 't' && this.lobby.isCheatEnabled && this.lobby.mode !== this.gameMode.Practice) {
-                if (this.gameAreaService.isCheatModeActivated) {
-                    this.clientSocket.send('game', GameEvents.CheatDeactivated);
-                } else {
-                    this.clientSocket.send('game', GameEvents.CheatActivated);
+        if (!this.roomManager.isObserver) {
+            if (eventHTMLElement.tagName !== INPUT_TAG_NAME) {
+                if (event.key === 't' && this.lobby.isCheatEnabled && this.lobby.mode !== this.gameMode.Practice) {
+                    if (this.gameAreaService.isCheatModeActivated) {
+                        this.clientSocket.send('game', GameEvents.CheatDeactivated);
+                    } else {
+                        this.clientSocket.send('game', GameEvents.CheatActivated);
+                    }
+                    const differencesCoordinates = this.gameLobby?.differences ? ([] as Coordinate[]).concat(...this.remainingDifference) : [];
+                    this.gameAreaService.toggleCheatMode(differencesCoordinates);
                 }
-                const differencesCoordinates = this.gameLobby?.differences ? ([] as Coordinate[]).concat(...this.remainingDifference) : [];
-                this.gameAreaService.toggleCheatMode(differencesCoordinates);
             }
         }
     }
@@ -94,16 +102,22 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.clientSocket.connect(this.welcome.account.id as string, 'game');
-        this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
         this.gameManager.manageSocket();
-        this.lobby = this.gameManager.lobbyWaiting;
-        this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
-            this.lobby = lobby;
-            this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
+        if (this.roomManager.isObserver) {
+            this.clientSocket.send('game', GameEvents.Spectate, this.gameManager.lobbyWaiting.lobbyId);
+        }
+        this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
+
+        // eslint-disable-next-line no-unused-vars
+        this.clientSocket.on('game', GameEvents.AbandonGame, (lobby: Lobby) => {
+            this.router.navigate(['/game-mode']);
+            this.clientSocket.disconnect('lobby');
+            this.clientSocket.disconnect('game');
         });
         this.chatSubscription = this.gameManager.message$.subscribe((message: Chat) => {
             this.receiveMessage(message);
         });
+
         this.gameSubscription = this.gameManager.game$.subscribe((game: Game) => {
             this.gameLobby = game;
             this.remainingDifference = this.gameLobby.differences as Coordinate[][];
@@ -125,6 +139,18 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.remainingDifference = remainingDifference;
         });
 
+        this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
+            this.lobby = lobby;
+            this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
+            if (this.roomManager.isObserver) {
+                this.messages = this.lobby.chatLog?.chat as Chat[];
+                this.messages.forEach((message: Chat) => {
+                    if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Sent;
+                    else message.tag = MessageTag.Received;
+                });
+            }
+        });
+        // this.lobby = this.gameManager.lobbyWaiting;
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.manage();
             this.globalChatService.updateLog();
@@ -148,7 +174,11 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.lobbySubscription?.unsubscribe();
             this.timeSubscription?.unsubscribe();
             this.endMessageSubscription?.unsubscribe();
+            this.lobbySubscription?.unsubscribe();
             this.remainingDifferenceSubscription?.unsubscribe();
+            this.observersSubscription?.unsubscribe();
+
+            this.roomManager.off();
             this.gameManager.off();
         }
         if (this.clientSocket.isSocketAlive('auth')) {

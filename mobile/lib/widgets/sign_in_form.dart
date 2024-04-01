@@ -12,6 +12,7 @@ import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/utils/credentials_validation.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_text_input_field.dart';
+import 'package:mobile/widgets/customs/stroked_text_widget.dart';
 import 'package:mobile/widgets/password_reset_popup.dart';
 import 'package:provider/provider.dart';
 
@@ -92,6 +93,16 @@ class _SignInFormState extends State<SignInForm> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
+                StrokedTextWidget(
+                  text: APP_NAME_TXT,
+                  textStyle: TextStyle(
+                    fontFamily: 'troika',
+                    fontSize: 140,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFE8A430),
+                    letterSpacing: 0.0,
+                  ),
+                ),
                 SizedBox(height: 40),
                 CustomTextInputField(
                   label: 'Nom d\'utilisateur ou courriel',
@@ -162,7 +173,8 @@ class _SignInFormState extends State<SignInForm> {
                   child: TextButton(
                     onPressed: () {
                       showDialog(
-                        context: context,
+                        barrierDismissible: false,
+                      context: context,
                         builder: (BuildContext context) {
                           return PasswordResetPopup();
                         },

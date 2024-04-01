@@ -33,11 +33,14 @@ export class RoomSheetComponent {
                     data: lobby,
                 });
         } else if (!this.lobby.isAvailable) {
+            this.roomManager.joinRoomObserver(lobby.lobbyId ? lobby.lobbyId : '');
+
             // rentrer en tant qu'observateur
         }
     }
+
     feedbackLobby(): string {
-        if (this.lobby.players.length === 4) return 'Partie pleine';
+        if (this.lobby.players.length === 4 && this.lobby.isAvailable) return 'Partie pleine';
         return '';
     }
 }

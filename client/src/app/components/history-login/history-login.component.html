@@ -1,0 +1,55 @@
+<div class="mat-elevation-z8">
+    <table  *ngIf="welcome.isHistoryLogin" mat-table [dataSource]="dataSourceLogin">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="timestamp">
+        <th mat-header-cell *matHeaderCellDef> timestamps </th>
+        <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="connection">
+        <th mat-header-cell *matHeaderCellDef> connection </th>
+        <td mat-cell *matCellDef="let element"> <span *ngIf="element.isConnection">Connection
+        </span> <span *ngIf="!element.isConnection">Deconnection
+        </span> </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsLogin"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsLogin;"></tr>
+    </table>
+
+
+    <table  *ngIf="!welcome.isHistoryLogin" mat-table [dataSource]="dataSourceGame">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="timestamp">
+          <th mat-header-cell *matHeaderCellDef> timestamps </th>
+          <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="Session">
+          <th mat-header-cell *matHeaderCellDef> Bilan de match </th>
+          <td mat-cell *matCellDef="let element"> <span *ngIf="element.isWinner">Victoire
+          </span> <span *ngIf="!element.isWinner">Défaite
+          </span> </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsGame"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsGame;"></tr>
+      </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                   showFirstLastButtons>
+    </mat-paginator>
+
+    <div>
+        <button mat-raised-button class="close-button" (click)="closeDialog()" aria-label="close history">
+            <mat-icon>close</mat-icon>
+            Fermer l'histroique
+        </button>
+    </div>
+  </div>
