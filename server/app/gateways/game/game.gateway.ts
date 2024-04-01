@@ -65,7 +65,7 @@ export class GameGateway implements OnGatewayConnection {
                     if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
                         const players = this.roomsManager.lobbies.get(lobbyId).players;
 
-                        /* --------- Record StartGame Event -------- */
+                        /* --------- Create Game Record on StartGame Event -------- */
                         this.recordManager.createGameRecord(
                             clonedGame,
                             players,
@@ -149,6 +149,7 @@ export class GameGateway implements OnGatewayConnection {
             // Difference found, update state of game
             if (index !== NOT_FOUND) {
                 this.logger.log(`Found event received from ${socket.data.accountId.name} in lobby ${lobbyId}`);
+
                 /* --------- Record Difference Found Event -------- */
                 this.recordManager.addGameEvent(lobbyId, {
                     username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
