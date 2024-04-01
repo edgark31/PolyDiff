@@ -50,8 +50,8 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     // ---------------------- LES GETTERS de users à chaque RECHERCHE  --------------------------------
     @SubscribeMessage(UserEvents.UpdateUsers)
-    updateUsers() {
-        this.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers()); // User[]
+    updateUsers(@ConnectedSocket() socket: Socket) {
+        socket.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers()); // User[]
     }
 
     // ---------------------- LES GETTERS de friends INITIAUX --------------------------------
@@ -67,7 +67,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(FriendEvents.UpdatePendingFriends)
     updatePendingFriends(@ConnectedSocket() socket: Socket) {
-        socket.emit(FriendEvents.UpdatePendingFriends, this.accountManager.users.get(socket.data.accountId).profile.friendRequests);
+        socket.emit(FriendEvents.UpdatePendingFriends, this.friendManager.calculatePendingFriends(socket.data.accountId));
     }
 
     // ---------------------- LES SCÉNARIOS --------------------------------
@@ -109,14 +109,31 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             if (senderFriendSocket) {
                 senderFriendSocket.emit(FriendEvents.UpdateSentFriends, this.friendManager.calculateSentFriends(senderFriendSocket.data.accountId));
             }
+            sockets.map((s) => {
+                s.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(s.data.accountId).profile.friends);
+            });
         });
         socket.emit(FriendEvents.UpdatePendingFriends, this.friendManager.calculatePendingFriends(socket.data.accountId));
+        this.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers());
     }
 
     @SubscribeMessage(FriendEvents.OptFavorite)
     async optFavorite(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string, @MessageBody('isFavorite') isFavorite: boolean) {
         await this.friendManager.optFavorite(socket.data.accountId, friendId, isFavorite);
         socket.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(socket.data.accountId).profile.friends);
+    }
+
+    @SubscribeMessage(FriendEvents.DeleteFriend)
+    async deleteFriend(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string) {
+        await this.friendManager.deleteFriend(socket.data.accountId, friendId);
+        this.server.fetchSockets().then((sockets) => {
+            const friendSocket = sockets.find((s) => s.data.accountId === friendId);
+            if (friendSocket) {
+                friendSocket.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(friendSocket.data.accountId).profile.friends);
+            }
+        });
+        socket.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(socket.data.accountId).profile.friends);
+        this.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers());
     }
 
     @SubscribeMessage(ChannelEvents.SendGlobalMessage)
