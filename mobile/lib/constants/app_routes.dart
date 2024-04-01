@@ -3,18 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/admin_page.dart';
 import 'package:mobile/pages/chat_page.dart';
-import 'package:mobile/pages/game_page.dart';
 import 'package:mobile/pages/create_room_card_page.dart';
 import 'package:mobile/pages/create_room_options_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/edit_profile_page.dart';
+import 'package:mobile/pages/game_page.dart';
 import 'package:mobile/pages/history_page.dart';
-import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
 import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/search_page.dart';
-import 'package:mobile/pages/settings_page.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/pages/sign_up_page.dart';
 import 'package:mobile/pages/statistics_page.dart';
@@ -42,7 +40,6 @@ const String CHAT_ROUTE = '/chat';
 // ACCOUNT/PROFILE
 const String ADMIN_ROUTE = '/admin';
 const String PROFILE_ROUTE = '/profile';
-const String SETTINGS_ROUTE = '$PROFILE_ROUTE/settings';
 const String EDIT_PROFILE_ROUTE = '$PROFILE_ROUTE/edit';
 const String STATISTICS_ROUTE = '$PROFILE_ROUTE/statistics';
 const String HISTORY_ROUTE = '$PROFILE_ROUTE/history';
@@ -65,10 +62,10 @@ class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return HomePage.route();
+        return SignInPage.route();
 
-      case LoginPage.routeName:
-        return LoginPage.route();
+      case SignInPage.routeName:
+        return SignInPage.route();
 
       case SignUpPage.routeName:
         return SignUpPage.route();
@@ -90,9 +87,6 @@ class AppRouter {
 
       case SearchPage.routeName:
         return SearchPage.route();
-
-      case SettingsPage.routeName:
-        return SettingsPage.route();
 
       case HistoryPage.routeName:
         return HistoryPage.route();

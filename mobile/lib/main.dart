@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
-import 'package:mobile/pages/home_page.dart';
+import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
@@ -18,7 +18,7 @@ import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/utils/theme_utils.dart';
 import 'package:provider/provider.dart';
 
-Widget defaultHome = HomePage();
+Widget defaultHome = SignInPage();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,6 +83,7 @@ void initializeServices() {
   Get.put(GameCardService());
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
+  Get.put(ThemeProvider());
 }
 
 class MyApp extends StatelessWidget {
@@ -90,14 +91,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: APP_NAME_TXT,
-      themeMode: ThemeMode.system,
-      theme: ThemeClass.darkTheme, // TODO Change according to settings
-      // darkTheme: ThemeClass.darkTheme,
+      themeMode: themeProvider.themeMode,
+      theme: ThemeClass.lightTheme,
+      darkTheme: ThemeClass.darkTheme,
       onGenerateRoute: AppRouter.onGenerateRoute,
-      initialRoute: HomePage.routeName,
+      initialRoute: SignInPage.routeName,
     );
   }
 }
