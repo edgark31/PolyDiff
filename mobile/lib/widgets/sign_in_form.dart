@@ -80,9 +80,6 @@ class _SignInFormState extends State<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    double bottomPadding = MediaQuery.of(context).viewInsets.bottom > 0
-        ? 20
-        : MediaQuery.of(context).size.height * 0.3;
     final socketService = context.watch<SocketService>();
     final infoService = context.watch<InfoService>();
     final chatService = context.watch<ChatService>();
@@ -91,8 +88,7 @@ class _SignInFormState extends State<SignInForm> {
       children: [
         SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.only(
-                top: bottomPadding, left: 1, right: 16, bottom: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
@@ -164,27 +160,28 @@ class _SignInFormState extends State<SignInForm> {
                     child: Text(
                       serverErrorMessage!,
                       style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight
-                              .bold // Use a color that makes the error message stand out
-                          ),
+                          color: Colors.red, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                SizedBox(height: 30),
-                CustomButton(
-                  text: FORGOT_PASSWORD_TXT,
-                  press: () {
-                    showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return PasswordResetPopup();
-                      },
-                    );
-                  },
+                Align(
+                  alignment: Alignment.center,
+                  child: TextButton(
+                    onPressed: () {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return PasswordResetPopup();
+                        },
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    child: Text(FORGOT_PASSWORD_TXT),
+                  ),
                 ),
-                SizedBox(height: 30),
                 CustomButton(
                   text: SIGN_UP_BTN_TXT,
                   press: () => Navigator.pushNamed(context, SIGN_UP_ROUTE),

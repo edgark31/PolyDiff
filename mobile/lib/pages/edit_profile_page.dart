@@ -283,7 +283,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           final themeProvider = Provider.of<ThemeProvider>(
                               context,
                               listen: false);
-                          themeProvider.toggleTheme(newValue == 'Dark');
+                          themeProvider.toggleTheme(newValue == 'dark');
                         });
                       },
                       decoration: InputDecoration(labelText: 'Theme'),
