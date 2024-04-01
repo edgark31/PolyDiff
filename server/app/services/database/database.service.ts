@@ -198,14 +198,9 @@ export class DatabaseService implements OnModuleInit {
 
     async deleteAllGameRecords() {
         try {
-            await this.gameRecordModel.deleteMany({}); // Ensure passing an empty filter object
-            // eslint-disable-next-line no-console
-            console.log('All game records have been deleted'); // For debugging
-            return 'All game records have been deleted'; // Since you're in an async function, no need for Promise.resolve
+            await this.gameRecordModel.deleteMany({}).exec();
         } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(`Failed to delete all games records --> ${error}`); // For debugging
-            throw new Error(`Failed to delete all games records --> ${error}`); // Throwing an error for consistency
+            return Promise.reject(`Failed to delete all game records --> ${error}`);
         }
     }
 

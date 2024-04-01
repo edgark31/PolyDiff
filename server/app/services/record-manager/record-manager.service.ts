@@ -66,6 +66,15 @@ export class RecordManagerService {
         return this.gameRecordModel.findOne({ lobbyId });
     }
 
+    // all saved game records are fetch when user wants to see his profile
+    async fetchSavedGameRecordsByAccountId(accountId: string) {
+        try {
+            return this.gameRecordModel.find({ accountIds: accountId });
+        } catch (error) {
+            this.logger.error(`Record Manager has failed to fetch saved game records for accountId: ${accountId} with error: ${error}`);
+        }
+    }
+
     // player account id is removed from the gameRecord when he wants to delete it from his profile
     async deleteAccountId(lobbyId: string, accountId: string): Promise<void> {
         await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { $pull: { accountIds: accountId } }, { new: true });

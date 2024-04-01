@@ -28,7 +28,7 @@ export class GameRecord {
     @Prop({ required: true })
     players: Player[];
 
-    // account ids of the players who saved the recorded game
+    // account ids of players who saved the recorded game
     @ApiProperty()
     @Prop()
     accountIds: string[];
