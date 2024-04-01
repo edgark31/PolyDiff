@@ -126,7 +126,6 @@ export class FriendPageComponent implements OnInit, OnDestroy {
     }
 
     sendSearch(): void {
-        console.log('bonnsssssssssn');
         this.friendService.sendSearch();
     }
 
