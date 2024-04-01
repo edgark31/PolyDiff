@@ -9,7 +9,6 @@ import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/edit_profile_page.dart';
 import 'package:mobile/pages/game_page.dart';
 import 'package:mobile/pages/history_page.dart';
-import 'package:mobile/pages/home_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
 import 'package:mobile/pages/profile_page.dart';
@@ -65,8 +64,7 @@ class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return HomePage.route();
-      // return SignInPage.route();
+        return SignInPage.route();
 
       case SignInPage.routeName:
         return SignInPage.route();
