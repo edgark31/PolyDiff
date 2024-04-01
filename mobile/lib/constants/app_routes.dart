@@ -40,7 +40,6 @@ const String CHAT_ROUTE = '/chat';
 // ACCOUNT/PROFILE
 const String ADMIN_ROUTE = '/admin';
 const String PROFILE_ROUTE = '/profile';
-const String SETTINGS_ROUTE = '$PROFILE_ROUTE/settings';
 const String EDIT_PROFILE_ROUTE = '$PROFILE_ROUTE/edit';
 const String STATISTICS_ROUTE = '$PROFILE_ROUTE/statistics';
 const String HISTORY_ROUTE = '$PROFILE_ROUTE/history';

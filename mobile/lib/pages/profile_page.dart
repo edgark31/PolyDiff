@@ -118,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         title: "Paramètres",
                         icon: Icons.settings,
                         onPress: () {
-                          Navigator.pushNamed(context, SETTINGS_ROUTE);
+                          Navigator.pushNamed(context, EDIT_PROFILE_ROUTE);
                         }),
                     SizedBox(height: 10),
                     ProfileMenuWidget(
