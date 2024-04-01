@@ -13,7 +13,6 @@ import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
 import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/search_page.dart';
-import 'package:mobile/pages/settings_page.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/pages/sign_up_page.dart';
 import 'package:mobile/pages/statistics_page.dart';
@@ -89,9 +88,6 @@ class AppRouter {
 
       case SearchPage.routeName:
         return SearchPage.route();
-
-      case SettingsPage.routeName:
-        return SettingsPage.route();
 
       case HistoryPage.routeName:
         return HistoryPage.route();
