@@ -62,7 +62,7 @@ export class RecordManagerService {
         }
     }
 
-    async getRecordedGameByLobbyId(lobbyId: string): Promise<GameRecord> {
+    async get(lobbyId: string): Promise<GameRecord> {
         return this.gameRecordModel.findOne({ lobbyId });
     }
 

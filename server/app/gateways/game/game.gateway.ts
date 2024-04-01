@@ -333,8 +333,6 @@ export class GameGateway implements OnGatewayConnection {
         socket.emit(GameEvents.AbandonGame, this.roomsManager.lobbies.get(lobbyId));
     }
 
-    // TODO :
-
     @SubscribeMessage(GameEvents.CheatActivated)
     cheatActivated(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string) {
         const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
@@ -353,6 +351,18 @@ export class GameGateway implements OnGatewayConnection {
         /* ------------------ Record Event ------------------ */
         this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.CheatDeactivated, username } as GameEventData);
         this.logger.log(`${username}(${socket.data.accountId}) deactivated cheat in ${lobbyId}`);
+    }
+
+    // sends back the recorded game if a player click on replay button
+    @SubscribeMessage(GameEvents.ReplayCurrentGame)
+    handleGameReplay(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        socket.emit(GameEvents.ReplayCurrentGame, this.recordManager.get(lobbyId));
+    }
+
+    // after replay recorded game, player can save it in his account
+    @SubscribeMessage(GameEvents.SaveGameRecord)
+    addAccountIdToGameRecord(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        this.recordManager.addAccountId(lobbyId, socket.data.accountId);
     }
 
     @SubscribeMessage(ChannelEvents.SendGameMessage)
