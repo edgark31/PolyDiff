@@ -210,30 +210,26 @@ export class LobbyGateway implements OnGatewayConnection {
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
         socket.data.state = LobbyState.Idle;
-        const lobbies = Array.from(this.roomsManager.lobbies.values());
-        this.server.emit(LobbyEvents.UpdateLobbys, lobbies);
-        // HANDLE DISCONNECT-ING ***
+        this.logger.log(`LOBBY IN de ${socket.data.accountId}`);
+
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
                 case LobbyState.Idle:
-                    this.logger.log(`${socket.data.accountId} was IDLE`);
+                    this.logger.log(`LOBBY OUT de ${socket.data.accountId} | was IDLE`);
                     break;
                 case LobbyState.Waiting: // ta deja rejoint une room
-                    this.logger.log(`${socket.data.accountId} was WAITING`);
+                    this.logger.log(`LOBBY OUT de ${socket.data.accountId} | was WAITING`);
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
-                    this.logger.log(`${socket.data.accountId} was INGAME`);
+                    this.logger.log(`LOBBY OUT de ${socket.data.accountId} | was INGAME`);
                     break;
                 case LobbyState.Spectate: // t'es dans une room en tant que spectateur
-                    this.logger.log(`${socket.data.accountId} was SPECTATING`);
+                    this.logger.log(`LOBBY OUT de ${socket.data.accountId} | was SPECTATING`);
                     break;
                 default:
                     break;
             }
-            const lobbiesFromManager = Array.from(this.roomsManager.lobbies.values());
-            this.server.emit(LobbyEvents.UpdateLobbys, lobbiesFromManager);
-            this.logger.log(`LOBBY OUT de ${socket.data.accountId}`);
+            this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
         });
-        this.logger.log(`LOBBY IN de ${socket.data.accountId}`);
     }
 }
