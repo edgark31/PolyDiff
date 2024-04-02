@@ -31,7 +31,20 @@
         "returnProfil": "revenir au profil",
         "GoReglage": "Aller dans réglage",
         "Settings": "Réglages",
+        "previous": "précédent",
+        "following": "suivant",
         "fr": "français",
         "en": "anglais"
+    },
+
+    "roomSheet": {
+        "creationRoom": "Créer une salle",
+        "gameMode": "Mode de jeu",
+        "picture": "Image",
+        "differenceNumber": "Nombre de différences",
+        "join": "rejoindre",
+        "joinObserver":
+
+
     }
 }

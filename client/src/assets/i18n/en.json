@@ -36,5 +36,9 @@
         "Settings": "Settings",
         "fr": "french",
         "en": "english"
+    },
+
+    "classic": {
+        "creationRoom": "Disconnect"
     }
 }
