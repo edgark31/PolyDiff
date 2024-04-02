@@ -102,10 +102,9 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     // TODO : Reload game cards if new games are added or deleted to the server
 
     return Scaffold(
-      // TODO : Put back when disconnect logic in place
-      // drawer: CustomMenuDrawer(),
-      // appBar:
-      //     CustomAppBar(title: 'Création d\'une salle de jeu - Choix de fiche'),
+      drawer: CustomMenuDrawer(),
+      appBar:
+          CustomAppBar(title: 'Création d\'une salle de jeu - Choix de fiche'),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
