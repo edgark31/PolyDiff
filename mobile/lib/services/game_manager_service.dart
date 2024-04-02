@@ -85,19 +85,6 @@ class GameManagerService extends ChangeNotifier {
     _record = record;
   }
 
-  // void sendCoord(String? lobbyId, Coordinate coord) {
-  //   print(
-  //       'SendCoord is called with id: $lobbyId and coord: x: ${coord.x} y: ${coord.y}');
-  //   socketService.send(
-  //     SocketType.Game,
-  //     GameEvents.Clic.name,
-  //     {
-  //       'lobbyId': lobbyId,
-  //       'coordClic': coord,
-  //     },
-  //   );
-  // }
-
   void sendCoord(String? lobbyId, Coordinate coord) {
     print(
         'SendCoord is called with id: $lobbyId and coord: x: ${coord.x} y: ${coord.y}');
@@ -231,9 +218,7 @@ class GameManagerService extends ChangeNotifier {
 
     socketService.on(SocketType.Game, GameEvents.GameRecord.name, (record) {
       print('GameRecord received');
-      print("""""`${GameRecord.fromJson(record as Map<String, dynamic>)}`""");
-
-      setGameRecord(GameRecord.fromJson(record as Map<String, dynamic>));
+      setGameRecord(record as GameRecord);
     });
   }
 }

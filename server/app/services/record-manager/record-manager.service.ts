@@ -11,7 +11,7 @@ import { Model } from 'mongoose';
 @Injectable()
 export class RecordManagerService {
     private pendingGameRecord = new Map<string, GameRecord>();
-    private gameDifferencesIndex: number[];
+    private remainingDifferencesIndex: number[];
 
     constructor(
         @InjectModel(GameRecord.name) private gameRecordModel: Model<GameRecordDocument>,
@@ -46,9 +46,9 @@ export class RecordManagerService {
             this.pendingGameRecord.set(game.lobbyId, newGameRecord);
 
             // Creates an array of index of differences to keep track of the remaining differences
-            this.gameDifferencesIndex = game.differences ? Array.from({ length: game.differences.length }, (_, i) => i) : [];
+            this.remainingDifferencesIndex = game.differences ? Array.from({ length: game.differences.length }, (_, i) => i) : [];
 
-            this.logger.log(`Record Manager created array of index ${this.gameDifferencesIndex}`);
+            this.logger.log(`Record Manager created array of index ${this.remainingDifferencesIndex}`);
             this.logger.verbose(`Record Manager from lobby :${game.lobbyId} has created a new record with id :${newGameRecord}`);
         } catch (error) {
             this.logger.error(`Failed to insert GameRecord: ${error}`);
@@ -111,7 +111,7 @@ export class RecordManagerService {
         }
         // Reset the pending game record
         this.pendingGameRecord = new Map<string, GameRecord>();
-        this.gameDifferencesIndex = [];
+        this.remainingDifferencesIndex = [];
     }
 
     // TODO: put theses methods in the database service
@@ -149,14 +149,13 @@ export class RecordManagerService {
     }
 
     private getRemainingDifferenceIndex(game: Game, coordinates: Coordinate): number[] {
-        let remainingDifferenceIndex = this.gameDifferencesIndex;
         game.differences.forEach((difference, index) => {
             if (difference[0].x !== coordinates.x || difference[0].y !== coordinates.y) {
                 const foundIndex = index;
-                remainingDifferenceIndex = this.gameDifferencesIndex.filter((value) => value !== foundIndex);
+                this.remainingDifferencesIndex = this.remainingDifferencesIndex.filter((value) => value !== foundIndex);
             }
         });
-        this.logger.debug(`Record Manager created array of index ${remainingDifferenceIndex}`);
-        return remainingDifferenceIndex;
+        this.logger.debug(`Record Manager created array of index ${this.remainingDifferencesIndex}`);
+        return this.remainingDifferencesIndex;
     }
 }

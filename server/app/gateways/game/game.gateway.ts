@@ -86,7 +86,13 @@ export class GameGateway implements OnGatewayConnection {
                     return;
                 }
                 if (this.roomsManager.lobbies.get(lobbyId).time <= 0) {
+                    if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
+                        this.recordManager.closeEntry(lobbyId);
+                        const record = this.recordManager.getPendingGameRecord(lobbyId);
+                        this.server.to(lobbyId).emit(GameEvents.GameRecord, record);
+                    }
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Temps écoulé !');
+                    this.recordManager.pushToDatabase(lobbyId);
                     this.logDraw(lobbyId);
                     clearInterval(timerId);
                     this.deleteLobby(lobbyId);
@@ -143,7 +149,7 @@ export class GameGateway implements OnGatewayConnection {
         if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
             // Difference found, update state of game
             if (index !== NOT_FOUND) {
-                this.logger.log(`Found event received from ${socket.data.accountId.name} in lobby ${lobbyId}`);
+                this.logger.log(`Found event received from ${socket.data.accountId} in lobby ${lobbyId}`);
 
                 /* --------- Record Difference Found Event -------- */
                 this.recordManager.addGameEvent(lobbyId, {
@@ -333,7 +339,7 @@ export class GameGateway implements OnGatewayConnection {
     }
 
     @SubscribeMessage(GameEvents.CheatActivated)
-    cheatActivated(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string) {
+    cheatActivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
         const accountId = socket.data.accountId;
         const players = this.roomsManager.lobbies.get(lobbyId).players;
