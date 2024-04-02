@@ -17,7 +17,7 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
     replaySpeed: number;
     constructor(private readonly replayService: ReplayService) {
         this.timer = 0;
-        this.isReplayAvailable = true;
+        this.isReplayAvailable = false;
         this.isReplayPaused = false;
         this.replaySpeeds = REPLAY_SPEEDS;
     }
