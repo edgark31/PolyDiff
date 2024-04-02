@@ -79,7 +79,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     updateCommonFriends(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string) {
         const ownAccount = this.accountManager.users.get(socket.data.accountId);
         const friendAccount = this.accountManager.users.get(friendId);
-        socket.emit(FriendEvents.UpdateFoFs, this.friendManager.calculateCommonFriends(ownAccount, friendAccount));
+        socket.emit(FriendEvents.UpdateCommonFriends, this.friendManager.calculateCommonFriends(ownAccount, friendAccount));
     }
 
     // ---------------------- LES SCÉNARIOS --------------------------------
@@ -159,7 +159,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     // ---------------------- SHARE SCORE --------------------------------
 
     @SubscribeMessage(FriendEvents.ShareScore)
-    shareScore(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string, @MessageBody('score') score: number) {
+    shareScore(@MessageBody('friendId') friendId: string, @MessageBody('score') score: number) {
         this.server.fetchSockets().then((sockets) => {
             const friendSocket = sockets.find((s) => s.data.accountId === friendId);
             if (friendSocket) {
