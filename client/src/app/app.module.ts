@@ -73,6 +73,8 @@ import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { WaitingRoomComponent } from './pages/waiting-room/waiting-room.component';
+import { WaitingPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
+import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -131,6 +133,8 @@ export const createTranslateLoader = (http: HttpClient) => {
         FriendPageComponent,
         HistoryLoginComponent,
         FriendsInfosComponent,
+        WaitingPlayerToJoinComponent,
+        JoinedPlayerDialogComponent,
     ],
     imports: [
         AppMaterialModule,
