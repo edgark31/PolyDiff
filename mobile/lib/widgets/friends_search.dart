@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/user_model.dart';
 import 'package:mobile/services/friend_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/widgets/friends_popup.dart';
+import 'package:provider/provider.dart';
 
 class FriendsSearch extends StatefulWidget {
   @override
@@ -12,10 +15,17 @@ class FriendsSearch extends StatefulWidget {
 
 class _FriendsSearchState extends State<FriendsSearch> {
   final FriendService friendService = Get.find();
+
   TextEditingController usernameController = TextEditingController();
   FocusNode textFocusNode = FocusNode();
   bool isTyping = false;
   List<User> searchedUsers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    friendService.fetchUsers();
+  }
 
   void _handleUsernameSubmit(String username) {
     friendService.fetchUsers();
@@ -34,8 +44,18 @@ class _FriendsSearchState extends State<FriendsSearch> {
     }
   }
 
+  Widget _relation(String myId, User user) {
+    bool isFriend = user.friends.any((friend) => friend!.accountId == myId);
+    if (isFriend) {
+      return Text('Friend', style: TextStyle(fontSize: 18));
+    } else {
+      return Text("Not Friend");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final infoService = context.watch<InfoService>();
     return Column(
       children: [
         Padding(
@@ -74,7 +94,8 @@ class _FriendsSearchState extends State<FriendsSearch> {
           child: ListView.builder(
             itemCount: searchedUsers.length,
             itemBuilder: (BuildContext context, int index) {
-              final friend = searchedUsers[index];
+              final user = searchedUsers[index];
+              String avatarURL = '$BASE_URL/avatar/${user.accountId}.png';
               return Container(
                 alignment: Alignment.center,
                 child: ConstrainedBox(
@@ -85,13 +106,12 @@ class _FriendsSearchState extends State<FriendsSearch> {
                       leading: CircleAvatar(
                         radius: 40,
                         backgroundColor: Colors.grey[200],
-                        backgroundImage:
-                            AssetImage('assets/images/hallelujaRaccoon.jpeg'),
+                        backgroundImage: NetworkImage(avatarURL),
                       ),
                       title: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(friend.name, style: TextStyle(fontSize: 25)),
+                          Text(user.name, style: TextStyle(fontSize: 25)),
                           SizedBox(width: 20),
                           TextButton(
                             onPressed: () {
@@ -99,8 +119,8 @@ class _FriendsSearchState extends State<FriendsSearch> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return FriendsPopup(
-                                    username: friend.name,
-                                    allFriends: friend.friends,
+                                    username: user.name,
+                                    allFriends: user.friends,
                                     commonFriends: [], // Ok for now because this is not the real logic
                                   );
                                 },
@@ -112,22 +132,11 @@ class _FriendsSearchState extends State<FriendsSearch> {
                               disabledForegroundColor:
                                   Colors.grey.withOpacity(0.38),
                             ),
-                            child: Text('Amis', style: TextStyle(fontSize: 18)),
+                            child: Text('Amis', style: TextStyle(fontSize: 25)),
                           ),
                         ],
                       ),
-                      trailing: TextButton(
-                        onPressed: () {
-                          print("Cancelled request");
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: kLightGreen,
-                          disabledForegroundColor:
-                              Colors.grey.withOpacity(0.38),
-                        ),
-                        child: Text('Annuler', style: TextStyle(fontSize: 18)),
-                      ),
+                      trailing: _relation(infoService.id, user),
                     ),
                   ),
                 ),
