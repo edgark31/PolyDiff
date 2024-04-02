@@ -15,6 +15,7 @@ import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
+import 'package:mobile/services/sound_service.dart';
 import 'package:mobile/utils/theme_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,10 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageProvider()),
+    ChangeNotifierProvider( create: (context) {
+      SoundService soundService = Get.find();
+      return soundService;
+    }),
     ChangeNotifierProvider(create: (context) {
       RegisterProvider registerProvider = Get.find();
       return registerProvider;
@@ -73,6 +78,7 @@ void main() async {
 }
 
 void initializeServices() {
+  Get.put(SoundService());
   Get.put(SocketService());
   Get.put(GameAreaService());
   Get.put(InfoService());
