@@ -20,6 +20,7 @@ class InfoService extends ChangeNotifier {
     averageDifferences: 0,
   );
   static List<ConnectionLog> _connections = [];
+  static List<SessionLog> _sessions = [];
 
   String get username => _username;
   String get id => _id;
@@ -31,6 +32,7 @@ class InfoService extends ChangeNotifier {
   Sound get onCorrectSound => _onCorrectSound;
   Statistics get statistics => _statistics;
   List<ConnectionLog> get connections => _connections;
+  List<SessionLog> get sessions => _sessions;
 
   void setId(String newId) {
     // print('Changing id from $_id to $newId');
@@ -52,13 +54,24 @@ class InfoService extends ChangeNotifier {
     }
   }
 
+    void setSessions(List<SessionLog> newSessions) {
+    String oldSessions =
+        _sessions.map((c) => c.toJson().toString()).join(', ');
+    String newSessionsString =
+        newSessions.map((c) => c.toJson().toString()).join(', ');
+    print(
+        'Changing sessions from $oldSessions to $newSessionsString for $username ($_id)');
+    _sessions = newSessions;
+    notifyListeners();
+  }
+
   void setConnections(List<ConnectionLog> newConnections) {
     String oldConnections =
         _connections.map((c) => c.toJson().toString()).join(', ');
     String newConnectionsString =
         newConnections.map((c) => c.toJson().toString()).join(', ');
     print(
-        'Changing sessions from $oldConnections to $newConnectionsString for $username ($_id)');
+        'Changing connections from $oldConnections to $newConnectionsString for $username ($_id)');
     _connections = newConnections;
     notifyListeners();
   }
@@ -118,10 +131,14 @@ class InfoService extends ChangeNotifier {
     final connections = List<ConnectionLog>.from(result['profile']
             ['connections']
         .map((connection) => ConnectionLog.fromJson(connection)));
+    final sessions = List<SessionLog>.from(result['profile']
+            ['sessions']
+        .map((session) => SessionLog.fromJson(session)));
 
     setCredentials(credentials);
     setStatistics(statistics);
     setConnections(connections);
+    setSessions(sessions);
 
     setTheme(result['profile']['mobileTheme']);
     setLanguage(result['profile']['language']);
