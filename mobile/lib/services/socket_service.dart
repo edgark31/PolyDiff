@@ -4,11 +4,36 @@ import 'package:mobile/constants/enums.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends ChangeNotifier {
-  static late IO.Socket authSocket;
-  static late IO.Socket lobbySocket;
-  static late IO.Socket gameSocket;
+  static IO.Socket? authSocket;
+  static IO.Socket? lobbySocket;
+  static IO.Socket? gameSocket;
 
   void setup(SocketType type, String id) {
+    bool isConnected = false;
+
+    switch (type) {
+      case SocketType.Auth:
+        if (authSocket != null && authSocket!.connected) {
+          isConnected = true;
+        }
+        break;
+      case SocketType.Lobby:
+        if (lobbySocket != null && lobbySocket!.connected) {
+          isConnected = true;
+        }
+        break;
+      case SocketType.Game:
+        if (gameSocket != null && gameSocket!.connected) {
+          isConnected = true;
+        }
+        break;
+    }
+
+    if (isConnected) {
+      print("${type.name} socket is already connected. Skipping setup.");
+      return;
+    }
+
     switch (type) {
       case SocketType.Auth:
         authSocket = IO.io(BASE_URL, <String, dynamic>{
@@ -17,8 +42,8 @@ class SocketService extends ChangeNotifier {
           'forceNew': true,
           'query': 'id=$id'
         });
-        authSocket.connect();
-        setSocket(authSocket);
+        authSocket!.connect();
+        setSocket(authSocket!);
         break;
       case SocketType.Lobby:
         lobbySocket = IO.io("$BASE_URL/lobby", <String, dynamic>{
@@ -27,8 +52,8 @@ class SocketService extends ChangeNotifier {
           'forceNew': true,
           'query': 'id=$id'
         });
-        lobbySocket.connect();
-        setSocket(lobbySocket);
+        lobbySocket!.connect();
+        setSocket(lobbySocket!);
         break;
       case SocketType.Game:
         gameSocket = IO.io("$BASE_URL/game", <String, dynamic>{
@@ -37,8 +62,8 @@ class SocketService extends ChangeNotifier {
           'forceNew': true,
           'query': 'id=$id',
         });
-        gameSocket.connect();
-        setSocket(gameSocket);
+        gameSocket!.connect();
+        setSocket(gameSocket!);
         break;
     }
     print("Setup ${type.name} completed for $id");
@@ -63,13 +88,13 @@ class SocketService extends ChangeNotifier {
   void send<T>(SocketType type, String event, [T? data]) {
     switch (type) {
       case SocketType.Auth:
-        authSocket.emit(event, data);
+        authSocket!.emit(event, data);
         break;
       case SocketType.Lobby:
-        lobbySocket.emit(event, data);
+        lobbySocket!.emit(event, data);
         break;
       case SocketType.Game:
-        gameSocket.emit(event, data);
+        gameSocket!.emit(event, data);
         break;
     }
   }
@@ -77,13 +102,13 @@ class SocketService extends ChangeNotifier {
   void on<T>(SocketType type, String event, Function(T) action) {
     switch (type) {
       case SocketType.Auth:
-        authSocket.on(event, (data) => action(data as T));
+        authSocket!.on(event, (data) => action(data as T));
         break;
       case SocketType.Lobby:
-        lobbySocket.on(event, (data) => action(data as T));
+        lobbySocket!.on(event, (data) => action(data as T));
         break;
       case SocketType.Game:
-        gameSocket.on(event, (data) => action(data as T));
+        gameSocket!.on(event, (data) => action(data as T));
         break;
     }
   }
@@ -92,16 +117,16 @@ class SocketService extends ChangeNotifier {
     print("Disconnecting socket $type");
     switch (type) {
       case SocketType.Auth:
-        authSocket.disconnect();
-        authSocket.clearListeners();
+        authSocket!.disconnect();
+        authSocket!.clearListeners();
         break;
       case SocketType.Lobby:
-        lobbySocket.disconnect();
-        lobbySocket.clearListeners();
+        lobbySocket!.disconnect();
+        lobbySocket!.clearListeners();
         break;
       case SocketType.Game:
-        gameSocket.disconnect();
-        gameSocket.clearListeners();
+        gameSocket!.disconnect();
+        gameSocket!.clearListeners();
         break;
     }
   }

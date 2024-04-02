@@ -63,9 +63,15 @@ enum GameEvents {
   NextGame,
   AbandonGame,
   EndGame,
+  // observer
   Spectate,
+  // Cheat system
   CheatActivated,
   CheatDeactivated,
+  // Relay system
+  GameRecord,
+  WatchRecordedGame,
+  SaveGameRecord,
 }
 
 enum LobbyEvents {
@@ -75,7 +81,7 @@ enum LobbyEvents {
   OptPlayer,
   Spectate,
   UpdateLobbys,
-  Start,
+  Start
 }
 
 extension LobbyEventsExtension on LobbyEvents {

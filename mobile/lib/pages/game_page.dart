@@ -96,6 +96,7 @@ class _GamePageState extends State<GamePage> {
       Future.delayed(Duration.zero, () {
         if (ModalRoute.of(context)?.isCurrent ?? false) {
           showDialog(
+            barrierDismissible: false,
             context: context,
             builder: (BuildContext context) {
               return EndGamePopup(
@@ -154,7 +155,8 @@ class _GamePageState extends State<GamePage> {
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
-                    if (lobbyService.lobby.observers.isNotEmpty) // TODO : Remove when observers are fully done
+                    if (lobbyService.lobby.observers
+                        .isNotEmpty) // TODO : Remove when observers are fully done
                       Text(lobbyService.lobby.observers
                           .map((o) => o.name)
                           .join(', '))
@@ -221,6 +223,7 @@ class _GamePageState extends State<GamePage> {
                     Future.delayed(Duration.zero, () {
                       if (ModalRoute.of(context)?.isCurrent ?? false) {
                         showDialog(
+                          barrierDismissible: false,
                           context: context,
                           builder: (BuildContext context) {
                             return AbandonPopup();

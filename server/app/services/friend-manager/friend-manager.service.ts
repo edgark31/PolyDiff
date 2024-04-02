@@ -99,6 +99,7 @@ export class FriendManagerService {
         const accounts = await this.accountManager.accountModel.find();
         accounts.forEach((account) => {
             account.profile.friends = [];
+            account.profile.friendRequests = [];
             account.save();
         });
     }
