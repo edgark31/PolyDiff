@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { GameRecord, GameRecordDocument } from '@app/model/database/game-record';
 import { DatabaseService } from '@app/services/database/database.service';
@@ -91,12 +92,12 @@ export class RecordManagerService {
     }
 
     // account id is added to the gameRecord when players saves it
-    async updateAccountIds(recordId: string, accountId: string): Promise<void> {
-        try {
-            await this.gameRecordModel.findOneAndUpdate({ _id: recordId }, { accountIds: accountId }).exec();
-        } catch (error) {
-            this.logger.error(`Record Manager from lobby :${recordId} has failed to add the account id with error: ${error}`);
-        }
+    async addAccountId(date: Date, accountId: string): Promise<void> {
+        const record = await this.getByDate(date);
+        if (!record) return;
+
+        await this.databaseService.addAccountIdToGameRecord(date, accountId);
+        this.logger.verbose(`Record Manager has added account id :${accountId} to the game record`);
     }
 
     async pushToDatabase(lobbyId: string): Promise<void> {
@@ -114,29 +115,22 @@ export class RecordManagerService {
         this.remainingDifferencesIndex = [];
     }
 
-    // TODO: put theses methods in the database service
-    async getById(id: string): Promise<GameRecord> {
-        try {
-            const record = await this.gameRecordModel.findById(id, '-__v').exec();
-            this.logger.log(`Record Manager from lobby :${id} has fetched the game record successfully`);
-            return record;
-        } catch (error) {
-            this.logger.error(`Record Manager from lobby :${id} has failed to get the game record with error: ${error}`);
-        }
+    // the date of the game record is used to fetch it from the database
+    async getByDate(date: Date): Promise<GameRecord> {
+        return await this.databaseService.getGameRecordByDate(date);
     }
 
-    // all saved game records are fetch when user wants to see his profile
-    async getAllByAccountId(accountId: string) {
-        try {
-            return await this.gameRecordModel.find({ accountIds: accountId }).exec();
-        } catch (error) {
-            this.logger.error(`Record Manager has failed to fetch saved game records for accountId: ${accountId} with error: ${error}`);
-        }
+    // all saved game records are fetch of user's saved game records
+    async getAllByAccountId(accountId: string): Promise<GameRecord[]> {
+        return this.databaseService.getAllGameRecordByAccountId(accountId);
     }
 
-    // player account id is removed from the gameRecord when he wants to delete it from his profile
-    async deleteAccountId(recordId: string, accountId: string): Promise<void> {
-        await this.gameRecordModel.findOneAndUpdate({ _id: recordId }, { $pull: { accountIds: accountId } }).exec();
+    // player account id is removed from the gameRecord
+    async deleteAccountId(date: Date, accountId: string): Promise<void> {
+        const record = await this.getByDate(date);
+        if (!record) return;
+
+        await this.databaseService.deleteAccountIdFromGameRecord(date, accountId);
     }
 
     // if no player saves the record, it can be deleted from the database

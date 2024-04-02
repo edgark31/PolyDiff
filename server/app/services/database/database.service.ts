@@ -115,13 +115,48 @@ export class DatabaseService implements OnModuleInit {
         }
     }
 
-    async getGameRecords(): Promise<GameRecordDocument[]> {
+    /* ------ Start Game Record ---------*/
+
+    // returns a game record with the date
+    async getGameRecordByDate(date: Date): Promise<GameRecord> {
         try {
-            return await this.gameRecordModel.find().exec();
+            const query = { date };
+            return await this.gameRecordModel.findOne(query, '-__v').exec();
         } catch (error) {
-            return Promise.reject(`Failed to get game records: ${error}`);
+            return Promise.reject(`Failed to get game record: ${error}`);
         }
     }
+
+    async getAllGameRecordByAccountId(accountId: string): Promise<GameRecordDocument[]> {
+        try {
+            return await this.gameRecordModel.find({ accountIds: accountId }).exec();
+        } catch (error) {
+            return Promise.reject(`Failed to get game record: ${error}`);
+        }
+    }
+
+    async addAccountIdToGameRecord(date: Date, accountId: string): Promise<void> {
+        try {
+            await this.gameRecordModel
+                .findOneAndUpdate(
+                    { date },
+                    { $addToSet: { accountIds: accountId } }, // Using $addToSet to avoid duplicates
+                )
+                .exec();
+        } catch (error) {
+            return Promise.reject(`Failed to update game record: ${error}`);
+        }
+    }
+
+    async deleteAccountIdFromGameRecord(date: Date, accountId: string): Promise<void> {
+        try {
+            await this.gameRecordModel.findOneAndUpdate({ date }, { $pull: { accountIds: accountId } }).exec();
+        } catch (error) {
+            return Promise.reject(`Failed to update game record: ${error}`);
+        }
+    }
+
+    /* ------ End Game Record ---------*/
 
     saveFiles(newGame: Game): void {
         const dirName = `assets/${newGame._id.toString()}`;
