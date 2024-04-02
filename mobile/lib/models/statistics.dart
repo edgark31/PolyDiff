@@ -2,7 +2,7 @@ class Statistics {
   int gamesPlayed;
   int gameWon;
   double averageTime;
-  int averageDifferences;
+  double averageDifferences;
 
   Statistics({
     required this.gamesPlayed,
@@ -16,7 +16,7 @@ class Statistics {
       gamesPlayed: json['gamesPlayed'],
       gameWon: json['gameWon'],
       averageTime: json['averageTime'].toDouble(),
-      averageDifferences: json['averageDifferences'],
+      averageDifferences: json['averageDifferences'].toDouble(),
     );
   }
 

@@ -12,7 +12,6 @@ import 'package:mobile/pages/history_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
 import 'package:mobile/pages/profile_page.dart';
-import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/pages/sign_up_page.dart';
 import 'package:mobile/pages/statistics_page.dart';
@@ -48,7 +47,6 @@ const String VIDEOS_ROUTE = '$PROFILE_ROUTE/videos';
 
 // FRIENDS
 const String FRIENDS_ROUTE = '/friends';
-const String SEARCH_FRIEND_ROUTE = '$FRIENDS_ROUTE/search';
 
 // GAMES
 const String GAME_ROUTE = '/game';
@@ -87,9 +85,6 @@ class AppRouter {
 
       case EditProfilePage.routeName:
         return EditProfilePage.route();
-
-      case SearchPage.routeName:
-        return SearchPage.route();
 
       case HistoryPage.routeName:
         return HistoryPage.route();
