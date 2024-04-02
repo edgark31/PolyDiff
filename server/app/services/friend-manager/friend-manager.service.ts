@@ -73,48 +73,7 @@ export class FriendManagerService {
         });
         await potentialFriendAccount.save();
         await senderFriendAccount.save();
-        // await this.updateAllUsersFoFs(potentialFriendAccount, senderFriendAccount);
-        // await this.updateAllUsersCommonFriends(potentialFriendAccount, senderFriendAccount);
-    }
-
-    async updateAllUsersFoFs(excludeAccount1, excludeAccount2) {
-        this.accountManager.users.forEach(async (user) => {
-            if (user.id !== excludeAccount1.id && user.id !== excludeAccount2.id) await this.updateUserFoFs(user);
-        });
-    }
-
-    // ******** Update friends of friends of 1 USER *********
-    async updateUserFoFs(userAccount: any) {
-        const friends = userAccount.profile.friends;
-        const friendsOfFriends = new Set();
-
-        for (const friendRef of friends) {
-            const friendAccount = await this.accountManager.accountModel.findOne({ id: friendRef.accountId });
-            for (const foFRef of friendAccount.profile.friends) {
-                if (foFRef.accountId !== userAccount.id) {
-                    friendsOfFriends.add({ name: foFRef.name, accountId: foFRef.accountId });
-                }
-            }
-        }
-
-        await userAccount.save();
-    }
-
-    async updateAllUsersCommonFriends(excludeAccount1, excludeAccount2) {
-        this.accountManager.users.forEach(async (user) => {
-            if (user.id !== excludeAccount1.id && user.id !== excludeAccount2.id) await this.updateCommonFriends(user);
-        });
-    }
-
-    // ********* Update common friends of each friend of 1 USER *********
-    async updateCommonFriends(userAccount: any) {
-        const friends = userAccount.profile.friends;
-        for (const friendRef of friends) {
-            const friendAccount = await this.accountManager.accountModel.findOne({ id: friendRef.accountId });
-            const commonFriends = this.calculateCommonFriends(userAccount, friendAccount);
-            friendRef.commonFriends = commonFriends;
-        }
-        await userAccount.save();
+        await this.accountManager.fetchUsers();
     }
 
     async deleteFriend(senderFriendId: string, friendId: string): Promise<void> {
@@ -138,9 +97,9 @@ export class FriendManagerService {
 
     async deleteAllFriends() {
         const accounts = await this.accountManager.accountModel.find();
-        accounts.forEach(async (account) => {
+        accounts.forEach((account) => {
             account.profile.friends = [];
-            await account.save();
+            account.save();
         });
     }
 
@@ -194,5 +153,6 @@ export class FriendManagerService {
             }
         });
         await account.save();
+        await this.accountManager.fetchUsers();
     }
 }
