@@ -1,14 +1,14 @@
 class Friend {
-  String username;
-  String id;
+  String name;
+  String accountId;
   List<Friend?> friends;
   List<Friend?> commonFriends;
   bool isOnline;
   bool isFavorite;
 
   Friend({
-    required this.username,
-    required this.id,
+    required this.name,
+    required this.accountId,
     this.friends = const [],
     this.commonFriends = const [],
     required this.isOnline,
@@ -17,8 +17,8 @@ class Friend {
 
   factory Friend.fromJson(Map<String, dynamic> json) {
     return Friend(
-      username: json['username'],
-      id: json['id'],
+      name: json['name'],
+      accountId: json['accountId'],
       friends: List<Friend>.from(json['friends'] ?? []),
       commonFriends: List<Friend>.from(json['commonFriends'] ?? []),
       isOnline: json['isOnline'],
@@ -28,8 +28,8 @@ class Friend {
 
   Map<String, dynamic> toJson() {
     return {
-      'name': username,
-      'id': id,
+      'name': name,
+      'accountId': accountId,
       'friends': friends,
       'commonFriends': commonFriends,
       'isOnline': isOnline,

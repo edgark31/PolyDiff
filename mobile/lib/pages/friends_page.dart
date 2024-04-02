@@ -28,26 +28,26 @@ class _FriendsPageState extends State<FriendsPage> {
   bool isTyping = false;
   List<Friend> simulatedFriends = [
     Friend(
-        username: "Mp",
-        id: "11",
+        name: "Mp",
+        accountId: "11",
         friends: [
           Friend(
-              username: "AHHH",
-              id: "17",
+              name: "AHHH",
+              accountId: "17",
               friends: [],
               commonFriends: [],
               isOnline: true,
               isFavorite: false),
           Friend(
-              username: "Edgar",
-              id: "14",
+              name: "Edgar",
+              accountId: "14",
               friends: [],
               commonFriends: [],
               isOnline: false,
               isFavorite: false),
           Friend(
-              username: "Mj",
-              id: "13",
+              name: "Mj",
+              accountId: "13",
               friends: [],
               commonFriends: [],
               isOnline: true,
@@ -55,15 +55,15 @@ class _FriendsPageState extends State<FriendsPage> {
         ],
         commonFriends: [
           Friend(
-              username: "Zaki",
-              id: "15",
+              name: "Zaki",
+              accountId: "15",
               friends: [],
               commonFriends: [],
               isOnline: true,
               isFavorite: false),
           Friend(
-              username: "Moh",
-              id: "16",
+              name: "Moh",
+              accountId: "16",
               friends: [],
               commonFriends: [],
               isOnline: true,
@@ -72,29 +72,29 @@ class _FriendsPageState extends State<FriendsPage> {
         isOnline: true,
         isFavorite: false),
     Friend(
-        username: "Edgar",
-        id: "14",
+        name: "Edgar",
+        accountId: "14",
         friends: [],
         commonFriends: [],
         isOnline: false,
         isFavorite: false),
     Friend(
-        username: "Mj",
-        id: "13",
+        name: "Mj",
+        accountId: "13",
         friends: [],
         commonFriends: [],
         isOnline: true,
         isFavorite: false),
     Friend(
-        username: "Zaki",
-        id: "15",
+        name: "Zaki",
+        accountId: "15",
         friends: [],
         commonFriends: [],
         isOnline: true,
         isFavorite: false),
     Friend(
-        username: "Moh",
-        id: "16",
+        name: "Moh",
+        accountId: "16",
         friends: [],
         commonFriends: [],
         isOnline: true,
@@ -103,15 +103,15 @@ class _FriendsPageState extends State<FriendsPage> {
   //simulatedRequestsReceived and simulatedRequestsSent won't have this version of Friend
   List<Friend> simulatedRequestsReceived = [
     Friend(
-        username: "Zaki",
-        id: "15",
+        name: "Zaki",
+        accountId: "15",
         friends: [],
         commonFriends: [],
         isOnline: true,
         isFavorite: false),
     Friend(
-        username: "Mj",
-        id: "13",
+        name: "Mj",
+        accountId: "13",
         friends: [],
         commonFriends: [],
         isOnline: true,
@@ -120,8 +120,8 @@ class _FriendsPageState extends State<FriendsPage> {
 
   List<Friend> simulatedRequestsSent = [
     Friend(
-        username: "Edgar",
-        id: "14",
+        name: "Edgar",
+        accountId: "14",
         friends: [],
         commonFriends: [],
         isOnline: false,
@@ -129,42 +129,42 @@ class _FriendsPageState extends State<FriendsPage> {
   ];
 
   //Utilisé pour la recherche
-  List<UserFriend> simulatedUsers = [
-    UserFriend(username: "Mp", id: "11", friends: [
+  List<User> simulatedUsers = [
+    User(name: "Mp", accountId: "11", friends: [
       Friend(
-          username: "AHHH",
-          id: "17",
+          name: "AHHH",
+          accountId: "17",
           friends: [],
           commonFriends: [],
           isOnline: true,
           isFavorite: false),
       Friend(
-          username: "Edgar",
-          id: "14",
+          name: "Edgar",
+          accountId: "14",
           friends: [],
           commonFriends: [],
           isOnline: false,
           isFavorite: false),
       Friend(
-          username: "Mj",
-          id: "13",
+          name: "Mj",
+          accountId: "13",
           friends: [],
           commonFriends: [],
           isOnline: true,
           isFavorite: false),
     ], friendRequests: []),
-    UserFriend(username: "Mj", id: "13", friends: [], friendRequests: []),
-    UserFriend(username: "Edgar", id: "14", friends: [], friendRequests: []),
-    UserFriend(username: "Moha", id: "15", friends: [], friendRequests: []),
-    UserFriend(username: "Zaki", id: "16", friends: [], friendRequests: []),
+    User(name: "Mj", accountId: "13", friends: [], friendRequests: []),
+    User(name: "Edgar", accountId: "14", friends: [], friendRequests: []),
+    User(name: "Moha", accountId: "15", friends: [], friendRequests: []),
+    User(name: "Zaki", accountId: "16", friends: [], friendRequests: []),
   ];
-  List<UserFriend> searchedUsers = [];
+  List<User> searchedUsers = [];
   void _handleUsernameSubmit(String username) {
     if (username.isNotEmpty && username.trim().isNotEmpty) {
       setState(() {
         searchedUsers = simulatedUsers
             .where((user) =>
-                user.username.toLowerCase().startsWith(username.toLowerCase()))
+                user.name.toLowerCase().startsWith(username.toLowerCase()))
             .toList();
       });
       FocusScope.of(context).requestFocus(textFocusNode);
@@ -226,7 +226,7 @@ class _FriendsPageState extends State<FriendsPage> {
                     title: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(friend.username, style: TextStyle(fontSize: 25)),
+                        Text(friend.name, style: TextStyle(fontSize: 25)),
                         SizedBox(width: 5),
                         IconButton(
                           icon: Icon(
@@ -250,7 +250,7 @@ class _FriendsPageState extends State<FriendsPage> {
                               context: context,
                               builder: (BuildContext context) {
                                 return FriendsPopup(
-                                  username: friend.username,
+                                  username: friend.name,
                                   allFriends: friend.friends,
                                   commonFriends: friend.commonFriends,
                                 );
@@ -272,7 +272,7 @@ class _FriendsPageState extends State<FriendsPage> {
                       iconSize: 40,
                       icon: Icon(Icons.person_remove),
                       onPressed: () {
-                        print("delete ${friend.username}");
+                        print("delete ${friend.name}");
                       },
                     ),
                   ),
@@ -315,8 +315,7 @@ class _FriendsPageState extends State<FriendsPage> {
                           title: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(friend.username,
-                                  style: TextStyle(fontSize: 25)),
+                              Text(friend.name, style: TextStyle(fontSize: 25)),
                             ],
                           ),
                           trailing: Row(
@@ -381,8 +380,7 @@ class _FriendsPageState extends State<FriendsPage> {
                           title: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(friend.username,
-                                  style: TextStyle(fontSize: 25)),
+                              Text(friend.name, style: TextStyle(fontSize: 25)),
                             ],
                           ),
                           trailing: TextButton(
@@ -432,26 +430,11 @@ class _FriendsPageState extends State<FriendsPage> {
                             hintText: "Entrez le nom d'un utilisateur",
                             border: OutlineInputBorder(),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: Colors.black,
                           ),
                           onSubmitted: _handleUsernameSubmit,
                         ),
                       ),
-                      SizedBox(width: 10),
-                      if (isTyping)
-                        Container(
-                          decoration: BoxDecoration(
-                            color: kMidGreen,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: IconButton(
-                            color: Colors.white,
-                            icon: Icon(Icons.search),
-                            onPressed: () {
-                              _handleUsernameSubmit(usernameController.text);
-                            },
-                          ),
-                        ),
                     ],
                   ),
                 ),
@@ -465,7 +448,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   return Container(
                     alignment: Alignment.center,
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 500),
+                      constraints: BoxConstraints(maxWidth: 520),
                       child: Card(
                         margin: EdgeInsets.all(8),
                         child: ListTile(
@@ -478,8 +461,7 @@ class _FriendsPageState extends State<FriendsPage> {
                           title: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(friend.username,
-                                  style: TextStyle(fontSize: 25)),
+                              Text(friend.name, style: TextStyle(fontSize: 25)),
                               SizedBox(width: 20),
                               TextButton(
                                 onPressed: () {
@@ -487,7 +469,7 @@ class _FriendsPageState extends State<FriendsPage> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return FriendsPopup(
-                                        username: friend.username,
+                                        username: friend.name,
                                         allFriends: friend.friends,
                                         commonFriends: [], // Ok for now because this is not the real logic
                                       );

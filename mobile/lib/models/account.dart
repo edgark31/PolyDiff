@@ -2,7 +2,7 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/info_service.dart';
 
 /// Represents a user's account.
-class User {
+class UserOld {
   final String avatar;
   final List<SessionLog> sessions;
   final List<ConnectionLog> connections;
@@ -14,7 +14,7 @@ class User {
   final Sound onCorrectSound;
   final Sound onErrorSound;
 
-  User({
+  UserOld({
     required this.avatar,
     required this.sessions,
     required this.connections,
@@ -27,8 +27,8 @@ class User {
     required this.onErrorSound,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory UserOld.fromJson(Map<String, dynamic> json) {
+    return UserOld(
       avatar: json['avatar'],
       sessions: List<SessionLog>.from(
           json['sessions'].map((x) => SessionLog.fromJson(x))),

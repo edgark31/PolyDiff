@@ -74,7 +74,7 @@ class _FriendsPopupState extends State<FriendsPopup> {
                             backgroundImage: AssetImage(
                                 'assets/images/hallelujaRaccoon.jpeg'),
                           ),
-                          title: Text(friend!.username,
+                          title: Text(friend!.name,
                               style: TextStyle(fontSize: 25)),
                         ),
                       ),

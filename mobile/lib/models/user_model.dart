@@ -1,22 +1,22 @@
 import 'package:mobile/models/friend_model.dart';
 
-class UserFriend {
-  String username;
-  String id;
+class User {
+  String name;
+  String accountId;
   List<Friend?> friends;
   List<String?> friendRequests;
 
-  UserFriend({
-    required this.username,
-    required this.id,
+  User({
+    required this.name,
+    required this.accountId,
     this.friends = const [],
     this.friendRequests = const [],
   });
 
-  factory UserFriend.fromJson(Map<String, dynamic> json) {
-    return UserFriend(
-      username: json['username'],
-      id: json['id'],
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      name: json['name'],
+      accountId: json['accountId'],
       friends: List<Friend>.from(json['friends'] ?? []),
       friendRequests: List<String>.from(json['friendRequests'] ?? []),
     );
@@ -24,15 +24,14 @@ class UserFriend {
 
   Map<String, dynamic> toJson() {
     return {
-      'name': username,
-      'id': id,
+      'name': name,
+      'accountId': accountId,
       'friends': friends,
       'friendRequests': friendRequests,
     };
   }
 
-  static List<UserFriend> usersFromSnapshot(
-      List<Map<String, dynamic>> snapshot) {
-    return snapshot.map((e) => UserFriend.fromJson(e)).toList();
+  static List<User> usersFromSnapshot(List<Map<String, dynamic>> snapshot) {
+    return snapshot.map((e) => User.fromJson(e)).toList();
   }
 }
