@@ -218,16 +218,16 @@ export class LobbyGateway implements OnGatewayConnection {
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
                 case LobbyState.Idle:
-                    this.logger.log(`${socket.data.accountId} is IDLE`);
+                    this.logger.log(`${socket.data.accountId} was IDLE`);
                     break;
                 case LobbyState.Waiting: // ta deja rejoint une room
-                    this.logger.log(`${socket.data.accountId} is WAITING`);
+                    this.logger.log(`${socket.data.accountId} was WAITING`);
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
-                    this.logger.log(`${socket.data.accountId} is INGAME`);
+                    this.logger.log(`${socket.data.accountId} was INGAME`);
                     break;
                 case LobbyState.Spectate: // t'es dans une room en tant que spectateur
-                    this.logger.log(`${socket.data.accountId} is SPECTATING`);
+                    this.logger.log(`${socket.data.accountId} was SPECTATING`);
                     break;
                 default:
                     break;

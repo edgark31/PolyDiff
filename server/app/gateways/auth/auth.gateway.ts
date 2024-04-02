@@ -156,6 +156,18 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.server.emit(UserEvents.UpdateUsers, await this.friendManager.queryUsers());
     }
 
+    // ---------------------- SHARE SCORE --------------------------------
+
+    @SubscribeMessage(FriendEvents.ShareScore)
+    shareScore(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string, @MessageBody('score') score: number) {
+        this.server.fetchSockets().then((sockets) => {
+            const friendSocket = sockets.find((s) => s.data.accountId === friendId);
+            if (friendSocket) {
+                friendSocket.emit(FriendEvents.ShareScore, score);
+            }
+        });
+    }
+
     @SubscribeMessage(ChannelEvents.SendGlobalMessage)
     handleGlobalMessage(@ConnectedSocket() socket: Socket, @MessageBody() message: string) {
         const chat: Chat = this.messageManager.createMessage(
