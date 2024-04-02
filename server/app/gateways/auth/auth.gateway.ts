@@ -70,6 +70,18 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         socket.emit(FriendEvents.UpdatePendingFriends, this.friendManager.calculatePendingFriends(socket.data.accountId));
     }
 
+    @SubscribeMessage(FriendEvents.UpdateFoFs)
+    updateFoFs(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string) {
+        socket.emit(FriendEvents.UpdateFoFs, this.accountManager.users.get(friendId).profile.friends);
+    }
+
+    @SubscribeMessage(FriendEvents.UpdateCommonFriends)
+    updateCommonFriends(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string) {
+        const ownAccount = this.accountManager.users.get(socket.data.accountId);
+        const friendAccount = this.accountManager.users.get(friendId);
+        socket.emit(FriendEvents.UpdateFoFs, this.friendManager.calculateCommonFriends(ownAccount, friendAccount));
+    }
+
     // ---------------------- LES SCÉNARIOS --------------------------------
     @SubscribeMessage(FriendEvents.SendRequest)
     async sendRequest(@ConnectedSocket() socket: Socket, @MessageBody('potentialFriendId') potentialFriendId: string) {

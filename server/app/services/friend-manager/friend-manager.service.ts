@@ -73,6 +73,7 @@ export class FriendManagerService {
         });
         await potentialFriendAccount.save();
         await senderFriendAccount.save();
+        await this.accountManager.fetchUsers();
     }
 
     async deleteFriend(senderFriendId: string, friendId: string): Promise<void> {
