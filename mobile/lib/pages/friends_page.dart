@@ -480,6 +480,29 @@ class _FriendsPageState extends State<FriendsPage> {
                             children: [
                               Text(friend.username,
                                   style: TextStyle(fontSize: 25)),
+                              SizedBox(width: 20),
+                              TextButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return FriendsPopup(
+                                        username: friend.username,
+                                        allFriends: friend.friends,
+                                        commonFriends: [], // Ok for now because this is not the real logic
+                                      );
+                                    },
+                                  );
+                                },
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: kLightGreen,
+                                  disabledForegroundColor:
+                                      Colors.grey.withOpacity(0.38),
+                                ),
+                                child: Text('Amis',
+                                    style: TextStyle(fontSize: 18)),
+                              ),
                             ],
                           ),
                           trailing: TextButton(

@@ -33,24 +33,26 @@ class _FriendsPopupState extends State<FriendsPopup> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: kLightGreen,
-                  disabledForegroundColor: Colors.grey.withOpacity(0.38),
+            if (widget.commonFriends.isNotEmpty) ...[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: kLightGreen,
+                    disabledForegroundColor: Colors.grey.withOpacity(0.38),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      showAllFriends = !showAllFriends;
+                    });
+                  },
+                  child: Text(showAllFriends
+                      ? 'Voir les amis en commun'
+                      : 'Voir tous les amis'),
                 ),
-                onPressed: () {
-                  setState(() {
-                    showAllFriends = !showAllFriends;
-                  });
-                },
-                child: Text(showAllFriends
-                    ? 'Voir les amis en commun'
-                    : 'Voir tous les amis'),
               ),
-            ),
+            ],
             Text("Liste d'amis à ${widget.username}",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
             Expanded(
