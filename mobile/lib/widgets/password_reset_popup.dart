@@ -119,7 +119,7 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                         if (serverErrorMessage == null) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => LoginPage(),
+                              builder: (context) => SignInPage(),
                             ),
                           );
                         } else {

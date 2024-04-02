@@ -5,7 +5,7 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/sound_service.dart';
 
 class GameAreaService extends ChangeNotifier {
-  final SoundService soundService = Get.put(SoundService());
+  final SoundService soundService = Get.find();
   GameAreaService();
   List<Coordinate> coordinates = [];
   List<Coordinate> leftErrorCoord = [];
@@ -22,7 +22,7 @@ class GameAreaService extends ChangeNotifier {
   void showDifferenceFound(List<Coordinate> newCoordinates) {
     soundService.playCorrectSound();
     coordinates.addAll(newCoordinates);
-    if(isCheatMode) {
+    if (isCheatMode) {
       onCheatModeDeactivated?.call();
     }
     isCheatMode = false;

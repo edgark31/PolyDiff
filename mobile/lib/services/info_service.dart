@@ -13,6 +13,13 @@ class InfoService extends ChangeNotifier {
   static String _language = 'fr';
   static Sound _onErrorSound = DEFAULT_ON_ERROR_SOUND;
   static Sound _onCorrectSound = DEFAULT_ON_CORRECT_SOUND;
+  static Statistics _statistics = Statistics(
+    gamesPlayed: 0,
+    gameWon: 0,
+    averageTime: 0,
+    averageDifferences: 0,
+  );
+  static List<ConnectionLog> _connections = [];
 
   String get username => _username;
   String get id => _id;
@@ -41,6 +48,24 @@ class InfoService extends ChangeNotifier {
       _email = newEmail;
       notifyListeners();
     }
+  }
+
+  void setConnections(List<ConnectionLog> newConnections) {
+    String oldConnections =
+        _connections.map((c) => c.toJson().toString()).join(', ');
+    String newConnectionsString =
+        newConnections.map((c) => c.toJson().toString()).join(', ');
+    print(
+        'Changing sessions from $oldConnections to $newConnectionsString for $username ($_id)');
+    _connections = newConnections;
+    notifyListeners();
+  }
+
+  void setStatistics(Statistics newStatistics) {
+    print(
+        'Changing statistics from ${_statistics.toJson()} to ${newStatistics.toJson()} for $username ($_id)');
+    _statistics = newStatistics;
+    notifyListeners();
   }
 
   void setTheme(String newTheme) {
@@ -78,6 +103,8 @@ class InfoService extends ChangeNotifier {
   void setInfosOnConnection(String serverConnectionResponse) {
     final result = jsonDecode(serverConnectionResponse) as Map<String, dynamic>;
 
+    print('result: $result');
+
     // print('id: ${result['id']}');
     setId(result['id']);
 
@@ -85,8 +112,14 @@ class InfoService extends ChangeNotifier {
     final credentials = Credentials.fromJson(result['credentials']);
     final onErrorSound = Sound.fromJson(result['profile']['onErrorSound']);
     final onCorrectSound = Sound.fromJson(result['profile']['onCorrectSound']);
+    final statistics = Statistics.fromJson(result['profile']['stats']);
+    final connections = List<ConnectionLog>.from(result['profile']
+            ['connections']
+        .map((connection) => ConnectionLog.fromJson(connection)));
 
     setCredentials(credentials);
+    setStatistics(statistics);
+    setConnections(connections);
 
     setTheme(result['profile']['mobileTheme']);
     setLanguage(result['profile']['language']);

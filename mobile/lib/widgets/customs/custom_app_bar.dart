@@ -44,7 +44,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
           child: IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(Icons.diversity_3),
             onPressed: () => Navigator.pushNamed(context, FRIENDS_ROUTE),
           ),
         ),
