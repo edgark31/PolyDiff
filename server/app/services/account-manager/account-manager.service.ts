@@ -82,7 +82,6 @@ export class AccountManagerService implements OnModuleInit {
             if (this.connectedUsers.has(accountFound.id)) throw new Error('Account already connected');
 
             await accountFound.save();
-            accountFound.profile.avatar = '';
             this.connectedUsers.set(accountFound.id, accountFound);
             this.fetchUsers();
             this.logger.log(`${accountFound.credentials.username} has connected with password ${accountFound.credentials.password}`);

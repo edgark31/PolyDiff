@@ -153,5 +153,6 @@ export class FriendManagerService {
             }
         });
         await account.save();
+        await this.accountManager.fetchUsers();
     }
 }
