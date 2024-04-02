@@ -258,17 +258,6 @@ export class DatabaseService implements OnModuleInit {
         }
     }
 
-    async getLobbyRecordById(lobbyId: string) {
-        try {
-            const gameRecord = await this.gameRecordModel.findOne({ lobbyId }).exec();
-            if (gameRecord) {
-                return gameRecord;
-            }
-        } catch (error) {
-            return Promise.reject(`Failed to get game: ${error}`);
-        }
-    }
-
     async saveGameHistory(gameHistory: GameHistory): Promise<void> {
         try {
             await this.gameHistoryModel.create(gameHistory);
