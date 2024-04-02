@@ -57,7 +57,7 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
               tileColor: Colors.transparent,
               leading: Icon(Icons.line_axis),
               title: Text('Statistiques'),
-              onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE)),
+              onTap: () => Navigator.pushNamed(context, STATISTICS_ROUTE)),
           SizedBox(height: 10),
           ListTile(
               tileColor: Colors.transparent,

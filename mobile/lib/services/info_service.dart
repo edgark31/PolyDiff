@@ -29,6 +29,8 @@ class InfoService extends ChangeNotifier {
   String get theme => _theme;
   Sound get onErrorSound => _onErrorSound;
   Sound get onCorrectSound => _onCorrectSound;
+  Statistics get statistics => _statistics;
+  List<ConnectionLog> get connections => _connections;
 
   void setId(String newId) {
     // print('Changing id from $_id to $newId');
