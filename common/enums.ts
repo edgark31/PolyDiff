@@ -130,6 +130,8 @@ export enum FriendEvents {
     OptRequest = 'OptRequest', // Accepter ou refuser une demande - ROLE du recepteur
     OptFavorite = 'OptFavorite', // Ajouter ou retirer un ami des favoris
     UpdateFriends = 'UpdateFriends', // Pour rafraichir la liste d'amis
+    UpdateFoFs = 'UpdateFoFs', // Pour rafraichir la liste d'amis d'amis
+    UpdateCommonFriends = 'UpdateCommonFriends', // Pour rafraichir la liste d'amis communs
     UpdateSentFriends = 'UpdateSentFriends', // Pour rafraichir la liste des demandes envoyées
     UpdatePendingFriends = 'UpdatePendingFriends', // Pour rafraichir la liste des demandes en attente
     DeleteFriend = 'DeleteFriend', // Pour supprimer un ami
