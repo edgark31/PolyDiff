@@ -51,7 +51,6 @@ class LobbyService extends ChangeNotifier {
   }
 
   void startLobby() {
-    // setIsCreator(false);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Start.name,
@@ -60,8 +59,7 @@ class LobbyService extends ChangeNotifier {
   }
 
   void joinLobby(String? joinedLobbyId) {
-    setIsCreator(false);
-    setLobby(getLobbyFromLobbies(joinedLobbyId));
+    setUpLobbyInitial(joinedLobbyId);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Join.name,
@@ -74,7 +72,7 @@ class LobbyService extends ChangeNotifier {
 
   void spectateLobby(String? joinedLobbyId) {
     setIsObserver(true);
-    setLobby(getLobbyFromLobbies(joinedLobbyId));
+    setUpLobbyInitial(joinedLobbyId);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Spectate.name,
@@ -82,23 +80,31 @@ class LobbyService extends ChangeNotifier {
     );
   }
 
+  void setUpLobbyInitial(String? joinedLobbyId) {
+    // Safety check to unsure latest lobbies are up to date
+    socketService.send(SocketType.Auth, LobbyEvents.UpdateLobbys.name);
+    setLobby(getLobbyFromLobbies(joinedLobbyId));
+  }
+
   void leaveLobby() {
-    setIsCreator(false);
     socketService.send(
       SocketType.Lobby,
       LobbyEvents.Leave.name,
       _lobby.lobbyId,
     );
     setLobby(Lobby.initial());
-    endLobby();
+    disconnectLobbySocket();
   }
 
-  void endLobby() {
+  void disconnectLobbySocket() {
     socketService.disconnect(SocketType.Lobby);
   }
 
   void setupLobby(GameModes mode) {
+    setIsCreator(false); // Make sure default value is false
+    setIsObserver(false); // Make sure default value is false
     setListeners();
+    socketService.send(SocketType.Auth, LobbyEvents.UpdateLobbys.name);
     setGameModes(mode);
   }
 

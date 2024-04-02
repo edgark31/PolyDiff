@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback press;
-  final Color backgroundColor, textColor;
   final IconData? icon;
   final double widthFactor;
   final double height;
@@ -11,8 +10,6 @@ class CustomButton extends StatelessWidget {
   const CustomButton({
     required this.text,
     required this.press,
-    required this.backgroundColor,
-    this.textColor = Colors.white,
     this.icon,
     this.widthFactor = 0.20,
     this.height = 50.0,
@@ -29,27 +26,15 @@ class CustomButton extends StatelessWidget {
         child: ClipRRect(
           child: ElevatedButton(
             onPressed: press,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: backgroundColor,
-              shape: StadiumBorder(),
-              side: BorderSide.none,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              textStyle: TextStyle(
-                color: textColor,
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 5,
-              ),
-            ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (icon != null)
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(icon, color: textColor),
+                    child: Icon(icon),
                   ),
-                Text(text, style: TextStyle(color: textColor)),
+                Text(text),
               ],
             ),
           ),

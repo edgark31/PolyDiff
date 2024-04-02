@@ -67,7 +67,7 @@ class HistoryPage extends StatelessWidget {
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(title, style: Theme.of(context).textTheme.bodyLarge),
+      child: Text(title),
     );
   }
 
@@ -75,10 +75,6 @@ class HistoryPage extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.7),
-        borderRadius: BorderRadius.circular(12.0),
-      ),
       child: Column(
         children: children,
       ),

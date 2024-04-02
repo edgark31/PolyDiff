@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/constants/enums.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 
 class EndGamePopup extends StatelessWidget {
   const EndGamePopup({
     required this.endMessage,
-    required this.gameMode,
-    required this.isObserver,
+    required this.canPlayerReplay,
   });
 
   final String endMessage;
-  final GameModes gameMode;
-  final bool isObserver;
+  final bool canPlayerReplay;
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +37,14 @@ class EndGamePopup extends StatelessWidget {
                 press: () {
                   Navigator.pushNamed(context, DASHBOARD_ROUTE);
                 },
-                backgroundColor: kMidOrange,
               ),
-              if (gameMode == GameModes.Classic && !isObserver) ...[
+              if (canPlayerReplay) ...[
                 SizedBox(height: 10),
                 CustomButton(
                   text: 'Reprise Vidéo',
                   press: () {
                     print('Navigate to replay video page');
                   },
-                  backgroundColor: kMidOrange,
                 ),
               ],
             ],

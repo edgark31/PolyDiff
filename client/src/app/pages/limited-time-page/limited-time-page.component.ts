@@ -4,10 +4,11 @@ import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { ModalAccessMatchComponent } from '@app/components/modal-access-match/modal-access-match.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { NavigationService } from '@app/services/navigation-service/navigation.service';
 // import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { ChannelEvents, GameModes } from '@common/enums';
+import { ChannelEvents, GameModes, LobbyEvents } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 import { Subscription } from 'rxjs';
 
@@ -33,6 +34,7 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     constructor(
         public router: Router,
         private readonly roomManagerService: RoomManagerService,
+        private readonly gameManager: GameManagerService,
         private readonly dialog: MatDialog,
         private readonly clientSocket: ClientSocketService,
         private readonly navigationService: NavigationService,
@@ -47,6 +49,12 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     ngOnInit(): void {
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
+        // if (this.roomManagerService.isObserver)
+        this.clientSocket.on('lobby', LobbyEvents.Spectate, (lobby: Lobby) => {
+            this.roomManagerService.actualRoomId = lobby.lobbyId ?? '';
+            this.gameManager.lobbyWaiting = lobby;
+            this.router.navigate(['/game']);
+        });
         this.updatePagedImages();
     }
     previousPage() {
@@ -93,6 +101,10 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
+        // if (this.clientSocket.isSocketAlive('lobby') && this.roomManagerService.isObserver) {
+        //     this.clientSocket.disconnect('lobby');
+        //     this.roomManagerService.off();
+        // }
         this.navigationService.setPreviousUrl('/limited');
         this.lobbiesSubscription?.unsubscribe();
         this.roomIdSubscription?.unsubscribe();

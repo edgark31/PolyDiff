@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
@@ -54,17 +53,13 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     final LobbyService lobbyService = Get.find();
     final SocketService socketService = Get.find();
     final GameManagerService gameManagerService = Get.find();
-    final LobbySelectionService lobbySelectionService = Get.find();
     final infoService = context.read<InfoService>();
-    lobbySelectionService.setIsCheatEnabled(false); // Practice has no cheat
-    lobbySelectionService.setGameDuration(0); // Practice has no time limit
     lobbyService.createLobby();
     print('createLobby() called');
     Future.delayed(Duration(milliseconds: 500), () {
       // Waiting for server to emit the created lobby from creator
       lobbyService.startLobby();
       setState(() => isLoading = true);
-      print('startLobby() called');
       Future.delayed(Duration(milliseconds: 500), () {
         // Waiting for server to  start Lobby
         if (lobbyService.isCurrentLobbyStarted()) {
@@ -72,12 +67,12 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
             // Safety check
             if (ModalRoute.of(context)?.isCurrent ?? false) {
               // Safety check
-              print('Current Lobby is started navigating to GamePage');
+              print(
+                  'Current Lobby is started navigating to GamePage for Practice Game');
               socketService.setup(SocketType.Game, infoService.id);
               gameManagerService.setupGame();
-              lobbyService.setIsCreator(false); // TODO: clean this
               setState(() => isLoading = false);
-              Navigator.pushNamed(context, PRACTICE_ROUTE);
+              Navigator.pushNamed(context, GAME_ROUTE);
             }
           });
         }
@@ -107,9 +102,10 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     // TODO : Reload game cards if new games are added or deleted to the server
 
     return Scaffold(
-      drawer: CustomMenuDrawer(),
-      appBar:
-          CustomAppBar(title: 'Création d\'une salle de jeu - Choix de fiche'),
+      // TODO : Put back when disconnect logic in place
+      // drawer: CustomMenuDrawer(),
+      // appBar:
+      //     CustomAppBar(title: 'Création d\'une salle de jeu - Choix de fiche'),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -172,7 +168,6 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
                 }
               },
               text: 'Choisir cette fiche',
-              backgroundColor: kMidOrange,
             ),
           ],
         ),

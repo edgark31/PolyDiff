@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game.dart';
-import 'package:mobile/models/observers_model.dart';
 import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
@@ -18,30 +18,31 @@ import 'package:mobile/widgets/game_infos.dart';
 import 'package:mobile/widgets/game_loading.dart';
 import 'package:provider/provider.dart';
 
-class ClassicGamePage extends StatefulWidget {
-  static const routeName = CLASSIC_ROUTE;
+class GamePage extends StatefulWidget {
+  static const routeName = GAME_ROUTE;
 
-  ClassicGamePage();
+  GamePage();
 
   @override
-  State<ClassicGamePage> createState() => _ClassicGamePageState();
+  State<GamePage> createState() => _GamePageState();
 
   static Route<dynamic> route() {
     return MaterialPageRoute(
-      builder: (_) => ClassicGamePage(),
+      builder: (_) => GamePage(),
       settings: RouteSettings(name: routeName),
     );
   }
 }
 
-class _ClassicGamePageState extends State<ClassicGamePage> {
+class _GamePageState extends State<GamePage> {
   final ImageConverterService imageConverterService = ImageConverterService();
   final GameAreaService gameAreaService = Get.find();
   final GameManagerService gameManagerService = Get.find();
+  final tempGameManager = CoordinateConversionService();
+
   late Future<CanvasModel> imagesFuture;
   bool isChatBoxVisible = false;
   bool isCheatActivated = false;
-  final tempGameManager = CoordinateConversionService();
 
   @override
   void initState() {
@@ -75,7 +76,9 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
     final isPlayerAnObserver = lobbyService.isObserver;
 
     final canPlayerInteract =
-        !isPlayerAnObserver; // TODO: Add condition for replay
+        !isPlayerAnObserver; // TODO: Add condition for replay ?
+    bool canPlayerReplay = lobbyService.gameModes == GameModes.Classic &&
+        !isPlayerAnObserver; // TODO: Add condition for replay ?
 
     if (gameManagerService.game.gameId == '') {
       return Container(
@@ -97,8 +100,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             builder: (BuildContext context) {
               return EndGamePopup(
                 endMessage: gameManagerService.endGameMessage!,
-                gameMode: lobbyService.lobby.mode,
-                isObserver: isPlayerAnObserver,
+                canPlayerReplay: canPlayerReplay,
               );
             },
           );
@@ -152,6 +154,10 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
+                    if (lobbyService.lobby.observers.isNotEmpty) // TODO : Remove when observers are fully done
+                      Text(lobbyService.lobby.observers
+                          .map((o) => o.name)
+                          .join(', '))
                   ],
                   SizedBox(
                     height: 200,
@@ -203,11 +209,8 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                   context,
                   'Quitter',
                   () {
+                    print('Quitter pressed');
                     gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
-                    gameManagerService
-                        .disconnectSocket(); // No event sent to server
-                    lobbyService.setIsObserver(false);
-                    lobbyService.leaveLobby();
                     Navigator.pushNamed(context, DASHBOARD_ROUTE);
                   },
                 )
@@ -227,8 +230,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
                     });
                   },
                 ),
-          if (lobbyService.lobby.observers.isNotEmpty)
-            _observerInfos(lobbyService.lobby.observers),
+          _observerInfos(lobbyService.lobby.observers.length),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -273,8 +275,25 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
     );
   }
 
-  Widget _observerInfos(List<Observer> observers) {
-    String observerNames = observers.map((e) => e.name).join(', ');
+  Widget _observerInfos(int nObservers) {
+    if (nObservers == 0) {
+      return Positioned(
+        right: 8.0,
+        bottom: 8.0,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [Icon(Icons.visibility_off, color: Colors.white)],
+          ),
+        ),
+      );
+    }
+
     return Positioned(
       right: 8.0,
       bottom: 8.0,
@@ -290,7 +309,7 @@ class _ClassicGamePageState extends State<ClassicGamePage> {
             Icon(Icons.remove_red_eye, color: Colors.white),
             SizedBox(width: 8),
             Text(
-              observerNames,
+              nObservers.toString(),
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
