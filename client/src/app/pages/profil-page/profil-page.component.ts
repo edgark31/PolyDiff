@@ -46,18 +46,9 @@ export class ProfilPageComponent implements AfterViewInit, OnInit, OnDestroy {
         this.welcomeService.updateAccountObservable();
         this.accountSubscription = this.welcomeService.accountObservable$.subscribe((account: Account) => {
             this.welcomeService.account = account;
-            account.profile.sessions.forEach((session) => {
-                console.log("est-ce que c'est bon ?" + session.isWinner);
-            });
-
             this.welcomeService.account = account;
-            console.log("t'es là?" + this.welcomeService.account.credentials.username);
-        });
-        this.welcomeService.account.profile.sessions.forEach((session) => {
-            console.log(session.isWinner);
         });
         this.clientSocket.send('auth', AccountEvents.RefreshAccount);
-        console.log(this.welcomeService.account);
     }
 
     ngAfterViewInit() {
