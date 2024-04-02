@@ -22,8 +22,8 @@ export class AccountManagerService implements OnModuleInit {
         private readonly imageManager: ImageManagerService,
     ) {}
 
-    onModuleInit() {
-        this.loadAllAvatars();
+    async onModuleInit() {
+        await this.loadAllAvatars();
         this.fetchUsers();
     }
 
@@ -350,10 +350,10 @@ export class AccountManagerService implements OnModuleInit {
         account.save();
     }
 
-    private loadAllAvatars(): void {
-        this.accountModel.find().then((accounts) => {
+    private async loadAllAvatars(): Promise<void> {
+        await this.accountModel.find().then((accounts) => {
             accounts.forEach((account) => {
-                this.imageManager.save(account.id, account.profile.avatar);
+                this.imageManager.save(account._id, account.profile.avatar);
                 this.imageManager.save(account.credentials.username, account.profile.avatar);
             });
         });
