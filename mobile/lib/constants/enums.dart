@@ -128,3 +128,5 @@ enum AccountEvents {
   UserDelete,
   RefreshAccount,
 }
+
+enum UserEvents { UpdateUsers }
