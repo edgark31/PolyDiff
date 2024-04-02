@@ -7,6 +7,7 @@ export 'friend_model.dart';
 export 'game.dart';
 export 'game_card.dart';
 export 'game_history.dart';
+export 'game_record_model.dart';
 export 'lobby_model.dart';
 export 'observers_model.dart';
 export 'players.dart';

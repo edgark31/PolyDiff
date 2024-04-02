@@ -1,6 +1,7 @@
 /* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { MessageManagerService } from '@app/services/message-manager/message-manager.service';
+import { RecordManagerService } from '@app/services/record-manager/record-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { ChannelEvents, LobbyEvents, LobbyState, MessageTag } from '@common/enums';
 import { Chat, ChatLog, Lobby, Observer, Player } from '@common/game-interfaces';
@@ -19,11 +20,12 @@ export class LobbyGateway implements OnGatewayConnection {
         private readonly accountManager: AccountManagerService,
         private readonly messageManager: MessageManagerService,
         private readonly roomsManager: RoomsManagerService,
+        private readonly recordManager: RecordManagerService,
     ) {
         this.roomsManager.lobbies = new Map<string, Lobby>();
     }
 
-    // l'hôte crée le lobby
+    // Lobby created by host
     @SubscribeMessage(LobbyEvents.Create)
     create(@ConnectedSocket() socket: Socket, @MessageBody() lobby: Lobby) {
         socket.data.state = LobbyState.Waiting;

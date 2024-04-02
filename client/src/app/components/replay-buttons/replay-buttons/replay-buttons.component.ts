@@ -10,11 +10,13 @@ import { ReplayService } from '@app/services/replay-service/replay.service';
 })
 export class ReplayButtonsComponent implements OnInit, OnDestroy {
     @Input() isReplayAvailable: boolean;
+    timer: number;
     isReplayButtonDisabled: boolean;
     isReplayPaused: boolean;
     replaySpeeds: number[];
     replaySpeed: number;
     constructor(private readonly replayService: ReplayService) {
+        this.timer = 0;
         this.isReplayAvailable = false;
         this.isReplayPaused = false;
         this.replaySpeeds = REPLAY_SPEEDS;
@@ -22,6 +24,10 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.replaySpeed = SPEED_X1;
+    }
+
+    formatThumbLabel(value: number): string {
+        return `${value}`;
     }
 
     replay(isMidReplay: boolean) {

@@ -10,7 +10,7 @@ class StrokedTextWidget extends StatelessWidget {
     super.key,
     required this.text,
     required this.textStyle,
-    this.strokeWidth = 2.0,
+    this.strokeWidth = 4.0,
     this.strokeColor = Colors.black,
   });
 

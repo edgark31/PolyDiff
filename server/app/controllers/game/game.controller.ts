@@ -30,6 +30,16 @@ export class GameController {
         }
     }
 
+    @Get('/records')
+    async getGameRecords(@Res() response: Response) {
+        try {
+            const gameRecords = await this.gameService.getAllGameRecords();
+            response.status(HttpStatus.OK).json(gameRecords);
+        } catch (error) {
+            response.status(HttpStatus.NOT_FOUND).send(error.message);
+        }
+    }
+
     @Get('carousel/:index')
     async getGameCarrousel(@Param('index') index: number, @Res() response: Response) {
         try {
@@ -66,6 +76,16 @@ export class GameController {
         response.status(HttpStatus.OK).json(gameExists);
     }
 
+    @Put('/constants')
+    async updateGameConstants(@Body() gameConstantsDto: GameConstantsDto, @Res() response: Response) {
+        try {
+            await this.gameService.updateGameConstants(gameConstantsDto);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.NO_CONTENT).send(error.message);
+        }
+    }
+
     @Post()
     async addGame(@Body() gameDto: CreateGameDto, @Res() response: Response) {
         try {
@@ -75,10 +95,21 @@ export class GameController {
             response.status(HttpStatus.BAD_REQUEST).send(error.message);
         }
     }
+
     @Delete('/history')
     async deleteAllGamesHistory(@Res() response: Response) {
         try {
             await this.gameService.deleteAllGamesHistory();
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.NO_CONTENT).send(error.message);
+        }
+    }
+
+    @Delete('/records')
+    async deleteAllGameRecords(@Res() response: Response) {
+        try {
+            await this.gameService.deleteAllGameRecords();
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NO_CONTENT).send(error.message);
@@ -99,16 +130,6 @@ export class GameController {
     async deleteAllGames(@Res() response: Response) {
         try {
             await this.gameService.deleteAllGames();
-            response.status(HttpStatus.OK).send();
-        } catch (error) {
-            response.status(HttpStatus.NO_CONTENT).send(error.message);
-        }
-    }
-
-    @Put('/constants')
-    async updateGameConstants(@Body() gameConstantsDto: GameConstantsDto, @Res() response: Response) {
-        try {
-            await this.gameService.updateGameConstants(gameConstantsDto);
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NO_CONTENT).send(error.message);
