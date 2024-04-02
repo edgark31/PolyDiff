@@ -109,7 +109,7 @@ export const friendSchema = SchemaFactory.createForClass(Friend);
 
 @Schema({ _id: false })
 export class Profile {
-    @Prop({ required: true })
+    @Prop({ required: false })
     avatar: string;
 
     @Prop({ type: [sessionLogSchema], default: [] })
