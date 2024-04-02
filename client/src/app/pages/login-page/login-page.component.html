@@ -1,19 +1,21 @@
-<h1 class="title">PolyDiff</h1>
-<form [formGroup]="loginForm">
-    <h1>Connexion</h1>
-    <div class="form-control">
-        <label for="username">Nom d'utilisateur ou courriel</label>
-        <input formControlName="username" id="username"/>
-    </div>
-    <div class="form-control">
-        <div class="test">
-            <label for="password">Mot de passe</label>
+<div class="container">
+    <h1 class="title">PolyDiff</h1>
+    <form [formGroup]="loginForm">
+        <h1>Connexion</h1>
+        <div class="form-control">
+            <label for="username">Nom d'utilisateur ou courriel</label>
+            <input formControlName="username" id="username"/>
         </div>
-        <input formControlName="password" id="password" type="password"/>
-    </div>
-    <button type="submit" (click)="onSubmit()">Se connecter</button>
-    <button routerLink="/recover-password">Mot de passe oublié</button>
-    <button routerLink="/registration">Créer un compte</button>
-    <p class="feedback">{{ feedback }}</p>
-</form>
-<img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+        <div class="form-control">
+            <div class="test">
+                <label for="password">Mot de passe</label>
+            </div>
+            <input formControlName="password" id="password" type="password"/>
+        </div>
+        <button type="submit" (click)="onSubmit()">Se connecter</button>
+        <button routerLink="/recover-password">Mot de passe oublié</button>
+        <button routerLink="/registration">Créer un compte</button>
+        <p class="feedback">{{ feedback }}</p>
+    </form>
+    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+</div>

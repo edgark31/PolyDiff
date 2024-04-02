@@ -23,6 +23,17 @@
     }
 }
 
+.container {
+    min-height: 100vh;
+    height: auto;
+    color: rgb(0, 0, 0);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+
 .title {
     margin-top: 150px;
     font-family: 'Troika', sans-serif;
@@ -47,7 +58,6 @@ form {
     margin-top: 10%;
     margin-left: 38%;
     border-radius: 10px;
-    
 
     h1 {
         color: #ffffff;
@@ -118,12 +128,12 @@ button {
 }
 
 .feedback {
-  font-family: 'Troika', sans-serif;
-  text-align: center;
-  color: red;
-  font-style: italic;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-  font-size: 1rem;
-  margin-top: 4px;
-  margin-bottom: 0;
+    font-family: 'Troika', sans-serif;
+    text-align: center;
+    color: red;
+    font-style: italic;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    font-size: 1rem;
+    margin-top: 4px;
+    margin-bottom: 0;
 }
