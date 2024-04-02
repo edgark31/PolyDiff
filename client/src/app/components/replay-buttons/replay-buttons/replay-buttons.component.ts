@@ -10,11 +10,13 @@ import { ReplayService } from '@app/services/replay-service/replay.service';
 })
 export class ReplayButtonsComponent implements OnInit, OnDestroy {
     @Input() isReplayAvailable: boolean;
+    timer: number;
     isReplayButtonDisabled: boolean;
     isReplayPaused: boolean;
     replaySpeeds: number[];
     replaySpeed: number;
     constructor(private readonly replayService: ReplayService) {
+        this.timer = 0;
         this.isReplayAvailable = true;
         this.isReplayPaused = false;
         this.replaySpeeds = REPLAY_SPEEDS;

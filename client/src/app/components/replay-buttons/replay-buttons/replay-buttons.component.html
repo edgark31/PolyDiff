@@ -6,6 +6,9 @@
     <mat-slider min="0" max="300" [displayWith]="formatThumbLabel">
       <input matSliderThumb />
     </mat-slider>
+    <div class="timer">
+      {{timer | date: 'mm:ss'}}
+    </div>
     <mat-radio-group [(ngModel)]="replaySpeed">
       <mat-radio-button mat-button *ngFor="let replaySpeed of replaySpeeds" [value]="replaySpeed" (click)="setSpeed(replaySpeed)">x{{replaySpeed}}</mat-radio-button>
     </mat-radio-group>
