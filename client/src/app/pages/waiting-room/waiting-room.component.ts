@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { WaitingGameDialogComponent } from '@app/components/waiting-game-dialog/waiting-game-dialog.component';
+import { WaitingPlayerToJoinComponent } from '@app/components/waiting-player-to-join/waiting-player-to-join.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
@@ -24,10 +25,12 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     chatSubscription: Subscription;
     chatSubscriptionGlobal: Subscription;
     lobbiesSubscription: Subscription;
+    requestSubscription: Subscription;
     private lobbySubscription: Subscription;
     // eslint-disable-next-line max-params
     constructor(
         public router: Router,
+        public dialog: MatDialog,
         public roomManagerService: RoomManagerService,
         private clientSocketService: ClientSocketService,
         public welcome: WelcomeService,
@@ -60,6 +63,16 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         });
         this.chatSubscription = this.roomManagerService.message$.subscribe((message: Chat) => {
             this.receiveMessage(message);
+        });
+        this.requestSubscription = this.roomManagerService.playerNameRequesting$.subscribe((playerName: string) => {
+            this.dialog.open(WaitingPlayerToJoinComponent, {
+                data: { lobby: this.lobby, username: playerName },
+                disableClose: true,
+                panelClass: 'dialog',
+            });
+        });
+        this.clientSocketService.on('lobby', LobbyEvents.CancelRequestAcessHost, () => {
+            this.dialog.closeAll();
         });
         this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {
             this.router.navigate(['/game-mode']);
@@ -125,6 +138,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             // this.clientSocketService.disconnect('lobby');
             this.lobbySubscription?.unsubscribe();
             this.chatSubscription?.unsubscribe();
+            this.requestSubscription?.unsubscribe();
             // this.roomManagerService.off();
             this.gameManager.lobbyWaiting = this.lobby;
         }

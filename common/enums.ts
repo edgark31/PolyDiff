@@ -101,6 +101,12 @@ export enum LobbyEvents {
     Spectate = 'Spectate',
     UpdateLobbys = 'UpdateLobbys',
     Start = 'Start',
+    RequestAccess = 'RequestAccess',
+    RequestAccessHost = 'RequestAccessHost',
+    SendResponseAccess = 'SendResponseAccess',
+    NotifyGuest = 'NotifyGuest',
+    CancelRequestAcess = 'CancelRequestAcess',
+    CancelRequestAcessHost = 'CancelRequestAcessHost',
 }
 
 export enum LobbyState {

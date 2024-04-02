@@ -43,6 +43,69 @@ export class LobbyGateway implements OnGatewayConnection {
         this.logger.log(`${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} crée le lobby ${lobby.lobbyId}`);
     }
 
+    // un joueur rentre un mot de passe valide pour rejoindre le lobby
+    @SubscribeMessage(LobbyEvents.RequestAccess)
+    handleRequestAccess(@ConnectedSocket() socket: Socket, @MessageBody() data: { lobbyId: string; password?: string }) {
+        const { lobbyId, password } = data;
+        if (this.roomsManager.lobbies.get(lobbyId).password && this.roomsManager.lobbies.get(lobbyId).password === password) {
+            this.server.fetchSockets().then((sockets) => {
+                const host = sockets.find((s) => s.data.accountId === this.roomsManager.lobbies.get(lobbyId).players[0].accountId);
+                host.emit(LobbyEvents.RequestAccessHost, this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username);
+            });
+            socket.emit(LobbyEvents.RequestAccess);
+            this.logger.log(
+                `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} demande à rejoindre le lobby ${lobbyId}`,
+            );
+            return;
+        }
+    }
+
+    // un joueur annule sa requete pour rejoindre le lobby
+    @SubscribeMessage(LobbyEvents.CancelRequestAcess)
+    handleCancelRequestAccess(@ConnectedSocket() socket: Socket, @MessageBody() data: { lobbyId: string; username: string }) {
+        const { lobbyId, username } = data;
+        const joinerId = Array.from(this.accountManager.users.values()).find((user) => user.credentials.username === username).id;
+        this.server.fetchSockets().then((sockets) => {
+            const guest = sockets.find((s) => s.data.accountId === joinerId);
+            guest.emit(LobbyEvents.CancelRequestAcessHost);
+            const host = sockets.find((s) => s.data.accountId === this.roomsManager.lobbies.get(lobbyId).players[0].accountId);
+            host.emit(LobbyEvents.CancelRequestAcessHost);
+        });
+        this.logger.log(
+            `${
+                this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username
+            } annule sa demande pour rejoindre le lobby ${lobbyId}`,
+        );
+        return;
+    }
+
+    // l'hôte accepte ou refuse le joueur
+    @SubscribeMessage(LobbyEvents.OptPlayer)
+    handleResponseAccess(@ConnectedSocket() socket: Socket, @MessageBody() data: { lobbyId: string; username: string; isPlayerAccepted: boolean }) {
+        const { lobbyId, username, isPlayerAccepted } = data;
+        const joinerId = Array.from(this.accountManager.users.values()).find((user) => user.credentials.username === username).id;
+        this.server.fetchSockets().then((sockets) => {
+            const guest = sockets.find((s) => s.data.accountId === joinerId);
+            if (this.roomsManager.lobbies.get(lobbyId) && isPlayerAccepted) {
+                guest.emit(LobbyEvents.NotifyGuest, true);
+                this.logger.log(
+                    `${username} a été accepté par ${
+                        this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username
+                    } pour rejoindre le lobby ${lobbyId}`,
+                );
+                return;
+            } else if (this.roomsManager.lobbies.get(lobbyId) && !isPlayerAccepted) {
+                guest.emit(LobbyEvents.NotifyGuest, false);
+                this.logger.log(
+                    `${username} a été refusé par ${
+                        this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username
+                    } pour rejoindre le lobby ${lobbyId}`,
+                );
+                return;
+            }
+        });
+    }
+
     // un joueur rejoint le lobby
     @SubscribeMessage(LobbyEvents.Join)
     join(@ConnectedSocket() socket: Socket, @MessageBody() data: { lobbyId: string; password?: string }) {
