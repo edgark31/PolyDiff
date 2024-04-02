@@ -15,13 +15,17 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
     replaySpeeds: number[];
     replaySpeed: number;
     constructor(private readonly replayService: ReplayService) {
-        this.isReplayAvailable = false;
+        this.isReplayAvailable = true;
         this.isReplayPaused = false;
         this.replaySpeeds = REPLAY_SPEEDS;
     }
 
     ngOnInit() {
         this.replaySpeed = SPEED_X1;
+    }
+
+    formatThumbLabel(value: number): string {
+        return `${value}`;
     }
 
     replay(isMidReplay: boolean) {

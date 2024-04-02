@@ -3,6 +3,9 @@
     <button mat-button [disabled]="isReplayButtonDisabled" (click)="isReplaying()?replay(true):replay(false)"><mat-icon>replay</mat-icon></button>
     <button mat-button [disabled]="!isReplaying()" *ngIf="!isReplayPaused" (click)="pause()"><mat-icon>pause_circle_filled</mat-icon></button>
     <button mat-button [disabled]="!isReplaying()" *ngIf="isReplayPaused" (click)="resume()"><mat-icon>play_circle_filled</mat-icon></button>
+    <mat-slider min="0" max="300" [displayWith]="formatThumbLabel">
+      <input matSliderThumb />
+    </mat-slider>
     <mat-radio-group [(ngModel)]="replaySpeed">
       <mat-radio-button mat-button *ngFor="let replaySpeed of replaySpeeds" [value]="replaySpeed" (click)="setSpeed(replaySpeed)">x{{replaySpeed}}</mat-radio-button>
     </mat-radio-group>

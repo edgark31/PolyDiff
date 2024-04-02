@@ -2,12 +2,18 @@
     background: #7daf9c;
     border-radius: 15px;
     padding: 10px 40px 10px;
-    width: 370px;
+    width: 80vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    background: linear-gradient(to right, rgba(125, 175, 156, 100), rgba(255, 255, 255, 50));
+    background: linear-gradient(to right, orange, rgba(255, 255, 255, 50));
     background-size: 200% 200%;
     animation: gradientLoop 20s ease infinite;
+}
+
+mat-slider {
+    width: 65%;
 }
 
 mat-radio-button {
