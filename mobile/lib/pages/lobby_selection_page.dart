@@ -6,7 +6,9 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:provider/provider.dart';
 
 class LobbySelectionPage extends StatefulWidget {
@@ -42,9 +44,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     final lobbiesFromServer = lobbyService.filterLobbies();
     final gameModeName = lobbyService.gameModes.name;
     return Scaffold(
-      // TODO : Put back when disconnect logic in place
-      // drawer: CustomMenuDrawer(),
-      // appBar: CustomAppBar(title: 'Sélection de la salle de jeu'),
+      drawer: CustomMenuDrawer(),
+      appBar: CustomAppBar(title: 'Sélection de la salle de jeu'),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(

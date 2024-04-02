@@ -30,30 +30,42 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
+      padding: const EdgeInsets.only(bottom: 10.0),
       child: Container(
-        constraints: BoxConstraints(maxWidth: 400),
+        constraints: BoxConstraints(maxWidth: 400, maxHeight: 100),
         child: TextField(
           controller: widget.controller,
           obscureText: widget.isPassword,
           maxLength: widget.maxLength,
           onChanged: (value) {
-            if (widget.onInputTextChanged != null) {
-              widget.onInputTextChanged!(value);
-            }
+            widget.onInputTextChanged!(value);
           },
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             labelText: widget.label,
+            labelStyle:
+                TextStyle(color: Theme.of(context).colorScheme.secondary),
             hintText: widget.hint,
+            hintStyle: TextStyle(
+                color: const Color.fromARGB(255, 93, 92, 92),
+                fontWeight: FontWeight.bold),
             helperText: widget.helperText,
+            helperStyle: TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2),
             errorText: widget.errorText,
+            errorStyle: TextStyle(color: Colors.red),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0),
+              borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              borderSide: BorderSide(color: Colors.orange, width: 2.0),
+              borderRadius: BorderRadius.circular(12),
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.secondary),
             ),
             filled: true,
             fillColor: Colors.grey[200],

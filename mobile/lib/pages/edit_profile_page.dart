@@ -37,6 +37,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   AvatarProvider _avatarProvider = Get.find();
   InfoService _infoService = Get.find();
   RegisterProvider _registerProvider = Get.find();
+  SoundService soundService = Get.find();
 
   // Same logic when signing up : avatar
   ImageProvider? _selectedAvatar;
@@ -209,8 +210,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final soundService = SoundService();
-
     return Scaffold(
         drawer: CustomMenuDrawer(),
         appBar: CustomAppBar(title: "Personnalisation du profil"),
@@ -283,7 +282,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           final themeProvider = Provider.of<ThemeProvider>(
                               context,
                               listen: false);
-                          themeProvider.toggleTheme(newValue == 'Dark');
+                          themeProvider.toggleTheme(newValue == 'dark');
                         });
                       },
                       decoration: InputDecoration(labelText: 'Theme'),
