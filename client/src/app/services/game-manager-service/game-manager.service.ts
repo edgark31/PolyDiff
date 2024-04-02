@@ -173,9 +173,7 @@ export class GameManagerService {
     }
 
     abandonGame(lobbyId: string): void {
-        console.log('on y est presque' + this.roomManager.isObserver);
         this.clientSocket.send('game', GameEvents.AbandonGame, lobbyId);
-        console.log('ALLLEZZZ');
     }
 
     setIsLeftCanvas(isLeft: boolean): void {
@@ -226,7 +224,6 @@ export class GameManagerService {
             this.clientSocket.on('game', GameEvents.Spectate, (data: { lobby: Lobby; game: Game }) => {
                 if (data.game) this.game.next(data.game);
                 this.lobbyGame.next(data.lobby);
-                console.log(data.lobby.observers.length);
             });
         else
             this.clientSocket.on('game', GameEvents.Spectate, (data: { lobby: Lobby; game: Game }) => {
@@ -234,13 +231,11 @@ export class GameManagerService {
                 this.lobbyGame.next(data.lobby);
             });
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
-            console.log('aaaaaaaaa');
             this.lobbies.next(lobbies);
             this.lobbyGame.next(lobbies.find((lobby: Lobby) => this.lobbyWaiting.lobbyId === lobby.lobbyId) ?? this.lobbyWaiting);
         });
 
         this.clientSocket.on('game', GameEvents.AbandonGame, (lobby: Lobby) => {
-            console.log('aaaaaaaaa');
             this.lobbyGame.next(lobby);
         });
         this.clientSocket.on('game', GameEvents.NextGame, (nextGame: Game) => {
@@ -256,7 +251,6 @@ export class GameManagerService {
         });
 
         this.clientSocket.on('game', GameEvents.Cheat, (remainingDifference: Coordinate[][]) => {
-            console.log('Receiving new remaining differences');
             this.remainingDifference.next(remainingDifference);
         });
 

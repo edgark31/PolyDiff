@@ -39,6 +39,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     lobbies: Lobby[] = [];
     gameLobby: Game;
     lobby: Lobby;
+    mode: string;
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
@@ -72,6 +73,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.timer = 0;
         this.messages = [];
         this.messageGlobal = [];
+        this.mode = '';
         this.canvasSize = CANVAS_MEASUREMENTS;
         this.isReplayAvailable = false;
         this.gameMode = GameModes;
@@ -185,6 +187,19 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.globalChatService.off();
         }
         this.chatSubscriptionGlobal?.unsubscribe();
+    }
+
+    translateGameMode(mode: GameModes): string {
+        switch (mode) {
+            case GameModes.Classic:
+                return 'Classique';
+            case GameModes.Limited:
+                return 'Temps limité';
+            case GameModes.Practice:
+                return 'Pratique';
+            default:
+                return '';
+        }
     }
 
     sendMessage(message: string): void {
