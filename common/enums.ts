@@ -157,7 +157,8 @@ export enum GameEvents {
     Spectate = 'Spectate',
     CheatActivated = 'CheatActivated',
     CheatDeactivated = 'CheatDeactivated',
-    ReplayCurrentGame = 'ReplayCurrentGame',
+    GameRecord = 'GameRecord',
+    WatchRecordedGame = 'WatchRecordedGame',
     SaveGameRecord = 'SaveGameRecord',
 }
 

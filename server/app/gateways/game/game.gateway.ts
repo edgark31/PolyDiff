@@ -152,7 +152,7 @@ export class GameGateway implements OnGatewayConnection {
 
                 /* --------- Record Difference Found Event -------- */
                 this.recordManager.addGameEvent(lobbyId, {
-                    username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+                    accountId: socket.data.accountId,
                     gameEvent: GameEvents.Found,
                     players: this.roomsManager.lobbies.get(lobbyId).players,
                     coordClic,
@@ -176,11 +176,11 @@ export class GameGateway implements OnGatewayConnection {
 
                 if (isGameFinished && potentialWinner) {
                     /* --------- Record EndGame Event -------- */
-                    this.recordManager.addGameEvent(lobbyId, {
-                        gameEvent: GameEvents.EndGame,
-                    } as GameEventData);
                     this.recordManager.saveGameRecord(lobbyId);
+                    const record = this.recordManager.get(lobbyId);
 
+                    /* --------- Send Record on End Game -------- */
+                    this.server.to(lobbyId).emit(GameEvents.GameRecord, record);
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
                     this.logOneWinner(lobbyId, potentialWinner.accountId);
                     const winChat: Chat = {
@@ -196,12 +196,11 @@ export class GameGateway implements OnGatewayConnection {
                 // Vérifier s'il reste des differences
                 if (this.games.get(lobbyId).differences.length <= 0) {
                     /* --------- Record EndGame Event -------- */
-                    this.recordManager.addGameEvent(lobbyId, {
-                        gameEvent: GameEvents.EndGame,
-                    } as GameEventData);
                     this.recordManager.saveGameRecord(lobbyId);
-
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
+
+                    /* --------- Send Record on End Game -------- */
+                    socket.emit(GameEvents.GameRecord, this.recordManager.get(lobbyId));
                     this.logDraw(lobbyId);
                     const drawChat: Chat = { raw: 'MATCH NUL', tag: MessageTag.Common };
                     this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(drawChat);
@@ -212,7 +211,7 @@ export class GameGateway implements OnGatewayConnection {
                 return;
             }
             // If user did not click on a difference
-            /* --------- Record Event -------- */
+            /* --------- Record Not Found Event -------- */
             this.recordManager.addGameEvent(lobbyId, {
                 accountId: socket.data.accountId,
                 username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
@@ -347,16 +346,19 @@ export class GameGateway implements OnGatewayConnection {
     @SubscribeMessage(GameEvents.CheatDeactivated)
     cheatDeactivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        const accountId = socket.data.accountId;
 
         /* ------------------ Record Event ------------------ */
-        this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.CheatDeactivated, username } as GameEventData);
+        this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.CheatDeactivated, username, accountId } as GameEventData);
         this.logger.log(`${username}(${socket.data.accountId}) deactivated cheat in ${lobbyId}`);
     }
 
-    // sends back the recorded game if a player click on replay button
-    @SubscribeMessage(GameEvents.ReplayCurrentGame)
-    handleGameReplay(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        socket.emit(GameEvents.ReplayCurrentGame, this.recordManager.get(lobbyId));
+    // TODO : check if async function slows down the sending
+    // sends back the recorded game when user wants to watch it
+    @SubscribeMessage(GameEvents.WatchRecordedGame)
+    async handleGameReplay(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        const record = await this.recordManager.get(lobbyId);
+        socket.emit(GameEvents.WatchRecordedGame, record);
     }
 
     // after replay recorded game, player can save it in his account

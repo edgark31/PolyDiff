@@ -9,6 +9,10 @@ export type GameRecordDocument = GameRecord & Document;
 @Schema()
 export class GameRecord {
     @ApiProperty()
+    @Prop({ required: true })
+    lobbyId: string;
+
+    @ApiProperty()
     @Prop({
         required: true,
         type: () => ({

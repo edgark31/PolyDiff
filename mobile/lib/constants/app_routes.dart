@@ -16,6 +16,7 @@ import 'package:mobile/pages/search_page.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/pages/sign_up_page.dart';
 import 'package:mobile/pages/statistics_page.dart';
+import 'package:mobile/replay/watch_recorded_game_page.dart';
 
 // Important if testing on a real device with a local server
 // Change the IP address to your local machine's IP address
@@ -52,6 +53,7 @@ const String SEARCH_FRIEND_ROUTE = '$FRIENDS_ROUTE/search';
 // GAMES
 const String GAME_ROUTE = '/game';
 const String PRACTICE_ROUTE = '$GAME_ROUTE/practice';
+const String REPLAY_ROUTE = '$GAME_ROUTE/replay';
 
 // LOBBY
 const String LOBBY_ROUTE = '/lobby';
@@ -109,6 +111,9 @@ class AppRouter {
 
       case GamePage.routeName:
         return GamePage.route();
+
+      case WatchRecordedGame.routeName:
+        return WatchRecordedGame.route();
 
       default:
         return _errorRoute();

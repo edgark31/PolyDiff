@@ -27,6 +27,8 @@ export class RecordManagerService {
         };
 
         const newRecord = new this.gameRecordModel({
+            lobbyId: game.lobbyId,
+            accountIds: [],
             game,
             players,
             date,
@@ -41,7 +43,7 @@ export class RecordManagerService {
     async addGameEvent(lobbyId: string, eventData: GameEventData): Promise<void> {
         eventData.timestamp = Date.now();
         try {
-            await this.gameRecordModel.findOneAndUpdate({ 'game.lobbyId': lobbyId }, { $push: { gameEvents: eventData } }, { new: true });
+            await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { gameEvents: eventData }).exec();
             this.logger.verbose(`Record Manager from lobby :${lobbyId} has registered ${eventData} successfully`);
         } catch (error) {
             this.logger.error(`Record Manager from lobby :${lobbyId} has failed to register ${eventData} with error: ${error}`);
@@ -50,13 +52,23 @@ export class RecordManagerService {
 
     // account id is added to the gameRecord when players saves it
     async addAccountId(lobbyId: string, accountId: string): Promise<void> {
-        await this.gameRecordModel.findOneAndUpdate({ 'game.lobbyId': lobbyId }, { $push: { accountIds: accountId } }, { new: true });
+        try {
+            await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { accountIds: accountId }).exec();
+        } catch (error) {
+            this.logger.error(`Record Manager from lobby :${lobbyId} has failed to add the account id with error: ${error}`);
+        }
     }
 
     async saveGameRecord(lobbyId: string): Promise<void> {
         const endTime = Date.now();
+        const gameEventData: GameEventData = {
+            timestamp: endTime,
+            gameEvent: GameEvents.EndGame,
+        };
+
         try {
-            await this.gameRecordModel.findOneAndUpdate({ 'game.lobbyId': lobbyId }, { endTime }, { new: true });
+            await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { endTime }, { new: true }).exec();
+            await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { gameEvents: gameEventData }).exec();
         } catch (error) {
             this.logger.error(`Record Manager from lobby :${lobbyId} has failed
             to save the game record with error: ${error}`);
@@ -65,8 +77,7 @@ export class RecordManagerService {
 
     async get(lobbyId: string): Promise<GameRecord> {
         try {
-            const record = await this.gameRecordModel.findOne({ 'game.lobbyId': lobbyId });
-            this.logger.log(`Record Manager from lobby :${lobbyId} has fetched the game record successfully`);
+            const record = await this.gameRecordModel.findOne({ lobbyId }).exec();
             this.logger.log(`Record Manager from lobby :${lobbyId} has fetched the game record successfully`);
             return record;
         } catch (error) {
@@ -77,7 +88,7 @@ export class RecordManagerService {
     // all saved game records are fetch when user wants to see his profile
     async fetchSavedGameRecordsByAccountId(accountId: string) {
         try {
-            return this.gameRecordModel.find({ accountIds: accountId });
+            return this.gameRecordModel.find({ accountIds: accountId }).exec();
         } catch (error) {
             this.logger.error(`Record Manager has failed to fetch saved game records for accountId: ${accountId} with error: ${error}`);
         }
@@ -85,12 +96,12 @@ export class RecordManagerService {
 
     // player account id is removed from the gameRecord when he wants to delete it from his profile
     async deleteAccountId(lobbyId: string, accountId: string): Promise<void> {
-        await this.gameRecordModel.findOneAndUpdate({ 'game.lobbyId': lobbyId }, { $pull: { accountIds: accountId } }, { new: true });
+        await this.gameRecordModel.findOneAndUpdate({ lobbyId }, { $pull: { accountIds: accountId } }, { new: true });
     }
 
     // if no player saves the record, it can be deleted from the database
     async deleteOneGameRecordByLobbyId(lobbyId: string): Promise<void> {
-        await this.gameRecordModel.deleteOne({ 'game.lobbyId': lobbyId });
+        await this.gameRecordModel.deleteOne({ lobbyId });
     }
 
     async deleteAllGameRecords(): Promise<void> {

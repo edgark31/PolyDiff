@@ -69,7 +69,8 @@ enum GameEvents {
   CheatActivated,
   CheatDeactivated,
   // Relay system
-  ReplayGame,
+  GameRecord,
+  WatchRecordedGame,
   SaveGameRecord,
 }
 
