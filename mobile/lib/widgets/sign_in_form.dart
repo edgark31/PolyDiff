@@ -190,10 +190,6 @@ class _SignInFormState extends State<SignInForm> {
                   text: SIGN_UP_BTN_TXT,
                   press: () => Navigator.pushNamed(context, SIGN_UP_ROUTE),
                 ),
-                CustomButton(
-                  text: "Friends",
-                  press: () => Navigator.pushNamed(context, FRIENDS_ROUTE),
-                ),
               ],
             ),
           ),

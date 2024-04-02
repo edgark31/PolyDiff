@@ -14,10 +14,15 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
+    if (json['friends'] == []) {
+      json['friends'] = List<Friend>.empty();
+    }
     return User(
       name: json['name'],
       accountId: json['accountId'],
-      friends: List<Friend>.from(json['friends'] ?? []),
+      friends: json['friends']
+          .map<Friend>((friend) => Friend.fromJson(friend))
+          .toList(),
       friendRequests: List<String>.from(json['friendRequests'] ?? []),
     );
   }

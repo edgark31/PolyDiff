@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/friend_model.dart';
 import 'package:mobile/models/user_model.dart';
-import 'package:mobile/services/friend_service.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:mobile/widgets/friends_popup.dart';
 import 'package:mobile/widgets/friends_search.dart';
-import 'package:provider/provider.dart';
 
 class FriendsPage extends StatefulWidget {
   static const routeName = FRIENDS_ROUTE;
@@ -27,7 +24,7 @@ class FriendsPage extends StatefulWidget {
 
 class _FriendsPageState extends State<FriendsPage> {
   int _selectedViewIndex = 0;
-  
+
   List<Friend> simulatedFriends = [
     Friend(
         name: "Mp",
@@ -160,7 +157,6 @@ class _FriendsPageState extends State<FriendsPage> {
     User(name: "Moha", accountId: "15", friends: [], friendRequests: []),
     User(name: "Zaki", accountId: "16", friends: [], friendRequests: []),
   ];
-  
 
   void _selectView(int index) {
     setState(() {
@@ -200,12 +196,12 @@ class _FriendsPageState extends State<FriendsPage> {
                               color: Colors.white,
                               shape: BoxShape.circle,
                             ),
-                            child: Icon(
-                              Icons.circle,
-                              color:
-                                  friend.isOnline ? Colors.green : Colors.red,
-                              size: 20,
-                            ),
+                            // child: Icon(
+                            //   Icons.circle,
+                            //   color:
+                            //       friend.isOnline ? Colors.green : Colors.red,
+                            //   size: 20,
+                            // ),
                           ),
                         ),
                       ],
@@ -215,21 +211,21 @@ class _FriendsPageState extends State<FriendsPage> {
                       children: [
                         Text(friend.name, style: TextStyle(fontSize: 25)),
                         SizedBox(width: 5),
-                        IconButton(
-                          icon: Icon(
-                            friend.isFavorite
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: friend.isFavorite ? Colors.red : null,
-                            size: 35,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              friend.isFavorite = !friend.isFavorite;
-                            });
-                            // TODO: notify the server
-                          },
-                        ),
+                        // IconButton(
+                        //   icon: Icon(
+                        //     friend.isFavorite
+                        //         ? Icons.favorite
+                        //         : Icons.favorite_border,
+                        //     //color: friend.isFavorite ? Colors.red : null,
+                        //     size: 35,
+                        //   ),
+                        //   onPressed: () {
+                        //     setState(() {
+                        //       //friend.isFavorite = !friend.isFavorite;
+                        //     });
+                        //     // TODO: notify the server
+                        //   },
+                        // ),
                         SizedBox(width: 20),
                         TextButton(
                           onPressed: () {
@@ -254,7 +250,7 @@ class _FriendsPageState extends State<FriendsPage> {
                         ),
                       ],
                     ),
-                    subtitle: Text(friend.isOnline ? 'Online' : 'Offline'),
+                    //subtitle: Text(friend.isOnline ? 'Online' : 'Offline'),
                     trailing: IconButton(
                       iconSize: 40,
                       icon: Icon(Icons.person_remove),

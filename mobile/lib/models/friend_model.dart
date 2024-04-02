@@ -3,8 +3,8 @@ class Friend {
   String accountId;
   List<Friend?> friends;
   List<Friend?> commonFriends;
-  bool isOnline;
-  bool isFavorite;
+  bool? isOnline;
+  bool? isFavorite;
 
   Friend({
     required this.name,
@@ -16,11 +16,22 @@ class Friend {
   });
 
   factory Friend.fromJson(Map<String, dynamic> json) {
+    if (json['friends'] == []) {
+      json['friends'] = List<Friend>.empty();
+    }
+
+    if (json['commonFriends'] == []) {
+      json['commonFriends'] = List<Friend>.empty();
+    }
     return Friend(
       name: json['name'],
       accountId: json['accountId'],
-      friends: List<Friend>.from(json['friends'] ?? []),
-      commonFriends: List<Friend>.from(json['commonFriends'] ?? []),
+      friends: json['friends']
+          .map<Friend>((friend) => Friend.fromJson(friend))
+          .toList(),
+      commonFriends: json['commonFriends']
+          .map<Friend>((friend) => Friend.fromJson(friend))
+          .toList(),
       isOnline: json['isOnline'],
       isFavorite: json['isFavorite'],
     );
