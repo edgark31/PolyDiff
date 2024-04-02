@@ -20,6 +20,7 @@ class FriendService extends ChangeNotifier {
   }
 
   void fetchUsers() {
+    print("Fetching users");
     socketService.send(SocketType.Auth, UserEvents.UpdateUsers.name);
   }
 
@@ -29,7 +30,7 @@ class FriendService extends ChangeNotifier {
       List<dynamic> receivedData = data as List<dynamic>;
       List<User> allUsers =
           receivedData.map<User>((user) => User.fromJson(user)).toList();
-      print(allUsers);
+      updateUsersList(allUsers);
     });
 
     // socketService.on(SocketType.Game, GameEvents.TimerUpdate.name, (data) {
