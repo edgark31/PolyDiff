@@ -8,9 +8,10 @@ export type GameRecordDocument = GameRecord & Document;
 
 @Schema()
 export class GameRecord {
+    // account ids of players who saved the recorded game
     @ApiProperty()
     @Prop({ required: true })
-    lobbyId: string;
+    accountIds: string[];
 
     @ApiProperty()
     @Prop({
@@ -32,28 +33,23 @@ export class GameRecord {
     @Prop({ required: true })
     players: Player[];
 
-    // account ids of players who saved the recorded game
-    @ApiProperty()
-    @Prop()
-    accountIds: string[];
-
     @ApiProperty()
     @Prop({ required: true })
-    date: number;
+    date: Date;
 
-    @ApiProperty()
+    @ApiProperty({ required: false })
     @Prop()
     startTime: number;
 
     @ApiProperty()
-    @Prop()
+    @Prop({ required: false })
     endTime: number;
 
     @ApiProperty()
-    @Prop()
+    @Prop({ required: false })
     duration: number;
 
-    @ApiProperty()
+    @ApiProperty({ required: true })
     @Prop({ required: true })
     isCheatEnabled: boolean;
 

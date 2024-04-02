@@ -272,5 +272,6 @@ export interface GameEventData {
     players?: Player[];
     gameEvent: string;
     coordClic?: Coordinate;
+    remainingDifferenceIndex?: number[];
     isMainCanvas?: boolean;
 }
