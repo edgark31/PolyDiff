@@ -13,21 +13,21 @@
             </div>
         </div>
         <div class="right">
-            <div class="player-count"> {{ getPlayers().length }}/4 joueurs présents</div>
+            <div class="player-count"> {{ getPlayers().length }}/4 {{'waitingPage.currentPlayers' | translate }}</div>
             <div class="element">
                 <div class="players-list">
-                    <p class="waiting-text"> Joueur(s) en attente : </p>
+                    <p class="waiting-text"> {{'waitingPage.waitingPlayers' | translate }} : </p>
                     <div class="player-container">
                         <div class="players" *ngFor="let playerName of getPlayers()">
-                            <p class="player">Joueur: <span class="player-name">{{ playerName.name }}</span></p>
+                            <p class="player">{{'waitingPage.player' | translate }}: <span class="player-name">{{ playerName.name }}</span></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="button-container">
-            <button (click)="onStart()" *ngIf="roomManagerService.isOrganizer && getPlayers().length>=2" type="submit">Commencer la partie</button>
-            <button (click)="onQuit()" type="submit">Quitter</button>
+            <button (click)="onStart()" *ngIf="roomManagerService.isOrganizer && getPlayers().length>=2" type="submit">{{'waitingPage.start' | translate }}</button>
+            <button (click)="onQuit()" type="submit">{{'waitingPage.quit' | translate }}</button>
         </div>
     </div>
 </div>

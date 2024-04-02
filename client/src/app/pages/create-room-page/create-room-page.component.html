@@ -5,7 +5,7 @@
     <img id="background" src="./assets/background/CreationBackground.jpg" alt="background" />
     <div class="flex-column">
         <button class="settings-button">
-            <span id = "classic">Temps : </span>
+            <span id = "classic">{{'createRoom.time' | translate }} : </span>
             <mat-slider color="warn" thumbLabel [displayWith]="formatLabelTime.bind(this)" tickInterval="1" min="30" max="60"></mat-slider>
         </button>
         <div *ngIf="!onVerifyClassic()">
@@ -15,17 +15,17 @@
             </button>
         </div>
         <button class="settings-button">
-            <span id="classic">Mode triche : </span>
+            <span id="classic">{{'createRoom.cheatMode' | translate }} : </span>
             <mat-checkbox id="config" color="warn" [(ngModel)]="isCheatModeEnabled"></mat-checkbox>
         </button>
         <button class="settings-button">
-            <span id="classic">Mot de passe : </span>
+            <span id="classic">{{'createRoom.password' | translate }} : </span>
             <input matInput type="password" placeholder="Veuillez entrer votre mot de passe" [(ngModel)]="password">
         </button>
     </div>
     <footer class="footer flex-column">
         <button class="button">
-            <span id="classic" routerLink="/waiting-room" (click)="onSubmit()">Créer la salle</span>
+            <span id="classic" routerLink="/waiting-room" (click)="onSubmit()">{{'createRoom.createRoom' | translate }}</span>
         </button>
     </footer>
 </div>

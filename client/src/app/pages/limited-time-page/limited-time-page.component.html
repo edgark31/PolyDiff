@@ -4,7 +4,7 @@
             <app-nav-bar id ="nav-bar"></app-nav-bar>
         </div>
         <button mat-raised-button class="create-button" routerLink="/create-room">
-            <span>Créer une salle</span>
+            <span>{{'roomSheet.createRoom' | translate }}</span>
         </button>
         <div *ngFor="let lobby of pagedLobbies">
             <div *ngIf="lobby.mode === gameModes.Limited">
@@ -12,8 +12,8 @@
             </div>
         </div>
         <div class="button-container">
-            <button (click)="previousPage()" *ngIf="currentPage > 0">Précédent</button>
-            <button (click)="nextPage()" *ngIf="(lobbies.length / pageSize) - 1 > currentPage ">Suivant</button>
+            <button (click)="previousPage()" *ngIf="currentPage > 0">{{'button.previous' | translate }}</button>
+            <button (click)="nextPage()" *ngIf="(lobbies.length / pageSize) - 1 > currentPage ">{{'button.following' | translate }}</button>
         </div>
     </div>
 </body>

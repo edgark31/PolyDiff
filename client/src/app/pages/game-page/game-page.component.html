@@ -12,9 +12,9 @@
             <div class="game-feedback">
                 <h1>Mode : {{ lobby.mode }}</h1>
                 &nbsp;
-                <h1>Différences trouvées : {{ nDifferencesFound }}</h1>
+                <h1>{{'game.foundDifference' | translate }} : {{ nDifferencesFound }}</h1>
                 &nbsp;
-                <h1 *ngIf="this.getMode() !== '/practice'">Temps écoulé : {{ timer * 1000 | date: 'mm:ss' }}</h1>
+                <h1 *ngIf="this.getMode() !== '/practice'">{{'game.timerOver' | translate }} : {{ timer * 1000 | date: 'mm:ss' }}</h1>
                 &nbsp;
                 <div *ngIf="lobby.players.length > 0" id="players">
                     <h1 *ngFor="let player of lobby.players">

@@ -1,11 +1,11 @@
-<h2 class="header" *ngIf="typeFriend==='allFriends'">liste d'amis de {{data.friend.name }}</h2>
-<h2 class="header" *ngIf="typeFriend==='commonFriends' && data.showCommonFriend ">liste d'amis en commun entre toi et {{data.friend.name }}</h2>
+<h2 class="header" *ngIf="typeFriend==='allFriends'">{{'friendInfo.friendList' | translate }} {{data.friend.name }}</h2>
+<h2 class="header" *ngIf="typeFriend==='commonFriends' && data.showCommonFriend ">{{'friendInfo.commonFriendList' | translate }} {{data.friend.name }}</h2>
 <div class="container">
-    <div class="header" *ngIf="!data.showCommonFriend">Tous les amis</div>
+    <div class="header" *ngIf="!data.showCommonFriend">{{'friendInfo.allFriends' | translate }}</div>
     <div *ngIf="data.showCommonFriend">
         <mat-radio-group class="all-radio-button" [(ngModel)]="typeFriend" (change)="onTypeChange(typeFriend)">
-            <mat-radio-button value="commonFriends"  class="radio-button">ami en commun</mat-radio-button>
-            <mat-radio-button value="allFriends">Tous les amis</mat-radio-button>
+            <mat-radio-button value="commonFriends"  class="radio-button">{{'friendInfo.commonFriends' | translate }}</mat-radio-button>
+            <mat-radio-button value="allFriends">{{'friendInfo.allFriends' | translate }}</mat-radio-button>
         </mat-radio-group>
     </div>
 
@@ -22,7 +22,7 @@
 </div>
 
 
-    <button mat-button (click)="dialogRef.close()">fermer</button>
+    <button mat-button (click)="dialogRef.close()">{{'friendInfo.close' | translate }}</button>
 </div>
 
 

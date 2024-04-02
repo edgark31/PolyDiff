@@ -1,7 +1,7 @@
 <div class="selectionComponent">
     <div class="header">
-        <h1 *ngIf="router.url === '/selection'">Selectionne ton jeu</h1>
-        <h1 *ngIf="router.url === '/admin'">Configure ton jeu</h1>
+        <h1 *ngIf="router.url === '/selection'">{{'selectionPage.selectGame' | translate }}</h1>
+        <h1 *ngIf="router.url === '/admin'">>{{'selectionPage.configureGame' | translate }}</h1>
         <app-nav-bar id ="nav-bar"></app-nav-bar>
     </div>
     <div class="gameCarrouselContainer">
@@ -19,7 +19,7 @@
     </div>
     <img id = "selection" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
 </div>
-<p *ngIf = "!gameCarrousel.gameCards.length" id = "waiting-message">Il n'y a pas de jeux disponibles pour le moment</p>
+<p *ngIf = "!gameCarrousel.gameCards.length" id = "waiting-message">{{'selectionPage.noGameAvailable' | translate }}</p>
 <img *ngIf = "!gameCarrousel.gameCards.length" id = "waiting" src = "./assets/raccoonWaiting.gif" alt = "waiting-image" />
 <!-- <div *ngIf="router.url === '/selection'" class="footerPreview">
     <div class="section">

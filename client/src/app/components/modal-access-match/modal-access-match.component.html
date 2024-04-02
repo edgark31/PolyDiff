@@ -1,17 +1,17 @@
 <body>
 <div class="modal">
     <div class="modal-content">
-<h2 mat-dialog-title  class="title">ENTRER LE CODE D'ACCES</h2>
+<h2 mat-dialog-title  class="title">{{'accessModal.accessCode' | translate }}</h2>
 <mat-dialog-content>
   <mat-form-field>
-    <mat-label >Mot de passe</mat-label>
+    <mat-label >{{'accessModal.password' | translate }}</mat-label>
     <input  class="title" matInput type="password" placeholder="Code d'accès" (keyup.enter)="onSubmitAccess()" [(ngModel)]="codeAccess">
   </mat-form-field>
-  <div *ngIf="codeAccess !== data.password" class="error-message">Mot de passe incorrect. Veuillez réessayer.</div>
+  <div *ngIf="codeAccess !== data.password" class="error-message">{{'accessModal.incorrectPassword' | translate }}.</div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button class="submit-button" type="submit" (click)="onCancel()">ANNULER</button>
-  <button mat-button class="submit-button" type="submit" (click)="onSubmitAccess()">CONFIRMER</button>
+  <button mat-button class="submit-button" type="submit" (click)="onCancel()">{{'accessModal.cancel' | translate }}</button>
+  <button mat-button class="submit-button" type="submit" (click)="onSubmitAccess()">{{'accessModal.confirm' | translate }}</button>
 </mat-dialog-actions>
 </div>
 </div>

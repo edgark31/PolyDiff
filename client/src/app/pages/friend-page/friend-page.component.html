@@ -4,17 +4,17 @@
         <app-nav-bar id ="nav-bar"></app-nav-bar>
         </div>
         <div class="icon-container">
-            <button class="icon" (click)="onSubmit('friendUpdate')">amis actuels</button>
-            <button class="icon" (click)="onSubmit('friendCommon')">demande d'amis </button>
-            <button class="icon" (click)="onSubmit('friendPending')"> invitation d'amis</button>
-            <button class="icon" (click)="onSubmit('accountUser')">Compte</button>
+            <button class="icon" (click)="onSubmit('friendUpdate')">{{'friendPage.friends' | translate }}</button>
+            <button class="icon" (click)="onSubmit('friendCommon')">{{'friendPage.friendsRequests' | translate }} </button>
+            <button class="icon" (click)="onSubmit('friendPending')"> {{'friendPage.friendsPedding' | translate }}</button>
+            <button class="icon" (click)="onSubmit('accountUser')">{{'friendPage.allAccount' | translate }}</button>
           </div>
 
           <section class="friends-container">
-            <h1 *ngIf="pageFriendupdate==='friendUpdate'" class="informationUpdate">Liste d'amis</h1>
-            <h1 *ngIf="pageFriendupdate==='friendCommon'" class="information">Liste d'amis en attente envoyé</h1>
-            <h1 *ngIf="pageFriendupdate==='friendPending'" class="information">Liste d'amis en attente reçu</h1>
-            <h1 *ngIf="pageFriendupdate==='accountUser'" class="informationUpdate">Liste de comptes</h1>
+            <h1 *ngIf="pageFriendupdate==='friendUpdate'" class="informationUpdate">{{'friendPage.friendsList' | translate }}</h1>
+            <h1 *ngIf="pageFriendupdate==='friendCommon'" class="information">{{'friendPage.requestFriendsSendList' | translate }}</h1>
+            <h1 *ngIf="pageFriendupdate==='friendPending'" class="information">{{'friendPage.pendingFriendsList' | translate }}</h1>
+            <h1 *ngIf="pageFriendupdate==='accountUser'" class="informationUpdate">{{'friendPage.allListAccount' | translate }}</h1>
             <form   *ngIf="pageFriendupdate==='accountUser'" class="search-form">
                 <input type="text" placeholder="Rechercher..." [(ngModel)]="searchQuery" name="searchQuery" class="search-input">
                 <button type="submit" (click)="sendSearch()" class="search-button">

@@ -9,12 +9,12 @@
         <app-image-canvas [position]="canvasPosition.Right"></app-image-canvas>
     </div>
 
-    <p>L'image doit être de taille 640x480 et en BMP, PNG, JPEG ou JPG</p>
+    <p>{{'creationPage.lengthPicture' | translate }}</p>
     <app-canvas-under-buttons [canvasPositionType]="canvasPosition.Both"></app-canvas-under-buttons>
 
     <div id="radio-buttons">
         <div>
-            <p>Choisissez le rayon d'élargissement :</p>
+            <p>{{'creationPage.enlargementRayon' | translate }} :</p>
             <mat-radio-group ngDefaultControl aria-label="Select an option" [(ngModel)]="radius">
                 <mat-radio-button color="primary" *ngFor="let radius of radiusSizes" [value]="radius">{{ radius
                     }}</mat-radio-button>
@@ -22,9 +22,9 @@
         </div>
     </div>
     <button mat-raised-button name="validateButton" color="primary" (click)="validateDifferences()">
-        Valider les différences
+        {{'creationPage.differenceValid' | translate }}
     </button>
-    <button mat-raised-button [routerLink]="configRoute">Retourner à la page de Configuration</button>
+    <button mat-raised-button [routerLink]="configRoute">{{'creationPage.returnConfigPage' | translate }}</button>
     <img id = "creation" src = "./assets/background/CreationBackground.jpg" alt="background"/>
     <img id = "run" src = "./assets/icon/RunRight.gif" alt="runningGif"/>
 
