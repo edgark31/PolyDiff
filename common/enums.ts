@@ -165,6 +165,9 @@ export enum GameEvents {
     Spectate = 'Spectate',
     CheatActivated = 'CheatActivated',
     CheatDeactivated = 'CheatDeactivated',
+    GameRecord = 'GameRecord',
+    WatchRecordedGame = 'WatchRecordedGame',
+    SaveGameRecord = 'SaveGameRecord',
 }
 
 export enum GameState {
