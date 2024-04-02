@@ -23,6 +23,7 @@ export class AccountManagerService implements OnModuleInit {
     ) {}
 
     onModuleInit() {
+        this.loadAllAvatars();
         this.fetchUsers();
     }
 
@@ -54,6 +55,8 @@ export class AccountManagerService implements OnModuleInit {
                     onErrorSound: ERROR_SOUND_LIST[0],
                 },
             };
+            this.imageManager.save(newAccount.id, newAccount.profile.avatar);
+            this.imageManager.save(newAccount.credentials.username, newAccount.profile.avatar);
             await this.accountModel.create(newAccount);
             this.logger.verbose(`Account ${creds.username} has registered successfully`);
             this.fetchUsers();
@@ -78,11 +81,7 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.id = accountFound._id.toString();
             if (this.connectedUsers.has(accountFound.id)) throw new Error('Account already connected');
 
-            this.imageManager.save(accountFound.id, accountFound.profile.avatar);
-            this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
-
             await accountFound.save();
-            accountFound.profile.avatar = '';
             this.connectedUsers.set(accountFound.id, accountFound);
             this.fetchUsers();
             this.logger.log(`${accountFound.credentials.username} has connected with password ${accountFound.credentials.password}`);
@@ -283,7 +282,6 @@ export class AccountManagerService implements OnModuleInit {
     async fetchUsers() {
         await this.accountModel.find().then((accounts) => {
             accounts.forEach((account) => {
-                account.profile.avatar = '';
                 this.users.set(account._id.toString(), account);
                 this.connectedUsers.get(account.id) ? this.connectedUsers.set(account.id, account) : null;
             });
@@ -350,5 +348,14 @@ export class AccountManagerService implements OnModuleInit {
         account.profile.stats.averageDifferences =
             (account.profile.stats.averageDifferences * (account.profile.stats.gamesPlayed - 1) + count) / account.profile.stats.gamesPlayed;
         account.save();
+    }
+
+    private loadAllAvatars(): void {
+        this.accountModel.find().then((accounts) => {
+            accounts.forEach((account) => {
+                this.imageManager.save(account.id, account.profile.avatar);
+                this.imageManager.save(account.credentials.username, account.profile.avatar);
+            });
+        });
     }
 }

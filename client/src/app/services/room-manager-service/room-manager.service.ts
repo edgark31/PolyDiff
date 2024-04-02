@@ -35,16 +35,19 @@ export class RoomManagerService {
     private isGameHistoryReloadNeeded: Subject<boolean>;
     private messages: Subject<Chat[]>;
     private message: Subject<Chat>;
+    private playerNameRequesting: Subject<string>;
 
     constructor(private readonly clientSocket: ClientSocketService) {
         this.lobby = new Subject<Lobby>();
         this.lobbies = new Subject<Lobby[]>();
         this.joinedPlayerNames = new Subject<string[]>();
         this.deletedGameId = new Subject<string>();
+        this.isPlayerAccepted = new Subject<boolean>();
         this.isGameCardsReloadNeeded = new Subject<boolean>();
         this.isGameHistoryReloadNeeded = new Subject<boolean>();
         this.messages = new Subject<Chat[]>();
         this.message = new Subject<Chat>();
+        this.playerNameRequesting = new Subject<string>();
     }
 
     get joinedPlayerNamesByGameId$() {
@@ -77,6 +80,10 @@ export class RoomManagerService {
 
     get isGameHistoryReloadNeeded$() {
         return this.isGameHistoryReloadNeeded.asObservable();
+    }
+
+    get playerNameRequesting$() {
+        return this.playerNameRequesting.asObservable();
     }
 
     get lobby$() {
@@ -113,6 +120,10 @@ export class RoomManagerService {
 
     joinRoom(lobbyId: string) {
         this.clientSocket.send('lobby', LobbyEvents.Join, { lobbyId });
+    }
+
+    sendRequestToJoinRoom(lobbyId: string, password: string) {
+        this.clientSocket.send('lobby', LobbyEvents.RequestAccess, { lobbyId, password });
     }
 
     joinRoomObserver(lobbyId: string) {
@@ -183,8 +194,16 @@ export class RoomManagerService {
     onStart(id: string) {
         this.clientSocket.send('lobby', LobbyEvents.Start, id);
     }
-    cancelJoining(gameId: string): void {
-        this.clientSocket.send('lobby', PlayerEvents.CancelJoining, gameId);
+    // cancelJoining(gameId: string): void {
+    //     this.clientSocket.send('lobby', PlayerEvents.CancelJoining, gameId);
+    // }
+
+    optPlayer(lobbyId: string, username: string, isPlayerAccepted: boolean) {
+        this.clientSocket.send('lobby', LobbyEvents.OptPlayer, { lobbyId, username, isPlayerAccepted });
+    }
+
+    cancelRequestToJoinRoom(lobbyId: string, username: string): void {
+        this.clientSocket.send('lobby', LobbyEvents.CancelRequestAcess, { lobbyId, username });
     }
 
     checkIfAnyCoopRoomExists(playerPayLoad: PlayerData) {
@@ -237,29 +256,24 @@ export class RoomManagerService {
         this.lobby = new Subject<Lobby>();
         this.lobbies = new Subject<Lobby[]>();
         this.message = new Subject<Chat>();
-        if (this.isOrganizer)
+        if (this.isOrganizer) {
             this.clientSocket.on('lobby', LobbyEvents.Create, (lobby: Lobby) => {
                 this.lobby.next(lobby);
                 this.lobbyGame = lobby;
             });
-        else
+            this.clientSocket.on('lobby', LobbyEvents.RequestAccessHost, (playerName: string) => {
+                this.playerNameRequesting.next(playerName);
+            });
+        } else {
             this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
                 this.lobbyGame = lobby;
                 this.lobby.next(lobby);
             });
-
+        }
         this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
             this.lobbies.next(lobbies);
             this.lobbiesGame = lobbies;
         });
-
-        // this.clientSocket.on('lobby', LobbyEvents.UpdateLobbys, (lobbies: Lobby[]) => {
-        //     this.lobbies.next(lobbies);
-        //     this.lobbiesGame = lobbies;
-        //     lobbies.forEach((element) => {
-        //         console.log(element.observers.length);
-        //     });
-        // });
         this.clientSocket.on('lobby', ChannelEvents.LobbyMessage, (chat: Chat) => {
             this.message.next(chat);
         });
