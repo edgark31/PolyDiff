@@ -72,7 +72,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             });
         });
         this.clientSocketService.on('lobby', LobbyEvents.CancelRequestAcessHost, () => {
-            console.log('CancelRequestAcessHost');
             this.dialog.closeAll();
         });
         this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {
