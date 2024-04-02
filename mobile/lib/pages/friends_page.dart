@@ -158,11 +158,20 @@ class _FriendsPageState extends State<FriendsPage> {
     UserFriend(username: "Moha", id: "15", friends: [], friendRequests: []),
     UserFriend(username: "Zaki", id: "16", friends: [], friendRequests: []),
   ];
+  List<UserFriend> searchedUsers = [];
   void _handleUsernameSubmit(String username) {
     if (username.isNotEmpty && username.trim().isNotEmpty) {
-      print("Searched");
-      setState(() {});
+      setState(() {
+        searchedUsers = simulatedUsers
+            .where((user) =>
+                user.username.toLowerCase().startsWith(username.toLowerCase()))
+            .toList();
+      });
       FocusScope.of(context).requestFocus(textFocusNode);
+    } else {
+      setState(() {
+        searchedUsers = [];
+      });
     }
   }
 
@@ -416,6 +425,7 @@ class _FriendsPageState extends State<FriendsPage> {
                           onChanged: (text) {
                             setState(() {
                               isTyping = text.isNotEmpty;
+                              _handleUsernameSubmit(usernameController.text);
                             });
                           },
                           decoration: InputDecoration(
@@ -449,9 +459,9 @@ class _FriendsPageState extends State<FriendsPage> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: simulatedRequestsSent.length,
+                itemCount: searchedUsers.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final friend = simulatedRequestsSent[index];
+                  final friend = searchedUsers[index];
                   return Container(
                     alignment: Alignment.center,
                     child: ConstrainedBox(
