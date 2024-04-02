@@ -312,7 +312,7 @@ class _SignUpFormState extends State<SignUpForm> {
           hint: "Confirmez votre mot de passe",
           helperText:
               'Doit correspondre au mot de passe: $passwordConfirmation',
-          maxLength: 40,
+          maxLength: 20,
           errorText: _validator.states['passwordConfirmation'] ==
                   ValidatorState.isEmpty
               ? "Veuillez confirmer votre mot de passe"
