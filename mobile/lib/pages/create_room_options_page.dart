@@ -5,7 +5,9 @@ import 'package:mobile/constants/enums.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:provider/provider.dart';
 
 class CreateRoomOptionsPage extends StatefulWidget {
@@ -38,9 +40,8 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     final chatService = context.watch<ChatService>();
 
     return Scaffold(
-      // TODO : Put back when disconnect logic in place
-      // appBar: CustomAppBar(title: 'Configurations des options'),
-      // drawer: CustomMenuDrawer(),
+      appBar: CustomAppBar(title: 'Configurations des options'),
+      drawer: CustomMenuDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
