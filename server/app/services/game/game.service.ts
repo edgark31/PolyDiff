@@ -71,14 +71,6 @@ export class GameService {
         throw new NotFoundException('No games history found');
     }
 
-    async getLobbyRecordsById(lobbyId: string): Promise<GameRecord> {
-        const gameRecord = await this.databaseService.getLobbyRecordById(lobbyId);
-        if (gameRecord) {
-            return gameRecord;
-        }
-        throw new NotFoundException('No games history found');
-    }
-
     async verifyIfGameExists(gameName: string): Promise<boolean> {
         return await this.databaseService.verifyIfGameExists(gameName);
     }
