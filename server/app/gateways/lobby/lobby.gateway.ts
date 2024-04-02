@@ -68,6 +68,8 @@ export class LobbyGateway implements OnGatewayConnection {
         this.server.fetchSockets().then((sockets) => {
             const guest = sockets.find((s) => s.data.accountId === joinerId);
             guest.emit(LobbyEvents.CancelRequestAcessHost);
+            const host = sockets.find((s) => s.data.accountId === this.roomsManager.lobbies.get(lobbyId).players[0].accountId);
+            host.emit(LobbyEvents.CancelRequestAcessHost);
         });
         this.logger.log(
             `${

@@ -21,10 +21,7 @@ export class WaitingPlayerToJoinComponent implements OnInit, OnDestroy {
 
     // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
-    constructor(
-        @Inject(MAT_DIALOG_DATA) private data: { lobby: Lobby; username: string },
-        private readonly roomManagerService: RoomManagerService, // private dialogRef: MatDialogRef<WaitingPlayerToJoinComponent>, // private readonly router: Router,
-    ) {
+    constructor(@Inject(MAT_DIALOG_DATA) private data: { lobby: Lobby; username: string }, private readonly roomManagerService: RoomManagerService) {
         this.playerName = this.data.username;
         this.actions = GameCardActions;
     }
@@ -48,12 +45,4 @@ export class WaitingPlayerToJoinComponent implements OnInit, OnDestroy {
         this.countdownSubscription?.unsubscribe();
         this.deletedGameIdSubscription?.unsubscribe();
     }
-
-    // private loadPlayerNamesList(): void {
-    //     this.playerNamesSubscription = this.roomManagerService.joinedPlayerNamesByGameId$
-    //         .pipe(filter((playerNamesList) => !!playerNamesList))
-    //         .subscribe((playerNamesList) => {
-    //             this.playerNames = playerNamesList;
-    //         });
-    // }
 }
