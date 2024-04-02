@@ -109,7 +109,7 @@ export const friendSchema = SchemaFactory.createForClass(Friend);
 
 @Schema({ _id: false })
 export class Profile {
-    @Prop({ required: true })
+    @Prop({ required: false })
     avatar: string;
 
     @Prop({ type: [sessionLogSchema], default: [] })
@@ -155,6 +155,9 @@ export class Credentials {
 
     @Prop()
     email: string;
+
+    @Prop({ required: false })
+    recuperatePasswordCode: string;
 }
 
 export const credentialsSchema = SchemaFactory.createForClass(Credentials);

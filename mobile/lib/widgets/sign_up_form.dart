@@ -139,7 +139,7 @@ class _SignUpFormState extends State<SignUpForm> {
             predefinedAvatarBody, AvatarType.predefined);
 
         if (registerProvider.isBack) {
-          Navigator.pushNamed(context, LOGIN_ROUTE);
+          Navigator.pushNamed(context, SIGN_IN_ROUTE);
         }
       } else if (_selectedAvatarBase64 != null) {
         UploadAvatarBody avatarBody = UploadAvatarBody(
@@ -226,19 +226,12 @@ class _SignUpFormState extends State<SignUpForm> {
       child: Column(
         children: [
           CustomButton(
-              press: () => _registerUserCredentials(),
-              backgroundColor: kMidOrange,
-              text: SIGN_UP_BTN_TXT),
+              press: () => _registerUserCredentials(), text: SIGN_UP_BTN_TXT),
           if (serverErrorMessage != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Text(
                 serverErrorMessage!,
-                style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight
-                        .bold // Use a color that makes the error message stand out
-                    ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -339,10 +332,9 @@ class _SignUpFormState extends State<SignUpForm> {
       child: Padding(
         padding: EdgeInsets.only(top: 10),
         child: CustomButton(
-            text: SIGN_IN_BTN_TXT,
-            press: () => Navigator.pushNamed(context, LOGIN_ROUTE),
-            backgroundColor: kMidGreen,
-            textColor: kLight),
+          text: SIGN_IN_BTN_TXT,
+          press: () => Navigator.pushNamed(context, SIGN_IN_ROUTE),
+        ),
       ),
     );
   }

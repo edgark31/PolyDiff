@@ -198,11 +198,11 @@ button {
 .button-container button {
     font-size: 16px;
     margin-left: 10px;
+    font-family: 'Troika', sans-serif;
     color: rgba(253, 250, 151, 255);
-    -webkit-text-stroke: 0.2px black;
+    // -webkit-text-stroke: 0.2px black;
     text-transform: uppercase;
     border: none;
-    // border-radius: 25px;
     background-color: #e8a430;
 }
 

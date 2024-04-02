@@ -161,7 +161,6 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.credentials.password = newPassword;
 
             await accountFound.save();
-            this.connectedUsers.set(accountFound.id, accountFound);
             await this.fetchUsers();
 
             this.logger.verbose(`${username} has changed his password`);

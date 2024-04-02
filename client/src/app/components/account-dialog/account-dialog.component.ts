@@ -13,6 +13,7 @@ import { Lobby } from '@common/game-interfaces';
 })
 export class AccountDialogComponent {
     isReplayPaused: boolean;
+    // eslint-disable-next-line max-params
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: { action: GamePageEvent; message: string; lobby: Lobby; isReplayMode: boolean },
         public welcomeService: WelcomeService,

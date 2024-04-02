@@ -184,6 +184,7 @@ export interface Credentials {
     username: string;
     password: string;
     email?: string;
+    recuperatePasswordCode?: string;
 }
 
 export interface Profile {
