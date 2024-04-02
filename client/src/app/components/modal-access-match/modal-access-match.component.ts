@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { JoinedPlayerDialogComponent } from '@app/components/joined-player-dialog/joined-player-dialog.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { LobbyEvents } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 
@@ -27,14 +28,14 @@ export class ModalAccessMatchComponent implements OnInit {
         public dialogRef: MatDialogRef<ModalAccessMatchComponent>,
         public clientSocketService: ClientSocketService,
         public roomManager: RoomManagerService,
+        public welcomeService: WelcomeService,
         @Inject(MAT_DIALOG_DATA) public lobby: Lobby,
-        @Inject(MAT_DIALOG_DATA) public username: string,
     ) {}
 
     ngOnInit(): void {
         this.clientSocketService.on('lobby', LobbyEvents.RequestAccess, () => {
             this.dialog.open(JoinedPlayerDialogComponent, {
-                data: { lobbyId: this.lobby.lobbyId as string, username: this.username },
+                data: { lobbyId: this.lobby.lobbyId as string, username: this.welcomeService.account.credentials.username },
                 disableClose: true,
                 panelClass: 'dialog',
             });
