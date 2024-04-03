@@ -212,8 +212,6 @@ class Sound {
   @override
   bool operator ==(Object other) {
     Sound otherSound = other as Sound;
-    print('compared ${this.toJson()} to ${otherSound.toJson()}');
-    print('names: ${name} ${otherSound.name}');
     return identical(this, other) || (name == otherSound.name);
   }
 
