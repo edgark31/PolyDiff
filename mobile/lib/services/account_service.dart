@@ -62,6 +62,7 @@ class AccountService {
   Future<String?> updateTheme(String username, String newTheme) async {
     final String themeToLowerCase = newTheme.toLowerCase();
     try {
+      print('Entering updateTheme try');
       final response = await http.put(
         Uri.parse('$baseUrl/account/mobile/theme'),
         headers: <String, String>{
@@ -75,6 +76,10 @@ class AccountService {
       if (response.statusCode == 200) {
         print("Theme updated to $themeToLowerCase ");
         return null;
+      } else {
+        print("Failed to update theme");
+        print(response.body);
+        print(response.statusCode);
       }
     } catch (error) {
       print("Error updating theme preference: $error");
