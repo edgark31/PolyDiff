@@ -77,13 +77,6 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
               text: 'Créer la salle de jeu',
               widthFactor: 0.25,
             ),
-            CustomButton(
-              press: () {
-                Navigator.pushNamed(context, DASHBOARD_ROUTE);
-              },
-              text: 'Retour à l\'accueil',
-              widthFactor: 0.25,
-            ),
           ],
         ),
       ),
