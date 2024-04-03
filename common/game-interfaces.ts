@@ -275,3 +275,10 @@ export interface GameEventData {
     remainingDifferenceIndex?: number[];
     isMainCanvas?: boolean;
 }
+
+export interface RankedPlayer {
+    accountId: string;
+    name: string;
+    rank: number;
+    stats: Statistics;
+}

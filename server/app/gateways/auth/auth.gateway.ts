@@ -168,6 +168,12 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         });
     }
 
+    // ---------------------- GLOBAL RANKING --------------------------------
+    @SubscribeMessage(AccountEvents.GlobalRanking)
+    async globalRanking(@ConnectedSocket() socket: Socket) {
+        socket.emit(AccountEvents.GlobalRanking, await this.accountManager.globalRanking());
+    }
+
     @SubscribeMessage(ChannelEvents.SendGlobalMessage)
     handleGlobalMessage(@ConnectedSocket() socket: Socket, @MessageBody() message: string) {
         const chat: Chat = this.messageManager.createMessage(
