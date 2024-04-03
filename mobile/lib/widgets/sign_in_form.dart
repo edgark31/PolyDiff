@@ -5,6 +5,7 @@ import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/avatar_provider.dart';
+import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/services/info_service.dart';
@@ -84,6 +85,7 @@ class _SignInFormState extends State<SignInForm> {
     final infoService = context.watch<InfoService>();
     final chatService = context.watch<ChatService>();
     final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
+    final ThemeProvider themeProvider = context.watch<ThemeProvider>();
     return Stack(
       children: [
         SingleChildScrollView(
@@ -148,6 +150,7 @@ class _SignInFormState extends State<SignInForm> {
                         socketService.setup(SocketType.Auth, infoService.id);
                         chatService.setupGlobalChat();
                         avatarProvider.setAccountAvatarUrl();
+                        themeProvider.toggleTheme(infoService.theme == 'dark');
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
                       }
                     }
