@@ -175,7 +175,7 @@ export class AccountManagerService implements OnModuleInit {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
-            accountFound.profile.onCorrectSound = newSound;
+            accountFound.profile.onErrorSound = newSound;
 
             await accountFound.save();
             this.logger.verbose(`${username} has changed his error sound effect`);
