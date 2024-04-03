@@ -25,6 +25,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
   void initState() {
     super.initState();
     friendService.fetchUsers();
+    friendService.fetchPending();
   }
 
   void _handleUsernameSubmit(String username) {
@@ -44,13 +45,65 @@ class _FriendsSearchState extends State<FriendsSearch> {
     }
   }
 
-  Widget _relation(String myId, User user) {
+  Widget _state(String myId, User user) {
     bool isFriend = user.friends.any((friend) => friend!.accountId == myId);
     if (isFriend) {
-      return Text('Friend', style: TextStyle(fontSize: 18));
+      return Text('Ami', style: TextStyle(fontSize: 18));
     } else {
-      return Text("Not Friend");
+      if (user.friendRequests.contains(myId)) {
+        return TextButton(
+          onPressed: () {
+            print("Cancelled request");
+          },
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: kLightGreen,
+            disabledForegroundColor: Colors.grey.withOpacity(0.38),
+          ),
+          child: Text('Annuler', style: TextStyle(fontSize: 18)),
+        );
+      } else {
+        bool isPending = friendService.pendingFriends
+            .any((friend) => friend.accountId == user.accountId);
+        if (isPending) {
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                color: const Color.fromARGB(255, 2, 173, 90),
+                iconSize: 40,
+                icon: Icon(Icons.person_add),
+                onPressed: () {
+                  print("Accepted Friend invite");
+                },
+              ),
+              SizedBox(width: 50),
+              IconButton(
+                color: Colors.redAccent,
+                iconSize: 40,
+                icon: Icon(Icons.person_remove),
+                onPressed: () {
+                  print("Unaccepted Friend invite");
+                },
+              ),
+            ],
+          );
+        } else {
+          return TextButton(
+            onPressed: () {
+              friendService.sendInvite(user.accountId);
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: kLightGreen,
+              disabledForegroundColor: Colors.grey.withOpacity(0.38),
+            ),
+            child: Text('Inviter', style: TextStyle(fontSize: 18)),
+          );
+        }
+      }
     }
+    return Text("ERROR");
   }
 
   @override
@@ -136,7 +189,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
                           ),
                         ],
                       ),
-                      trailing: _relation(infoService.id, user),
+                      trailing: _state(infoService.id, user),
                     ),
                   ),
                 ),
