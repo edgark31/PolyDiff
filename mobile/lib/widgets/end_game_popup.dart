@@ -43,6 +43,7 @@ class EndGamePopup extends StatelessWidget {
                 CustomButton(
                   text: 'Reprise Vidéo',
                   press: () {
+                    Navigator.pushNamed(context, REPLAY_ROUTE);
                     print('Navigate to replay video page');
                   },
                 ),

@@ -113,7 +113,7 @@
 
     "dialogGame": {
         "home": "Accueil",
-        "videoReprise": "Clavardage",
+        "videoReprise": "reprise Video",
         "yes": "oui",
         "no": "Non"
     },

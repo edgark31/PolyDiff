@@ -61,7 +61,9 @@ export class FriendService {
     sendFriendRequest(accountId: string): void {
         this.clientSocket.send('auth', FriendEvents.SendRequest, { potentialFriendId: accountId });
     }
-
+    shareScore(accountId: string, score: number): void {
+        this.clientSocket.send('auth', FriendEvents.ShareScore, { friendId: accountId, score });
+    }
     sendFavorite(accountId: string, isFavorite: boolean): void {
         console.log('yooooooooooooooooooo' + accountId + isFavorite);
         this.clientSocket.send('auth', FriendEvents.OptFavorite, { friendId: accountId, isFavorite });

@@ -7,7 +7,8 @@
         </div>
         <div class="chat flex-column">
             <app-chat-box (add)="sendMessage($event)" [messages]="messages"></app-chat-box>
-            <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+            <img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+            <img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background.jpg" alt="background"/>
         </div>
     </div>
 </div>

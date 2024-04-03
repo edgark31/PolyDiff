@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { ChatMessageGlobal } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -22,6 +23,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
         private readonly router: Router,
         private dialog: MatDialog,
         public translate: TranslateService,
+        public welcomeService: WelcomeService,
     ) {
         this.messages = [];
         this.onDestroy$ = new Subject();

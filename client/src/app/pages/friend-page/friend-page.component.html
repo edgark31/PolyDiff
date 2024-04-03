@@ -212,4 +212,5 @@
         </section>
 
 </body>
-<img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+<img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+<img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background.jpg" alt="background"/>

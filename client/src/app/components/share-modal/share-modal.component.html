@@ -1,0 +1,18 @@
+<div class="infos-container" >
+    <div *ngFor="let friend of  welcome.account.profile.friends; let last = last" class="separator">
+        <!-- <mat-form-field class="full-width-field"> -->
+           <div class="form-avatar">
+               <img [src]="'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'" alt="Image" style="width: 50px; height: 50px; border-radius: 16px;">
+             </div>
+               <span class="name">{{ friend.name }}</span>
+               <div   class="details">
+                <button mat-icon-button >
+                 <mat-icon (click)="onShare(friend.accountId)" class="icone favorite-icon">share</mat-icon>
+                </button>
+            </div>
+               <span *ngIf="!last"></span>
+
+       <!-- </mat-form-field> -->
+   </div>
+</div>
+

@@ -1,24 +1,11 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:mobile/models/account.dart';
 
-class SoundService {
-  final AudioPlayer audioPlayer;
+class SoundService extends ChangeNotifier {
+  final AudioPlayer audioPlayer = AudioPlayer();
   final String correctSoundPath = "sound/correct1.mp3";
   final String errorSoundPath = "sound/error1.mp3";
-
-  SoundService() : audioPlayer = AudioPlayer() {
-    preloadSounds();
-  }
-
-  void preloadSounds() async {
-    try {
-      await audioPlayer.setSource(AssetSource(correctSoundPath));
-      await audioPlayer.setSource(AssetSource(errorSoundPath));
-      // Does load the file, but we're not playing it immediately.
-    } catch (e) {
-      print('Error preloading sound: $e');
-    }
-  }
 
   playCorrectSound() async {
     playSound(correctSoundPath);

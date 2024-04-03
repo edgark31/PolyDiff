@@ -55,8 +55,6 @@ export class AccountManagerService implements OnModuleInit {
                     onErrorSound: ERROR_SOUND_LIST[0],
                 },
             };
-            this.imageManager.save(newAccount.id, newAccount.profile.avatar);
-            this.imageManager.save(newAccount.credentials.username, newAccount.profile.avatar);
             await this.accountModel.create(newAccount);
             this.logger.verbose(`Account ${creds.username} has registered successfully`);
             this.fetchUsers();
@@ -81,6 +79,8 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.id = accountFound._id.toString();
             if (this.connectedUsers.has(accountFound.id)) throw new Error('Account already connected');
 
+            this.imageManager.save(accountFound.id, accountFound.profile.avatar);
+            this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
             await accountFound.save();
             this.connectedUsers.set(accountFound.id, accountFound);
             this.fetchUsers();
@@ -175,7 +175,7 @@ export class AccountManagerService implements OnModuleInit {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
             if (!accountFound) throw new Error('Account not found');
-            accountFound.profile.onCorrectSound = newSound;
+            accountFound.profile.onErrorSound = newSound;
 
             await accountFound.save();
             this.logger.verbose(`${username} has changed his error sound effect`);
@@ -335,6 +335,9 @@ export class AccountManagerService implements OnModuleInit {
         account.profile.sessions.push({
             timestamp: new Date().toLocaleTimeString('en-US', {
                 timeZone: 'America/Toronto',
+                year: 'numeric',
+                month: 'long',
+                day: '2-digit',
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',

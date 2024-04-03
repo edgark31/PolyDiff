@@ -10,17 +10,20 @@ class ThemeClass {
   Color kGreen = Color(0xFF43A047);
   Color kLightGreen = Color.fromRGBO(85, 139, 47, 1);
   Color kMidGreen = Color.fromRGBO(123, 142, 5, 1);
-  Color kDarkGreen = Color.fromARGB(255, 7, 93, 15);
+  Color kDarkGreen = Color.fromARGB(255, 1, 90, 10);
 
   Color kLightOrange = Color.fromRGBO(245, 124, 0, 1);
   Color kMidOrange = Color.fromRGBO(239, 108, 0, 1);
   Color kDarkOrange = Color.fromRGBO(230, 81, 0, 1);
+  // Title color
+  Color kMidYellow = Color(0xFFE8A430);
 
   Color kMidPink = Color.fromRGBO(255, 105, 180, 1);
 
   static ThemeData lightTheme = ThemeData(
     primaryColor: ThemeData.light().scaffoldBackgroundColor,
     fontFamily: 'troika',
+    brightness: Brightness.light,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor:
@@ -45,11 +48,13 @@ class ThemeClass {
   static ThemeData darkTheme = ThemeData(
     primaryColor: _themeClass.kDarkGreen,
     fontFamily: 'troika',
+    brightness: Brightness.dark,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor:
             MaterialStateProperty.all<Color>(_themeClass.kDarkGreen),
-        foregroundColor: MaterialStateProperty.all<Color>(_themeClass.kLight),
+        foregroundColor:
+            MaterialStateProperty.all<Color>(_themeClass.kMidYellow),
         shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
         side: MaterialStateProperty.all<BorderSide>(
           BorderSide(
@@ -64,7 +69,8 @@ class ThemeClass {
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.all<Color>(_themeClass.kLight),
+        foregroundColor:
+            MaterialStateProperty.all<Color>(_themeClass.kMidYellow),
       ),
     ),
     listTileTheme: ListTileThemeData(
@@ -90,9 +96,11 @@ class ThemeClass {
     ),
     colorScheme: const ColorScheme.dark().copyWith(
       primary: _themeClass.kDarkGreen,
-      onPrimary: _themeClass.kLight,
+      onPrimary: _themeClass.kMidYellow,
       secondary: _themeClass.kDark,
-      onSecondary: _themeClass.kLight,
+      onSecondary: _themeClass.kMidYellow,
+      tertiary: _themeClass.kMidYellow,
+      onTertiary: _themeClass.kDark,
     ),
   );
 }

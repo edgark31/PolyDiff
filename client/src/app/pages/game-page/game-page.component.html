@@ -1,6 +1,6 @@
 <div id="game-page" class="justified">
     <div  class="game-infos information-header justified">
-        <mat-icon
+        <mat-icon *ngIf="this.lobby.mode !== this.gameMode.Practice"
         class="eye-icon"
         [class.eye-open]="lobby.observers.length>0"
         [class.eye-closed]="lobby.observers.length===0"
@@ -10,7 +10,7 @@
       <h1 *ngIf="lobby.observers.length>0" id="length"> {{ lobby.observers.length }} </h1>
         <h1 id = "title">{{ gameLobby.name }}</h1>
             <div class="game-feedback">
-                <h1>Mode : {{ lobby.mode }}</h1>
+                <h1>Mode : {{ translateGameMode(lobby.mode) }}</h1>
                 &nbsp;
                 <h1>{{'game.foundDifference' | translate }} : {{ nDifferencesFound }}</h1>
                 &nbsp;

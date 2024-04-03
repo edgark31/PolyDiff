@@ -21,6 +21,15 @@
             <div class="centered-yes">{{'dialogGame.home' | translate }}</div>
         </div>
     </div>
+
+    <div class = "button3" *ngIf="data.action === 'EndGame'">
+        <div class="button-container">
+            <button class = "yesButton" mat-button *ngIf="data.action === 'EndGame'" mat-dialog-close (click)="openShareScoreFriend(true)"></button>
+            <img src="./assets/icon/PlayButton.png" alt="returnToMenuButton">
+            <div class="centered-yes">Partage de score</div>
+        </div>
+    </div>
+
     <div class = "button2" *ngIf="data.action === 'EndGame' && data.isReplayMode">
         <div class="button-container">
         <button class = "noButton" mat-button *ngIf="data.action === 'EndGame'" mat-dialog-close (click)="replay()"></button>

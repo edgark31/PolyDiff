@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
@@ -8,6 +8,7 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 import { GamePageEvent } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
+import { ShareModalComponent } from '../share-modal/share-modal.component';
 @Component({
     selector: 'app-game-page-dialog',
     templateUrl: './game-page-dialog.component.html',
@@ -24,6 +25,7 @@ export class GamePageDialogComponent implements OnInit {
         public roomManager: RoomManagerService,
         public router: Router,
         public clientSocket: ClientSocketService,
+        public dialog: MatDialog,
     ) {
         this.isReplayPaused = false;
 
@@ -34,6 +36,14 @@ export class GamePageDialogComponent implements OnInit {
     ngOnInit(): void {}
     abandonGame(): void {
         this.gameManager.abandonGame(this.data.lobby.lobbyId as string);
+        this.router.navigate(['/game-mode']);
+    }
+
+    openShareScoreFriend(showShareFriend: boolean): void {
+        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        this.dialog.open(ShareModalComponent, {
+            data: { showShareFriend, players: this.data.lobby.players },
+        });
     }
 
     leaveGame(): void {

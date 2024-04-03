@@ -67,7 +67,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
     constructor(
         public clientSocket: ClientSocketService,
         private friendService: FriendService,
-        private welcome: WelcomeService,
+        public welcome: WelcomeService,
         private readonly matDialog: MatDialog,
         public translate: TranslateService,
         public dialog: MatDialog,

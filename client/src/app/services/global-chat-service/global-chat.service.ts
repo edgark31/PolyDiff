@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { ChannelEvents, MessageTag } from '@common/enums';
+import { ChannelEvents, FriendEvents, MessageTag } from '@common/enums';
 import { Chat, ChatLog } from '@common/game-interfaces';
 import { Subject } from 'rxjs';
 
@@ -30,6 +30,11 @@ export class GlobalChatService {
     manage(): void {
         this.message = new Subject<Chat>();
         this.clientSocketService.on('auth', ChannelEvents.GlobalMessage, (chat: Chat) => {
+            this.message.next(chat);
+        });
+
+        this.clientSocketService.on('auth', FriendEvents.ShareScore, (score: number) => {
+            const chat = { raw: score.toString(), tag: MessageTag.Common } as Chat;
             this.message.next(chat);
         });
         this.clientSocketService.on('auth', ChannelEvents.UpdateLog, (chatLog: ChatLog) => {

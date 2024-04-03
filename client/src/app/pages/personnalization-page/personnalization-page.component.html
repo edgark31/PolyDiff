@@ -3,8 +3,8 @@
   <div class="header">
     <app-nav-bar id ="nav-bar"></app-nav-bar>
     </div>
-    <img *ngIf="welcomeService.account.profile.desktopTheme.name==='light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
-    <img *ngIf="welcomeService.account.profile.desktopTheme.name==='dark'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+    <img *ngIf="welcomeService.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+    <img  *ngIf="welcomeService.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background.jpg" alt="background"/>
   <!-- <app-menu></app-menu> -->
   <div class="container-information">
     <div class="information">{{'profil.information' | translate }}</div>
