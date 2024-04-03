@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/models/game_record_model.dart';
@@ -13,17 +14,7 @@ class GameManagerService extends ChangeNotifier {
   static Game _game = Game.initial();
   static int _time = 0;
   static String? _endGameMessage;
-  static GameRecord _record = GameRecord(
-      game: Game.initial(),
-      players: [],
-      accountIds: [],
-      date: 0,
-      startTime: 0,
-      endTime: 0,
-      duration: 100,
-      isCheatEnabled: true,
-      timeLimit: 600,
-      gameEvents: []);
+  static GameRecord _record = DEFAULT_GAME_RECORD;
 
   // Services
   final SocketService socketService = Get.find();
@@ -218,7 +209,7 @@ class GameManagerService extends ChangeNotifier {
 
     socketService.on(SocketType.Game, GameEvents.GameRecord.name, (record) {
       print('GameRecord received');
-      setGameRecord(record as GameRecord);
+      setGameRecord(GameRecord.fromJson(record as Map<String, dynamic>));
     });
   }
 }

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/replay/game_record_details_widget.dart';
-import 'package:mobile/services/game_manager_service.dart';
+import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 
 class WatchRecordedGame extends StatefulWidget {
   const WatchRecordedGame({super.key});
 
-  static const routeName = REPLAY_ROUTE;
+  static const routeName = VIDEOS_ROUTE;
 
   static Route<dynamic> route() {
     return MaterialPageRoute(
@@ -22,15 +21,41 @@ class WatchRecordedGame extends StatefulWidget {
 }
 
 class _WatchRecordedGameState extends State<WatchRecordedGame> {
-  final GameManagerService gameManagerService = Get.find();
+  final GameRecordProvider gameRecordProvider = Get.find();
+  final defaultDateForTest = 'Wed, 03 Apr 2024 19:15:01 GMT';
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('Watch Recorded Game'),
-        GameRecordDetails(gameRecord: gameManagerService.gameRecord),
-        // TODO: implement save account id in the game record
-        CustomButton(text: 'Sauvegarder la reprise vidéo', press: () {}),
+        Row(
+          children: [
+            // GameRecordDetails(gameRecord: gameManagerService.gameRecord),
+            // TODO: implement save account id in the game record
+            CustomButton(
+                text: 'ajouter le accountId',
+                press: () {
+                  gameRecordProvider.addAccountIdByDate(defaultDateForTest);
+                }),
+
+            SizedBox(width: 1),
+
+            CustomButton(
+                text: 'Supprimer le accountId',
+                press: () {
+                  gameRecordProvider.deleteAccountIdByDate(defaultDateForTest);
+                }),
+          ],
+        ),
+        Row(
+          children: [
+            CustomButton(
+                text: 'fetch one',
+                press: () {
+                  gameRecordProvider.getByDate(defaultDateForTest);
+                }),
+          ],
+        ),
       ],
     );
   }

@@ -5,7 +5,7 @@ class GameRecord {
   final Game game;
   final List<Player> players;
   final List<String> accountIds;
-  final int date;
+  final String date;
   final int startTime;
   final int endTime;
   final int duration;

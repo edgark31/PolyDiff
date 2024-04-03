@@ -20,7 +20,8 @@ class _GameRecordDetailsState extends State<GameRecordDetails> {
           Text("Game: ${widget.gameRecord.game.name}"),
           Text("Difficulty: ${widget.gameRecord.game.difficulty}"),
           Text(
-              "Date: ${DateTime.fromMillisecondsSinceEpoch(widget.gameRecord.date).toString()}"),
+            "Date: ${widget.gameRecord.date})",
+          ),
           Text("Duration: ${widget.gameRecord.duration} seconds"),
           Text(
               "Cheat Enabled: ${widget.gameRecord.isCheatEnabled ? "Yes" : "No"}"),

@@ -1,6 +1,7 @@
 import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 import { GameConstantsDto } from '@app/model/dto/game/game-constants.dto';
 import { GameService } from '@app/services/game/game.service';
+import { RecordManagerService } from '@app/services/record-manager/record-manager.service';
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -8,7 +9,7 @@ import { Response } from 'express';
 @ApiTags('Games')
 @Controller('games')
 export class GameController {
-    constructor(private readonly gameService: GameService) {}
+    constructor(private readonly gameService: GameService, private readonly recordManagerService: RecordManagerService) {}
 
     @Get('/constants')
     async getGameConstants(@Res() response: Response) {
@@ -30,11 +31,31 @@ export class GameController {
         }
     }
 
-    @Get('/records')
-    async getGameRecords(@Res() response: Response) {
+    @Get('/records/:date')
+    async getGameRecordByDate(@Param('date') date: string, @Res() response: Response) {
         try {
-            const gameRecords = await this.gameService.getAllGameRecords();
-            response.status(HttpStatus.OK).json(gameRecords);
+            const gameRecord = await this.recordManagerService.getByDate(date);
+            response.status(HttpStatus.OK).json(gameRecord);
+        } catch (error) {
+            response.status(HttpStatus.NOT_FOUND).send(error.message);
+        }
+    }
+
+    @Put('/records/:date')
+    async addAccountIdToGameRecord(@Param('date') date: string, @Body() accountId: string, @Res() response: Response) {
+        try {
+            await this.recordManagerService.addAccountId(date, accountId);
+            response.status(HttpStatus.OK).send();
+        } catch (error) {
+            response.status(HttpStatus.NOT_FOUND).send(error.message);
+        }
+    }
+
+    @Delete('/records/:date')
+    async deleteAccountIdFromGameRecord(@Param('date') date: string, @Body() accountId: string, @Res() response: Response) {
+        try {
+            await this.recordManagerService.deleteAccountId(date, accountId);
+            response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NOT_FOUND).send(error.message);
         }

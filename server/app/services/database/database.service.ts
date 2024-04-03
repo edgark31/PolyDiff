@@ -118,7 +118,7 @@ export class DatabaseService implements OnModuleInit {
     /* ------ Start Game Record ---------*/
 
     // returns a game record with the date
-    async getGameRecordByDate(date: Date): Promise<GameRecord> {
+    async getGameRecordByDate(date: string): Promise<GameRecord> {
         try {
             const query = { date };
             return await this.gameRecordModel.findOne(query, '-__v').exec();
@@ -127,32 +127,27 @@ export class DatabaseService implements OnModuleInit {
         }
     }
 
-    async getAllGameRecordByAccountId(accountId: string): Promise<GameRecordDocument[]> {
+    async addAccountIdToGameRecord(date: string, accountId: string): Promise<void> {
         try {
-            return await this.gameRecordModel.find({ accountIds: accountId }).exec();
-        } catch (error) {
-            return Promise.reject(`Failed to get game record: ${error}`);
-        }
-    }
-
-    async addAccountIdToGameRecord(date: Date, accountId: string): Promise<void> {
-        try {
-            await this.gameRecordModel
-                .findOneAndUpdate(
-                    { date },
-                    { $addToSet: { accountIds: accountId } }, // Using $addToSet to avoid duplicates
-                )
-                .exec();
+            await this.gameRecordModel.findOneAndUpdate({ date }, { $addToSet: { accountIds: accountId } }).exec();
         } catch (error) {
             return Promise.reject(`Failed to update game record: ${error}`);
         }
     }
 
-    async deleteAccountIdFromGameRecord(date: Date, accountId: string): Promise<void> {
+    async deleteAccountIdFromGameRecord(date: string, accountId: string): Promise<void> {
         try {
             await this.gameRecordModel.findOneAndUpdate({ date }, { $pull: { accountIds: accountId } }).exec();
         } catch (error) {
             return Promise.reject(`Failed to update game record: ${error}`);
+        }
+    }
+
+    async deleteGameRecordByDate(date: string): Promise<void> {
+        try {
+            await this.gameRecordModel.deleteOne({ date }).exec();
+        } catch (error) {
+            return Promise.reject(`Failed to delete game record: ${error}`);
         }
     }
 

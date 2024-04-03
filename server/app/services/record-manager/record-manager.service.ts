@@ -25,7 +25,7 @@ export class RecordManagerService {
         this.logger.verbose(`Record Manager from lobby :${game.lobbyId} is creating a new record for game :${game.gameId} `);
 
         try {
-            const date = new Date();
+            const date = new Date().toUTCString();
 
             const gameEventData: GameEventData = {
                 timestamp: Date.now(),
@@ -92,10 +92,7 @@ export class RecordManagerService {
     }
 
     // account id is added to the gameRecord when players saves it
-    async addAccountId(date: Date, accountId: string): Promise<void> {
-        const record = await this.getByDate(date);
-        if (!record) return;
-
+    async addAccountId(date: string, accountId: string): Promise<void> {
         await this.databaseService.addAccountIdToGameRecord(date, accountId);
         this.logger.verbose(`Record Manager has added account id :${accountId} to the game record`);
     }
@@ -106,6 +103,7 @@ export class RecordManagerService {
 
         try {
             await this.gameRecordModel.create(gameRecord);
+
             this.logger.verbose(`Record Manager from lobby :${lobbyId} has saved the game record successfully`);
         } catch (error) {
             this.logger.error(`Record Manager from lobby :${lobbyId} has failed`);
@@ -116,26 +114,17 @@ export class RecordManagerService {
     }
 
     // the date of the game record is used to fetch it from the database
-    async getByDate(date: Date): Promise<GameRecord> {
+    async getByDate(date: string): Promise<GameRecord> {
         return await this.databaseService.getGameRecordByDate(date);
     }
 
-    // all saved game records are fetch of user's saved game records
-    async getAllByAccountId(accountId: string): Promise<GameRecord[]> {
-        return this.databaseService.getAllGameRecordByAccountId(accountId);
-    }
-
-    // player account id is removed from the gameRecord
-    async deleteAccountId(date: Date, accountId: string): Promise<void> {
-        const record = await this.getByDate(date);
-        if (!record) return;
-
+    // if no player saves the record, it can be deleted from the database
+    async deleteAccountId(date: string, accountId: string): Promise<void> {
         await this.databaseService.deleteAccountIdFromGameRecord(date, accountId);
     }
 
-    // if no player saves the record, it can be deleted from the database
-    async deleteById(id: string): Promise<void> {
-        await this.gameRecordModel.findByIdAndDelete(id).exec();
+    async deleteByDate(date: string): Promise<void> {
+        await this.databaseService.deleteGameRecordByDate(date);
     }
 
     async deleteAll(): Promise<void> {
