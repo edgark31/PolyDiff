@@ -390,24 +390,24 @@ export class GameGateway implements OnGatewayConnection {
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
         socket.data.state = GameState.InGame;
+        this.logger.log(`GAME ON de ${socket.data.accountId}`);
 
         socket.on('disconnecting', () => {
+            this.logger.log(` ${socket.data.accountId}`);
             switch (socket.data.state) {
                 case GameState.InGame:
-                    this.logger.log(`${socket.data.accountId} was INGAME`);
+                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was INGAME`);
                     break;
                 case GameState.Abandoned:
-                    this.logger.log(`${socket.data.accountId} was ABANDONED`);
+                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was ABANDONING`);
                     break;
                 case GameState.Spectate:
-                    this.logger.log(`${socket.data.accountId} was SPECTATE`);
+                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was SPECTATING`);
                     break;
                 default:
                     break;
             }
-            this.logger.log(`GAME OUT de ${socket.data.accountId}`);
         });
-        this.logger.log(`GAME ON de ${socket.data.accountId}`);
     }
 
     // ------------------ CLASSIC MODE ------------------
