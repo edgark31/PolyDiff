@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/utils/theme_utils.dart';
 
 class ThemeProvider extends ChangeNotifier {
+  final InfoService _infoService = Get.find();
+
   // ThemeMode _themeMode = ThemeMode.system;
   ThemeMode _themeMode = ThemeMode.dark;
+
+  ThemeProvider() {
+    _themeMode =
+        _infoService.theme == 'dark' ? ThemeMode.dark : ThemeMode.light;
+  }
   ThemeData _lightTheme = ThemeClass.lightTheme;
   ThemeData _darkTheme = ThemeClass.darkTheme;
 
@@ -16,14 +25,12 @@ class ThemeProvider extends ChangeNotifier {
   //     _themeMode == ThemeMode.dark ? _darkTheme : _lightTheme;
 
   bool get isDarkMode {
-    if (_themeMode == ThemeMode.system) {
-      return false;
-    } else {
-      return _themeMode == ThemeMode.dark;
-    }
+    print('_themeMode : $_themeMode');
+    return _themeMode == ThemeMode.dark;
   }
 
   void toggleTheme(bool isDarkTheme) {
+    print('_themeMode : $_themeMode');
     _themeMode = isDarkTheme ? ThemeMode.dark : ThemeMode.light;
     notifyListeners();
   }

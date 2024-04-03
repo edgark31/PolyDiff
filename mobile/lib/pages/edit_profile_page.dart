@@ -16,7 +16,6 @@ import 'package:mobile/utils/credentials_validation.dart';
 import 'package:mobile/widgets/avatar_picker.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/widgets.dart';
-import 'package:provider/provider.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -40,6 +39,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   InfoService _infoService = Get.find();
   RegisterProvider _registerProvider = Get.find();
   SoundService soundService = Get.find();
+  final ThemeProvider themeProvider = Get.find();
 
   // Same logic when signing up : avatar
   ImageProvider? _selectedAvatar;
@@ -228,12 +228,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
       }
       // Theme changes
+      print('currentSettings?.theme : ${currentSettings?.theme}');
+      print('initialSettings?.theme : ${initialSettings?.theme}');
       if (currentSettings?.theme != initialSettings?.theme &&
           currentSettings?.theme != null) {
+        print('HERE THEME CHANGED');
         String? response = await accountService.updateTheme(
             _infoService.username, currentSettings!.theme);
         if (response == null) {
           _infoService.setTheme(currentSettings!.theme);
+          themeProvider.toggleTheme(currentSettings!.theme == 'dark');
           showFeedback("Theme updated successfully.");
         } else {
           throw Exception(response);
@@ -349,10 +353,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               currentSettings!.copyWith(theme: newValue);
                         }
                         setState(() {
-                          final themeProvider = Provider.of<ThemeProvider>(
-                              context,
-                              listen: false);
-                          themeProvider.toggleTheme(newValue == 'dark');
+                          // final themeProvider = Provider.of<ThemeProvider>(
+                          //     context,
+                          //     listen: false);
+                          // themeProvider.toggleTheme(newValue == 'dark');
                         });
                       },
                       decoration: InputDecoration(labelText: 'Theme'),
