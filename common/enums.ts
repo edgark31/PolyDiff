@@ -118,6 +118,7 @@ export enum LobbyState {
 
 export enum AccountEvents {
     RefreshAccount = 'RefreshAccount', // Pour rafraichir son propre compte
+    GlobalRanking = 'GlobalRanking', // Pour chercher le classement global
 }
 
 export enum UserEvents {
@@ -165,6 +166,9 @@ export enum GameEvents {
     Spectate = 'Spectate',
     CheatActivated = 'CheatActivated',
     CheatDeactivated = 'CheatDeactivated',
+    GameRecord = 'GameRecord',
+    WatchRecordedGame = 'WatchRecordedGame',
+    SaveGameRecord = 'SaveGameRecord',
 }
 
 export enum GameState {

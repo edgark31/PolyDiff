@@ -264,3 +264,21 @@ export interface Sound {
     name: string;
     path: string;
 }
+
+export interface GameEventData {
+    accountId?: string;
+    username?: string;
+    timestamp?: number;
+    players?: Player[];
+    gameEvent: string;
+    coordClic?: Coordinate;
+    remainingDifferenceIndex?: number[];
+    isMainCanvas?: boolean;
+}
+
+export interface RankedPlayer {
+    accountId: string;
+    name: string;
+    rank: number;
+    stats: Statistics;
+}
