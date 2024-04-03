@@ -24,7 +24,7 @@ export class AccountController {
         try {
             await this.accountManager.register(creds, id);
             response.status(HttpStatus.OK).send();
-            this.auth.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers());
+            this.auth.server.emit(UserEvents.UpdateUsers, await this.friendManager.queryUsers());
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
         }
