@@ -198,7 +198,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
       // Password changes
       if (passwordConfirmation == YES) {
-        print('Sending updatePassword Request');
         String? response = await accountService.updatePassword(
             _infoService.username, passwordController.text.trim());
         if (response == null) {
@@ -206,8 +205,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         } else {
           throw Exception(response);
         }
-      } else {
-        print('NOT sending updatePassword Request');
       }
       // Username changes
       if (usernameController.text.trim() != initialSettings?.username &&
@@ -284,18 +281,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('Current OnErrorSound: ${currentSettings?.onErrorSound.toJson()}');
-    print(
-        'Error Sound List: ${ERROR_SOUND_LIST.map((e) => e.toJson()).toList()}');
-    print(
-        'Current OnCorrectSound: ${currentSettings?.onCorrectSound.toJson()}');
-    print(
-        'Correct Sound List: ${CORRECT_SOUND_LIST.map((e) => e.toJson()).toList()}');
-    // This checks if all sounds have a unique name property
-    print(ERROR_SOUND_LIST.map((s) => s.name).toSet().length ==
-        ERROR_SOUND_LIST.length);
-    print(CORRECT_SOUND_LIST.map((s) => s.name).toSet().length ==
-        CORRECT_SOUND_LIST.length);
     return Scaffold(
         drawer: CustomMenuDrawer(),
         appBar: CustomAppBar(title: "Personnalisation du profil"),
