@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 import { SCORE_POSITION } from '@common/constants';
 import { GameModes } from '@common/enums';
 import { Chat, NewRecord } from '@common/game-interfaces';
@@ -33,5 +34,10 @@ export class MessageManagerService {
         });
         const raw = content;
         return { raw, accountId, name, timestamp };
+    }
+
+    createScoreMessage(accountId: string, name: string, score: number): Chat {
+        const content = `a obtenu un score de ${score} différences trouvées dans sa partie!`;
+        return this.createMessage(name, content, accountId);
     }
 }
