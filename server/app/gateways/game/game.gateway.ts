@@ -374,7 +374,7 @@ export class GameGateway implements OnGatewayConnection {
     }
 
     @SubscribeMessage(ChannelEvents.SendGameMessage)
-    handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string, @MessageBody('message') message: string) {
+    handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
         const chat: Chat = this.messageManager.createMessage(
             this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
             message,
