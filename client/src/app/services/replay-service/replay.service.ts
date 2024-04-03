@@ -1,14 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { REPLAY_LIMITER, SPEED_X1 } from '@app/constants/replay';
 import { ReplayActions } from '@app/enum/replay-actions';
-import { ClickErrorData, ReplayEvent, ReplayPayload } from '@app/interfaces/replay-actions';
+// import { ClickErrorData, ReplayEvent, ReplayPayload } from '@app/interfaces/replay-actions';
 import { ReplayInterval } from '@app/interfaces/replay-interval';
-import { CaptureService } from '@app/services/capture-service/capture.service';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
-import { Coordinate, GameRoom } from '@common/game-interfaces';
+import { Coordinate, GameEventData, GameRecord } from '@common/game-interfaces';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Injectable({
@@ -16,7 +15,8 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 })
 export class ReplayService implements OnDestroy {
     isReplaying: boolean;
-    private replayEvents: ReplayEvent[];
+    private record: GameRecord;
+    private replayEvents: GameEventData[];
     private replaySpeed: number;
     private currentCoords: Coordinate[];
     private isCheatMode: boolean;
@@ -25,7 +25,7 @@ export class ReplayService implements OnDestroy {
     private currentReplayIndex: number;
     private replayTimer: BehaviorSubject<number>;
     private replayDifferenceFound: BehaviorSubject<number>;
-    private replayOpponentDifferenceFound: BehaviorSubject<number>;
+    // private replayOpponentDifferenceFound: BehaviorSubject<number>;
     private replayEventsSubjectSubscription: Subscription;
 
     // Replay needs to communicate with all services
@@ -35,13 +35,11 @@ export class ReplayService implements OnDestroy {
         private readonly gameManager: GameManagerService,
         private readonly soundService: SoundService,
         private readonly imageService: ImageService,
-        private readonly captureService: CaptureService,
     ) {
-        this.addReplayEvent();
         this.isReplaying = false;
         this.replayTimer = new BehaviorSubject<number>(0);
         this.replayDifferenceFound = new BehaviorSubject<number>(0);
-        this.replayOpponentDifferenceFound = new BehaviorSubject<number>(0);
+        // this.replayOpponentDifferenceFound = new BehaviorSubject<number>(0);
         this.replayEvents = [];
         this.replaySpeed = SPEED_X1;
         this.currentCoords = [];
@@ -58,11 +56,16 @@ export class ReplayService implements OnDestroy {
         return this.replayDifferenceFound.asObservable();
     }
 
-    get replayOpponentDifferenceFound$() {
-        return this.replayOpponentDifferenceFound.asObservable();
+    // get replayOpponentDifferenceFound$() {
+    //     return this.replayOpponentDifferenceFound.asObservable();
+    // }
+
+    setReplay(record: GameRecord): void {
+        this.record = record;
     }
 
     startReplay(): void {
+        this.replayEvents = this.record.gameEvents;
         this.isReplaying = true;
         this.currentReplayIndex = 0;
         this.replayInterval = this.createReplayInterval(
@@ -96,7 +99,7 @@ export class ReplayService implements OnDestroy {
     }
 
     restartTimer(): void {
-        this.replayOpponentDifferenceFound.next(0);
+        // this.replayOpponentDifferenceFound.next(0);
         this.replayDifferenceFound.next(0);
         this.replayTimer.next(0);
     }
@@ -112,12 +115,6 @@ export class ReplayService implements OnDestroy {
         this.replayEventsSubjectSubscription?.unsubscribe();
     }
 
-    private addReplayEvent(): void {
-        this.replayEventsSubjectSubscription = this.captureService.replayEventsSubject$.subscribe((replayEvent: ReplayEvent) => {
-            if (!this.isReplaying) this.replayEvents.push(replayEvent);
-        });
-    }
-
     private toggleFlashing(isPaused: boolean): void {
         if (this.isCheatMode) {
             this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
@@ -127,25 +124,25 @@ export class ReplayService implements OnDestroy {
         }
     }
 
-    private replaySwitcher(replayData: ReplayEvent): void {
-        switch (replayData.action) {
+    private replaySwitcher(replayData: GameEventData): void {
+        switch (replayData.gameEvent) {
             case ReplayActions.StartGame:
-                this.replayGameStart(replayData.data as ReplayPayload);
+                this.replayGameStart();
                 break;
             case ReplayActions.ClickFound:
-                this.replayClickFound(replayData.data as ReplayPayload);
+                this.replayClickFound(replayData);
                 break;
             case ReplayActions.ClickError:
-                this.replayClickError(replayData.data as ReplayPayload);
+                this.replayClickError(replayData);
                 break;
             case ReplayActions.CaptureMessage:
                 // this.replayCaptureMessage(replayData.data as ReplayPayload);
                 break;
             case ReplayActions.ActivateCheat:
-                this.replayActivateCheat(replayData.data as ReplayPayload);
+                this.replayActivateCheat(replayData);
                 break;
             case ReplayActions.DeactivateCheat:
-                this.replayDeactivateCheat(replayData.data as ReplayPayload);
+                this.replayDeactivateCheat(replayData);
                 break;
             case ReplayActions.TimerUpdate:
                 this.replayTimerUpdate(replayData.data as ReplayPayload);
@@ -154,7 +151,7 @@ export class ReplayService implements OnDestroy {
                 this.replayDifferenceFoundUpdate(replayData.data as ReplayPayload);
                 break;
             case ReplayActions.OpponentDifferencesFoundUpdate:
-                this.replayOpponentDifferencesFoundUpdate(replayData.data as ReplayPayload);
+                // this.replayOpponentDifferencesFoundUpdate(replayData.data as ReplayPayload);
                 break;
         }
         this.currentReplayIndex++;
@@ -220,54 +217,53 @@ export class ReplayService implements OnDestroy {
             : REPLAY_LIMITER;
     }
 
-    private replayGameStart(replayData: ReplayPayload): void {
-        this.gameManager.differences = (replayData as GameRoom).originalDifferences;
-        this.imageService.loadImage(this.gameAreaService.getOriginalContext(), (replayData as GameRoom).clientGame.original);
-        this.imageService.loadImage(this.gameAreaService.getModifiedContext(), (replayData as GameRoom).clientGame.modified);
+    private replayGameStart(): void {
+        this.gameManager.differences = this.record.game.differences as Coordinate[][];
+        this.imageService.loadImage(this.gameAreaService.getOriginalContext(), this.record.game.original);
+        this.imageService.loadImage(this.gameAreaService.getModifiedContext(), this.record.game.modified);
         this.gameAreaService.setAllData();
     }
 
-    private replayClickFound(replayData: ReplayPayload): void {
-        this.currentCoords = replayData as Coordinate[];
+    private replayClickFound(replayData: GameEventData): void {
+        this.currentCoords = (this.record.game.differences as Coordinate[][])[replayData.remainingDifferenceIndex[this.currentReplayIndex] as number];
         this.isDifferenceFound = true;
         this.soundService.playCorrectSound();
         this.gameAreaService.setAllData();
-        this.gameAreaService.replaceDifference(replayData as Coordinate[], this.replaySpeed);
+        this.gameAreaService.replaceDifference(this.currentCoords, this.replaySpeed);
     }
 
-    private replayClickError(replayData: ReplayPayload): void {
+    private replayClickError(replayData: GameEventData): void {
         this.soundService.playErrorSound();
-        this.gameAreaService.showError(
-            (replayData as ClickErrorData).isMainCanvas as boolean,
-            (replayData as ClickErrorData).pos as Coordinate,
-            this.replaySpeed,
-        );
+        this.gameAreaService.showError(replayData.isMainCanvas as boolean, replayData.coordClic as Coordinate, this.replaySpeed);
     }
 
     // private replayCaptureMessage(replayData: ReplayPayload): void {
     //     this.gameManager.setMessage(replayData as Chat);
     // }
 
-    private replayActivateCheat(replayData: ReplayPayload): void {
+    private replayActivateCheat(replayData: GameEventData): void {
         this.isCheatMode = true;
-        this.currentCoords = replayData as Coordinate[];
-        this.gameAreaService.toggleCheatMode(replayData as Coordinate[], this.replaySpeed);
+        this.currentCoords = (this.record.game.differences as Coordinate[][])[replayData.remainingDifferenceIndex[this.currentReplayIndex] as number];
+        this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
     }
 
-    private replayDeactivateCheat(replayData: ReplayPayload): void {
+    private replayDeactivateCheat(replayData: GameEventData): void {
+        const startDifferences = (this.record.game.differences as Coordinate[][])[
+            replayData.remainingDifferenceIndex[this.currentReplayIndex] as number
+        ];
         this.isCheatMode = false;
-        this.gameAreaService.toggleCheatMode(replayData as Coordinate[], this.replaySpeed);
+        this.gameAreaService.toggleCheatMode(startDifferences, this.replaySpeed);
     }
 
-    private replayTimerUpdate(replayData: ReplayPayload): void {
-        this.replayTimer.next(replayData as number);
+    private replayTimerUpdate(replayData: GameEventData): void {
+        this.replayTimer.next(replayData.timestamp);
     }
 
-    private replayDifferenceFoundUpdate(replayData: ReplayPayload): void {
-        this.replayDifferenceFound.next(replayData as number);
+    private replayDifferenceFoundUpdate(replayData: GameEventData): void {
+        this.replayDifferenceFound.next(replayData.remainingDifferenceIndex);
     }
 
-    private replayOpponentDifferencesFoundUpdate(replayData: ReplayPayload): void {
-        this.replayOpponentDifferenceFound.next(replayData as number);
-    }
+    // private replayOpponentDifferencesFoundUpdate(replayData: ReplayPayload): void {
+    //     this.replayOpponentDifferenceFound.next(replayData as number);
+    // }
 }

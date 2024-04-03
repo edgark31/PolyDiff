@@ -15,7 +15,7 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent, MessageTag } from '@common/enums';
-import { Chat, Game, Lobby } from '@common/game-interfaces';
+import { Chat, Game, GameRecord, Lobby } from '@common/game-interfaces';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
 @Component({
@@ -142,9 +142,11 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.showEndGameDialog(this.endMessage);
             this.welcome.onChatGame = false;
         });
-
         this.remainingDifferenceSubscription = this.gameManager.remainingDifference$.subscribe((remainingDifference: Coordinate[][]) => {
             this.remainingDifference = remainingDifference;
+        });
+        this.clientSocket.on('game', GameEvents.GameRecord, (record: GameRecord) => {
+            this.replayService.setReplay(record);
         });
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.manage();
@@ -154,6 +156,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             });
         }
     }
+
     ngAfterViewInit(): void {
         this.setUpGame();
         this.setUpReplay();
@@ -211,19 +214,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.messageGlobal.push(chat);
     }
 
-    // goPageChatGame(): void {
-    //     this.welcome.onChatGame = true;
-    //     this.clientSocket.disconnect('game');
-    //     this.router.navigate(['/chat']);
-    // }
-
     showEndGameDialog(endingMessage: string): void {
-        if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
         this.matDialog.open(GamePageDialogComponent, {
             data: { action: GamePageEvent.EndGame, message: endingMessage, isReplayMode: this.lobby.mode === this.gameMode.Classic },
             disableClose: true,
             panelClass: 'dialog',
         });
+        if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
     }
 
     showAbandonDialog(): void {
@@ -242,8 +239,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     setUpGame(): void {
-        // eslint-disable-next-line no-unused-vars
-
         this.gameAreaService.setOriginalContext(
             this.originalCanvas.nativeElement.getContext('2d', {
                 willReadFrequently: true,
@@ -276,8 +271,17 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
                 this.timer = replayTimer;
                 if (replayTimer === 0) {
                     this.messages = [];
+                    this.nDifferencesFound = 0;
                 }
             }
         });
+
+        this.replayService.replayDifferenceFound$.pipe(takeUntil(this.onDestroy$)).subscribe((replayDiffFound) => {
+            if (this.isReplayAvailable) this.nDifferencesFound = replayDiffFound;
+        });
+
+        // this.replayService.replayOpponentDifferenceFound$.pipe(takeUntil(this.onDestroy$)).subscribe((replayDiffFound) => {
+        //     if (this.isReplayAvailable) this.opponentDifferencesFound = replayDiffFound;
+        // });
     }
 }

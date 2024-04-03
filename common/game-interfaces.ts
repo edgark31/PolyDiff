@@ -268,10 +268,23 @@ export interface Sound {
 export interface GameEventData {
     accountId?: string;
     username?: string;
-    timestamp?: number;
+    timestamp: number;
     players?: Player[];
     gameEvent: string;
     coordClic?: Coordinate;
-    remainingDifferenceIndex?: number[];
+    remainingDifferenceIndex: number[];
     isMainCanvas?: boolean;
+}
+
+export interface GameRecord {
+    game: Game;
+    players: Player[];
+    accountIds: string[];
+    date: Date;
+    startTime: number;
+    endTime: number;
+    duration: number;
+    isCheatEnabled: boolean;
+    timeLimit: number;
+    gameEvents: GameEventData[];
 }
