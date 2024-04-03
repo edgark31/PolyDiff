@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
@@ -63,6 +65,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   String passwordStrength = '';
   String passwordConfirmation = '';
+
+  Queue<String> _snackBarQueue = Queue<String>();
 
   @override
   void initState() {
@@ -137,6 +141,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  //   void showFeedback(String message) {
+  //   if (ScaffoldMessenger.of(context).mounted &&
+  //       ScaffoldMessenger.of(context).hasCurrentSnackBar) {
+  //     _snackBarQueue.add(message);
+  //   } else {
+  //     _showSnackBar(message);
+  //   }
+  // }
+
+  // void _showSnackBar(String message) {
+  //   final snackBar = SnackBar(
+  //     content: Text(message),
+  //     duration: Duration(seconds: 2),
+  //   );
+
+  //   ScaffoldMessenger.of(context).showSnackBar(snackBar).closed.then((reason) {
+  //     if (_snackBarQueue.isNotEmpty) {
+  //       final nextMessage = _snackBarQueue.removeFirst();
+  //       _showSnackBar(nextMessage);
+  //     }
+  //   });
+  // }
+
   Future<void> saveChanges() async {
     try {
       // Avatar changes
@@ -169,6 +196,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
       }
 
+      // Password changes
+      if (passwordConfirmation == YES) {
+        print('Sending updatePassword Request');
+        String? response = await accountService.updatePassword(
+            _infoService.username, passwordController.text.trim());
+        if (response == null) {
+          showFeedback("Password updated successfully.");
+        } else {
+          throw Exception(response);
+        }
+      } else {
+        print('NOT sending updatePassword Request');
+      }
       // Username changes
       if (usernameController.text.trim() != initialSettings?.username &&
           usernameController.text.trim().isNotEmpty) {
