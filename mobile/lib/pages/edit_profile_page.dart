@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
@@ -58,16 +60,33 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   String usernameFormat = NO;
 
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmationController = TextEditingController();
+
+  String passwordStrength = '';
+  String passwordConfirmation = '';
+  String newPassword = '';
+
+  Queue<String> _snackBarQueue = Queue<String>();
+  bool _isSnackBarActive = false;
+
   @override
   void initState() {
     super.initState();
+    print('init State');
     _validator = CredentialsValidator(onStateChanged: _forceRebuild);
     usernameController.addListener(_onUsernameChanged);
+    passwordController.addListener(validatePassword);
+    confirmationController.addListener(validatePasswordConfirmation);
 
     _loadInitialSettings();
   }
 
   void _loadInitialSettings() {
+    print('_loadInitialSettings');
+    print(_infoService.onCorrectSound.toJson());
+    print(_infoService.onErrorSound.toJson());
+
     initialSettings = AccountSettings.fromInfoService(_infoService);
     currentSettings = AccountSettings.fromInfoService(_infoService);
   }
@@ -97,15 +116,52 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
+  void updateValidatorStates() {
+    setState(() {
+      passwordStrength = _validator.passwordStrength;
+      passwordConfirmation =
+          _validator.states['passwordConfirmation'] == ValidatorState.isValid
+              ? YES
+              : NO;
+    });
+  }
+
+  void validatePassword() {
+    _validator.updatePasswordStrength(passwordController.text);
+    updateValidatorStates();
+  }
+
+  void validatePasswordConfirmation() {
+    _validator.hasMatchingPasswords(
+        passwordController.text, confirmationController.text);
+    updateValidatorStates();
+  }
+
   void showFeedback(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    if (_isSnackBarActive) {
+      _snackBarQueue.add(message);
+      return;
+    }
+
+    _isSnackBarActive = true;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+          SnackBar(
+            content: Text(message),
+            duration: Duration(seconds: 1),
+          ),
+        )
+        .closed
+        .then((reason) {
+      _isSnackBarActive = false;
+      if (_snackBarQueue.isNotEmpty) {
+        showFeedback(_snackBarQueue.removeFirst());
+      }
+    });
   }
 
   Future<void> saveChanges() async {
     try {
-      // Avatar changes
       if (_selectedAvatarId != null) {
         UploadAvatarBody predefinedAvatarBody = UploadAvatarBody(
             username: _infoService.username, id: _selectedAvatarId);
@@ -135,6 +191,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
       }
 
+      // Password changes
+      if (passwordConfirmation == YES &&
+          passwordController.text.trim() != newPassword) {
+        String? response = await accountService.updatePassword(
+            _infoService.username, passwordController.text.trim());
+        if (response == null) {
+          newPassword = passwordController.text.trim();
+          showFeedback("Password updated successfully.");
+        } else {
+          throw Exception(response);
+        }
+      }
       // Username changes
       if (usernameController.text.trim() != initialSettings?.username &&
           usernameController.text.trim().isNotEmpty) {
@@ -231,13 +299,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     SizedBox(height: 30),
                     buildUsernameField(),
                     SizedBox(height: 30),
+                    buildPasswordField(),
+                    buildPasswordConfirmationField(),
+                    SizedBox(height: 30),
                     DropdownButtonFormField<Sound>(
-                      value: currentSettings!.onErrorSound,
+                      value: currentSettings?.onErrorSound,
                       onChanged: (newValue) {
                         if (newValue != null) {
+                          soundService.playOnErrorSound(newValue);
                           currentSettings =
                               currentSettings!.copyWith(onErrorSound: newValue);
-                          soundService.playOnErrorSound(newValue);
                         }
                       },
                       items: ERROR_SOUND_LIST.map((sound) {
@@ -246,10 +317,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       }).toList(),
                       decoration: InputDecoration(labelText: "Son d'erreur"),
                     ),
-
                     DropdownButtonFormField<Sound>(
-                      value: currentSettings!.onCorrectSound,
-                      onChanged: (newValue) {
+                      value: currentSettings?.onCorrectSound,
+                      onChanged: (Sound? newValue) {
                         if (newValue != null) {
                           soundService.playOnCorrectSound(newValue);
                           currentSettings = currentSettings!
@@ -351,6 +421,51 @@ class _EditProfilePageState extends State<EditProfilePage> {
           hint: "Entrez votre nom d'utilisateur",
           helperText: 'Non vide: $usernameFormat',
           maxLength: 20,
+        ),
+        SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget buildPasswordField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextInputField(
+          label: "Mot de passe",
+          controller: passwordController,
+          hint: "Entrez votre mot de passe",
+          helperText: 'Force du mot de passe: $passwordStrength',
+          errorText: _validator.states['password'] == ValidatorState.isEmpty
+              ? "Mot de passe requis"
+              : null,
+          maxLength: 20,
+          isPassword: true,
+        ),
+        SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget buildPasswordConfirmationField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextInputField(
+          label: "Confirmation du mot de passe",
+          controller: confirmationController,
+          hint: "Confirmez votre mot de passe",
+          helperText:
+              'Doit correspondre au mot de passe: $passwordConfirmation',
+          maxLength: 20,
+          errorText: _validator.states['passwordConfirmation'] ==
+                  ValidatorState.isEmpty
+              ? "Veuillez confirmer votre mot de passe"
+              : _validator.states['passwordConfirmation'] ==
+                      ValidatorState.isInvalid
+                  ? "Les mots de passes doivent être identiques"
+                  : null,
+          isPassword: true,
         ),
         SizedBox(height: 10),
       ],
