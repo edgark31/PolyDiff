@@ -145,10 +145,10 @@ export class ReplayService implements OnDestroy {
                 this.replayDeactivateCheat(replayData);
                 break;
             case ReplayActions.TimerUpdate:
-                this.replayTimerUpdate(replayData.data as ReplayPayload);
+                this.replayTimerUpdate(replayData);
                 break;
             case ReplayActions.DifferenceFoundUpdate:
-                this.replayDifferenceFoundUpdate(replayData.data as ReplayPayload);
+                // this.replayDifferenceFoundUpdate();
                 break;
             case ReplayActions.OpponentDifferencesFoundUpdate:
                 // this.replayOpponentDifferencesFoundUpdate(replayData.data as ReplayPayload);
@@ -212,9 +212,15 @@ export class ReplayService implements OnDestroy {
     private getNextInterval(): number {
         const nextActionIndex = this.currentReplayIndex + 1;
         this.isDifferenceFound = false;
-        return nextActionIndex < this.replayEvents.length
-            ? (this.replayEvents[nextActionIndex].timestamp - this.replayEvents[this.currentReplayIndex].timestamp) / this.replaySpeed
-            : REPLAY_LIMITER;
+        let nextInterval = REPLAY_LIMITER;
+        if (nextActionIndex < this.replayEvents.length) {
+            const nextAction = this.replayEvents[nextActionIndex];
+            const currentAction = this.replayEvents[this.currentReplayIndex];
+            if (nextAction && currentAction) {
+                nextInterval = ((nextAction.timestamp ?? 0) - (currentAction.timestamp ?? 0)) / this.replaySpeed;
+            }
+        }
+        return nextInterval;
     }
 
     private replayGameStart(): void {
@@ -225,7 +231,11 @@ export class ReplayService implements OnDestroy {
     }
 
     private replayClickFound(replayData: GameEventData): void {
-        this.currentCoords = (this.record.game.differences as Coordinate[][])[replayData.remainingDifferenceIndex[this.currentReplayIndex] as number];
+        if (replayData.remainingDifferenceIndex) {
+            this.currentCoords = (this.record.game.differences as Coordinate[][])[
+                replayData.remainingDifferenceIndex[this.currentReplayIndex] as number
+            ];
+        }
         this.isDifferenceFound = true;
         this.soundService.playCorrectSound();
         this.gameAreaService.setAllData();
@@ -243,25 +253,29 @@ export class ReplayService implements OnDestroy {
 
     private replayActivateCheat(replayData: GameEventData): void {
         this.isCheatMode = true;
-        this.currentCoords = (this.record.game.differences as Coordinate[][])[replayData.remainingDifferenceIndex[this.currentReplayIndex] as number];
-        this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
+        if (replayData.remainingDifferenceIndex) {
+            this.currentCoords = (this.record.game.differences as Coordinate[][])[
+                replayData.remainingDifferenceIndex[this.currentReplayIndex] as number
+            ];
+            this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
+        }
     }
 
     private replayDeactivateCheat(replayData: GameEventData): void {
         const startDifferences = (this.record.game.differences as Coordinate[][])[
-            replayData.remainingDifferenceIndex[this.currentReplayIndex] as number
+            replayData.remainingDifferenceIndex?.[this.currentReplayIndex] as number
         ];
         this.isCheatMode = false;
         this.gameAreaService.toggleCheatMode(startDifferences, this.replaySpeed);
     }
 
     private replayTimerUpdate(replayData: GameEventData): void {
-        this.replayTimer.next(replayData.timestamp);
+        this.replayTimer.next(replayData.timestamp as number);
     }
 
-    private replayDifferenceFoundUpdate(replayData: GameEventData): void {
-        this.replayDifferenceFound.next(replayData.remainingDifferenceIndex);
-    }
+    // private replayDifferenceFoundUpdate(replayData: GameEventData): void {
+    //     this.replayDifferenceFound.next();
+    // }
 
     // private replayOpponentDifferencesFoundUpdate(replayData: ReplayPayload): void {
     //     this.replayOpponentDifferenceFound.next(replayData as number);
