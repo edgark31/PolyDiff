@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/services/friend_service.dart';
+import 'package:provider/provider.dart';
 
 class FriendsPending extends StatefulWidget {
   @override
@@ -10,10 +11,9 @@ class FriendsPending extends StatefulWidget {
 }
 
 class _FriendsPending extends State<FriendsPending> {
-  final FriendService friendService = Get.find();
-
   @override
   void initState() {
+    final FriendService friendService = Get.find();
     super.initState();
     friendService.fetchSent();
     friendService.fetchPending();
@@ -21,6 +21,8 @@ class _FriendsPending extends State<FriendsPending> {
 
   @override
   Widget build(BuildContext context) {
+    final FriendService friendService = context.watch<FriendService>();
+
     return Column(
       children: [
         Padding(
@@ -42,7 +44,7 @@ class _FriendsPending extends State<FriendsPending> {
               return Container(
                 alignment: Alignment.center,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 500),
+                  constraints: BoxConstraints(maxWidth: 600),
                   child: Card(
                     margin: EdgeInsets.all(8),
                     child: ListTile(
@@ -107,7 +109,7 @@ class _FriendsPending extends State<FriendsPending> {
               return Container(
                 alignment: Alignment.center,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 500),
+                  constraints: BoxConstraints(maxWidth: 600),
                   child: Card(
                     margin: EdgeInsets.all(8),
                     child: ListTile(
@@ -125,7 +127,6 @@ class _FriendsPending extends State<FriendsPending> {
                       trailing: TextButton(
                         onPressed: () {
                           friendService.cancelInvite(friend.accountId);
-                          friendService.fetchSent();
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.white,

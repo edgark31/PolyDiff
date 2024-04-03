@@ -14,8 +14,6 @@ class FriendsSearch extends StatefulWidget {
 }
 
 class _FriendsSearchState extends State<FriendsSearch> {
-  final FriendService friendService = Get.find();
-
   TextEditingController usernameController = TextEditingController();
   FocusNode textFocusNode = FocusNode();
   bool isTyping = false;
@@ -23,34 +21,21 @@ class _FriendsSearchState extends State<FriendsSearch> {
 
   @override
   void initState() {
+    final FriendService friendService = Get.find();
     super.initState();
     friendService.fetchUsers();
-    friendService.fetchPending();
-  }
-
-  void _handleUsernameSubmit(String username) {
-    friendService.fetchUsers();
-    if (username.isNotEmpty && username.trim().isNotEmpty) {
-      setState(() {
-        searchedUsers = (friendService.users)
-            .where((user) =>
-                user.name.toLowerCase().contains(username.toLowerCase()))
-            .toList();
-      });
-      FocusScope.of(context).requestFocus(textFocusNode);
-    } else {
-      setState(() {
-        searchedUsers = [];
-      });
-    }
+    // friendService.fetchPending();
   }
 
   Widget _state(String myId, User user) {
+    final friendService = context.watch<FriendService>();
     bool isFriend = user.friends.any((friend) => friend!.accountId == myId);
     if (isFriend) {
       return Text('Ami', style: TextStyle(fontSize: 18));
     } else {
-      if (user.friendRequests.contains(myId)) {
+      bool isRequest = friendService.sentFriends
+          .any((friend) => friend.accountId == user.accountId);
+      if (isRequest) {
         return TextButton(
           onPressed: () {
             print("Cancelled request");
@@ -92,8 +77,6 @@ class _FriendsSearchState extends State<FriendsSearch> {
           return TextButton(
             onPressed: () {
               friendService.sendInvite(user.accountId);
-              setState(() {});
-              setState(() {});
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.white,
@@ -110,6 +93,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
 
   @override
   Widget build(BuildContext context) {
+    final friendService = context.watch<FriendService>();
     final infoService = context.watch<InfoService>();
     return Column(
       children: [
@@ -128,7 +112,23 @@ class _FriendsSearchState extends State<FriendsSearch> {
                       onChanged: (text) {
                         setState(() {
                           isTyping = text.isNotEmpty;
-                          _handleUsernameSubmit(usernameController.text);
+                          friendService.fetchUsers();
+                          if (usernameController.text.isNotEmpty &&
+                              usernameController.text.trim().isNotEmpty) {
+                            setState(() {
+                              searchedUsers = (friendService.users)
+                                  .where((user) => user.name
+                                      .toLowerCase()
+                                      .contains(usernameController.text
+                                          .toLowerCase()))
+                                  .toList();
+                            });
+                            FocusScope.of(context).requestFocus(textFocusNode);
+                          } else {
+                            setState(() {
+                              searchedUsers = [];
+                            });
+                          }
                         });
                       },
                       decoration: InputDecoration(
@@ -137,7 +137,6 @@ class _FriendsSearchState extends State<FriendsSearch> {
                         filled: true,
                         fillColor: Colors.black,
                       ),
-                      onSubmitted: _handleUsernameSubmit,
                     ),
                   ),
                 ],
@@ -154,7 +153,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
               return Container(
                 alignment: Alignment.center,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 520),
+                  constraints: BoxConstraints(maxWidth: 600),
                   child: Card(
                     margin: EdgeInsets.all(8),
                     child: ListTile(

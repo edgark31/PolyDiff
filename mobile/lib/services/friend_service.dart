@@ -87,7 +87,6 @@ class FriendService extends ChangeNotifier {
           .map<Friend>((friend) => Friend.fromJson(friend))
           .toList();
       updateSentFriends(allSent);
-      print("Receiving all sent ${allSent.length}");
     });
 
     // socketService.on(SocketType.Game, GameEvents.TimerUpdate.name, (data) {
