@@ -27,10 +27,6 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageProvider()),
-    ChangeNotifierProvider( create: (context) {
-      SoundService soundService = Get.find();
-      return soundService;
-    }),
     ChangeNotifierProvider(create: (context) {
       RegisterProvider registerProvider = Get.find();
       return registerProvider;
@@ -40,12 +36,16 @@ void main() async {
       return socketService;
     }),
     ChangeNotifierProvider(create: (context) {
-      GameAreaService gameAreaService = Get.find();
-      return gameAreaService;
-    }),
-    ChangeNotifierProvider(create: (context) {
       InfoService infoService = Get.find();
       return infoService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      SoundService soundService = Get.find();
+      return soundService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      GameAreaService gameAreaService = Get.find();
+      return gameAreaService;
     }),
 
     ChangeNotifierProvider(create: (context) {
@@ -78,10 +78,10 @@ void main() async {
 }
 
 void initializeServices() {
-  Get.put(SoundService());
   Get.put(SocketService());
-  Get.put(GameAreaService());
   Get.put(InfoService());
+  Get.put(SoundService());
+  Get.put(GameAreaService());
   Get.put(LobbySelectionService());
   Get.put(LobbyService());
   Get.put(GameManagerService());

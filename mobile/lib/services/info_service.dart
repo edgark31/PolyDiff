@@ -54,9 +54,8 @@ class InfoService extends ChangeNotifier {
     }
   }
 
-    void setSessions(List<SessionLog> newSessions) {
-    String oldSessions =
-        _sessions.map((c) => c.toJson().toString()).join(', ');
+  void setSessions(List<SessionLog> newSessions) {
+    String oldSessions = _sessions.map((c) => c.toJson().toString()).join(', ');
     String newSessionsString =
         newSessions.map((c) => c.toJson().toString()).join(', ');
     print(
@@ -91,14 +90,14 @@ class InfoService extends ChangeNotifier {
 
   void setOnErrorSound(Sound newOnErrorSound) {
     print(
-        'Changing onErrorSoundId from $_onErrorSound to $newOnErrorSound for $username ($_id)');
+        'Changing onErrorSoundId from ${_onErrorSound.toJson()} to ${newOnErrorSound.toJson()} for $username ($_id)');
     _onErrorSound = newOnErrorSound;
     notifyListeners();
   }
 
   void setOnCorrectSound(Sound newOnCorrectSound) {
     print(
-        'Changing onCorrectSoundId from $_onCorrectSound to $newOnCorrectSound for $username ($_id)');
+        'Changing onCorrectSoundId from ${_onCorrectSound.toJson()} to ${newOnCorrectSound.toJson()} for $username ($_id)');
     _onCorrectSound = newOnCorrectSound;
   }
 
@@ -131,14 +130,17 @@ class InfoService extends ChangeNotifier {
     final connections = List<ConnectionLog>.from(result['profile']
             ['connections']
         .map((connection) => ConnectionLog.fromJson(connection)));
-    final sessions = List<SessionLog>.from(result['profile']
-            ['sessions']
+    final sessions = List<SessionLog>.from(result['profile']['sessions']
         .map((session) => SessionLog.fromJson(session)));
+    final correctSound = Sound.fromJson(result['profile']['onCorrectSound']);
+    final errorSound = Sound.fromJson(result['profile']['onErrorSound']);
 
     setCredentials(credentials);
     setStatistics(statistics);
     setConnections(connections);
     setSessions(sessions);
+    setOnCorrectSound(correctSound);
+    setOnErrorSound(errorSound);
 
     setTheme(result['profile']['mobileTheme']);
     setLanguage(result['profile']['language']);
