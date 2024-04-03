@@ -50,6 +50,7 @@ class FriendService extends ChangeNotifier {
   }
 
   void sendInvite(String potentialFriendId) {
+    print("Sending $potentialFriendId");
     socketService.send(SocketType.Auth, FriendEvents.SendRequest.name,
         {'potentialFriendId': potentialFriendId});
   }

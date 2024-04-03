@@ -16,11 +16,11 @@ class Friend {
   });
 
   factory Friend.fromJson(Map<String, dynamic> json) {
-    if (json['friends'] == []) {
+    if (json['friends'] == [] || json['friends'] == null) {
       json['friends'] = List<Friend>.empty();
     }
 
-    if (json['commonFriends'] == []) {
+    if (json['commonFriends'] == [] || json['commonFriends'] == null) {
       json['commonFriends'] = List<Friend>.empty();
     }
     return Friend(

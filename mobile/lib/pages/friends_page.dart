@@ -5,6 +5,7 @@ import 'package:mobile/models/friend_model.dart';
 import 'package:mobile/models/user_model.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
+import 'package:mobile/widgets/friends_pending.dart';
 import 'package:mobile/widgets/friends_popup.dart';
 import 'package:mobile/widgets/friends_search.dart';
 
@@ -265,129 +266,7 @@ class _FriendsPageState extends State<FriendsPage> {
           },
         );
       case 1:
-        return Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                "Liste de demande d'amis en attente reçues",
-                style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: simulatedRequestsReceived.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final friend = simulatedRequestsReceived[index];
-                  return Container(
-                    alignment: Alignment.center,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 500),
-                      child: Card(
-                        margin: EdgeInsets.all(8),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            radius: 40,
-                            backgroundColor: Colors.grey[200],
-                            backgroundImage: AssetImage(
-                                'assets/images/hallelujaRaccoon.jpeg'),
-                          ),
-                          title: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(friend.name, style: TextStyle(fontSize: 25)),
-                            ],
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              IconButton(
-                                color: const Color.fromARGB(255, 2, 173, 90),
-                                iconSize: 40,
-                                icon: Icon(Icons.person_add),
-                                onPressed: () {
-                                  print("Accepted Friend invite");
-                                },
-                              ),
-                              SizedBox(width: 50),
-                              IconButton(
-                                color: Colors.redAccent,
-                                iconSize: 40,
-                                icon: Icon(Icons.person_remove),
-                                onPressed: () {
-                                  print("Unaccepted Friend invite");
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Container(
-                child: Text(
-                  "Liste de demande d'amis en attente envoyées",
-                  style: TextStyle(
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: simulatedRequestsSent.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final friend = simulatedRequestsSent[index];
-                  return Container(
-                    alignment: Alignment.center,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 500),
-                      child: Card(
-                        margin: EdgeInsets.all(8),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            radius: 40,
-                            backgroundColor: Colors.grey[200],
-                            backgroundImage: AssetImage(
-                                'assets/images/hallelujaRaccoon.jpeg'),
-                          ),
-                          title: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(friend.name, style: TextStyle(fontSize: 25)),
-                            ],
-                          ),
-                          trailing: TextButton(
-                            onPressed: () {
-                              print("Cancelled request");
-                            },
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor: kLightGreen,
-                              disabledForegroundColor:
-                                  Colors.grey.withOpacity(0.38),
-                            ),
-                            child:
-                                Text('Annuler', style: TextStyle(fontSize: 18)),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        );
+        return FriendsPending();
       case 2:
         return FriendsSearch();
 
