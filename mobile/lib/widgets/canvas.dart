@@ -65,9 +65,6 @@ class OriginalCanvas extends GameCanvas {
             ),
           ),
         ),
-        Obx(
-          () => Text("Coordinate x : ${x.value}, y : ${y.value}"),
-        )
       ],
     );
   }
@@ -126,9 +123,6 @@ class ModifiedCanvas extends GameCanvas {
             ),
           ),
         ),
-        Obx(
-          () => Text("Coordinate x : ${x.value}, y : ${y.value}"),
-        )
       ],
     );
   }
