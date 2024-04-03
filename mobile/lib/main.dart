@@ -73,7 +73,10 @@ void main() async {
       AvatarProvider avatarProvider = Get.find();
       return avatarProvider;
     }),
-    ChangeNotifierProvider(create: (context) => ThemeProvider()),
+    ChangeNotifierProvider(create: (context) {
+      ThemeProvider themeProvider = Get.find();
+      return themeProvider;
+    }),
   ], child: const MyApp()));
 }
 
