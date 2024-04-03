@@ -124,7 +124,8 @@ class _FriendsPending extends State<FriendsPending> {
                       ),
                       trailing: TextButton(
                         onPressed: () {
-                          print("Cancelled request");
+                          friendService.cancelInvite(friend.accountId);
+                          friendService.fetchSent();
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.white,

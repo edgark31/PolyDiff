@@ -55,6 +55,12 @@ class FriendService extends ChangeNotifier {
         {'potentialFriendId': potentialFriendId});
   }
 
+  void cancelInvite(String potentialFriendId) {
+    print("Cancenlling invite with id: $potentialFriendId");
+    socketService.send(SocketType.Auth, FriendEvents.CancelRequest.name,
+        {'potentialFriendId': potentialFriendId});
+  }
+
   void setListeners() {
     socketService.on(SocketType.Auth, UserEvents.UpdateUsers.name, (data) {
       print("Receiving all users");
@@ -76,12 +82,12 @@ class FriendService extends ChangeNotifier {
 
     socketService.on(SocketType.Auth, FriendEvents.UpdateSentFriends.name,
         (data) {
-      print("Receiving all sent");
       List<dynamic> receivedData = data as List<dynamic>;
       List<Friend> allSent = receivedData
           .map<Friend>((friend) => Friend.fromJson(friend))
           .toList();
       updateSentFriends(allSent);
+      print("Receiving all sent ${allSent.length}");
     });
 
     // socketService.on(SocketType.Game, GameEvents.TimerUpdate.name, (data) {

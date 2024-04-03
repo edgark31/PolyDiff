@@ -92,6 +92,8 @@ class _FriendsSearchState extends State<FriendsSearch> {
           return TextButton(
             onPressed: () {
               friendService.sendInvite(user.accountId);
+              setState(() {});
+              setState(() {});
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.white,
