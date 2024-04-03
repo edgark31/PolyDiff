@@ -272,16 +272,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
                 if (replayTimer === 0) {
                     this.messages = [];
                     this.nDifferencesFound = 0;
+                    this.lobby.players = this.replayService.record.players;
                 }
             }
         });
-
-        this.replayService.replayDifferenceFound$.pipe(takeUntil(this.onDestroy$)).subscribe((replayDiffFound) => {
-            if (this.isReplayAvailable) this.nDifferencesFound = replayDiffFound;
-        });
-
-        // this.replayService.replayOpponentDifferenceFound$.pipe(takeUntil(this.onDestroy$)).subscribe((replayDiffFound) => {
-        //     if (this.isReplayAvailable) this.opponentDifferencesFound = replayDiffFound;
-        // });
     }
 }

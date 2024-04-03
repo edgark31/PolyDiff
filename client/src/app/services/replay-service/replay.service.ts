@@ -9,13 +9,14 @@ import { ImageService } from '@app/services/image-service/image.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { Coordinate, GameEventData, GameRecord } from '@common/game-interfaces';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { WelcomeService } from '../welcome-service/welcome.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ReplayService implements OnDestroy {
     isReplaying: boolean;
-    private record: GameRecord;
+    record: GameRecord;
     private replayEvents: GameEventData[];
     private replaySpeed: number;
     private currentCoords: Coordinate[];
@@ -35,6 +36,7 @@ export class ReplayService implements OnDestroy {
         private readonly gameManager: GameManagerService,
         private readonly soundService: SoundService,
         private readonly imageService: ImageService,
+        private readonly welcome: WelcomeService,
     ) {
         this.isReplaying = false;
         this.replayTimer = new BehaviorSubject<number>(0);
@@ -125,34 +127,36 @@ export class ReplayService implements OnDestroy {
     }
 
     private replaySwitcher(replayData: GameEventData): void {
+        console.log(replayData.gameEvent);
+        console.log('index:', this.currentReplayIndex);
         switch (replayData.gameEvent) {
             case ReplayActions.StartGame:
                 this.replayGameStart();
                 break;
-            case ReplayActions.ClickFound:
+            case ReplayActions.Found:
                 this.replayClickFound(replayData);
                 break;
-            case ReplayActions.ClickError:
+            case ReplayActions.NotFound:
                 this.replayClickError(replayData);
                 break;
             case ReplayActions.CaptureMessage:
                 // this.replayCaptureMessage(replayData.data as ReplayPayload);
                 break;
-            case ReplayActions.ActivateCheat:
+            case ReplayActions.CheatActivated:
                 this.replayActivateCheat(replayData);
                 break;
-            case ReplayActions.DeactivateCheat:
+            case ReplayActions.CheatDeactivated:
                 this.replayDeactivateCheat(replayData);
                 break;
-            case ReplayActions.TimerUpdate:
+            case ReplayActions.UpdateTimer:
                 this.replayTimerUpdate(replayData);
                 break;
-            case ReplayActions.DifferenceFoundUpdate:
-                // this.replayDifferenceFoundUpdate();
-                break;
-            case ReplayActions.OpponentDifferencesFoundUpdate:
-                // this.replayOpponentDifferencesFoundUpdate(replayData.data as ReplayPayload);
-                break;
+            // case ReplayActions.DifferenceFoundUpdate:
+            //     // this.replayDifferenceFoundUpdate();
+            //     break;
+            // case ReplayActions.OpponentDifferencesFoundUpdate:
+            //     // this.replayOpponentDifferencesFoundUpdate(replayData.data as ReplayPayload);
+            //     break;
         }
         this.currentReplayIndex++;
     }
@@ -237,13 +241,13 @@ export class ReplayService implements OnDestroy {
             ];
         }
         this.isDifferenceFound = true;
-        this.soundService.playCorrectSound();
+        this.soundService.playCorrectSoundDifference(this.welcome.account.profile.onCorrectSound);
         this.gameAreaService.setAllData();
         this.gameAreaService.replaceDifference(this.currentCoords, this.replaySpeed);
     }
 
     private replayClickError(replayData: GameEventData): void {
-        this.soundService.playErrorSound();
+        this.soundService.playIncorrectSound(this.welcome.account.profile.onErrorSound);
         this.gameAreaService.showError(replayData.isMainCanvas as boolean, replayData.coordClic as Coordinate, this.replaySpeed);
     }
 
