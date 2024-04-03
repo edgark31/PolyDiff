@@ -1,14 +1,20 @@
-<h2 class="header" *ngIf="typeFriend==='allFriends'">{{'friendInfo.friendList' | translate }} {{data.friend.name }}</h2>
+<div class="header" *ngIf="!data.showCommonFriend">{{'friendInfo.allFriends' | translate }}</div>
+<div class="allList" *ngIf="data.showCommonFriend">
+    <button class="list" *ngIf="typeFriend==='allFriends'" (click)="onTypeChange('commonFriends')"> {{'friendInfo.commonFriends' | translate }}</button>
+    <button class="list"  *ngIf="typeFriend==='commonFriends'" (click)="onTypeChange('allFriends')"> {{'friendInfo.allFriends' | translate }}</button>
+    <!-- <mat-radio-group class="all-radio-button" [(ngModel)]="typeFriend" (change)="onTypeChange(typeFriend)">
+        <mat-radio-button value="commonFriends"  class="radio-button">{{'friendInfo.commonFriends' | translate }}</mat-radio-button>
+        <mat-radio-button value="allFriends">{{'friendInfo.allFriends' | translate }}</mat-radio-button>
+    </mat-radio-group> -->
+</div>
+
+<h2 class="header" *ngIf="typeFriend==='allFriends' && data.showCommonFriend">{{'friendInfo.friendList' | translate }} {{data.friend.name }}</h2>
+<h2 class="header" *ngIf="typeFriend==='allFriends' && !data.showCommonFriend">{{'friendInfo.friendList' | translate }} {{data.user.name }}</h2>
 <h2 class="header" *ngIf="typeFriend==='commonFriends' && data.showCommonFriend ">{{'friendInfo.commonFriendList' | translate }} {{data.friend.name }}</h2>
 <div class="container">
-    <div class="header" *ngIf="!data.showCommonFriend">{{'friendInfo.allFriends' | translate }}</div>
-    <div *ngIf="data.showCommonFriend">
-        <mat-radio-group class="all-radio-button" [(ngModel)]="typeFriend" (change)="onTypeChange(typeFriend)">
-            <mat-radio-button value="commonFriends"  class="radio-button">{{'friendInfo.commonFriends' | translate }}</mat-radio-button>
-            <mat-radio-button value="allFriends">{{'friendInfo.allFriends' | translate }}</mat-radio-button>
-        </mat-radio-group>
-    </div>
 
+
+<div *ngIf="typeFriend==='allFriends' && data.showCommonFriend">
 <div *ngFor="let friend of  friends; let last = last" class="separator">
      <!-- <mat-form-field class="full-width-field"> -->
         <div class="form-avatar">
@@ -19,6 +25,35 @@
             <span *ngIf="!last"></span>
 
     <!-- </mat-form-field> -->
+</div>
+</div>
+
+<div *ngIf="typeFriend==='allFriends' && !data.showCommonFriend">
+    <div *ngFor="let friend of  data.user.friends; let last = last" class="separator">
+         <!-- <mat-form-field class="full-width-field"> -->
+            <div class="form-avatar">
+                <img [src]="'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'" alt="Image" style="width: 50px; height: 50px; border-radius: 16px;">
+              </div>
+                <span class="name">{{ friend.name }}</span>
+
+                <span *ngIf="!last"></span>
+
+        <!-- </mat-form-field> -->
+    </div>
+    </div>
+
+<div *ngIf="typeFriend==='commonFriends'">
+<div *ngFor="let friend of  friendsCommon; let last = last" class="separator">
+    <!-- <mat-form-field class="full-width-field"> -->
+       <div class="form-avatar">
+           <img [src]="'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'" alt="Image" style="width: 50px; height: 50px; border-radius: 16px;">
+         </div>
+           <span class="name">{{ friend.name }}</span>
+
+           <span *ngIf="!last"></span>
+
+   <!-- </mat-form-field> -->
+</div>
 </div>
 
 

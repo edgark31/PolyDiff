@@ -1,11 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { FriendService } from '@app/services/friend-service/friend.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { GamePageEvent } from '@common/enums';
-import { Lobby } from '@common/game-interfaces';
 @Component({
     selector: 'app-account-dialog',
     templateUrl: './account-dialog.component.html',
@@ -15,16 +14,17 @@ export class AccountDialogComponent {
     isReplayPaused: boolean;
     // eslint-disable-next-line max-params
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: { action: GamePageEvent; message: string; lobby: Lobby; isReplayMode: boolean },
+        @Inject(MAT_DIALOG_DATA) public data: { mode: boolean; accountId: string },
         public welcomeService: WelcomeService,
         public gameManager: GameManagerService,
         public sound: SoundService,
         private router: Router,
+        private friendService: FriendService,
     ) {
         this.isReplayPaused = false;
     }
 
-    onSubmit() {
+    onSubmitProfile() {
         if (this.welcomeService.selectName !== this.gameManager.username) this.welcomeService.onModifyUser();
         if (!this.welcomeService.chooseImage && this.welcomeService.account.profile.avatar !== this.welcomeService.selectAvatar)
             this.welcomeService.onUpdateAvatar();
@@ -38,5 +38,10 @@ export class AccountDialogComponent {
         if (this.sound.incorrectSoundEffect !== this.welcomeService.account.profile.onErrorSound) this.welcomeService.onUpdateErrorSound();
 
         this.router.navigate(['/profil']);
+    }
+
+    onSubmitDeleteFriend() {
+        console.log('delete' + this.data.accountId);
+        this.friendService.sendFriendDelete(this.data.accountId);
     }
 }

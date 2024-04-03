@@ -1,15 +1,17 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
+import { AccountDialogComponent } from '@app/components/account-dialog/account-dialog.component';
 import { FriendsInfosComponent } from '@app/components/friends-infos/friends-infos.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { FriendService } from '@app/services/friend-service/friend.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { AccountEvents } from '@common/enums';
 import { Account, Friend, User } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -17,14 +19,16 @@ import { Subscription } from 'rxjs';
     templateUrl: './friend-page.component.html',
     styleUrls: ['./friend-page.component.scss'],
 })
-export class FriendPageComponent implements OnInit, OnDestroy {
+export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     accountSubscription: Subscription;
     pageFriendupdate: string = 'friendUpdate';
     searchQuery: string = '';
+    previousSearchQuery: string = '';
     friendSentList: Friend[] = [];
     friendPendingList: Friend[] = [];
     userList: User[] = [];
+    isRequestPending: boolean = false;
     userSubscription: Subscription;
     friendListSubscription: Subscription;
     friendSendListSubscription: Subscription;
@@ -65,15 +69,25 @@ export class FriendPageComponent implements OnInit, OnDestroy {
         private friendService: FriendService,
         private welcome: WelcomeService,
         private readonly matDialog: MatDialog,
+        public translate: TranslateService,
+        public dialog: MatDialog,
     ) {}
     // eslint-disable-next-line max-params
     onSubmit(pageFriend: string): void {
         this.pageFriendupdate = pageFriend;
-        if (this.pageFriendupdate === 'friendCommon') {
+        if (this.pageFriendupdate === 'friendWait') {
             this.friendService.recuperateFriendSend();
-        } else if (this.pageFriendupdate === 'friendPending') this.friendService.recuperateFriendPending();
-        else this.friendService.recuperateFriend();
+            this.friendService.recuperateFriendPending();
+        } else this.friendService.recuperateFriend();
     }
+
+    ngDoCheck(): void {
+        if (this.previousSearchQuery !== this.searchQuery) {
+            this.previousSearchQuery = this.searchQuery;
+            this.friendService.sendSearch();
+        }
+    }
+
     ngOnInit(): void {
         this.friendService.manageSocket();
         this.welcome.updateAccountObservable();
@@ -107,11 +121,11 @@ export class FriendPageComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         if (this.clientSocket.isSocketAlive('auth')) {
             this.accountSubscription?.unsubscribe();
-            this.welcome.off();
             this.userSubscription?.unsubscribe();
             this.friendListSubscription?.unsubscribe();
             this.friendSendListSubscription?.unsubscribe();
             this.friendPendingListSubscription?.unsubscribe();
+            // this.welcome.off();
             this.friendService.off();
         }
     }
@@ -126,12 +140,20 @@ export class FriendPageComponent implements OnInit, OnDestroy {
 
     getFriendForUser(accountId: string): Friend {
         const friendFound = this.friends.find((friend) => friend.accountId === accountId);
+        console.log('bbbbbbbbbbbbbbbbbbbbb' + friendFound?.accountId);
         return friendFound ? friendFound : ({} as Friend);
     }
 
     showFriendsOfFriends(friendOfFriend: Friend, showCommonFriend: boolean): void {
+        console.log('aaaaaaaaaaaa' + friendOfFriend.accountId);
         this.matDialog.open(FriendsInfosComponent, {
-            data: { friend: friendOfFriend, showCommonFriend },
+            data: { friend: friendOfFriend, showCommonFriend, user: null },
+        });
+    }
+
+    showFriendsOfUser(user: User, showCommonFriend: boolean): void {
+        this.matDialog.open(FriendsInfosComponent, {
+            data: { friend: null, showCommonFriend, user },
         });
     }
 
@@ -147,22 +169,46 @@ export class FriendPageComponent implements OnInit, OnDestroy {
         this.friendService.sendFavorite(accountId, false);
     }
     sendFriendRequest(accountId: string): void {
-        this.friendService.sendFriendRequest(accountId);
-        console.log('yoyoy' + accountId);
+        this.isRequestPending = true;
+        setTimeout(() => {
+            this.friendService.sendFriendRequest(accountId);
+            this.isRequestPending = false;
+            console.log('yoyoy' + accountId);
+        }, 500);
     }
 
     sendFriendPendingAccept(accountId: string): void {
-        this.friendService.sendFriendPending(accountId, true);
+        this.isRequestPending = true;
+        setTimeout(() => {
+            this.friendService.sendFriendPending(accountId, true);
+            this.isRequestPending = false;
+            console.log('yoyoy' + accountId);
+        }, 500);
+
         console.log('yoyoyo' + accountId);
     }
 
     sendFriendPendingRefuse(accountId: string): void {
-        this.friendService.sendFriendPending(accountId, false);
+        this.isRequestPending = true;
+        setTimeout(() => {
+            this.friendService.sendFriendPending(accountId, false);
+            this.isRequestPending = false;
+            console.log('yoyoy' + accountId);
+        }, 500);
+
         console.log('yoyoyooooooooooooooooooo' + accountId);
     }
 
     sendFriendDelete(accountId: string): void {
-        this.friendService.sendFriendDelete(accountId);
+        console.log('delete' + accountId);
+        this.dialog.open(AccountDialogComponent, {
+            data: { mode: true, accountId },
+            disableClose: true,
+            panelClass: 'dialog',
+        });
+
+        // this.friendService.sendFriendDelete(accountId);
+        // en attendant de régler l'erreur du double clique
     }
 
     sendFriendCancel(accountId: string): void {

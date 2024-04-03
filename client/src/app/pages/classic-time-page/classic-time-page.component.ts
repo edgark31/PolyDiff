@@ -10,6 +10,7 @@ import { NavigationService } from '@app/services/navigation-service/navigation.s
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { ChannelEvents, GameModes, LobbyEvents } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -39,6 +40,7 @@ export class ClassicTimePageComponent implements OnDestroy, OnInit {
         private readonly clientSocket: ClientSocketService,
         private readonly navigationService: NavigationService,
         private cdr: ChangeDetectorRef,
+        public translate: TranslateService,
     ) {
         this.gameModes = GameModes;
         // this.isStartingGame = false;

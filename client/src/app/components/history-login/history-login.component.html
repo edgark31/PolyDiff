@@ -3,15 +3,15 @@
 
       <!-- Position Column -->
       <ng-container matColumnDef="timestamp">
-        <th mat-header-cell *matHeaderCellDef> {{'gameSheet.timeStamps' | translate }} </th>
+        <th mat-header-cell *matHeaderCellDef> {{'historyLogin.timeStamps' | translate }} </th>
         <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
       </ng-container>
 
       <!-- Name Column -->
       <ng-container matColumnDef="connection">
-        <th mat-header-cell *matHeaderCellDef> {{'gameSheet.connection' | translate }} </th>
-        <td mat-cell *matCellDef="let element"> <span *ngIf="element.isConnection">{{'gameSheet.connection' | translate }}
-        </span> <span *ngIf="!element.isConnection">{{'gameSheet.disconnection' | translate }}
+        <th mat-header-cell *matHeaderCellDef> {{'historyLogin.connection' | translate }} </th>
+        <td mat-cell *matCellDef="let element"> <span *ngIf="element.isConnection">{{'historyLogin.connection' | translate }}
+        </span> <span *ngIf="!element.isConnection">{{'historyLogin.disconnection' | translate }}
         </span> </td>
       </ng-container>
 
@@ -25,15 +25,15 @@
 
         <!-- Position Column -->
         <ng-container matColumnDef="timestamp">
-          <th mat-header-cell *matHeaderCellDef> {{'gameSheet.timeStamps' | translate }} </th>
+          <th mat-header-cell *matHeaderCellDef> {{'historyLogin.timeStamps' | translate }} </th>
           <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="Session">
-          <th mat-header-cell *matHeaderCellDef> {{'gameSheet.matchSummary' | translate }} </th>
+          <th mat-header-cell *matHeaderCellDef> {{'historyLogin.matchSummary' | translate }} </th>
           <td mat-cell *matCellDef="let element"> <span *ngIf="element.isWinner">{{'gameSheet.win' | translate }}
-          </span> <span *ngIf="!element.isWinner">{{'gameSheet.loose' | translate }}
+          </span> <span *ngIf="!element.isWinner">{{'historyLogin.loose' | translate }}
           </span> </td>
         </ng-container>
 
@@ -49,7 +49,7 @@
     <div>
         <button mat-raised-button class="close-button" (click)="closeDialog()" aria-label="close history">
             <mat-icon>close</mat-icon>
-            {{'gameSheet.closeHistoric' | translate }}
+            {{'historyLogin.closeHistoric' | translate }}
         </button>
     </div>
   </div>

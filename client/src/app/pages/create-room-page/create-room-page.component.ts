@@ -3,6 +3,7 @@ import { NavigationService } from '@app/services/navigation-service/navigation.s
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-create-room-page',
@@ -19,7 +20,11 @@ export class CreateRoomPageComponent implements AfterViewInit {
     nDifferences: number;
     gameId: string;
     lobby: Lobby;
-    constructor(private readonly roomManagerService: RoomManagerService, private readonly navigationService: NavigationService) {
+    constructor(
+        private readonly roomManagerService: RoomManagerService,
+        private readonly navigationService: NavigationService,
+        public translate: TranslateService,
+    ) {
         this.time = 30;
         this.bonusTime = 10;
         this.nDifferences = 0;

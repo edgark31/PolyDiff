@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { WAITING_TIME } from '@app/constants/constants';
 import { REPLAY_SPEEDS, SPEED_X1 } from '@app/constants/replay';
 import { ReplayService } from '@app/services/replay-service/replay.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-replay-buttons',
@@ -14,7 +15,7 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
     isReplayPaused: boolean;
     replaySpeeds: number[];
     replaySpeed: number;
-    constructor(private readonly replayService: ReplayService) {
+    constructor(private readonly replayService: ReplayService, public translate: TranslateService) {
         this.isReplayAvailable = false;
         this.isReplayPaused = false;
         this.replaySpeeds = REPLAY_SPEEDS;

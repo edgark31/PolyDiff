@@ -252,6 +252,7 @@ export class GameGateway implements OnGatewayConnection {
         const abandonChat: Chat = { raw: abandonMessage, tag: MessageTag.Common };
         this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(abandonChat);
         this.server.to(lobbyId).emit(ChannelEvents.GameMessage, abandonChat);
+        socket.emit(GameEvents.AbandonGame, this.roomsManager.lobbies.get(lobbyId));
         if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
             this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
             clearInterval(this.timers.get(lobbyId));
@@ -259,7 +260,7 @@ export class GameGateway implements OnGatewayConnection {
             this.logger.log(`Game ${lobbyId} ended because of not enough players`);
             return;
         }
-        socket.emit(GameEvents.AbandonGame, this.roomsManager.lobbies.get(lobbyId));
+        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaa');
     }
 
     @SubscribeMessage(GameEvents.CheatActivated)

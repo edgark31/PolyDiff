@@ -22,17 +22,40 @@ body {
     gap: 40px;
 }
 
-.icon {
-    font-size: 48px;
-    margin: 40px;
-    width: 300px;
-    height: 100px;
+.icon-friend {
+    font-size: 20px;
+    position: absolute;
+    top: -40px;
+    right: -150px;
+    width: 150px;
+
+    height: 26px;
     z-index: 1;
     color: rgba(253, 250, 151, 255);
     -webkit-text-stroke: 0.2px black;
     border: none;
     background-color: #e8a430;
-    // border-radius: 50%;
+    font-family: 'Troika', sans-serif;
+    border-radius: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.icon {
+    font-size: 28px;
+    margin: 200px;
+    width: 500px;
+    margin-top: 0px;
+    height: 50px;
+    z-index: 1;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #e8a430;
+    font-family: 'Troika', sans-serif;
+    border-radius: 10%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -146,6 +169,10 @@ body {
     transition: background-color 0.3s;
 }
 
+.disabled {
+    pointer-events: none;
+}
+
 .icone-delete {
     position: absolute;
     top: -203px;
@@ -168,18 +195,20 @@ body {
 
 .icone-thump {
     position: absolute;
-    top: -140px;
+    top: -130px;
     right: -900px;
-    font-size: 39px;
+    font-size: 26px;
+    width: 150px;
     margin: 100px;
-    width: 80px;
-    height: 80px;
+
+    height: 30px;
+    font-family: 'Troika', sans-serif;
     z-index: 1;
     color: rgba(253, 250, 151, 255);
     -webkit-text-stroke: 0.2px black;
     border: none;
     background-color: #e8304c;
-    border-radius: 50%;
+    border-radius: 10%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -241,6 +270,7 @@ body {
 }
 
 .friends-container {
+    margin-top: -50px;
     display: flex;
     background-color: #dfd40700;
     flex-direction: column;
@@ -262,7 +292,7 @@ body {
     font-weight: bold;
     padding: 10px;
     margin-bottom: 10px;
-    margin-top: -5px;
+    margin-top: -70px;
     padding-right: 14px;
     width: 900px;
     height: 50px;
@@ -280,10 +310,32 @@ body {
     font-weight: bold;
     padding: 10px;
     margin-bottom: 10px;
-    margin-top: -5px;
+    margin-top: -70px;
     padding-right: 14px;
     width: 500px;
     height: 50px;
+}
+
+.informationPending {
+    color: #ffa500;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+    font-weight: bold;
+    display: inline-block;
+    text-align: left;
+    font-size: 55px;
+    margin-left: 180px;
+    // font-weight: bold;
+    // padding: 10px;
+    // margin-bottom: 10px;
+    margin-top: 40px;
+    // padding-right: 14px;
+    width: 900px;
+    height: 50px;
+}
+
+.pending {
+    margin-top: 200px;
 }
 
 .card-container {

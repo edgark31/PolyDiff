@@ -1,7 +1,25 @@
-    <p class = "abandon"> Etes-vous sur de vouloir confirmer vos modifications </p>
+   <div *ngIf="!data.mode">
+   <p  class = "abandon"> Etes-vous sur de vouloir confirmer vos modifications </p>
     <div class = "button1">
         <div class="button-container">
-            <button class = "yesButton" mat-dialog-close (click)="onSubmit()"></button>
+            <button class = "yesButton" mat-dialog-close (click)="onSubmitProfile()"></button>
+            <img src="./assets/icon/PlayButton.png" alt="abandonButton">
+            <div class="centered-yes">yes</div>
+        </div>
+    </div>
+    <div class = "button2" >
+        <div class="button-container">
+        <button class = "noButton"  mat-dialog-close></button>
+            <img src="./assets/icon/CreateButton.png" alt="notAbandonButton" >
+            <div class="centered-no">Non</div>
+        </div>
+    </div>
+</div>
+<div *ngIf="data.mode">
+    <p *ngIf="data.mode" class = "abandon"> Etes-vous sur de supprimer cet ami </p>
+    <div class = "button1">
+        <div class="button-container">
+            <button class = "yesButton" mat-dialog-close (click)="onSubmitDeleteFriend()"></button>
             <img src="./assets/icon/PlayButton.png" alt="abandonButton">
             <div class="centered-yes">Oui</div>
         </div>
@@ -13,4 +31,5 @@
             <div class="centered-no">Non</div>
         </div>
     </div>
+</div>
     <img src="./assets/icon/woodenPopUp.png" class="dialog-image" alt="popup">

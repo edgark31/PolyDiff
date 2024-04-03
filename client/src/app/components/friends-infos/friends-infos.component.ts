@@ -3,7 +3,8 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FriendService } from '@app/services/friend-service/friend.service';
-import { Friend } from '@common/game-interfaces';
+import { Friend, User } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -14,7 +15,10 @@ import { Subscription } from 'rxjs';
 export class FriendsInfosComponent implements OnInit, OnDestroy {
     typeFriend: 'commonFriends' | 'allFriends' = 'allFriends';
     friendListSubscription: Subscription;
+    friendCommonSubscription: Subscription;
     friends: Friend[] = [];
+    friendsCommon: Friend[] = [];
+    actualfriends: Friend[] = [];
     // friends: Friend[] = [
     //     // variable temporaire
     //     {
@@ -45,32 +49,35 @@ export class FriendsInfosComponent implements OnInit, OnDestroy {
     // ];
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: { friend: Friend; showCommonFriend: boolean },
+        @Inject(MAT_DIALOG_DATA) public data: { friend: Friend; showCommonFriend: boolean; user: User },
         public dialogRef: MatDialogRef<FriendsInfosComponent>,
         public friendService: FriendService,
+        public translate: TranslateService,
     ) {}
 
     onTypeChange(type: 'commonFriends' | 'allFriends') {
         this.typeFriend = type;
-        if (type === 'allFriends') {
-            console.log('aie aie' + this.data.friend.friends);
-            // this.friends = this.data.friend.friends ?? [];
-            // rien n'est mis dedans
+        if (type === 'allFriends' && this.data.showCommonFriend) {
+            this.friendService.recuperateFriendofFriends(this.data.friend.accountId);
         } else {
-            // ami en commun
+            this.friendService.recuperateCommonFriends(this.data.friend.accountId);
         }
     }
     ngOnInit(): void {
-        this.friendService.manageSocket();
+        this.friendService.recuperateFriendofFriends(this.data.friend.accountId);
 
-        // this.friendService.recuperateFriend();
+        this.friendListSubscription = this.friendService.friendsoffriendsSubject$.subscribe((friendList: Friend[]) => {
+            this.friends = friendList.sort((a, b) => (a.isFavorite === b.isFavorite ? 0 : a.isFavorite ? -1 : 1));
+        });
 
-        // this.friendListSubscription = this.friendService.friendsSubject$.subscribe((friendList: Friend[]) => {
-        //     this.friends = friendList.sort((a, b) => (a.isFavorite === b.isFavorite ? 0 : a.isFavorite ? -1 : 1));
-        // });
+        this.friendCommonSubscription = this.friendService.friendsCommonSubject$.subscribe((friendList: Friend[]) => {
+            this.friendsCommon = friendList.sort((a, b) => (a.isFavorite === b.isFavorite ? 0 : a.isFavorite ? -1 : 1));
+        });
     }
 
     ngOnDestroy(): void {
         this.friendListSubscription?.unsubscribe();
+        this.friendCommonSubscription?.unsubscribe();
+        // this.friendService?.off();
     }
 }

@@ -5,15 +5,14 @@
         </div>
         <div class="icon-container">
             <button class="icon" (click)="onSubmit('friendUpdate')">{{'friendPage.friends' | translate }}</button>
-            <button class="icon" (click)="onSubmit('friendCommon')">{{'friendPage.friendsRequests' | translate }} </button>
-            <button class="icon" (click)="onSubmit('friendPending')"> {{'friendPage.friendsPedding' | translate }}</button>
+            <button class="icon" (click)="onSubmit('friendWait')">{{'friendPage.friendsRequests' | translate }} </button>
+            <!-- <button class="icon" (click)="onSubmit('friendPending')"> {{'friendPage.friendsPending' | translate }}</button> -->
             <button class="icon" (click)="onSubmit('accountUser')">{{'friendPage.allAccount' | translate }}</button>
           </div>
 
           <section class="friends-container">
             <h1 *ngIf="pageFriendupdate==='friendUpdate'" class="informationUpdate">{{'friendPage.friendsList' | translate }}</h1>
-            <h1 *ngIf="pageFriendupdate==='friendCommon'" class="information">{{'friendPage.requestFriendsSendList' | translate }}</h1>
-            <h1 *ngIf="pageFriendupdate==='friendPending'" class="information">{{'friendPage.pendingFriendsList' | translate }}</h1>
+            <h1 *ngIf="pageFriendupdate==='friendWait'" class="information">{{'friendPage.requestFriendsSendList' | translate }}</h1>
             <h1 *ngIf="pageFriendupdate==='accountUser'" class="informationUpdate">{{'friendPage.allListAccount' | translate }}</h1>
             <form   *ngIf="pageFriendupdate==='accountUser'" class="search-form">
                 <input type="text" placeholder="Rechercher..." [(ngModel)]="searchQuery" name="searchQuery" class="search-input">
@@ -48,8 +47,8 @@
                         <div   class="details">
                             <button mat-icon-button  (click)="showFriendsOfFriends(friend, true)">
 
-                                <span class="material-symbols-outlined materialIcon"  >
-                                    group
+                                <span class="icon-friend">
+                                    amis
                                     </span>
 
                         </button>
@@ -67,7 +66,7 @@
 
 
 
-            <div *ngIf="pageFriendupdate==='friendPending'" class="card-container">
+            <div *ngIf="pageFriendupdate==='friendWait'" class="card-container">
                 <mat-card class="friend-card"  *ngFor="let friend of friendPendingList">
                     <mat-card-header>
                         <mat-card-title class="username">
@@ -100,10 +99,9 @@
                         </div>
                     </mat-card-content>
                 </mat-card>
-            </div>
+<div class="pending">
+                <h1 class="informationPending">{{'friendPage.pendingFriendsList' | translate }}</h1>
 
-
-            <div *ngIf="pageFriendupdate==='friendCommon'" class="card-container">
                 <mat-card class="friend-card"  *ngFor="let friend of  friendSentList">
                     <mat-card-header>
                         <mat-card-title class="username">
@@ -124,7 +122,7 @@
 
 
                             <button (click)="sendFriendCancel(friend.accountId)"   mat-icon-button >
-                                <mat-icon class="icone-thump">thumb_down</mat-icon>
+                                    <span class="icone-thump">Annuler</span>
                             </button>
 
 
@@ -132,6 +130,7 @@
                     </mat-card-content>
                 </mat-card>
             </div>
+        </div>
 
 
 
@@ -162,8 +161,8 @@
                         </div>
 
 
-                        <div *ngIf="stateUser(user.name)==='accountUser'" class="details">
-                            <button mat-icon-button (click)="sendFriendRequest(user.accountId)" >
+                        <div *ngIf="stateUser(user.name)==='accountUser'"  class="details">
+                            <button mat-icon-button [disabled]="isRequestPending" (click)="sendFriendRequest(user.accountId)" >
                              <mat-icon class="icone favorite-icon">add</mat-icon>
                             </button>
                         </div>
@@ -175,10 +174,10 @@
                         </div>
 
                         <div *ngIf="stateUser(user.name)==='friendUpdate' || stateUser(user.name)==='accountUser'"   class="details">
-                            <button mat-icon-button (click)="showFriendsOfFriends(getFriendForUser(user.accountId), false)" >
+                            <button mat-icon-button (click)="showFriendsOfUser(user, false)" >
 
-                                <span class="material-symbols-outlined materialIcon2"  >
-                                    group
+                                <span class="icon-friend">
+                                    amis
                                     </span>
 
                         </button>
@@ -202,7 +201,7 @@
 
 
                             <button    mat-icon-button >
-                                <mat-icon class="icone-thump">thumb_down</mat-icon>
+                                <span class="icone-thump">Annuler</span>
                             </button>
 
 

@@ -57,6 +57,7 @@ export class PersonalizationPageComponent implements OnInit {
 
     onSubmitProfile() {
         this.dialog.open(AccountDialogComponent, {
+            data: { mode: false },
             disableClose: true,
             panelClass: 'dialog',
         });

@@ -16,6 +16,7 @@ import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent, MessageTag } from '@common/enums';
 import { Chat, Game, Lobby } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
 @Component({
@@ -39,6 +40,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     lobbies: Lobby[] = [];
     gameLobby: Game;
     lobby: Lobby;
+    mode: string;
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
@@ -67,11 +69,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         public welcome: WelcomeService,
         public globalChatService: GlobalChatService,
         private navigationService: NavigationService,
+        public translate: TranslateService,
     ) {
         this.nDifferencesFound = 0;
         this.timer = 0;
         this.messages = [];
         this.messageGlobal = [];
+        this.mode = '';
         this.canvasSize = CANVAS_MEASUREMENTS;
         this.isReplayAvailable = false;
         this.gameMode = GameModes;
@@ -110,9 +114,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
         // eslint-disable-next-line no-unused-vars
         this.clientSocket.on('game', GameEvents.AbandonGame, (lobby: Lobby) => {
-            this.router.navigate(['/game-mode']);
             this.clientSocket.disconnect('lobby');
             this.clientSocket.disconnect('game');
+            this.router.navigate(['/game-mode']);
         });
         this.chatSubscription = this.gameManager.message$.subscribe((message: Chat) => {
             this.receiveMessage(message);
@@ -164,6 +168,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.setUpReplay();
     }
 
+    translateCharacter(character: string): string {
+        return this.translate.instant(`chat.${character}`);
+    }
+
     ngOnDestroy(): void {
         this.onDestroy$.next();
         this.onDestroy$.complete();
@@ -180,11 +188,26 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
             this.roomManager.off();
             this.gameManager.off();
+            this.clientSocket.disconnect('lobby');
+            this.clientSocket.disconnect('game');
         }
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.off();
         }
         this.chatSubscriptionGlobal?.unsubscribe();
+    }
+
+    translateGameMode(mode: GameModes): string {
+        switch (mode) {
+            case GameModes.Classic:
+                return 'Classique';
+            case GameModes.Limited:
+                return 'Temps limité';
+            case GameModes.Practice:
+                return 'Pratique';
+            default:
+                return '';
+        }
     }
 
     sendMessage(message: string): void {

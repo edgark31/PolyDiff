@@ -60,7 +60,7 @@
         </div>
     </div>
     <button *ngIf="!isReplayAvailable" class="importantButton justified" (click)="showAbandonDialog()">
-        <span id="abandon">Abandonner la partie</span>
+        <span id="abandon">{{'game.abandon' | translate }}</span>
     </button>
 </div>
 <div *ngIf="!welcome.onChatGame">

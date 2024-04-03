@@ -236,7 +236,7 @@ export class GameManagerService {
         });
 
         this.clientSocket.on('game', GameEvents.AbandonGame, (lobby: Lobby) => {
-            console.log('aaaaaaaaa');
+            console.log("t'es là");
             this.lobbyGame.next(lobby);
         });
         this.clientSocket.on('game', GameEvents.NextGame, (nextGame: Game) => {

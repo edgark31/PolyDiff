@@ -9,6 +9,8 @@ import { Subject } from 'rxjs';
 })
 export class FriendService {
     private friendsSubject: Subject<Friend[]>;
+    private friendsoffriendsSubject: Subject<Friend[]>;
+    private friendsCommonSubject: Subject<Friend[]>;
     private friendsSendSubject: Subject<Friend[]>;
     private friendsPendingSubject: Subject<Friend[]>;
     private userList: Subject<User[]>;
@@ -21,6 +23,14 @@ export class FriendService {
 
     get friendsSubject$() {
         return this.friendsSubject.asObservable();
+    }
+
+    get friendsCommonSubject$() {
+        return this.friendsCommonSubject.asObservable();
+    }
+
+    get friendsoffriendsSubject$() {
+        return this.friendsoffriendsSubject.asObservable();
     }
 
     get friendsSendSubject$() {
@@ -65,19 +75,38 @@ export class FriendService {
     sendFriendCancel(accountId: string): void {
         this.clientSocket.send('auth', FriendEvents.CancelRequest, { potentialFriendId: accountId });
     }
+    recuperateFriendofFriends(accountId: string): void {
+        console.log(accountId);
+        this.clientSocket.send('auth', FriendEvents.UpdateFoFs, { friendId: accountId });
+    }
+
+    recuperateCommonFriends(accountId: string): void {
+        console.log(accountId);
+        this.clientSocket.send('auth', FriendEvents.UpdateCommonFriends, { friendId: accountId });
+    }
 
     sendFriendDelete(accountId: string): void {
-        console.log(accountId);
+        console.log('delete' + accountId);
         this.clientSocket.send('auth', FriendEvents.DeleteFriend, { friendId: accountId });
     }
     manageSocket(): void {
         this.friendsSubject = new Subject<Friend[]>();
         this.friendsSendSubject = new Subject<Friend[]>();
+        this.friendsoffriendsSubject = new Subject<Friend[]>();
+        this.friendsCommonSubject = new Subject<Friend[]>();
         this.friendsPendingSubject = new Subject<Friend[]>();
         this.userList = new Subject<User[]>();
 
         this.clientSocket.on('auth', FriendEvents.UpdateFriends, (friends: Friend[]) => {
             this.friendsSubject.next(friends);
+        });
+
+        this.clientSocket.on('auth', FriendEvents.UpdateFoFs, (friends: Friend[]) => {
+            this.friendsoffriendsSubject.next(friends);
+        });
+
+        this.clientSocket.on('auth', FriendEvents.UpdateCommonFriends, (friends: Friend[]) => {
+            this.friendsCommonSubject.next(friends);
         });
 
         this.clientSocket.on('auth', FriendEvents.UpdateSentFriends, (friends: Friend[]) => {
@@ -99,5 +128,7 @@ export class FriendService {
         if (this.friendsSendSubject && !this.friendsSendSubject.closed) this.friendsSendSubject?.unsubscribe();
         if (this.friendsPendingSubject && !this.friendsPendingSubject.closed) this.friendsPendingSubject?.unsubscribe();
         if (this.userList && !this.userList.closed) this.userList?.unsubscribe();
+        if (this.friendsoffriendsSubject && !this.friendsoffriendsSubject.closed) this.friendsoffriendsSubject?.unsubscribe();
+        if (this.friendsCommonSubject && !this.friendsCommonSubject.closed) this.friendsCommonSubject?.unsubscribe();
     }
 }

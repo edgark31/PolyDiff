@@ -66,7 +66,9 @@
 
     "chat": {
         "chatZone": "Zone de clavardage ",
-        "return": "retour"
+        "return": "retour",
+        "foundDifférence": " a trouvé une différence !",
+        "error": " s'est trompé !"
     },
 
     "creationGame": {
@@ -119,7 +121,8 @@
     "gameSheet": {
         "play": "Jouer",
         "suppression": "Supprimer",
-        "reset": "Réinitialiser"
+        "reset": "Réinitialiser",
+        "create": "créer"
     },
 
     "historyLogin": {
@@ -158,7 +161,7 @@
         "startParty": "La partie va commencer sous peu..."
     },
 
-    "selectionPage": {
+    " selectionPage": {
         "selectGame": "Selectionne ton jeu",
         "configureGame": "Configure ton jeu",
         "noGameAvailable": "Il n'y a pas de jeux disponibles pour le moment"
@@ -175,10 +178,15 @@
         "quit": "quit"
     },
 
+    "mainPage": {
+        "gameMode": "Modes de jeu",
+        "welcome": "Bienvenue"
+    },
+
     "pageConfig": {
         "createGame": "Création de jeu",
         "resetTimes": "Réinitialiser les meilleurs temps",
-        "suppressionGames": "Supprimer tous les jeux"
+        "deleteGames": "Supprimer tous les jeux"
     },
 
     "createRoom": {
@@ -197,9 +205,8 @@
 
     "friendPage": {
         "friends": "amis actuels",
-        "friendsRequests": "demande d'amis envoyés",
-        "friendsPedding": "demandes d'amis reçus",
-        "allAccount": "Retourner à la page de Configuration",
+        "friendsRequests": "amis en attente",
+        "allAccount": "liste de compte",
         "friendsList": "Liste d'amis",
         "requestFriendsSendList": "Liste d'amis en attente envoyé",
         "pendingFriendsList": "Liste d'amis en attente reçu",
@@ -212,5 +219,19 @@
         "player": "Joueur",
         "start": "Commencer la partie",
         "quit": "Quit"
+    },
+
+    "canvasUnder": {
+        "PictureDownload": "Téléverser une image",
+        "reset": "Réinitialiser",
+        "foregroundReset": "Réinitialiser l'avant-plan",
+        "close": "Fermer",
+        "noConformPicture": "Image non conforme !",
+        "respectPictureSpecification": "L'image doit respecter les spécifications suivantes",
+        "pictureType": "Le type d'image doit être en",
+        "pictureLength": "La taille de l'image doit être de",
+        "twoAreas": "pour les deux zones",
+        "backgrounds": "les arrières-plans",
+        "background": "l'arrière-plan"
     }
 }

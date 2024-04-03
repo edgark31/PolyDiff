@@ -67,7 +67,9 @@
     },
     "chat": {
         "chatZone": "Chat zone",
-        "return": "return"
+        "return": "return",
+        "foundDifférence": " found a difference!",
+        "error": " made a mistake!"
     },
     "creationGame": {
         "differenceImage": "Here is the image of the differences",
@@ -117,7 +119,8 @@
     "gameSheet": {
         "play": "Play",
         "suppression": "Delete",
-        "reset": "Reset"
+        "reset": "Reset",
+        "create": "create"
     },
 
     "historyLogin": {
@@ -152,7 +155,7 @@
     "waitingDialog": {
         "startParty": "The game will start shortly..."
     },
-    "waitingPage": {
+    "selectionPage": {
         "selectGame": "Select your game",
         "configureGame": "Configure your game",
         "noGameAvailable": "There are no games available at the moment"
@@ -167,6 +170,11 @@
         "noGame": "We do not have any games available at the moment. Would you like to create one?",
         "create": "Create",
         "quit": "Quit"
+    },
+
+    "mainPage": {
+        "gameMode": "game Modes",
+        "welcome": "welcome"
     },
 
     "pageConfig": {
@@ -191,20 +199,34 @@
 
     "friendPage": {
         "friends": "Current friends",
-        "friendsRequests": "Sent friend requests",
+        "friendsRequests": "friends waiting",
         "friendsPending": "Received friend requests",
-        "allAccount": "Return to Configuration Page",
+        "allAccount": "all Account",
         "friendsList": "Friends List",
         "requestFriendsSendList": "Sent Friend Requests List",
         "pendingFriendsList": "Received Friend Requests List",
         "allListAccount": "Account List"
     },
 
-    "selectionPage": {
+    "waitingPage": {
         "currentPlayers": "current players",
         "waitingPlayers": "Waiting player(s)",
         "player": "Player",
         "start": "Start the game",
         "quit": "Quit"
+    },
+
+    "canvasUnder": {
+        "PictureDownload": "Upload an image",
+        "reset": "Reset",
+        "foregroundReset": "Reset foreground",
+        "close": "Close",
+        "noConformPicture": "Non-compliant image!",
+        "respectPictureSpecification": "The image must comply with the following specifications:",
+        "pictureType": "Image type must be",
+        "pictureLength": "Image size must be",
+        "twoAreas": "for both areas",
+        "backgrounds": "the backgrounds",
+        "background": "background"
     }
 }
