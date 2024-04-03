@@ -6,6 +6,7 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/register_provider.dart';
+import 'package:mobile/services/avatar_service.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/utils/credentials_validation.dart';
 import 'package:mobile/widgets/avatar_picker.dart';
@@ -23,8 +24,8 @@ class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final FormService formService = FormService();
 
-  ImageProvider? _selectedAvatar;
-  String? _selectedAvatarId;
+  ImageProvider _selectedAvatar = NetworkImage(getDefaultAvatarUrl('1'));
+  String _selectedAvatarId = '1';
   String? _selectedAvatarBase64;
 
   TextEditingController usernameController = TextEditingController();
@@ -126,27 +127,28 @@ class _SignUpFormState extends State<SignUpForm> {
       email: email,
     ));
 
-    if (_selectedAvatarId != null) {
-      RegisterProvider registerProvider =
-          Provider.of<RegisterProvider>(context, listen: false);
+    print('_selectedAvatarId $_selectedAvatarId');
+    print('_selectedAvatarBase64 $_selectedAvatarBase64');
 
-      await registerProvider.postCredentialsData(credentialsBody);
+    RegisterProvider registerProvider =
+        Provider.of<RegisterProvider>(context, listen: false);
+
+    await registerProvider.postCredentialsData(credentialsBody);
+
+    if (registerProvider.isBack) {
+      UploadAvatarBody predefinedAvatarBody =
+          UploadAvatarBody(username: username, id: _selectedAvatarId);
+      await registerProvider.putAvatarData(
+          predefinedAvatarBody, AvatarType.predefined);
 
       if (registerProvider.isBack) {
-        UploadAvatarBody predefinedAvatarBody =
-            UploadAvatarBody(username: username, id: _selectedAvatarId!);
-        await registerProvider.putAvatarData(
-            predefinedAvatarBody, AvatarType.predefined);
-
-        if (registerProvider.isBack) {
-          Navigator.pushNamed(context, SIGN_IN_ROUTE);
-        }
-      } else if (_selectedAvatarBase64 != null) {
-        UploadAvatarBody avatarBody = UploadAvatarBody(
-            username: username, base64Avatar: _selectedAvatarBase64!);
-
-        await registerProvider.putAvatarData(avatarBody, AvatarType.camera);
+        Navigator.pushNamed(context, SIGN_IN_ROUTE);
       }
+    } else if (_selectedAvatarBase64 != null) {
+      UploadAvatarBody avatarBody = UploadAvatarBody(
+          username: username, base64Avatar: _selectedAvatarBase64!);
+
+      await registerProvider.putAvatarData(avatarBody, AvatarType.camera);
     }
   }
 
@@ -341,25 +343,21 @@ class _SignUpFormState extends State<SignUpForm> {
 
   Widget buildSelectedAvatar() {
     return Container(
-      width: 100, // Total diameter including border
-      height: 100, // Total diameter including border
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.grey.shade200, // Background color inside the border
-        border: Border.all(
-          color: _selectedAvatar == null
-              ? Colors.red
-              : Colors.green, // Border color based on condition
-          width: 4, // Border width
+        width: 100, // Total diameter including border
+        height: 100, // Total diameter including border
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.grey.shade200, // Background color inside the border
+          border: Border.all(
+            color: Colors.green, // Border color based on condition
+            width: 4, // Border width
+          ),
         ),
-      ),
-      child: CircleAvatar(
-        backgroundImage: _selectedAvatar,
-        radius: 50,
-        backgroundColor: Colors.grey.shade200,
-        child: _selectedAvatar == null ? Icon(Icons.person, size: 50) : null,
-      ),
-    );
+        child: CircleAvatar(
+          backgroundImage: _selectedAvatar,
+          radius: 50,
+          backgroundColor: Colors.grey.shade200,
+        ));
   }
 
   void setPredefinedAvatarSelection(String id) {
