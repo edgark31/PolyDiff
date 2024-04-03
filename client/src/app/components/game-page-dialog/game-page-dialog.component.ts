@@ -36,7 +36,6 @@ export class GamePageDialogComponent implements OnInit {
     ngOnInit(): void {}
     abandonGame(): void {
         this.gameManager.abandonGame(this.data.lobby.lobbyId as string);
-        this.router.navigate(['/game-mode']);
     }
 
     openShareScoreFriend(showShareFriend: boolean): void {
