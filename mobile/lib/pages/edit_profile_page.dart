@@ -65,8 +65,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   String passwordStrength = '';
   String passwordConfirmation = '';
+  String newPassword = '';
 
   Queue<String> _snackBarQueue = Queue<String>();
+  bool _isSnackBarActive = false;
 
   @override
   void initState() {
@@ -136,37 +138,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void showFeedback(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    if (_isSnackBarActive) {
+      _snackBarQueue.add(message);
+      return;
+    }
+
+    _isSnackBarActive = true;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+          SnackBar(
+            content: Text(message),
+            duration: Duration(seconds: 1),
+          ),
+        )
+        .closed
+        .then((reason) {
+      _isSnackBarActive = false;
+      if (_snackBarQueue.isNotEmpty) {
+        showFeedback(_snackBarQueue.removeFirst());
+      }
+    });
   }
-
-  //   void showFeedback(String message) {
-  //   if (ScaffoldMessenger.of(context).mounted &&
-  //       ScaffoldMessenger.of(context).hasCurrentSnackBar) {
-  //     _snackBarQueue.add(message);
-  //   } else {
-  //     _showSnackBar(message);
-  //   }
-  // }
-
-  // void _showSnackBar(String message) {
-  //   final snackBar = SnackBar(
-  //     content: Text(message),
-  //     duration: Duration(seconds: 2),
-  //   );
-
-  //   ScaffoldMessenger.of(context).showSnackBar(snackBar).closed.then((reason) {
-  //     if (_snackBarQueue.isNotEmpty) {
-  //       final nextMessage = _snackBarQueue.removeFirst();
-  //       _showSnackBar(nextMessage);
-  //     }
-  //   });
-  // }
 
   Future<void> saveChanges() async {
     try {
-      // Avatar changes
       if (_selectedAvatarId != null) {
         UploadAvatarBody predefinedAvatarBody = UploadAvatarBody(
             username: _infoService.username, id: _selectedAvatarId);
@@ -197,10 +192,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
       }
 
       // Password changes
-      if (passwordConfirmation == YES) {
+      if (passwordConfirmation == YES &&
+          passwordController.text.trim() != newPassword) {
         String? response = await accountService.updatePassword(
             _infoService.username, passwordController.text.trim());
         if (response == null) {
+          newPassword = passwordController.text.trim();
           showFeedback("Password updated successfully.");
         } else {
           throw Exception(response);
