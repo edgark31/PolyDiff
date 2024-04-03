@@ -288,3 +288,10 @@ export interface GameRecord {
     timeLimit: number;
     gameEvents: GameEventData[];
 }
+
+export interface RankedPlayer {
+    accountId: string;
+    name: string;
+    rank: number;
+    stats: Statistics;
+}
