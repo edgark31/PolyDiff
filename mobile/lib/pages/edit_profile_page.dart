@@ -58,12 +58,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   String usernameFormat = NO;
 
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmationController = TextEditingController();
+
+  String passwordStrength = '';
+  String passwordConfirmation = '';
+
   @override
   void initState() {
     super.initState();
     print('init State');
     _validator = CredentialsValidator(onStateChanged: _forceRebuild);
     usernameController.addListener(_onUsernameChanged);
+    passwordController.addListener(validatePassword);
+    confirmationController.addListener(validatePasswordConfirmation);
 
     _loadInitialSettings();
   }
@@ -100,6 +108,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ? "invalide"
               : '';
     });
+  }
+
+  void updateValidatorStates() {
+    setState(() {
+      passwordStrength = _validator.passwordStrength;
+      passwordConfirmation =
+          _validator.states['passwordConfirmation'] == ValidatorState.isValid
+              ? YES
+              : NO;
+    });
+  }
+
+  void validatePassword() {
+    _validator.updatePasswordStrength(passwordController.text);
+    updateValidatorStates();
+  }
+
+  void validatePasswordConfirmation() {
+    _validator.hasMatchingPasswords(
+        passwordController.text, confirmationController.text);
+    updateValidatorStates();
   }
 
   void showFeedback(String message) {
@@ -248,6 +277,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     SizedBox(height: 30),
                     buildUsernameField(),
                     SizedBox(height: 30),
+                    buildPasswordField(),
+                    buildPasswordConfirmationField(),
+                    SizedBox(height: 30),
                     DropdownButtonFormField<Sound>(
                       value: currentSettings?.onErrorSound,
                       onChanged: (newValue) {
@@ -367,6 +399,51 @@ class _EditProfilePageState extends State<EditProfilePage> {
           hint: "Entrez votre nom d'utilisateur",
           helperText: 'Non vide: $usernameFormat',
           maxLength: 20,
+        ),
+        SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget buildPasswordField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextInputField(
+          label: "Mot de passe",
+          controller: passwordController,
+          hint: "Entrez votre mot de passe",
+          helperText: 'Force du mot de passe: $passwordStrength',
+          errorText: _validator.states['password'] == ValidatorState.isEmpty
+              ? "Mot de passe requis"
+              : null,
+          maxLength: 20,
+          isPassword: true,
+        ),
+        SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget buildPasswordConfirmationField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextInputField(
+          label: "Confirmation du mot de passe",
+          controller: confirmationController,
+          hint: "Confirmez votre mot de passe",
+          helperText:
+              'Doit correspondre au mot de passe: $passwordConfirmation',
+          maxLength: 20,
+          errorText: _validator.states['passwordConfirmation'] ==
+                  ValidatorState.isEmpty
+              ? "Veuillez confirmer votre mot de passe"
+              : _validator.states['passwordConfirmation'] ==
+                      ValidatorState.isInvalid
+                  ? "Les mots de passes doivent être identiques"
+                  : null,
+          isPassword: true,
         ),
         SizedBox(height: 10),
       ],
