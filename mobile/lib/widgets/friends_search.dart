@@ -24,7 +24,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
     final FriendService friendService = Get.find();
     super.initState();
     friendService.fetchUsers();
-    // friendService.fetchPending();
+    friendService.fetchPending();
   }
 
   Widget _state(String myId, User user) {
@@ -38,7 +38,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
       if (isRequest) {
         return TextButton(
           onPressed: () {
-            print("Cancelled request");
+            friendService.cancelInvite(user.accountId);
           },
           style: TextButton.styleFrom(
             foregroundColor: Colors.white,
@@ -51,7 +51,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
         bool isPending = friendService.pendingFriends
             .any((friend) => friend.accountId == user.accountId);
         if (isPending) {
-          Row(
+          return Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               IconButton(
@@ -59,7 +59,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
                 iconSize: 40,
                 icon: Icon(Icons.person_add),
                 onPressed: () {
-                  print("Accepted Friend invite");
+                  friendService.respondToInvite(user.accountId, true);
                 },
               ),
               SizedBox(width: 50),
@@ -68,7 +68,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
                 iconSize: 40,
                 icon: Icon(Icons.person_remove),
                 onPressed: () {
-                  print("Unaccepted Friend invite");
+                  friendService.respondToInvite(user.accountId, false);
                 },
               ),
             ],
@@ -88,7 +88,6 @@ class _FriendsSearchState extends State<FriendsSearch> {
         }
       }
     }
-    return Text("ERROR");
   }
 
   @override

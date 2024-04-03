@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/models/friend_model.dart';
-import 'package:mobile/models/user_model.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
+import 'package:mobile/widgets/friends_list.dart';
 import 'package:mobile/widgets/friends_pending.dart';
-import 'package:mobile/widgets/friends_popup.dart';
 import 'package:mobile/widgets/friends_search.dart';
 
 class FriendsPage extends StatefulWidget {
@@ -26,139 +24,6 @@ class FriendsPage extends StatefulWidget {
 class _FriendsPageState extends State<FriendsPage> {
   int _selectedViewIndex = 0;
 
-  List<Friend> simulatedFriends = [
-    Friend(
-        name: "Mp",
-        accountId: "11",
-        friends: [
-          Friend(
-              name: "AHHH",
-              accountId: "17",
-              friends: [],
-              commonFriends: [],
-              isOnline: true,
-              isFavorite: false),
-          Friend(
-              name: "Edgar",
-              accountId: "14",
-              friends: [],
-              commonFriends: [],
-              isOnline: false,
-              isFavorite: false),
-          Friend(
-              name: "Mj",
-              accountId: "13",
-              friends: [],
-              commonFriends: [],
-              isOnline: true,
-              isFavorite: false),
-        ],
-        commonFriends: [
-          Friend(
-              name: "Zaki",
-              accountId: "15",
-              friends: [],
-              commonFriends: [],
-              isOnline: true,
-              isFavorite: false),
-          Friend(
-              name: "Moh",
-              accountId: "16",
-              friends: [],
-              commonFriends: [],
-              isOnline: true,
-              isFavorite: false),
-        ],
-        isOnline: true,
-        isFavorite: false),
-    Friend(
-        name: "Edgar",
-        accountId: "14",
-        friends: [],
-        commonFriends: [],
-        isOnline: false,
-        isFavorite: false),
-    Friend(
-        name: "Mj",
-        accountId: "13",
-        friends: [],
-        commonFriends: [],
-        isOnline: true,
-        isFavorite: false),
-    Friend(
-        name: "Zaki",
-        accountId: "15",
-        friends: [],
-        commonFriends: [],
-        isOnline: true,
-        isFavorite: false),
-    Friend(
-        name: "Moh",
-        accountId: "16",
-        friends: [],
-        commonFriends: [],
-        isOnline: true,
-        isFavorite: false),
-  ];
-  //simulatedRequestsReceived and simulatedRequestsSent won't have this version of Friend
-  List<Friend> simulatedRequestsReceived = [
-    Friend(
-        name: "Zaki",
-        accountId: "15",
-        friends: [],
-        commonFriends: [],
-        isOnline: true,
-        isFavorite: false),
-    Friend(
-        name: "Mj",
-        accountId: "13",
-        friends: [],
-        commonFriends: [],
-        isOnline: true,
-        isFavorite: false),
-  ];
-
-  List<Friend> simulatedRequestsSent = [
-    Friend(
-        name: "Edgar",
-        accountId: "14",
-        friends: [],
-        commonFriends: [],
-        isOnline: false,
-        isFavorite: false),
-  ];
-
-  //Utilisé pour la recherche
-  List<User> simulatedUsers = [
-    User(name: "Mp", accountId: "11", friends: [
-      Friend(
-          name: "AHHH",
-          accountId: "17",
-          friends: [],
-          commonFriends: [],
-          isOnline: true,
-          isFavorite: false),
-      Friend(
-          name: "Edgar",
-          accountId: "14",
-          friends: [],
-          commonFriends: [],
-          isOnline: false,
-          isFavorite: false),
-      Friend(
-          name: "Mj",
-          accountId: "13",
-          friends: [],
-          commonFriends: [],
-          isOnline: true,
-          isFavorite: false),
-    ], friendRequests: []),
-    User(name: "Mj", accountId: "13", friends: [], friendRequests: []),
-    User(name: "Edgar", accountId: "14", friends: [], friendRequests: []),
-    User(name: "Moha", accountId: "15", friends: [], friendRequests: []),
-    User(name: "Zaki", accountId: "16", friends: [], friendRequests: []),
-  ];
-
   void _selectView(int index) {
     setState(() {
       _selectedViewIndex = index;
@@ -169,102 +34,7 @@ class _FriendsPageState extends State<FriendsPage> {
   Widget _buildContent() {
     switch (_selectedViewIndex) {
       case 0:
-        return ListView.builder(
-          itemCount: simulatedFriends.length,
-          itemBuilder: (BuildContext context, int index) {
-            final friend = simulatedFriends[index];
-            return Container(
-              alignment: Alignment.center,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 750),
-                child: Card(
-                  margin: EdgeInsets.all(8),
-                  child: ListTile(
-                    leading: Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundColor: Colors.grey[200],
-                          backgroundImage:
-                              AssetImage('assets/images/hallelujaRaccoon.jpeg'),
-                        ),
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: Container(
-                            padding: EdgeInsets.all(1),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                            // child: Icon(
-                            //   Icons.circle,
-                            //   color:
-                            //       friend.isOnline ? Colors.green : Colors.red,
-                            //   size: 20,
-                            // ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    title: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(friend.name, style: TextStyle(fontSize: 25)),
-                        SizedBox(width: 5),
-                        // IconButton(
-                        //   icon: Icon(
-                        //     friend.isFavorite
-                        //         ? Icons.favorite
-                        //         : Icons.favorite_border,
-                        //     //color: friend.isFavorite ? Colors.red : null,
-                        //     size: 35,
-                        //   ),
-                        //   onPressed: () {
-                        //     setState(() {
-                        //       //friend.isFavorite = !friend.isFavorite;
-                        //     });
-                        //     // TODO: notify the server
-                        //   },
-                        // ),
-                        SizedBox(width: 20),
-                        TextButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return FriendsPopup(
-                                  username: friend.name,
-                                  allFriends: friend.friends,
-                                  commonFriends: friend.commonFriends,
-                                );
-                              },
-                            );
-                          },
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: kLightGreen,
-                            disabledForegroundColor:
-                                Colors.grey.withOpacity(0.38),
-                          ),
-                          child: Text('Amis', style: TextStyle(fontSize: 18)),
-                        ),
-                      ],
-                    ),
-                    //subtitle: Text(friend.isOnline ? 'Online' : 'Offline'),
-                    trailing: IconButton(
-                      iconSize: 40,
-                      icon: Icon(Icons.person_remove),
-                      onPressed: () {
-                        print("delete ${friend.name}");
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        );
+        return FriendsList();
       case 1:
         return FriendsPending();
       case 2:

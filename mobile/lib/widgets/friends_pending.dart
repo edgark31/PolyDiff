@@ -67,7 +67,8 @@ class _FriendsPending extends State<FriendsPending> {
                             iconSize: 40,
                             icon: Icon(Icons.person_add),
                             onPressed: () {
-                              print("Accepted Friend invite");
+                              friendService.respondToInvite(
+                                  friend.accountId, true);
                             },
                           ),
                           SizedBox(width: 50),
@@ -76,7 +77,8 @@ class _FriendsPending extends State<FriendsPending> {
                             iconSize: 40,
                             icon: Icon(Icons.person_remove),
                             onPressed: () {
-                              print("Unaccepted Friend invite");
+                              friendService.respondToInvite(
+                                  friend.accountId, false);
                             },
                           ),
                         ],
