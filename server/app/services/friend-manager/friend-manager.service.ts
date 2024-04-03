@@ -38,6 +38,7 @@ export class FriendManagerService {
             }
         });
         await potentialFriendAccount.save();
+        await this.accountManager.fetchUsers();
     }
 
     async optFriendRequest(potentialFriendId: string, senderFriendId: string, isOpt: boolean): Promise<void> {
@@ -93,6 +94,7 @@ export class FriendManagerService {
         });
         await senderAccount.save();
         await friendAccount.save();
+        await this.accountManager.fetchUsers();
     }
 
     async deleteAllFriends() {
@@ -102,6 +104,7 @@ export class FriendManagerService {
             account.profile.friendRequests = [];
             account.save();
         });
+        await this.accountManager.fetchUsers();
     }
 
     calculateCommonFriends(sender: Account, potential: Account): Friend[] {

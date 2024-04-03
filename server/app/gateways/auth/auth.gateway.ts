@@ -79,7 +79,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     updateCommonFriends(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string) {
         const ownAccount = this.accountManager.users.get(socket.data.accountId);
         const friendAccount = this.accountManager.users.get(friendId);
-        socket.emit(FriendEvents.UpdateFoFs, this.friendManager.calculateCommonFriends(ownAccount, friendAccount));
+        socket.emit(FriendEvents.UpdateCommonFriends, this.friendManager.calculateCommonFriends(ownAccount, friendAccount));
     }
 
     // ---------------------- LES SCÉNARIOS --------------------------------
@@ -163,9 +163,18 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.server.fetchSockets().then((sockets) => {
             const friendSocket = sockets.find((s) => s.data.accountId === friendId);
             if (friendSocket) {
-                friendSocket.emit(FriendEvents.ShareScore, score);
+                friendSocket.emit(
+                    FriendEvents.ShareScore,
+                    this.messageManager.createScoreMessage(socket.data.accountId, friendSocket.data.username, score),
+                );
             }
         });
+    }
+
+    // ---------------------- GLOBAL RANKING --------------------------------
+    @SubscribeMessage(AccountEvents.GlobalRanking)
+    async globalRanking(@ConnectedSocket() socket: Socket) {
+        socket.emit(AccountEvents.GlobalRanking, await this.accountManager.globalRanking());
     }
 
     @SubscribeMessage(ChannelEvents.SendGlobalMessage)
