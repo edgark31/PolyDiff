@@ -61,6 +61,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
+    print('init State');
     _validator = CredentialsValidator(onStateChanged: _forceRebuild);
     usernameController.addListener(_onUsernameChanged);
 
@@ -68,6 +69,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _loadInitialSettings() {
+    print('_loadInitialSettings');
+    print(_infoService.onCorrectSound.toJson());
+    print(_infoService.onErrorSound.toJson());
+
     initialSettings = AccountSettings.fromInfoService(_infoService);
     currentSettings = AccountSettings.fromInfoService(_infoService);
   }
@@ -210,6 +215,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('Current OnErrorSound: ${currentSettings?.onErrorSound.toJson()}');
+    print(
+        'Error Sound List: ${ERROR_SOUND_LIST.map((e) => e.toJson()).toList()}');
+    print(
+        'Current OnCorrectSound: ${currentSettings?.onCorrectSound.toJson()}');
+    print(
+        'Correct Sound List: ${CORRECT_SOUND_LIST.map((e) => e.toJson()).toList()}');
+    // This checks if all sounds have a unique name property
+    print(ERROR_SOUND_LIST.map((s) => s.name).toSet().length ==
+        ERROR_SOUND_LIST.length);
+    print(CORRECT_SOUND_LIST.map((s) => s.name).toSet().length ==
+        CORRECT_SOUND_LIST.length);
     return Scaffold(
         drawer: CustomMenuDrawer(),
         appBar: CustomAppBar(title: "Personnalisation du profil"),
@@ -232,12 +249,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     buildUsernameField(),
                     SizedBox(height: 30),
                     DropdownButtonFormField<Sound>(
-                      value: currentSettings!.onErrorSound,
+                      value: currentSettings?.onErrorSound,
                       onChanged: (newValue) {
                         if (newValue != null) {
+                          soundService.playOnErrorSound(newValue);
                           currentSettings =
                               currentSettings!.copyWith(onErrorSound: newValue);
-                          soundService.playOnErrorSound(newValue);
                         }
                       },
                       items: ERROR_SOUND_LIST.map((sound) {
@@ -246,10 +263,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       }).toList(),
                       decoration: InputDecoration(labelText: "Son d'erreur"),
                     ),
-
                     DropdownButtonFormField<Sound>(
-                      value: currentSettings!.onCorrectSound,
-                      onChanged: (newValue) {
+                      value: currentSettings?.onCorrectSound,
+                      onChanged: (Sound? newValue) {
                         if (newValue != null) {
                           soundService.playOnCorrectSound(newValue);
                           currentSettings = currentSettings!

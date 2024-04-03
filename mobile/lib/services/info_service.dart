@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/models.dart';
 
 class InfoService extends ChangeNotifier {
@@ -11,8 +10,8 @@ class InfoService extends ChangeNotifier {
   static String _email = 'temp_email';
   static String _theme = 'light';
   static String _language = 'fr';
-  static Sound _onErrorSound = DEFAULT_ON_ERROR_SOUND;
-  static Sound _onCorrectSound = DEFAULT_ON_CORRECT_SOUND;
+  static Sound _onErrorSound = Sound(name: 'default', path: 'default');
+  static Sound _onCorrectSound = Sound(name: 'default', path: 'default');
   static Statistics _statistics = Statistics(
     gamesPlayed: 0,
     gameWon: 0,
@@ -132,15 +131,11 @@ class InfoService extends ChangeNotifier {
         .map((connection) => ConnectionLog.fromJson(connection)));
     final sessions = List<SessionLog>.from(result['profile']['sessions']
         .map((session) => SessionLog.fromJson(session)));
-    final correctSound = Sound.fromJson(result['profile']['onCorrectSound']);
-    final errorSound = Sound.fromJson(result['profile']['onErrorSound']);
 
     setCredentials(credentials);
     setStatistics(statistics);
     setConnections(connections);
     setSessions(sessions);
-    setOnCorrectSound(correctSound);
-    setOnErrorSound(errorSound);
 
     setTheme(result['profile']['mobileTheme']);
     setLanguage(result['profile']['language']);
