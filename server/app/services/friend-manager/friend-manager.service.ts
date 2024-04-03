@@ -104,6 +104,7 @@ export class FriendManagerService {
             account.profile.friendRequests = [];
             account.save();
         });
+        await this.accountManager.fetchUsers();
     }
 
     calculateCommonFriends(sender: Account, potential: Account): Friend[] {

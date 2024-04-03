@@ -7,6 +7,7 @@
 import { Account, AccountDocument, Credentials, Sound, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, THEME_PERSONALIZATION } from '@common/constants';
+import { RankedPlayer } from '@common/game-interfaces';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -56,6 +57,9 @@ export class AccountManagerService implements OnModuleInit {
                 },
             };
             await this.accountModel.create(newAccount);
+            const account = await this.accountModel.findOne({ 'credentials.username': creds.username });
+            account.id = account._id.toString();
+            await account.save();
             this.logger.verbose(`Account ${creds.username} has registered successfully`);
             this.fetchUsers();
             return Promise.resolve();
@@ -294,6 +298,26 @@ export class AccountManagerService implements OnModuleInit {
             return Promise.resolve(password === 'admin');
         } catch (error) {
             this.logger.error(`Failed to connect --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async globalRanking(): Promise<RankedPlayer[]> {
+        try {
+            const rankedPlayers: RankedPlayer[] = [];
+            const accounts = await this.accountModel.find();
+            accounts.sort((a, b) => b.profile.stats.gameWon - a.profile.stats.gameWon);
+            accounts.forEach((account, index) => {
+                rankedPlayers.push({
+                    name: account.credentials.username,
+                    accountId: account.id,
+                    rank: index + 1,
+                    stats: account.profile.stats,
+                });
+            });
+            return Promise.resolve(rankedPlayers);
+        } catch (error) {
+            this.logger.error(`Failed to get global ranking --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
