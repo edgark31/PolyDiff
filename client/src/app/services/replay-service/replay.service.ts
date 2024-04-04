@@ -7,9 +7,9 @@ import { GameAreaService } from '@app/services/game-area-service/game-area.servi
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate, GameEventData, GameRecord } from '@common/game-interfaces';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { WelcomeService } from '../welcome-service/welcome.service';
 
 @Injectable({
     providedIn: 'root',
@@ -235,10 +235,11 @@ export class ReplayService implements OnDestroy {
     }
 
     private replayClickFound(replayData: GameEventData): void {
-        if (replayData.remainingDifferenceIndex) {
-            this.currentCoords = (this.record.game.differences as Coordinate[][])[
-                replayData.remainingDifferenceIndex[this.currentReplayIndex] as number
-            ];
+        if (this.record.game.differences) {
+            const currentIndex: number = this.record.game.differences.findIndex((difference) =>
+                difference.some((coord: Coordinate) => coord.x === replayData.coordClic?.x && coord.y === replayData.coordClic?.y),
+            );
+            this.currentCoords = (this.record.game.differences as Coordinate[][])[currentIndex];
         }
         this.isDifferenceFound = true;
         this.soundService.playCorrectSoundDifference(this.welcome.account.profile.onCorrectSound);
