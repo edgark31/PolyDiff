@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { GameRecord, GameRecordDocument } from '@app/model/database/game-record';
 import { DatabaseService } from '@app/services/database/database.service';
-import { DEFAULT_COUNTDOWN_VALUE } from '@common/constants';
+import { DEFAULT_COUNTDOWN_VALUE, NOT_FOUND } from '@common/constants';
 import { GameEvents } from '@common/enums';
 import { Coordinate, Game, GameEventData, Player } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
@@ -156,7 +156,7 @@ export class RecordManagerService {
             differenceGroup.some((coordinate) => coordinate.x === coordinates.x && coordinate.y === coordinates.y),
         );
 
-        if (foundIndex !== -1) {
+        if (foundIndex !== NOT_FOUND) {
             const remainingDifferencesIndex = this.remainingDifferencesIndex.get(game.lobbyId).filter((index) => index !== foundIndex);
             this.remainingDifferencesIndex.set(game.lobbyId, remainingDifferencesIndex);
             this.logger.debug(`Record Manager found index : ${foundIndex} at coordinates ${coordinates.x} et ${coordinates.y}`);
