@@ -32,11 +32,12 @@ const List<Sound> CORRECT_SOUND_LIST = [
   Sound(name: "TOO GOOD 3", path: "assets/sound/correct1.mp3"),
 ];
 
+// Default Game Record
 GameRecord DEFAULT_GAME_RECORD = GameRecord(
   game: Game.initial(),
   players: [],
   accountIds: [],
-  date: '',
+  date: DateTime.now().toUtc(),
   startTime: 0,
   endTime: 0,
   duration: 0,

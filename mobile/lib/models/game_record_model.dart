@@ -2,10 +2,10 @@ import 'package:mobile/models/game.dart';
 import 'package:mobile/models/players.dart';
 
 class GameRecord {
+  final DateTime date;
   final Game game;
   final List<Player> players;
   final List<String> accountIds;
-  final String date;
   final int startTime;
   final int endTime;
   final int duration;
@@ -14,10 +14,10 @@ class GameRecord {
   final List<GameEventData> gameEvents;
 
   GameRecord({
+    required this.date,
     required this.game,
     required this.players,
     required this.accountIds,
-    required this.date,
     required this.startTime,
     required this.endTime,
     required this.duration,
@@ -51,7 +51,8 @@ class GameEventData {
   final List<Player>? players;
   final String gameEvent;
   final Coordinate? coordClic;
-  final List<int>? remainingDifferenceIndex;
+  final List<int>?
+      remainingDifferenceIndex; // Only sent when a difference is found
   final bool? isMainCanvas;
 
   GameEventData({
