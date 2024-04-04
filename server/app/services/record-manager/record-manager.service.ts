@@ -1,24 +1,20 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { GameRecord, GameRecordDocument } from '@app/model/database/game-record';
-import { DatabaseService } from '@app/services/database/database.service';
+/* eslint-disable no-underscore-dangle */
+import { GameRecord } from '@app/model/database/game-record';
 import { DEFAULT_COUNTDOWN_VALUE, NOT_FOUND } from '@common/constants';
 import { GameEvents } from '@common/enums';
 import { Coordinate, Game, GameEventData, Player } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 
 @Injectable()
 export class RecordManagerService {
     private remainingDifferencesIndex = new Map<string, number[]>();
     private pendingGameRecord = new Map<string, GameRecord>();
 
-    constructor(
-        @InjectModel(GameRecord.name) private gameRecordModel: Model<GameRecordDocument>,
-        private readonly logger: Logger,
-        private readonly databaseService: DatabaseService,
-    ) {}
+    constructor(@InjectModel(GameRecord.name) private gameRecordModel: Model<GameRecord>, private readonly logger: Logger) {}
 
+    // TODO: add coordClick as empty
     // eslint-disable-next-line max-params
     createEntry(game: Game, players: Player[], isCheatEnabled?: boolean, timeLimit?: number): void {
         this.logger.verbose(`Record Manager from lobby :${game.lobbyId} is creating a new record for game :${game.gameId} `);
@@ -35,7 +31,7 @@ export class RecordManagerService {
                 game,
                 players,
                 date,
-                startTime: Date.now(),
+                startTime: date.getTime(),
                 endTime: null,
                 duration: 0,
                 isCheatEnabled: isCheatEnabled != null ? isCheatEnabled : false,
@@ -73,7 +69,7 @@ export class RecordManagerService {
     }
 
     closeEntry(lobbyId: string): void {
-        const endTime = Date.now();
+        const endTime = new Date().getTime();
         const gameEventData: GameEventData = {
             timestamp: endTime,
             gameEvent: GameEvents.EndGame,
@@ -93,21 +89,13 @@ export class RecordManagerService {
         return this.pendingGameRecord.get(lobbyId);
     }
 
-    // account id is added to the gameRecord when players saves it
-    async updateAccountIds(recordId: string, accountId: string): Promise<void> {
-        try {
-            await this.gameRecordModel.findOneAndUpdate({ _id: recordId }, { accountIds: accountId }).exec();
-        } catch (error) {
-            this.logger.error(`Record Manager from lobby :${recordId} has failed to add the account id with error: ${error}`);
-        }
-    }
-
-    async pushToDatabase(lobbyId: string): Promise<void> {
+    async post(lobbyId: string): Promise<void> {
         const gameRecord = this.getPendingGameRecord(lobbyId);
         if (!gameRecord) return;
 
         try {
             await this.gameRecordModel.create(gameRecord);
+
             this.logger.verbose(`Record Manager from lobby :${lobbyId} has saved the game record successfully`);
         } catch (error) {
             this.logger.error(`Record Manager from lobby :${lobbyId} has failed`);
@@ -117,38 +105,44 @@ export class RecordManagerService {
         this.remainingDifferencesIndex.set(lobbyId, []);
     }
 
-    // TODO: put theses methods in the database service
-    async getById(id: string): Promise<GameRecord> {
-        try {
-            const record = await this.gameRecordModel.findById(id, '-__v').exec();
-            this.logger.log(`Record Manager from lobby :${id} has fetched the game record successfully`);
-            return record;
-        } catch (error) {
-            this.logger.error(`Record Manager from lobby :${id} has failed to get the game record with error: ${error}`);
-        }
+    // the date of the game record is used to fetch it from the database
+    async findOne(dateFilterQuery: FilterQuery<GameRecord>): Promise<GameRecord> {
+        return await this.gameRecordModel.findOne({ dateFilterQuery }).exec();
     }
 
-    // all saved game records are fetch when user wants to see his profile
-    async getAllByAccountId(accountId: string) {
-        try {
-            return await this.gameRecordModel.find({ accountIds: accountId }).exec();
-        } catch (error) {
-            this.logger.error(`Record Manager has failed to fetch saved game records for accountId: ${accountId} with error: ${error}`);
-        }
+    async findAll(): Promise<GameRecord[]> {
+        return await this.gameRecordModel.find().exec();
     }
 
-    // player account id is removed from the gameRecord when he wants to delete it from his profile
-    async deleteAccountId(recordId: string, accountId: string): Promise<void> {
-        await this.gameRecordModel.findOneAndUpdate({ _id: recordId }, { $pull: { accountIds: accountId } }).exec();
+    async findAllByAccountId(accountId: string): Promise<GameRecord[]> {
+        return await this.gameRecordModel.find({ accountIds: accountId }).exec();
+    }
+
+    async addAccountId(date: string, accountId: string): Promise<void> {
+        try {
+            await this.gameRecordModel.findOneAndUpdate({ date }, { $addToSet: { accountIds: accountId } }).exec();
+            this.logger.log(`Record Manager has added account id :${accountId} to the game record with date :${date}`);
+        } catch (error) {
+            return Promise.reject(`Failed to update game record: ${error}`);
+        }
     }
 
     // if no player saves the record, it can be deleted from the database
-    async deleteById(id: string): Promise<void> {
-        await this.gameRecordModel.findByIdAndDelete(id).exec();
+    async deleteAccountId(date: string, accountId: string): Promise<void> {
+        try {
+            await this.gameRecordModel.findOneAndUpdate({ date }, { $pull: { accountIds: accountId } }).exec();
+            this.logger.log(`Record Manager has deleted account id :${accountId} from the game record with date :${date}`);
+        } catch (error) {
+            return Promise.reject(`Failed to update game record: ${error}`);
+        }
+    }
+
+    async deleteOne(dateFilterQuery: FilterQuery<GameRecord>): Promise<void> {
+        await this.gameRecordModel.findOneAndDelete({ dateFilterQuery }).exec();
     }
 
     async deleteAll(): Promise<void> {
-        await this.databaseService.deleteAllGameRecords();
+        await this.gameRecordModel.deleteMany({}).exec();
     }
 
     private getRemainingDifferenceIndex(game: Game, coordinates: Coordinate): number[] {

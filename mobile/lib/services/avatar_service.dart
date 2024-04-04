@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/account.dart';
 
+
+
 Future<http.Response?> putCameraImageAvatar(UploadAvatarBody data) async {
   const url = "$API_URL/account/avatar/upload";
   http.Response? response;

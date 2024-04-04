@@ -96,7 +96,7 @@ export class GameGateway implements OnGatewayConnection {
                         this.server.to(lobbyId).emit(GameEvents.GameRecord, record);
                     }
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Temps écoulé !');
-                    this.recordManager.pushToDatabase(lobbyId);
+                    this.recordManager.post(lobbyId);
                     this.logDraw(lobbyId);
                     clearInterval(timerId);
                     this.deleteLobby(lobbyId);
@@ -195,7 +195,7 @@ export class GameGateway implements OnGatewayConnection {
                     };
                     this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(winChat);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, winChat);
-                    this.recordManager.pushToDatabase(lobbyId);
+                    this.recordManager.post(lobbyId);
                     clearInterval(this.timers.get(lobbyId));
                     this.deleteLobby(lobbyId);
                     return;
@@ -209,7 +209,7 @@ export class GameGateway implements OnGatewayConnection {
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
                     /* --------- Send Record on End Game -------- */
                     this.server.to(lobbyId).emit(GameEvents.GameRecord, record);
-                    this.recordManager.pushToDatabase(lobbyId);
+                    this.recordManager.post(lobbyId);
 
                     this.logDraw(lobbyId);
                     const drawChat: Chat = { raw: 'MATCH NUL', tag: MessageTag.Common };
@@ -336,7 +336,7 @@ export class GameGateway implements OnGatewayConnection {
             this.recordManager.closeEntry(lobbyId);
 
             clearInterval(this.timers.get(lobbyId));
-            this.recordManager.pushToDatabase(lobbyId);
+            this.recordManager.post(lobbyId);
             this.deleteLobby(lobbyId);
             this.logger.log(`Game ${lobbyId} ended because of not enough players`);
             return;
@@ -362,20 +362,6 @@ export class GameGateway implements OnGatewayConnection {
         /* ------------------ Record Event ------------------ */
         this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.CheatDeactivated, username, accountId } as GameEventData);
         this.logger.log(`${username}(${socket.data.accountId}) deactivated cheat in ${lobbyId}`);
-    }
-
-    // TODO : check if async function slows down the sending
-    // sends back the recorded game when user wants to watch it
-    @SubscribeMessage(GameEvents.WatchRecordedGame)
-    async handleGameReplay(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        const record = await this.recordManager.getById(lobbyId);
-        socket.emit(GameEvents.WatchRecordedGame, record);
-    }
-
-    // after replay recorded game, player can save it in his account
-    @SubscribeMessage(GameEvents.SaveGameRecord)
-    addAccountIdToGameRecord(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        this.recordManager.updateAccountIds(lobbyId, socket.data.accountId);
     }
 
     @SubscribeMessage(ChannelEvents.SendGameMessage)

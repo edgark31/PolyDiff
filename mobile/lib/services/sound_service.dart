@@ -1,18 +1,19 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/models/account.dart';
+import 'package:mobile/services/info_service.dart';
 
 class SoundService extends ChangeNotifier {
   final AudioPlayer audioPlayer = AudioPlayer();
-  final String correctSoundPath = "sound/correct1.mp3";
-  final String errorSoundPath = "sound/error1.mp3";
+  final InfoService infoService = Get.find();
 
   playCorrectSound() async {
-    playSound(correctSoundPath);
+    playSound(infoService.onCorrectSound.path.replaceFirst('assets/', ''));
   }
 
   playErrorSound() async {
-    playSound(errorSoundPath);
+    playSound(infoService.onErrorSound.path.replaceFirst('assets/', ''));
   }
 
   playSound(String soundPath) async {

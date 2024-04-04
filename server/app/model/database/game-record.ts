@@ -8,10 +8,13 @@ export type GameRecordDocument = GameRecord & Document;
 
 @Schema()
 export class GameRecord {
-    // account ids of players who saved the recorded game
     @ApiProperty()
-    @Prop({ required: true })
-    accountIds: string[];
+    @Prop({ type: Date, required: true }) // used as the id
+    date: Date;
+
+    @ApiProperty()
+    @Prop([String])
+    accountIds: string[]; // account ids are added after the record is sent
 
     @ApiProperty()
     @Prop({
@@ -33,13 +36,9 @@ export class GameRecord {
     @Prop({ required: true })
     players: Player[];
 
-    @ApiProperty()
-    @Prop({ required: true })
-    date: Date;
-
     @ApiProperty({ required: false })
     @Prop()
-    startTime: number;
+    startTime: number; // timestamp milliseconds
 
     @ApiProperty()
     @Prop({ required: false })

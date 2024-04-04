@@ -155,12 +155,8 @@ class _GamePageState extends State<GamePage> {
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
-                    if (lobbyService.lobby.observers
-                        .isNotEmpty) // TODO : Remove when observers are fully done
-                      Text(lobbyService.lobby.observers
-                          .map((o) => o.name)
-                          .join(', '))
-                  ],
+                  ] else
+                    SizedBox(width: 50),
                   SizedBox(
                     height: 200,
                     width: 1000,
