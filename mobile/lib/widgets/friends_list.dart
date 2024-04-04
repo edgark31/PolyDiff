@@ -107,7 +107,7 @@ class _FriendsListState extends State<FriendsList> {
                   iconSize: 40,
                   icon: Icon(Icons.person_remove),
                   onPressed: () {
-                    print("delete ${friend.name}");
+                    friendService.removeFriend(friend.accountId);
                   },
                 ),
               ),

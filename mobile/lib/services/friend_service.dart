@@ -78,6 +78,11 @@ class FriendService extends ChangeNotifier {
         {'senderFriendId': userId, 'isOpt': isAccept});
   }
 
+  removeFriend(String friendId) {
+    socketService.send(SocketType.Auth, FriendEvents.DeleteFriend.name,
+        {'friendId': friendId});
+  }
+
   void setListeners() {
     socketService.on(SocketType.Auth, UserEvents.UpdateUsers.name, (data) {
       List<dynamic> receivedData = data as List<dynamic>;
