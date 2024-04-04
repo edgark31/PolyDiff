@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/services/friend_service.dart';
 import 'package:mobile/widgets/friends_popup.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ class _FriendsListState extends State<FriendsList> {
       itemCount: friendService.friends.length,
       itemBuilder: (BuildContext context, int index) {
         final friend = friendService.friends[index];
+        String avatarURL = '$BASE_URL/avatar/${friend.accountId}.png';
         return Container(
           alignment: Alignment.center,
           child: ConstrainedBox(
@@ -37,8 +39,7 @@ class _FriendsListState extends State<FriendsList> {
                     CircleAvatar(
                       radius: 40,
                       backgroundColor: Colors.grey[200],
-                      backgroundImage:
-                          AssetImage('assets/images/hallelujaRaccoon.jpeg'),
+                      backgroundImage: NetworkImage(avatarURL),
                     ),
                     // Positioned(
                     //   right: 0,

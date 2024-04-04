@@ -75,17 +75,21 @@ class _FriendsSearchState extends State<FriendsSearch> {
             ],
           );
         } else {
-          return TextButton(
-            onPressed: () {
-              friendService.sendInvite(user.accountId);
-            },
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: kLightGreen,
-              disabledForegroundColor: Colors.grey.withOpacity(0.38),
-            ),
-            child: Text('Inviter', style: TextStyle(fontSize: 18)),
-          );
+          if (user.accountId == myId) {
+            return Text('Vous', style: TextStyle(fontSize: 18));
+          } else {
+            return TextButton(
+              onPressed: () {
+                friendService.sendInvite(user.accountId);
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: kLightGreen,
+                disabledForegroundColor: Colors.grey.withOpacity(0.38),
+              ),
+              child: Text('Inviter', style: TextStyle(fontSize: 18)),
+            );
+          }
         }
       }
     }
