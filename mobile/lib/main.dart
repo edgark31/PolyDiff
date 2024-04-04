@@ -5,6 +5,7 @@ import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
+import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/chat_service.dart';
@@ -27,7 +28,7 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageProvider()),
-    ChangeNotifierProvider( create: (context) {
+    ChangeNotifierProvider(create: (context) {
       SoundService soundService = Get.find();
       return soundService;
     }),
@@ -74,6 +75,10 @@ void main() async {
       return avatarProvider;
     }),
     ChangeNotifierProvider(create: (context) => ThemeProvider()),
+    ChangeNotifierProvider(create: (context) {
+      GameRecordProvider gameRecordProvider = Get.find();
+      return gameRecordProvider;
+    }),
   ], child: const MyApp()));
 }
 
@@ -90,6 +95,7 @@ void initializeServices() {
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
   Get.put(ThemeProvider());
+  Get.put(GameRecordProvider());
 }
 
 class MyApp extends StatelessWidget {

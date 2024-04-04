@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/providers/game_record_provider.dart';
+import 'package:mobile/replay/game_record_details_widget.dart';
+import 'package:provider/provider.dart';
 
 class WatchRecordedGame extends StatefulWidget {
   const WatchRecordedGame({super.key});
@@ -18,44 +22,34 @@ class WatchRecordedGame extends StatefulWidget {
 }
 
 class _WatchRecordedGameState extends State<WatchRecordedGame> {
-//   final GameRecordProvider gameRecordProvider = Get.find();
-//   final defaultDateForTest = 'Wed, 03 Apr 2024 19:15:01 GMT';
+  final GameRecordProvider gameRecordProvider = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+    gameRecordProvider.getAll();
+    print('Getting all game records');
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    final gameRecordProvider = Provider.of<GameRecordProvider>(context);
+
+    if (gameRecordProvider.gameRecords.isNotEmpty) {
+      Future.delayed(Duration.zero, () {
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) {
+              return GameRecordDetails(
+                  gameRecord: gameRecordProvider.gameRecord);
+            });
+      });
+    } else {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return const Center(child: Text("nothing to show"));
   }
 }
-//       children: [
-//         Row(
-//           children: [
-//             // GameRecordDetails(gameRecord: gameManagerService.gameRecord),
-//             // TODO: implement save account id in the game record
-//             CustomButton(
-//                 text: 'ajouter le accountId',
-//                 press: () {
-//                   gameRecordProvider.addAccountIdByDate(DateTime());
-//                 }),
-
-//             SizedBox(width: 1),
-
-//             CustomButton(
-//                 text: 'Supprimer le accountId',
-//                 press: () {
-//                   gameRecordProvider.deleteAccountIdByDate(defaultDateForTest);
-//                 }),
-//           ],
-//         ),
-//         Row(
-//           children: [
-//             CustomButton(
-//                 text: 'fetch one',
-//                 press: () {
-//                   gameRecordProvider.getByDate(defaultDateForTest);
-//                 }),
-//           ],
-//         ),
-//       ],
-//     );
-//   }
-// }

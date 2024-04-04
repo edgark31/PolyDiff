@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/models/game_record_model.dart'; // Your model import
+import 'package:get/get.dart';
+import 'package:mobile/models/game_record_model.dart';
+import 'package:mobile/providers/game_record_provider.dart';
+import 'package:mobile/widgets/customs/custom_btn.dart'; // Your model import
 
 class GameRecordDetails extends StatefulWidget {
   final GameRecord gameRecord;
@@ -11,6 +14,7 @@ class GameRecordDetails extends StatefulWidget {
 }
 
 class _GameRecordDetailsState extends State<GameRecordDetails> {
+  final GameRecordProvider gameRecordProvider = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +50,12 @@ class _GameRecordDetailsState extends State<GameRecordDetails> {
                               .toString())
                           : null,
                     ))
-                .toList(), // Ensure .toList() is called
+                .toList(),
+            CustomButton(
+                text: 'sauvegarder la reprise',
+                press: () {
+                  gameRecordProvider.addAccountIdByDate(widget.gameRecord.date);
+                }) // Ensure .toList() is called
           ],
         ),
       ),

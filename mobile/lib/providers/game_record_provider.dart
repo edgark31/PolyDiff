@@ -69,7 +69,7 @@ class GameRecordProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> addAccountIdByDate(DateTime date) async {
+  Future<String?> addAccountIdByDate(String date) async {
     final accountId = _infoService.id;
     final url = Uri.parse('$baseUrl/$date?accountId=$accountId');
 

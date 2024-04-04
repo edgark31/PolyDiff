@@ -138,7 +138,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ProfileMenuWidget(
                         title: "Reprises vidéos",
                         icon: Icons.video_collection,
-                        onPress: () => {}),
+                        onPress: () {
+                          Navigator.pushNamed(context, VIDEOS_ROUTE);
+                        }),
 
                     Divider(),
                     SizedBox(height: 20),
