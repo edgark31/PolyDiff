@@ -51,7 +51,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
         if (this.clientSocket.isSocketAlive('auth') === undefined) return;
         this.clientSocket.authSocket.off(AccountEvents.GlobalRanking);
         this.clientSocket.on('auth', AccountEvents.GlobalRanking, (rankedPlayers: RankedPlayer[]) => {
-            this.rankedPlayers = rankedPlayers;
+            this.rankedPlayers = rankedPlayers.slice(0, 3 + 2);
         });
         this.clientSocket.send('auth', AccountEvents.GlobalRanking);
     }
