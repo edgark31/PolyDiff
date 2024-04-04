@@ -166,7 +166,8 @@ button:hover {
     flex-direction: column;
     padding: 3px;
     margin: 10px;
-    background-color: #e8a430;
+    background-color: transparent;
+    border: 2px solid black;
     border-radius: 10px;
     font-family: 'Troika', sans-serif;
     font-size: 20px;
