@@ -7,6 +7,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AccountController } from './controllers/account/account.controller';
 import { GameController } from './controllers/game/game.controller';
+import { RecordController } from './controllers/record/record.controller';
 import { AuthGateway } from './gateways/auth/auth.gateway';
 import { GameGateway } from './gateways/game/game.gateway';
 import { LobbyGateway } from './gateways/lobby/lobby.gateway';
@@ -77,7 +78,7 @@ import { RoomsManagerService } from './services/rooms-manager/rooms-manager.serv
             { name: GameRecord.name, schema: gameRecordSchema },
         ]),
     ],
-    controllers: [GameController, AccountController],
+    controllers: [GameController, AccountController, RecordController],
     providers: [
         Logger,
         GameService,
