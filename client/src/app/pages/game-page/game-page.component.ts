@@ -40,6 +40,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     gameLobby: Game;
     lobby: Lobby;
     mode: string;
+    isAbandon = false;
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
@@ -110,14 +111,14 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
             this.lobby = lobby;
             this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
-            if (this.roomManager.isObserver) {
-                this.messages = this.lobby.chatLog?.chat as Chat[];
-                this.messages.forEach((message: Chat) => {
-                    if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Sent;
-                    else message.tag = MessageTag.Received;
-                });
-            }
+
+            this.messages = this.lobby.chatLog?.chat as Chat[];
+            this.messages.forEach((message: Chat) => {
+                if (message.name === this.welcome.account.credentials.username && message.name) message.tag = MessageTag.Sent;
+                else if (message.name !== this.welcome.account.credentials.username && message.name) message.tag = MessageTag.Received;
+            });
         });
+
         this.gameSubscription = this.gameManager.game$.subscribe((game: Game) => {
             this.gameLobby = game;
             this.remainingDifference = this.gameLobby.differences as Coordinate[][];
@@ -175,6 +176,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
             this.roomManager.off();
             this.gameManager.off();
+            if (!this.isAbandon) {
+                this.clientSocket.disconnect('lobby');
+                this.clientSocket.disconnect('game');
+            }
         }
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.off();
@@ -227,6 +232,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     showAbandonDialog(): void {
+        this.isAbandon = true;
         this.matDialog.open(GamePageDialogComponent, {
             data: { action: GamePageEvent.Abandon, message: 'Êtes-vous certain de vouloir abandonner la partie ? ', lobby: this.lobby },
             disableClose: true,
