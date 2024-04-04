@@ -1,33 +1,29 @@
-<div class="header">
-    <app-nav-bar id="nav-bar"></app-nav-bar>
-</div>
-<div class="selectionComponent">
-    <img id="background" src="./assets/background/MenuBackground.jpg" alt="background" />
+<img id="background" src="./assets/background/MenuBackground.jpg" alt="background" />
+<div class="main">
+    <div class="nav-bar-container">
+        <app-nav-bar id="nav-bar"></app-nav-bar>
+    </div>
     <div class="container">
-        <div class="left">
-            <div *ngIf="!welcome.onChatLobby">
+        <div class="chat-part">
             <app-chat-box (addLobby)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
         </div>
-            <div *ngIf="welcome.onChatLobby">
-                <app-chat-box class="chat-box" (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
+        <div class="player-part">
+            <div class="player-count"> 
+                <p> {{ getPlayers().length }}/4 joueurs présents </p> 
             </div>
-        </div>
-        <div class="right">
-            <div class="player-count"> {{ getPlayers().length }}/4 joueurs présents</div>
-            <div class="element">
-                <div class="players-list">
-                    <p class="waiting-text"> Joueur(s) en attente : </p>
-                    <div class="player-container">
-                        <div class="players" *ngFor="let playerName of getPlayers()">
-                            <p class="player">Joueur: <span class="player-name">{{ playerName.name }}</span></p>
-                        </div>
-                    </div>
+            <div class="waiting-text">
+                <p> Joueur(s) en attente : </p>
+            </div>
+            <div class="players">
+                <div class="player" *ngFor="let player of getPlayers()">
+                    <img src="{{'http://localhost:3000/avatar/' + player.accountId + '.png'}}" >
+                    <p>Joueur: {{ player.name }}</p>
                 </div>
             </div>
         </div>
-        <div class="button-container">
-            <button (click)="onStart()" *ngIf="roomManagerService.isOrganizer && getPlayers().length>=2" type="submit">Commencer la partie</button>
-            <button (click)="onQuit()" type="submit">Quitter</button>
-        </div>
+    </div>
+    <div class="button-container">
+        <button (click)="onStart()" *ngIf="roomManagerService.isOrganizer && getPlayers().length>=2" type="submit">Commencer la partie</button>
+        <button (click)="onQuit()" type="submit">Quitter</button>
     </div>
 </div>
