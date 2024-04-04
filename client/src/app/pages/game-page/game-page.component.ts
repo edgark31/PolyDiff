@@ -201,7 +201,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     sendMessage(message: string): void {
-        console.log(message + 'aaaaaa');
         this.gameManager.sendMessage(this.gameLobby.lobbyId, message);
     }
 
