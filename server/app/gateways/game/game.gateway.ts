@@ -66,7 +66,12 @@ export class GameGateway implements OnGatewayConnection {
                         const players = this.roomsManager.lobbies.get(lobbyId).players;
 
                         /* --------- Create Game Record on StartGame Event -------- */
-                        this.recordManager.createEntry(clonedGame, players, lobby.isCheatEnabled, this.roomsManager.lobbies.get(lobbyId).timeLimit);
+                        this.recordManager.createEntry(
+                            structuredClone(clonedGame),
+                            players,
+                            lobby.isCheatEnabled,
+                            this.roomsManager.lobbies.get(lobbyId).timeLimit,
+                        );
                         this.logger.verbose(`Game Gateway : Game Event StartGame, Game ${clonedGame.name} created`);
                     }
                 });

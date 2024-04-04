@@ -37,7 +37,7 @@ GameRecord DEFAULT_GAME_RECORD = GameRecord(
   game: Game.initial(),
   players: [],
   accountIds: [],
-  date: DateTime.now().toUtc(),
+  date: DateTime.now().toUtc().toString(),
   startTime: 0,
   endTime: 0,
   duration: 0,

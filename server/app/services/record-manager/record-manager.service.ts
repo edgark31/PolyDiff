@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { GameRecord } from '@app/model/database/game-record';
-import { DEFAULT_COUNTDOWN_VALUE } from '@common/constants';
+import { DEFAULT_COUNTDOWN_VALUE, NOT_FOUND } from '@common/constants';
 import { GameEvents } from '@common/enums';
 import { Coordinate, Game, GameEventData, Player } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
@@ -10,10 +10,11 @@ import { FilterQuery, Model } from 'mongoose';
 @Injectable()
 export class RecordManagerService {
     private pendingGameRecord = new Map<string, GameRecord>();
-    private remainingDifferencesIndex: number[];
+    private remainingDifferencesIndex = new Map<string, number[]>();
 
     constructor(@InjectModel(GameRecord.name) private gameRecordModel: Model<GameRecord>, private readonly logger: Logger) {}
 
+    // TODO: add coordClick as empty
     // eslint-disable-next-line max-params
     createEntry(game: Game, players: Player[], isCheatEnabled?: boolean, timeLimit?: number): void {
         this.logger.verbose(`Record Manager from lobby :${game.lobbyId} is creating a new record for game :${game.gameId} `);
@@ -41,7 +42,8 @@ export class RecordManagerService {
             this.pendingGameRecord.set(game.lobbyId, newGameRecord);
 
             // Creates an array of index of differences to keep track of the remaining differences
-            this.remainingDifferencesIndex = game.differences ? Array.from({ length: game.differences.length }, (_, i) => i) : [];
+            const remainingDifferencesIndex = game.differences ? Array.from({ length: game.differences.length }, (_, i) => i) : [];
+            this.remainingDifferencesIndex.set(game.lobbyId, remainingDifferencesIndex);
 
             this.logger.log(`Record Manager created array of index ${this.remainingDifferencesIndex}`);
             this.logger.verbose(`Record Manager from lobby :${game.lobbyId} has created a new record with id :${newGameRecord}`);
@@ -97,8 +99,8 @@ export class RecordManagerService {
             this.logger.error(`Record Manager from lobby :${lobbyId} has failed`);
         }
         // Reset the pending game record
-        this.pendingGameRecord = new Map<string, GameRecord>();
-        this.remainingDifferencesIndex = [];
+        this.pendingGameRecord.set(lobbyId, null);
+        this.remainingDifferencesIndex.set(lobbyId, []);
     }
 
     // the date of the game record is used to fetch it from the database
@@ -142,13 +144,19 @@ export class RecordManagerService {
     }
 
     private getRemainingDifferenceIndex(game: Game, coordinates: Coordinate): number[] {
-        game.differences.forEach((difference, index) => {
-            if (difference[0].x === coordinates.x || difference[0].y === coordinates.y) {
-                const foundIndex = index;
-                this.remainingDifferencesIndex = this.remainingDifferencesIndex.filter((value) => value !== foundIndex);
-            }
-        });
+        const foundIndex = game.differences.findIndex((differenceGroup) =>
+            differenceGroup.some((coordinate) => coordinate.x === coordinates.x && coordinate.y === coordinates.y),
+        );
+
+        if (foundIndex !== NOT_FOUND) {
+            const remainingDifferencesIndex = this.remainingDifferencesIndex.get(game.lobbyId).filter((index) => index !== foundIndex);
+            this.remainingDifferencesIndex.set(game.lobbyId, remainingDifferencesIndex);
+            this.logger.debug(`Record Manager found index : ${foundIndex} at coordinates ${coordinates.x} et ${coordinates.y}`);
+        } else {
+            this.logger.debug(`Record Manager could not find the difference at coordinates ${coordinates}`);
+        }
+
         this.logger.debug(`Record Manager created array of index ${this.remainingDifferencesIndex}`);
-        return this.remainingDifferencesIndex;
+        return this.remainingDifferencesIndex.get(game.lobbyId);
     }
 }

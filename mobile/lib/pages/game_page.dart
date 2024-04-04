@@ -5,6 +5,7 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game.dart';
+import 'package:mobile/replay/game_record_details_widget.dart';
 import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
@@ -13,7 +14,6 @@ import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/abandon_popup.dart';
 import 'package:mobile/widgets/canvas.dart';
 import 'package:mobile/widgets/chat_box.dart';
-import 'package:mobile/widgets/end_game_popup.dart';
 import 'package:mobile/widgets/game_infos.dart';
 import 'package:mobile/widgets/game_loading.dart';
 import 'package:provider/provider.dart';
@@ -92,19 +92,24 @@ class _GamePageState extends State<GamePage> {
       );
     }
 
-    if (gameManagerService.endGameMessage != null) {
+    if (gameManagerService.endGameMessage != null &&
+        gameManagerService.gameRecord != null) {
       Future.delayed(Duration.zero, () {
         if (ModalRoute.of(context)?.isCurrent ?? false) {
           showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) {
-              return EndGamePopup(
-                endMessage: gameManagerService.endGameMessage!,
-                canPlayerReplay: canPlayerReplay,
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                print(gameManagerService.gameRecord);
+                return GameRecordDetails(
+                    gameRecord: gameManagerService.gameRecord);
+              }
+              // return EndGamePopup(
+              //   endMessage: gameManagerService.endGameMessage!,
+              //   canPlayerReplay: canPlayerReplay,
+              // );
+              //},
               );
-            },
-          );
         }
       });
     }

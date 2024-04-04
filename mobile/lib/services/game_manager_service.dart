@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
@@ -74,6 +76,7 @@ class GameManagerService extends ChangeNotifier {
   void setGameRecord(GameRecord record) {
     print('Setting game record');
     _record = record;
+    notifyListeners();
   }
 
   void sendCoord(String? lobbyId, Coordinate coord) {
@@ -209,7 +212,16 @@ class GameManagerService extends ChangeNotifier {
 
     socketService.on(SocketType.Game, GameEvents.GameRecord.name, (record) {
       print('GameRecord received');
-      setGameRecord(GameRecord.fromJson(record as Map<String, dynamic>));
+      if (record is Map<String, dynamic>) {
+        setGameRecord(GameRecord.fromJson(record));
+        print('GameRecord is set');
+        return;
+      } else if (record is String) {
+        final Map<String, dynamic> parsedRecord = jsonDecode(record);
+        setGameRecord(GameRecord.fromJson(parsedRecord));
+      } else {
+        print('Unexpected data format received: ${record.runtimeType}');
+      }
     });
   }
 }
