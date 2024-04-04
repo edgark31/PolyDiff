@@ -8,7 +8,8 @@ import { GameManagerService } from '@app/services/game-manager-service/game-mana
 import { ImageService } from '@app/services/image-service/image.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { Coordinate, GameEventData, GameRecord } from '@common/game-interfaces';
+import { MessageTag } from '@common/enums';
+import { Chat, Coordinate, GameEventData, GameRecord } from '@common/game-interfaces';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Injectable({
@@ -127,8 +128,7 @@ export class ReplayService implements OnDestroy {
     }
 
     private replaySwitcher(replayData: GameEventData): void {
-        console.log(replayData.gameEvent);
-        console.log('index:', this.currentReplayIndex);
+        console.log('index:', this.currentReplayIndex, ', ', replayData.gameEvent, ', username:', replayData.username);
         switch (replayData.gameEvent) {
             case ReplayActions.StartGame:
                 this.replayGameStart();
@@ -243,12 +243,22 @@ export class ReplayService implements OnDestroy {
         }
         this.isDifferenceFound = true;
         this.soundService.playCorrectSoundDifference(this.welcome.account.profile.onCorrectSound);
+        if (replayData) {
+            const commonMessage = `${replayData.username} a trouvé une différence !`;
+            const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
+            this.gameManager.setMessage(commonChat);
+        }
         this.gameAreaService.setAllData();
         this.gameAreaService.replaceDifference(this.currentCoords, this.replaySpeed);
     }
 
     private replayClickError(replayData: GameEventData): void {
         this.soundService.playIncorrectSound(this.welcome.account.profile.onErrorSound);
+        if (replayData) {
+            const commonMessage = `${replayData.username} s'est trompé !`;
+            const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
+            this.gameManager.setMessage(commonChat);
+        }
         this.gameAreaService.showError(replayData.isMainCanvas as boolean, replayData.coordClic as Coordinate, this.replaySpeed);
     }
 
@@ -258,20 +268,24 @@ export class ReplayService implements OnDestroy {
 
     private replayActivateCheat(replayData: GameEventData): void {
         this.isCheatMode = true;
-        if (replayData.remainingDifferenceIndex) {
-            this.currentCoords = (this.record.game.differences as Coordinate[][])[
-                replayData.remainingDifferenceIndex[this.currentReplayIndex] as number
-            ];
+        if (this.record.game.differences) {
+            const currentIndex: number = this.record.game.differences.findIndex((difference) =>
+                difference.some((coord: Coordinate) => coord.x === replayData.coordClic?.x && coord.y === replayData.coordClic?.y),
+            );
+            this.currentCoords = (this.record.game.differences as Coordinate[][])[currentIndex];
             this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
         }
     }
 
     private replayDeactivateCheat(replayData: GameEventData): void {
-        const startDifferences = (this.record.game.differences as Coordinate[][])[
-            replayData.remainingDifferenceIndex?.[this.currentReplayIndex] as number
-        ];
         this.isCheatMode = false;
-        this.gameAreaService.toggleCheatMode(startDifferences, this.replaySpeed);
+        if (this.record.game.differences) {
+            const currentIndex: number = this.record.game.differences.findIndex((difference) =>
+                difference.some((coord: Coordinate) => coord.x === replayData.coordClic?.x && coord.y === replayData.coordClic?.y),
+            );
+            this.currentCoords = (this.record.game.differences as Coordinate[][])[currentIndex];
+            this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
+        }
     }
 
     private replayTimerUpdate(replayData: GameEventData): void {

@@ -158,6 +158,7 @@ export class GameGateway implements OnGatewayConnection {
                 /* --------- Record Difference Found Event -------- */
                 this.recordManager.addGameEvent(lobbyId, {
                     accountId: socket.data.accountId,
+                    username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
                     gameEvent: GameEvents.Found,
                     players: this.roomsManager.lobbies.get(lobbyId).players,
                     coordClic,
