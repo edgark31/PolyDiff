@@ -40,7 +40,7 @@ export class ReplayService implements OnDestroy {
         private readonly welcome: WelcomeService,
     ) {
         this.isReplaying = false;
-        this.replayTimer = new BehaviorSubject<number>(0);
+        this.replayTimer = new BehaviorSubject<number>(0); // TODO: Set to timeLimit NO BEHAVIOR SUBJECT
         this.replayDifferenceFound = new BehaviorSubject<number>(0);
         // this.replayOpponentDifferenceFound = new BehaviorSubject<number>(0);
         this.replayEvents = [];
@@ -138,9 +138,6 @@ export class ReplayService implements OnDestroy {
                 break;
             case ReplayActions.NotFound:
                 this.replayClickError(replayData);
-                break;
-            case ReplayActions.CaptureMessage:
-                // this.replayCaptureMessage(replayData.data as ReplayPayload);
                 break;
             case ReplayActions.CheatActivated:
                 this.replayActivateCheat(replayData);
@@ -261,10 +258,6 @@ export class ReplayService implements OnDestroy {
         }
         this.gameAreaService.showError(replayData.isMainCanvas as boolean, replayData.coordClic as Coordinate, this.replaySpeed);
     }
-
-    // private replayCaptureMessage(replayData: ReplayPayload): void {
-    //     this.gameManager.setMessage(replayData as Chat);
-    // }
 
     private replayActivateCheat(replayData: GameEventData): void {
         this.isCheatMode = true;

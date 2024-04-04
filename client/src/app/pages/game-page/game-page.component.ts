@@ -269,10 +269,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.replayService.replayTimer$.pipe(takeUntil(this.onDestroy$)).subscribe((replayTimer: number) => {
             if (this.isReplayAvailable) {
                 this.timer = replayTimer;
+                this.lobby.players = this.replayService.record.players;
                 if (replayTimer === 0) {
                     this.messages = [];
                     this.nDifferencesFound = 0;
-                    this.lobby.players = this.replayService.record.players;
                 }
             }
         });
