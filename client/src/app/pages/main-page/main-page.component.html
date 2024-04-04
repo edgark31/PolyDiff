@@ -19,10 +19,17 @@
     </div>
 
     <footer class="footer flex-column">
-        <div class="ranking">
-            <div class="rankedPlayer" *ngFor="let rankedPlayer of rankedPlayers">
-                <p>{{rankedPlayer.rank}}. {{rankedPlayer.name}}</p>
-                <img src="{{'http://localhost:3000/avatar/' + rankedPlayer.accountId + '.png'}}">
+        <div *ngIf="rankedPlayers.length > 0" class="ranking">
+            <div class="scroll-container">
+                <div class="rankedPlayer" *ngFor="let rankedPlayer of rankedPlayers">
+                    <p>{{rankedPlayer.rank}}. {{rankedPlayer.name}}</p>
+                    <img src="{{'http://localhost:3000/avatar/' + rankedPlayer.accountId + '.png'}}">
+                </div>
+            </div>
+        </div>
+        <div class="ranking" *ngIf="rankedPlayers.length <= 0" >
+            <div class="loading">
+                <p>Loading ...</p>
             </div>
         </div>
     </footer>
