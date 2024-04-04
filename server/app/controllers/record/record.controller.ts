@@ -2,8 +2,8 @@ import { RecordManagerService } from '@app/services/record-manager/record-manage
 import { GameRecord } from '@common/game-interfaces';
 import { Controller, Delete, Get, Param, Put, Query } from '@nestjs/common';
 
-@Controller('game-record')
-export class GameRecordController {
+@Controller('records')
+export class RecordController {
     constructor(private readonly recordManagerService: RecordManagerService) {}
 
     @Get(':date')
