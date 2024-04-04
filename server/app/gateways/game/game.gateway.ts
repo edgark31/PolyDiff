@@ -64,9 +64,13 @@ export class GameGateway implements OnGatewayConnection {
                     this.games.set(lobbyId, clonedGame);
                     if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
                         const players = this.roomsManager.lobbies.get(lobbyId).players;
-
                         /* --------- Create Game Record on StartGame Event -------- */
-                        this.recordManager.createEntry(clonedGame, players, lobby.isCheatEnabled, this.roomsManager.lobbies.get(lobbyId).timeLimit);
+                        this.recordManager.createEntry(
+                            structuredClone(clonedGame),
+                            players,
+                            lobby.isCheatEnabled,
+                            this.roomsManager.lobbies.get(lobbyId).timeLimit,
+                        );
                         this.logger.verbose(`Game Gateway : Game Event StartGame, Game ${clonedGame.name} created`);
                     }
                 });
@@ -154,6 +158,7 @@ export class GameGateway implements OnGatewayConnection {
                 /* --------- Record Difference Found Event -------- */
                 this.recordManager.addGameEvent(lobbyId, {
                     accountId: socket.data.accountId,
+                    username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
                     gameEvent: GameEvents.Found,
                     players: this.roomsManager.lobbies.get(lobbyId).players,
                     coordClic,
