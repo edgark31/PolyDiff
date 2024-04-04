@@ -10,8 +10,8 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class RecordManagerService {
-    private pendingGameRecord = new Map<string, GameRecord>();
     private remainingDifferencesIndex = new Map<string, number[]>();
+    private pendingGameRecord = new Map<string, GameRecord>();
 
     constructor(
         @InjectModel(GameRecord.name) private gameRecordModel: Model<GameRecordDocument>,
@@ -66,8 +66,9 @@ export class RecordManagerService {
             this.logger.debug(`FOUND COORDCLIC: ${eventData.coordClic.x}, ${eventData.coordClic.y}`);
             const remainingDifferenceIndex = this.getRemainingDifferenceIndex(gameRecord.game, eventData.coordClic);
             eventData.remainingDifferenceIndex = remainingDifferenceIndex;
+        } else if (eventData.gameEvent === GameEvents.CheatActivated || eventData.gameEvent === GameEvents.CheatDeactivated) {
+            eventData.remainingDifferenceIndex = this.remainingDifferencesIndex.get(lobbyId);
         }
-
         gameRecord.gameEvents.push(eventData);
     }
 

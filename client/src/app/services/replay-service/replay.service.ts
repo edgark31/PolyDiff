@@ -249,7 +249,7 @@ export class ReplayService implements OnDestroy {
             this.gameManager.setMessage(commonChat);
         }
         this.gameAreaService.setAllData();
-        this.gameAreaService.replaceDifference(this.currentCoords, this.replaySpeed);
+        this.gameAreaService.replaceDifference(this.currentCoords, '', this.replaySpeed);
     }
 
     private replayClickError(replayData: GameEventData): void {
@@ -268,22 +268,26 @@ export class ReplayService implements OnDestroy {
 
     private replayActivateCheat(replayData: GameEventData): void {
         this.isCheatMode = true;
-        if (this.record.game.differences) {
-            const currentIndex: number = this.record.game.differences.findIndex((difference) =>
-                difference.some((coord: Coordinate) => coord.x === replayData.coordClic?.x && coord.y === replayData.coordClic?.y),
+        this.currentCoords = [];
+        if (replayData.remainingDifferenceIndex) {
+            this.currentCoords = this.currentCoords.concat(
+                replayData.remainingDifferenceIndex.reduce((acc, index) => {
+                    return acc.concat(this.record.game.differences?.[index] as Coordinate[]);
+                }, [] as Coordinate[]),
             );
-            this.currentCoords = (this.record.game.differences as Coordinate[][])[currentIndex];
             this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
         }
     }
 
     private replayDeactivateCheat(replayData: GameEventData): void {
         this.isCheatMode = false;
-        if (this.record.game.differences) {
-            const currentIndex: number = this.record.game.differences.findIndex((difference) =>
-                difference.some((coord: Coordinate) => coord.x === replayData.coordClic?.x && coord.y === replayData.coordClic?.y),
+        this.currentCoords = [];
+        if (replayData.remainingDifferenceIndex) {
+            this.currentCoords = this.currentCoords.concat(
+                replayData.remainingDifferenceIndex.reduce((acc, index) => {
+                    return acc.concat(this.record.game.differences?.[index] as Coordinate[]);
+                }, [] as Coordinate[]),
             );
-            this.currentCoords = (this.record.game.differences as Coordinate[][])[currentIndex];
             this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
         }
     }
