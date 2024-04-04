@@ -86,9 +86,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         if (eventHTMLElement.tagName !== INPUT_TAG_NAME) {
             if (event.key === 't' && this.lobby.isCheatEnabled && this.lobby.mode !== this.gameMode.Practice) {
                 if (this.gameAreaService.isCheatModeActivated) {
-                    this.clientSocket.send('game', GameEvents.CheatDeactivated);
+                    this.clientSocket.send('game', GameEvents.CheatDeactivated, this.lobby.lobbyId);
                 } else {
-                    this.clientSocket.send('game', GameEvents.CheatActivated);
+                    this.clientSocket.send('game', GameEvents.CheatActivated, this.lobby.lobbyId);
                 }
                 const differencesCoordinates = this.gameLobby?.differences ? ([] as Coordinate[]).concat(...this.remainingDifference) : [];
                 this.gameAreaService.toggleCheatMode(differencesCoordinates);
@@ -107,7 +107,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.clientSocket.send('game', GameEvents.Spectate, this.gameManager.lobbyWaiting.lobbyId);
         }
         this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
-        this.lobby = this.gameManager.lobbyWaiting;
+        // this.lobby = this.gameManager.lobbyWaiting;
         this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
             this.lobby = lobby;
             this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
@@ -275,10 +275,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.replayService.replayTimer$.pipe(takeUntil(this.onDestroy$)).subscribe((replayTimer: number) => {
             if (this.isReplayAvailable) {
                 this.timer = replayTimer;
+                this.lobby.players = this.replayService.record.players;
                 if (replayTimer === 0) {
                     this.messages = [];
                     this.nDifferencesFound = 0;
-                    this.lobby.players = this.replayService.record.players;
                 }
             }
         });

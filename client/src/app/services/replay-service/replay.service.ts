@@ -8,7 +8,8 @@ import { GameManagerService } from '@app/services/game-manager-service/game-mana
 import { ImageService } from '@app/services/image-service/image.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { Coordinate, GameEventData, GameRecord } from '@common/game-interfaces';
+import { MessageTag } from '@common/enums';
+import { Chat, Coordinate, GameEventData, GameRecord } from '@common/game-interfaces';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Injectable({
@@ -39,7 +40,7 @@ export class ReplayService implements OnDestroy {
         private readonly welcome: WelcomeService,
     ) {
         this.isReplaying = false;
-        this.replayTimer = new BehaviorSubject<number>(0);
+        this.replayTimer = new BehaviorSubject<number>(0); // TODO: Set to timeLimit NO BEHAVIOR SUBJECT
         this.replayDifferenceFound = new BehaviorSubject<number>(0);
         // this.replayOpponentDifferenceFound = new BehaviorSubject<number>(0);
         this.replayEvents = [];
@@ -127,8 +128,7 @@ export class ReplayService implements OnDestroy {
     }
 
     private replaySwitcher(replayData: GameEventData): void {
-        console.log(replayData.gameEvent);
-        console.log('index:', this.currentReplayIndex);
+        // console.log('index:', this.currentReplayIndex, ', ', replayData.gameEvent, ', username:', replayData.username);
         switch (replayData.gameEvent) {
             case ReplayActions.StartGame:
                 this.replayGameStart();
@@ -138,9 +138,6 @@ export class ReplayService implements OnDestroy {
                 break;
             case ReplayActions.NotFound:
                 this.replayClickError(replayData);
-                break;
-            case ReplayActions.CaptureMessage:
-                // this.replayCaptureMessage(replayData.data as ReplayPayload);
                 break;
             case ReplayActions.CheatActivated:
                 this.replayActivateCheat(replayData);
@@ -243,35 +240,49 @@ export class ReplayService implements OnDestroy {
         }
         this.isDifferenceFound = true;
         this.soundService.playCorrectSoundDifference(this.welcome.account.profile.onCorrectSound);
+        if (replayData) {
+            const commonMessage = `${replayData.username} a trouvé une différence !`;
+            const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
+            this.gameManager.setMessage(commonChat);
+        }
         this.gameAreaService.setAllData();
-        this.gameAreaService.replaceDifference(this.currentCoords, this.replaySpeed);
+        this.gameAreaService.replaceDifference(this.currentCoords, '', this.replaySpeed);
     }
 
     private replayClickError(replayData: GameEventData): void {
         this.soundService.playIncorrectSound(this.welcome.account.profile.onErrorSound);
+        if (replayData) {
+            const commonMessage = `${replayData.username} s'est trompé !`;
+            const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
+            this.gameManager.setMessage(commonChat);
+        }
         this.gameAreaService.showError(replayData.isMainCanvas as boolean, replayData.coordClic as Coordinate, this.replaySpeed);
     }
 
-    // private replayCaptureMessage(replayData: ReplayPayload): void {
-    //     this.gameManager.setMessage(replayData as Chat);
-    // }
-
     private replayActivateCheat(replayData: GameEventData): void {
         this.isCheatMode = true;
+        this.currentCoords = [];
         if (replayData.remainingDifferenceIndex) {
-            this.currentCoords = (this.record.game.differences as Coordinate[][])[
-                replayData.remainingDifferenceIndex[this.currentReplayIndex] as number
-            ];
+            this.currentCoords = this.currentCoords.concat(
+                replayData.remainingDifferenceIndex.reduce((acc, index) => {
+                    return acc.concat(this.record.game.differences?.[index] as Coordinate[]);
+                }, [] as Coordinate[]),
+            );
             this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
         }
     }
 
     private replayDeactivateCheat(replayData: GameEventData): void {
-        const startDifferences = (this.record.game.differences as Coordinate[][])[
-            replayData.remainingDifferenceIndex?.[this.currentReplayIndex] as number
-        ];
         this.isCheatMode = false;
-        this.gameAreaService.toggleCheatMode(startDifferences, this.replaySpeed);
+        this.currentCoords = [];
+        if (replayData.remainingDifferenceIndex) {
+            this.currentCoords = this.currentCoords.concat(
+                replayData.remainingDifferenceIndex.reduce((acc, index) => {
+                    return acc.concat(this.record.game.differences?.[index] as Coordinate[]);
+                }, [] as Coordinate[]),
+            );
+            this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
+        }
     }
 
     private replayTimerUpdate(replayData: GameEventData): void {

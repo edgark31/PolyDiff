@@ -289,7 +289,7 @@ export class GameManagerService {
         if (differenceFound.length !== 0) {
             this.soundService.playCorrectSoundDifference(this.welcome.account.profile.onCorrectSound);
             this.gameAreaService.setAllData();
-            this.gameAreaService.replaceDifference(differenceFound);
+            this.gameAreaService.replaceDifference(differenceFound, lobby.lobbyId as string);
         }
     }
 }

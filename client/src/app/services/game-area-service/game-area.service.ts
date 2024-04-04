@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 import { HostListener, Injectable } from '@angular/core';
 import {
     CHEAT_MODE_WAIT_TIME,
@@ -68,7 +69,7 @@ export class GameAreaService {
         // this.captureService.saveReplayEvent(ReplayActions.ClickError, { isMainCanvas, pos: errorCoordinate });
     }
 
-    replaceDifference(differenceCoord: Coordinate[], flashingSpeed: number = SPEED_X1, isPaused: boolean = false): void {
+    replaceDifference(differenceCoord: Coordinate[], lobbyId: string, flashingSpeed: number = SPEED_X1, isPaused: boolean = false): void {
         const imageDataIndex = this.convert2DCoordToPixelIndex(differenceCoord);
         for (const index of imageDataIndex) {
             for (let i = 0; i < N_PIXEL_ATTRIBUTE; i++) {
@@ -77,7 +78,7 @@ export class GameAreaService {
         }
         this.modifiedContext.putImageData(this.modifiedPixelData, 0, 0);
         if (this.isCheatMode) {
-            this.clientSocket.send('game', GameEvents.CheatDeactivated);
+            this.clientSocket.send('game', GameEvents.CheatDeactivated, lobbyId);
         }
         this.resetCheatMode();
         // this.captureService.saveReplayEvent(ReplayActions.ClickFound, differenceCoord);
