@@ -25,22 +25,27 @@ class StatisticsPage extends StatelessWidget {
     final infoService = context.watch<InfoService>();
     final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
     final username = infoService.username;
-    // TODO: create a statistics service
+    final averageTime = infoService.statistics.averageTime;
+    String formattedAverageTime =
+        "${(averageTime ~/ 60).toString().padLeft(2, '0')}:${(averageTime % 60).toString().padLeft(2, '0')}";
     final List<StatisticItem> statistics = [
       StatisticItem(
           title: "Nombre de parties jouées",
-          value: "100",
+          value: infoService.statistics.gamesPlayed.toString(),
           icon: Icons.games_rounded),
       StatisticItem(
           title: "Nombre de parties gagnées",
-          value: "50",
+          value: infoService.statistics.gameWon.toString(),
           icon: Icons.emoji_events),
       StatisticItem(
           title: "Moyenne de différences trouvées par partie",
-          value: "3.5",
+          value: infoService.statistics.averageDifferences.toString(),
           icon: Icons.photo_library_outlined),
       StatisticItem(
-          title: "Temps moyen par partie", value: "5m 30s", icon: Icons.timer),
+        title: "Temps moyen par partie",
+        value: formattedAverageTime,
+        icon: Icons.timer,
+      ),
     ];
 
     return Scaffold(

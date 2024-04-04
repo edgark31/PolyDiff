@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/models.dart';
 
 class InfoService extends ChangeNotifier {
@@ -11,8 +10,8 @@ class InfoService extends ChangeNotifier {
   static String _email = 'temp_email';
   static String _theme = 'light';
   static String _language = 'fr';
-  static Sound _onErrorSound = DEFAULT_ON_ERROR_SOUND;
-  static Sound _onCorrectSound = DEFAULT_ON_CORRECT_SOUND;
+  static Sound _onErrorSound = Sound(name: 'default', path: 'default');
+  static Sound _onCorrectSound = Sound(name: 'default', path: 'default');
   static Statistics _statistics = Statistics(
     gamesPlayed: 0,
     gameWon: 0,
@@ -20,6 +19,7 @@ class InfoService extends ChangeNotifier {
     averageDifferences: 0,
   );
   static List<ConnectionLog> _connections = [];
+  static List<SessionLog> _sessions = [];
 
   String get username => _username;
   String get id => _id;
@@ -29,6 +29,9 @@ class InfoService extends ChangeNotifier {
   String get theme => _theme;
   Sound get onErrorSound => _onErrorSound;
   Sound get onCorrectSound => _onCorrectSound;
+  Statistics get statistics => _statistics;
+  List<ConnectionLog> get connections => _connections;
+  List<SessionLog> get sessions => _sessions;
 
   void setId(String newId) {
     // print('Changing id from $_id to $newId');
@@ -50,13 +53,23 @@ class InfoService extends ChangeNotifier {
     }
   }
 
+  void setSessions(List<SessionLog> newSessions) {
+    String oldSessions = _sessions.map((c) => c.toJson().toString()).join(', ');
+    String newSessionsString =
+        newSessions.map((c) => c.toJson().toString()).join(', ');
+    print(
+        'Changing sessions from $oldSessions to $newSessionsString for $username ($_id)');
+    _sessions = newSessions;
+    notifyListeners();
+  }
+
   void setConnections(List<ConnectionLog> newConnections) {
     String oldConnections =
         _connections.map((c) => c.toJson().toString()).join(', ');
     String newConnectionsString =
         newConnections.map((c) => c.toJson().toString()).join(', ');
     print(
-        'Changing sessions from $oldConnections to $newConnectionsString for $username ($_id)');
+        'Changing connections from $oldConnections to $newConnectionsString for $username ($_id)');
     _connections = newConnections;
     notifyListeners();
   }
@@ -76,14 +89,14 @@ class InfoService extends ChangeNotifier {
 
   void setOnErrorSound(Sound newOnErrorSound) {
     print(
-        'Changing onErrorSoundId from $_onErrorSound to $newOnErrorSound for $username ($_id)');
+        'Changing onErrorSoundId from ${_onErrorSound.toJson()} to ${newOnErrorSound.toJson()} for $username ($_id)');
     _onErrorSound = newOnErrorSound;
     notifyListeners();
   }
 
   void setOnCorrectSound(Sound newOnCorrectSound) {
     print(
-        'Changing onCorrectSoundId from $_onCorrectSound to $newOnCorrectSound for $username ($_id)');
+        'Changing onCorrectSoundId from ${_onCorrectSound.toJson()} to ${newOnCorrectSound.toJson()} for $username ($_id)');
     _onCorrectSound = newOnCorrectSound;
   }
 
@@ -116,10 +129,13 @@ class InfoService extends ChangeNotifier {
     final connections = List<ConnectionLog>.from(result['profile']
             ['connections']
         .map((connection) => ConnectionLog.fromJson(connection)));
+    final sessions = List<SessionLog>.from(result['profile']['sessions']
+        .map((session) => SessionLog.fromJson(session)));
 
     setCredentials(credentials);
     setStatistics(statistics);
     setConnections(connections);
+    setSessions(sessions);
 
     setTheme(result['profile']['mobileTheme']);
     setLanguage(result['profile']['language']);
