@@ -31,36 +31,6 @@ export class GameController {
         }
     }
 
-    @Get('/records/:date')
-    async getGameRecordByDate(@Param('date') date: string, @Res() response: Response) {
-        try {
-            const gameRecord = await this.recordManagerService.getByDate(date);
-            response.status(HttpStatus.OK).json(gameRecord);
-        } catch (error) {
-            response.status(HttpStatus.NOT_FOUND).send(error.message);
-        }
-    }
-
-    @Put('/records/:date')
-    async addAccountIdToGameRecord(@Param('date') date: string, @Body() accountId: string, @Res() response: Response) {
-        try {
-            await this.recordManagerService.addAccountId(date, accountId);
-            response.status(HttpStatus.OK).send();
-        } catch (error) {
-            response.status(HttpStatus.NOT_FOUND).send(error.message);
-        }
-    }
-
-    @Delete('/records/:date')
-    async deleteAccountIdFromGameRecord(@Param('date') date: string, @Body() accountId: string, @Res() response: Response) {
-        try {
-            await this.recordManagerService.deleteAccountId(date, accountId);
-            response.status(HttpStatus.OK).send();
-        } catch (error) {
-            response.status(HttpStatus.NOT_FOUND).send(error.message);
-        }
-    }
-
     @Get('carousel/:index')
     async getGameCarrousel(@Param('index') index: number, @Res() response: Response) {
         try {
@@ -121,16 +91,6 @@ export class GameController {
     async deleteAllGamesHistory(@Res() response: Response) {
         try {
             await this.gameService.deleteAllGamesHistory();
-            response.status(HttpStatus.OK).send();
-        } catch (error) {
-            response.status(HttpStatus.NO_CONTENT).send(error.message);
-        }
-    }
-
-    @Delete('/records')
-    async deleteAllGameRecords(@Res() response: Response) {
-        try {
-            await this.gameService.deleteAllGameRecords();
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NO_CONTENT).send(error.message);

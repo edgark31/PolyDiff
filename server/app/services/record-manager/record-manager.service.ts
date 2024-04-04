@@ -85,7 +85,7 @@ export class RecordManagerService {
         return this.pendingGameRecord.get(lobbyId);
     }
 
-    async postToDataBase(lobbyId: string): Promise<void> {
+    async post(lobbyId: string): Promise<void> {
         const gameRecord = this.getPendingGameRecord(lobbyId);
         if (!gameRecord) return;
 
