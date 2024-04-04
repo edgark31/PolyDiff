@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class WatchRecordedGame extends StatefulWidget {
   const WatchRecordedGame({super.key});
 
-  static const routeName = VIDEOS_ROUTE;
+  static const routeName = REPLAY_ROUTE;
 
   static Route<dynamic> route() {
     return MaterialPageRoute(
@@ -41,14 +41,11 @@ class _WatchRecordedGameState extends State<WatchRecordedGame> {
             barrierDismissible: false,
             context: context,
             builder: (BuildContext context) {
-              return GameRecordDetails(
-                  gameRecord: gameRecordProvider.gameRecord);
+              return GameRecordDetails();
             });
       });
     } else {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: Text("nothing to show"));
     }
     return const Center(child: Text("nothing to show"));
   }
