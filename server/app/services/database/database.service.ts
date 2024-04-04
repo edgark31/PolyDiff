@@ -115,44 +115,6 @@ export class DatabaseService implements OnModuleInit {
         }
     }
 
-    /* ------ Start Game Record ---------*/
-
-    // returns a game record with the date
-    async getGameRecordByDate(date: string): Promise<GameRecord> {
-        try {
-            const query = { date };
-            return await this.gameRecordModel.findOne(query, '-__v').exec();
-        } catch (error) {
-            return Promise.reject(`Failed to get game record: ${error}`);
-        }
-    }
-
-    async addAccountIdToGameRecord(date: string, accountId: string): Promise<void> {
-        try {
-            await this.gameRecordModel.findOneAndUpdate({ date }, { $addToSet: { accountIds: accountId } }).exec();
-        } catch (error) {
-            return Promise.reject(`Failed to update game record: ${error}`);
-        }
-    }
-
-    async deleteAccountIdFromGameRecord(date: string, accountId: string): Promise<void> {
-        try {
-            await this.gameRecordModel.findOneAndUpdate({ date }, { $pull: { accountIds: accountId } }).exec();
-        } catch (error) {
-            return Promise.reject(`Failed to update game record: ${error}`);
-        }
-    }
-
-    async deleteGameRecordByDate(date: string): Promise<void> {
-        try {
-            await this.gameRecordModel.deleteOne({ date }).exec();
-        } catch (error) {
-            return Promise.reject(`Failed to delete game record: ${error}`);
-        }
-    }
-
-    /* ------ End Game Record ---------*/
-
     saveFiles(newGame: Game): void {
         const dirName = `assets/${newGame._id.toString()}`;
         const dataOfOriginalImage = Buffer.from(newGame.originalImage.replace(/^data:image\/\w+;base64,/, ''), 'base64');
@@ -223,14 +185,6 @@ export class DatabaseService implements OnModuleInit {
             await this.gameCardModel.deleteMany({}).exec();
         } catch (error) {
             return Promise.reject(`Failed to delete all games --> ${error}`);
-        }
-    }
-
-    async deleteAllGameRecords() {
-        try {
-            await this.gameRecordModel.deleteMany({}).exec();
-        } catch (error) {
-            return Promise.reject(`Failed to delete all game records --> ${error}`);
         }
     }
 
