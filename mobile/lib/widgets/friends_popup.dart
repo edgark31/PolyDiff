@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/friend_model.dart';
+import 'package:mobile/services/friend_service.dart';
+import 'package:provider/provider.dart';
 
 class FriendsPopup extends StatefulWidget {
-  final List<Friend?> allFriends;
-  final List<Friend?> commonFriends;
   final String username;
+  final bool inSearch;
 
   FriendsPopup(
       {Key? key,
       required this.username,
-      required this.allFriends,
-      required this.commonFriends})
+      required this.inSearch})
       : super(key: key);
 
   @override
@@ -19,12 +20,14 @@ class FriendsPopup extends StatefulWidget {
 }
 
 class _FriendsPopupState extends State<FriendsPopup> {
+  final FriendService friendService = Get.find();
   bool showAllFriends = true;
 
   @override
   Widget build(BuildContext context) {
+    final friendService = context.watch<FriendService>();
     List<Friend?> friendsToShow =
-        showAllFriends ? widget.allFriends : widget.commonFriends;
+        showAllFriends ? friendService.friends : friendService.friends; // to change
 
     return Dialog(
       child: SizedBox(
@@ -33,7 +36,7 @@ class _FriendsPopupState extends State<FriendsPopup> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (widget.commonFriends.isNotEmpty) ...[
+            if (!widget.inSearch) ...[
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(

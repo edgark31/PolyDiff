@@ -11,15 +11,18 @@ class FriendService extends ChangeNotifier {
   static List<Friend> _pendingFriends = [];
   static List<Friend> _sentFriends = [];
   static List<Friend> _friends = [];
+  static List<Friend> _friendsOfFriends = [];
+  static List<Friend> _commonFriends = [];
 
   final SocketService socketService = Get.find();
-
   final InfoService infoService = Get.find();
 
   List<User> get users => _users;
   List<Friend> get pendingFriends => _pendingFriends;
   List<Friend> get sentFriends => _sentFriends;
   List<Friend> get friends => _friends;
+  List<Friend> get friendsOfFriends => _friendsOfFriends;
+  List<Friend> get commonFriend => _commonFriends;
 
   void updateUsersList(List<User> allUsers) {
     _users = allUsers;
@@ -41,6 +44,16 @@ class FriendService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateCommon(List<Friend> friends) {
+    _commonFriends = friends;
+    notifyListeners();
+  }
+
+  void updateFoFs(List<Friend> friends) {
+    _friendsOfFriends = friends;
+    notifyListeners();
+  }
+
   void fetchUsers() {
     print("Fetching users");
     socketService.send(SocketType.Auth, UserEvents.UpdateUsers.name);
@@ -59,6 +72,18 @@ class FriendService extends ChangeNotifier {
   void fetchFriends() {
     print("Fetching friends");
     socketService.send(SocketType.Auth, FriendEvents.UpdateFriends.name);
+  }
+
+  void fetchCommon(String friendId) {
+    print("Fetching commonFriends");
+    socketService.send(SocketType.Auth, FriendEvents.UpdateCommonFriends.name,
+        {'friendId': friendId});
+  }
+
+  void fetchFoFs(String friendId) {
+    print("Fetching FriendsOfFriends");
+    socketService.send(
+        SocketType.Auth, FriendEvents.UpdateFoFs.name, {'friendId': friendId});
   }
 
   void sendInvite(String potentialFriendId) {
@@ -119,5 +144,24 @@ class FriendService extends ChangeNotifier {
           .toList();
       updateFriends(allFriends);
     });
+
+  //   socketService.on(SocketType.Auth, FriendEvents.UpdateCommonFriends.name,
+  //       (data) {
+  //     print("UPDATING Common");
+  //     List<dynamic> receivedData = data as List<dynamic>;
+  //     List<Friend> commonFriends = receivedData
+  //         .map<Friend>((friend) => Friend.fromJson(friend))
+  //         .toList();
+  //     update(allFriends);
+  //   });
+
+  //   socketService.on(SocketType.Auth, FriendEvents.UpdateFriends.name, (data) {
+  //     print("UPDATING FOF");
+  //     List<dynamic> receivedData = data as List<dynamic>;
+  //     List<Friend> allFriends = receivedData
+  //         .map<Friend>((friend) => Friend.fromJson(friend))
+  //         .toList();
+  //     updateFriends(allFriends);
+  //   });
   }
 }

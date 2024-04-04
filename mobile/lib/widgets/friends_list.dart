@@ -88,8 +88,7 @@ class _FriendsListState extends State<FriendsList> {
                           builder: (BuildContext context) {
                             return FriendsPopup(
                               username: friend.name,
-                              allFriends: friend.friends,
-                              commonFriends: friend.commonFriends,
+                              inSearch: false,
                             );
                           },
                         );
