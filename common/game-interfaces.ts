@@ -288,3 +288,23 @@ export interface GameEventData {
     remainingDifferenceIndex?: number[];
     isMainCanvas?: boolean;
 }
+
+export interface GameRecord {
+    game: Game;
+    players: Player[];
+    accountIds: string[];
+    date: Date;
+    startTime: number;
+    endTime: number;
+    duration: number;
+    isCheatEnabled: boolean;
+    timeLimit: number;
+    gameEvents: GameEventData[];
+}
+
+export interface RankedPlayer {
+    accountId: string;
+    name: string;
+    rank: number;
+    stats: Statistics;
+}

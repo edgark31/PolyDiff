@@ -118,6 +118,7 @@ export enum LobbyState {
 
 export enum AccountEvents {
     RefreshAccount = 'RefreshAccount', // Pour rafraichir son propre compte
+    GlobalRanking = 'GlobalRanking', // Pour chercher le classement global
 }
 
 export enum UserEvents {

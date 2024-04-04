@@ -59,6 +59,7 @@ export class RecordManagerService {
         if (!gameRecord) return;
 
         if (eventData.gameEvent === GameEvents.Found) {
+            this.logger.debug(`FOUND COORDCLIC: ${eventData.coordClic.x}, ${eventData.coordClic.y}`);
             const remainingDifferenceIndex = this.getRemainingDifferenceIndex(gameRecord.game, eventData.coordClic);
             eventData.remainingDifferenceIndex = remainingDifferenceIndex;
         }

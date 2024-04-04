@@ -176,7 +176,6 @@ export class LobbyGateway implements OnGatewayConnection {
     spectate(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         if (this.roomsManager.lobbies.get(lobbyId).isAvailable) return;
         socket.data.state = LobbyState.Spectate;
-        // Ajouter car le socket observateur ne rejoint aucune salle avant ça
         const observer: Observer = {
             accountId: socket.data.accountId,
             name: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
@@ -212,30 +211,26 @@ export class LobbyGateway implements OnGatewayConnection {
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
         socket.data.state = LobbyState.Idle;
-        const lobbies = Array.from(this.roomsManager.lobbies.values());
-        this.server.emit(LobbyEvents.UpdateLobbys, lobbies);
-        // HANDLE DISCONNECT-ING ***
+        this.logger.log(`LOBBY IN de ${socket.data.accountId}`);
+
         socket.on('disconnecting', () => {
             switch (socket.data.state) {
                 case LobbyState.Idle:
-                    this.logger.log(`${socket.data.accountId} is IDLE`);
+                    this.logger.log(`LOBBY OUT de ${socket.data.accountId} | was IDLE`);
                     break;
                 case LobbyState.Waiting: // ta deja rejoint une room
-                    this.logger.log(`${socket.data.accountId} is WAITING`);
+                    this.logger.log(`LOBBY OUT de ${socket.data.accountId} | was WAITING`);
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
-                    this.logger.log(`${socket.data.accountId} is INGAME`);
+                    this.logger.log(`LOBBY OUT de ${socket.data.accountId} | was INGAME`);
                     break;
                 case LobbyState.Spectate: // t'es dans une room en tant que spectateur
-                    this.logger.log(`${socket.data.accountId} is SPECTATING`);
+                    this.logger.log(`LOBBY OUT de ${socket.data.accountId} | was SPECTATING`);
                     break;
                 default:
                     break;
             }
-            const lobbiesFromManager = Array.from(this.roomsManager.lobbies.values());
-            this.server.emit(LobbyEvents.UpdateLobbys, lobbiesFromManager);
-            this.logger.log(`LOBBY OUT de ${socket.data.accountId}`);
+            this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
         });
-        this.logger.log(`LOBBY IN de ${socket.data.accountId}`);
     }
 }

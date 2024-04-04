@@ -64,7 +64,6 @@ export class GameGateway implements OnGatewayConnection {
                     this.games.set(lobbyId, clonedGame);
                     if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
                         const players = this.roomsManager.lobbies.get(lobbyId).players;
-
                         /* --------- Create Game Record on StartGame Event -------- */
                         this.recordManager.createEntry(
                             structuredClone(clonedGame),
@@ -327,6 +326,7 @@ export class GameGateway implements OnGatewayConnection {
         const abandonChat: Chat = { raw: abandonMessage, tag: MessageTag.Common };
         this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(abandonChat);
         this.server.to(lobbyId).emit(ChannelEvents.GameMessage, abandonChat);
+        socket.emit(GameEvents.AbandonGame, this.roomsManager.lobbies.get(lobbyId));
         if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
             this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
 
@@ -340,7 +340,6 @@ export class GameGateway implements OnGatewayConnection {
             this.logger.log(`Game ${lobbyId} ended because of not enough players`);
             return;
         }
-        socket.emit(GameEvents.AbandonGame, this.roomsManager.lobbies.get(lobbyId));
     }
 
     @SubscribeMessage(GameEvents.CheatActivated)
@@ -365,7 +364,7 @@ export class GameGateway implements OnGatewayConnection {
     }
 
     @SubscribeMessage(ChannelEvents.SendGameMessage)
-    handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string, @MessageBody('message') message: string) {
+    handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
         const chat: Chat = this.messageManager.createMessage(
             this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
             message,
@@ -381,21 +380,24 @@ export class GameGateway implements OnGatewayConnection {
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
         socket.data.state = GameState.InGame;
+        this.logger.log(`GAME ON de ${socket.data.accountId}`);
 
         socket.on('disconnecting', () => {
+            this.logger.log(` ${socket.data.accountId}`);
             switch (socket.data.state) {
                 case GameState.InGame:
+                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was INGAME`);
                     break;
                 case GameState.Abandoned:
+                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was ABANDONING`);
                     break;
                 case GameState.Spectate:
+                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was SPECTATING`);
                     break;
                 default:
                     break;
             }
-            this.logger.log(`GAME OUT de ${socket.data.accountId}`);
         });
-        this.logger.log(`GAME ON de ${socket.data.accountId}`);
     }
 
     // ------------------ CLASSIC MODE ------------------

@@ -7,6 +7,7 @@
 import { Account, AccountDocument, Credentials, Sound, Theme } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
 import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, THEME_PERSONALIZATION } from '@common/constants';
+import { RankedPlayer } from '@common/game-interfaces';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -55,9 +56,10 @@ export class AccountManagerService implements OnModuleInit {
                     onErrorSound: ERROR_SOUND_LIST[0],
                 },
             };
-            this.imageManager.save(newAccount.id, newAccount.profile.avatar);
-            this.imageManager.save(newAccount.credentials.username, newAccount.profile.avatar);
             await this.accountModel.create(newAccount);
+            const account = await this.accountModel.findOne({ 'credentials.username': creds.username });
+            account.id = account._id.toString();
+            await account.save();
             this.logger.verbose(`Account ${creds.username} has registered successfully`);
             this.fetchUsers();
             return Promise.resolve();
@@ -81,6 +83,8 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.id = accountFound._id.toString();
             if (this.connectedUsers.has(accountFound.id)) throw new Error('Account already connected');
 
+            this.imageManager.save(accountFound.id, accountFound.profile.avatar);
+            this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
             await accountFound.save();
             this.connectedUsers.set(accountFound.id, accountFound);
             this.fetchUsers();
@@ -298,6 +302,26 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
+    async globalRanking(): Promise<RankedPlayer[]> {
+        try {
+            const rankedPlayers: RankedPlayer[] = [];
+            const accounts = await this.accountModel.find();
+            accounts.sort((a, b) => b.profile.stats.gameWon - a.profile.stats.gameWon);
+            accounts.forEach((account, index) => {
+                rankedPlayers.push({
+                    name: account.credentials.username,
+                    accountId: account.id,
+                    rank: index + 1,
+                    stats: account.profile.stats,
+                });
+            });
+            return Promise.resolve(rankedPlayers);
+        } catch (error) {
+            this.logger.error(`Failed to get global ranking --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
     showProfiles(): void {
         this.logger.verbose('Connected profiles: ');
         this.connectedUsers.forEach((value, key) => {
@@ -335,6 +359,9 @@ export class AccountManagerService implements OnModuleInit {
         account.profile.sessions.push({
             timestamp: new Date().toLocaleTimeString('en-US', {
                 timeZone: 'America/Toronto',
+                year: 'numeric',
+                month: 'long',
+                day: '2-digit',
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
