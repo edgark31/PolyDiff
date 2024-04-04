@@ -80,10 +80,10 @@ class FriendService extends ChangeNotifier {
 
   void setListeners() {
     socketService.on(SocketType.Auth, UserEvents.UpdateUsers.name, (data) {
-      print("Receiving all users");
       List<dynamic> receivedData = data as List<dynamic>;
       List<User> allUsers =
           receivedData.map<User>((user) => User.fromJson(user)).toList();
+      print("Received data of users: $receivedData");
       updateUsersList(allUsers);
     });
 

@@ -29,7 +29,8 @@ class _FriendsSearchState extends State<FriendsSearch> {
 
   Widget _state(String myId, User user) {
     final friendService = context.watch<FriendService>();
-    bool isFriend = user.friends.any((friend) => friend!.accountId == myId);
+    bool isFriend = friendService.friends
+        .any((friend) => friend.accountId == user.accountId);
     if (isFriend) {
       return Text('Ami', style: TextStyle(fontSize: 18));
     } else {
