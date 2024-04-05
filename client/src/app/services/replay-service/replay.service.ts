@@ -25,8 +25,10 @@ export class ReplayService implements OnDestroy {
     private replayInterval: ReplayInterval;
     private currentReplayIndex: number;
     private replayTimer: number;
+    private nDifferencesFound: number;
     private replayTimerSubject: Subject<number>;
-    private replayDifferenceFound: Subject<Player>;
+    private replayPlayerCount: Subject<Player>;
+    private replayDifferenceFound: Subject<number>;
     private replayEventsSubjectSubscription: Subscription;
 
     // Replay needs to communicate with all services
@@ -47,7 +49,13 @@ export class ReplayService implements OnDestroy {
         this.isDifferenceFound = false;
         this.currentReplayIndex = 0;
         this.replayTimerSubject = new Subject<number>();
-        this.replayDifferenceFound = new Subject<Player>();
+        this.replayPlayerCount = new Subject<Player>();
+        this.replayDifferenceFound = new Subject<number>();
+        this.nDifferencesFound = 0;
+    }
+
+    get nDifferencesFound$() {
+        return this.nDifferencesFound;
     }
 
     get replayTimer$() {
@@ -56,6 +64,10 @@ export class ReplayService implements OnDestroy {
 
     get replayTimerSubject$() {
         return this.replayTimerSubject.asObservable();
+    }
+
+    get replayPlayerCount$() {
+        return this.replayPlayerCount.asObservable();
     }
 
     get replayDifferenceFound$() {
@@ -67,6 +79,8 @@ export class ReplayService implements OnDestroy {
     }
 
     startReplay(): void {
+        console.log(this.record.gameEvents); // player.count =  0 ?
+        console.log('--------------RECORD.PLAYERS--------------');
         this.replayEvents = this.record.gameEvents;
         this.isReplaying = true;
         this.currentReplayIndex = 0;
@@ -101,9 +115,14 @@ export class ReplayService implements OnDestroy {
     }
 
     restartTimer(): void {
-        this.replayDifferenceFound.next(this.record.players[0]);
         this.replayTimer = 0;
+        this.nDifferencesFound = 0;
         this.replayTimerSubject.next(0);
+        for (const player of this.record.players) {
+            player.count = 0;
+            this.replayPlayerCount.next(player);
+        }
+        this.replayDifferenceFound.next(this.nDifferencesFound);
     }
 
     resetReplay(): void {
@@ -127,7 +146,7 @@ export class ReplayService implements OnDestroy {
     }
 
     private replaySwitcher(replayData: GameEventData): void {
-        console.log('index:', this.currentReplayIndex, ', ', replayData.gameEvent, ', username:', replayData.username);
+        console.log(replayData.players);
         switch (replayData.gameEvent) {
             case ReplayActions.StartGame:
                 this.replayGameStart();
@@ -241,7 +260,9 @@ export class ReplayService implements OnDestroy {
         if (replayData.players) {
             for (const player of replayData.players) {
                 if (player.name === replayData.username) {
-                    this.replayDifferenceFound.next(player);
+                    this.replayPlayerCount.next(player);
+                    this.nDifferencesFound++;
+                    this.replayDifferenceFound.next(this.nDifferencesFound);
                 }
             }
         }
@@ -289,12 +310,4 @@ export class ReplayService implements OnDestroy {
         this.replayTimer = replayData.time as number;
         this.replayTimerSubject.next(this.replayTimer);
     }
-
-    // private replayDifferenceFoundUpdate(replayData: GameEventData): void {
-    //     this.replayDifferenceFound.next();
-    // }
-
-    // private replayOpponentDifferencesFoundUpdate(replayData: ReplayPayload): void {
-    //     this.replayOpponentDifferenceFound.next(replayData as number);
-    // }
 }

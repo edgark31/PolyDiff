@@ -50,6 +50,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     lobbiesSubscription: Subscription;
     observersSubscription: Subscription;
     replayTimerSubscription: Subscription;
+    replayPlayerCountSubscription: Subscription;
     replayDifferenceFoundSubscription: Subscription;
     private gameSubscription: Subscription;
     private nextGameSubscription: Subscription;
@@ -182,6 +183,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.observersSubscription?.unsubscribe();
             this.replayTimerSubscription?.unsubscribe();
             this.replayDifferenceFoundSubscription?.unsubscribe();
+            this.replayPlayerCountSubscription?.unsubscribe();
 
             this.roomManager.off();
             this.gameManager.off();
@@ -288,13 +290,15 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
             this.timer = replayTimer;
         });
-        this.replayDifferenceFoundSubscription = this.replayService.replayDifferenceFound$.subscribe((replayDifferenceFound: Player) => {
+        this.replayPlayerCountSubscription = this.replayService.replayPlayerCount$.subscribe((replayPlayerCount: Player) => {
             for (const player of this.lobby.players) {
-                if (player.name === replayDifferenceFound.name) {
-                    player.count = replayDifferenceFound.count;
-                    this.nDifferencesFound++;
+                if (player.name === replayPlayerCount.name) {
+                    player.count = replayPlayerCount.count;
                 }
             }
+        });
+        this.replayDifferenceFoundSubscription = this.replayService.replayDifferenceFound$.subscribe((nDifferencesFound: number) => {
+            this.nDifferencesFound = nDifferencesFound;
         });
     }
 }

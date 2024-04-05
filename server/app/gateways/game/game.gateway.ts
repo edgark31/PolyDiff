@@ -160,16 +160,6 @@ export class GameGateway implements OnGatewayConnection {
             if (index !== NOT_FOUND) {
                 this.logger.log(`Found event received from ${socket.data.accountId} in lobby ${lobbyId}`);
 
-                /* --------- Record Difference Found Event -------- */
-                this.recordManager.addGameEvent(lobbyId, {
-                    accountId: socket.data.accountId,
-                    username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
-                    gameEvent: GameEvents.Found,
-                    players: this.roomsManager.lobbies.get(lobbyId).players,
-                    coordClic,
-                    isMainCanvas,
-                } as GameEventData);
-
                 this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
                 const difference = this.games.get(lobbyId).differences[index];
                 this.games.get(lobbyId).differences.splice(index, 1);
@@ -178,6 +168,16 @@ export class GameGateway implements OnGatewayConnection {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
                     difference,
                 });
+
+                /* --------- Record Difference Found Event -------- */
+                this.recordManager.addGameEvent(lobbyId, {
+                    accountId: socket.data.accountId,
+                    username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+                    gameEvent: GameEvents.Found,
+                    players: structuredClone(this.roomsManager.lobbies.get(lobbyId).players),
+                    coordClic,
+                    isMainCanvas,
+                } as GameEventData);
 
                 this.roomsManager.lobbies.get(lobbyId).isCheatEnabled ? this.server.to(lobbyId).emit(GameEvents.Cheat, remainingDifferences) : null;
                 this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(commonChat);
