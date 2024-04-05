@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
@@ -38,11 +39,11 @@ class _DashboardPageState extends State<DashboardPage> {
     String typeText = '';
     switch (type) {
       case GameModes.Classic:
-        typeText = 'Classique';
+        typeText = AppLocalizations.of(context)!.classicMode;
       case GameModes.Limited:
-        typeText = 'Temps limité';
+        typeText = AppLocalizations.of(context)!.limitedMode;
       case GameModes.Practice:
-        typeText = 'Pratique';
+        typeText = AppLocalizations.of(context)!.practiceMode;
       default:
     }
 
