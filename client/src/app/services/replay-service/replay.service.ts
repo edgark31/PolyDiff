@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Injectable, OnDestroy } from '@angular/core';
 import { REPLAY_LIMITER, SPEED_X1 } from '@app/constants/replay';
 import { ReplayActions } from '@app/enum/replay-actions';
@@ -103,10 +104,6 @@ export class ReplayService implements OnDestroy {
         );
         // timestamp le plus proche
         const gameEvent = gameEventsFiltered.filter((event) => event.timestamp && event.timestamp - this.record.startTime <= time * 1000).pop();
-        console.log(
-            'gameEventsFiltered: ',
-            gameEventsFiltered.filter((event) => event.timestamp && event.timestamp - this.record.startTime <= time * 1000),
-        );
         // calculer lindex a partir du timestamp trouve
         for (let i = 0; i < this.record.gameEvents.length; i++) {
             if (this.record.gameEvents[i].timestamp === gameEvent?.timestamp) {

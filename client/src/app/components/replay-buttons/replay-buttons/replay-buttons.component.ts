@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
 import { WAITING_TIME } from '@app/constants/constants';
@@ -42,7 +43,6 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
     setTimer(event: MatSliderChange): void {
         if (!this.isReplayButtonDisabled) {
             this.timer = event.value as number;
-            console.log('setTimer: ', this.timer);
             this.replayService.fallBackReplay(this.timer);
             setTimeout(() => {
                 this.isReplayButtonDisabled = false;
