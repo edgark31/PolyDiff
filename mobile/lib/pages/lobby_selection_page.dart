@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
@@ -38,57 +41,84 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
+    final infoService = context.watch<InfoService>();
     String creationRoute = lobbyService.isGameModesClassic()
         ? CREATE_ROOM_CARD_ROUTE
         : CREATE_ROOM_OPTIONS_ROUTE;
     final lobbiesFromServer = lobbyService.filterLobbies();
-    final gameModeName = lobbyService.gameModes.name;
-    return Scaffold(
-      drawer: CustomMenuDrawer(),
-      appBar: CustomAppBar(title: 'Sélection de la salle de jeu'),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 10),
-                    CustomButton(
-                      text: 'Créer une salle pour le mode $gameModeName',
-                      press: () => Navigator.pushNamed(context, creationRoute),
-                      widthFactor: 0.5,
-                    ),
-                    const SizedBox(height: 10),
-                    lobbiesFromServer.isEmpty
-                        ? Text(
-                            'Aucune salle d\'attente disponible pour le Mode $gameModeName')
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: lobbiesFromServer.length,
-                            itemBuilder: (context, index) {
-                              return buildLobbyCard(
-                                  context, lobbiesFromServer[index]);
-                            },
-                          ),
-                  ],
+    String gameModeName = lobbyService.gameModes == GameModes.Classic
+        ? AppLocalizations.of(context)!.classicMode
+        : AppLocalizations.of(context)!.limitedMode;
+
+    return BackgroundContainer(
+      backgroundImagePath: infoService.isThemeLight
+          ? SELECTION_BACKGROUND_PATH
+          : SELECTION_BACKGROUND_PATH_DARK,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        drawer: CustomMenuDrawer(),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context)!.lobby_selection_title,
+        ),
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 10),
+                      CustomButton(
+                        text:
+                            '${AppLocalizations.of(context)!.lobby_selection_createRoom} $gameModeName',
+                        press: () =>
+                            Navigator.pushNamed(context, creationRoute),
+                        widthFactor: 0.5,
+                      ),
+                      const SizedBox(height: 10),
+                      lobbiesFromServer.isEmpty
+                          ? Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.all(16.0),
+                              margin: const EdgeInsets.all(16.0),
+                              child: Text(
+                                '${AppLocalizations.of(context)!.lobby_selection_noRoom} $gameModeName',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: lobbiesFromServer.length,
+                              itemBuilder: (context, index) {
+                                return buildLobbyCard(
+                                    context, lobbiesFromServer[index]);
+                              },
+                            ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 
   Widget buildLobbyCard(BuildContext context, Lobby lobby) {
     bool isLobbyClassic = lobby.mode == GameModes.Classic;
-    String lobbyName = isLobbyClassic ? 'Classique' : 'Temps limité';
+    String lobbyName = isLobbyClassic
+        ? AppLocalizations.of(context)!.classicMode
+        : AppLocalizations.of(context)!.limitedMode;
     String classicImagePath = '$BASE_URL/${lobby.gameId}/original.bmp';
     ImageProvider<Object>? lobbyImage = isLobbyClassic
         ? Image.network(classicImagePath).image
         : const AssetImage('assets/images/limitedTime.png');
     String differences =
-        isLobbyClassic ? 'Différences: ${lobby.nDifferences}, ' : '';
-    String nPlayers = 'Nombre de joueurs: ${lobby.players.length}/4';
+        isLobbyClassic ? 'Differences: ${lobby.nDifferences}, ' : '';
+    String nPlayers =
+        '${AppLocalizations.of(context)!.lobby_selection_nPlayers}: ${lobby.players.length}/4';
     String playerNames = lobby.players.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
     final chatService = context.watch<ChatService>();
@@ -118,7 +148,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Text('Joueurs: $playerNames',
+                      child: Text(
+                          '${AppLocalizations.of(context)!.lobby_selection_players}: $playerNames',
                           style: const TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Expanded(
@@ -138,18 +169,21 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
               children: [
                 lobby.isAvailable
                     ? (lobby.players.length == 4
-                        ? const Text('Salle d\'attente pleine')
+                        ? Text(AppLocalizations.of(context)!
+                            .lobby_selection_fullRoom)
                         : CustomButton(
                             press: () {
                               lobbyService.joinLobby(lobby.lobbyId);
                               chatService.setLobbyMessages(lobby.chatLog!.chat);
                               Navigator.pushNamed(context, LOBBY_ROUTE);
                             },
-                            text: 'Rejoindre cette salle d\'attente',
+                            text: AppLocalizations.of(context)!
+                                .lobby_selection_join,
                             widthFactor: 1.5,
                           ))
                     : CustomButton(
-                        text: 'Observer cette partie',
+                        text: AppLocalizations.of(context)!
+                            .lobby_selection_observe,
                         press: () {
                           print(
                               'Player is joining as observer in lobby ${lobby.lobbyId}');

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
@@ -83,7 +84,10 @@ void main() async {
       AvatarProvider avatarProvider = Get.find();
       return avatarProvider;
     }),
-    ChangeNotifierProvider(create: (context) => ThemeProvider()),
+    ChangeNotifierProvider(create: (context) {
+      ThemeProvider themeProvider = Get.find();
+      return themeProvider;
+    })
   ], child: const MyApp()));
 }
 
@@ -109,9 +113,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    final ThemeProvider themeProvider = Get.find();
 
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: APP_NAME_TXT,
       themeMode: themeProvider.themeMode,
@@ -119,6 +123,8 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeClass.darkTheme,
       onGenerateRoute: AppRouter.onGenerateRoute,
       initialRoute: SignInPage.routeName,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

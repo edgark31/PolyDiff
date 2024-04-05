@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/models/models.dart';
 
 class InfoService extends ChangeNotifier {
@@ -27,6 +28,7 @@ class InfoService extends ChangeNotifier {
   String get email => _email;
   String get language => _language;
   String get theme => _theme;
+  bool get isThemeLight => _theme == 'light';
   Sound get onErrorSound => _onErrorSound;
   Sound get onCorrectSound => _onCorrectSound;
   Statistics get statistics => _statistics;
@@ -104,6 +106,7 @@ class InfoService extends ChangeNotifier {
     print(
         'Changing language from $_language to $newLanguage for $username ($_id)');
     _language = newLanguage;
+    Get.updateLocale(Locale(_language));
     notifyListeners();
   }
 

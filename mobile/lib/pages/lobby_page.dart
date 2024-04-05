@@ -64,7 +64,9 @@ class _LobbyPageState extends State<LobbyPage> {
     }
 
     return BackgroundContainer(
-      backgroundImagePath: SELECTION_BACKGROUND_PATH,
+      backgroundImagePath: infoService.isThemeLight
+          ? SELECTION_BACKGROUND_PATH
+          : SELECTION_BACKGROUND_PATH_DARK,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(

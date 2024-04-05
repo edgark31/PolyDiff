@@ -40,20 +40,18 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
           onChanged: (value) {
             widget.onInputTextChanged!(value);
           },
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             labelText: widget.label,
             labelStyle:
-                TextStyle(color: Theme.of(context).colorScheme.secondary),
+                TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             hintText: widget.hint,
             hintStyle: TextStyle(
-                color: const Color.fromARGB(255, 93, 92, 92),
+                color: Color.fromARGB(255, 192, 190, 190),
                 fontWeight: FontWeight.bold),
             helperText: widget.helperText,
             helperStyle: TextStyle(
-                color: Colors.grey,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 2),
             errorText: widget.errorText,
