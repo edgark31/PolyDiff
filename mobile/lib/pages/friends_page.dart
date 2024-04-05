@@ -41,7 +41,7 @@ class _FriendsPageState extends State<FriendsPage> {
         return FriendsSearch();
 
       default:
-        return Text("Contenu non disponible");
+        return Text("");
     }
   }
 
@@ -82,8 +82,10 @@ class _FriendsPageState extends State<FriendsPage> {
                             ? AppLocalizations.of(context)!
                                 .friend_allFriendsButton
                             : (i == 1
-                                ? AppLocalizations.of(context)!.friend_PendingButton
-                                : AppLocalizations.of(context)!.friend_AddButton),
+                                ? AppLocalizations.of(context)!
+                                    .friend_pendingButton
+                                : AppLocalizations.of(context)!
+                                    .friend_addButton),
                         style: TextStyle(fontSize: 25, color: Colors.white)),
                   ),
                 ]
