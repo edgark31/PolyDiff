@@ -156,11 +156,11 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                         child: areObservers
                             ? const Icon(
                                 Icons.remove_red_eye,
-                                color: Colors.white,
+                                color: Colors.black,
                               )
                             : const Icon(
                                 Icons.visibility_off,
-                                color: Colors.white,
+                                color: Colors.black,
                               )),
                   ]),
             ),
