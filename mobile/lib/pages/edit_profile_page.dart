@@ -278,137 +278,145 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        drawer: CustomMenuDrawer(),
-        appBar: CustomAppBar(title: "Personnalisation du profil"),
-        body: Container(
-            padding: EdgeInsets.only(left: 15, top: 20, right: 15),
-            child: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: ListView(
-                  children: [
-                    Row(
-                      children: [
-                        buildSelectedAvatar(),
-                        SizedBox(width: 100),
-                        buildAvatarPicker(),
-                      ],
-                    ),
-                    SizedBox(height: 30),
-                    buildUsernameField(),
-                    SizedBox(height: 30),
-                    buildPasswordField(),
-                    buildPasswordConfirmationField(),
-                    SizedBox(height: 30),
-                    DropdownButtonFormField<Sound>(
-                      value: currentSettings?.onErrorSound,
-                      onChanged: (newValue) {
-                        if (newValue != null) {
-                          soundService.playOnErrorSound(newValue);
-                          currentSettings =
-                              currentSettings!.copyWith(onErrorSound: newValue);
-                        }
-                      },
-                      items: ERROR_SOUND_LIST.map((sound) {
-                        return DropdownMenuItem(
-                            value: sound, child: Text(sound.name));
-                      }).toList(),
-                      decoration: InputDecoration(labelText: "Son d'erreur"),
-                    ),
-                    DropdownButtonFormField<Sound>(
-                      value: currentSettings?.onCorrectSound,
-                      onChanged: (Sound? newValue) {
-                        if (newValue != null) {
-                          soundService.playOnCorrectSound(newValue);
-                          currentSettings = currentSettings!
-                              .copyWith(onCorrectSound: newValue);
-                        }
-                      },
-                      items: CORRECT_SOUND_LIST.map((sound) {
-                        return DropdownMenuItem(
-                            value: sound, child: Text(sound.name));
-                      }).toList(),
-                      decoration: InputDecoration(
-                          labelText: "Son de différence trouvée"),
-                    ),
-                    // Choisir le thème de l'application
-                    DropdownButtonFormField<String>(
-                      value: currentSettings!.theme,
-                      items:
-                          themes.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          currentSettings =
-                              currentSettings!.copyWith(theme: newValue);
-                        }
-                        setState(() {
-                          final themeProvider = Provider.of<ThemeProvider>(
-                              context,
-                              listen: false);
-                          themeProvider.toggleTheme(newValue == 'dark');
-                        });
-                      },
-                      decoration: InputDecoration(labelText: 'Theme'),
-                    ),
-                    // Choisir la langue de l'application
-                    DropdownButtonFormField<String>(
-                      value: currentSettings!.language,
-                      items: languages
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        if (newValue != null) {
-                          currentSettings =
-                              currentSettings!.copyWith(language: newValue);
-                        }
-                      },
-                      decoration: InputDecoration(labelText: "Langue"),
-                    ),
-                    Row(
-                      children: [
-                        OutlinedButton(
-                          onPressed: () {},
-                          style: OutlinedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 50),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20))),
-                          child: Text(CANCEL_BTN_TXT,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.red,
-                                letterSpacing: 2,
-                              )),
-                        ),
-                        SizedBox(width: 125),
-                        ElevatedButton(
-                          onPressed: () => saveChanges(),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: kMidOrange,
-                              padding: EdgeInsets.symmetric(horizontal: 50),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20))),
-                          child: Text(SAVE_BTN_TXT,
-                              style: TextStyle(
-                                fontSize: 15,
-                                letterSpacing: 2,
-                                color: kLight,
-                              )),
-                        ),
-                      ],
-                    )
-                  ],
-                ))));
+    final infoService = context.watch<InfoService>();
+
+    return BackgroundContainer(
+      backgroundImagePath: infoService.isThemeLight
+          ? MENU_BACKGROUND_PATH
+          : MENU_BACKGROUND_PATH_DARK,
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          drawer: CustomMenuDrawer(),
+          appBar: CustomAppBar(title: "Personnalisation du profil"),
+          body: Container(
+              padding: EdgeInsets.only(left: 15, top: 20, right: 15),
+              child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: ListView(
+                    children: [
+                      Row(
+                        children: [
+                          buildSelectedAvatar(),
+                          SizedBox(width: 100),
+                          buildAvatarPicker(),
+                        ],
+                      ),
+                      SizedBox(height: 30),
+                      buildUsernameField(),
+                      SizedBox(height: 30),
+                      buildPasswordField(),
+                      buildPasswordConfirmationField(),
+                      SizedBox(height: 30),
+                      DropdownButtonFormField<Sound>(
+                        value: currentSettings?.onErrorSound,
+                        onChanged: (newValue) {
+                          if (newValue != null) {
+                            soundService.playOnErrorSound(newValue);
+                            currentSettings = currentSettings!
+                                .copyWith(onErrorSound: newValue);
+                          }
+                        },
+                        items: ERROR_SOUND_LIST.map((sound) {
+                          return DropdownMenuItem(
+                              value: sound, child: Text(sound.name));
+                        }).toList(),
+                        decoration: InputDecoration(labelText: "Son d'erreur"),
+                      ),
+                      DropdownButtonFormField<Sound>(
+                        value: currentSettings?.onCorrectSound,
+                        onChanged: (Sound? newValue) {
+                          if (newValue != null) {
+                            soundService.playOnCorrectSound(newValue);
+                            currentSettings = currentSettings!
+                                .copyWith(onCorrectSound: newValue);
+                          }
+                        },
+                        items: CORRECT_SOUND_LIST.map((sound) {
+                          return DropdownMenuItem(
+                              value: sound, child: Text(sound.name));
+                        }).toList(),
+                        decoration: InputDecoration(
+                            labelText: "Son de différence trouvée"),
+                      ),
+                      // Choisir le thème de l'application
+                      DropdownButtonFormField<String>(
+                        value: currentSettings!.theme,
+                        items: themes
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          if (newValue != null) {
+                            currentSettings =
+                                currentSettings!.copyWith(theme: newValue);
+                          }
+                          setState(() {
+                            final themeProvider = Provider.of<ThemeProvider>(
+                                context,
+                                listen: false);
+                            themeProvider.toggleTheme(newValue == 'dark');
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Theme'),
+                      ),
+                      // Choisir la langue de l'application
+                      DropdownButtonFormField<String>(
+                        value: currentSettings!.language,
+                        items: languages
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          if (newValue != null) {
+                            currentSettings =
+                                currentSettings!.copyWith(language: newValue);
+                          }
+                        },
+                        decoration: InputDecoration(labelText: "Langue"),
+                      ),
+                      Row(
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {},
+                            style: OutlinedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(horizontal: 50),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20))),
+                            child: Text(CANCEL_BTN_TXT,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.red,
+                                  letterSpacing: 2,
+                                )),
+                          ),
+                          SizedBox(width: 125),
+                          ElevatedButton(
+                            onPressed: () => saveChanges(),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: kMidOrange,
+                                padding: EdgeInsets.symmetric(horizontal: 50),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20))),
+                            child: Text(SAVE_BTN_TXT,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  letterSpacing: 2,
+                                  color: kLight,
+                                )),
+                          ),
+                        ],
+                      )
+                    ],
+                  )))),
+    );
   }
 
   Widget buildUsernameField() {

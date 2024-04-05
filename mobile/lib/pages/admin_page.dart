@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/game_card_service.dart';
+import 'package:mobile/services/info_service.dart';
+import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -54,66 +57,74 @@ class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     final gameCardService = context.watch<GameCardService>();
+    final infoService = context.watch<InfoService>();
+
     final gameCardsFromServer = gameCardService.gameCards;
     if (isLoading) return CircularProgressIndicator();
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: AppLocalizations.of(context)!.adminPage_adminPageTitle,
-      ),
-      body: Column(
-        children: [
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  for (GameCard gameCard in gameCardsFromServer) {
-                    gameCardService.deleteGameById(gameCard.id);
-                  }
+    return BackgroundContainer(
+      backgroundImagePath: infoService.isThemeLight
+          ? SELECTION_BACKGROUND_PATH
+          : SELECTION_BACKGROUND_PATH_DARK,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context)!.adminPage_adminPageTitle,
+        ),
+        body: Column(
+          children: [
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
                   setState(() {
-                    isLoading = true;
+                    for (GameCard gameCard in gameCardsFromServer) {
+                      gameCardService.deleteGameById(gameCard.id);
+                    }
+                    setState(() {
+                      isLoading = true;
+                    });
+                    Future.delayed(Duration(milliseconds: 2000), () {
+                      _fetchGameCards();
+                      Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                    });
                   });
-                  Future.delayed(Duration(milliseconds: 2000), () {
-                    _fetchGameCards();
-                    Navigator.pushNamed(context, DASHBOARD_ROUTE);
-                  });
-                });
-              },
-              child:
-                  Text(AppLocalizations.of(context)!.adminPage_deleteAllButton),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: GridView.builder(
-                padding: EdgeInsets.all(8.0),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                ),
-                itemCount: gameCardsFromServer.length,
-                itemBuilder: (context, index) {
-                  return AdminGame(
-                    game: gameCardsFromServer[index],
-                    onDelete: () {
-                      setState(() {
-                        gameCardService
-                            .deleteGameById(gameCardsFromServer[index].id);
-                        setState(() {
-                          isLoading = true;
-                        });
-                        Future.delayed(Duration(milliseconds: 2000), () {
-                          _fetchGameCards();
-                        });
-                      });
-                    },
-                  );
                 },
+                child: Text(
+                    AppLocalizations.of(context)!.adminPage_deleteAllButton),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: GridView.builder(
+                  padding: EdgeInsets.all(8.0),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
+                  ),
+                  itemCount: gameCardsFromServer.length,
+                  itemBuilder: (context, index) {
+                    return AdminGame(
+                      game: gameCardsFromServer[index],
+                      onDelete: () {
+                        setState(() {
+                          gameCardService
+                              .deleteGameById(gameCardsFromServer[index].id);
+                          setState(() {
+                            isLoading = true;
+                          });
+                          Future.delayed(Duration(milliseconds: 2000), () {
+                            _fetchGameCards();
+                          });
+                        });
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

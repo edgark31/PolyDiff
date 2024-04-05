@@ -9,6 +9,7 @@ import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/abandon_popup.dart';
 import 'package:mobile/widgets/canvas.dart';
@@ -73,6 +74,8 @@ class _GamePageState extends State<GamePage> {
     final gameAreaService = Provider.of<GameAreaService>(context);
     final gameManagerService = context.watch<GameManagerService>();
     final lobbyService = context.watch<LobbyService>();
+    final infoService = context.watch<InfoService>();
+
     final isPlayerAnObserver = lobbyService.isObserver;
 
     final canPlayerInteract =
@@ -84,7 +87,9 @@ class _GamePageState extends State<GamePage> {
       return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/game_background.jpg"),
+            image: AssetImage(infoService.isThemeLight
+                ? GAME_BACKGROUND_PATH
+                : GAME_BACKGROUND_PATH_DARK),
             fit: BoxFit.cover,
           ),
         ),

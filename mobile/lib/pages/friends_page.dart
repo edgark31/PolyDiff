@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:mobile/widgets/friends_list.dart';
 import 'package:mobile/widgets/friends_pending.dart';
 import 'package:mobile/widgets/friends_search.dart';
+import 'package:provider/provider.dart';
 
 class FriendsPage extends StatefulWidget {
   static const routeName = FRIENDS_ROUTE;
@@ -47,6 +49,8 @@ class _FriendsPageState extends State<FriendsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final infoService = context.watch<InfoService>();
+
     return Scaffold(
       drawer: CustomMenuDrawer(),
       appBar:
@@ -54,7 +58,9 @@ class _FriendsPageState extends State<FriendsPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/LimitedTimeBackground.jpg"),
+            image: AssetImage(infoService.isThemeLight
+                ? LIMITED_TIME_BACKGROUND_PATH
+                : LIMITED_TIME_BACKGROUND_PATH_DARK),
             fit: BoxFit.cover,
           ),
         ),
