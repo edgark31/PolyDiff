@@ -8,7 +8,6 @@ import { MailService } from '@app/services/mail-service/mail-service';
 import { UserEvents } from '@common/enums';
 import { Body, Controller, Delete, HttpStatus, Post, Put, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Socket } from 'dgram';
 import { Response } from 'express';
 
 @ApiTags('Accounts')
