@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_routes.dart';
 
 class AdminPopup extends StatefulWidget {
@@ -28,7 +29,8 @@ class _AdminPopupState extends State<AdminPopup> {
       Navigator.pushNamed(context, ADMIN_ROUTE);
     } else {
       setState(() {
-        errorMessage = "Le mot de passe entré est incorrecte";
+        errorMessage =
+            AppLocalizations.of(context)!.adminPopup_incorrectPassword;
       });
     }
   }
@@ -67,7 +69,7 @@ class _AdminPopupState extends State<AdminPopup> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Connexion à la page d'administration",
+                  AppLocalizations.of(context)!.adminPopup_loginTitle,
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -78,7 +80,7 @@ class _AdminPopupState extends State<AdminPopup> {
                 Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Text(
-                    "Mot de passe",
+                    AppLocalizations.of(context)!.adminPopup_passwordTitle,
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
@@ -132,7 +134,8 @@ class _AdminPopupState extends State<AdminPopup> {
                         backgroundColor: Color.fromARGB(255, 31, 150, 104),
                         foregroundColor: Colors.white,
                       ),
-                      child: Text("Connexion"),
+                      child: Text(
+                          AppLocalizations.of(context)!.adminPopup_loginButton),
                     ),
                   ),
                 ),
