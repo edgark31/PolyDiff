@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
@@ -150,7 +150,8 @@ class _GamePageState extends State<GamePage> {
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       ),
-                      child: Text(AppLocalizations.of(context)!.gamePage_cheatButton,
+                      child: Text(
+                        AppLocalizations.of(context)!.gamePage_cheatButton,
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
@@ -202,7 +203,8 @@ class _GamePageState extends State<GamePage> {
             ),
           isPlayerAnObserver
               ? _actionButton(
-                  context, AppLocalizations.of(context)!.gamePage_leaveButton,
+                  context,
+                  AppLocalizations.of(context)!.gamePage_leaveButton,
                   () {
                     gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
                     Navigator.pushNamed(context, DASHBOARD_ROUTE);
