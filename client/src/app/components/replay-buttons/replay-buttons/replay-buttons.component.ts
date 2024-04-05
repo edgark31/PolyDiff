@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { WAITING_TIME } from '@app/constants/constants';
 import { REPLAY_SPEEDS, SPEED_X1 } from '@app/constants/replay';
 import { ReplayService } from '@app/services/replay-service/replay.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-replay-buttons',
@@ -26,11 +26,9 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.replayService.replayTimer$.pipe(takeUntil(this.onDestroy$)).subscribe((replayTimer: number) => {
-            if (this.isReplayAvailable) {
-                this.timer = replayTimer;
-            }
-        });
+        if (this.isReplayAvailable) {
+            this.timer = this.replayService.replayTimer$;
+        }
         this.replaySpeed = SPEED_X1;
     }
 

@@ -16,7 +16,7 @@ import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent, MessageTag } from '@common/enums';
 import { Chat, Game, GameRecord, Lobby } from '@common/game-interfaces';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
 @Component({
     selector: 'app-game-page',
@@ -148,6 +148,8 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         });
         this.clientSocket.on('game', GameEvents.GameRecord, (record: GameRecord) => {
             this.replayService.setReplay(record);
+            this.timer = record.timeLimit;
+            this.resetGameStats();
         });
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.manage();
@@ -188,6 +190,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.globalChatService.off();
         }
         this.chatSubscriptionGlobal?.unsubscribe();
+    }
+
+    resetGameStats(): void {
+        this.nDifferencesFound = 0;
+        for (const player of this.lobby.players) {
+            player.count = 0;
+        }
     }
 
     translateGameMode(mode: GameModes): string {
@@ -272,15 +281,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     private setUpReplay(): void {
-        this.replayService.replayTimer$.pipe(takeUntil(this.onDestroy$)).subscribe((replayTimer: number) => {
-            if (this.isReplayAvailable) {
-                this.timer = replayTimer;
-                this.lobby.players = this.replayService.record.players;
-                if (replayTimer === 0) {
-                    this.messages = [];
-                    this.nDifferencesFound = 0;
-                }
+        if (this.isReplayAvailable) {
+            this.timer = this.replayService.replayTimer$;
+            // this.lobby.players = this.replayService.record.players;
+            if (this.replayService.replayTimer$ === 0) {
+                this.messages = [];
+                this.nDifferencesFound = 0;
             }
-        });
+        }
     }
 }

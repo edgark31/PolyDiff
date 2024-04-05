@@ -25,7 +25,7 @@ export class ReplayService implements OnDestroy {
     private isDifferenceFound: boolean;
     private replayInterval: ReplayInterval;
     private currentReplayIndex: number;
-    private replayTimer: BehaviorSubject<number>;
+    private replayTimer: number;
     private replayDifferenceFound: BehaviorSubject<number>;
     // private replayOpponentDifferenceFound: BehaviorSubject<number>;
     private replayEventsSubjectSubscription: Subscription;
@@ -40,7 +40,7 @@ export class ReplayService implements OnDestroy {
         private readonly welcome: WelcomeService,
     ) {
         this.isReplaying = false;
-        this.replayTimer = new BehaviorSubject<number>(0); // TODO: Set to timeLimit NO BEHAVIOR SUBJECT
+        this.replayTimer = 0; // TODO: Set to timeLimit
         this.replayDifferenceFound = new BehaviorSubject<number>(0);
         // this.replayOpponentDifferenceFound = new BehaviorSubject<number>(0);
         this.replayEvents = [];
@@ -52,7 +52,7 @@ export class ReplayService implements OnDestroy {
     }
 
     get replayTimer$() {
-        return this.replayTimer.asObservable();
+        return this.replayTimer;
     }
 
     get replayDifferenceFound$() {
@@ -104,7 +104,7 @@ export class ReplayService implements OnDestroy {
     restartTimer(): void {
         // this.replayOpponentDifferenceFound.next(0);
         this.replayDifferenceFound.next(0);
-        this.replayTimer.next(0);
+        this.replayTimer = 0;
     }
 
     resetReplay(): void {
@@ -128,7 +128,7 @@ export class ReplayService implements OnDestroy {
     }
 
     private replaySwitcher(replayData: GameEventData): void {
-        // console.log('index:', this.currentReplayIndex, ', ', replayData.gameEvent, ', username:', replayData.username);
+        console.log('index:', this.currentReplayIndex, ', ', replayData.gameEvent, ', username:', replayData.username);
         switch (replayData.gameEvent) {
             case ReplayActions.StartGame:
                 this.replayGameStart();
@@ -286,7 +286,7 @@ export class ReplayService implements OnDestroy {
     }
 
     private replayTimerUpdate(replayData: GameEventData): void {
-        this.replayTimer.next(replayData.timestamp as number);
+        this.replayTimer = replayData.timestamp as number;
     }
 
     // private replayDifferenceFoundUpdate(replayData: GameEventData): void {
