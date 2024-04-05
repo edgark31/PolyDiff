@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GameLoading extends StatelessWidget {
   @override
@@ -18,7 +19,7 @@ class GameLoading extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                "LA PARTIE VA COMMENCER SOUS PEU ...",
+                AppLocalizations.of(context)!.gameLoading_loadingTitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),

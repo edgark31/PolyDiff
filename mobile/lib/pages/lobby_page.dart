@@ -86,7 +86,7 @@ class _LobbyPageState extends State<LobbyPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ChatBox(),
+                  SizedBox(height: 550, child: ChatBox()),
                   playersInfos(context, playerNames: playerNames),
                 ],
               ),

@@ -11,7 +11,6 @@ class ForegroundPtOriginal extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print('called paint');
     if (gameAreaService.blinkingDifference != null) {
       canvas.scale(
           GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
@@ -29,15 +28,14 @@ class ForegroundPtOriginal extends CustomPainter {
     }
 
     if (gameAreaService.leftErrorCoord.isNotEmpty) {
-      print('called error');
       canvas.scale(
           GameCanvas.tabletScalingRatio, GameCanvas.tabletScalingRatio);
       final textPainter = TextPainter(
         text: TextSpan(
-          text: 'ERREUR',
+          text: 'X',
           style: TextStyle(
             color: Colors.red,
-            fontSize: 30.0,
+            fontSize: 60.0,
           ),
         ),
         textDirection: TextDirection.ltr,
@@ -45,7 +43,7 @@ class ForegroundPtOriginal extends CustomPainter {
       textPainter.layout();
       textPainter.paint(
         canvas,
-        Offset((gameAreaService.leftErrorCoord[0].x - 40).toDouble(),
+        Offset((gameAreaService.leftErrorCoord[0].x).toDouble(),
             (gameAreaService.leftErrorCoord[0].y).toDouble()),
       );
       print(

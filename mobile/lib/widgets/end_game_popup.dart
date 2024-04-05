@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EndGamePopup extends StatelessWidget {
   const EndGamePopup({
@@ -33,7 +34,7 @@ class EndGamePopup extends StatelessWidget {
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
               CustomButton(
-                text: 'Accueil',
+                text: AppLocalizations.of(context)!.endGame_homeButton,
                 press: () {
                   Navigator.pushNamed(context, DASHBOARD_ROUTE);
                 },
@@ -41,10 +42,9 @@ class EndGamePopup extends StatelessWidget {
               if (canPlayerReplay) ...[
                 SizedBox(height: 10),
                 CustomButton(
-                  text: 'Reprise Vidéo',
+                  text: AppLocalizations.of(context)!.endGame_videoReplayButton,
                   press: () {
                     Navigator.pushNamed(context, REPLAY_ROUTE);
-                    print('Navigate to replay video page');
                   },
                 ),
               ],
