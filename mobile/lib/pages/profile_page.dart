@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
@@ -40,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: CustomAppBar(title: "P R O F I L"),
+      appBar: CustomAppBar(title: AppLocalizations.of(context)!.profile_title),
       drawer: CustomMenuDrawer(),
       body: SingleChildScrollView(
         child: Column(
@@ -107,9 +108,45 @@ class _ProfilePageState extends State<ProfilePage> {
                     Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: Column(children: [
-                        Text(infoService.username),
+                        Container(
+                          padding: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Text(
+                            infoService.username,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                         SizedBox(height: 5),
-                        Text(infoService.email),
+                        Container(
+                          padding: const EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Text(
+                            infoService.email,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ]),
                     ),
 
@@ -118,28 +155,29 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 10),
                     // Account information item
                     ProfileMenuWidget(
-                        title: "Paramètres",
+                        title: AppLocalizations.of(context)!.profile_parameters,
                         icon: Icons.settings,
                         onPress: () {
                           Navigator.pushNamed(context, EDIT_PROFILE_ROUTE);
                         }),
                     SizedBox(height: 10),
                     ProfileMenuWidget(
-                        title: "Historique",
+                        title: AppLocalizations.of(context)!.profile_history,
                         icon: Icons.games,
                         onPress: () {
                           Navigator.pushNamed(context, HISTORY_ROUTE);
                         }),
                     SizedBox(height: 10),
                     ProfileMenuWidget(
-                        title: "Statistiques",
+                        title: AppLocalizations.of(context)!.profile_statistics,
                         icon: Icons.trending_up,
                         onPress: () {
                           Navigator.pushNamed(context, STATISTICS_ROUTE);
                         }),
                     SizedBox(height: 10),
                     ProfileMenuWidget(
-                        title: "Reprises vidéos",
+                        title:
+                            AppLocalizations.of(context)!.profile_videoReplay,
                         icon: Icons.video_collection,
                         onPress: () {
                           Navigator.pushNamed(context, VIDEOS_ROUTE);
@@ -148,7 +186,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     Divider(),
                     SizedBox(height: 20),
                     ProfileMenuWidget(
-                      title: "Déconnexion",
+                      title:
+                          AppLocalizations.of(context)!.history_disconnection,
                       icon: Icons.logout_rounded,
                       onPress: () {
                         socketService.disconnect(SocketType.Auth);
