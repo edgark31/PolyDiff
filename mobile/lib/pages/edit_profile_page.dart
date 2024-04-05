@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
@@ -57,7 +58,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   late final CredentialsValidator _validator;
 
-  String usernameFormat = NO;
+  String usernameFormat = '';
 
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmationController = TextEditingController();
@@ -65,6 +66,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String passwordStrength = '';
   String passwordConfirmation = '';
   String newPassword = '';
+
+  String avatarFeedback = '';
+  String passwordFeedback = '';
+  String usernameFeedback = '';
+  String languageFeedback = '';
+  String themeFeedback = '';
+  String errorSoundFeedback = '';
+  String differenceFoundSoundFeedback = '';
 
   Queue<String> _snackBarQueue = Queue<String>();
   bool _isSnackBarActive = false;
@@ -74,6 +83,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     print('init State');
     _validator = CredentialsValidator(onStateChanged: _forceRebuild);
+    usernameFormat = AppLocalizations.of(context)!.confirmation_no;
+
+    avatarFeedback = AppLocalizations.of(context)!.edit_profile_avatarFeedback;
+    passwordFeedback =
+        AppLocalizations.of(context)!.edit_profile_passwordFeedback;
+    usernameFeedback =
+        AppLocalizations.of(context)!.edit_profile_usernameFeedback;
+    languageFeedback =
+        AppLocalizations.of(context)!.edit_profile_languageFeedback;
+    themeFeedback = AppLocalizations.of(context)!.edit_profile_themeFeedback;
+    errorSoundFeedback =
+        AppLocalizations.of(context)!.edit_profile_errorSoundFeedback;
+    differenceFoundSoundFeedback =
+        AppLocalizations.of(context)!.edit_profile_differenceFoundSoundFeedback;
+
     usernameController.addListener(_onUsernameChanged);
     passwordController.addListener(validatePassword);
     confirmationController.addListener(validatePasswordConfirmation);
@@ -110,7 +134,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       usernameFormat = _validator.states['username'] == ValidatorState.isEmpty
           ? ''
           : _validator.states['username'] == ValidatorState.isInvalid
-              ? "invalide"
+              ? AppLocalizations.of(context)!.edit_profile_invalid
               : '';
     });
   }
@@ -118,10 +142,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void updateValidatorStates() {
     setState(() {
       passwordStrength = _validator.passwordStrength;
+      switch (passwordStrength) {
+        case WEAK_PASSWORD:
+          passwordStrength =
+              AppLocalizations.of(context)!.edit_profile_passwordWeak;
+          break;
+        case AVERAGE_PASSWORD:
+          passwordStrength =
+              AppLocalizations.of(context)!.edit_profile_passwordAverage;
+          break;
+        case STRONG_PASSWORD:
+          passwordStrength =
+              AppLocalizations.of(context)!.edit_profile_passwordStrong;
+          break;
+      }
       passwordConfirmation =
           _validator.states['passwordConfirmation'] == ValidatorState.isValid
-              ? YES
-              : NO;
+              ? AppLocalizations.of(context)!.confirmation_yes
+              : AppLocalizations.of(context)!.confirmation_no;
     });
   }
 
@@ -171,7 +209,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         print("response : $response");
         if (response == null) {
           _avatarProvider.setAccountAvatarUrl();
-          showFeedback("Avatar updated successfully.");
+          showFeedback(avatarFeedback);
         } else {
           throw Exception(response);
         }
@@ -184,20 +222,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
             avatarBody, AvatarType.camera);
 
         if (response == null) {
-          showFeedback("Avatar updated successfully.");
+          showFeedback(avatarFeedback);
         } else {
           throw Exception(response);
         }
       }
 
       // Password changes
-      if (passwordConfirmation == YES &&
+      if ((passwordConfirmation == "Yes" || passwordConfirmation == "Oui") &&
           passwordController.text.trim() != newPassword) {
         String? response = await accountService.updatePassword(
             _infoService.username, passwordController.text.trim());
         if (response == null) {
           newPassword = passwordController.text.trim();
-          showFeedback("Password updated successfully.");
+          showFeedback(passwordFeedback);
         } else {
           throw Exception(response);
         }
@@ -209,7 +247,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _infoService.username, usernameController.text.trim());
         if (response == null) {
           _infoService.setUsername(usernameController.text.trim());
-          showFeedback("Username updated successfully.");
+          showFeedback(usernameFeedback);
         } else {
           throw Exception(response);
         }
@@ -221,7 +259,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _infoService.username, currentSettings!.language);
         if (response == null) {
           _infoService.setLanguage(currentSettings!.language);
-          showFeedback("Language updated successfully.");
+          showFeedback(languageFeedback);
         } else {
           throw Exception(response);
         }
@@ -233,7 +271,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _infoService.username, currentSettings!.theme);
         if (response == null) {
           _infoService.setTheme(currentSettings!.theme);
-          showFeedback("Theme updated successfully.");
+          showFeedback(themeFeedback);
         } else {
           throw Exception(response);
         }
@@ -245,7 +283,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _infoService.username, currentSettings!.onErrorSound);
         if (response == null) {
           _infoService.setOnErrorSound(currentSettings!.onErrorSound);
-          showFeedback("Sound onError updated successfully.");
+          showFeedback(errorSoundFeedback);
         } else {
           throw Exception(response);
         }
@@ -256,7 +294,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _infoService.username, currentSettings!.onCorrectSound);
         if (response == null) {
           _infoService.setOnCorrectSound(currentSettings!.onCorrectSound);
-          showFeedback("Correct sound updated successfully.");
+          showFeedback(differenceFoundSoundFeedback);
         } else {
           throw Exception(response);
         }
@@ -286,7 +324,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       child: Scaffold(
           backgroundColor: Colors.transparent,
           drawer: CustomMenuDrawer(),
-          appBar: CustomAppBar(title: "Personnalisation du profil"),
+          appBar: CustomAppBar(
+              title: AppLocalizations.of(context)!.edit_profile_title),
           body: Container(
               padding: EdgeInsets.only(left: 15, top: 20, right: 15),
               child: GestureDetector(
@@ -321,7 +360,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           return DropdownMenuItem(
                               value: sound, child: Text(sound.name));
                         }).toList(),
-                        decoration: InputDecoration(labelText: "Son d'erreur"),
+                        decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!
+                                .edit_profile_errorSound),
                       ),
                       DropdownButtonFormField<Sound>(
                         value: currentSettings?.onCorrectSound,
@@ -337,7 +378,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               value: sound, child: Text(sound.name));
                         }).toList(),
                         decoration: InputDecoration(
-                            labelText: "Son de différence trouvée"),
+                            labelText: AppLocalizations.of(context)!
+                                .edit_profile_differenceFoundSound),
                       ),
                       // Choisir le thème de l'application
                       DropdownButtonFormField<String>(
@@ -379,7 +421,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 currentSettings!.copyWith(language: newValue);
                           }
                         },
-                        decoration: InputDecoration(labelText: "Langue"),
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!
+                              .edit_profile_language,
+                        ),
                       ),
                       Row(
                         children: [
@@ -389,7 +434,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 padding: EdgeInsets.symmetric(horizontal: 50),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20))),
-                            child: Text(CANCEL_BTN_TXT,
+                            child: Text(
+                                AppLocalizations.of(context)!
+                                    .edit_profile_cancel,
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.red,
@@ -404,7 +451,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 padding: EdgeInsets.symmetric(horizontal: 50),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20))),
-                            child: Text(SAVE_BTN_TXT,
+                            child: Text(
+                                AppLocalizations.of(context)!.edit_profile_save,
                                 style: TextStyle(
                                   fontSize: 15,
                                   letterSpacing: 2,
@@ -423,10 +471,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextInputField(
-          label: "Nom d'utilisateur",
+          label: AppLocalizations.of(context)!.edit_profile_username,
           controller: usernameController,
-          hint: "Entrez votre nom d'utilisateur",
-          helperText: 'Non vide: $usernameFormat',
+          hint: AppLocalizations.of(context)!.edit_profile_usernameHint,
+          helperText:
+              '${AppLocalizations.of(context)!.edit_profile_usernameHelper}: $usernameFormat',
           maxLength: 20,
         ),
         SizedBox(height: 10),
@@ -439,12 +488,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextInputField(
-          label: "Mot de passe",
+          label: AppLocalizations.of(context)!.edit_profile_password,
           controller: passwordController,
-          hint: "Entrez votre mot de passe",
-          helperText: 'Force du mot de passe: $passwordStrength',
+          hint: AppLocalizations.of(context)!.edit_profile_passwordHint,
+          helperText:
+              '${AppLocalizations.of(context)!.edit_profile_passwordStrength}: $passwordStrength',
           errorText: _validator.states['password'] == ValidatorState.isEmpty
-              ? "Mot de passe requis"
+              ? AppLocalizations.of(context)!.edit_profile_passwordCondition
               : null,
           maxLength: 20,
           isPassword: true,
@@ -459,18 +509,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextInputField(
-          label: "Confirmation du mot de passe",
+          label:
+              AppLocalizations.of(context)!.edit_profile_passwordConfirmation,
           controller: confirmationController,
-          hint: "Confirmez votre mot de passe",
+          hint: AppLocalizations.of(context)!
+              .edit_profile_passwordConfirmationHint,
           helperText:
-              'Doit correspondre au mot de passe: $passwordConfirmation',
+              '${AppLocalizations.of(context)!.edit_profile_passwordConfirmationHelper}: $passwordConfirmation',
           maxLength: 20,
           errorText: _validator.states['passwordConfirmation'] ==
                   ValidatorState.isEmpty
-              ? "Veuillez confirmer votre mot de passe"
+              ? AppLocalizations.of(context)!
+                  .edit_profile_passwordConfirmationCondition
               : _validator.states['passwordConfirmation'] ==
                       ValidatorState.isInvalid
-                  ? "Les mots de passes doivent être identiques"
+                  ? AppLocalizations.of(context)!
+                      .edit_profile_passwordConfirmationMatch
                   : null,
           isPassword: true,
         ),
