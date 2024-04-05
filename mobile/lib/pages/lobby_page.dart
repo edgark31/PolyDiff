@@ -72,8 +72,17 @@ class _LobbyPageState extends State<LobbyPage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Text(
-                  '${AppLocalizations.of(context)!.lobby_title} $gameModeName'),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  '${AppLocalizations.of(context)!.lobby_title} $gameModeName',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -107,7 +116,17 @@ class _LobbyPageState extends State<LobbyPage> {
     final lobbyService = context.watch<LobbyService>();
     int nPlayers = lobbyService.lobby.players.length;
     if (!lobbyService.isCreator) {
-      return Text(AppLocalizations.of(context)!.lobby_waiting);
+      return Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(4.0),
+        child: Text(
+          AppLocalizations.of(context)!.lobby_waiting,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      );
     }
     if (nPlayers >= 2 && nPlayers <= 4) {
       return CustomButton(
@@ -120,7 +139,17 @@ class _LobbyPageState extends State<LobbyPage> {
         },
       );
     } else {
-      return Text(AppLocalizations.of(context)!.lobby_startConditions);
+      return Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(4.0),
+        child: Text(
+          AppLocalizations.of(context)!.lobby_startConditions,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      );
     }
   }
 
@@ -128,14 +157,31 @@ class _LobbyPageState extends State<LobbyPage> {
       {List<String> playerNames = const []}) {
     return Container(
       padding: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.black,
+          width: 2.0,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-              '${AppLocalizations.of(context)!.lobby_selection_nPlayers}: ${playerNames.length}/4'),
-          Text(AppLocalizations.of(context)!.lobby_playersOnline,
-              style: Theme.of(context).textTheme.titleLarge),
-          ...playerNames.map((name) => Text(name)),
+            '${AppLocalizations.of(context)!.lobby_selection_nPlayers}: ${playerNames.length}/4',
+            style: TextStyle(color: Colors.black),
+          ),
+          Text(
+            AppLocalizations.of(context)!.lobby_playersOnline,
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: Colors.black),
+          ),
+          ...playerNames
+              .map((name) => Text(name, style: TextStyle(color: Colors.black))),
         ],
       ),
     );
