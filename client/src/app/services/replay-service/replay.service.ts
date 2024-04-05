@@ -52,6 +52,8 @@ export class ReplayService implements OnDestroy {
         this.replayPlayerCount = new Subject<Player>();
         this.replayDifferenceFound = new Subject<number>();
         this.nDifferencesFound = 0;
+        this.record = {} as GameRecord;
+        this.record.timeLimit = 0;
     }
 
     get nDifferencesFound$() {
