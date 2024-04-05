@@ -28,6 +28,7 @@ class InfoService extends ChangeNotifier {
   String get email => _email;
   String get language => _language;
   String get theme => _theme;
+  bool get isThemeLight => _theme == 'light';
   Sound get onErrorSound => _onErrorSound;
   Sound get onCorrectSound => _onCorrectSound;
   Statistics get statistics => _statistics;
