@@ -7,10 +7,16 @@ import 'package:mobile/models/game_record_model.dart';
 
 // Background image paths
 const String EMPTY_BACKGROUND_PATH = 'assets/images/empty_background.jpg';
+const String EMPTY_BACKGROUND_PATH_DARK =
+    'assets/images/empty_background_dark.png';
 const String MENU_BACKGROUND_PATH = 'assets/images/menu_background.jpg';
 const String SELECTION_BACKGROUND_PATH =
     'assets/images/selection_background.jpg';
+const String SELECTION_BACKGROUND_PATH_DARK =
+    'assets/images/selection_background_dark.jpg';
 const String GAME_BACKGROUND_PATH = 'assets/images/game_background.jpg';
+const String GAME_BACKGROUND_PATH_DARK =
+    'assets/images/game_background_dark.png';
 
 // Default sounds
 

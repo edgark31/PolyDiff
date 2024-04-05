@@ -66,10 +66,14 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final infoService = context.watch<InfoService>();
+
     double screenHeight = MediaQuery.of(context).size.height;
     double startingPoint = screenHeight * 0.05;
     return BackgroundContainer(
-      backgroundImagePath: EMPTY_BACKGROUND_PATH,
+      backgroundImagePath: infoService.isThemeLight
+          ? EMPTY_BACKGROUND_PATH
+          : EMPTY_BACKGROUND_PATH_DARK,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         drawer: CustomMenuDrawer(),
@@ -77,7 +81,7 @@ class _DashboardPageState extends State<DashboardPage> {
         body: SingleChildScrollView(
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(0.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -94,7 +98,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 10),
                   _gameModeOption(
                     GameModes.Classic,
                     Icons.class_,
