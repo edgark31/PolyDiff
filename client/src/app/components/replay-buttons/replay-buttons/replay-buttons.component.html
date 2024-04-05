@@ -3,7 +3,7 @@
     <button mat-button [disabled]="isReplayButtonDisabled" (click)="isReplaying()?replay(true):replay(false)"><mat-icon>replay</mat-icon></button>
     <button mat-button [disabled]="!isReplaying()" *ngIf="!isReplayPaused" (click)="pause()"><mat-icon>pause_circle_filled</mat-icon></button>
     <button mat-button [disabled]="!isReplaying()" *ngIf="isReplayPaused" (click)="resume()"><mat-icon>play_circle_filled</mat-icon></button>
-    <mat-slider min="0" max="300" [displayWith]="formatThumbLabel">
+    <mat-slider min="0" [max]="getTimeLimit()" [(ngModel)]="timer" [displayWith]="formatThumbLabel">
       <input matSliderThumb />
     </mat-slider>
     <div class="timer">

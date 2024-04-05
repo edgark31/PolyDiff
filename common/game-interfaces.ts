@@ -287,6 +287,7 @@ export interface GameEventData {
     coordClic?: Coordinate;
     remainingDifferenceIndex?: number[];
     isMainCanvas?: boolean;
+    time?: number;
 }
 
 export interface GameRecord {

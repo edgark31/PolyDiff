@@ -15,8 +15,8 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent, MessageTag } from '@common/enums';
-import { Chat, Game, GameRecord, Lobby } from '@common/game-interfaces';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Chat, Game, GameRecord, Lobby, Player } from '@common/game-interfaces';
+import { Subject, Subscription } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
 @Component({
     selector: 'app-game-page',
@@ -49,6 +49,8 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     lobbySubscription: Subscription;
     lobbiesSubscription: Subscription;
     observersSubscription: Subscription;
+    replayTimerSubscription: Subscription;
+    replayDifferenceFoundSubscription: Subscription;
     private gameSubscription: Subscription;
     private nextGameSubscription: Subscription;
     private endMessageSubscription: Subscription;
@@ -148,6 +150,8 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         });
         this.clientSocket.on('game', GameEvents.GameRecord, (record: GameRecord) => {
             this.replayService.setReplay(record);
+            this.timer = record.timeLimit;
+            this.resetGameStats();
         });
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.manage();
@@ -176,6 +180,8 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.lobbySubscription?.unsubscribe();
             this.remainingDifferenceSubscription?.unsubscribe();
             this.observersSubscription?.unsubscribe();
+            this.replayTimerSubscription?.unsubscribe();
+            this.replayDifferenceFoundSubscription?.unsubscribe();
 
             this.roomManager.off();
             this.gameManager.off();
@@ -188,6 +194,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.globalChatService.off();
         }
         this.chatSubscriptionGlobal?.unsubscribe();
+    }
+
+    resetGameStats(): void {
+        this.nDifferencesFound = 0;
+        for (const player of this.lobby.players) {
+            player.count = 0;
+        }
     }
 
     translateGameMode(mode: GameModes): string {
@@ -272,13 +285,14 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     private setUpReplay(): void {
-        this.replayService.replayTimer$.pipe(takeUntil(this.onDestroy$)).subscribe((replayTimer: number) => {
-            if (this.isReplayAvailable) {
-                this.timer = replayTimer;
-                this.lobby.players = this.replayService.record.players;
-                if (replayTimer === 0) {
-                    this.messages = [];
-                    this.nDifferencesFound = 0;
+        this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
+            this.timer = replayTimer;
+        });
+        this.replayDifferenceFoundSubscription = this.replayService.replayDifferenceFound$.subscribe((replayDifferenceFound: Player) => {
+            for (const player of this.lobby.players) {
+                if (player.name === replayDifferenceFound.name) {
+                    player.count = replayDifferenceFound.count;
+                    this.nDifferencesFound++;
                 }
             }
         });
