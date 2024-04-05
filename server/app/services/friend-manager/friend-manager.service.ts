@@ -54,6 +54,8 @@ export class FriendManagerService {
                 accountId: potentialFriendId,
                 friends: [],
                 commonFriends,
+                isFavorite: false,
+                isOnline: false,
             };
             // Add friend in sender's friends
             const senderFriend: Friend = {
@@ -61,6 +63,8 @@ export class FriendManagerService {
                 accountId: senderFriendId,
                 friends: [],
                 commonFriends,
+                isFavorite: false,
+                isOnline: false,
             };
 
             senderFriendAccount.profile.friends.push(potentialFriend);
