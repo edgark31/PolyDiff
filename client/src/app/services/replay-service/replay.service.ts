@@ -96,6 +96,33 @@ export class ReplayService implements OnDestroy {
         this.replayInterval.resume();
     }
 
+    fallBackReplay(time: number): void {
+        // filtrer found ou start
+        const gameEventsFiltered = this.record.gameEvents.filter(
+            (event) => event.gameEvent === ReplayActions.Found || event.gameEvent === ReplayActions.StartGame,
+        );
+        // timestamp le plus proche
+        const gameEvent = gameEventsFiltered.filter((event) => event.timestamp && event.timestamp - this.record.startTime <= time * 1000).pop();
+        console.log(
+            'gameEventsFiltered: ',
+            gameEventsFiltered.filter((event) => event.timestamp && event.timestamp - this.record.startTime <= time * 1000),
+        );
+        // calculer lindex a partir du timestamp trouve
+        for (let i = 0; i < this.record.gameEvents.length; i++) {
+            if (this.record.gameEvents[i].timestamp === gameEvent?.timestamp) {
+                this.currentReplayIndex = i;
+                break;
+            }
+        }
+        if (gameEvent?.gameEvent === ReplayActions.StartGame) {
+            this.replayGameStart();
+        } else {
+            this.imageService.loadImage(this.gameAreaService.getModifiedContext(), gameEvent?.modified as string);
+            this.gameAreaService.setAllData();
+        }
+        this.replayInterval.resume();
+    }
+
     pauseReplay(): void {
         this.toggleFlashing(true);
         this.replayInterval.pause();

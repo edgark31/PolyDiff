@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatSliderChange } from '@angular/material/slider';
 import { WAITING_TIME } from '@app/constants/constants';
 import { REPLAY_SPEEDS, SPEED_X1 } from '@app/constants/replay';
 import { ReplayService } from '@app/services/replay-service/replay.service';
@@ -35,7 +36,19 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
     }
 
     getTimeLimit(): number {
-        return this.replayService.record.timeLimit;
+        return Math.floor(this.replayService.record.duration / 1000);
+    }
+
+    setTimer(event: MatSliderChange): void {
+        if (!this.isReplayButtonDisabled) {
+            this.timer = event.value as number;
+            console.log('setTimer: ', this.timer);
+            this.replayService.fallBackReplay(this.timer);
+            setTimeout(() => {
+                this.isReplayButtonDisabled = false;
+            }, WAITING_TIME);
+        }
+        this.isReplayButtonDisabled = true;
     }
 
     formatThumbLabel(value: number): string {
