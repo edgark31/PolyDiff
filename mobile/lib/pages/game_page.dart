@@ -155,7 +155,8 @@ class _GamePageState extends State<GamePage> {
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
-                  ],
+                  ] else
+                    SizedBox(width: 50),
                   SizedBox(
                     height: 200,
                     width: 1000,

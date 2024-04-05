@@ -10,10 +10,10 @@ class Game {
   List<String>? playedGameIds;
   Game(
     this.lobbyId,
-    this.gameId,
     this.name,
     this.original,
     this.modified,
+    this.gameId,
     this.difficulty,
     this.differences,
     this.nDifferences,
@@ -23,10 +23,10 @@ class Game {
   Game.initial()
       : this(
           '', // lobbyId
-          '', // gameId
           '', // name
           '', // original
           '', // modified
+          '', // gameId
           '', // difficulty
           [], // differences
           0, // nDifferences
@@ -39,11 +39,11 @@ class Game {
     }
     return Game(
       json['lobbyId'],
-      json['gameId'],
       json['name'],
       json['original'],
       json['modified'],
-      json['difficulty'],
+      json['gameId'],
+      json['difficulty'] ?? '',
       List<List<Coordinate>>.from(json['differences'].map((x) =>
           List<Coordinate>.from(
               x.map((x) => Coordinate.fromJson(x)).toList()))),

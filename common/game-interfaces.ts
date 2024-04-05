@@ -265,6 +265,19 @@ export interface Sound {
     path: string;
 }
 
+export interface GameRecord {
+    accountIds: string[];
+    game: Game;
+    players: Player[];
+    date: Date;
+    startTime: number;
+    endTime: number;
+    duration: number;
+    isCheatEnabled: boolean;
+    timeLimit: number;
+    gameEvents: GameEventData[];
+}
+
 export interface GameEventData {
     accountId?: string;
     username?: string;
@@ -274,4 +287,24 @@ export interface GameEventData {
     coordClic?: Coordinate;
     remainingDifferenceIndex?: number[];
     isMainCanvas?: boolean;
+}
+
+export interface GameRecord {
+    game: Game;
+    players: Player[];
+    accountIds: string[];
+    date: Date;
+    startTime: number;
+    endTime: number;
+    duration: number;
+    isCheatEnabled: boolean;
+    timeLimit: number;
+    gameEvents: GameEventData[];
+}
+
+export interface RankedPlayer {
+    accountId: string;
+    name: string;
+    rank: number;
+    stats: Statistics;
 }

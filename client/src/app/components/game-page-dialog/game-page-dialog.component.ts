@@ -17,7 +17,6 @@ export class GamePageDialogComponent {
         @Inject(MAT_DIALOG_DATA) public data: { action: GamePageEvent; message: string; lobby: Lobby; isReplayMode: boolean },
         private readonly gameManager: GameManagerService,
         private readonly replayService: ReplayService,
-
         public roomManager: RoomManagerService,
     ) {
         this.isReplayPaused = false;

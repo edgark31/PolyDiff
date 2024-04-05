@@ -6,6 +6,7 @@ import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
+import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/chat_service.dart';
@@ -62,6 +63,10 @@ void main() async {
       return gameManagerService;
     }),
     ChangeNotifierProvider(create: (context) {
+      GameRecordProvider gameRecordProvider = Get.find();
+      return gameRecordProvider;
+    }),
+    ChangeNotifierProvider(create: (context) {
       ChatService chatService = Get.find();
       return chatService;
     }),
@@ -85,6 +90,7 @@ void initializeServices() {
   Get.put(GameAreaService());
   Get.put(LobbySelectionService());
   Get.put(LobbyService());
+  Get.put(GameRecordProvider());
   Get.put(GameManagerService());
   Get.put(ChatService());
   Get.put(GameCardService());
