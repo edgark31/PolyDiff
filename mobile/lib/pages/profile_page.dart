@@ -39,13 +39,16 @@ class _ProfilePageState extends State<ProfilePage> {
     final avatarProvider = context.watch<AvatarProvider>();
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: CustomAppBar(title: "P R O F I L"),
       drawer: CustomMenuDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
             BackgroundContainer(
-              backgroundImagePath: SELECTION_BACKGROUND_PATH,
+              backgroundImagePath: infoService.isThemeLight
+                  ? MENU_BACKGROUND_PATH
+                  : MENU_BACKGROUND_PATH_DARK,
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Column(

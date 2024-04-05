@@ -49,11 +49,14 @@ class StatisticsPage extends StatelessWidget {
     ];
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: CustomAppBar(
         title: "Statistiques de $username",
       ),
       body: BackgroundContainer(
-        backgroundImagePath: SELECTION_BACKGROUND_PATH,
+        backgroundImagePath: infoService.isThemeLight
+            ? MENU_BACKGROUND_PATH
+            : MENU_BACKGROUND_PATH_DARK,
         child: SingleChildScrollView(
           child: Column(
             children: [

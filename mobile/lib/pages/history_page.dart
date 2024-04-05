@@ -40,7 +40,9 @@ class HistoryPage extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(title: 'H I S T O R I Q U E'),
       body: BackgroundContainer(
-        backgroundImagePath: SELECTION_BACKGROUND_PATH,
+        backgroundImagePath: infoService.isThemeLight
+            ? MENU_BACKGROUND_PATH
+            : MENU_BACKGROUND_PATH_DARK,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
