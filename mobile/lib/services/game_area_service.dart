@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/sound_service.dart';
@@ -19,7 +20,8 @@ class GameAreaService extends ChangeNotifier {
   bool isClickDisabled = false;
   Function? onCheatModeDeactivated;
 
-  void showDifferenceFound(List<Coordinate> newCoordinates) {
+  void showDifferenceFound(List<Coordinate> newCoordinates,
+      [int flashingSpeed = SPEED_X1]) {
     soundService.playCorrectSound();
     coordinates.addAll(newCoordinates);
     if (isCheatMode) {
@@ -28,7 +30,7 @@ class GameAreaService extends ChangeNotifier {
     isCheatMode = false;
     resetCheatBlinkingDifference();
     notifyListeners();
-    startBlinking(newCoordinates);
+    startBlinking(newCoordinates, flashingSpeed);
   }
 
   void showDifferenceNotFound(Coordinate currentCoord, bool isLeft) {
@@ -68,7 +70,9 @@ class GameAreaService extends ChangeNotifier {
     blinkingDifference = path;
   }
 
-  Future<void> startBlinking(List<Coordinate> coords) async {
+  Future<void> startBlinking(
+    List<Coordinate> coords, [int flashingSpeed = SPEED_X1]
+  ) async {
     initPath(coords);
     if (blinkingDifference == null) return;
 
@@ -76,8 +80,8 @@ class GameAreaService extends ChangeNotifier {
     const int timeToBlinkMs = 100;
 
     for (int i = 0; i < 3; i++) {
-      await showDifferenceColor(blinkingPath, timeToBlinkMs, Colors.green);
-      await showDifferenceColor(blinkingPath, timeToBlinkMs, Colors.yellow);
+      await showDifferenceColor(blinkingPath, (timeToBlinkMs/flashingSpeed) as int, Colors.green);
+      await showDifferenceColor(blinkingPath, (timeToBlinkMs/flashingSpeed) as int, Colors.yellow);
     }
 
     resetBlinkingDifference();
