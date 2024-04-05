@@ -2,13 +2,13 @@ import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/game.dart';
 
 class Player {
-  String? accountId;
+  String accountId;
   String? name;
   Differences? differenceData;
   int? count;
 
   Player({
-    this.accountId,
+    required this.accountId,
     required this.name,
     required this.differenceData,
     this.count,

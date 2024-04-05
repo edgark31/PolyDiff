@@ -210,9 +210,10 @@ class Sound {
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Sound && runtimeType == other.runtimeType && name == other.name;
+  bool operator ==(Object other) {
+    Sound otherSound = other as Sound;
+    return identical(this, other) || (name == otherSound.name);
+  }
 
   @override
   int get hashCode => name.hashCode;

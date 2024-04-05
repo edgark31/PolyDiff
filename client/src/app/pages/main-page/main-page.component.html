@@ -19,5 +19,20 @@
     </div>
 
     <footer class="footer flex-column">
+        <div *ngIf="rankedPlayers.length > 0" class="ranking">
+            <div class="scroll-container">
+                <p class="ranking-title">Classement global :</p>
+                <div class="rankedPlayer" *ngFor="let rankedPlayer of rankedPlayers">
+                    <p>{{rankedPlayer.rank}}. {{rankedPlayer.name}}</p>
+                    <img src="{{'http://localhost:3000/avatar/' + rankedPlayer.accountId + '.png'}}">
+                    <span>{{rankedPlayer.stats.gameWon}} parties gagnées !</span>
+                </div>
+            </div>
+        </div>
+        <div class="ranking" *ngIf="rankedPlayers.length <= 0" >
+            <div class="loading">
+                <p>Loading ...</p>
+            </div>
+        </div>
     </footer>
 </div>

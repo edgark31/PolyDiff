@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 import { HostListener, Injectable } from '@angular/core';
 import {
     CHEAT_MODE_WAIT_TIME,
@@ -12,8 +13,6 @@ import {
 import { IMG_HEIGHT, IMG_WIDTH } from '@app/constants/image';
 import { GREEN_PIXEL, N_PIXEL_ATTRIBUTE, RED_PIXEL, YELLOW_PIXEL } from '@app/constants/pixels';
 import { SPEED_X1 } from '@app/constants/replay';
-import { ReplayActions } from '@app/enum/replay-actions';
-import { CaptureService } from '@app/services/capture-service/capture.service';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents } from '@common/enums';
@@ -35,7 +34,7 @@ export class GameAreaService {
     private isCheatMode: boolean;
     private cheatModeInterval: number;
 
-    constructor(private readonly captureService: CaptureService, private readonly clientSocket: ClientSocketService) {
+    constructor(private readonly clientSocket: ClientSocketService) {
         this.mousePosition = { x: 0, y: 0 };
         this.isClickDisabled = false;
         this.isCheatMode = false;
@@ -67,10 +66,10 @@ export class GameAreaService {
             frontContext.clearRect(0, 0, IMG_WIDTH, IMG_HEIGHT);
             this.isClickDisabled = false;
         }, WAITING_TIME / flashingSpeed);
-        this.captureService.saveReplayEvent(ReplayActions.ClickError, { isMainCanvas, pos: errorCoordinate });
+        // this.captureService.saveReplayEvent(ReplayActions.ClickError, { isMainCanvas, pos: errorCoordinate });
     }
 
-    replaceDifference(differenceCoord: Coordinate[], flashingSpeed: number = SPEED_X1, isPaused: boolean = false): void {
+    replaceDifference(differenceCoord: Coordinate[], lobbyId: string, flashingSpeed: number = SPEED_X1, isPaused: boolean = false): void {
         const imageDataIndex = this.convert2DCoordToPixelIndex(differenceCoord);
         for (const index of imageDataIndex) {
             for (let i = 0; i < N_PIXEL_ATTRIBUTE; i++) {
@@ -79,10 +78,10 @@ export class GameAreaService {
         }
         this.modifiedContext.putImageData(this.modifiedPixelData, 0, 0);
         if (this.isCheatMode) {
-            this.clientSocket.send('game', GameEvents.CheatDeactivated);
+            this.clientSocket.send('game', GameEvents.CheatDeactivated, lobbyId);
         }
         this.resetCheatMode();
-        this.captureService.saveReplayEvent(ReplayActions.ClickFound, differenceCoord);
+        // this.captureService.saveReplayEvent(ReplayActions.ClickFound, differenceCoord);
         this.flashPixels(differenceCoord, flashingSpeed, isPaused);
     }
 
@@ -128,9 +127,9 @@ export class GameAreaService {
                     this.clearFlashing();
                 }, RED_FLASH_TIME / flashingSpeed);
             }, CHEAT_MODE_WAIT_TIME / flashingSpeed);
-            this.captureService.saveReplayEvent(ReplayActions.ActivateCheat, startDifferences);
+            // this.captureService.saveReplayEvent(ReplayActions.ActivateCheat, startDifferences);
         } else {
-            this.captureService.saveReplayEvent(ReplayActions.DeactivateCheat, startDifferences);
+            // this.captureService.saveReplayEvent(ReplayActions.DeactivateCheat, startDifferences);
             clearInterval(this.cheatModeInterval);
             this.clearFlashing();
         }

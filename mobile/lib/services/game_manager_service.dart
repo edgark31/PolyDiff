@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/models/lobby_model.dart';
+import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
@@ -13,30 +16,19 @@ class GameManagerService extends ChangeNotifier {
   static Game _game = Game.initial();
   static int _time = 0;
   static String? _endGameMessage;
-  static GameRecord _record = GameRecord(
-      game: Game.initial(),
-      players: [],
-      accountIds: [],
-      date: 0,
-      startTime: 0,
-      endTime: 0,
-      duration: 100,
-      isCheatEnabled: true,
-      timeLimit: 600,
-      gameEvents: []);
 
   // Services
   final SocketService socketService = Get.find();
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();
   final InfoService infoService = Get.find();
-  bool isLeftCanvas = true;
+  final GameRecordProvider gameRecordProvider = Get.find();
 
+  bool isLeftCanvas = true;
   VoidCallback? onGameChange;
   Game get game => _game;
   int get time => _time;
   String? get endGameMessage => _endGameMessage;
-  GameRecord get gameRecord => _record;
 
   void setGame(Game newGame) {
     print('new Game has been setted $game');
@@ -82,7 +74,8 @@ class GameManagerService extends ChangeNotifier {
 
   void setGameRecord(GameRecord record) {
     print('Setting game record');
-    _record = record;
+    gameRecordProvider.setCurrentGameRecord(record);
+    notifyListeners();
   }
 
   void sendCoord(String? lobbyId, Coordinate coord) {
@@ -218,7 +211,15 @@ class GameManagerService extends ChangeNotifier {
 
     socketService.on(SocketType.Game, GameEvents.GameRecord.name, (record) {
       print('GameRecord received');
-      setGameRecord(record as GameRecord);
+      if (record is Map<String, dynamic>) {
+        setGameRecord(GameRecord.fromJson(record));
+        return;
+      } else if (record is String) {
+        final Map<String, dynamic> parsedRecord = jsonDecode(record);
+        setGameRecord(GameRecord.fromJson(parsedRecord));
+      } else {
+        print('Unexpected data format received: ${record.runtimeType}');
+      }
     });
   }
 }
