@@ -8,8 +8,7 @@ import { GameManagerService } from '@app/services/game-manager-service/game-mana
 import { ImageService } from '@app/services/image-service/image.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { MessageTag } from '@common/enums';
-import { Chat, Coordinate, GameEventData, GameRecord } from '@common/game-interfaces';
+import { Coordinate, GameEventData, GameRecord, Player } from '@common/game-interfaces';
 import { Subject, Subscription } from 'rxjs';
 
 @Injectable({
@@ -27,8 +26,7 @@ export class ReplayService implements OnDestroy {
     private currentReplayIndex: number;
     private replayTimer: number;
     private replayTimerSubject: Subject<number>;
-    // private replayDifferenceFound: BehaviorSubject<number>;
-    // private replayOpponentDifferenceFound: BehaviorSubject<number>;
+    private replayDifferenceFound: Subject<Player>;
     private replayEventsSubjectSubscription: Subscription;
 
     // Replay needs to communicate with all services
@@ -42,8 +40,6 @@ export class ReplayService implements OnDestroy {
     ) {
         this.isReplaying = false;
         this.replayTimer = 0;
-        // this.replayDifferenceFound = new BehaviorSubject<number>(0);
-        // this.replayOpponentDifferenceFound = new BehaviorSubject<number>(0);
         this.replayEvents = [];
         this.replaySpeed = SPEED_X1;
         this.currentCoords = [];
@@ -51,6 +47,7 @@ export class ReplayService implements OnDestroy {
         this.isDifferenceFound = false;
         this.currentReplayIndex = 0;
         this.replayTimerSubject = new Subject<number>();
+        this.replayDifferenceFound = new Subject<Player>();
     }
 
     get replayTimer$() {
@@ -61,13 +58,9 @@ export class ReplayService implements OnDestroy {
         return this.replayTimerSubject.asObservable();
     }
 
-    // get replayDifferenceFound$() {
-    //     return this.replayDifferenceFound.asObservable();
-    // }
-
-    // get replayOpponentDifferenceFound$() {
-    //     return this.replayOpponentDifferenceFound.asObservable();
-    // }
+    get replayDifferenceFound$() {
+        return this.replayDifferenceFound.asObservable();
+    }
 
     setReplay(record: GameRecord): void {
         this.record = record;
@@ -108,8 +101,7 @@ export class ReplayService implements OnDestroy {
     }
 
     restartTimer(): void {
-        // this.replayOpponentDifferenceFound.next(0);
-        // this.replayDifferenceFound.next(0);
+        this.replayDifferenceFound.next(this.record.players[0]);
         this.replayTimer = 0;
         this.replayTimerSubject.next(0);
     }
@@ -155,12 +147,6 @@ export class ReplayService implements OnDestroy {
             case ReplayActions.TimerUpdate:
                 this.replayTimerUpdate(replayData);
                 break;
-            // case ReplayActions.DifferenceFoundUpdate:
-            //     // this.replayDifferenceFoundUpdate();
-            //     break;
-            // case ReplayActions.OpponentDifferencesFoundUpdate:
-            //     // this.replayOpponentDifferencesFoundUpdate(replayData.data as ReplayPayload);
-            //     break;
         }
         this.currentReplayIndex++;
     }
@@ -252,6 +238,13 @@ export class ReplayService implements OnDestroy {
         //     const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
         //     this.gameManager.setMessage(commonChat);
         // } snif snif mes messages zabi les gars
+        if (replayData.players) {
+            for (const player of replayData.players) {
+                if (player.name === replayData.username) {
+                    this.replayDifferenceFound.next(player);
+                }
+            }
+        }
         this.gameAreaService.setAllData();
         this.gameAreaService.replaceDifference(this.currentCoords, '', this.replaySpeed);
     }
