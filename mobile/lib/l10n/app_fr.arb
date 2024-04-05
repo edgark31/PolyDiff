@@ -51,6 +51,9 @@
     "gameInfos_timeTitle": "Temps",
     "gameInfos_differencesPresentTitle": "Nombre de différences présentes",
     "gameInfos_differencesFoundTitle": "Différences trouvées",
+    "gamePage_cheatButton": "TRICHE",
+    "gamePage_leaveButton": "Quitter",
+    "gamePage_giveUpButton": "Abandonner",
     "classicMode": "Classique",
     "limitedMode": "Temps limité",
     "practiceMode": "Pratique"

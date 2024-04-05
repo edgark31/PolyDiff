@@ -51,6 +51,9 @@
     "gameInfos_timeTitle": "Time",
     "gameInfos_differencesPresentTitle": "Number of differences present",
     "gameInfos_differencesFoundTitle": "Differences found",
+    "gamePage_cheatButton": "CHEAT",
+    "gamePage_leaveButton": "Leave",
+    "gamePage_giveUpButton": "Give up",
     "classicMode": "Classic",
     "limitedMode": "Limited Time",
     "practiceMode": "Practice"

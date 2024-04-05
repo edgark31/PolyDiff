@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
@@ -48,7 +49,6 @@ class _GamePageState extends State<GamePage> {
   void initState() {
     super.initState();
     gameManagerService.onGameChange = () {
-      print('Loading new images');
       if (gameManagerService.game.original == '' ||
           gameManagerService.game.modified == '') return;
       imagesFuture = loadImage(
@@ -150,8 +150,7 @@ class _GamePageState extends State<GamePage> {
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       ),
-                      child: Text(
-                        'TRICHE',
+                      child: Text(AppLocalizations.of(context)!.gamePage_cheatButton,
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
@@ -177,7 +176,6 @@ class _GamePageState extends State<GamePage> {
                       ],
                     );
                   } else {
-                    print('NOT DONE');
                     return CircularProgressIndicator();
                   }
                 },
@@ -204,17 +202,15 @@ class _GamePageState extends State<GamePage> {
             ),
           isPlayerAnObserver
               ? _actionButton(
-                  context,
-                  'Quitter',
+                  context, AppLocalizations.of(context)!.gamePage_leaveButton,
                   () {
-                    print('Quitter pressed');
                     gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
                     Navigator.pushNamed(context, DASHBOARD_ROUTE);
                   },
                 )
               : _actionButton(
                   context,
-                  'Abandonner',
+                  AppLocalizations.of(context)!.gamePage_giveUpButton,
                   () {
                     Future.delayed(Duration.zero, () {
                       if (ModalRoute.of(context)?.isCurrent ?? false) {
