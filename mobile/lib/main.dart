@@ -5,9 +5,11 @@ import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
+import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/friend_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_card_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
@@ -61,12 +63,20 @@ void main() async {
       return gameManagerService;
     }),
     ChangeNotifierProvider(create: (context) {
+      GameRecordProvider gameRecordProvider = Get.find();
+      return gameRecordProvider;
+    }),
+    ChangeNotifierProvider(create: (context) {
       ChatService chatService = Get.find();
       return chatService;
     }),
     ChangeNotifierProvider(create: (context) {
       GameCardService gameCardService = Get.find();
       return gameCardService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      FriendService friendService = Get.find();
+      return friendService;
     }),
     // Avatar
     ChangeNotifierProvider(create: (context) {
@@ -84,9 +94,11 @@ void initializeServices() {
   Get.put(GameAreaService());
   Get.put(LobbySelectionService());
   Get.put(LobbyService());
+  Get.put(GameRecordProvider());
   Get.put(GameManagerService());
   Get.put(ChatService());
   Get.put(GameCardService());
+  Get.put(FriendService());
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
   Get.put(ThemeProvider());

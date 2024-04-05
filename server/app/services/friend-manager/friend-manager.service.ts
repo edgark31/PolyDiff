@@ -38,6 +38,7 @@ export class FriendManagerService {
             }
         });
         await potentialFriendAccount.save();
+        await this.accountManager.fetchUsers();
     }
 
     async optFriendRequest(potentialFriendId: string, senderFriendId: string, isOpt: boolean): Promise<void> {
@@ -93,14 +94,17 @@ export class FriendManagerService {
         });
         await senderAccount.save();
         await friendAccount.save();
+        await this.accountManager.fetchUsers();
     }
 
     async deleteAllFriends() {
         const accounts = await this.accountManager.accountModel.find();
         accounts.forEach((account) => {
             account.profile.friends = [];
+            account.profile.friendRequests = [];
             account.save();
         });
+        await this.accountManager.fetchUsers();
     }
 
     calculateCommonFriends(sender: Account, potential: Account): Friend[] {

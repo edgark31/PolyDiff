@@ -128,3 +128,74 @@ button:hover {
     left: 0;
     z-index: -1;
 }
+
+@keyframes scroll-left {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.ranking {
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+}
+
+.scroll-container {
+    display: flex;
+    white-space: nowrap;
+    overflow-x: hidden;
+    animation: scroll-left 40s linear infinite;
+    align-items: center;
+}
+
+.ranking-title {
+    font-family: 'Troika', sans-serif;
+    font-size: 40px;
+    font-weight: bold;
+    color: white;
+    margin-right: 30px;
+    -webkit-text-stroke: 1px black;
+}
+
+.rankedPlayer {
+    display: inline-flex;
+    flex-direction: column;
+    padding: 3px;
+    margin: 10px;
+    background-color: transparent;
+    border: 2px solid black;
+    border-radius: 10px;
+    font-family: 'Troika', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    -webkit-text-stroke: 1px black;
+    align-items: center;
+}
+
+.rankedPlayer p {
+    font-size: 20px;
+    margin: 0;
+}
+.rankedPlayer span {
+    font-size: 15px;
+}
+
+.rankedPlayer img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.loading {
+    font-family: 'Troika', sans-serif;
+    font-size: 40px;
+    margin: 10px;
+    font-weight: bold;
+    color: white;
+    -webkit-text-stroke: 1px black;
+}

@@ -115,14 +115,6 @@ export class DatabaseService implements OnModuleInit {
         }
     }
 
-    async getGameRecords(): Promise<GameRecordDocument[]> {
-        try {
-            return await this.gameRecordModel.find().exec();
-        } catch (error) {
-            return Promise.reject(`Failed to get game records: ${error}`);
-        }
-    }
-
     saveFiles(newGame: Game): void {
         const dirName = `assets/${newGame._id.toString()}`;
         const dataOfOriginalImage = Buffer.from(newGame.originalImage.replace(/^data:image\/\w+;base64,/, ''), 'base64');
@@ -193,14 +185,6 @@ export class DatabaseService implements OnModuleInit {
             await this.gameCardModel.deleteMany({}).exec();
         } catch (error) {
             return Promise.reject(`Failed to delete all games --> ${error}`);
-        }
-    }
-
-    async deleteAllGameRecords() {
-        try {
-            await this.gameRecordModel.deleteMany({}).exec();
-        } catch (error) {
-            return Promise.reject(`Failed to delete all game records --> ${error}`);
         }
     }
 

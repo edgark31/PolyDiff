@@ -1,40 +1,50 @@
 class Friend {
-  String username;
-  String avatar;
-  List<String> friendUsernames;
-  List<String> commonFriendUsernames;
-  bool isFavorite;
-  bool isOnline;
+  String name;
+  String accountId;
+  List<Friend?> friends;
+  List<Friend?> commonFriends;
+  bool? isOnline;
+  bool? isFavorite;
 
   Friend({
-    required this.username,
-    required this.avatar,
-    this.friendUsernames = const [],
-    this.commonFriendUsernames = const [],
-    required this.isFavorite,
+    required this.name,
+    required this.accountId,
+    this.friends = const [],
+    this.commonFriends = const [],
     required this.isOnline,
+    required this.isFavorite,
   });
 
   factory Friend.fromJson(Map<String, dynamic> json) {
+    if (json['friends'] == [] || json['friends'] == null) {
+      json['friends'] = List<Friend>.empty();
+    }
+
+    if (json['commonFriends'] == [] || json['commonFriends'] == null) {
+      json['commonFriends'] = List<Friend>.empty();
+    }
     return Friend(
-      username: json['username'],
-      avatar: json['avatar'],
-      friendUsernames: List<String>.from(json['friendUsernames'] ?? []),
-      commonFriendUsernames:
-          List<String>.from(json['commonFriendUsernames'] ?? []),
-      isFavorite: json['isFavorite'],
+      name: json['name'],
+      accountId: json['accountId'],
+      friends: json['friends']
+          .map<Friend>((friend) => Friend.fromJson(friend))
+          .toList(),
+      commonFriends: json['commonFriends']
+          .map<Friend>((friend) => Friend.fromJson(friend))
+          .toList(),
       isOnline: json['isOnline'],
+      isFavorite: json['isFavorite'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'name': username,
-      'avatar': avatar,
-      'friendUsernames': friendUsernames,
-      'commonFriendNames': commonFriendUsernames,
-      'isFavorite': isFavorite,
+      'name': name,
+      'accountId': accountId,
+      'friends': friends,
+      'commonFriends': commonFriends,
       'isOnline': isOnline,
+      'isFavorite': isFavorite,
     };
   }
 
