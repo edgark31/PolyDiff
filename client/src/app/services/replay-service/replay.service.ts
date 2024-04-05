@@ -79,8 +79,6 @@ export class ReplayService implements OnDestroy {
     }
 
     startReplay(): void {
-        console.log(this.record.gameEvents); // player.count =  0 ?
-        console.log('--------------RECORD.PLAYERS--------------');
         this.replayEvents = this.record.gameEvents;
         this.isReplaying = true;
         this.currentReplayIndex = 0;
@@ -146,7 +144,6 @@ export class ReplayService implements OnDestroy {
     }
 
     private replaySwitcher(replayData: GameEventData): void {
-        console.log(replayData.players);
         switch (replayData.gameEvent) {
             case ReplayActions.StartGame:
                 this.replayGameStart();

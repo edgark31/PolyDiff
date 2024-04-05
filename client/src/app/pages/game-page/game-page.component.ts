@@ -203,6 +203,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         for (const player of this.lobby.players) {
             player.count = 0;
         }
+        this.messages = [];
     }
 
     translateGameMode(mode: GameModes): string {
@@ -289,6 +290,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     private setUpReplay(): void {
         this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
             this.timer = replayTimer;
+            this.messages = [];
         });
         this.replayPlayerCountSubscription = this.replayService.replayPlayerCount$.subscribe((replayPlayerCount: Player) => {
             for (const player of this.lobby.players) {
