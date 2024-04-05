@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-params */
 import { AuthGateway } from '@app/gateways/auth/auth.gateway';
 import { Credentials, Sound, Theme } from '@app/model/database/account';
@@ -7,6 +8,7 @@ import { MailService } from '@app/services/mail-service/mail-service';
 import { UserEvents } from '@common/enums';
 import { Body, Controller, Delete, HttpStatus, Post, Put, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Socket } from 'dgram';
 import { Response } from 'express';
 
 @ApiTags('Accounts')
@@ -35,6 +37,11 @@ export class AccountController {
         try {
             const accountFound = await this.accountManager.connection(creds);
             response.status(HttpStatus.OK).json(accountFound);
+            this.auth.server.fetchSockets().then((sockets) => {
+                sockets.forEach((socket) => {
+                    this.auth.updateIsOnline(socket as any);
+                });
+            });
         } catch (error) {
             response.status(HttpStatus.UNAUTHORIZED).json(error);
         }
