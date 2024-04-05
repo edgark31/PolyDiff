@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
@@ -55,10 +56,7 @@ class _LobbyPageState extends State<LobbyPage> {
           socketService.setup(SocketType.Game, infoService.id);
           chatService.setupGame();
           gameManagerService.setupGame();
-          // Future.delayed(Duration(milliseconds: 2000), () {
-          // Waiting for server to emit the created game from creator
           Navigator.pushNamed(context, GAME_ROUTE);
-          // });
         }
       });
     }
@@ -72,7 +70,8 @@ class _LobbyPageState extends State<LobbyPage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Text('Salle d\'attente de la partie en $gameModeName'),
+              Text(
+                  '${AppLocalizations.of(context)!.lobby_title} $gameModeName'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -85,7 +84,7 @@ class _LobbyPageState extends State<LobbyPage> {
                 children: [
                   lobbyButton(context),
                   CustomButton(
-                    text: 'Quitter la salle d\'attente',
+                    text: AppLocalizations.of(context)!.lobby_quit,
                     press: () {
                       print('Quitting lobby');
                       lobbyService.leaveLobby();
@@ -106,11 +105,11 @@ class _LobbyPageState extends State<LobbyPage> {
     final lobbyService = context.watch<LobbyService>();
     int nPlayers = lobbyService.lobby.players.length;
     if (!lobbyService.isCreator) {
-      return Text('En attente du début de la partie...');
+      return Text(AppLocalizations.of(context)!.lobby_waiting);
     }
     if (nPlayers >= 2 && nPlayers <= 4) {
       return CustomButton(
-        text: 'Commencer la partie',
+        text: AppLocalizations.of(context)!.lobby_start,
         press: () {
           print('Starting the lobby');
           lobbyService.startLobby();
@@ -119,8 +118,7 @@ class _LobbyPageState extends State<LobbyPage> {
         },
       );
     } else {
-      return Text(
-          'Vous devez être entre 2 et 4 joueurs pour commencer la partie');
+      return Text(AppLocalizations.of(context)!.lobby_startConditions);
     }
   }
 
@@ -131,8 +129,9 @@ class _LobbyPageState extends State<LobbyPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Nombre de joueurs: ${playerNames.length}/4'),
-          Text('Joueurs en ligne',
+          Text(
+              '${AppLocalizations.of(context)!.lobby_selection_nPlayers}: ${playerNames.length}/4'),
+          Text(AppLocalizations.of(context)!.lobby_playersOnline,
               style: Theme.of(context).textTheme.titleLarge),
           ...playerNames.map((name) => Text(name)),
         ],
