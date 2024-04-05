@@ -72,16 +72,37 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
                   ),
                 ),
               ),
-              cheatSetting(context),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(width: 16),
+                  cheatSetting(context),
+                  SizedBox(width: 16),
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
               ),
-              timeSelection(context),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(width: 16),
+                  timeSelection(context),
+                  SizedBox(width: 16),
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
               ),
               if (lobbyService.gameModes == GameModes.Limited) ...[
-                bonusTimeSelection(context),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(width: 16),
+                    bonusTimeSelection(context),
+                    SizedBox(width: 16),
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                 ),
@@ -118,61 +139,101 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
   }
 
   Widget cheatSetting(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(AppLocalizations.of(context)!.create_room_options_cheatSetting),
-        Checkbox(
-          value: cheatMode,
-          onChanged: (bool? newValue) {
-            setState(() {
-              cheatMode = newValue!;
-            });
-          },
+    final double fixedWidth = MediaQuery.of(context).size.width * 0.9;
+    return Center(
+      child: Container(
+        width: fixedWidth,
+        color: Colors.white,
+        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.create_room_options_cheatSetting,
+              style: TextStyle(color: Colors.black),
+            ),
+            Checkbox(
+              value: cheatMode,
+              onChanged: (bool? newValue) {
+                setState(() {
+                  cheatMode = newValue!;
+                });
+              },
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
   Widget timeSelection(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(AppLocalizations.of(context)!.create_room_options_initialTime),
-        Slider(
-          value: gameDuration,
-          min: 30,
-          max: 600, // TODO: Change back to 60 when testing is done
-          divisions: 30,
-          label: gameDuration.round().toString(),
-          onChanged: (double newValue) {
-            setState(() {
-              gameDuration = newValue;
-            });
-          },
+    final double fixedWidth = MediaQuery.of(context).size.width * 0.9;
+    return Center(
+      child: Container(
+        width: fixedWidth,
+        color: Colors.white,
+        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.create_room_options_initialTime,
+              style: TextStyle(color: Colors.black),
+            ),
+            Expanded(
+              child: Slider(
+                value: gameDuration,
+                min: 30,
+                max: 600, // TODO: Change back to 60 when testing is done
+                divisions: 30,
+                label: gameDuration.round().toString(),
+                onChanged: (double newValue) {
+                  setState(() {
+                    gameDuration = newValue;
+                  });
+                },
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
   Widget bonusTimeSelection(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(AppLocalizations.of(context)!.create_room_options_bonusTime),
-        Slider(
-          value: gameBonus,
-          min: 10,
-          max: 20,
-          divisions: 10,
-          label: gameBonus.round().toString(),
-          onChanged: (double newValue) {
-            setState(() {
-              gameBonus = newValue;
-            });
-          },
+    final double fixedWidth = MediaQuery.of(context).size.width * 0.9;
+    return Center(
+      child: Container(
+        width: fixedWidth,
+        color: Colors.white,
+        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.create_room_options_bonusTime,
+              style: TextStyle(color: Colors.black),
+            ),
+            Expanded(
+              child: Slider(
+                value: gameBonus,
+                min: 10,
+                max: 20,
+                divisions: 10,
+                label: gameBonus.round().toString(),
+                onChanged: (double newValue) {
+                  setState(() {
+                    gameBonus = newValue;
+                  });
+                },
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
