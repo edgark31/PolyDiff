@@ -104,6 +104,11 @@ export class GameGateway implements OnGatewayConnection {
                 }
                 this.roomsManager.lobbies.get(lobbyId).time -= 1;
                 this.roomsManager.lobbies.get(lobbyId).timePlayed += 1;
+                /* --------- Record TimerUpdate -------- */
+                this.recordManager.addGameEvent(lobbyId, {
+                    gameEvent: GameEvents.TimerUpdate,
+                    time: this.roomsManager.lobbies.get(lobbyId).time,
+                } as GameEventData);
                 this.server.to(lobbyId).emit(GameEvents.TimerUpdate, this.roomsManager.lobbies.get(lobbyId).time);
             }, DELAY_BEFORE_EMITTING_TIME);
             this.timers.set(lobbyId, timerId);

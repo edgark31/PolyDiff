@@ -10,7 +10,7 @@ import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { MessageTag } from '@common/enums';
 import { Chat, Coordinate, GameEventData, GameRecord } from '@common/game-interfaces';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -26,7 +26,8 @@ export class ReplayService implements OnDestroy {
     private replayInterval: ReplayInterval;
     private currentReplayIndex: number;
     private replayTimer: number;
-    private replayDifferenceFound: BehaviorSubject<number>;
+    private replayTimerSubject: Subject<number>;
+    // private replayDifferenceFound: BehaviorSubject<number>;
     // private replayOpponentDifferenceFound: BehaviorSubject<number>;
     private replayEventsSubjectSubscription: Subscription;
 
@@ -40,8 +41,8 @@ export class ReplayService implements OnDestroy {
         private readonly welcome: WelcomeService,
     ) {
         this.isReplaying = false;
-        this.replayTimer = 0; // TODO: Set to timeLimit
-        this.replayDifferenceFound = new BehaviorSubject<number>(0);
+        this.replayTimer = 0;
+        // this.replayDifferenceFound = new BehaviorSubject<number>(0);
         // this.replayOpponentDifferenceFound = new BehaviorSubject<number>(0);
         this.replayEvents = [];
         this.replaySpeed = SPEED_X1;
@@ -49,15 +50,20 @@ export class ReplayService implements OnDestroy {
         this.isCheatMode = false;
         this.isDifferenceFound = false;
         this.currentReplayIndex = 0;
+        this.replayTimerSubject = new Subject<number>();
     }
 
     get replayTimer$() {
         return this.replayTimer;
     }
 
-    get replayDifferenceFound$() {
-        return this.replayDifferenceFound.asObservable();
+    get replayTimerSubject$() {
+        return this.replayTimerSubject.asObservable();
     }
+
+    // get replayDifferenceFound$() {
+    //     return this.replayDifferenceFound.asObservable();
+    // }
 
     // get replayOpponentDifferenceFound$() {
     //     return this.replayOpponentDifferenceFound.asObservable();
@@ -103,7 +109,7 @@ export class ReplayService implements OnDestroy {
 
     restartTimer(): void {
         // this.replayOpponentDifferenceFound.next(0);
-        this.replayDifferenceFound.next(0);
+        // this.replayDifferenceFound.next(0);
         this.replayTimer = 0;
     }
 
@@ -145,7 +151,7 @@ export class ReplayService implements OnDestroy {
             case ReplayActions.CheatDeactivated:
                 this.replayDeactivateCheat(replayData);
                 break;
-            case ReplayActions.UpdateTimer:
+            case ReplayActions.TimerUpdate:
                 this.replayTimerUpdate(replayData);
                 break;
             // case ReplayActions.DifferenceFoundUpdate:
@@ -286,7 +292,8 @@ export class ReplayService implements OnDestroy {
     }
 
     private replayTimerUpdate(replayData: GameEventData): void {
-        this.replayTimer = replayData.timestamp as number;
+        this.replayTimer = replayData.time as number;
+        this.replayTimerSubject.next(this.replayTimer);
     }
 
     // private replayDifferenceFoundUpdate(replayData: GameEventData): void {

@@ -49,6 +49,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     lobbySubscription: Subscription;
     lobbiesSubscription: Subscription;
     observersSubscription: Subscription;
+    replayTimerSubscription: Subscription;
     private gameSubscription: Subscription;
     private nextGameSubscription: Subscription;
     private endMessageSubscription: Subscription;
@@ -178,6 +179,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.lobbySubscription?.unsubscribe();
             this.remainingDifferenceSubscription?.unsubscribe();
             this.observersSubscription?.unsubscribe();
+            this.replayTimerSubscription?.unsubscribe();
 
             this.roomManager.off();
             this.gameManager.off();
@@ -281,13 +283,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     private setUpReplay(): void {
-        if (this.isReplayAvailable) {
-            this.timer = this.replayService.replayTimer$;
-            // this.lobby.players = this.replayService.record.players;
-            if (this.replayService.replayTimer$ === 0) {
-                this.messages = [];
-                this.nDifferencesFound = 0;
-            }
-        }
+        this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
+            this.timer = replayTimer;
+            console.log('timer:', this.timer);
+        });
     }
 }
