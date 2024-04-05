@@ -47,6 +47,10 @@
     "adminPopup_loginButton": "Login",
     "adminPage_adminPageTitle": "Administration page",
     "adminPage_deleteAllButton": "Delete all games",
+    "gameInfos_gameModeTitle": "Game mode",
+    "gameInfos_timeTitle": "Time",
+    "gameInfos_differencesPresentTitle": "Number of differences present",
+    "gameInfos_differencesFoundTitle": "Differences found",
     "classicMode": "Classic",
     "limitedMode": "Limited Time",
     "practiceMode": "Practice"

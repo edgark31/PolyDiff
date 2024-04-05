@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/players.dart';
@@ -40,14 +41,14 @@ class _GameInfosState extends State<GameInfos> {
               children: [
                 SizedBox(width: 380),
                 Text(
-                  'Mode de jeu : $gameMode',
+                  '${AppLocalizations.of(context)!.gameInfos_gameModeTitle} : $gameMode',
                   style: _textStyle(),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(width: 100),
                 if (lobbyService.lobby.mode != GameModes.Practice) ...[
                   Text(
-                    'Temps : $formattedTime',
+                    '${AppLocalizations.of(context)!.gameInfos_timeTitle} : $formattedTime',
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -60,8 +61,8 @@ class _GameInfosState extends State<GameInfos> {
             ),
             if (lobbyService.lobby.mode == GameModes.Classic) ...[
               Text(
-                'Nombre de différences présentes : $nbDifferencesPresent',
-                style:_textStyle(),
+                '${AppLocalizations.of(context)!.gameInfos_differencesPresentTitle} : $nbDifferencesPresent',
+                style: _textStyle(),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -112,7 +113,7 @@ class _GameInfosState extends State<GameInfos> {
           width: 30,
         ),
         Text(
-          'Différences trouvées : ${player.count}',
+          '${AppLocalizations.of(context)!.gameInfos_differencesFoundTitle} : ${player.count}',
           style: _textStyle(),
           textAlign: TextAlign.center,
         ),

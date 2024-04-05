@@ -47,6 +47,10 @@
     "adminPopup_loginButton": "Connexion",
     "adminPage_adminPageTitle": "Page d'administration",
     "adminPage_deleteAllButton": "Supprimer tous les jeux",
+    "gameInfos_gameModeTitle": "Mode de jeu",
+    "gameInfos_timeTitle": "Temps",
+    "gameInfos_differencesPresentTitle": "Nombre de différences présentes",
+    "gameInfos_differencesFoundTitle": "Différences trouvées",
     "classicMode": "Classique",
     "limitedMode": "Temps limité",
     "practiceMode": "Pratique"
