@@ -10,6 +10,7 @@ import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/friend_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_card_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
@@ -74,6 +75,10 @@ void main() async {
       GameCardService gameCardService = Get.find();
       return gameCardService;
     }),
+    ChangeNotifierProvider(create: (context) {
+      FriendService friendService = Get.find();
+      return friendService;
+    }),
     // Avatar
     ChangeNotifierProvider(create: (context) {
       AvatarProvider avatarProvider = Get.find();
@@ -94,6 +99,7 @@ void initializeServices() {
   Get.put(GameManagerService());
   Get.put(ChatService());
   Get.put(GameCardService());
+  Get.put(FriendService());
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
   Get.put(ThemeProvider());
