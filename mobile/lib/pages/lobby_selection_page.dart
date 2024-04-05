@@ -6,7 +6,9 @@ import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
@@ -39,6 +41,7 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
+    final infoService = context.watch<InfoService>();
     String creationRoute = lobbyService.isGameModesClassic()
         ? CREATE_ROOM_CARD_ROUTE
         : CREATE_ROOM_OPTIONS_ROUTE;
@@ -46,41 +49,60 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
     String gameModeName = lobbyService.gameModes == GameModes.Classic
         ? AppLocalizations.of(context)!.classicMode
         : AppLocalizations.of(context)!.limitedMode;
-    return Scaffold(
-      drawer: CustomMenuDrawer(),
-      appBar: CustomAppBar(
-          title: AppLocalizations.of(context)!.lobby_selection_title),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 10),
-                    CustomButton(
-                      text:
-                          '${AppLocalizations.of(context)!.lobby_selection_createRoom} $gameModeName',
-                      press: () => Navigator.pushNamed(context, creationRoute),
-                      widthFactor: 0.5,
-                    ),
-                    const SizedBox(height: 10),
-                    lobbiesFromServer.isEmpty
-                        ? Text(
-                            '${AppLocalizations.of(context)!.lobby_selection_noRoom} $gameModeName')
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: lobbiesFromServer.length,
-                            itemBuilder: (context, index) {
-                              return buildLobbyCard(
-                                  context, lobbiesFromServer[index]);
-                            },
-                          ),
-                  ],
+
+    return BackgroundContainer(
+      backgroundImagePath: infoService.isThemeLight
+          ? SELECTION_BACKGROUND_PATH
+          : SELECTION_BACKGROUND_PATH_DARK,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        drawer: CustomMenuDrawer(),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context)!.lobby_selection_title,
+        ),
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 10),
+                      CustomButton(
+                        text:
+                            '${AppLocalizations.of(context)!.lobby_selection_createRoom} $gameModeName',
+                        press: () =>
+                            Navigator.pushNamed(context, creationRoute),
+                        widthFactor: 0.5,
+                      ),
+                      const SizedBox(height: 10),
+                      lobbiesFromServer.isEmpty
+                          ? Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.all(16.0),
+                              margin: const EdgeInsets.all(16.0),
+                              child: Text(
+                                '${AppLocalizations.of(context)!.lobby_selection_noRoom} $gameModeName',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: lobbiesFromServer.length,
+                              itemBuilder: (context, index) {
+                                return buildLobbyCard(
+                                    context, lobbiesFromServer[index]);
+                              },
+                            ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 
@@ -95,7 +117,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
         : const AssetImage('assets/images/limitedTime.png');
     String differences =
         isLobbyClassic ? 'Differences: ${lobby.nDifferences}, ' : '';
-    String nPlayers = '${AppLocalizations.of(context)!.lobby_selection_nPlayers}: ${lobby.players.length}/4';
+    String nPlayers =
+        '${AppLocalizations.of(context)!.lobby_selection_nPlayers}: ${lobby.players.length}/4';
     String playerNames = lobby.players.map((e) => e.name).join(', ');
     final lobbyService = context.watch<LobbyService>();
     final chatService = context.watch<ChatService>();
@@ -125,7 +148,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Text('${AppLocalizations.of(context)!.lobby_selection_players}: $playerNames',
+                      child: Text(
+                          '${AppLocalizations.of(context)!.lobby_selection_players}: $playerNames',
                           style: const TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Expanded(
@@ -145,18 +169,21 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
               children: [
                 lobby.isAvailable
                     ? (lobby.players.length == 4
-                        ? Text(AppLocalizations.of(context)!.lobby_selection_fullRoom)
+                        ? Text(AppLocalizations.of(context)!
+                            .lobby_selection_fullRoom)
                         : CustomButton(
                             press: () {
                               lobbyService.joinLobby(lobby.lobbyId);
                               chatService.setLobbyMessages(lobby.chatLog!.chat);
                               Navigator.pushNamed(context, LOBBY_ROUTE);
                             },
-                            text: AppLocalizations.of(context)!.lobby_selection_join,
+                            text: AppLocalizations.of(context)!
+                                .lobby_selection_join,
                             widthFactor: 1.5,
                           ))
                     : CustomButton(
-                        text: AppLocalizations.of(context)!.lobby_selection_observe,
+                        text: AppLocalizations.of(context)!
+                            .lobby_selection_observe,
                         press: () {
                           print(
                               'Player is joining as observer in lobby ${lobby.lobbyId}');

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
+import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
@@ -38,58 +41,77 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     final lobbyService = context.watch<LobbyService>();
     final lobbySelectionService = context.watch<LobbySelectionService>();
     final chatService = context.watch<ChatService>();
+    final infoService = context.watch<InfoService>();
+
     String gameModeName = lobbyService.gameModes == GameModes.Classic
         ? AppLocalizations.of(context)!.classicMode
         : AppLocalizations.of(context)!.limitedMode;
 
-    return Scaffold(
-      appBar: CustomAppBar(
-          title: AppLocalizations.of(context)!.create_room_options_title),
-      drawer: CustomMenuDrawer(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-                '${AppLocalizations.of(context)!.create_room_options_selectionText} $gameModeName'),
-            cheatSetting(context),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-            ),
-            timeSelection(context),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-            ),
-            if (lobbyService.gameModes == GameModes.Limited) ...[
-              bonusTimeSelection(context),
+    return BackgroundContainer(
+      backgroundImagePath: infoService.isThemeLight
+          ? SELECTION_BACKGROUND_PATH
+          : SELECTION_BACKGROUND_PATH_DARK,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
+            title: AppLocalizations.of(context)!.create_room_options_title),
+        drawer: CustomMenuDrawer(),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(16.0),
+                margin: const EdgeInsets.all(16.0),
+                child: Text(
+                  '${AppLocalizations.of(context)!.create_room_options_selectionText} $gameModeName',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              cheatSetting(context),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
               ),
+              timeSelection(context),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+              ),
+              if (lobbyService.gameModes == GameModes.Limited) ...[
+                bonusTimeSelection(context),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                ),
+              ],
+              CustomButton(
+                press: () {
+                  lobbySelectionService.setIsCheatEnabled(cheatMode);
+                  lobbySelectionService.setGameDuration(gameDuration.round());
+                  lobbySelectionService.setGameBonus(gameBonus.round());
+                  lobbyService.createLobby();
+                  chatService.setLobbyMessages([]); // Creator has no messages
+                  Future.delayed(Duration(milliseconds: 500), () {
+                    // Waiting for server to emit the created lobby from creator
+                    Navigator.pushNamed(context, LOBBY_ROUTE);
+                  });
+                },
+                text: AppLocalizations.of(context)!
+                    .create_room_options_createText,
+                widthFactor: 0.25,
+              ),
+              CustomButton(
+                press: () {
+                  Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                },
+                text:
+                    AppLocalizations.of(context)!.create_room_options_backText,
+                widthFactor: 0.25,
+              ),
             ],
-            CustomButton(
-              press: () {
-                lobbySelectionService.setIsCheatEnabled(cheatMode);
-                lobbySelectionService.setGameDuration(gameDuration.round());
-                lobbySelectionService.setGameBonus(gameBonus.round());
-                lobbyService.createLobby();
-                chatService.setLobbyMessages([]); // Creator has no messages
-                Future.delayed(Duration(milliseconds: 500), () {
-                  // Waiting for server to emit the created lobby from creator
-                  Navigator.pushNamed(context, LOBBY_ROUTE);
-                });
-              },
-              text:
-                  AppLocalizations.of(context)!.create_room_options_createText,
-              widthFactor: 0.25,
-            ),
-            CustomButton(
-              press: () {
-                Navigator.pushNamed(context, DASHBOARD_ROUTE);
-              },
-              text: AppLocalizations.of(context)!.create_room_options_backText,
-              widthFactor: 0.25,
-            ),
-          ],
+          ),
         ),
       ),
     );
