@@ -83,11 +83,13 @@ class _FriendsListState extends State<FriendsList> {
                     SizedBox(width: 20),
                     TextButton(
                       onPressed: () {
+                        friendService.fetchFoFs(friend.accountId);
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return FriendsPopup(
                               username: friend.name,
+                              accountId: friend.accountId,
                               inSearch: false,
                             );
                           },

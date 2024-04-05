@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/friend_model.dart';
 import 'package:mobile/services/friend_service.dart';
 import 'package:provider/provider.dart';
 
 class FriendsPopup extends StatefulWidget {
   final String username;
+  final String accountId;
   final bool inSearch;
 
   FriendsPopup(
       {Key? key,
       required this.username,
+      required this.accountId,
       required this.inSearch})
       : super(key: key);
 
@@ -26,9 +29,9 @@ class _FriendsPopupState extends State<FriendsPopup> {
   @override
   Widget build(BuildContext context) {
     final friendService = context.watch<FriendService>();
-    List<Friend?> friendsToShow =
-        showAllFriends ? friendService.friends : friendService.friends; // to change
-
+    List<Friend?> friendsToShow = showAllFriends
+        ? friendService.friendsOfFriends
+        : friendService.commonFriend;
     return Dialog(
       child: SizedBox(
         width: 500,
@@ -48,6 +51,11 @@ class _FriendsPopupState extends State<FriendsPopup> {
                   onPressed: () {
                     setState(() {
                       showAllFriends = !showAllFriends;
+                      if (showAllFriends) {
+                        friendService.fetchFoFs(widget.accountId);
+                      } else {
+                        friendService.fetchCommon(widget.accountId);
+                      }
                     });
                   },
                   child: Text(showAllFriends
@@ -56,13 +64,18 @@ class _FriendsPopupState extends State<FriendsPopup> {
                 ),
               ),
             ],
-            Text("Liste d'amis à ${widget.username}",
+            Text(
+                showAllFriends
+                    ? 'Amis à ${widget.username}'
+                    : 'Amis communs avec ${widget.username}',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
             Expanded(
               child: ListView.builder(
                 itemCount: friendsToShow.length,
                 itemBuilder: (context, index) {
                   final friend = friendsToShow[index];
+                  String avatarURL =
+                      '$BASE_URL/avatar/${friend!.accountId}.png';
 
                   return Container(
                     alignment: Alignment.center,
@@ -74,8 +87,7 @@ class _FriendsPopupState extends State<FriendsPopup> {
                           leading: CircleAvatar(
                             radius: 40,
                             backgroundColor: Colors.grey[200],
-                            backgroundImage: AssetImage(
-                                'assets/images/hallelujaRaccoon.jpeg'),
+                            backgroundImage: NetworkImage(avatarURL),
                           ),
                           title: Text(friend!.name,
                               style: TextStyle(fontSize: 25)),

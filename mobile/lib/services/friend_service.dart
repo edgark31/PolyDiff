@@ -81,7 +81,7 @@ class FriendService extends ChangeNotifier {
   }
 
   void fetchFoFs(String friendId) {
-    print("Fetching FriendsOfFriends");
+    print("Fetching FriendsOfFriends with id: $friendId");
     socketService.send(
         SocketType.Auth, FriendEvents.UpdateFoFs.name, {'friendId': friendId});
   }
@@ -145,23 +145,23 @@ class FriendService extends ChangeNotifier {
       updateFriends(allFriends);
     });
 
-  //   socketService.on(SocketType.Auth, FriendEvents.UpdateCommonFriends.name,
-  //       (data) {
-  //     print("UPDATING Common");
-  //     List<dynamic> receivedData = data as List<dynamic>;
-  //     List<Friend> commonFriends = receivedData
-  //         .map<Friend>((friend) => Friend.fromJson(friend))
-  //         .toList();
-  //     update(allFriends);
-  //   });
+    socketService.on(SocketType.Auth, FriendEvents.UpdateCommonFriends.name,
+        (data) {
+      print("UPDATING Common");
+      List<dynamic> receivedData = data as List<dynamic>;
+      List<Friend> commonFriends = receivedData
+          .map<Friend>((friend) => Friend.fromJson(friend))
+          .toList();
+      updateCommon(commonFriends);
+    });
 
-  //   socketService.on(SocketType.Auth, FriendEvents.UpdateFriends.name, (data) {
-  //     print("UPDATING FOF");
-  //     List<dynamic> receivedData = data as List<dynamic>;
-  //     List<Friend> allFriends = receivedData
-  //         .map<Friend>((friend) => Friend.fromJson(friend))
-  //         .toList();
-  //     updateFriends(allFriends);
-  //   });
+    socketService.on(SocketType.Auth, FriendEvents.UpdateFoFs.name, (data) {
+      print("UPDATING FOF");
+      List<dynamic> receivedData = data as List<dynamic>;
+      List<Friend> friendsOfFriends = receivedData
+          .map<Friend>((friend) => Friend.fromJson(friend))
+          .toList();
+      updateFoFs(friendsOfFriends);
+    });
   }
 }

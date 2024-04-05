@@ -104,7 +104,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
         Padding(
           padding: EdgeInsets.all(10),
           child: Center(
-            child: Container(
+            child: SizedBox(
               width: 520,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -173,11 +173,13 @@ class _FriendsSearchState extends State<FriendsSearch> {
                           SizedBox(width: 20),
                           TextButton(
                             onPressed: () {
+                              friendService.fetchFoFs(user.accountId);
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return FriendsPopup(
                                     username: user.name,
+                                    accountId: user.accountId,
                                     inSearch: true,
                                   );
                                 },
