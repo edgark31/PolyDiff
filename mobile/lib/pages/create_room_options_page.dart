@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
@@ -40,14 +41,15 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     final chatService = context.watch<ChatService>();
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'Configurations des options'),
+      appBar: CustomAppBar(
+          title: AppLocalizations.of(context)!.create_room_options_title),
       drawer: CustomMenuDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-                'Sélectionner les options de la salle de jeu en Mode $gameModeName'),
+                '${AppLocalizations.of(context)!.create_room_options_title} $gameModeName'),
             cheatSetting(context),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
@@ -74,14 +76,14 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
                   Navigator.pushNamed(context, LOBBY_ROUTE);
                 });
               },
-              text: 'Créer la salle de jeu',
+              text: AppLocalizations.of(context)!.create_room_options_createText,
               widthFactor: 0.25,
             ),
             CustomButton(
               press: () {
                 Navigator.pushNamed(context, DASHBOARD_ROUTE);
               },
-              text: 'Retour à l\'accueil',
+              text: AppLocalizations.of(context)!.create_room_options_backText,
               widthFactor: 0.25,
             ),
           ],
@@ -94,7 +96,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('Mode de triche'),
+        Text(AppLocalizations.of(context)!.create_room_options_cheatSetting),
         Checkbox(
           value: cheatMode,
           onChanged: (bool? newValue) {
@@ -111,7 +113,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('Temps initial de la partie (en secondes)'),
+        Text(AppLocalizations.of(context)!.create_room_options_initialTime),
         Slider(
           value: gameDuration,
           min: 30,
@@ -132,7 +134,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('Temps de bonus pour différence trouvée (en secondes)'),
+        Text(AppLocalizations.of(context)!.create_room_options_bonusTime),
         Slider(
           value: gameBonus,
           min: 10,

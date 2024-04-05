@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/services/game_card_service.dart';
@@ -104,7 +105,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     return Scaffold(
       drawer: CustomMenuDrawer(),
       appBar:
-          CustomAppBar(title: 'Création d\'une salle de jeu - Choix de fiche'),
+          CustomAppBar(title: AppLocalizations.of(context)!.create_room_card_title),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -138,7 +139,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     final lobbySelectionService = context.watch<LobbySelectionService>();
     final lobbyService = context.watch<LobbyService>();
     String imagePath = '$BASE_URL/${card.id}/original.bmp';
-    String differenceText = 'Différences: ${card.nDifference}';
+    String differenceText = 'Differences: ${card.nDifference}';
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -166,7 +167,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
                   Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
                 }
               },
-              text: 'Choisir cette fiche',
+              text: AppLocalizations.of(context)!.create_room_card_chooseCardText,
             ),
           ],
         ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/info_service.dart';
@@ -85,7 +84,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   Padding(
                     padding: EdgeInsets.only(top: startingPoint),
                     child: StrokedTextWidget(
-                      text: WELCOME_TXT,
+                      text: AppLocalizations.of(context)!.dashboard_welcomeText,
                       textStyle: TextStyle(
                         fontFamily: 'troika',
                         fontSize: 140,

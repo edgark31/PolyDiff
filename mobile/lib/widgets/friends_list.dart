@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
@@ -100,11 +101,11 @@ class _FriendsListState extends State<FriendsList> {
                         backgroundColor: kLightGreen,
                         disabledForegroundColor: Colors.grey.withOpacity(0.38),
                       ),
-                      child: Text('Amis', style: TextStyle(fontSize: 18)),
+                      child: Text(AppLocalizations.of(context)!.friendList_friendButton, style: TextStyle(fontSize: 18)),
                     ),
                   ],
                 ),
-                //subtitle: Text(friend.isOnline ? 'Online' : 'Offline'),
+                //subtitle: Text(friend.isOnline ? friendList_isOnline : 'friendList_isOffline'),
                 trailing: IconButton(
                   iconSize: 40,
                   icon: Icon(Icons.person_remove),

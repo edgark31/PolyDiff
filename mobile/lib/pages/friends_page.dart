@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
@@ -30,7 +31,6 @@ class _FriendsPageState extends State<FriendsPage> {
     });
   }
 
-// TODO: When the real connection is done, move each returned widget into separate files
   Widget _buildContent() {
     switch (_selectedViewIndex) {
       case 0:
@@ -49,7 +49,8 @@ class _FriendsPageState extends State<FriendsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CustomMenuDrawer(),
-      appBar: CustomAppBar(title: "Page d'amis"),
+      appBar:
+          CustomAppBar(title: AppLocalizations.of(context)!.friend_pageTitle),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -78,8 +79,11 @@ class _FriendsPageState extends State<FriendsPage> {
                     ),
                     child: Text(
                         i == 0
-                            ? "Tous les amis"
-                            : (i == 1 ? "En attente" : "Ajouter un ami"),
+                            ? AppLocalizations.of(context)!
+                                .friend_allFriendsButton
+                            : (i == 1
+                                ? AppLocalizations.of(context)!.friend_PendingButton
+                                : AppLocalizations.of(context)!.friend_AddButton),
                         style: TextStyle(fontSize: 25, color: Colors.white)),
                   ),
                 ]
