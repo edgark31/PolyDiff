@@ -54,13 +54,16 @@ class HistoryPage extends StatelessWidget {
                 AppLocalizations.of(context)!.history_connectionHistory),
             Expanded(
               child: Scrollbar(
-                child: ListView(
-                  children: loginHistory
-                      .map((e) => ListTile(
-                            title: Text(e.action),
-                            subtitle: Text("${e.dateTime}"),
-                          ))
-                      .toList(),
+                child: ListView.builder(
+                  itemCount: loginHistory.length,
+                  itemBuilder: (context, index) => Card(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: ListTile(
+                      title: Text(loginHistory[index].action),
+                      subtitle: Text("${loginHistory[index].dateTime}"),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -68,19 +71,25 @@ class HistoryPage extends StatelessWidget {
                 context, AppLocalizations.of(context)!.history_gameHistory),
             Expanded(
               child: Scrollbar(
-                child: ListView(
-                  children: gameHistory
-                      .map((e) => ListTile(
-                            title: Text(e.won
-                                ? AppLocalizations.of(context)!.history_wonGame
-                                : AppLocalizations.of(context)!
-                                    .history_lostGame),
-                            subtitle: Text("${e.dateTime}"),
-                            leading: Icon(
-                                e.won ? Icons.emoji_events : Icons.close,
-                                color: e.won ? Colors.green : Colors.red),
-                          ))
-                      .toList(),
+                child: ListView.builder(
+                  itemCount: gameHistory.length,
+                  itemBuilder: (context, index) => Card(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: ListTile(
+                      title: Text(gameHistory[index].won
+                          ? AppLocalizations.of(context)!.history_wonGame
+                          : AppLocalizations.of(context)!.history_lostGame),
+                      subtitle: Text("${gameHistory[index].dateTime}"),
+                      leading: Icon(
+                          gameHistory[index].won
+                              ? Icons.emoji_events
+                              : Icons.close,
+                          color: gameHistory[index].won
+                              ? Colors.green
+                              : Colors.red),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -109,6 +118,8 @@ class HistoryPage extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
         ),
       ),
