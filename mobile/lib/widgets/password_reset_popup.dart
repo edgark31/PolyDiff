@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/services/form_service.dart';
 
@@ -59,7 +60,7 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Récuperation de mot de passe",
+                  AppLocalizations.of(context)!.passwordResetPopup_resetTitle,
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -70,7 +71,7 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                 Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Text(
-                    "Courriel",
+                    AppLocalizations.of(context)!.passwordResetPopup_email,
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
@@ -124,8 +125,8 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                           );
                         } else {
                           setState(() {
-                            errorMessage =
-                                "Il n'y a pas de compte associé à cet email";
+                            errorMessage = AppLocalizations.of(context)!
+                                .passwordResetPopup_emailNoAccount;
                           });
                         }
                       },
@@ -136,7 +137,8 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                         backgroundColor: Color.fromARGB(255, 31, 150, 104),
                         foregroundColor: Colors.white,
                       ),
-                      child: Text("Recevoir un code"),
+                      child: Text(AppLocalizations.of(context)!
+                          .passwordResetPopup_emailGetCode),
                     ),
                   ),
                 ),
