@@ -54,6 +54,12 @@
     "gamePage_cheatButton": "CHEAT",
     "gamePage_leaveButton": "Leave",
     "gamePage_giveUpButton": "Give up",
+    "gameLoading_loadingTitle": "THE GAME WILL START SOON ...",
+    "abandonGame_questionTitle": "Are you sure you want to give up the game ?",
+    "confirmation_yes": "Yes",
+    "confirmation_no": "No",
+    "endGame_homeButton": "Home",
+    "endGame_videoReplayButton": "Video replay",
     "classicMode": "Classic",
     "limitedMode": "Limited Time",
     "practiceMode": "Practice"

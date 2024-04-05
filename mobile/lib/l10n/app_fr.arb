@@ -54,6 +54,12 @@
     "gamePage_cheatButton": "TRICHE",
     "gamePage_leaveButton": "Quitter",
     "gamePage_giveUpButton": "Abandonner",
+    "gameLoading_loadingTitle": "LA PARTIE VA COMMENCER SOUS PEU ...",
+    "abandonGame_questionTitle": "Êtes-vous certain de vouloir abandonner la partie ?",
+    "confirmation_yes": "Oui",
+    "confirmation_no": "Non",
+    "endGame_homeButton": "Accueil",
+    "endGame_videoReplayButton": "Reprise Vidéo",
     "classicMode": "Classique",
     "limitedMode": "Temps limité",
     "practiceMode": "Pratique"
