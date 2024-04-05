@@ -62,6 +62,10 @@ void main() async {
       return gameManagerService;
     }),
     ChangeNotifierProvider(create: (context) {
+      GameRecordProvider gameRecordProvider = Get.find();
+      return gameRecordProvider;
+    }),
+    ChangeNotifierProvider(create: (context) {
       ChatService chatService = Get.find();
       return chatService;
     }),
@@ -75,10 +79,6 @@ void main() async {
       return avatarProvider;
     }),
     ChangeNotifierProvider(create: (context) => ThemeProvider()),
-    ChangeNotifierProvider(create: (context) {
-      GameRecordProvider gameRecordProvider = Get.find();
-      return gameRecordProvider;
-    }),
   ], child: const MyApp()));
 }
 
@@ -89,13 +89,13 @@ void initializeServices() {
   Get.put(GameAreaService());
   Get.put(LobbySelectionService());
   Get.put(LobbyService());
+  Get.put(GameRecordProvider());
   Get.put(GameManagerService());
   Get.put(ChatService());
   Get.put(GameCardService());
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
   Get.put(ThemeProvider());
-  Get.put(GameRecordProvider());
 }
 
 class MyApp extends StatelessWidget {
