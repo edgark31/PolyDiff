@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
@@ -57,7 +58,7 @@ class _AdminPageState extends State<AdminPage> {
     if (isLoading) return CircularProgressIndicator();
     return Scaffold(
       appBar: CustomAppBar(
-        title: "Page d'administration",
+        title: AppLocalizations.of(context)!.adminPage_adminPageTitle,
       ),
       body: Column(
         children: [
@@ -77,7 +78,8 @@ class _AdminPageState extends State<AdminPage> {
                   });
                 });
               },
-              child: Text('Supprimer tous les jeux'),
+              child:
+                  Text(AppLocalizations.of(context)!.adminPage_deleteAllButton),
             ),
           ),
           Expanded(

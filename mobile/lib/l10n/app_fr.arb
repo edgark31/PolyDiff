@@ -45,6 +45,8 @@
     "adminPopup_loginTitle": "Connexion à la page d'administration",
     "adminPopup_passwordTitle": "Mot de passe",
     "adminPopup_loginButton": "Connexion",
+    "adminPage_adminPageTitle": "Page d'administration",
+    "adminPage_deleteAllButton": "Supprimer tous les jeux",
     "classicMode": "Classique",
     "limitedMode": "Temps limité",
     "practiceMode": "Pratique"
