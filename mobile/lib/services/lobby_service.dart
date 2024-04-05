@@ -82,7 +82,7 @@ class LobbyService extends ChangeNotifier {
 
   void setUpLobbyInitial(String? joinedLobbyId) {
     // Safety check to unsure latest lobbies are up to date
-    socketService.send(SocketType.Auth, LobbyEvents.UpdateLobbys.name);
+    socketService.send(SocketType.Lobby, LobbyEvents.UpdateLobbys.name);
     setLobby(getLobbyFromLobbies(joinedLobbyId));
   }
 
@@ -104,7 +104,7 @@ class LobbyService extends ChangeNotifier {
     setIsCreator(false); // Make sure default value is false
     setIsObserver(false); // Make sure default value is false
     setListeners();
-    socketService.send(SocketType.Auth, LobbyEvents.UpdateLobbys.name);
+    socketService.send(SocketType.Lobby, LobbyEvents.UpdateLobbys.name);
     setGameModes(mode);
   }
 
