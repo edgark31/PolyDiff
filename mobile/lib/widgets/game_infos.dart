@@ -27,7 +27,11 @@ class _GameInfosState extends State<GameInfos> {
     int timer = gameManagerService.time;
     int? nbDifferencesPresent = gameManagerService.game.nDifferences;
     List<Player> players = lobbyService.lobby.players;
-    String gameMode = lobbyService.lobby.mode.name;
+    String gameMode = lobbyService.gameModes == GameModes.Classic
+        ? AppLocalizations.of(context)!.classicMode
+        : (lobbyService.gameModes == GameModes.Limited
+            ? AppLocalizations.of(context)!.limitedMode
+            : AppLocalizations.of(context)!.practiceMode);
 
     String formattedTime =
         "${(timer ~/ 60).toString().padLeft(2, '0')}:${(timer % 60).toString().padLeft(2, '0')}";
