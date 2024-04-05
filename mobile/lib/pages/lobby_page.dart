@@ -40,7 +40,9 @@ class _LobbyPageState extends State<LobbyPage> {
     List<String> playerNames = lobbyService.lobby.players.map((e) {
       return e.name ?? '';
     }).toList();
-    String gameModeName = lobbyService.gameModes.name;
+    String gameModeName = lobbyService.gameModes == GameModes.Classic
+        ? AppLocalizations.of(context)!.classicMode
+        : AppLocalizations.of(context)!.limitedMode;
 
     if (!lobbyService.isCurrentLobbyInLobbies()) {
       Future.delayed(Duration.zero, () {
