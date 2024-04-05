@@ -84,7 +84,10 @@ void main() async {
       AvatarProvider avatarProvider = Get.find();
       return avatarProvider;
     }),
-    ChangeNotifierProvider(create: (context) => ThemeProvider()),
+    ChangeNotifierProvider(create: (context) {
+      ThemeProvider themeProvider = Get.find();
+      return themeProvider;
+    })
   ], child: const MyApp()));
 }
 
@@ -110,7 +113,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    final ThemeProvider themeProvider = Get.find();
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
