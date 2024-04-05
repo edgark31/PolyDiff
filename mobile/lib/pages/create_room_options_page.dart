@@ -37,8 +37,10 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
     final lobbySelectionService = context.watch<LobbySelectionService>();
-    final gameModeName = lobbyService.gameModes.name;
     final chatService = context.watch<ChatService>();
+    String gameModeName = lobbyService.gameModes == GameModes.Classic
+        ? AppLocalizations.of(context)!.classicMode
+        : AppLocalizations.of(context)!.limitedMode;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -49,7 +51,7 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-                '${AppLocalizations.of(context)!.create_room_options_title} $gameModeName'),
+                '${AppLocalizations.of(context)!.create_room_options_selectionText} $gameModeName'),
             cheatSetting(context),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
@@ -76,7 +78,8 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
                   Navigator.pushNamed(context, LOBBY_ROUTE);
                 });
               },
-              text: AppLocalizations.of(context)!.create_room_options_createText,
+              text:
+                  AppLocalizations.of(context)!.create_room_options_createText,
               widthFactor: 0.25,
             ),
             CustomButton(

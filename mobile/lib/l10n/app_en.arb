@@ -4,7 +4,7 @@
     "create_room_options_title": "Options configuration",
     "create_room_options_selectionText": "Choose options for the room in mode",
     "create_room_options_createText": "Create the lobby",
-    "create_room_options_backText": "Go back to dashboard",
+    "create_room_options_backText": "Go back to HomePage",
     "create_room_options_cheatSetting": "Cheat Mode",
     "create_room_options_initialTime": "Initial time of the game (in seconds)",
     "create_room_options_bonusTime": "Bonus time for difference found (in seconds)",
