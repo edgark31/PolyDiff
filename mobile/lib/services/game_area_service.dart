@@ -31,28 +31,28 @@ class GameAreaService extends ChangeNotifier {
     startBlinking(newCoordinates);
   }
 
-  void showDifferenceNotFoundLeft(Coordinate currentCoord) {
-    isClickDisabled = true;
-    soundService.playErrorSound();
-    leftErrorCoord.add(currentCoord);
-    notifyListeners();
-    Future.delayed(Duration(seconds: 1), () {
-      leftErrorCoord = [];
+  void showDifferenceNotFound(Coordinate currentCoord, bool isLeft) {
+    if (isLeft) {
+      isClickDisabled = true;
+      soundService.playErrorSound();
+      leftErrorCoord.add(currentCoord);
       notifyListeners();
-      isClickDisabled = false;
-    });
-  }
-
-  showDifferenceNotFoundRight(Coordinate currentCoord) {
-    isClickDisabled = true;
-    soundService.playErrorSound();
-    rightErrorCoord.add(currentCoord);
-    notifyListeners();
-    Future.delayed(Duration(seconds: 1), () {
-      rightErrorCoord = [];
+      Future.delayed(Duration(seconds: 1), () {
+        leftErrorCoord = [];
+        notifyListeners();
+        isClickDisabled = false;
+      });
+    } else {
+      isClickDisabled = true;
+      soundService.playErrorSound();
+      rightErrorCoord.add(currentCoord);
       notifyListeners();
-      isClickDisabled = false;
-    });
+      Future.delayed(Duration(seconds: 1), () {
+        rightErrorCoord = [];
+        notifyListeners();
+        isClickDisabled = false;
+      });
+    }
   }
 
   void initPath(List<Coordinate> coords) {
@@ -76,22 +76,16 @@ class GameAreaService extends ChangeNotifier {
     const int timeToBlinkMs = 100;
 
     for (int i = 0; i < 3; i++) {
-      await showDifferenceGreen(blinkingPath, timeToBlinkMs);
-      await showDifferenceYellow(blinkingPath, timeToBlinkMs);
+      await showDifferenceColor(blinkingPath, timeToBlinkMs, Colors.green);
+      await showDifferenceColor(blinkingPath, timeToBlinkMs, Colors.yellow);
     }
 
     resetBlinkingDifference();
   }
 
-  Future<void> showDifferenceGreen(Path difference, int waitingTimeMs) async {
-    blinkingColor.color = Colors.green;
-    blinkingDifference = difference;
-    notifyListeners();
-    await Future.delayed(Duration(milliseconds: waitingTimeMs));
-  }
-
-  Future<void> showDifferenceYellow(Path difference, int waitingTimeMs) async {
-    blinkingColor.color = Colors.yellow;
+  Future<void> showDifferenceColor(
+      Path difference, int waitingTimeMs, Color color) async {
+    blinkingColor.color = color;
     blinkingDifference = difference;
     notifyListeners();
     await Future.delayed(Duration(milliseconds: waitingTimeMs));
@@ -103,7 +97,6 @@ class GameAreaService extends ChangeNotifier {
   }
 
   void initCheatPath(List<Coordinate> coords) {
-    print('Enter initcheatpath');
     final cheatPath = Path();
     for (var coord in coords) {
       cheatPath.addRect(Rect.fromLTWH(
@@ -117,7 +110,6 @@ class GameAreaService extends ChangeNotifier {
   }
 
   Future<void> toggleCheatMode(List<Coordinate> coords) async {
-    print('Enter toggleCheatMode');
     isCheatMode = !isCheatMode;
     if (isCheatMode) {
       initCheatPath(coords);
@@ -128,8 +120,8 @@ class GameAreaService extends ChangeNotifier {
       const int cheatModeWaitMs = 250;
 
       while (isCheatMode) {
-        await showCheatDifference(blinkingCheatPath, timeToBlinkMs);
-        await hideCheatDifference(cheatModeWaitMs);
+        await blinkCheatDifference(blinkingCheatPath, timeToBlinkMs);
+        await blinkCheatDifference(null, cheatModeWaitMs);
         if (!isCheatMode) {
           break;
         }
@@ -141,24 +133,14 @@ class GameAreaService extends ChangeNotifier {
     resetCheatBlinkingDifference();
   }
 
-  Future<void> showCheatDifference(Path difference, int waitingTimeMs) async {
-    print('Enter showcheat');
+  Future<void> blinkCheatDifference(Path? difference, int waitingTimeMs) async {
     blinkingColor.color = Colors.red;
     cheatBlinkingDifference = difference;
     notifyListeners();
     await Future.delayed(Duration(milliseconds: waitingTimeMs));
   }
 
-  Future<void> hideCheatDifference(int waitingTimeMs) async {
-    print('Enter hidecheat');
-    blinkingColor.color = Colors.red;
-    cheatBlinkingDifference = null;
-    notifyListeners();
-    await Future.delayed(Duration(milliseconds: waitingTimeMs));
-  }
-
   void resetCheatBlinkingDifference() {
-    print('Enter resetcheat');
     cheatBlinkingDifference = null;
     notifyListeners();
   }
