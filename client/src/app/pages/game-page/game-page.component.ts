@@ -285,7 +285,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     private setUpReplay(): void {
         this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
             this.timer = replayTimer;
-            console.log('timer:', this.timer);
         });
     }
 }

@@ -111,6 +111,7 @@ export class ReplayService implements OnDestroy {
         // this.replayOpponentDifferenceFound.next(0);
         // this.replayDifferenceFound.next(0);
         this.replayTimer = 0;
+        this.replayTimerSubject.next(0);
     }
 
     resetReplay(): void {
