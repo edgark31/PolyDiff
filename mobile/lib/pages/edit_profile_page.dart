@@ -8,7 +8,6 @@ import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/models/account.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
-import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/account_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/sound_service.dart';
@@ -356,10 +355,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 currentSettings!.copyWith(theme: newValue);
                           }
                           setState(() {
-                            final themeProvider = Provider.of<ThemeProvider>(
-                                context,
-                                listen: false);
-                            themeProvider.toggleTheme(newValue == 'dark');
+                            // final themeProvider = Provider.of<ThemeProvider>(
+                            //     context,
+                            //     listen: false);
+                            // themeProvider.toggleTheme(newValue == 'dark');
                           });
                         },
                         decoration: InputDecoration(labelText: 'Theme'),
