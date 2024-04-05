@@ -57,7 +57,13 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     // ---------------------- LES GETTERS de friends INITIAUX --------------------------------
     @SubscribeMessage(FriendEvents.UpdateFriends)
     updateFriends(@ConnectedSocket() socket: Socket) {
-        socket.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(socket.data.accountId).profile.friends);
+        const friends = this.accountManager.users.get(socket.data.accountId).profile.friends;
+        this.accountManager.connectedUsers.forEach((value, key) => {
+            if (friends.find((f) => f.accountId === key)) {
+                friends.find((f) => f.accountId === key).isOnline = true;
+            }
+        });
+        socket.emit(FriendEvents.UpdateFriends, friends);
     }
 
     @SubscribeMessage(FriendEvents.UpdateSentFriends)
