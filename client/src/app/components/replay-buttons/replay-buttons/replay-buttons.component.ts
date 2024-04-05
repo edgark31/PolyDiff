@@ -29,8 +29,13 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
             this.timer = this.replayService.record.timeLimit - replayTimer;
+            this.formatThumbLabel(this.timer);
         });
         this.replaySpeed = SPEED_X1;
+    }
+
+    getTimeLimit(): number {
+        return this.replayService.record.timeLimit;
     }
 
     formatThumbLabel(value: number): string {
