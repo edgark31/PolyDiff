@@ -215,6 +215,11 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.logger.log(`DEATH de ${socket.data.accountId}`);
         this.accountManager.logConnection(socket.data.accountId, false);
         this.accountManager.disconnection(socket.data.accountId);
+        this.server.fetchSockets().then((sockets) => {
+            sockets.forEach((s) => {
+                this.updateIsOnline(s as any);
+            });
+        });
     }
 
     updateIsOnline(socket: Socket) {
