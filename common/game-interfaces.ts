@@ -282,11 +282,13 @@ export interface GameEventData {
     accountId?: string;
     username?: string;
     timestamp?: number;
+    modified?: string;
     players?: Player[];
     gameEvent: string;
     coordClic?: Coordinate;
     remainingDifferenceIndex?: number[];
     isMainCanvas?: boolean;
+    time?: number;
 }
 
 export interface GameRecord {

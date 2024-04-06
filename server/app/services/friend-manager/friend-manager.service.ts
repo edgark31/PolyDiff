@@ -54,6 +54,8 @@ export class FriendManagerService {
                 accountId: potentialFriendId,
                 friends: [],
                 commonFriends,
+                isFavorite: false,
+                isOnline: false,
             };
             // Add friend in sender's friends
             const senderFriend: Friend = {
@@ -61,6 +63,8 @@ export class FriendManagerService {
                 accountId: senderFriendId,
                 friends: [],
                 commonFriends,
+                isFavorite: false,
+                isOnline: false,
             };
 
             senderFriendAccount.profile.friends.push(potentialFriend);
@@ -81,13 +85,13 @@ export class FriendManagerService {
         const senderAccount = await this.accountManager.accountModel.findOne({ id: senderFriendId });
         const friendAccount = await this.accountManager.accountModel.findOne({ id: friendId });
         // Remove friend from sender's friends
-        senderAccount.profile.friends.find((friend, index) => {
+        senderAccount.profile.friends.forEach((friend, index) => {
             if (friend.accountId === friendId) {
                 senderAccount.profile.friends.splice(index, 1);
             }
         });
         // Remove sender from friend's friends
-        friendAccount.profile.friends.find((friend, index) => {
+        friendAccount.profile.friends.forEach((friend, index) => {
             if (friend.accountId === senderFriendId) {
                 friendAccount.profile.friends.splice(index, 1);
             }
