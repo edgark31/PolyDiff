@@ -113,7 +113,17 @@ export class ReplayService implements OnDestroy {
         }
         if (gameEvent?.gameEvent === ReplayActions.StartGame) {
             this.replayGameStart();
+            this.nDifferencesFound = 0;
+            for (const player of this.record.players) {
+                player.count = 0;
+                this.replayPlayerCount.next(player);
+            }
+            this.replayDifferenceFound.next(this.nDifferencesFound);
         } else {
+            for (const player of this.record.players) {
+                player.count = gameEvent?.players?.find((p) => p.name === player.name)?.count ?? 0;
+                this.replayPlayerCount.next(player);
+            }
             this.imageService.loadImage(this.gameAreaService.getModifiedContext(), gameEvent?.modified as string);
             this.gameAreaService.setAllData();
         }
@@ -284,10 +294,10 @@ export class ReplayService implements OnDestroy {
             for (const player of replayData.players) {
                 if (player.name === replayData.username) {
                     this.replayPlayerCount.next(player);
-                    this.nDifferencesFound++;
-                    this.replayDifferenceFound.next(this.nDifferencesFound);
                 }
             }
+            this.nDifferencesFound = replayData?.players?.reduce((acc, p) => acc + (p.count ?? 0), 0) ?? 0;
+            this.replayDifferenceFound.next(this.nDifferencesFound);
         }
         this.gameAreaService.setAllData();
         this.gameAreaService.replaceDifference(this.currentCoords, '', this.replaySpeed);
