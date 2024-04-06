@@ -323,7 +323,7 @@ export class AccountManagerService implements OnModuleInit {
     }
 
     showProfiles(): void {
-        this.logger.verbose('Connected profiles: ');
+        this.logger.verbose(' -------- Connected account: -------- ');
         this.connectedUsers.forEach((value, key) => {
             this.logger.verbose(`${key}`);
         });
@@ -331,7 +331,6 @@ export class AccountManagerService implements OnModuleInit {
 
     disconnection(id: string): void {
         this.connectedUsers.delete(id);
-        this.logger.log(`Account ${id} has been disconnected`);
         this.showProfiles();
     }
 

@@ -437,28 +437,38 @@ export class GameGateway implements OnGatewayConnection {
         this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
 
         socket.on('disconnecting', () => {
-            this.logger.debug(Array.from(socket.rooms).find((id) => id !== socket.id));
+            let logMessage = `GAME OUT de ${socket.data.accountId} | `;
+            const lobbyId = Array.from(socket.rooms).find((id) => id !== socket.id)
+                ? ` in lobby(${Array.from(socket.rooms).find((id) => id !== socket.id)})`
+                : '';
             switch (socket.data.state) {
                 case GameState.InGame:
-                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was INGAME`);
+                    logMessage += 'was INGAME';
+                    if (!Array.from(socket.rooms).find((id) => id !== socket.id)) break;
                     this.abandonGame(
                         socket,
                         Array.from(socket.rooms).find((id) => id !== socket.id),
                     );
                     break;
                 case GameState.Abandoned:
-                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was ABANDONING`);
+                    logMessage += 'was ABANDONING';
                     break;
                 case GameState.Spectate:
-                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was SPECTATING`);
+                    logMessage += 'was SPECTATING';
+                    if (!Array.from(socket.rooms).find((id) => id !== socket.id)) break;
+                    this.abandonGame(
+                        socket,
+                        Array.from(socket.rooms).find((id) => id !== socket.id),
+                    );
                     break;
                 case GameState.GameOver:
-                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was GAMEOVER`);
+                    logMessage += 'was OVER the game';
                     break;
                 default:
                     break;
             }
             this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
+            this.logger.debug(logMessage + lobbyId);
         });
     }
 
