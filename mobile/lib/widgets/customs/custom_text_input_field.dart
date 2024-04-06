@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class CustomTextInputField extends StatefulWidget {
-  final Function(void)? onInputTextChanged;
   final String label;
   final TextEditingController controller;
   final String hint;
@@ -12,7 +11,6 @@ class CustomTextInputField extends StatefulWidget {
 
   CustomTextInputField({
     super.key,
-    this.onInputTextChanged,
     required this.label,
     required this.controller,
     required this.hint,
@@ -37,9 +35,6 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
           controller: widget.controller,
           obscureText: widget.isPassword,
           maxLength: widget.maxLength,
-          onChanged: (value) {
-            widget.onInputTextChanged!(value);
-          },
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             labelText: widget.label,

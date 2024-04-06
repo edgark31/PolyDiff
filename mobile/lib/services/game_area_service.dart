@@ -80,8 +80,8 @@ class GameAreaService extends ChangeNotifier {
     const int timeToBlinkMs = 100;
 
     for (int i = 0; i < 3; i++) {
-      await showDifferenceColor(blinkingPath, (timeToBlinkMs/flashingSpeed) as int, Colors.green);
-      await showDifferenceColor(blinkingPath, (timeToBlinkMs/flashingSpeed) as int, Colors.yellow);
+      await showDifferenceColor(blinkingPath, (timeToBlinkMs/flashingSpeed).floor(), Colors.green);
+      await showDifferenceColor(blinkingPath, (timeToBlinkMs/flashingSpeed).floor(), Colors.yellow);
     }
 
     resetBlinkingDifference();
