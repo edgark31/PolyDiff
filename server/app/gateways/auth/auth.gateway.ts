@@ -118,6 +118,8 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(FriendEvents.OptRequest)
     async optRequest(@ConnectedSocket() socket: Socket, @MessageBody('senderFriendId') senderFriendId: string, @MessageBody('isOpt') isOpt: boolean) {
+        if (this.accountManager.users.get(socket.data.accountId).profile.friends.find((f) => f.accountId === senderFriendId)) return;
+        if (this.accountManager.users.get(senderFriendId).profile.friends.find((f) => f.accountId === socket.data.accountId)) return;
         await this.friendManager.optFriendRequest(socket.data.accountId, senderFriendId, isOpt);
         this.server.fetchSockets().then((sockets) => {
             const senderFriendSocket = sockets.find((s) => s.data.accountId === senderFriendId);
