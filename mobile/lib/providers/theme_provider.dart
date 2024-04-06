@@ -3,7 +3,7 @@ import 'package:mobile/utils/theme_utils.dart';
 
 class ThemeProvider extends ChangeNotifier {
   // ThemeMode _themeMode = ThemeMode.system;
-  ThemeMode _themeMode = ThemeMode.dark;
+  ThemeMode _themeMode = ThemeMode.light;
   ThemeData _lightTheme = ThemeClass.lightTheme;
   ThemeData _darkTheme = ThemeClass.darkTheme;
 

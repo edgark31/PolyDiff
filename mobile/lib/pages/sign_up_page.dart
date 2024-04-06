@@ -21,7 +21,7 @@ class SignUpPage extends StatelessWidget {
       body: Stack(
         children: [
           BackgroundContainer(
-            backgroundImagePath: SELECTION_BACKGROUND_PATH,
+            backgroundImagePath: MENU_BACKGROUND_PATH,
             child: SignUpForm(),
           )
         ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/services/info_service.dart';
+import 'package:provider/provider.dart';
 
 class BackgroundContainer extends StatelessWidget {
   const BackgroundContainer({
@@ -17,7 +19,11 @@ class BackgroundContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String imagePath = backgroundImagePath ?? MENU_BACKGROUND_PATH;
+    final infoService = context.watch<InfoService>();
+    final String imagePath = backgroundImagePath ??
+        (infoService.isThemeLight
+            ? MENU_BACKGROUND_PATH
+            : MENU_BACKGROUND_PATH_DARK);
 
     return Container(
       height: MediaQuery.of(context).size.height,

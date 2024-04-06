@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
@@ -9,6 +11,7 @@ import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_selection_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/services.dart';
+import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
@@ -98,36 +101,44 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
   @override
   Widget build(BuildContext context) {
     final gameCardService = context.watch<GameCardService>();
+    final infoService = context.watch<InfoService>();
+
     final gameCardsFromServer = gameCardService.gameCards;
     // TODO : Reload game cards if new games are added or deleted to the server
 
-    return Scaffold(
-      drawer: CustomMenuDrawer(),
-      appBar:
-          CustomAppBar(title: 'Création d\'une salle de jeu - Choix de fiche'),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: gameCardsFromServer.length,
-                      itemBuilder: (context, index) {
-                        return buildGameCard(
-                            context, gameCardsFromServer[index]);
-                      },
-                    ),
-              Text(
-                errorMessage,
-                style: TextStyle(
-                    color: const Color.fromARGB(255, 240, 16, 0),
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
+    return BackgroundContainer(
+      backgroundImagePath: infoService.isThemeLight
+          ? SELECTION_BACKGROUND_PATH
+          : SELECTION_BACKGROUND_PATH_DARK,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        drawer: CustomMenuDrawer(),
+        appBar: CustomAppBar(
+            title: AppLocalizations.of(context)!.create_room_card_title),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: gameCardsFromServer.length,
+                        itemBuilder: (context, index) {
+                          return buildGameCard(
+                              context, gameCardsFromServer[index]);
+                        },
+                      ),
+                Text(
+                  errorMessage,
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 240, 16, 0),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -138,7 +149,7 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
     final lobbySelectionService = context.watch<LobbySelectionService>();
     final lobbyService = context.watch<LobbyService>();
     String imagePath = '$BASE_URL/${card.id}/original.bmp';
-    String differenceText = 'Différences: ${card.nDifference}';
+    String differenceText = 'Differences: ${card.nDifference}';
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -166,7 +177,8 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
                   Navigator.pushNamed(context, CREATE_ROOM_OPTIONS_ROUTE);
                 }
               },
-              text: 'Choisir cette fiche',
+              text:
+                  AppLocalizations.of(context)!.create_room_card_chooseCardText,
             ),
           ],
         ),

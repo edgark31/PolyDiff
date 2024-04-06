@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
@@ -28,7 +29,7 @@ class _FriendsPending extends State<FriendsPending> {
         Padding(
           padding: EdgeInsets.all(10),
           child: Text(
-            "Liste de demande d'amis en attente reçues",
+            AppLocalizations.of(context)!.friendPending_pendingTitle,
             style: TextStyle(
                 fontSize: 30.0,
                 fontWeight: FontWeight.bold,
@@ -94,7 +95,7 @@ class _FriendsPending extends State<FriendsPending> {
           padding: EdgeInsets.all(10),
           child: Container(
             child: Text(
-              "Liste de demande d'amis en attente envoyées",
+              AppLocalizations.of(context)!.friendPending_pendingRequestTitle,
               style: TextStyle(
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold,
@@ -136,7 +137,7 @@ class _FriendsPending extends State<FriendsPending> {
                           disabledForegroundColor:
                               Colors.grey.withOpacity(0.38),
                         ),
-                        child: Text('Annuler', style: TextStyle(fontSize: 18)),
+                        child: Text(AppLocalizations.of(context)!.friendPending_cancelButton, style: TextStyle(fontSize: 18)),
                       ),
                     ),
                   ),

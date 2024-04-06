@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/services/game_manager_service.dart';
@@ -29,7 +30,7 @@ class AbandonPopup extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                "Êtes-vous certain de vouloir abandonner la partie ?",
+                AppLocalizations.of(context)!.abandonGame_questionTitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
@@ -37,7 +38,7 @@ class AbandonPopup extends StatelessWidget {
                 height: 30,
               ),
               CustomButton(
-                text: 'Oui',
+                text: AppLocalizations.of(context)!.confirmation_yes,
                 press: () {
                   gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
                   Navigator.pushNamed(context, DASHBOARD_ROUTE);
@@ -45,7 +46,7 @@ class AbandonPopup extends StatelessWidget {
               ),
               SizedBox(height: 10),
               CustomButton(
-                text: 'Non',
+                text: AppLocalizations.of(context)!.confirmation_no,
                 press: () {
                   Navigator.pop(context);
                 },

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:mobile/widgets/friends_list.dart';
 import 'package:mobile/widgets/friends_pending.dart';
 import 'package:mobile/widgets/friends_search.dart';
+import 'package:provider/provider.dart';
 
 class FriendsPage extends StatefulWidget {
   static const routeName = FRIENDS_ROUTE;
@@ -30,7 +33,6 @@ class _FriendsPageState extends State<FriendsPage> {
     });
   }
 
-// TODO: When the real connection is done, move each returned widget into separate files
   Widget _buildContent() {
     switch (_selectedViewIndex) {
       case 0:
@@ -41,19 +43,24 @@ class _FriendsPageState extends State<FriendsPage> {
         return FriendsSearch();
 
       default:
-        return Text("Contenu non disponible");
+        return Text("");
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final infoService = context.watch<InfoService>();
+
     return Scaffold(
       drawer: CustomMenuDrawer(),
-      appBar: CustomAppBar(title: "Page d'amis"),
+      appBar:
+          CustomAppBar(title: AppLocalizations.of(context)!.friend_pageTitle),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/LimitedTimeBackground.jpg"),
+            image: AssetImage(infoService.isThemeLight
+                ? LIMITED_TIME_BACKGROUND_PATH
+                : LIMITED_TIME_BACKGROUND_PATH_DARK),
             fit: BoxFit.cover,
           ),
         ),
@@ -78,8 +85,13 @@ class _FriendsPageState extends State<FriendsPage> {
                     ),
                     child: Text(
                         i == 0
-                            ? "Tous les amis"
-                            : (i == 1 ? "En attente" : "Ajouter un ami"),
+                            ? AppLocalizations.of(context)!
+                                .friend_allFriendsButton
+                            : (i == 1
+                                ? AppLocalizations.of(context)!
+                                    .friend_pendingButton
+                                : AppLocalizations.of(context)!
+                                    .friend_addButton),
                         style: TextStyle(fontSize: 25, color: Colors.white)),
                   ),
                 ]

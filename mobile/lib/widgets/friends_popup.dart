@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
@@ -59,15 +60,15 @@ class _FriendsPopupState extends State<FriendsPopup> {
                     });
                   },
                   child: Text(showAllFriends
-                      ? 'Voir les amis en commun'
-                      : 'Voir tous les amis'),
+                      ? AppLocalizations.of(context)!.friendPopup_seeCommonTitle
+                      : AppLocalizations.of(context)!.friendPopup_seeAllTitle),
                 ),
               ),
             ],
             Text(
                 showAllFriends
-                    ? 'Amis à ${widget.username}'
-                    : 'Amis communs avec ${widget.username}',
+                    ? '${AppLocalizations.of(context)!.friendPopup_friendsOfTitle} ${widget.username}'
+                    : '${AppLocalizations.of(context)!.friendPopup_friendsInCommonWithTitle} ${widget.username}',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
             Expanded(
               child: ListView.builder(

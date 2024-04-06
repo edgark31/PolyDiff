@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/services/info_service.dart';
@@ -25,8 +26,11 @@ class HistoryPage extends StatelessWidget {
     final List<LoginHistory> loginHistory = infoService.connections
         .map(
           (connection) => LoginHistory(
-              dateTime: connection.timestamp,
-              action: connection.isConnection ? 'Connexion' : 'Déconnexion'),
+            dateTime: connection.timestamp,
+            action: connection.isConnection
+                ? AppLocalizations.of(context)!.history_connection
+                : AppLocalizations.of(context)!.history_disconnection,
+          ),
         )
         .toList();
 
@@ -38,38 +42,54 @@ class HistoryPage extends StatelessWidget {
         .toList();
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'H I S T O R I Q U E'),
+      appBar: CustomAppBar(title: AppLocalizations.of(context)!.history_title),
       body: BackgroundContainer(
-        backgroundImagePath: SELECTION_BACKGROUND_PATH,
+        backgroundImagePath: infoService.isThemeLight
+            ? MENU_BACKGROUND_PATH
+            : MENU_BACKGROUND_PATH_DARK,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            _buildSectionTitle(context, "Historique de Connexion"),
+            _buildSectionTitle(context,
+                AppLocalizations.of(context)!.history_connectionHistory),
             Expanded(
               child: Scrollbar(
-                child: ListView(
-                  children: loginHistory
-                      .map((e) => ListTile(
-                            title: Text(e.action),
-                            subtitle: Text("${e.dateTime}"),
-                          ))
-                      .toList(),
+                child: ListView.builder(
+                  itemCount: loginHistory.length,
+                  itemBuilder: (context, index) => Card(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: ListTile(
+                      title: Text(loginHistory[index].action),
+                      subtitle: Text("${loginHistory[index].dateTime}"),
+                    ),
+                  ),
                 ),
               ),
             ),
-            _buildSectionTitle(context, "Historique des Parties"),
+            _buildSectionTitle(
+                context, AppLocalizations.of(context)!.history_gameHistory),
             Expanded(
               child: Scrollbar(
-                child: ListView(
-                  children: gameHistory
-                      .map((e) => ListTile(
-                            title: Text(e.won ? "Gagnée" : "Perdue"),
-                            subtitle: Text("${e.dateTime}"),
-                            leading: Icon(
-                                e.won ? Icons.emoji_events : Icons.close,
-                                color: e.won ? Colors.green : Colors.red),
-                          ))
-                      .toList(),
+                child: ListView.builder(
+                  itemCount: gameHistory.length,
+                  itemBuilder: (context, index) => Card(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: ListTile(
+                      title: Text(gameHistory[index].won
+                          ? AppLocalizations.of(context)!.history_wonGame
+                          : AppLocalizations.of(context)!.history_lostGame),
+                      subtitle: Text("${gameHistory[index].dateTime}"),
+                      leading: Icon(
+                          gameHistory[index].won
+                              ? Icons.emoji_events
+                              : Icons.close,
+                          color: gameHistory[index].won
+                              ? Colors.green
+                              : Colors.red),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -82,7 +102,27 @@ class HistoryPage extends StatelessWidget {
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(title),
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        margin: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: Colors.black,
+            width: 2.0,
+          ),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+      ),
     );
   }
 }
