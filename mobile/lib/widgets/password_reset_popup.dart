@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/services/form_service.dart';
 
@@ -60,7 +59,7 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  AppLocalizations.of(context)!.passwordResetPopup_resetTitle,
+                  "Récuperation de mot de passe",
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -71,7 +70,7 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                 Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Text(
-                    AppLocalizations.of(context)!.passwordResetPopup_email,
+                    "Courriel",
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
@@ -125,8 +124,8 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                           );
                         } else {
                           setState(() {
-                            errorMessage = AppLocalizations.of(context)!
-                                .passwordResetPopup_emailNoAccount;
+                            errorMessage =
+                                "Il n'y a pas de compte associé à cet email";
                           });
                         }
                       },
@@ -137,8 +136,7 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                         backgroundColor: Color.fromARGB(255, 31, 150, 104),
                         foregroundColor: Colors.white,
                       ),
-                      child: Text(AppLocalizations.of(context)!
-                          .passwordResetPopup_emailGetCode),
+                      child: Text("Recevoir un code"),
                     ),
                   ),
                 ),
