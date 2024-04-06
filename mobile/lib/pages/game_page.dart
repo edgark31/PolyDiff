@@ -120,7 +120,9 @@ class _GamePageState extends State<GamePage> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(GAME_BACKGROUND_PATH),
+                image: AssetImage(infoService.isThemeLight
+                    ? GAME_BACKGROUND_PATH
+                    : GAME_BACKGROUND_PATH_DARK),
                 fit: BoxFit.cover,
               ),
             ),
