@@ -15,8 +15,8 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent, MessageTag } from '@common/enums';
-import { Chat, Game, Lobby } from '@common/game-interfaces';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Chat, Game, GameRecord, Lobby, Player } from '@common/game-interfaces';
+import { Subject, Subscription } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
 @Component({
     selector: 'app-game-page',
@@ -40,6 +40,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     gameLobby: Game;
     lobby: Lobby;
     mode: string;
+    isAbandon = false;
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
@@ -48,6 +49,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     lobbySubscription: Subscription;
     lobbiesSubscription: Subscription;
     observersSubscription: Subscription;
+    replayTimerSubscription: Subscription;
+    replayPlayerCountSubscription: Subscription;
+    replayDifferenceFoundSubscription: Subscription;
     private gameSubscription: Subscription;
     private nextGameSubscription: Subscription;
     private endMessageSubscription: Subscription;
@@ -85,9 +89,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         if (eventHTMLElement.tagName !== INPUT_TAG_NAME) {
             if (event.key === 't' && this.lobby.isCheatEnabled && this.lobby.mode !== this.gameMode.Practice) {
                 if (this.gameAreaService.isCheatModeActivated) {
-                    this.clientSocket.send('game', GameEvents.CheatDeactivated);
+                    this.clientSocket.send('game', GameEvents.CheatDeactivated, this.lobby.lobbyId);
                 } else {
-                    this.clientSocket.send('game', GameEvents.CheatActivated);
+                    this.clientSocket.send('game', GameEvents.CheatActivated, this.lobby.lobbyId);
                 }
                 const differencesCoordinates = this.gameLobby?.differences ? ([] as Coordinate[]).concat(...this.remainingDifference) : [];
                 this.gameAreaService.toggleCheatMode(differencesCoordinates);
@@ -106,18 +110,18 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.clientSocket.send('game', GameEvents.Spectate, this.gameManager.lobbyWaiting.lobbyId);
         }
         this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
-        this.lobby = this.gameManager.lobbyWaiting;
+        // this.lobby = this.gameManager.lobbyWaiting;
         this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
             this.lobby = lobby;
             this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
-            if (this.roomManager.isObserver) {
-                this.messages = this.lobby.chatLog?.chat as Chat[];
-                this.messages.forEach((message: Chat) => {
-                    if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Sent;
-                    else message.tag = MessageTag.Received;
-                });
-            }
+
+            this.messages = this.lobby.chatLog?.chat as Chat[];
+            this.messages.forEach((message: Chat) => {
+                if (message.name === this.welcome.account.credentials.username && message.name) message.tag = MessageTag.Sent;
+                else if (message.name !== this.welcome.account.credentials.username && message.name) message.tag = MessageTag.Received;
+            });
         });
+
         this.gameSubscription = this.gameManager.game$.subscribe((game: Game) => {
             this.gameLobby = game;
             this.remainingDifference = this.gameLobby.differences as Coordinate[][];
@@ -142,9 +146,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.showEndGameDialog(this.endMessage);
             this.welcome.onChatGame = false;
         });
-
         this.remainingDifferenceSubscription = this.gameManager.remainingDifference$.subscribe((remainingDifference: Coordinate[][]) => {
             this.remainingDifference = remainingDifference;
+        });
+        this.clientSocket.on('game', GameEvents.GameRecord, (record: GameRecord) => {
+            this.replayService.setReplay(record);
+            this.timer = record.timeLimit;
+            this.resetGameStats();
         });
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.manage();
@@ -154,6 +162,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             });
         }
     }
+
     ngAfterViewInit(): void {
         this.setUpGame();
         this.setUpReplay();
@@ -172,14 +181,29 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.lobbySubscription?.unsubscribe();
             this.remainingDifferenceSubscription?.unsubscribe();
             this.observersSubscription?.unsubscribe();
+            this.replayTimerSubscription?.unsubscribe();
+            this.replayDifferenceFoundSubscription?.unsubscribe();
+            this.replayPlayerCountSubscription?.unsubscribe();
 
             this.roomManager.off();
             this.gameManager.off();
+            if (!this.isAbandon) {
+                this.clientSocket.disconnect('lobby');
+                this.clientSocket.disconnect('game');
+            }
         }
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.off();
         }
         this.chatSubscriptionGlobal?.unsubscribe();
+    }
+
+    resetGameStats(): void {
+        this.nDifferencesFound = 0;
+        for (const player of this.lobby.players) {
+            player.count = 0;
+        }
+        this.messages = [];
     }
 
     translateGameMode(mode: GameModes): string {
@@ -211,22 +235,17 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.messageGlobal.push(chat);
     }
 
-    // goPageChatGame(): void {
-    //     this.welcome.onChatGame = true;
-    //     this.clientSocket.disconnect('game');
-    //     this.router.navigate(['/chat']);
-    // }
-
     showEndGameDialog(endingMessage: string): void {
-        if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
         this.matDialog.open(GamePageDialogComponent, {
             data: { action: GamePageEvent.EndGame, message: endingMessage, isReplayMode: this.lobby.mode === this.gameMode.Classic },
             disableClose: true,
             panelClass: 'dialog',
         });
+        if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
     }
 
     showAbandonDialog(): void {
+        this.isAbandon = true;
         this.matDialog.open(GamePageDialogComponent, {
             data: { action: GamePageEvent.Abandon, message: 'Êtes-vous certain de vouloir abandonner la partie ? ', lobby: this.lobby },
             disableClose: true,
@@ -242,8 +261,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     setUpGame(): void {
-        // eslint-disable-next-line no-unused-vars
-
         this.gameAreaService.setOriginalContext(
             this.originalCanvas.nativeElement.getContext('2d', {
                 willReadFrequently: true,
@@ -271,13 +288,19 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     private setUpReplay(): void {
-        this.replayService.replayTimer$.pipe(takeUntil(this.onDestroy$)).subscribe((replayTimer: number) => {
-            if (this.isReplayAvailable) {
-                this.timer = replayTimer;
-                if (replayTimer === 0) {
-                    this.messages = [];
+        this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
+            this.timer = replayTimer;
+            this.messages = [];
+        });
+        this.replayPlayerCountSubscription = this.replayService.replayPlayerCount$.subscribe((replayPlayerCount: Player) => {
+            for (const player of this.lobby.players) {
+                if (player.name === replayPlayerCount.name) {
+                    player.count = replayPlayerCount.count;
                 }
             }
+        });
+        this.replayDifferenceFoundSubscription = this.replayService.replayDifferenceFound$.subscribe((nDifferencesFound: number) => {
+            this.nDifferencesFound = nDifferencesFound;
         });
     }
 }

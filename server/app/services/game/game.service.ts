@@ -1,6 +1,5 @@
 import { Game } from '@app/model/database/game';
 import { GameHistory } from '@app/model/database/game-history';
-import { GameRecord } from '@app/model/database/game-record';
 import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 import { GameConstantsDto } from '@app/model/dto/game/game-constants.dto';
 import { DatabaseService } from '@app/services/database/database.service';
@@ -63,14 +62,6 @@ export class GameService {
         throw new NotFoundException('No games history found');
     }
 
-    async getAllGameRecords(): Promise<GameRecord[]> {
-        const gameRecords = await this.databaseService.getGameRecords();
-        if (gameRecords) {
-            return gameRecords;
-        }
-        throw new NotFoundException('No games history found');
-    }
-
     async verifyIfGameExists(gameName: string): Promise<boolean> {
         return await this.databaseService.verifyIfGameExists(gameName);
     }
@@ -109,9 +100,5 @@ export class GameService {
 
     async deleteAllGamesHistory(): Promise<void> {
         await this.databaseService.deleteAllGamesHistory();
-    }
-
-    async deleteAllGameRecords(): Promise<void> {
-        await this.databaseService.deleteAllGameRecords();
     }
 }
