@@ -83,20 +83,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     print('init State');
     _validator = CredentialsValidator(onStateChanged: _forceRebuild);
-    usernameFormat = AppLocalizations.of(context)!.confirmation_no;
-
-    avatarFeedback = AppLocalizations.of(context)!.edit_profile_avatarFeedback;
-    passwordFeedback =
-        AppLocalizations.of(context)!.edit_profile_passwordFeedback;
-    usernameFeedback =
-        AppLocalizations.of(context)!.edit_profile_usernameFeedback;
-    languageFeedback =
-        AppLocalizations.of(context)!.edit_profile_languageFeedback;
-    themeFeedback = AppLocalizations.of(context)!.edit_profile_themeFeedback;
-    errorSoundFeedback =
-        AppLocalizations.of(context)!.edit_profile_errorSoundFeedback;
-    differenceFoundSoundFeedback =
-        AppLocalizations.of(context)!.edit_profile_differenceFoundSoundFeedback;
 
     usernameController.addListener(_onUsernameChanged);
     passwordController.addListener(validatePassword);
@@ -317,6 +303,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     final infoService = context.watch<InfoService>();
 
+    avatarFeedback = AppLocalizations.of(context)!.edit_profile_avatarFeedback;
+    passwordFeedback =
+        AppLocalizations.of(context)!.edit_profile_passwordFeedback;
+    usernameFeedback =
+        AppLocalizations.of(context)!.edit_profile_usernameFeedback;
+    languageFeedback =
+        AppLocalizations.of(context)!.edit_profile_languageFeedback;
+    themeFeedback = AppLocalizations.of(context)!.edit_profile_themeFeedback;
+    errorSoundFeedback =
+        AppLocalizations.of(context)!.edit_profile_errorSoundFeedback;
+    differenceFoundSoundFeedback =
+        AppLocalizations.of(context)!.edit_profile_differenceFoundSoundFeedback;
+
     return BackgroundContainer(
       backgroundImagePath: infoService.isThemeLight
           ? MENU_BACKGROUND_PATH
@@ -347,83 +346,119 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       buildPasswordField(),
                       buildPasswordConfirmationField(),
                       SizedBox(height: 30),
-                      DropdownButtonFormField<Sound>(
-                        value: currentSettings?.onErrorSound,
-                        onChanged: (newValue) {
-                          if (newValue != null) {
-                            soundService.playOnErrorSound(newValue);
-                            currentSettings = currentSettings!
-                                .copyWith(onErrorSound: newValue);
-                          }
-                        },
-                        items: ERROR_SOUND_LIST.map((sound) {
-                          return DropdownMenuItem(
-                              value: sound, child: Text(sound.name));
-                        }).toList(),
-                        decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!
-                                .edit_profile_errorSound),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: DropdownButtonFormField<Sound>(
+                          value: currentSettings?.onErrorSound,
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              soundService.playOnErrorSound(newValue);
+                              currentSettings = currentSettings!
+                                  .copyWith(onErrorSound: newValue);
+                            }
+                          },
+                          items: ERROR_SOUND_LIST.map((sound) {
+                            return DropdownMenuItem(
+                                value: sound, child: Text(sound.name));
+                          }).toList(),
+                          decoration: InputDecoration(
+                              labelText: AppLocalizations.of(context)!
+                                  .edit_profile_errorSound),
+                        ),
                       ),
-                      DropdownButtonFormField<Sound>(
-                        value: currentSettings?.onCorrectSound,
-                        onChanged: (Sound? newValue) {
-                          if (newValue != null) {
-                            soundService.playOnCorrectSound(newValue);
-                            currentSettings = currentSettings!
-                                .copyWith(onCorrectSound: newValue);
-                          }
-                        },
-                        items: CORRECT_SOUND_LIST.map((sound) {
-                          return DropdownMenuItem(
-                              value: sound, child: Text(sound.name));
-                        }).toList(),
-                        decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!
-                                .edit_profile_differenceFoundSound),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: DropdownButtonFormField<Sound>(
+                          value: currentSettings?.onCorrectSound,
+                          onChanged: (Sound? newValue) {
+                            if (newValue != null) {
+                              soundService.playOnCorrectSound(newValue);
+                              currentSettings = currentSettings!
+                                  .copyWith(onCorrectSound: newValue);
+                            }
+                          },
+                          items: CORRECT_SOUND_LIST.map((sound) {
+                            return DropdownMenuItem(
+                                value: sound, child: Text(sound.name));
+                          }).toList(),
+                          decoration: InputDecoration(
+                              labelText: AppLocalizations.of(context)!
+                                  .edit_profile_differenceFoundSound),
+                        ),
                       ),
                       // Choisir le thème de l'application
-                      DropdownButtonFormField<String>(
-                        value: currentSettings!.theme,
-                        items: themes
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          if (newValue != null) {
-                            currentSettings =
-                                currentSettings!.copyWith(theme: newValue);
-                          }
-                          setState(() {
-                            // final themeProvider = Provider.of<ThemeProvider>(
-                            //     context,
-                            //     listen: false);
-                            // themeProvider.toggleTheme(newValue == 'dark');
-                          });
-                        },
-                        decoration: InputDecoration(labelText: 'Theme'),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: DropdownButtonFormField<String>(
+                          value: currentSettings!.theme,
+                          items: themes
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              currentSettings =
+                                  currentSettings!.copyWith(theme: newValue);
+                            }
+                            setState(() {
+                              // final themeProvider = Provider.of<ThemeProvider>(
+                              //     context,
+                              //     listen: false);
+                              // themeProvider.toggleTheme(newValue == 'dark');
+                            });
+                          },
+                          decoration: InputDecoration(labelText: 'Theme'),
+                        ),
                       ),
                       // Choisir la langue de l'application
-                      DropdownButtonFormField<String>(
-                        value: currentSettings!.language,
-                        items: languages
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (newValue) {
-                          if (newValue != null) {
-                            currentSettings =
-                                currentSettings!.copyWith(language: newValue);
-                          }
-                        },
-                        decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!
-                              .edit_profile_language,
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: DropdownButtonFormField<String>(
+                          value: currentSettings!.language,
+                          items: languages
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              currentSettings =
+                                  currentSettings!.copyWith(language: newValue);
+                            }
+                          },
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!
+                                .edit_profile_language,
+                          ),
                         ),
                       ),
                       Row(
@@ -460,7 +495,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 )),
                           ),
                         ],
-                      )
+                      ),
+                      SizedBox(width: 125),
                     ],
                   )))),
     );

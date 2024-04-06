@@ -41,13 +41,20 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             labelText: widget.label,
-            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            labelStyle:
+                TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             hintText: widget.hint,
-            hintStyle: TextStyle(color: Color.fromARGB(255, 192, 190, 190), fontWeight: FontWeight.bold),
+            hintStyle: TextStyle(
+                color: Color.fromARGB(255, 192, 190, 190),
+                fontWeight: FontWeight.bold),
             helperText: widget.helperText,
-            helperStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, letterSpacing: 2),
+            helperStyle: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2),
             errorText: widget.errorText,
-            errorStyle: TextStyle(color: Colors.red, backgroundColor: Colors.white),
+            errorStyle:
+                TextStyle(color: Colors.red, backgroundColor: Colors.white),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: Colors.red),
@@ -62,7 +69,8 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary),
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.secondary),
             ),
             filled: true,
             fillColor: Colors.grey[200],
