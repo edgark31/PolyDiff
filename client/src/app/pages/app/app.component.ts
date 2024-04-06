@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unresolved */
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -8,14 +9,16 @@ import { TranslateService } from '@ngx-translate/core';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-    constructor(private translate: TranslateService, public welcome: WelcomeService) {
+export class AppComponent implements OnInit {
+    constructor(private translate: TranslateService, public welcome: WelcomeService, private router: Router) {
         this.welcome.currentLangageTranslate.subscribe((language) => {
             this.translate.setDefaultLang(language);
             this.translate.use(language);
         });
-        // translate.setDefaultLang('en');
-        // translate.use('en');
+    }
+
+    ngOnInit() {
+        this.router.navigate(['/login']);
     }
 
     changeLang(lang: string) {
