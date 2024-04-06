@@ -3,7 +3,7 @@ export enum ReplayActions {
     Found = 'Found',
     CaptureMessage = 'CaptureMessage',
     // SEPARATION
-    UpdateTimer = 'UpdateTimer',
+    TimerUpdate = 'TimerUpdate',
     NotFound = 'NotFound',
     NextGame = 'NextGame',
     AbandonGame = 'AbandonGame',

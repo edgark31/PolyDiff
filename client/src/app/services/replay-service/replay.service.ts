@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Injectable, OnDestroy } from '@angular/core';
 import { REPLAY_LIMITER, SPEED_X1 } from '@app/constants/replay';
 import { ReplayActions } from '@app/enum/replay-actions';
@@ -8,9 +9,8 @@ import { GameManagerService } from '@app/services/game-manager-service/game-mana
 import { ImageService } from '@app/services/image-service/image.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { MessageTag } from '@common/enums';
-import { Chat, Coordinate, GameEventData, GameRecord } from '@common/game-interfaces';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Coordinate, GameEventData, GameRecord, Player } from '@common/game-interfaces';
+import { Subject, Subscription } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -25,9 +25,11 @@ export class ReplayService implements OnDestroy {
     private isDifferenceFound: boolean;
     private replayInterval: ReplayInterval;
     private currentReplayIndex: number;
-    private replayTimer: BehaviorSubject<number>;
-    private replayDifferenceFound: BehaviorSubject<number>;
-    // private replayOpponentDifferenceFound: BehaviorSubject<number>;
+    private replayTimer: number;
+    private nDifferencesFound: number;
+    private replayTimerSubject: Subject<number>;
+    private replayPlayerCount: Subject<Player>;
+    private replayDifferenceFound: Subject<number>;
     private replayEventsSubjectSubscription: Subscription;
 
     // Replay needs to communicate with all services
@@ -40,28 +42,40 @@ export class ReplayService implements OnDestroy {
         private readonly welcome: WelcomeService,
     ) {
         this.isReplaying = false;
-        this.replayTimer = new BehaviorSubject<number>(0); // TODO: Set to timeLimit NO BEHAVIOR SUBJECT
-        this.replayDifferenceFound = new BehaviorSubject<number>(0);
-        // this.replayOpponentDifferenceFound = new BehaviorSubject<number>(0);
+        this.replayTimer = 0;
         this.replayEvents = [];
         this.replaySpeed = SPEED_X1;
         this.currentCoords = [];
         this.isCheatMode = false;
         this.isDifferenceFound = false;
         this.currentReplayIndex = 0;
+        this.replayTimerSubject = new Subject<number>();
+        this.replayPlayerCount = new Subject<Player>();
+        this.replayDifferenceFound = new Subject<number>();
+        this.nDifferencesFound = 0;
+        this.record = {} as GameRecord;
+        this.record.timeLimit = 0;
+    }
+
+    get nDifferencesFound$() {
+        return this.nDifferencesFound;
     }
 
     get replayTimer$() {
-        return this.replayTimer.asObservable();
+        return this.replayTimer;
+    }
+
+    get replayTimerSubject$() {
+        return this.replayTimerSubject.asObservable();
+    }
+
+    get replayPlayerCount$() {
+        return this.replayPlayerCount.asObservable();
     }
 
     get replayDifferenceFound$() {
         return this.replayDifferenceFound.asObservable();
     }
-
-    // get replayOpponentDifferenceFound$() {
-    //     return this.replayOpponentDifferenceFound.asObservable();
-    // }
 
     setReplay(record: GameRecord): void {
         this.record = record;
@@ -80,6 +94,39 @@ export class ReplayService implements OnDestroy {
 
     restartReplay(): void {
         this.currentReplayIndex = 0;
+        this.replayInterval.resume();
+    }
+
+    fallBackReplay(time: number): void {
+        // filtrer found ou start
+        const gameEventsFiltered = this.record.gameEvents.filter(
+            (event) => event.gameEvent === ReplayActions.Found || event.gameEvent === ReplayActions.StartGame,
+        );
+        // timestamp le plus proche
+        const gameEvent = gameEventsFiltered.filter((event) => event.timestamp && event.timestamp - this.record.startTime <= time * 1000).pop();
+        // calculer lindex a partir du timestamp trouve
+        for (let i = 0; i < this.record.gameEvents.length; i++) {
+            if (this.record.gameEvents[i].timestamp === gameEvent?.timestamp) {
+                this.currentReplayIndex = i;
+                break;
+            }
+        }
+        if (gameEvent?.gameEvent === ReplayActions.StartGame) {
+            this.replayGameStart();
+            this.nDifferencesFound = 0;
+            for (const player of this.record.players) {
+                player.count = 0;
+                this.replayPlayerCount.next(player);
+            }
+            this.replayDifferenceFound.next(this.nDifferencesFound);
+        } else {
+            for (const player of this.record.players) {
+                player.count = gameEvent?.players?.find((p) => p.name === player.name)?.count ?? 0;
+                this.replayPlayerCount.next(player);
+            }
+            this.imageService.loadImage(this.gameAreaService.getModifiedContext(), gameEvent?.modified as string);
+            this.gameAreaService.setAllData();
+        }
         this.replayInterval.resume();
     }
 
@@ -102,9 +149,14 @@ export class ReplayService implements OnDestroy {
     }
 
     restartTimer(): void {
-        // this.replayOpponentDifferenceFound.next(0);
-        this.replayDifferenceFound.next(0);
-        this.replayTimer.next(0);
+        this.replayTimer = 0;
+        this.nDifferencesFound = 0;
+        this.replayTimerSubject.next(0);
+        for (const player of this.record.players) {
+            player.count = 0;
+            this.replayPlayerCount.next(player);
+        }
+        this.replayDifferenceFound.next(this.nDifferencesFound);
     }
 
     resetReplay(): void {
@@ -128,7 +180,6 @@ export class ReplayService implements OnDestroy {
     }
 
     private replaySwitcher(replayData: GameEventData): void {
-        // console.log('index:', this.currentReplayIndex, ', ', replayData.gameEvent, ', username:', replayData.username);
         switch (replayData.gameEvent) {
             case ReplayActions.StartGame:
                 this.replayGameStart();
@@ -145,15 +196,9 @@ export class ReplayService implements OnDestroy {
             case ReplayActions.CheatDeactivated:
                 this.replayDeactivateCheat(replayData);
                 break;
-            case ReplayActions.UpdateTimer:
+            case ReplayActions.TimerUpdate:
                 this.replayTimerUpdate(replayData);
                 break;
-            // case ReplayActions.DifferenceFoundUpdate:
-            //     // this.replayDifferenceFoundUpdate();
-            //     break;
-            // case ReplayActions.OpponentDifferencesFoundUpdate:
-            //     // this.replayOpponentDifferencesFoundUpdate(replayData.data as ReplayPayload);
-            //     break;
         }
         this.currentReplayIndex++;
     }
@@ -240,10 +285,19 @@ export class ReplayService implements OnDestroy {
         }
         this.isDifferenceFound = true;
         this.soundService.playCorrectSoundDifference(this.welcome.account.profile.onCorrectSound);
-        if (replayData) {
-            const commonMessage = `${replayData.username} a trouvé une différence !`;
-            const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
-            this.gameManager.setMessage(commonChat);
+        // if (replayData) {
+        //     const commonMessage = `${replayData.username} a trouvé une différence !`;
+        //     const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
+        //     this.gameManager.setMessage(commonChat);
+        // } snif snif mes messages zabi les gars
+        if (replayData.players) {
+            for (const player of replayData.players) {
+                if (player.name === replayData.username) {
+                    this.replayPlayerCount.next(player);
+                }
+            }
+            this.nDifferencesFound = replayData?.players?.reduce((acc, p) => acc + (p.count ?? 0), 0) ?? 0;
+            this.replayDifferenceFound.next(this.nDifferencesFound);
         }
         this.gameAreaService.setAllData();
         this.gameAreaService.replaceDifference(this.currentCoords, '', this.replaySpeed);
@@ -251,11 +305,11 @@ export class ReplayService implements OnDestroy {
 
     private replayClickError(replayData: GameEventData): void {
         this.soundService.playIncorrectSound(this.welcome.account.profile.onErrorSound);
-        if (replayData) {
-            const commonMessage = `${replayData.username} s'est trompé !`;
-            const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
-            this.gameManager.setMessage(commonChat);
-        }
+        // if (replayData) {
+        //     const commonMessage = `${replayData.username} s'est trompé !`;
+        //     const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
+        //     this.gameManager.setMessage(commonChat);
+        // } snif snif mes messages zabi les gars
         this.gameAreaService.showError(replayData.isMainCanvas as boolean, replayData.coordClic as Coordinate, this.replaySpeed);
     }
 
@@ -286,14 +340,7 @@ export class ReplayService implements OnDestroy {
     }
 
     private replayTimerUpdate(replayData: GameEventData): void {
-        this.replayTimer.next(replayData.timestamp as number);
+        this.replayTimer = replayData.time as number;
+        this.replayTimerSubject.next(this.replayTimer);
     }
-
-    // private replayDifferenceFoundUpdate(replayData: GameEventData): void {
-    //     this.replayDifferenceFound.next();
-    // }
-
-    // private replayOpponentDifferencesFoundUpdate(replayData: ReplayPayload): void {
-    //     this.replayOpponentDifferenceFound.next(replayData as number);
-    // }
 }
