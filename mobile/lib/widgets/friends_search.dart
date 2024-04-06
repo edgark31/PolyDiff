@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
@@ -32,7 +33,8 @@ class _FriendsSearchState extends State<FriendsSearch> {
     bool isFriend = friendService.friends
         .any((friend) => friend.accountId == user.accountId);
     if (isFriend) {
-      return Text('Ami', style: TextStyle(fontSize: 18));
+      return Text(AppLocalizations.of(context)!.friendSearch_friendTitle,
+          style: TextStyle(fontSize: 18));
     } else {
       bool isRequest = friendService.sentFriends
           .any((friend) => friend.accountId == user.accountId);
@@ -46,7 +48,8 @@ class _FriendsSearchState extends State<FriendsSearch> {
             backgroundColor: kLightGreen,
             disabledForegroundColor: Colors.grey.withOpacity(0.38),
           ),
-          child: Text('Annuler', style: TextStyle(fontSize: 18)),
+          child: Text(AppLocalizations.of(context)!.friendPending_cancelButton,
+              style: TextStyle(fontSize: 18)),
         );
       } else {
         bool isPending = friendService.pendingFriends
@@ -76,7 +79,8 @@ class _FriendsSearchState extends State<FriendsSearch> {
           );
         } else {
           if (user.accountId == myId) {
-            return Text('Vous', style: TextStyle(fontSize: 18));
+            return Text(AppLocalizations.of(context)!.friendSearch_youTitle,
+                style: TextStyle(fontSize: 18));
           } else {
             return TextButton(
               onPressed: () {
@@ -87,7 +91,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
                 backgroundColor: kLightGreen,
                 disabledForegroundColor: Colors.grey.withOpacity(0.38),
               ),
-              child: Text('Inviter', style: TextStyle(fontSize: 18)),
+              child: Text(
+                  AppLocalizations.of(context)!.friendSearch_inviteButton,
+                  style: TextStyle(fontSize: 18)),
             );
           }
         }
@@ -136,7 +142,8 @@ class _FriendsSearchState extends State<FriendsSearch> {
                         });
                       },
                       decoration: InputDecoration(
-                        hintText: "Entrez le nom d'un utilisateur",
+                        hintText: AppLocalizations.of(context)!
+                            .friendSearch_searchBarTitle,
                         border: OutlineInputBorder(),
                         filled: true,
                         fillColor: Colors.black,
@@ -191,7 +198,10 @@ class _FriendsSearchState extends State<FriendsSearch> {
                               disabledForegroundColor:
                                   Colors.grey.withOpacity(0.38),
                             ),
-                            child: Text('Amis', style: TextStyle(fontSize: 25)),
+                            child: Text(
+                                AppLocalizations.of(context)!
+                                    .friendList_friendButton,
+                                style: TextStyle(fontSize: 25)),
                           ),
                         ],
                       ),

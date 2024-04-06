@@ -72,8 +72,8 @@ class _DashboardPageState extends State<DashboardPage> {
     double startingPoint = screenHeight * 0.05;
     return BackgroundContainer(
       backgroundImagePath: infoService.isThemeLight
-          ? EMPTY_BACKGROUND_PATH
-          : EMPTY_BACKGROUND_PATH_DARK,
+          ? SELECTION_BACKGROUND_PATH
+          : SELECTION_BACKGROUND_PATH_DARK,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         drawer: CustomMenuDrawer(),

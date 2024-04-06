@@ -168,23 +168,17 @@ class _SignInFormState extends State<SignInForm> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                Align(
-                  alignment: Alignment.center,
-                  child: TextButton(
-                    onPressed: () {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return PasswordResetPopup();
-                        },
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: Theme.of(context).colorScheme.onSurface,
-                    ),
-                    child: Text(FORGOT_PASSWORD_TXT),
-                  ),
+                CustomButton(
+                  press: () {
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return PasswordResetPopup();
+                      },
+                    );
+                  },
+                  text: FORGOT_PASSWORD_TXT,
                 ),
                 CustomButton(
                   text: SIGN_UP_BTN_TXT,
