@@ -20,6 +20,8 @@ class GameAreaService extends ChangeNotifier {
   bool isClickDisabled = false;
   Function? onCheatModeDeactivated;
 
+  // Pour animer, il y a trois options SPEED_X1, SPEED_X2 ET SPEED_X3
+  // Par défaut la vitesse c'est SPEED_X1
   void showDifferenceFound(List<Coordinate> newCoordinates,
       [int flashingSpeed = SPEED_X1]) {
     soundService.playCorrectSound();
@@ -33,13 +35,14 @@ class GameAreaService extends ChangeNotifier {
     startBlinking(newCoordinates, flashingSpeed);
   }
 
-  void showDifferenceNotFound(Coordinate currentCoord, bool isLeft) {
+  void showDifferenceNotFound(Coordinate currentCoord, bool isLeft,
+      [int flashingSpeed = SPEED_X1]) {
     if (isLeft) {
       isClickDisabled = true;
       soundService.playErrorSound();
       leftErrorCoord.add(currentCoord);
       notifyListeners();
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(Duration(seconds: (1 / flashingSpeed).floor()), () {
         leftErrorCoord = [];
         notifyListeners();
         isClickDisabled = false;
@@ -49,7 +52,7 @@ class GameAreaService extends ChangeNotifier {
       soundService.playErrorSound();
       rightErrorCoord.add(currentCoord);
       notifyListeners();
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(Duration(seconds: (1 / flashingSpeed).floor()), () {
         rightErrorCoord = [];
         notifyListeners();
         isClickDisabled = false;
@@ -70,9 +73,8 @@ class GameAreaService extends ChangeNotifier {
     blinkingDifference = path;
   }
 
-  Future<void> startBlinking(
-    List<Coordinate> coords, [int flashingSpeed = SPEED_X1]
-  ) async {
+  Future<void> startBlinking(List<Coordinate> coords,
+      [int flashingSpeed = SPEED_X1]) async {
     initPath(coords);
     if (blinkingDifference == null) return;
 
@@ -80,8 +82,10 @@ class GameAreaService extends ChangeNotifier {
     const int timeToBlinkMs = 100;
 
     for (int i = 0; i < 3; i++) {
-      await showDifferenceColor(blinkingPath, (timeToBlinkMs/flashingSpeed).floor(), Colors.green);
-      await showDifferenceColor(blinkingPath, (timeToBlinkMs/flashingSpeed).floor(), Colors.yellow);
+      await showDifferenceColor(
+          blinkingPath, (timeToBlinkMs / flashingSpeed).floor(), Colors.green);
+      await showDifferenceColor(
+          blinkingPath, (timeToBlinkMs / flashingSpeed).floor(), Colors.yellow);
     }
 
     resetBlinkingDifference();
