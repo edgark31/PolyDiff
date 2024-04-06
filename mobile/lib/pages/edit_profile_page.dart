@@ -464,8 +464,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       Row(
                         children: [
                           OutlinedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, PROFILE_ROUTE);
+                            },
                             style: OutlinedButton.styleFrom(
+                                backgroundColor: Colors.black,
                                 padding: EdgeInsets.symmetric(horizontal: 50),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20))),

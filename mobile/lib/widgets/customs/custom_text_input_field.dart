@@ -49,6 +49,7 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
                 fontWeight: FontWeight.bold),
             helperText: widget.helperText,
             helperStyle: TextStyle(
+                backgroundColor: Colors.white,
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 2),
