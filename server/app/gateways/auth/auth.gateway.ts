@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-params */
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { FriendManagerService } from '@app/services/friend-manager/friend-manager.service';
@@ -57,13 +58,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     // ---------------------- LES GETTERS de friends INITIAUX --------------------------------
     @SubscribeMessage(FriendEvents.UpdateFriends)
     updateFriends(@ConnectedSocket() socket: Socket) {
-        const friends = this.accountManager.users.get(socket.data.accountId).profile.friends;
-        this.accountManager.connectedUsers.forEach((value, key) => {
-            if (friends.find((f) => f.accountId === key)) {
-                friends.find((f) => f.accountId === key).isOnline = true;
-            }
-        });
-        socket.emit(FriendEvents.UpdateFriends, friends);
+        this.updateIsOnline(socket);
     }
 
     @SubscribeMessage(FriendEvents.UpdateSentFriends)
@@ -123,6 +118,8 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(FriendEvents.OptRequest)
     async optRequest(@ConnectedSocket() socket: Socket, @MessageBody('senderFriendId') senderFriendId: string, @MessageBody('isOpt') isOpt: boolean) {
+        if (this.accountManager.users.get(socket.data.accountId).profile.friends.find((f) => f.accountId === senderFriendId)) return;
+        if (this.accountManager.users.get(senderFriendId).profile.friends.find((f) => f.accountId === socket.data.accountId)) return;
         await this.friendManager.optFriendRequest(socket.data.accountId, senderFriendId, isOpt);
         this.server.fetchSockets().then((sockets) => {
             const senderFriendSocket = sockets.find((s) => s.data.accountId === senderFriendId);
@@ -130,7 +127,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                 senderFriendSocket.emit(FriendEvents.UpdateSentFriends, this.friendManager.calculateSentFriends(senderFriendSocket.data.accountId));
             }
             sockets.map((s) => {
-                s.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(s.data.accountId).profile.friends);
+                this.updateFriends(s as any);
             });
         });
         socket.emit(FriendEvents.UpdatePendingFriends, this.friendManager.calculatePendingFriends(socket.data.accountId));
@@ -140,7 +137,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     @SubscribeMessage(FriendEvents.OptFavorite)
     async optFavorite(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string, @MessageBody('isFavorite') isFavorite: boolean) {
         await this.friendManager.optFavorite(socket.data.accountId, friendId, isFavorite);
-        socket.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(socket.data.accountId).profile.friends);
+        this.updateFriends(socket);
     }
 
     @SubscribeMessage(FriendEvents.DeleteFriend)
@@ -149,10 +146,10 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.server.fetchSockets().then((sockets) => {
             const friendSocket = sockets.find((s) => s.data.accountId === friendId);
             if (friendSocket) {
-                friendSocket.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(friendSocket.data.accountId).profile.friends);
+                this.updateFriends(friendSocket as any);
             }
         });
-        socket.emit(FriendEvents.UpdateFriends, this.accountManager.users.get(socket.data.accountId).profile.friends);
+        this.updateFriends(socket);
         this.server.emit(UserEvents.UpdateUsers, await this.friendManager.queryUsers());
     }
 
@@ -218,5 +215,20 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.logger.log(`DEATH de ${socket.data.accountId}`);
         this.accountManager.logConnection(socket.data.accountId, false);
         this.accountManager.disconnection(socket.data.accountId);
+        this.server.fetchSockets().then((sockets) => {
+            sockets.forEach((s) => {
+                this.updateIsOnline(s as any);
+            });
+        });
+    }
+
+    updateIsOnline(socket: Socket) {
+        const friends = this.accountManager.users.get(socket.data.accountId).profile.friends;
+        this.accountManager.connectedUsers.forEach((value, key) => {
+            if (friends.find((f) => f.accountId === key)) {
+                friends.find((f) => f.accountId === key).isOnline = true;
+            }
+        });
+        socket.emit(FriendEvents.UpdateFriends, friends);
     }
 }
