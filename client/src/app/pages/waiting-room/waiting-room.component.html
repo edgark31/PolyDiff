@@ -2,7 +2,8 @@
     <app-nav-bar id="nav-bar"></app-nav-bar>
 </div>
 <div class="selectionComponent">
-    <img id="background" src="./assets/background/MenuBackground.jpg" alt="background" />
+    <img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
+    <img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
     <div class="container">
         <div class="left">
             <div *ngIf="!welcome.onChatLobby">

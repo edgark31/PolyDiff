@@ -13,7 +13,7 @@ export class GameModePageComponent implements OnInit, OnDestroy {
     constructor(
         private readonly navigationService: NavigationService,
         private readonly clientSocketService: ClientSocketService,
-        private readonly welcomeService: WelcomeService,
+        public welcomeService: WelcomeService,
         public translate: TranslateService,
     ) {}
 

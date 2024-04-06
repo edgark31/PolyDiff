@@ -16,6 +16,7 @@ import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent, MessageTag } from '@common/enums';
 import { Chat, Game, Lobby } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
 @Component({
@@ -40,6 +41,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     gameLobby: Game;
     lobby: Lobby;
     mode: string;
+    isAbandon = false;
     gameMode: typeof GameModes;
     readonly canvasSize: CanvasMeasurements;
     chatSubscription: Subscription;
@@ -68,6 +70,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         public welcome: WelcomeService,
         public globalChatService: GlobalChatService,
         private navigationService: NavigationService,
+        private translate: TranslateService,
     ) {
         this.nDifferencesFound = 0;
         this.timer = 0;
@@ -95,6 +98,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         }
     }
 
+    translateCharacter(character: string, username: string): string {
+        return this.translate.instant(`chat.${character}`, { name: username });
+    }
+
     getMode(): string {
         return this.navigationService.getPreviousUrl();
     }
@@ -110,14 +117,14 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
             this.lobby = lobby;
             this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
-            if (this.roomManager.isObserver) {
-                this.messages = this.lobby.chatLog?.chat as Chat[];
-                this.messages.forEach((message: Chat) => {
-                    if (message.name === this.welcome.account.credentials.username) message.tag = MessageTag.Sent;
-                    else message.tag = MessageTag.Received;
-                });
-            }
+
+            this.messages = this.lobby.chatLog?.chat as Chat[];
+            this.messages.forEach((message: Chat) => {
+                if (message.name === this.welcome.account.credentials.username && message.name) message.tag = MessageTag.Sent;
+                else if (message.name !== this.welcome.account.credentials.username && message.name) message.tag = MessageTag.Received;
+            });
         });
+
         this.gameSubscription = this.gameManager.game$.subscribe((game: Game) => {
             this.gameLobby = game;
             this.remainingDifference = this.gameLobby.differences as Coordinate[][];
@@ -175,6 +182,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
             this.roomManager.off();
             this.gameManager.off();
+            if (!this.isAbandon) {
+                // this.clientSocket.disconnect('lobby');
+                // this.clientSocket.disconnect('game');
+            }
         }
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.off();
@@ -204,6 +215,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     receiveMessage(chat: Chat): void {
+        if (chat.raw.includes('a trouvé une différence')) {
+            const username = chat.raw.split(' ').shift();
+            chat.raw = this.translateCharacter('foundDifférence', username ?? '');
+        } else if (chat.raw.includes("s'est trompé")) {
+            const username = chat.raw.split(' ').shift();
+            chat.raw = this.translateCharacter('error', username ?? '');
+        }
         this.messages.push(chat);
     }
 
@@ -220,13 +238,19 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     showEndGameDialog(endingMessage: string): void {
         if (this.lobby.mode === this.gameMode.Classic) this.isReplayAvailable = true;
         this.matDialog.open(GamePageDialogComponent, {
-            data: { action: GamePageEvent.EndGame, message: endingMessage, isReplayMode: this.lobby.mode === this.gameMode.Classic },
+            data: {
+                action: GamePageEvent.EndGame,
+                message: endingMessage,
+                isReplayMode: this.lobby.mode === this.gameMode.Classic,
+                lobby: this.lobby,
+            },
             disableClose: true,
             panelClass: 'dialog',
         });
     }
 
     showAbandonDialog(): void {
+        this.isAbandon = true;
         this.matDialog.open(GamePageDialogComponent, {
             data: { action: GamePageEvent.Abandon, message: 'Êtes-vous certain de vouloir abandonner la partie ? ', lobby: this.lobby },
             disableClose: true,

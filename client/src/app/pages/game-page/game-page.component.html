@@ -69,7 +69,8 @@
 <div *ngIf="welcome.onChatGame">
     <app-chat-box (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
 </div>
- <img id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
+<img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
+<img *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/game_background_dark.png" alt="background"/>
 <div>
     <!-- <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages" [isReplaying]="isReplayAvailable" [gameMode]="game.mode"></app-chat-box> -->
     <app-replay-buttons [isReplayAvailable]="isReplayAvailable"></app-replay-buttons>

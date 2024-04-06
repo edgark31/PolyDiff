@@ -1,8 +1,11 @@
 <div class="infos-container" >
+    <p id = "waiting"> Liste de joueurs.</p>
+    <div class = "players-list">
     <div *ngFor="let friend of  welcome.account.profile.friends; let last = last" class="separator">
+        <div class = "waiting-text">
         <!-- <mat-form-field class="full-width-field"> -->
            <div class="form-avatar">
-               <img [src]="'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'" alt="Image" style="width: 50px; height: 50px; border-radius: 16px;">
+               <img [src]="'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'" alt="Image" style="width: 100px; height: 100px; border-radius: 16px;">
              </div>
                <span class="name">{{ friend.name }}</span>
                <div   class="details">
@@ -11,8 +14,22 @@
                 </button>
             </div>
                <span *ngIf="!last"></span>
-
+            </div>
        <!-- </mat-form-field> -->
    </div>
+   <!-- <button mat-icon-button >
+    <button mat-dialog-close routerLink="/home" class="icone favorite-icon">Fermer</button>
+   </button> -->
 </div>
+</div>
+<mat-dialog-actions class="dialog-actions">
+<div class = "button2" >
+    <div class="button-container">
+    <button class = "noButton"  mat-dialog-close routerLink="/home"></button>
+        <img src="./assets/icon/CreateButton.png" alt="notAbandonButton" >
+        <div class="centered-no">{{'creationGame.quit' | translate }}</div>
+    </div>
+</div>
+</mat-dialog-actions>
 
+ <img src="./assets/gameSheet.png" class="dialog-image" alt="popup">

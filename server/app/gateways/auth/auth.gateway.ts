@@ -102,7 +102,6 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(FriendEvents.CancelRequest)
     async cancelRequest(@ConnectedSocket() socket: Socket, @MessageBody('potentialFriendId') potentialFriendId: string) {
-        console.log(potentialFriendId);
         await this.friendManager.cancelRequest(socket.data.accountId, potentialFriendId);
         this.server.fetchSockets().then((sockets) => {
             const potentialFriendSocket = sockets.find((s) => s.data.accountId === potentialFriendId);
@@ -113,7 +112,6 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                 );
             }
         });
-        console.log(this.friendManager.calculateSentFriends(socket.data.accountId));
         socket.emit(FriendEvents.UpdateSentFriends, this.friendManager.calculateSentFriends(socket.data.accountId));
     }
 
@@ -141,7 +139,6 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(FriendEvents.DeleteFriend)
     async deleteFriend(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string) {
-        console.log('delete' + friendId);
         await this.friendManager.deleteFriend(socket.data.accountId, friendId);
         this.server.fetchSockets().then((sockets) => {
             const friendSocket = sockets.find((s) => s.data.accountId === friendId);
@@ -163,6 +160,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(FriendEvents.ShareScore)
     shareScore(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string, @MessageBody('score') score: number) {
+        // console.log('friensbd' + friendId + score);
         this.server.fetchSockets().then((sockets) => {
             const friendSocket = sockets.find((s) => s.data.accountId === friendId);
             if (friendSocket) {

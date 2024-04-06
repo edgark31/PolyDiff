@@ -9,7 +9,6 @@ import { FriendsInfosComponent } from '@app/components/friends-infos/friends-inf
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { FriendService } from '@app/services/friend-service/friend.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { AccountEvents } from '@common/enums';
 import { Account, Friend, User } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -94,7 +93,6 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         this.accountSubscription = this.welcome.accountObservable$.subscribe((account: Account) => {
             this.welcome.account = account;
         });
-        this.clientSocket.send('auth', AccountEvents.RefreshAccount);
         this.friendService.recuperateFriendSend();
         this.friendService.recuperateFriend();
         this.friendService.recuperateFriendPending();

@@ -1,6 +1,7 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { NavigationService } from '@app/services/navigation-service/navigation.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
@@ -24,6 +25,7 @@ export class CreateRoomPageComponent implements AfterViewInit {
         private readonly roomManagerService: RoomManagerService,
         private readonly navigationService: NavigationService,
         public translate: TranslateService,
+        public welcome: WelcomeService,
     ) {
         this.time = 30;
         this.bonusTime = 10;

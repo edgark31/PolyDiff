@@ -67,8 +67,8 @@
     "chat": {
         "chatZone": "Zone de clavardage ",
         "return": "retour",
-        "foundDifférence": " a trouvé une différence !",
-        "error": " s'est trompé !"
+        "foundDifférence": "{{name}} a trouvé une différence !",
+        "error": "{{name}} s'est trompé !"
     },
 
     "creationGame": {
@@ -115,7 +115,9 @@
         "home": "Accueil",
         "videoReprise": "reprise Video",
         "yes": "oui",
-        "no": "Non"
+        "no": "Non",
+        "scoreShare": "Partage votre score",
+        "quitGame": "quitter la game"
     },
 
     "gameSheet": {
@@ -210,7 +212,9 @@
         "friendsList": "Liste d'amis",
         "requestFriendsSendList": "Liste d'amis en attente envoyé",
         "pendingFriendsList": "Liste d'amis en attente reçu",
-        "allListAccount": "Liste de comptes"
+        "allListAccount": "Liste de comptes",
+        "friendsofFriends": "amis",
+        "cancel": "annuler"
     },
 
     "waitingPage": {
@@ -218,7 +222,14 @@
         "waitingPlayers": "Joueur(s) en attente",
         "player": "Joueur",
         "start": "Commencer la partie",
-        "quit": "Quit"
+        "quit": "Quitter"
+    },
+
+    "waitingPlayers": {
+        "playerWaiting": "En attente d’un joueur....",
+        "waitingPlayers": "Joueur en attente",
+        "cancel": "annuler",
+        "waitAccept": "En attente d'etre accepté"
     },
 
     "canvasUnder": {

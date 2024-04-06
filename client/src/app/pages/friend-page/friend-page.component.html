@@ -48,7 +48,7 @@
                             <button mat-icon-button  (click)="showFriendsOfFriends(friend, true)">
 
                                 <span class="icon-friend">
-                                    amis
+                                    {{'friendPage.friendsofFriends' | translate }}
                                     </span>
 
                         </button>
@@ -122,7 +122,7 @@
 
 
                             <button (click)="sendFriendCancel(friend.accountId)"   mat-icon-button >
-                                    <span class="icone-thump">Annuler</span>
+                                    <span class="icone-thump">{{'friendPage.cancel' | translate }}</span>
                             </button>
 
 
@@ -177,7 +177,7 @@
                             <button mat-icon-button (click)="showFriendsOfUser(user, false)" >
 
                                 <span class="icon-friend">
-                                    amis
+                                    {{'friendPage.friendsofFriends' | translate }}
                                     </span>
 
                         </button>
@@ -201,7 +201,7 @@
 
 
                             <button    mat-icon-button >
-                                <span class="icone-thump">Annuler</span>
+                                <span class="icone-thump"> {{'friendPage.cancel' | translate }}</span>
                             </button>
 
 
@@ -212,5 +212,5 @@
         </section>
 
 </body>
-<img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
-<img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background.jpg" alt="background"/>
+<img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
+<img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>

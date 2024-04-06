@@ -68,8 +68,8 @@
     "chat": {
         "chatZone": "Chat zone",
         "return": "return",
-        "foundDifférence": " found a difference!",
-        "error": " made a mistake!"
+        "foundDifférence": "{{name}} found a difference!",
+        "error": "{{name}} made a mistake!"
     },
     "creationGame": {
         "differenceImage": "Here is the image of the differences",
@@ -113,7 +113,9 @@
         "home": "Home",
         "videoReprise": "video replay",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "scoreShare": "Share your score",
+        "quitGame": "Quit the game"
     },
 
     "gameSheet": {
@@ -205,7 +207,9 @@
         "friendsList": "Friends List",
         "requestFriendsSendList": "Sent Friend Requests List",
         "pendingFriendsList": "Received Friend Requests List",
-        "allListAccount": "Account List"
+        "allListAccount": "Account List",
+        "friendsofFriends": "friends",
+        "cancel": "cancel"
     },
 
     "waitingPage": {
@@ -214,6 +218,13 @@
         "player": "Player",
         "start": "Start the game",
         "quit": "Quit"
+    },
+
+    "waitingPlayers": {
+        "playerWaiting": "Waiting for a player...",
+        "waitingPlayers": "Player waiting",
+        "cancel": "Cancel",
+        "waitAccept": "Waiting to be accepte"
     },
 
     "canvasUnder": {

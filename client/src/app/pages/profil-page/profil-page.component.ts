@@ -11,8 +11,7 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { ELEMENT_DATA, LANGUAGES, THEME_PERSONALIZATION } from '@common/constants';
-import { AccountEvents } from '@common/enums';
-import { Account, ConnectionLog } from '@common/game-interfaces';
+import { ConnectionLog } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
@@ -43,11 +42,11 @@ export class ProfilPageComponent implements AfterViewInit, OnInit, OnDestroy {
     ) {}
 
     ngOnInit() {
-        this.welcomeService.updateAccountObservable();
-        this.accountSubscription = this.welcomeService.accountObservable$.subscribe((account: Account) => {
-            this.welcomeService.account = account;
-        });
-        this.clientSocket.send('auth', AccountEvents.RefreshAccount);
+        // this.welcomeService.updateAccountObservable();
+        // this.accountSubscription = this.welcomeService.accountObservable$.subscribe((account: Account) => {
+        //     this.welcomeService.account = account;
+        // });
+        // this.clientSocket.send('auth', AccountEvents.RefreshAccount);
     }
 
     ngAfterViewInit() {

@@ -12,7 +12,7 @@
                 <div class="deleteText" *ngIf="router.url === '/admin'">{{'gameSheet.suppression' | translate }}</div>
             </div>
             <div class="button-container">
-                <button mat-raised-button *ngIf="getMode() !== '/practice'" routerLink="/create-room" (click)="setGameId()">{{"Créer"}}</button>
+                <button mat-raised-button *ngIf="getMode() !== '/practice'" routerLink="/create-room" (click)="setGameId()">{{'gameSheet.create' | translate }}</button>
                 <button mat-raised-button *ngIf="getMode() === '/practice'" (click)="startGame()">{{'gameSheet.play' | translate }}</button>
                 <button mat-raised-button *ngIf="router.url === '/admin'" (click)="openConfirmationDialog(actions.ResetTopTime)">{{'gameSheet.reset' | translate }}</button>
                 <img class="createButton" alt="button" src="./assets/icon/CreateButton.png"/>

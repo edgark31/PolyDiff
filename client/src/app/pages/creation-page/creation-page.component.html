@@ -25,7 +25,8 @@
         {{'creationPage.differenceValid' | translate }}
     </button>
     <button mat-raised-button [routerLink]="configRoute">{{'creationPage.returnConfigPage' | translate }}</button>
-    <img id = "creation" src = "./assets/background/CreationBackground.jpg" alt="background"/>
+    <img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "creation" src = "./assets/background/CreationBackground.jpg" alt="background"/>
+    <img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "creation" src = "./assets/background/CreationBackground_dark.png" alt="background"/>
     <img id = "run" src = "./assets/icon/RunRight.gif" alt="runningGif"/>
 
 </div>
