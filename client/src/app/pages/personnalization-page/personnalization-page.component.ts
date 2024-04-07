@@ -46,6 +46,17 @@ export class PersonalizationPageComponent implements OnInit {
         this.sound.incorrectSoundEffect = this.welcomeService.account.profile.onErrorSound;
     }
 
+    onCancel() {
+        this.welcomeService.selectName = this.gameManager.username;
+        this.welcomeService.selectAvatar = this.welcomeService.account.profile.avatar;
+        this.welcomeService.selectTheme = this.welcomeService.account.profile.desktopTheme;
+        this.welcomeService.selectLanguage = this.welcomeService.account.profile.language;
+        this.sound.correctSoundEffect = this.welcomeService.account.profile.onCorrectSound;
+        this.sound.incorrectSoundEffect = this.welcomeService.account.profile.onErrorSound;
+        this.useLanguage(this.welcomeService.selectLanguage);
+        this.router.navigate(['/profil']);
+    }
+
     useLanguage(language: string): void {
         this.translate.use(language);
     }

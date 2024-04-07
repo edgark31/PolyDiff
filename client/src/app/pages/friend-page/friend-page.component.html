@@ -25,7 +25,7 @@
                     <mat-card-header>
                         <mat-card-title class="username">
                             <div class="form-avatar">
-                                <img [src]="'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'" alt="Image" style="width: 100px; height: 100px; border-radius: 16px;">
+                                <img [src]="'http://localhost:3000/avatar/' + friend.accountId + '.png'" alt="Image" style="width: 100px; height: 100px; border-radius: 16px;">
                               </div>
                             <div class="name">
                                 <span>{{ friend.name }}</span>
@@ -55,8 +55,8 @@
                         </div>
 
 
-                        <div (click)="sendFriendDelete(friend.accountId)">
-                            <button    mat-icon-button >
+                        <div >
+                            <button  [disabled]="isRequestPending"(click)="sendFriendDelete(friend.accountId)"  mat-icon-button >
                                 <mat-icon class="icone-delete">delete</mat-icon>
                             </button>
                         </div>
@@ -71,7 +71,7 @@
                     <mat-card-header>
                         <mat-card-title class="username">
                             <div class="form-avatar">
-                                <img [src]="'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'" alt="Image" style="width: 100px; height: 100px; border-radius: 16px;">
+                                <img [src]="'http://localhost:3000/avatar/' + friend.accountId + '.png'" alt="Image" style="width: 100px; height: 100px; border-radius: 16px;">
                               </div>
                             <div class="name">
                                 <span>{{ friend.name }}</span>
@@ -85,7 +85,7 @@
 
 
                         <div  class="details">
-                            <button mat-icon-button (click)='sendFriendPendingAccept(friend.accountId)' >
+                            <button mat-icon-button [disabled]="isRequestPending" (click)='sendFriendPendingAccept(friend.accountId)' >
                              <mat-icon class="icone favorite-icon">person_add</mat-icon>
                             </button>
                         </div>
@@ -93,7 +93,7 @@
 
 
                         <div>
-                            <button mat-icon-button (click)='sendFriendPendingRefuse(friend.accountId)' >
+                            <button mat-icon-button [disabled]="isRequestPending" (click)='sendFriendPendingRefuse(friend.accountId)' >
                                 <mat-icon class="icone-close">person_remove</mat-icon>
                             </button>
                         </div>
@@ -110,7 +110,7 @@
                     <mat-card-header>
                         <mat-card-title class="username">
                             <div class="form-avatar">
-                                <img [src]="'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'" alt="Image" style="width: 100px; height: 100px; border-radius: 16px;">
+                                <img [src]="'http://localhost:3000/avatar/' + friend.accountId + '.png'" alt="Image" style="width: 100px; height: 100px; border-radius: 16px;">
                               </div>
                             <div class="name">
                                 <span>{{ friend.name }}</span>
@@ -125,7 +125,7 @@
                         <div>
 
 
-                            <button (click)="sendFriendCancel(friend.accountId)"   mat-icon-button >
+                            <button [disabled]="isRequestPending" (click)="sendFriendCancel(friend.accountId)"   mat-icon-button >
                                     <span class="icone-thump">{{'friendPage.cancel' | translate }}</span>
                             </button>
 
@@ -145,7 +145,7 @@
                     <mat-card-header>
                         <mat-card-title class="username">
                             <div class="form-avatar">
-                                <img [src]="'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'" alt="Image" style="width: 100px; height: 100px; border-radius: 16px;">
+                                <img [src]="'http://localhost:3000/avatar/' + user.accountId + '.png'" alt="Image" style="width: 100px; height: 100px; border-radius: 16px;">
                               </div>
                             <div class="name">
                                 <span>{{ user.name }}</span>
@@ -172,13 +172,13 @@
                         </div>
 
                         <div *ngIf="stateUser(user.name)==='friendPending'"  class="details">
-                            <button mat-icon-button (click)='sendFriendPendingAccept(user.accountId)' >
+                            <button mat-icon-button [disabled]="isRequestPending" (click)='sendFriendPendingAccept(user.accountId)' >
                              <mat-icon class="icone favorite-icon">person_add</mat-icon>
                             </button>
                         </div>
 
                         <div *ngIf="stateUser(user.name)==='friendUpdate' || stateUser(user.name)==='accountUser'"   class="details">
-                            <button mat-icon-button (click)="showFriendsOfUser(user, false)" >
+                            <button mat-icon-button  (click)="showFriendsOfUser(user, false)" >
 
                                 <span class="icon-friend">
                                     {{'friendPage.friendsofFriends' | translate }}
@@ -189,22 +189,22 @@
 
                         <div (click)="sendFriendDelete(user.accountId)">
 
-                            <button  *ngIf="stateUser(user.name)==='friendUpdate'"  mat-icon-button >
+                            <button [disabled]="isRequestPending" *ngIf="stateUser(user.name)==='friendUpdate'"  mat-icon-button >
                                 <mat-icon class="icone-delete">delete</mat-icon>
                             </button>
                         </div>
 
                         <div>
 
-                            <button *ngIf="stateUser(user.name)==='friendPending'" mat-icon-button (click)='sendFriendPendingRefuse(user.accountId)' >
+                            <button [disabled]="isRequestPending" *ngIf="stateUser(user.name)==='friendPending'" mat-icon-button (click)='sendFriendPendingRefuse(user.accountId)' >
                                 <mat-icon class="icone-close">person_remove</mat-icon>
                             </button>
                         </div>
 
-                        <div *ngIf="stateUser(user.name)==='friendSentList'" (click)="sendFriendCancel(user.accountId)">
+                        <div  *ngIf="stateUser(user.name)==='friendSentList'" >
 
 
-                            <button    mat-icon-button >
+                            <button [disabled]="isRequestPending" (click)="sendFriendCancel(user.accountId)"  mat-icon-button >
                                 <span class="icone-thump"> {{'friendPage.cancel' | translate }}</span>
                             </button>
 

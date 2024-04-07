@@ -27,7 +27,9 @@
         "songDifference": "choisissez votre son pour différence trouvé",
         "nameEnter": "veuillez écrire votre nom",
         "passwordEnter": "veuillez écrire votre mot de passe",
-        "confirmPasswordEnter": "veuillez ré-écrire votre mot de passe"
+        "confirmPasswordEnter": "veuillez ré-écrire votre mot de passe",
+        "cancel": "annuler",
+        "returnHome": "Retour à l'accueil"
     },
     "button": {
         "deconnexion": "Déconnexion",

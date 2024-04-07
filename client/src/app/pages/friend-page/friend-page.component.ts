@@ -172,7 +172,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
             this.friendService.sendFriendRequest(accountId);
             this.isRequestPending = false;
             console.log('yoyoy' + accountId);
-        }, 500);
+        }, 1000);
     }
 
     sendFriendPendingAccept(accountId: string): void {
@@ -181,7 +181,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
             this.friendService.sendFriendPending(accountId, true);
             this.isRequestPending = false;
             console.log('yoyoy' + accountId);
-        }, 500);
+        }, 3000);
 
         console.log('yoyoyo' + accountId);
     }
@@ -192,7 +192,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
             this.friendService.sendFriendPending(accountId, false);
             this.isRequestPending = false;
             console.log('yoyoy' + accountId);
-        }, 500);
+        }, 3000);
 
         console.log('yoyoyooooooooooooooooooo' + accountId);
     }
@@ -210,6 +210,11 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
     }
 
     sendFriendCancel(accountId: string): void {
-        this.friendService.sendFriendCancel(accountId);
+        this.isRequestPending = true;
+        setTimeout(() => {
+            this.friendService.sendFriendCancel(accountId);
+            this.isRequestPending = false;
+            console.log('yoyoy' + accountId);
+        }, 500);
     }
 }

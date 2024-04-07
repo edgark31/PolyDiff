@@ -4,7 +4,7 @@
     <app-nav-bar id ="nav-bar"></app-nav-bar>
     </div>
     <img *ngIf="welcomeService.selectTheme.name==='Light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
-    <img  *ngIf="welcomeService.selectTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background_dark.jpg" alt="background"/>
+    <img  *ngIf="welcomeService.selectTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
   <!-- <app-menu></app-menu> -->
   <div class="container-information">
     <div class="information">{{'profil.information' | translate }}</div>
@@ -91,9 +91,9 @@
               </mat-select>
             </mat-form-field>
           </div>
-       <div class="form-control section"> <div class="profil"> {{'profil.songError' | translate }}</div>
+       <div class="form-control section"> <div class="profil"> {{'profil.songDifference' | translate }}</div>
         <mat-form-field>
-          <mat-label>{{'profil.songError' | translate }}</mat-label>
+          <mat-label>{{'profil.songDifference' | translate }}</mat-label>
           <mat-select [(value)]="sound.correctSoundEffect">
             <mat-select-trigger>
                 {{ sound.correctSoundEffect.name }}
@@ -106,9 +106,9 @@
       </div>
 
 
-      <div class="form-control section"> <div class="profil"> {{'profil.songDifference' | translate }}</div>
+      <div class="form-control section"> <div class="profil"> {{'profil.songError' | translate }}</div>
         <mat-form-field>
-          <mat-label>{{'profil.songDifference' | translate }}</mat-label>
+          <mat-label>{{'profil.songError' | translate }}</mat-label>
           <mat-select [(value)]="sound.incorrectSoundEffect">
             <mat-select-trigger>
                 {{sound.incorrectSoundEffect.name }}
@@ -135,7 +135,7 @@
 
   <div class="button-container">
     <button type="submit" (click)="onSubmitProfile()">{{'button.returnProfil' | translate }}</button>
-    <button routerLink="/profil">Annuler</button>
+    <button (click)="onCancel()">{{'profil.cancel' | translate }}</button>
   </div>
 
 </body>

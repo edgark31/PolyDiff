@@ -28,7 +28,9 @@
         "songError": "choose your sound for error",
         "nameEnter": "please write your name",
         "passwordEnter": "please write your password",
-        "confirmPasswordEnter": "please re-write your password"
+        "confirmPasswordEnter": "please re-write your password",
+        "cancel": "cancel",
+        "returnHome": "Return to home"
     },
 
     "button": {

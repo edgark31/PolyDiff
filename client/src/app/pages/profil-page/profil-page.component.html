@@ -6,7 +6,7 @@
   <app-nav-bar id ="nav-bar"></app-nav-bar>
   </div>
   <img *ngIf="welcomeService.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
-  <img  *ngIf="welcomeService.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background_dark.jpg" alt="background"/>
+  <img  *ngIf="welcomeService.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
   <div class="container-information">
     <div class="information">{{'profil.information' | translate }}</div>
   </div>
@@ -87,7 +87,7 @@
 
   <div class="button-container">
     <button type="submit" (click)="onSubmitPersonalization()">{{'button.GoReglage' | translate }}</button>
-    <button routerLink="/home">Retour à l'accueil</button>
+    <button routerLink="/home">{{'profil.returnHome' | translate }}</button>
   </div>
 </body>
 
