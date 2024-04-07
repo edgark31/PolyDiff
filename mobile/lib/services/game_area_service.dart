@@ -117,7 +117,7 @@ class GameAreaService extends ChangeNotifier {
     cheatBlinkingDifference = cheatPath;
   }
 
-  Future<void> toggleCheatMode(List<Coordinate> coords) async {
+  Future<void> toggleCheatMode(List<Coordinate> coords, [int flashingSpeed = SPEED_X1]) async {
     isCheatMode = !isCheatMode;
     if (isCheatMode) {
       initCheatPath(coords);
@@ -128,8 +128,8 @@ class GameAreaService extends ChangeNotifier {
       const int cheatModeWaitMs = 250;
 
       while (isCheatMode) {
-        await blinkCheatDifference(blinkingCheatPath, timeToBlinkMs);
-        await blinkCheatDifference(null, cheatModeWaitMs);
+        await blinkCheatDifference(blinkingCheatPath, (timeToBlinkMs/flashingSpeed).floor());
+        await blinkCheatDifference(null, (cheatModeWaitMs/flashingSpeed).floor());
         if (!isCheatMode) {
           break;
         }
