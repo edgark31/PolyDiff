@@ -26,7 +26,6 @@ export class ImportDialogComponent {
             const fileReader = new FileReader();
             fileReader.onload = () => {
                 const imageBase64 = fileReader.result as string;
-
                 this.imageData = imageBase64;
             };
             fileReader.readAsDataURL(selectedFile);
