@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-params */
 import { AuthGateway } from '@app/gateways/auth/auth.gateway';
 import { Credentials, Sound, Theme } from '@app/model/database/account';
@@ -35,6 +36,11 @@ export class AccountController {
         try {
             const accountFound = await this.accountManager.connection(creds);
             response.status(HttpStatus.OK).json(accountFound);
+            this.auth.server.fetchSockets().then((sockets) => {
+                sockets.forEach((socket) => {
+                    this.auth.updateIsOnline(socket as any);
+                });
+            });
         } catch (error) {
             response.status(HttpStatus.UNAUTHORIZED).json(error);
         }

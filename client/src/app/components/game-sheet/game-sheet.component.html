@@ -7,18 +7,18 @@
         </div>
         <div class="buttonSection">
             <div class="button-container">
-                <button mat-raised-button *ngIf="router.url === '/selection'">Jouer</button>
-                <button mat-raised-button *ngIf="router.url === '/admin'" (click)="openConfirmationDialog(actions.DeleteGame)">Supprimer</button>
-                <div class="deleteText" *ngIf="router.url === '/admin'">Supprimer</div>
+                <button mat-raised-button *ngIf="router.url === '/selection'">{{'gameSheet.play' | translate }}</button>
+                <button mat-raised-button *ngIf="router.url === '/admin'" (click)="openConfirmationDialog(actions.DeleteGame)">{{'gameSheet.suppression' | translate }}</button>
+                <div class="deleteText" *ngIf="router.url === '/admin'">{{'gameSheet.suppression' | translate }}</div>
             </div>
             <div class="button-container">
-                <button mat-raised-button *ngIf="getMode() !== '/practice'" routerLink="/create-room" (click)="setGameId()">{{"Créer"}}</button>
-                <button mat-raised-button *ngIf="getMode() === '/practice'" (click)="startGame()">{{"Jouer"}}</button>
-                <button mat-raised-button *ngIf="router.url === '/admin'" (click)="openConfirmationDialog(actions.ResetTopTime)">Réinitialiser</button>
+                <button mat-raised-button *ngIf="getMode() !== '/practice'" routerLink="/create-room" (click)="setGameId()">{{'gameSheet.create' | translate }}</button>
+                <button mat-raised-button *ngIf="getMode() === '/practice'" (click)="startGame()">{{'gameSheet.play' | translate }}</button>
+                <button mat-raised-button *ngIf="router.url === '/admin'" (click)="openConfirmationDialog(actions.ResetTopTime)">{{'gameSheet.reset' | translate }}</button>
                 <img class="createButton" alt="button" src="./assets/icon/CreateButton.png"/>
-                <div class="createText" *ngIf="getMode() !== '/practice'">{{"Créer"}} </div>
-                <div class="createText" *ngIf="getMode() === '/practice'">{{"Jouer"}}</div>
-                <div class="reinitializeText" *ngIf="router.url === '/admin'">Réinitialiser</div>
+                <div class="createText" *ngIf="getMode() !== '/practice'">{{'gameSheet.create' | translate }} </div>
+                <div class="createText" *ngIf="getMode() === '/practice'">{{'gameSheet.play' | translate }}</div>
+                <div class="reinitializeText" *ngIf="router.url === '/admin'">{{'gameSheet.reset' | translate }}</div>
             </div>
         </div>
     </div>

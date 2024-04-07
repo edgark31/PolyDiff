@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { NavigationService } from '@app/services/navigation-service/navigation.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-game-mode-page',
@@ -12,7 +13,8 @@ export class GameModePageComponent implements OnInit, OnDestroy {
     constructor(
         private readonly navigationService: NavigationService,
         private readonly clientSocketService: ClientSocketService,
-        private readonly welcomeService: WelcomeService,
+        public welcomeService: WelcomeService,
+        public translate: TranslateService,
     ) {}
 
     ngOnInit(): void {

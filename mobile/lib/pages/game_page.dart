@@ -45,6 +45,7 @@ class _GamePageState extends State<GamePage> {
   late Future<CanvasModel> imagesFuture;
   bool isChatBoxVisible = false;
   bool isCheatActivated = false;
+  bool isAnimationPaused = false;
 
   @override
   void initState() {
@@ -157,6 +158,36 @@ class _GamePageState extends State<GamePage> {
                       ),
                       child: Text(
                         AppLocalizations.of(context)!.gamePage_cheatButton,
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ),
+
+                    // TODO: Get rid of this after you understand how I pause an animation
+                    ElevatedButton(
+                      onPressed: () {
+                        if (isAnimationPaused) {
+                          gameAreaService.resumeAnimation();
+                        } else {
+                          gameAreaService.pauseAnimation();
+                        }
+
+                        setState(() {
+                          isAnimationPaused = !isAnimationPaused;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Color(0xFFEF6151),
+                        backgroundColor: Color(0xFF2D1E16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      ),
+                      child: Text(
+                        isAnimationPaused
+                            ? 'Resume Animation'
+                            : 'Pause Animation',
                         style: TextStyle(fontSize: 30),
                       ),
                     ),

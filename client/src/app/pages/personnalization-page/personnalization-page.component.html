@@ -3,7 +3,8 @@
   <div class="header">
     <app-nav-bar id ="nav-bar"></app-nav-bar>
     </div>
-    <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+    <img *ngIf="welcomeService.selectTheme.name==='Light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+    <img  *ngIf="welcomeService.selectTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
   <!-- <app-menu></app-menu> -->
   <div class="container-information">
     <div class="information">{{'profil.information' | translate }}</div>
@@ -14,7 +15,7 @@
         <div class="profil">{{'profil.username' | translate }}</div>
         <mat-form-field>
           <mat-label>Name</mat-label>
-          <input matInput placeholder="veuillez écrire votre nom" [(ngModel)]="welcomeService.selectName" required>
+          <input matInput placeholder="{{ 'profil.nameEnter' | translate }}" [(ngModel)]="welcomeService.selectName" required>
         </mat-form-field>
         <!-- <input type="text" formControlName="username" id="username"/> -->
       </div>
@@ -23,7 +24,7 @@
         <div class="profil"> {{'profil.changePassword' | translate }}</div>
         <mat-form-field>
           <mat-label>Mot de passe</mat-label>
-          <input matInput type="password" placeholder="veuillez écrire votre mot de passe" [(ngModel)]="welcomeService.selectPassword" required>
+          <input matInput type="password" placeholder="{{ 'profil.passwordEnter' | translate }}" [(ngModel)]="welcomeService.selectPassword" required>
         </mat-form-field>
         <!-- <input type="text" formControlName="username" id="username"/> -->
       </div>
@@ -32,7 +33,7 @@
         <div class="profil"> {{'profil.confirmPassword' | translate }}</div>
         <mat-form-field>
           <mat-label>Mot de passe</mat-label>
-          <input matInput type="password" placeholder="veuillez ré-écrire votre mot de passe" [(ngModel)]="welcomeService.selectPasswordConfirm"
+          <input matInput type="password" placeholder="{{ 'profil.confirmPasswordEnter' | translate }}" [(ngModel)]="welcomeService.selectPasswordConfirm"
             required>
             <div class="error-message" *ngIf="welcomeService.selectPasswordConfirm!==welcomeService.selectPassword"> mettez un mot de passe identique</div>
         </mat-form-field>
@@ -90,9 +91,9 @@
               </mat-select>
             </mat-form-field>
           </div>
-       <div class="form-control section"> <div class="profil"> {{'profil.songError' | translate }}</div>
+       <div class="form-control section"> <div class="profil"> {{'profil.songDifference' | translate }}</div>
         <mat-form-field>
-          <mat-label>{{'profil.songError' | translate }}</mat-label>
+          <mat-label>{{'profil.songDifference' | translate }}</mat-label>
           <mat-select [(value)]="sound.correctSoundEffect">
             <mat-select-trigger>
                 {{ sound.correctSoundEffect.name }}
@@ -105,9 +106,9 @@
       </div>
 
 
-      <div class="form-control section"> <div class="profil"> {{'profil.songDifference' | translate }}</div>
+      <div class="form-control section"> <div class="profil"> {{'profil.songError' | translate }}</div>
         <mat-form-field>
-          <mat-label>{{'profil.songDifference' | translate }}</mat-label>
+          <mat-label>{{'profil.songError' | translate }}</mat-label>
           <mat-select [(value)]="sound.incorrectSoundEffect">
             <mat-select-trigger>
                 {{sound.incorrectSoundEffect.name }}
@@ -134,7 +135,7 @@
 
   <div class="button-container">
     <button type="submit" (click)="onSubmitProfile()">{{'button.returnProfil' | translate }}</button>
-    <button routerLink="/profil">Annuler</button>
+    <button (click)="onCancel()">{{'profil.cancel' | translate }}</button>
   </div>
 
 </body>
