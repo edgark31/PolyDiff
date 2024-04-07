@@ -23,9 +23,8 @@ export const ELEMENT_DATA: ConnectionLog[] = [
 ];
 
 export const THEME_PERSONALIZATION: Theme[] = [
-    { name: 'Default', color: '', buttonColor: 'black', backgroundColor: 'white' },
-    { name: 'oragina', color: '', buttonColor: 'Orange', backgroundColor: 'YellowOrange' },
-    { name: 'cafe', color: '', buttonColor: 'brown', backgroundColor: 'black' },
+    { name: 'Light', color: '', buttonColor: 'black', backgroundColor: 'white' },
+    { name: 'Dark', color: '', buttonColor: 'Orange', backgroundColor: 'YellowOrange' },
 ];
 
 export const CORRECT_SOUND_LIST: Sound[] = [

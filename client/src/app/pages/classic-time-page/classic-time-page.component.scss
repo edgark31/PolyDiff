@@ -1,7 +1,14 @@
 @import url('https://fonts.cdnfonts.com/css/troika-2');
 
-body {
-    background-image: url('../../../assets/LimitedTimeBackground.jpg');
+.light {
+    background-image: url('../../../assets/background/LimitedTimeBackground.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.dark {
+    background-image: url('../../../assets/background/LimitedTimeBackground_dark.jpg');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
