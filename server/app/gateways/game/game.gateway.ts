@@ -5,6 +5,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-params */
+import { LobbyGateway } from '@app/gateways/lobby/lobby.gateway';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { GameService } from '@app/services/game/game.service';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
@@ -12,7 +13,7 @@ import { MessageManagerService } from '@app/services/message-manager/message-man
 import { RecordManagerService } from '@app/services/record-manager/record-manager.service';
 import { RoomsManagerService } from '@app/services/rooms-manager/rooms-manager.service';
 import { NOT_FOUND } from '@common/constants';
-import { ChannelEvents, GameEvents, GameModes, GameState, MessageTag } from '@common/enums';
+import { ChannelEvents, GameEvents, GameModes, GameState, LobbyEvents, MessageTag } from '@common/enums';
 import { Chat, Coordinate, Game, GameEventData } from '@common/game-interfaces';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayConnection, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
@@ -36,6 +37,7 @@ export class GameGateway implements OnGatewayConnection {
         private readonly messageManager: MessageManagerService,
         private readonly imageManager: ImageManagerService,
         private readonly recordManager: RecordManagerService,
+        private readonly lobbyGateway: LobbyGateway,
     ) {}
 
     // ------------------ CLASSIC MODE && LIMITED MODE ------------------
@@ -95,6 +97,14 @@ export class GameGateway implements OnGatewayConnection {
                         const record = this.recordManager.getPendingGameRecord(lobbyId);
                         this.server.to(lobbyId).emit(GameEvents.GameRecord, record);
                     }
+                    this.server
+                        .in(lobbyId)
+                        .fetchSockets()
+                        .then((sockets) => {
+                            for (const s of sockets) {
+                                s.data.state = GameState.GameOver;
+                            }
+                        });
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Temps écoulé !');
                     this.recordManager.post(lobbyId);
                     this.logDraw(lobbyId);
@@ -112,6 +122,7 @@ export class GameGateway implements OnGatewayConnection {
                 this.server.to(lobbyId).emit(GameEvents.TimerUpdate, this.roomsManager.lobbies.get(lobbyId).time);
             }, DELAY_BEFORE_EMITTING_TIME);
             this.timers.set(lobbyId, timerId);
+            this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
         }
     }
 
@@ -151,8 +162,8 @@ export class GameGateway implements OnGatewayConnection {
             .differences.findIndex((difference) => difference.some((coord: Coordinate) => coord.x === coordClic.x && coord.y === coordClic.y));
         const commonMessage =
             index !== NOT_FOUND
-                ? `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a trouvé une différence !`
-                : `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} s'est trompé !`;
+                ? `${this.accountManager.users.get(socket.data.accountId).credentials.username} a trouvé une différence !`
+                : `${this.accountManager.users.get(socket.data.accountId).credentials.username} s'est trompé !`;
         const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
         // ------------------ CLASSIC MODE ------------------
         if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
@@ -187,6 +198,14 @@ export class GameGateway implements OnGatewayConnection {
                 const { isGameFinished, potentialWinner } = this.thresholdCheck(lobbyId);
 
                 if (isGameFinished && potentialWinner) {
+                    this.server
+                        .in(lobbyId)
+                        .fetchSockets()
+                        .then((sockets) => {
+                            for (const s of sockets) {
+                                s.data.state = GameState.GameOver;
+                            }
+                        });
                     /* --------- Record EndGame Event -------- */
                     this.recordManager.closeEntry(lobbyId);
                     const record = this.recordManager.getPendingGameRecord(lobbyId);
@@ -196,7 +215,7 @@ export class GameGateway implements OnGatewayConnection {
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
                     this.logOneWinner(lobbyId, potentialWinner.accountId);
                     const winChat: Chat = {
-                        raw: `${this.accountManager.connectedUsers.get(potentialWinner.accountId).credentials.username} a gagné !`,
+                        raw: `${this.accountManager.users.get(potentialWinner.accountId).credentials.username} a gagné !`,
                         tag: MessageTag.Common,
                     };
                     this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(winChat);
@@ -208,15 +227,22 @@ export class GameGateway implements OnGatewayConnection {
                 }
                 // Vérifier s'il reste des differences
                 if (this.games.get(lobbyId).differences.length <= 0) {
+                    this.server
+                        .in(lobbyId)
+                        .fetchSockets()
+                        .then((sockets) => {
+                            for (const s of sockets) {
+                                s.data.state = GameState.GameOver;
+                            }
+                        });
                     /* --------- Record EndGame Event -------- */
                     this.recordManager.closeEntry(lobbyId);
                     const record = this.recordManager.getPendingGameRecord(lobbyId);
-
-                    this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
                     /* --------- Send Record on End Game -------- */
                     this.server.to(lobbyId).emit(GameEvents.GameRecord, record);
                     this.recordManager.post(lobbyId);
 
+                    this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
                     this.logDraw(lobbyId);
                     const drawChat: Chat = { raw: 'MATCH NUL', tag: MessageTag.Common };
                     this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(drawChat);
@@ -230,7 +256,7 @@ export class GameGateway implements OnGatewayConnection {
             /* --------- Record Not Found Event -------- */
             this.recordManager.addGameEvent(lobbyId, {
                 accountId: socket.data.accountId,
-                username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+                username: this.accountManager.users.get(socket.data.accountId).credentials.username,
                 gameEvent: GameEvents.NotFound,
                 players: this.roomsManager.lobbies.get(lobbyId).players,
                 coordClic,
@@ -263,6 +289,14 @@ export class GameGateway implements OnGatewayConnection {
                 // Load la next game
                 const game = await this.nextGame(lobbyId, this.games.get(lobbyId).playedGameIds);
                 if (!game) {
+                    this.server
+                        .in(lobbyId)
+                        .fetchSockets()
+                        .then((sockets) => {
+                            for (const s of sockets) {
+                                s.data.state = GameState.GameOver;
+                            }
+                        });
                     const { winningPlayers, message } = this.limitedEndCheck(lobbyId);
                     this.logger.log(`Game ${lobbyId} ended with ${winningPlayers.length} winner(s)`);
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
@@ -298,6 +332,7 @@ export class GameGateway implements OnGatewayConnection {
                 });
                 // Vérifier s'il reste des differences
                 if (this.games.get(lobbyId).differences.length <= 0) {
+                    socket.data.state = GameState.GameOver;
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la pratique');
                     this.roomsManager.lobbies.delete(lobbyId);
                     this.games.delete(lobbyId);
@@ -312,7 +347,7 @@ export class GameGateway implements OnGatewayConnection {
 
     @SubscribeMessage(GameEvents.AbandonGame)
     abandonGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        const username = this.accountManager.users.get(socket.data.accountId).credentials.username;
         const accountId = socket.data.accountId;
         const players = this.roomsManager.lobbies.get(lobbyId).players;
         socket.data.state = GameState.Abandoned;
@@ -329,12 +364,20 @@ export class GameGateway implements OnGatewayConnection {
         this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.AbandonGame, username, accountId } as GameEventData);
 
         this.logger.log(`${socket.data.accountId} abandoned game ${lobbyId}`);
-        const abandonMessage = `${this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username} a abandonné la partie !`;
+        const abandonMessage = `${this.accountManager.users.get(socket.data.accountId).credentials.username} a abandonné la partie !`;
         const abandonChat: Chat = { raw: abandonMessage, tag: MessageTag.Common };
         this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(abandonChat);
         this.server.to(lobbyId).emit(ChannelEvents.GameMessage, abandonChat);
         socket.emit(GameEvents.AbandonGame, this.roomsManager.lobbies.get(lobbyId));
         if (this.roomsManager.lobbies.get(lobbyId).players.length <= 1) {
+            this.server
+                .in(lobbyId)
+                .fetchSockets()
+                .then((sockets) => {
+                    for (const s of sockets) {
+                        s.data.state = GameState.GameOver;
+                    }
+                });
             this.server.to(lobbyId).emit(GameEvents.EndGame, 'Abandon');
 
             /* ------------------ Record Event ------------------ */
@@ -351,7 +394,7 @@ export class GameGateway implements OnGatewayConnection {
 
     @SubscribeMessage(GameEvents.CheatActivated)
     cheatActivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        const username = this.accountManager.users.get(socket.data.accountId).credentials.username;
         const accountId = socket.data.accountId;
         const players = this.roomsManager.lobbies.get(lobbyId).players;
 
@@ -362,7 +405,7 @@ export class GameGateway implements OnGatewayConnection {
 
     @SubscribeMessage(GameEvents.CheatDeactivated)
     cheatDeactivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        const username = this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username;
+        const username = this.accountManager.users.get(socket.data.accountId).credentials.username;
         const accountId = socket.data.accountId;
 
         /* ------------------ Record Event ------------------ */
@@ -373,7 +416,7 @@ export class GameGateway implements OnGatewayConnection {
     @SubscribeMessage(ChannelEvents.SendGameMessage)
     handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
         const chat: Chat = this.messageManager.createMessage(
-            this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+            this.accountManager.users.get(socket.data.accountId).credentials.username,
             message,
             socket.data.accountId,
         );
@@ -388,22 +431,41 @@ export class GameGateway implements OnGatewayConnection {
         socket.data.accountId = socket.handshake.query.id as string;
         socket.data.state = GameState.InGame;
         this.logger.log(`GAME ON de ${socket.data.accountId}`);
+        this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
 
         socket.on('disconnecting', () => {
-            this.logger.log(` ${socket.data.accountId}`);
+            let logMessage = `GAME OUT de ${socket.data.accountId} | `;
+            const lobbyId = Array.from(socket.rooms).find((id) => id !== socket.id)
+                ? ` in lobby(${Array.from(socket.rooms).find((id) => id !== socket.id)})`
+                : '';
             switch (socket.data.state) {
                 case GameState.InGame:
-                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was INGAME`);
+                    logMessage += 'was INGAME';
+                    if (!Array.from(socket.rooms).find((id) => id !== socket.id)) break;
+                    this.abandonGame(
+                        socket,
+                        Array.from(socket.rooms).find((id) => id !== socket.id),
+                    );
                     break;
                 case GameState.Abandoned:
-                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was ABANDONING`);
+                    logMessage += 'was ABANDONING';
                     break;
                 case GameState.Spectate:
-                    this.logger.log(`GAME OUT de ${socket.data.accountId} | was SPECTATING`);
+                    logMessage += 'was SPECTATING';
+                    if (!Array.from(socket.rooms).find((id) => id !== socket.id)) break;
+                    this.abandonGame(
+                        socket,
+                        Array.from(socket.rooms).find((id) => id !== socket.id),
+                    );
+                    break;
+                case GameState.GameOver:
+                    logMessage += 'was OVER the game';
                     break;
                 default:
                     break;
             }
+            this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
+            this.logger.debug(logMessage + lobbyId);
         });
     }
 
@@ -504,5 +566,6 @@ export class GameGateway implements OnGatewayConnection {
                 });
             });
         this.accountManager.fetchUsers();
+        this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
     }
 }

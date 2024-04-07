@@ -58,7 +58,6 @@ export class LoginPageComponent implements OnInit {
                     this.gameManager.username = account.credentials.username;
                     this.translate.setDefaultLang(this.welcomeservice.account.profile.language);
                     this.translate.use(this.welcomeservice.account.profile.language);
-                    // Aucune idée de si les images prédéfénis ont une chance de pas l'avoir et cie versa
                     this.welcomeservice.account.profile.avatar = `http://localhost:3000/avatar/${this.welcomeservice.account.id}.png`;
                     this.router.navigate(['/home']);
                 },
