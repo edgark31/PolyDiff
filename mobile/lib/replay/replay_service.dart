@@ -133,12 +133,16 @@ class ReplayService extends ChangeNotifier {
 
   void _toggleFlashing(bool isPaused) {
     if (_isCheatMode) {
-      // TODO : add replay speed
-      _gameAreaService.toggleCheatMode(_currentDifference);
+      _gameAreaService.toggleCheatMode(_currentDifference, _replaySpeed);
     }
     if (_isDifferenceFound && _currentDifference.isNotEmpty) {
-      // TODO : add replay speed & isPaused
-      _gameAreaService.startBlinking(_currentDifference);
+      _gameAreaService.startBlinking(_currentDifference, _replaySpeed);
+      // TODO: maybe it will create a bug
+      if (isPaused) {
+        _gameAreaService.pauseAnimation();
+      } else {
+        _gameAreaService.resumeAnimation();
+      }
     }
   }
 
@@ -219,16 +223,8 @@ class ReplayService extends ChangeNotifier {
   }
 
   void _handleClickErrorEvent(GameEventData recordedEventData) {
-    _soundService.playErrorSound();
-
-    // TODO: Add replay speed when implemented in gameAreaService
-    if (recordedEventData.isMainCanvas != null &&
-        recordedEventData.isMainCanvas!) {
-      _gameAreaService.showDifferenceNotFoundLeft(recordedEventData.coordClic!);
-    } else {
-      _gameAreaService
-          .showDifferenceNotFoundRight(recordedEventData.coordClic!);
-    }
+    _gameAreaService.showDifferenceNotFound(recordedEventData.coordClic!,
+        recordedEventData.isMainCanvas!, _replaySpeed);
   }
 
   void _handleActivateCheatEvent(GameEventData recordedEventData) {
