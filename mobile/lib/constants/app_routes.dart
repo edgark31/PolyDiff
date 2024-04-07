@@ -7,6 +7,7 @@ import 'package:mobile/pages/create_room_card_page.dart';
 import 'package:mobile/pages/create_room_options_page.dart';
 import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/edit_profile_page.dart';
+import 'package:mobile/pages/friends_page.dart';
 import 'package:mobile/pages/game_page.dart';
 import 'package:mobile/pages/history_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
@@ -107,6 +108,8 @@ class AppRouter {
       case GamePage.routeName:
         return GamePage.route();
 
+      case FriendsPage.routeName:
+        return FriendsPage.route();
       case WatchRecordedGame.routeName:
         return WatchRecordedGame.route();
 

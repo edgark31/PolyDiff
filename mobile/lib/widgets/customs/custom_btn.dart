@@ -25,6 +25,15 @@ class CustomButton extends StatelessWidget {
         height: height,
         child: ClipRRect(
           child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              side: BorderSide(
+                  color: Colors.black, width: 2.0),
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(30.0),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            ),
             onPressed: press,
             child: Row(
               mainAxisSize: MainAxisSize.min,

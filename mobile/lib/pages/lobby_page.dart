@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
@@ -39,7 +40,9 @@ class _LobbyPageState extends State<LobbyPage> {
     List<String> playerNames = lobbyService.lobby.players.map((e) {
       return e.name ?? '';
     }).toList();
-    String gameModeName = lobbyService.gameModes.name;
+    String gameModeName = lobbyService.gameModes == GameModes.Classic
+        ? AppLocalizations.of(context)!.classicMode
+        : AppLocalizations.of(context)!.limitedMode;
 
     if (!lobbyService.isCurrentLobbyInLobbies()) {
       Future.delayed(Duration.zero, () {
@@ -55,26 +58,35 @@ class _LobbyPageState extends State<LobbyPage> {
           socketService.setup(SocketType.Game, infoService.id);
           chatService.setupGame();
           gameManagerService.setupGame();
-          // Future.delayed(Duration(milliseconds: 2000), () {
-          // Waiting for server to emit the created game from creator
           Navigator.pushNamed(context, GAME_ROUTE);
-          // });
         }
       });
     }
 
     return BackgroundContainer(
-      backgroundImagePath: SELECTION_BACKGROUND_PATH,
+      backgroundImagePath: infoService.isThemeLight
+          ? SELECTION_BACKGROUND_PATH
+          : SELECTION_BACKGROUND_PATH_DARK,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Text('Salle d\'attente de la partie en $gameModeName'),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  '${AppLocalizations.of(context)!.lobby_title} $gameModeName',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ChatBox(),
+                  SizedBox(height: 550, child: ChatBox()),
                   playersInfos(context, playerNames: playerNames),
                 ],
               ),
@@ -83,7 +95,7 @@ class _LobbyPageState extends State<LobbyPage> {
                 children: [
                   lobbyButton(context),
                   CustomButton(
-                    text: 'Quitter la salle d\'attente',
+                    text: AppLocalizations.of(context)!.lobby_quit,
                     press: () {
                       print('Quitting lobby');
                       lobbyService.leaveLobby();
@@ -104,11 +116,21 @@ class _LobbyPageState extends State<LobbyPage> {
     final lobbyService = context.watch<LobbyService>();
     int nPlayers = lobbyService.lobby.players.length;
     if (!lobbyService.isCreator) {
-      return Text('En attente du début de la partie...');
+      return Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(4.0),
+        child: Text(
+          AppLocalizations.of(context)!.lobby_waiting,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      );
     }
     if (nPlayers >= 2 && nPlayers <= 4) {
       return CustomButton(
-        text: 'Commencer la partie',
+        text: AppLocalizations.of(context)!.lobby_start,
         press: () {
           print('Starting the lobby');
           lobbyService.startLobby();
@@ -117,8 +139,17 @@ class _LobbyPageState extends State<LobbyPage> {
         },
       );
     } else {
-      return Text(
-          'Vous devez être entre 2 et 4 joueurs pour commencer la partie');
+      return Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(4.0),
+        child: Text(
+          AppLocalizations.of(context)!.lobby_startConditions,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      );
     }
   }
 
@@ -126,13 +157,31 @@ class _LobbyPageState extends State<LobbyPage> {
       {List<String> playerNames = const []}) {
     return Container(
       padding: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.black,
+          width: 2.0,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Nombre de joueurs: ${playerNames.length}/4'),
-          Text('Joueurs en ligne',
-              style: Theme.of(context).textTheme.titleLarge),
-          ...playerNames.map((name) => Text(name)),
+          Text(
+            '${AppLocalizations.of(context)!.lobby_selection_nPlayers}: ${playerNames.length}/4',
+            style: TextStyle(color: Colors.black),
+          ),
+          Text(
+            AppLocalizations.of(context)!.lobby_playersOnline,
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: Colors.black),
+          ),
+          ...playerNames
+              .map((name) => Text(name, style: TextStyle(color: Colors.black))),
         ],
       ),
     );

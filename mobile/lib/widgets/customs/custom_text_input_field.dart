@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomTextInputField extends StatefulWidget {
-  final Function(void)? onInputTextChanged;
+  final Function(String)? onInputTextChanged;
   final String label;
   final TextEditingController controller;
   final String hint;
@@ -37,27 +37,33 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
           controller: widget.controller,
           obscureText: widget.isPassword,
           maxLength: widget.maxLength,
-          onChanged: (value) {
-            widget.onInputTextChanged!(value);
-          },
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold),
+          onChanged: widget.onInputTextChanged,
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             labelText: widget.label,
             labelStyle:
-                TextStyle(color: Theme.of(context).colorScheme.secondary),
+                TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             hintText: widget.hint,
             hintStyle: TextStyle(
-                color: const Color.fromARGB(255, 93, 92, 92),
+                color: Color.fromARGB(255, 192, 190, 190),
                 fontWeight: FontWeight.bold),
             helperText: widget.helperText,
             helperStyle: TextStyle(
-                color: Colors.grey,
+                backgroundColor: Colors.white,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 2),
             errorText: widget.errorText,
-            errorStyle: TextStyle(color: Colors.red),
+            errorStyle:
+                TextStyle(color: Colors.red, backgroundColor: Colors.white),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.red),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.red),
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,

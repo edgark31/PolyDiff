@@ -128,9 +128,20 @@ extension LobbyEventsExtension on LobbyEvents {
   }
 }
 
-enum AccountEvents {
-  UserUpdate,
-  UserCreate,
-  UserDelete,
-  RefreshAccount,
+enum UserEvents { UpdateUsers }
+
+enum AccountEvents { RefreshAccount }
+
+enum FriendEvents {
+  SendRequest, // Envoyer une demande - ROLE de l'envoyeur
+  CancelRequest, // Annuler une demande -  ROLE de l'envoyeur
+  OptRequest, // Accepter ou refuser une demande - ROLE du recepteur
+  OptFavorite, // Ajouter ou retirer un ami des favoris
+  UpdateFriends, // Pour rafraichir la liste d'amis
+  UpdateFoFs, // Pour rafraichir la liste d'amis d'amis
+  UpdateCommonFriends, // Pour rafraichir la liste d'amis communs
+  UpdateSentFriends, // Pour rafraichir la liste des demandes envoyées
+  UpdatePendingFriends, // Pour rafraichir la liste des demandes en attente
+  DeleteFriend, // Pour supprimer un ami
+  ShareScore, // Pour partager un score -- CLIENT LOURD seulement
 }
