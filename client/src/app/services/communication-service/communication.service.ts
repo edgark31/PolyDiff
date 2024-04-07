@@ -68,8 +68,8 @@ export class CommunicationService {
         );
     }
 
-    updateAvatar(username: string, newAvatar: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { username, newAvatar }).pipe(
+    updateAvatar(username: string, avatar: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { username, avatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -79,7 +79,7 @@ export class CommunicationService {
         );
     }
     chooseAvatar(username: string, newAvatar: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/avatar/choose`, { username, newAvatar }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/avatar/choose`, { username, id: newAvatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console

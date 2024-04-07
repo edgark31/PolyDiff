@@ -4,8 +4,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { AccountEvents } from '@common/enums';
 import { ChatMessageGlobal, RankedPlayer } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { ModalAdminComponent } from './../../components/modal-admin/modal-admin.component';
 @Component({
@@ -24,6 +26,8 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
         private readonly gameManager: GameManagerService,
         private readonly router: Router,
         private dialog: MatDialog,
+        public translate: TranslateService,
+        public welcomeService: WelcomeService,
     ) {
         this.messages = [];
         this.rankedPlayers = [];

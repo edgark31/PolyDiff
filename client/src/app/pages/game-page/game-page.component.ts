@@ -15,8 +15,9 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent, MessageTag } from '@common/enums';
-import { Chat, Game, GameRecord, Lobby } from '@common/game-interfaces';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Chat, Game, GameRecord, Lobby, Player } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
+import { Subject, Subscription } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
 @Component({
     selector: 'app-game-page',
@@ -32,6 +33,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     remainingDifference: Coordinate[][];
     timer: number;
     nDifferencesFound: number;
+    playerShare: Player[]; // vu que maintenant le compteur player devient 0 avant fin de game
     endMessage: string;
     messages: Chat[];
     messageGlobal: Chat[];
@@ -49,6 +51,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     lobbySubscription: Subscription;
     lobbiesSubscription: Subscription;
     observersSubscription: Subscription;
+    replayTimerSubscription: Subscription;
+    replayPlayerCountSubscription: Subscription;
+    replayDifferenceFoundSubscription: Subscription;
     private gameSubscription: Subscription;
     private nextGameSubscription: Subscription;
     private endMessageSubscription: Subscription;
@@ -69,6 +74,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         public welcome: WelcomeService,
         public globalChatService: GlobalChatService,
         private navigationService: NavigationService,
+        private translate: TranslateService,
     ) {
         this.nDifferencesFound = 0;
         this.timer = 0;
@@ -96,6 +102,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         }
     }
 
+    translateCharacter(character: string): string {
+        return this.translate.instant(`chat.${character}`);
+    }
+
     getMode(): string {
         return this.navigationService.getPreviousUrl();
     }
@@ -114,6 +124,16 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
             this.messages = this.lobby.chatLog?.chat as Chat[];
             this.messages.forEach((message: Chat) => {
+                if (message.raw.includes('a trouvé une différence')) {
+                    const username = message.raw.split(' ').shift();
+                    message.raw = username + this.translateCharacter('foundDifférence');
+                } else if (message.raw.includes("s'est trompé")) {
+                    const username = message.raw.split(' ').shift();
+                    message.raw = username + this.translateCharacter('error');
+                } else if (message.raw.includes('a abandonné')) {
+                    const username = message.raw.split(' ').shift();
+                    message.raw = username + this.translateCharacter('abandonParty');
+                }
                 if (message.name === this.welcome.account.credentials.username && message.name) message.tag = MessageTag.Sent;
                 else if (message.name !== this.welcome.account.credentials.username && message.name) message.tag = MessageTag.Received;
             });
@@ -139,7 +159,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.timer = timer;
         });
         this.endMessageSubscription = this.gameManager.endMessage$.subscribe((endMessage: string) => {
-            this.endMessage = endMessage;
+            if (endMessage.includes('partie')) {
+                const username = endMessage.split(' ').shift();
+                this.endMessage = username + this.translateCharacter('endParty');
+            } else if (endMessage.includes('pratique')) {
+                const username = endMessage.split(' ').shift();
+                this.endMessage = username + this.translateCharacter('endPractice');
+            }
             this.showEndGameDialog(this.endMessage);
             this.welcome.onChatGame = false;
         });
@@ -148,6 +174,8 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         });
         this.clientSocket.on('game', GameEvents.GameRecord, (record: GameRecord) => {
             this.replayService.setReplay(record);
+            this.timer = record.timeLimit;
+            this.resetGameStats();
         });
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.manage();
@@ -176,18 +204,30 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.lobbySubscription?.unsubscribe();
             this.remainingDifferenceSubscription?.unsubscribe();
             this.observersSubscription?.unsubscribe();
+            this.replayTimerSubscription?.unsubscribe();
+            this.replayDifferenceFoundSubscription?.unsubscribe();
+            this.replayPlayerCountSubscription?.unsubscribe();
 
             this.roomManager.off();
             this.gameManager.off();
             if (!this.isAbandon) {
-                this.clientSocket.disconnect('lobby');
-                this.clientSocket.disconnect('game');
+                // this.clientSocket.disconnect('lobby');
+                // this.clientSocket.disconnect('game');
             }
         }
         if (this.clientSocket.isSocketAlive('auth')) {
             this.globalChatService.off();
         }
         this.chatSubscriptionGlobal?.unsubscribe();
+    }
+
+    resetGameStats(): void {
+        this.playerShare = this.lobby.players.map((player) => ({ ...player }));
+        this.nDifferencesFound = 0;
+        for (const player of this.lobby.players) {
+            player.count = 0;
+        }
+        this.messages = [];
     }
 
     translateGameMode(mode: GameModes): string {
@@ -212,6 +252,16 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     receiveMessage(chat: Chat): void {
+        if (chat.raw.includes('a trouvé une différence')) {
+            const username = chat.raw.split(' ').shift();
+            chat.raw = username + this.translateCharacter('foundDifférence');
+        } else if (chat.raw.includes("s'est trompé")) {
+            const username = chat.raw.split(' ').shift();
+            chat.raw = username + this.translateCharacter('error');
+        } else if (chat.raw.includes('a abandonné')) {
+            const username = chat.raw.split(' ').shift();
+            chat.raw = username + this.translateCharacter('abandonParty');
+        }
         this.messages.push(chat);
     }
 
@@ -221,7 +271,13 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
     showEndGameDialog(endingMessage: string): void {
         this.matDialog.open(GamePageDialogComponent, {
-            data: { action: GamePageEvent.EndGame, message: endingMessage, isReplayMode: this.lobby.mode === this.gameMode.Classic },
+            data: {
+                action: GamePageEvent.EndGame,
+                message: endingMessage,
+                isReplayMode: this.lobby.mode === this.gameMode.Classic,
+                lobby: this.lobby,
+                players: this.playerShare,
+            },
             disableClose: true,
             panelClass: 'dialog',
         });
@@ -231,7 +287,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     showAbandonDialog(): void {
         this.isAbandon = true;
         this.matDialog.open(GamePageDialogComponent, {
-            data: { action: GamePageEvent.Abandon, message: 'Êtes-vous certain de vouloir abandonner la partie ? ', lobby: this.lobby },
+            data: { action: GamePageEvent.Abandon, message: this.translateCharacter('partyAbandon'), lobby: this.lobby },
             disableClose: true,
             panelClass: 'dialog',
         });
@@ -272,15 +328,19 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     private setUpReplay(): void {
-        this.replayService.replayTimer$.pipe(takeUntil(this.onDestroy$)).subscribe((replayTimer: number) => {
-            if (this.isReplayAvailable) {
-                this.timer = replayTimer;
-                this.lobby.players = this.replayService.record.players;
-                if (replayTimer === 0) {
-                    this.messages = [];
-                    this.nDifferencesFound = 0;
+        this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
+            this.timer = replayTimer;
+            this.messages = [];
+        });
+        this.replayPlayerCountSubscription = this.replayService.replayPlayerCount$.subscribe((replayPlayerCount: Player) => {
+            for (const player of this.lobby.players) {
+                if (player.name === replayPlayerCount.name) {
+                    player.count = replayPlayerCount.count;
                 }
             }
+        });
+        this.replayDifferenceFoundSubscription = this.replayService.replayDifferenceFound$.subscribe((nDifferencesFound: number) => {
+            this.nDifferencesFound = nDifferencesFound;
         });
     }
 }

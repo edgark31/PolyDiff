@@ -1,10 +1,14 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { ShareModalComponent } from '@app/components/share-modal/share-modal.component';
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GamePageEvent } from '@common/enums';
-import { Lobby } from '@common/game-interfaces';
+import { Lobby, Player } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
     selector: 'app-game-page-dialog',
     templateUrl: './game-page-dialog.component.html',
@@ -12,12 +16,17 @@ import { Lobby } from '@common/game-interfaces';
 })
 export class GamePageDialogComponent {
     isReplayPaused: boolean;
+    goShare = false;
     // eslint-disable-next-line max-params
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: { action: GamePageEvent; message: string; lobby: Lobby; isReplayMode: boolean },
+        @Inject(MAT_DIALOG_DATA) public data: { action: GamePageEvent; message: string; lobby: Lobby; isReplayMode: boolean; players: Player[] },
         private readonly gameManager: GameManagerService,
         private readonly replayService: ReplayService,
+        public translate: TranslateService,
         public roomManager: RoomManagerService,
+        public router: Router,
+        public clientSocket: ClientSocketService,
+        public dialog: MatDialog,
     ) {
         this.isReplayPaused = false;
 
@@ -29,8 +38,19 @@ export class GamePageDialogComponent {
         this.gameManager.abandonGame(this.data.lobby.lobbyId as string);
     }
 
+    openShareScoreFriend(showShareFriend: boolean): void {
+        this.dialog.open(ShareModalComponent, {
+            data: { showShareFriend, players: this.data.players },
+            disableClose: true,
+            panelClass: 'dialog',
+        });
+    }
+
     leaveGame(): void {
         this.replayService.resetReplay();
+        this.clientSocket.disconnect('lobby');
+        this.clientSocket.disconnect('game');
+        this.goShare = true;
     }
 
     replay() {

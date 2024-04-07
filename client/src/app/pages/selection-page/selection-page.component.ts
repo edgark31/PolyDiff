@@ -2,7 +2,9 @@ import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { CarouselPaginator } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -20,6 +22,8 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
         private readonly communicationService: CommunicationService,
         public router: Router,
         private readonly roomManagerService: RoomManagerService,
+        public translate: TranslateService,
+        public welcome: WelcomeService,
     ) {
         this.gameCarrousel = { hasNext: false, hasPrevious: false, gameCards: [] };
         this.homeRoute = '/home';

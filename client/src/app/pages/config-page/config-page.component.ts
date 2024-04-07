@@ -3,6 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfigDialogComponent } from '@app/components/config-dialog/config-dialog.component';
 import { DeleteResetConfirmationDialogComponent } from '@app/components/delete-reset-confirmation-dialog/delete-reset-confirmation-dialog.component';
 import { Actions } from '@app/enum/delete-reset-actions';
+import { TranslateService } from '@ngx-translate/core';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
 
 @Component({
@@ -14,7 +15,7 @@ export class ConfigPageComponent implements OnDestroy {
     actions: typeof Actions;
     readonly createRoute: string;
 
-    constructor(private readonly dialog: MatDialog, private welcome: WelcomeService) {
+    constructor(private readonly dialog: MatDialog, private welcome: WelcomeService, public translate: TranslateService) {
         this.createRoute = '/create';
         this.actions = Actions;
     }
