@@ -122,7 +122,7 @@ export class AccountManagerService implements OnModuleInit {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');
 
-            accountFound.profile.avatar = avatar;
+            accountFound.profile.avatar = avatar.replace(/^data:image\/\w+;base64,/, '');
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
