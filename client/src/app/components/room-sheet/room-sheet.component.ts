@@ -7,6 +7,7 @@ import { ModalAccessMatchComponent } from '@app/components/modal-access-match/mo
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GameModes } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-room-sheet',
@@ -21,6 +22,7 @@ export class RoomSheetComponent {
         public router: Router, // private readonly dialog: MatDialog
         public roomManager: RoomManagerService,
         private readonly dialog: MatDialog,
+        public translate: TranslateService,
     ) {}
 
     manageGames(lobby: Lobby): void {

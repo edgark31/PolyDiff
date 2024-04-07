@@ -38,6 +38,7 @@
     position: absolute;
     z-index: 2;
     left: 32%;
+    bottom: 50%;
     font-family: 'Troika', sans-serif;
     font-size: 30px;
     color: black;
@@ -59,6 +60,13 @@
     position: absolute;
     left: 32%;
     top: 59%;
+}
+
+.button3 {
+    position: absolute;
+    left: 42%;
+    top: 49%;
+    width: 600px;
 }
 
 .button2 {

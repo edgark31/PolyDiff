@@ -1,5 +1,5 @@
 <div>
-    <p class = "noGame-question">Nous n'avons pas de jeux disponibles pour le moment. Voulez-vous en créer un ?</p>
+    <p class = "noGame-question">{{'gameAvailable.noGame' | translate }}</p>
 </div>
 
 
@@ -7,7 +7,7 @@
     <div class="button-container">
         <button class = "yesButton" mat-button  mat-dialog-close (click)="goToCreate()"></button>
         <img src="./assets/icon/PlayButton.png" alt="yesButton">
-        <div class="centered-yes">Créer</div>
+        <div class="centered-yes">{{'gameAvailable.create' | translate }}</div>
     </div>
 </div>
 
@@ -16,7 +16,7 @@
     <div class="button-container">
     <button class = "noButton" mat-button  mat-dialog-close (click)="goToHome()"></button>
         <img src="./assets/icon/CreateButton.png" alt="noButton" >
-        <div class="centered-no">Quitter</div>
+        <div class="centered-no">{{'gameAvailable.quit' | translate }}</div>
     </div>
 </div>
 <img src="./assets/icon/woodenPopUp.png" class="dialog-image" alt="popup">

@@ -3,18 +3,19 @@
         <app-nav-bar> </app-nav-bar>
     </div>
     <header class="header">
-        <h1 class="header-item flex-column">Choisis ton mode de jeu</h1>
+        <h1 class="header-item flex-column">{{'gameMode.chooseMode' | translate }}</h1>
     </header>
-    <img id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/> 
+    <img *ngIf="welcomeService.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
+    <img  *ngIf="welcomeService.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
     <div class="flex-column">
         <button class="button" routerLink="/classic">
-            <span id = "classic">Mode Classique</span>
+            <span id = "classic">{{'gameMode.classicMode' | translate }}</span>
         </button>
         <button class="button" routerLink="/limited">
-            <span id = "limited">Mode temps limité</span>
+            <span id = "limited">{{'gameMode.limitedMode' | translate }}</span>
         </button>
         <button class="button" routerLink="/selection">
-            <span id = "limited">Mode pratique</span>
+            <span id = "limited">{{'gameMode.practiceMode' | translate }}</span>
         </button>
     </div>
 

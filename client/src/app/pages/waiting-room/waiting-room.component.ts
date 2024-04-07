@@ -9,6 +9,7 @@ import { GameManagerService } from '@app/services/game-manager-service/game-mana
 import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { LobbyEvents, MessageTag } from '@common/enums';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { Chat, Lobby, Player } from './../../../../../common/game-interfaces';
 import { WelcomeService } from './../../services/welcome-service/welcome.service';
@@ -36,6 +37,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         public welcome: WelcomeService,
         public gameManager: GameManagerService,
         public globalChatService: GlobalChatService,
+        public translate: TranslateService,
         private readonly matDialog: MatDialog,
     ) {}
 

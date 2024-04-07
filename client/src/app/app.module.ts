@@ -50,6 +50,7 @@ import { HistoryBoxComponent } from './components/history-box/history-box.compon
 import { HistoryLoginComponent } from './components/history-login/history-login.component';
 import { ImageCanvasComponent } from './components/image-canvas/image-canvas.component';
 import { ImportDialogComponent } from './components/import-dialog-box/import-dialog-box.component';
+import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { ModalAccessMatchComponent } from './components/modal-access-match/modal-access-match.component';
 import { ModalAdminComponent } from './components/modal-admin/modal-admin.component';
@@ -58,7 +59,9 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { NoGameAvailableDialogComponent } from './components/no-game-available-dialog/no-game-available-dialog.component';
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { RoomSheetComponent } from './components/room-sheet/room-sheet.component';
+import { ShareModalComponent } from './components/share-modal/share-modal.component';
 import { WaitingGameDialogComponent } from './components/waiting-game-dialog/waiting-game-dialog.component';
+import { WaitingPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { ClassicTimePageComponent } from './pages/classic-time-page/classic-time-page.component';
 import { ConfigPageComponent } from './pages/config-page/config-page.component';
@@ -73,8 +76,6 @@ import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
 import { WaitingRoomComponent } from './pages/waiting-room/waiting-room.component';
-import { WaitingPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
-import { JoinedPlayerDialogComponent } from './components/joined-player-dialog/joined-player-dialog.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -87,6 +88,7 @@ export const createTranslateLoader = (http: HttpClient) => {
 @NgModule({
     declarations: [
         AppComponent,
+        ShareModalComponent,
         CreationPageComponent,
         MainPageComponent,
         SelectionPageComponent,

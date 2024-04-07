@@ -1,0 +1,101 @@
+.header {
+    padding: 16px;
+    text-align: center;
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    font-family: 'Troika', sans-serif;
+    font-size: 27px;
+}
+
+.container {
+    padding: 16px;
+
+    .header {
+        padding: 16px;
+        text-align: center;
+        font-size: 27px;
+        margin-top: -7px;
+    }
+}
+
+.list {
+    font-size: 20px;
+    // position: absolute;
+    // top: -40px;
+    // right: -150px;
+    position: relative;
+    left: 210px;
+    width: 250px;
+    text-align: center;
+    height: 26px;
+    z-index: 1;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #e8a430;
+    font-family: 'Troika', sans-serif;
+    border-radius: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+::ng-deep .mat-dialog-container {
+    max-width: 700px;
+    width: 700px;
+    max-height: 600px;
+    height: 80%;
+    background-color: '';
+    background-color: #fffdd0;
+}
+
+.friend-container {
+    display: flex;
+    align-items: center;
+    background-color: orange; /* Applique un fond orange à tout le conteneur */
+    margin-bottom: 10px; /* Espace entre les éléments de la liste */
+    padding: 10px; /* Espace à l'intérieur du conteneur */
+    border-radius: 8px; /* Coins arrondis pour le conteneur */
+}
+.name {
+    // position: absolute;
+    font-size: 23px;
+    // right: 1130px;
+    // top: 620px;
+    position: relative;
+    left: 160px;
+    top: -40px;
+    -webkit-text-stroke: 0.2px black;
+    font-family: 'Troika', sans-serif;
+    text-transform: uppercase;
+}
+.profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    position: relative;
+    left: 50px;
+    top: 10px;
+}
+
+div {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.radio-button {
+    margin-right: 20px;
+}
+
+.all-radio-button {
+    margin-top: -30px;
+    font-size: 22px;
+}
+
+.separator {
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    background-color: white;
+}

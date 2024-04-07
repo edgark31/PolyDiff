@@ -1,7 +1,7 @@
 <div id="chat-box">
     <div class="content">
         <div class="contact-profile">
-            <p class="chat">Zone de clavardage</p>
+            <p class="chat">{{'chat.chatZone' | translate }}</p>
             <!-- <button (click)="welcome.onChatGame ? goPageChat() : goPageChatLobby()"> -->
             <button *ngIf="router.url==='/game'" (click)="goPageChatGame()"
                 title="{{ welcome.onChatGame ? 'Cliquez pour passer en chat de la game' : 'Cliquez pour passer en chat global' }}">

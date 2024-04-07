@@ -10,6 +10,7 @@ import { CommunicationService } from '@app/services/communication-service/commun
 import { DifferenceService } from '@app/services/difference-service/difference.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { Coordinate } from '@common/coordinate';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable, map } from 'rxjs';
 
 @Component({
@@ -29,6 +30,7 @@ export class CreationGameDialogComponent implements OnInit {
         private readonly imageService: ImageService,
         private readonly differenceService: DifferenceService,
         private readonly dialogRef: MatDialogRef<CreationPageComponent>,
+        public translate: TranslateService,
         @Inject(MAT_DIALOG_DATA) public radius: number,
     ) {
         this.gameName = '';
