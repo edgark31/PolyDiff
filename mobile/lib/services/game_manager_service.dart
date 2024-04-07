@@ -16,6 +16,7 @@ class GameManagerService extends ChangeNotifier {
   static Game _game = Game.initial();
   static int _time = 0;
   static String? _endGameMessage;
+  static bool _isReplay = false;
 
   // Services
   final SocketService socketService = Get.find();
@@ -29,6 +30,7 @@ class GameManagerService extends ChangeNotifier {
   Game get game => _game;
   int get time => _time;
   String? get endGameMessage => _endGameMessage;
+  static bool get isReplay => _isReplay;
 
   void setGame(Game newGame) {
     print('new Game has been setted $game');
@@ -59,10 +61,17 @@ class GameManagerService extends ChangeNotifier {
     isLeftCanvas = isLeft;
   }
 
+  void setIsReplay(bool isReplay) {
+    _isReplay = isReplay;
+  }
+
   void startGame(String? lobbyId) {
     print("Calling gamemanager start game");
     gameAreaService.coordinates = [];
-    socketService.send(SocketType.Game, GameEvents.StartGame.name, lobbyId);
+
+    if (!_isReplay) {
+      socketService.send(SocketType.Game, GameEvents.StartGame.name, lobbyId);
+    }
   }
 
   void setupGame() {
@@ -95,18 +104,6 @@ class GameManagerService extends ChangeNotifier {
   void abandonGame(String? lobbyId) {
     print('AbandonGame called with id: $lobbyId');
     socketService.send(SocketType.Game, GameEvents.AbandonGame.name, lobbyId);
-  }
-
-  void watchRecordedGame(String lobbyId) {
-    print('ReplayCurrentGame called from gameManagerService with id: $lobbyId');
-    socketService.send(
-        SocketType.Game, GameEvents.WatchRecordedGame.name, lobbyId);
-  }
-
-  void saveGameRecord(String lobbyId) {
-    print('SaveRecordedGame called from gameManagerService with id: $lobbyId');
-    socketService.send(
-        SocketType.Game, GameEvents.SaveGameRecord.name, lobbyId);
   }
 
   void spectateLobby(String? lobbyId) {

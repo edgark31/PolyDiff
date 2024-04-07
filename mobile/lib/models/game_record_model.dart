@@ -56,6 +56,7 @@ class GameEventData {
   final List<int>?
       remainingDifferenceIndex; // Only sent when a difference is found
   final bool? isMainCanvas;
+  final int? time;
 
   GameEventData({
     this.timestamp,
@@ -66,6 +67,7 @@ class GameEventData {
     this.coordClic,
     this.remainingDifferenceIndex,
     this.isMainCanvas,
+    this.time,
   });
 
   factory GameEventData.fromJson(Map<String, dynamic> json) {
@@ -84,6 +86,7 @@ class GameEventData {
           ? List<int>.from(json['remainingDifferenceIndex'])
           : null,
       isMainCanvas: json['isMainCanvas'] ?? false,
+      time: json['time'] ?? 0,
     );
   }
 }
