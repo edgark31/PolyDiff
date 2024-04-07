@@ -1,25 +1,25 @@
 <div mat-dialog-content>
-    <h1 mat-dialog-title>Voici l'image des différences :</h1>
+    <h1 mat-dialog-title>{{'creationGame.differenceImage' | translate }} :</h1>
     <canvas #differenceCanvas id="difference-canvas"></canvas>
     <p>
-        Il y a : <strong> {{ displayDifferences }} </strong> différences
+        {{'creationGame.hasYou' | translate }} <strong> {{ displayDifferences }} </strong> {{'creationGame.differences' | translate }}
     </p>
     <div *ngIf="isNumberOfDifferencesValid(); else differencesInvalid">
-        <p>Veuillez entrer un nom de jeu :</p>
-        <p><strong>Attention : si le nom du jeu existe déjà, le jeu ne sera pas créé</strong></p>
+        <p>{{'creationGame.enterNameGame' | translate }}  :</p>
+        <p><strong>{{'creationGame.gameExisted' | translate }}</strong></p>
         <form [formGroup]="gameNameForm" (ngSubmit)="submitForm()">
             <mat-form-field>
                 <input matInput type="text" placeholder="Entrer le nom de votre jeu" formControlName="name" />
-                <mat-error *ngIf="gameNameForm.controls.name.errors?.required" [ngClass]="'error'"> Le nom ne peut pas être vide</mat-error>
-                <mat-error *ngIf="gameNameForm.controls.name.errors?.pattern" [ngClass]="'error'">Le nom ne peut pas contenir d'espaces</mat-error>
-                <mat-error *ngIf="gameNameForm.controls.name.errors?.gameExists" [ngClass]="'error'">Ce nom de jeu existe déjà</mat-error>
+                <mat-error *ngIf="gameNameForm.controls.name.errors?.required" [ngClass]="'error'"> {{'creationGame.emptyName' | translate }}</mat-error>
+                <mat-error *ngIf="gameNameForm.controls.name.errors?.pattern" [ngClass]="'error'">{{'creationGame.spaceName' | translate }}</mat-error>
+                <mat-error *ngIf="gameNameForm.controls.name.errors?.gameExists" [ngClass]="'error'">{{'creationGame.existName' | translate }}</mat-error>
             </mat-form-field>
-            <button mat-raised-button type="submit" [disabled]="gameNameForm.invalid">Créer un jeu</button>
-            <button mat-button mat-dialog-close type="button">Quitter</button>
+            <button mat-raised-button type="submit" [disabled]="gameNameForm.invalid">{{'creationGame.createGame' | translate }}</button>
+            <button mat-button mat-dialog-close type="button">{{'creationGame.quit' | translate }}</button>
         </form>
     </div>
     <ng-template #differencesInvalid>
-        <p>Il doit y avoir entre 3 et 9 différences. Veuillez recommencer le processus</p>
-        <button mat-button mat-dialog-close>Fermer</button>
+        <p>{{'creationGame.restartProcess' | translate }}</p>
+        <button mat-button mat-dialog-close>{{'creationGame.close' | translate }}</button>
     </ng-template>
 </div>

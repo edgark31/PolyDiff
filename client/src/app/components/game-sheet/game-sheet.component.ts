@@ -15,6 +15,7 @@ import { GameModes, LobbyEvents } from '@common/enums';
 import { WaitingGameDialogComponent } from '@app/components/waiting-game-dialog/waiting-game-dialog.component';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { GameCard, Lobby } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -42,6 +43,7 @@ export class GameSheetComponent implements OnDestroy, OnInit {
         private sanitizer: DomSanitizer,
         private readonly navigationService: NavigationService,
         private readonly gameManagerService: GameManagerService,
+        public translate: TranslateService,
     ) {
         this.actions = Actions;
     }

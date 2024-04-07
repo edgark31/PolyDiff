@@ -8,8 +8,10 @@ import { GameManagerService } from '@app/services/game-manager-service/game-mana
 import { NavigationService } from '@app/services/navigation-service/navigation.service';
 // import { PlayerNameDialogBoxComponent } from '@app/components/player-name-dialog-box/player-name-dialog-box.component';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { ChannelEvents, GameModes, LobbyEvents } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -39,6 +41,8 @@ export class LimitedTimePageComponent implements OnDestroy, OnInit {
         private readonly clientSocket: ClientSocketService,
         private readonly navigationService: NavigationService,
         private cdr: ChangeDetectorRef,
+        public translate: TranslateService,
+        public welcome: WelcomeService,
     ) {
         this.gameModes = GameModes;
         // this.isStartingGame = false;

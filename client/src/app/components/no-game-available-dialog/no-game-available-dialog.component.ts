@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-no-game-available-dialog',
@@ -7,7 +8,7 @@ import { Router } from '@angular/router';
     styleUrls: ['./no-game-available-dialog.component.scss'],
 })
 export class NoGameAvailableDialogComponent {
-    constructor(public router: Router) {}
+    constructor(public router: Router, public translate: TranslateService) {}
 
     goToHome() {
         this.router.navigate(['/']);
