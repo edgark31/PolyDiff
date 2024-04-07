@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
@@ -9,6 +10,7 @@ import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/widgets/abandon_popup.dart';
 import 'package:mobile/widgets/canvas.dart';
@@ -49,7 +51,6 @@ class _GamePageState extends State<GamePage> {
   void initState() {
     super.initState();
     gameManagerService.onGameChange = () {
-      print('Loading new images');
       if (gameManagerService.game.original == '' ||
           gameManagerService.game.modified == '') return;
       imagesFuture = loadImage(
@@ -74,6 +75,8 @@ class _GamePageState extends State<GamePage> {
     final gameAreaService = Provider.of<GameAreaService>(context);
     final gameManagerService = context.watch<GameManagerService>();
     final lobbyService = context.watch<LobbyService>();
+    final infoService = context.watch<InfoService>();
+
     final isPlayerAnObserver = lobbyService.isObserver;
 
     final canPlayerInteract =
@@ -85,7 +88,9 @@ class _GamePageState extends State<GamePage> {
       return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/game_background.jpg"),
+            image: AssetImage(infoService.isThemeLight
+                ? GAME_BACKGROUND_PATH
+                : GAME_BACKGROUND_PATH_DARK),
             fit: BoxFit.cover,
           ),
         ),
@@ -152,7 +157,7 @@ class _GamePageState extends State<GamePage> {
                             EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       ),
                       child: Text(
-                        'TRICHE',
+                        AppLocalizations.of(context)!.gamePage_cheatButton,
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
@@ -208,7 +213,6 @@ class _GamePageState extends State<GamePage> {
                       ],
                     );
                   } else {
-                    print('NOT DONE');
                     return CircularProgressIndicator();
                   }
                 },
@@ -236,16 +240,15 @@ class _GamePageState extends State<GamePage> {
           isPlayerAnObserver
               ? _actionButton(
                   context,
-                  'Quitter',
+                  AppLocalizations.of(context)!.gamePage_leaveButton,
                   () {
-                    print('Quitter pressed');
                     gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
                     Navigator.pushNamed(context, DASHBOARD_ROUTE);
                   },
                 )
               : _actionButton(
                   context,
-                  'Abandonner',
+                  AppLocalizations.of(context)!.gamePage_giveUpButton,
                   () {
                     Future.delayed(Duration.zero, () {
                       if (ModalRoute.of(context)?.isCurrent ?? false) {

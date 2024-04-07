@@ -61,9 +61,12 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                color: Colors.white,
                 padding: const EdgeInsets.all(16.0),
                 margin: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black),
+                ),
                 child: Text(
                   '${AppLocalizations.of(context)!.create_room_options_selectionText} $gameModeName',
                   textAlign: TextAlign.center,
@@ -143,9 +146,12 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     return Center(
       child: Container(
         width: fixedWidth,
-        color: Colors.white,
         padding: const EdgeInsets.all(8.0),
         margin: const EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.black),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -172,9 +178,12 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     return Center(
       child: Container(
         width: fixedWidth,
-        color: Colors.white,
         padding: const EdgeInsets.all(8.0),
         margin: const EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.black),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -207,9 +216,12 @@ class _CreateRoomOptionsPageState extends State<CreateRoomOptionsPage> {
     return Center(
       child: Container(
         width: fixedWidth,
-        color: Colors.white,
         padding: const EdgeInsets.all(8.0),
         margin: const EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.black),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

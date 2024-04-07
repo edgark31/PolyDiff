@@ -52,8 +52,8 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
 
     return BackgroundContainer(
       backgroundImagePath: infoService.isThemeLight
-          ? SELECTION_BACKGROUND_PATH
-          : SELECTION_BACKGROUND_PATH_DARK,
+          ? LIMITED_TIME_BACKGROUND_PATH
+          : LIMITED_TIME_BACKGROUND_PATH_DARK,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         drawer: CustomMenuDrawer(),
@@ -156,11 +156,11 @@ class _LobbySelectionPageState extends State<LobbySelectionPage> {
                         child: areObservers
                             ? const Icon(
                                 Icons.remove_red_eye,
-                                color: Colors.white,
+                                color: Colors.black,
                               )
                             : const Icon(
                                 Icons.visibility_off,
-                                color: Colors.white,
+                                color: Colors.black,
                               )),
                   ]),
             ),

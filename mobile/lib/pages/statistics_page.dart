@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
@@ -30,30 +31,33 @@ class StatisticsPage extends StatelessWidget {
         "${(averageTime ~/ 60).toString().padLeft(2, '0')}:${(averageTime % 60).toString().padLeft(2, '0')}";
     final List<StatisticItem> statistics = [
       StatisticItem(
-          title: "Nombre de parties jouées",
+          title: AppLocalizations.of(context)!.statistics_nGamesPlayers,
           value: infoService.statistics.gamesPlayed.toString(),
           icon: Icons.games_rounded),
       StatisticItem(
-          title: "Nombre de parties gagnées",
+          title: AppLocalizations.of(context)!.statistics_nGamesWon,
           value: infoService.statistics.gameWon.toString(),
           icon: Icons.emoji_events),
       StatisticItem(
-          title: "Moyenne de différences trouvées par partie",
+          title: AppLocalizations.of(context)!.statistics_averageDifferenceFound,
           value: infoService.statistics.averageDifferences.toString(),
           icon: Icons.photo_library_outlined),
       StatisticItem(
-        title: "Temps moyen par partie",
+        title: AppLocalizations.of(context)!.statistics_averageTime,
         value: formattedAverageTime,
         icon: Icons.timer,
       ),
     ];
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: CustomAppBar(
-        title: "Statistiques de $username",
+        title: "${AppLocalizations.of(context)!.statistics_title} $username",
       ),
       body: BackgroundContainer(
-        backgroundImagePath: SELECTION_BACKGROUND_PATH,
+        backgroundImagePath: infoService.isThemeLight
+            ? MENU_BACKGROUND_PATH
+            : MENU_BACKGROUND_PATH_DARK,
         child: SingleChildScrollView(
           child: Column(
             children: [
