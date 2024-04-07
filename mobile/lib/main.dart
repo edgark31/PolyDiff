@@ -9,6 +9,8 @@ import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
+import 'package:mobile/replay/player_data_provider.dart';
+import 'package:mobile/replay/replay_service.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/friend_service.dart';
 import 'package:mobile/services/game_area_service.dart';
@@ -87,7 +89,16 @@ void main() async {
     ChangeNotifierProvider(create: (context) {
       ThemeProvider themeProvider = Get.find();
       return themeProvider;
-    })
+    }),
+
+    ChangeNotifierProvider(create: (context) {
+      PlayersDataProvider playersDataProvider = Get.find();
+      return playersDataProvider;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      ReplayService replayService = Get.find();
+      return replayService;
+    }),
   ], child: const MyApp()));
 }
 
@@ -106,6 +117,8 @@ void initializeServices() {
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
   Get.put(ThemeProvider());
+  Get.put(PlayersDataProvider());
+  Get.put(ReplayService());
 }
 
 class MyApp extends StatelessWidget {

@@ -24,21 +24,21 @@ class _GameRecordDetailsState extends State<GameRecordDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Game: ${gameRecordProvider.gameRecord.game.name}"),
+            Text("Game: ${gameRecordProvider.record.game.name}"),
             Text(
-              "Date: ${gameRecordProvider.gameRecord.date})",
+              "Date: ${gameRecordProvider.record.date})",
             ),
-            Text("Duration: ${gameRecordProvider.gameRecord.duration} seconds"),
+            Text("Duration: ${gameRecordProvider.record.duration} seconds"),
             Text(
-                "Cheat Enabled: ${gameRecordProvider.gameRecord.isCheatEnabled ? "Yes" : "No"}"),
+                "Cheat Enabled: ${gameRecordProvider.record.isCheatEnabled ? "Yes" : "No"}"),
             const Divider(),
             Text("Players:"),
-            ...gameRecordProvider.gameRecord.players
+            ...gameRecordProvider.record.players
                 .map((player) => Text(player.name!))
                 .toList(), // Ensure .toList() is called
             const Divider(),
             Text("Game Events:"),
-            ...gameRecordProvider.gameRecord.gameEvents
+            ...gameRecordProvider.record.gameEvents
                 .map((event) => ListTile(
                       title: Text(event.username ?? "Unknown"),
                       subtitle: Text(event.gameEvent),
@@ -53,7 +53,7 @@ class _GameRecordDetailsState extends State<GameRecordDetails> {
                 text: 'sauvegarder la reprise',
                 press: () {
                   gameRecordProvider
-                      .addAccountIdByDate(gameRecordProvider.gameRecord.date);
+                      .addAccountIdByDate(gameRecordProvider.record.date);
                 }) // Ensure .toList() is called
           ],
         ),

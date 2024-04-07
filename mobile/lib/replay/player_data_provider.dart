@@ -1,33 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/players.dart';
 
-class PlayerDataProvider extends ChangeNotifier {
-  String _playerName = '';
-  String _playerId = '';
-  String _playerAvatar = '';
-  int _playerScore = 0;
+class PlayersDataProvider extends ChangeNotifier {
+  List<Player> _playersData = [];
 
-  String get playerName => _playerName;
-  String get playerId => _playerId;
-  String get playerAvatar => _playerAvatar;
-  int get playerScore => _playerScore;
+  List<Player> get playersData => _playersData;
 
-  void setPlayerName(String newPlayerName) {
-    _playerName = newPlayerName;
+  void setPlayersData(List<Player> playersData) {
+    _playersData = playersData;
     notifyListeners();
   }
 
-  void setPlayerId(String newPlayerId) {
-    _playerId = newPlayerId;
-    notifyListeners();
-  }
-
-  void setPlayerAvatar(String newPlayerAvatar) {
-    _playerAvatar = newPlayerAvatar;
-    notifyListeners();
-  }
-
-  void setPlayerScore(int newPlayerScore) {
-    _playerScore = newPlayerScore;
-    notifyListeners();
+  void updatePlayerData(Player playerData) {
+    final index =
+        _playersData.indexWhere((player) => player.name == player.name);
+    if (index != -1) {
+      _playersData[index] = playerData;
+      notifyListeners();
+    }
   }
 }

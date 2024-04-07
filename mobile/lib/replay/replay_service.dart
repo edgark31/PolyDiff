@@ -3,13 +3,16 @@ import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/models/game_record_model.dart';
+import 'package:mobile/models/players.dart';
 import 'package:mobile/providers/game_record_provider.dart';
+import 'package:mobile/replay/player_data_provider.dart';
 import 'package:mobile/replay/replay_player_util.dart';
 import 'package:mobile/services/services.dart';
 
 class ReplayService extends ChangeNotifier {
   final GameRecordProvider _gameRecordProvider = Get.find();
   final GameManagerService _gameManagerService = Get.find();
+  final PlayersDataProvider _playersDataProvider = Get.find();
   final GameAreaService _gameAreaService = Get.find();
   final SoundService _soundService = Get.find();
 
@@ -38,37 +41,69 @@ class ReplayService extends ChangeNotifier {
 
   int get replayTimer => _replayTimer;
 
+  @override
+  void dispose() {
+    _gameEventsData.clear();
+    _currentDifference.clear();
+    super.dispose();
+  }
+
   void setCurrentGameRecord(GameRecord gameRecord) {
     _gameManagerService.setGameRecord(gameRecord);
-    print("Replay : Game Record: ${_gameRecordProvider.gameRecord}");
+    print("Replay : Game Record: ${_gameRecordProvider.record}");
   }
 
-  @override
-  void start() {
+  void setUpGameReplay() {
     _gameManagerService.setIsReplay(true);
-    _gameManagerService.setGame(_gameRecordProvider.gameRecord.game);
-    _gameManagerService.setTime(_gameRecordProvider.gameRecord.timeLimit);
+    _gameManagerService.setGame(_gameRecordProvider.record.game);
+    _gameManagerService.setTime(_gameRecordProvider.record.timeLimit);
     _gameManagerService.setEndGameMessage(null);
     _isReplaying = true;
-    _gameEventsData = _gameRecordProvider.gameRecord.gameEvents;
+    _gameEventsData = _gameRecordProvider.record.gameEvents;
 
     notifyListeners();
   }
 
-  void resetCurrentGameReplay() {
-    _isReplaying = false;
-    _replaySpeed = SPEED_X1;
-    _currentReplayIndex = 0;
-    _gameEventsData = [];
-
-    notifyListeners();
-  }
-
-  void startReplay() {
+  void start() {
     if (_gameEventsData.isEmpty) return;
+    _isReplaying = true;
 
-    ReplayInterval replayInterval = createReplayInterval();
+    ReplayInterval replayInterval = _replayInterval();
     replayInterval.start();
+  }
+
+  void pause() {
+    _replayInterval().pause();
+
+    notifyListeners();
+  }
+
+  void restart() {
+    _currentReplayIndex = 0;
+
+    _replayInterval().resume();
+
+    notifyListeners();
+  }
+
+  void restartTimer() {
+    _replayTimer = 0;
+    _numberOfFoundDifferences = 0;
+
+    for (Player player in _gameRecordProvider.record.players) {
+      player.count = 0;
+      _playersDataProvider.updatePlayerData(player);
+    }
+    _replayInterval().start();
+  }
+
+  void resetReplay() {
+    _replaySpeed = SPEED_X1;
+    _gameEventsData.clear();
+    _currentReplayIndex = 0;
+    _isReplaying = false;
+
+    notifyListeners();
   }
 
   void setReplaySpeed(int speed) {
@@ -94,6 +129,17 @@ class ReplayService extends ChangeNotifier {
   void setCurrentCoordinates(List<Coordinate> currentDifference) {
     _currentDifference = currentDifference;
     notifyListeners();
+  }
+
+  void _toggleFlashing(bool isPaused) {
+    if (_isCheatMode) {
+      // TODO : add replay speed
+      _gameAreaService.toggleCheatMode(_currentDifference);
+    }
+    if (_isDifferenceFound && _currentDifference.isNotEmpty) {
+      // TODO : add replay speed & isPaused
+      _gameAreaService.startBlinking(_currentDifference);
+    }
   }
 
   void _handleGameEvent(GameEventData recordedEventData) {
@@ -136,7 +182,7 @@ class ReplayService extends ChangeNotifier {
     return nextInterval;
   }
 
-  ReplayInterval createReplayInterval() {
+  ReplayInterval _replayInterval() {
     return ReplayInterval(
         _gameEventsData,
         (eventData) => _handleGameEvent(_gameEventsData[_currentReplayIndex]),
@@ -144,28 +190,28 @@ class ReplayService extends ChangeNotifier {
   }
 
   void _handleGameStartEvent() {
-    _gameManagerService.startGame(_gameRecordProvider.gameRecord.game.lobbyId);
+    _gameManagerService.startGame(_gameRecordProvider.record.game.lobbyId);
   }
 
   void _handleClickFoundEvent(GameEventData recordedEventData) {
-    if (_gameRecordProvider.gameRecord.game.differences == null) return;
+    if (_gameRecordProvider.record.game.differences == null) return;
     if (recordedEventData.coordClic == null) return;
 
-    final int currentIndex = _gameRecordProvider.gameRecord.game.differences!
+    final int currentIndex = _gameRecordProvider.record.game.differences!
         .indexWhere((difference) => difference.any((coord) =>
             coord.x == recordedEventData.coordClic!.x &&
             coord.y == recordedEventData.coordClic!.y));
 
     _isDifferenceFound = true;
     _gameAreaService.showDifferenceFound(
-        _gameRecordProvider.gameRecord.game.differences![currentIndex]);
+        _gameRecordProvider.record.game.differences![currentIndex]);
 
     _soundService.playCorrectSound();
 
     if (recordedEventData.players != null) {
       // TODO: Add player notifier to update counter
       _gameManagerService.updateRemainingDifferences(
-          _gameRecordProvider.gameRecord.game.differences);
+          _gameRecordProvider.record.game.differences);
     }
 
     _numberOfFoundDifferences++;
@@ -202,7 +248,7 @@ class ReplayService extends ChangeNotifier {
         recordedEventData.remainingDifferenceIndex!.isNotEmpty) {
       for (int index in recordedEventData.remainingDifferenceIndex!) {
         List<Coordinate> differencesAtIndex =
-            _gameRecordProvider.gameRecord.game.differences![index];
+            _gameRecordProvider.record.game.differences![index];
 
         remainingCoordinates.add(differencesAtIndex);
       }

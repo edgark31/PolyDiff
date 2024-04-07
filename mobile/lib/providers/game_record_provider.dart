@@ -12,16 +12,16 @@ class GameRecordProvider extends ChangeNotifier {
   final String baseUrl = "$API_URL/records";
   final InfoService _infoService = Get.find();
 
-  GameRecord _gameRecord = DEFAULT_GAME_RECORD;
+  GameRecord _record = DEFAULT_GAME_RECORD;
 
   List<GameRecord> _gameRecords = [];
   List<GameRecord> get gameRecords => _gameRecords;
-  GameRecord get gameRecord => _gameRecord;
+  GameRecord get record => _record;
 
   GameRecordProvider();
 
   setCurrentGameRecord(GameRecord gameRecord) {
-    _gameRecord = gameRecord;
+    _record = gameRecord;
     notifyListeners();
   }
 
@@ -33,7 +33,7 @@ class GameRecordProvider extends ChangeNotifier {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        _gameRecord = GameRecord.fromJson(jsonDecode(response.body));
+        _record = GameRecord.fromJson(jsonDecode(response.body));
 
         print("GameRecord with $date fetched for ${_infoService.username}");
         notifyListeners();
