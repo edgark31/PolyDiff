@@ -12,7 +12,7 @@
 
           <section class="friends-container">
             <h1 *ngIf="pageFriendupdate==='friendUpdate'" class="informationUpdate">{{'friendPage.friendsList' | translate }}</h1>
-            <h1 *ngIf="pageFriendupdate==='friendWait'" class="information">{{'friendPage.requestFriendsSendList' | translate }}</h1>
+            <h1 *ngIf="pageFriendupdate==='friendWait'" class="information">{{'friendPage.pendingFriendsList' | translate }}</h1>
             <h1 *ngIf="pageFriendupdate==='accountUser'" class="informationUpdate">{{'friendPage.allListAccount' | translate }}</h1>
             <form   *ngIf="pageFriendupdate==='accountUser'" class="search-form">
                 <input type="text" placeholder="Rechercher..." [(ngModel)]="searchQuery" name="searchQuery" class="search-input">
@@ -86,7 +86,7 @@
 
                         <div  class="details">
                             <button mat-icon-button (click)='sendFriendPendingAccept(friend.accountId)' >
-                             <mat-icon class="icone favorite-icon">check</mat-icon>
+                             <mat-icon class="icone favorite-icon">person_add</mat-icon>
                             </button>
                         </div>
 
@@ -94,13 +94,17 @@
 
                         <div>
                             <button mat-icon-button (click)='sendFriendPendingRefuse(friend.accountId)' >
-                                <mat-icon class="icone-close">close</mat-icon>
+                                <mat-icon class="icone-close">person_remove</mat-icon>
                             </button>
                         </div>
                     </mat-card-content>
                 </mat-card>
-<div class="pending">
-                <h1 class="informationPending">{{'friendPage.pendingFriendsList' | translate }}</h1>
+            </div>
+
+            <h1 *ngIf="pageFriendupdate==='friendWait'"  class="informationPending"> {{'friendPage.requestFriendsSendList' | translate }}</h1>
+            <div *ngIf="pageFriendupdate==='friendWait'" class="card-container">
+<!-- <div class="pending"> -->
+
 
                 <mat-card class="friend-card"  *ngFor="let friend of  friendSentList">
                     <mat-card-header>
@@ -129,7 +133,7 @@
                         </div>
                     </mat-card-content>
                 </mat-card>
-            </div>
+            <!-- </div> -->
         </div>
 
 
@@ -169,7 +173,7 @@
 
                         <div *ngIf="stateUser(user.name)==='friendPending'"  class="details">
                             <button mat-icon-button (click)='sendFriendPendingAccept(user.accountId)' >
-                             <mat-icon class="icone favorite-icon">check</mat-icon>
+                             <mat-icon class="icone favorite-icon">person_add</mat-icon>
                             </button>
                         </div>
 
@@ -193,7 +197,7 @@
                         <div>
 
                             <button *ngIf="stateUser(user.name)==='friendPending'" mat-icon-button (click)='sendFriendPendingRefuse(user.accountId)' >
-                                <mat-icon class="icone-close">close</mat-icon>
+                                <mat-icon class="icone-close">person_remove</mat-icon>
                             </button>
                         </div>
 

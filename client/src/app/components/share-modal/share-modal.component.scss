@@ -8,11 +8,19 @@
     padding: 0;
 }
 
+.modal {
+    max-height: 400px; /* 100vh est la haire complète de l'écran, -100px ajuste pour d'autres contenus comme un en-tête */
+    overflow-y: auto;
+}
+
 .dialog-image {
     position: absolute;
     left: 50%;
     top: 55%;
     transform: translate(-50%, -50%) scale(0);
+    overflow-y: auto;
+    background-size: cover;
+    background-repeat: no-repeat;
     z-index: 1;
     width: 70%;
     height: 80%;
@@ -80,6 +88,8 @@
     left: 30%;
     margin-bottom: 550px;
     margin-top: 100px;
+    max-height: 400px; /* 100vh est la haire complète de l'écran, -100px ajuste pour d'autres contenus comme un en-tête */
+    overflow-y: auto;
 }
 
 .name {
@@ -87,7 +97,7 @@
     font-weight: bold;
     // color: #3f51b5;
     margin-left: 150px;
-    margin-top: -105px;
+    top: -30px;
     display: inline-block;
 }
 
@@ -109,6 +119,10 @@
     justify-content: center;
     align-items: center;
     transition: background-color 0.3s;
+}
+
+.icone:hover {
+    background-color: rgb(1, 62, 35);
 }
 .waiting-text {
     font-family: 'Troika', sans-serif;
@@ -133,8 +147,38 @@
 
 .button1 {
     position: absolute;
-    left: 55%;
-    bottom: 59%;
+    left: 40%;
+    top: calc(50% + 100px); /* Déplacement de 200px vers le bas */
+    transform: translate(-50%, -50%);
+    z-index: 20;
+}
+
+.button1 {
+    // position: absolute;
+    // left: 55%;
+    // bottom: 35%;
+    position: relative;
+    left: 40%;
+    top: 1600px;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.button3 {
+    // position: absolute;
+    // left: 55%;
+    // bottom: 35%;
+    position: relative;
+    left: 60%;
+    top: 1600px;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+.button3 {
+    position: absolute;
+    left: 60%;
+    top: calc(50% + 100px); /* Déplacement de 200px vers le bas */
+    transform: translate(-50%, -50%);
 }
 
 .dialog-actions {
@@ -142,16 +186,18 @@
     justify-content: center;
     align-items: flex-end;
     height: 100%;
+    position: absolute;
+    top: 300px;
 }
 
 .button2 {
     // position: absolute;
     // left: 55%;
     // bottom: 35%;
-    position: absolute;
-    left: 50%; /* Centrer le bouton horizontalement */
-    bottom: 240%; /* Positionner le bouton plus haut du fond pour le rendre lisible */
-    transform: translateX(-50%); /* Décaler de moitié de la largeur du bouton pour le centrer vraiment */
+    position: relative;
+    left: 50%;
+    top: 1600px;
+    transform: translate(-50%, -50%);
     z-index: 2;
 }
 

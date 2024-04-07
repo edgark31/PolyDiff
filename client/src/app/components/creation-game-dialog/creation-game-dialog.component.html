@@ -2,7 +2,7 @@
     <h1 mat-dialog-title>{{'creationGame.differenceImage' | translate }} :</h1>
     <canvas #differenceCanvas id="difference-canvas"></canvas>
     <p>
-        {{'creationGame.hasYou' | translate }} <strong> {{ displayDifferences }} </strong> différences
+        {{'creationGame.hasYou' | translate }} <strong> {{ displayDifferences }} </strong> {{'creationGame.differences' | translate }}
     </p>
     <div *ngIf="isNumberOfDifferencesValid(); else differencesInvalid">
         <p>{{'creationGame.enterNameGame' | translate }}  :</p>

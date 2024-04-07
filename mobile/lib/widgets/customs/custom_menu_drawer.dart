@@ -35,12 +35,17 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
             accountName: Text(infoService.username),
             accountEmail: Text(infoService.email),
             currentAccountPicture: CustomCircleAvatar(
-              // Provide a unique key to force widget rebuild when avatar changes
               key: ValueKey(avatarProvider.currentAvatarUrl),
 
               imageUrl: avatarProvider.currentAvatarUrl,
             ),
           ),
+          ListTile(
+              tileColor: Colors.transparent,
+              leading: Icon(Icons.home),
+              title: Text('Accueil'),
+              onTap: () => Navigator.pushNamed(context, DASHBOARD_ROUTE)),
+          SizedBox(height: 10),
           ListTile(
               tileColor: Colors.transparent,
               leading: Icon(Icons.account_circle),
@@ -57,7 +62,7 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
               tileColor: Colors.transparent,
               leading: Icon(Icons.line_axis),
               title: Text('Statistiques'),
-              onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE)),
+              onTap: () => Navigator.pushNamed(context, STATISTICS_ROUTE)),
           SizedBox(height: 10),
           ListTile(
               tileColor: Colors.transparent,

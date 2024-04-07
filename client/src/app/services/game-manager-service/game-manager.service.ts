@@ -1,7 +1,6 @@
 import { ChannelEvents, GameEvents, GameModes, LobbyEvents, MessageEvents, MessageTag } from './../../../../../common/enums';
 /* eslint-disable no-console */
 import { Injectable } from '@angular/core';
-import { ReplayEvent } from '@app/interfaces/replay-actions';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
@@ -14,7 +13,6 @@ import { Subject, filter } from 'rxjs';
     providedIn: 'root',
 })
 export class GameManagerService {
-    replayEventsSubject: Subject<ReplayEvent>;
     differences: Coordinate[][];
     gameConstants: GameConfigConst;
     username: string;
@@ -65,7 +63,6 @@ export class GameManagerService {
         this.endMessage = new Subject<string>();
         this.remainingDifference = new Subject<Coordinate[][]>();
         this.opponentDifferencesFound = new Subject<number>();
-        this.replayEventsSubject = new Subject<ReplayEvent>();
         this.isFirstDifferencesFound = new Subject<boolean>();
         this.isGameModeChanged = new Subject<boolean>();
         this.isGamePageRefreshed = new Subject<boolean>();
@@ -293,7 +290,7 @@ export class GameManagerService {
         if (differenceFound.length !== 0) {
             this.soundService.playCorrectSoundDifference(this.welcome.account.profile.onCorrectSound);
             this.gameAreaService.setAllData();
-            this.gameAreaService.replaceDifference(differenceFound);
+            this.gameAreaService.replaceDifference(differenceFound, lobby.lobbyId as string);
         }
     }
 }

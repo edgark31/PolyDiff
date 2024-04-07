@@ -1,7 +1,8 @@
 <div class="infos-container" >
-    <p id = "waiting"> Liste de joueurs.</p>
+    <p id = "waiting"> {{'friendPage.friendsList' | translate }}.</p>
+    <div class="modal">
     <div class = "players-list">
-    <div *ngFor="let friend of  welcome.account.profile.friends; let last = last" class="separator">
+    <div *ngFor="let friend of welcome.account.profile.friends; let last = last" class="separator">
         <div class = "waiting-text">
         <!-- <mat-form-field class="full-width-field"> -->
            <div class="form-avatar">
@@ -16,7 +17,7 @@
                <span *ngIf="!last"></span>
             </div>
        <!-- </mat-form-field> -->
-   </div>
+    </div>   </div>
    <!-- <button mat-icon-button >
     <button mat-dialog-close routerLink="/home" class="icone favorite-icon">Fermer</button>
    </button> -->

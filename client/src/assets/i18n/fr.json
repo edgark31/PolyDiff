@@ -24,7 +24,10 @@
         "changePassword": "Changer le mot de passe",
         "confirmPassword": "Confirmer le mot de passe",
         "songError": "choisissez votre son pour erreur",
-        "songDifference": "choisissez votre son pour différence trouvé"
+        "songDifference": "choisissez votre son pour différence trouvé",
+        "nameEnter": "veuillez écrire votre nom",
+        "passwordEnter": "veuillez écrire votre mot de passe",
+        "confirmPasswordEnter": "veuillez ré-écrire votre mot de passe"
     },
     "button": {
         "deconnexion": "Déconnexion",
@@ -67,13 +70,16 @@
     "chat": {
         "chatZone": "Zone de clavardage ",
         "return": "retour",
-        "foundDifférence": "{{name}} a trouvé une différence !",
-        "error": "{{name}} s'est trompé !"
+        "foundDifférence": " a trouvé une différence !",
+        "error": " s'est trompé !",
+        "endParty": "fin de la partie",
+        "endPractice": "fin de la pratique"
     },
 
     "creationGame": {
         "differenceImage": "Voici l'image des différences ",
         "hasYou": "Il y a :",
+        "differences": "différences",
         "enterNameGame": "Veuillez entrer un nom de jeu",
         "gameExisted": "Attention : si le nom du jeu existe déjà, le jeu ne sera pas créé",
         "emptyName": "Le nom ne peut pas être vide",
@@ -97,9 +103,9 @@
 
     "friendInfo": {
         "friendList": "liste d'amis de",
-        "allFriends": "Tous les amis",
+        "allFriends": "Voir tous les amis",
         "commonFriendList": "liste d'amis en commun entre toi et",
-        "commonFriends": "amis en commun",
+        "commonFriends": "voir les amis en commun",
         "close": "fermer"
     },
 
@@ -191,11 +197,23 @@
         "deleteGames": "Supprimer tous les jeux"
     },
 
+    "configDialog": {
+        "initialTime": "Temps initial du compte à rebours",
+        "beetweenTime": "Temps initial du compte à rebours",
+        "penaltyIndexTime": "Temps de pénalité pour l’utilisation d’un indice",
+        "beetweenTimePenalty": "La valeur du temps de pénalité doit être comprise entre 0 et 10",
+        "winTime": "Temps gagné avec la découverte d’une différence",
+        "beetweenTimeWin": "La valeur du temps gagné doit être comprise entre 0 et 10",
+        "save": "Enregistrer",
+        "reset": "Réinitialiser"
+    },
+
     "createRoom": {
         "time": "temps",
         "cheatMode": "mode Triche",
         "password": "Mot de passe",
-        "createRoom": "créer la salle"
+        "createRoom": "créer la salle",
+        "passwordKey": "Veuillez entrer votre mot de passe"
     },
 
     "creationPage": {
@@ -215,6 +233,13 @@
         "allListAccount": "Liste de comptes",
         "friendsofFriends": "amis",
         "cancel": "annuler"
+    },
+
+    "AccountDialog": {
+        "confirmChange": "Etes-vous sur de vouloir confirmer vos modifications",
+        "deleteFriends": "Etes-vous sur de supprimer cet ami",
+        "yes": "Oui",
+        "no": "Non"
     },
 
     "waitingPage": {

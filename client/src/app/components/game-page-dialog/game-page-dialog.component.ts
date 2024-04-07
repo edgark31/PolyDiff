@@ -6,7 +6,7 @@ import { GameManagerService } from '@app/services/game-manager-service/game-mana
 import { ReplayService } from '@app/services/replay-service/replay.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GamePageEvent } from '@common/enums';
-import { Lobby } from '@common/game-interfaces';
+import { Lobby, Player } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 import { ShareModalComponent } from '../share-modal/share-modal.component';
 @Component({
@@ -19,7 +19,7 @@ export class GamePageDialogComponent {
     goShare = false;
     // eslint-disable-next-line max-params
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: { action: GamePageEvent; message: string; lobby: Lobby; isReplayMode: boolean },
+        @Inject(MAT_DIALOG_DATA) public data: { action: GamePageEvent; message: string; lobby: Lobby; isReplayMode: boolean; players: Player[] },
         private readonly gameManager: GameManagerService,
         private readonly replayService: ReplayService,
         public translate: TranslateService,
@@ -39,8 +39,9 @@ export class GamePageDialogComponent {
     }
 
     openShareScoreFriend(showShareFriend: boolean): void {
+        this.data.players.forEach((player) => console.log('plddddddddddddddddddddddd' + player.count + player.name));
         this.dialog.open(ShareModalComponent, {
-            data: { showShareFriend, players: this.data.lobby?.players },
+            data: { showShareFriend, players: this.data.players },
             disableClose: true,
             panelClass: 'dialog',
         });

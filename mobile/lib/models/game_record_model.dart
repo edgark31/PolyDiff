@@ -2,10 +2,10 @@ import 'package:mobile/models/game.dart';
 import 'package:mobile/models/players.dart';
 
 class GameRecord {
+  final String date;
   final Game game;
   final List<Player> players;
-  final List<String> accountIds;
-  final int date;
+  final List<String>? accountIds;
   final int startTime;
   final int endTime;
   final int duration;
@@ -14,10 +14,10 @@ class GameRecord {
   final List<GameEventData> gameEvents;
 
   GameRecord({
+    required this.date,
+    this.accountIds,
     required this.game,
     required this.players,
-    required this.accountIds,
-    required this.date,
     required this.startTime,
     required this.endTime,
     required this.duration,
@@ -28,11 +28,13 @@ class GameRecord {
 
   factory GameRecord.fromJson(Map<String, dynamic> json) {
     return GameRecord(
+      date: json['date'],
+      accountIds: json['accountIds'] != null
+          ? List<String>.from(json['accountIds'].map((x) => x))
+          : null,
       game: Game.fromJson(json['game']),
       players:
           List<Player>.from(json['players'].map((x) => Player.fromJson(x))),
-      accountIds: List<String>.from(json['accountIds'].map((x) => x)),
-      date: json['date'],
       startTime: json['startTime'],
       endTime: json['endTime'],
       duration: json['duration'],
@@ -45,18 +47,19 @@ class GameRecord {
 }
 
 class GameEventData {
-  final int? timestamp;
-  final String username;
   final String? accountId;
+  final String? username;
+  final int? timestamp;
   final List<Player>? players;
   final String gameEvent;
   final Coordinate? coordClic;
-  final List<int>? remainingDifferenceIndex;
+  final List<int>?
+      remainingDifferenceIndex; // Only sent when a difference is found
   final bool? isMainCanvas;
 
   GameEventData({
     this.timestamp,
-    required this.username,
+    this.username,
     this.accountId,
     this.players,
     required this.gameEvent,
@@ -67,9 +70,9 @@ class GameEventData {
 
   factory GameEventData.fromJson(Map<String, dynamic> json) {
     return GameEventData(
-      timestamp: json['timestamp'],
-      username: json['username'],
-      accountId: json['accountId'],
+      timestamp: json['timestamp'] ?? 0,
+      username: json['username'] ?? '',
+      accountId: json['accountId'] ?? '',
       players: json['players'] != null
           ? List<Player>.from(json['players'].map((x) => Player.fromJson(x)))
           : null,
@@ -80,7 +83,7 @@ class GameEventData {
       remainingDifferenceIndex: json['remainingDifferenceIndex'] != null
           ? List<int>.from(json['remainingDifferenceIndex'])
           : null,
-      isMainCanvas: json['isMainCanvas'],
+      isMainCanvas: json['isMainCanvas'] ?? false,
     );
   }
 }

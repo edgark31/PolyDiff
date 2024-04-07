@@ -21,7 +21,7 @@
         </button>
         <button class="settings-button">
             <span id="classic">{{'createRoom.password' | translate }} : </span>
-            <input matInput type="password" placeholder="Veuillez entrer votre mot de passe" [(ngModel)]="password">
+            <input matInput type="password" placeholder="{{ 'createRoom.passwordKey' | translate }}" [(ngModel)]="password">
         </button>
     </div>
     <footer class="footer flex-column">

@@ -5,6 +5,7 @@ import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
+import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/chat_service.dart';
@@ -27,10 +28,6 @@ void main() async {
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => CameraImageProvider()),
-    ChangeNotifierProvider( create: (context) {
-      SoundService soundService = Get.find();
-      return soundService;
-    }),
     ChangeNotifierProvider(create: (context) {
       RegisterProvider registerProvider = Get.find();
       return registerProvider;
@@ -40,12 +37,16 @@ void main() async {
       return socketService;
     }),
     ChangeNotifierProvider(create: (context) {
-      GameAreaService gameAreaService = Get.find();
-      return gameAreaService;
-    }),
-    ChangeNotifierProvider(create: (context) {
       InfoService infoService = Get.find();
       return infoService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      SoundService soundService = Get.find();
+      return soundService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      GameAreaService gameAreaService = Get.find();
+      return gameAreaService;
     }),
 
     ChangeNotifierProvider(create: (context) {
@@ -59,6 +60,10 @@ void main() async {
     ChangeNotifierProvider(create: (context) {
       GameManagerService gameManagerService = Get.find();
       return gameManagerService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      GameRecordProvider gameRecordProvider = Get.find();
+      return gameRecordProvider;
     }),
     ChangeNotifierProvider(create: (context) {
       ChatService chatService = Get.find();
@@ -78,12 +83,13 @@ void main() async {
 }
 
 void initializeServices() {
-  Get.put(SoundService());
   Get.put(SocketService());
-  Get.put(GameAreaService());
   Get.put(InfoService());
+  Get.put(SoundService());
+  Get.put(GameAreaService());
   Get.put(LobbySelectionService());
   Get.put(LobbyService());
+  Get.put(GameRecordProvider());
   Get.put(GameManagerService());
   Get.put(ChatService());
   Get.put(GameCardService());

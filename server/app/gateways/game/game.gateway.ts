@@ -64,9 +64,13 @@ export class GameGateway implements OnGatewayConnection {
                     this.games.set(lobbyId, clonedGame);
                     if (this.roomsManager.lobbies.get(lobbyId).mode === GameModes.Classic) {
                         const players = this.roomsManager.lobbies.get(lobbyId).players;
-
                         /* --------- Create Game Record on StartGame Event -------- */
-                        this.recordManager.createEntry(clonedGame, players, lobby.isCheatEnabled, this.roomsManager.lobbies.get(lobbyId).timeLimit);
+                        this.recordManager.createEntry(
+                            structuredClone(clonedGame),
+                            players,
+                            lobby.isCheatEnabled,
+                            this.roomsManager.lobbies.get(lobbyId).timeLimit,
+                        );
                         this.logger.verbose(`Game Gateway : Game Event StartGame, Game ${clonedGame.name} created`);
                     }
                 });
@@ -92,7 +96,7 @@ export class GameGateway implements OnGatewayConnection {
                         this.server.to(lobbyId).emit(GameEvents.GameRecord, record);
                     }
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Temps écoulé !');
-                    this.recordManager.pushToDatabase(lobbyId);
+                    this.recordManager.post(lobbyId);
                     this.logDraw(lobbyId);
                     clearInterval(timerId);
                     this.deleteLobby(lobbyId);
@@ -100,6 +104,11 @@ export class GameGateway implements OnGatewayConnection {
                 }
                 this.roomsManager.lobbies.get(lobbyId).time -= 1;
                 this.roomsManager.lobbies.get(lobbyId).timePlayed += 1;
+                /* --------- Record TimerUpdate -------- */
+                this.recordManager.addGameEvent(lobbyId, {
+                    gameEvent: GameEvents.TimerUpdate,
+                    time: this.roomsManager.lobbies.get(lobbyId).time,
+                } as GameEventData);
                 this.server.to(lobbyId).emit(GameEvents.TimerUpdate, this.roomsManager.lobbies.get(lobbyId).time);
             }, DELAY_BEFORE_EMITTING_TIME);
             this.timers.set(lobbyId, timerId);
@@ -151,15 +160,6 @@ export class GameGateway implements OnGatewayConnection {
             if (index !== NOT_FOUND) {
                 this.logger.log(`Found event received from ${socket.data.accountId} in lobby ${lobbyId}`);
 
-                /* --------- Record Difference Found Event -------- */
-                this.recordManager.addGameEvent(lobbyId, {
-                    accountId: socket.data.accountId,
-                    gameEvent: GameEvents.Found,
-                    players: this.roomsManager.lobbies.get(lobbyId).players,
-                    coordClic,
-                    isMainCanvas,
-                } as GameEventData);
-
                 this.roomsManager.lobbies.get(lobbyId).players.find((player) => player.accountId === socket.data.accountId).count++;
                 const difference = this.games.get(lobbyId).differences[index];
                 this.games.get(lobbyId).differences.splice(index, 1);
@@ -168,6 +168,17 @@ export class GameGateway implements OnGatewayConnection {
                     lobby: this.roomsManager.lobbies.get(lobbyId),
                     difference,
                 });
+
+                /* --------- Record Difference Found Event -------- */
+                this.recordManager.addGameEvent(lobbyId, {
+                    accountId: socket.data.accountId,
+                    username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+                    gameEvent: GameEvents.Found,
+                    modified: 'data:image/png;base64,' + (await this.imageManager.observerImage(structuredClone(this.games.get(lobbyId)))),
+                    players: structuredClone(this.roomsManager.lobbies.get(lobbyId).players),
+                    coordClic,
+                    isMainCanvas,
+                } as GameEventData);
 
                 this.roomsManager.lobbies.get(lobbyId).isCheatEnabled ? this.server.to(lobbyId).emit(GameEvents.Cheat, remainingDifferences) : null;
                 this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(commonChat);
@@ -190,7 +201,7 @@ export class GameGateway implements OnGatewayConnection {
                     };
                     this.roomsManager.lobbies.get(lobbyId).chatLog.chat.push(winChat);
                     this.server.to(lobbyId).emit(ChannelEvents.GameMessage, winChat);
-                    this.recordManager.pushToDatabase(lobbyId);
+                    this.recordManager.post(lobbyId);
                     clearInterval(this.timers.get(lobbyId));
                     this.deleteLobby(lobbyId);
                     return;
@@ -204,7 +215,7 @@ export class GameGateway implements OnGatewayConnection {
                     this.server.to(lobbyId).emit(GameEvents.EndGame, 'Fin de la partie');
                     /* --------- Send Record on End Game -------- */
                     this.server.to(lobbyId).emit(GameEvents.GameRecord, record);
-                    this.recordManager.pushToDatabase(lobbyId);
+                    this.recordManager.post(lobbyId);
 
                     this.logDraw(lobbyId);
                     const drawChat: Chat = { raw: 'MATCH NUL', tag: MessageTag.Common };
@@ -331,7 +342,7 @@ export class GameGateway implements OnGatewayConnection {
             this.recordManager.closeEntry(lobbyId);
 
             clearInterval(this.timers.get(lobbyId));
-            this.recordManager.pushToDatabase(lobbyId);
+            this.recordManager.post(lobbyId);
             this.deleteLobby(lobbyId);
             this.logger.log(`Game ${lobbyId} ended because of not enough players`);
             return;
@@ -357,20 +368,6 @@ export class GameGateway implements OnGatewayConnection {
         /* ------------------ Record Event ------------------ */
         this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.CheatDeactivated, username, accountId } as GameEventData);
         this.logger.log(`${username}(${socket.data.accountId}) deactivated cheat in ${lobbyId}`);
-    }
-
-    // TODO : check if async function slows down the sending
-    // sends back the recorded game when user wants to watch it
-    @SubscribeMessage(GameEvents.WatchRecordedGame)
-    async handleGameReplay(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        const record = await this.recordManager.getById(lobbyId);
-        socket.emit(GameEvents.WatchRecordedGame, record);
-    }
-
-    // after replay recorded game, player can save it in his account
-    @SubscribeMessage(GameEvents.SaveGameRecord)
-    addAccountIdToGameRecord(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
-        this.recordManager.updateAccountIds(lobbyId, socket.data.accountId);
     }
 
     @SubscribeMessage(ChannelEvents.SendGameMessage)

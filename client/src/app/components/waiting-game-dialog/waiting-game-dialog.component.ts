@@ -11,5 +11,5 @@ import { TranslateService } from '@ngx-translate/core';
 export class WaitingGameDialogComponent {
     countdown: number;
     refusedMessage: string;
-    constructor(@Inject(MAT_DIALOG_DATA) public data: { lobby: Lobby }, public translate: TranslateService) {}
+    constructor(public translate: TranslateService, @Inject(MAT_DIALOG_DATA) public data: { lobby: Lobby }) {}
 }

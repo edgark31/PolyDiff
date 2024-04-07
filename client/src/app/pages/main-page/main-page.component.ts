@@ -1,9 +1,12 @@
+/* eslint-disable max-params */
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { ChatMessageGlobal } from '@common/game-interfaces';
+import { AccountEvents } from '@common/enums';
+import { ChatMessageGlobal, RankedPlayer } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { ModalAdminComponent } from './../../components/modal-admin/modal-admin.component';
@@ -14,11 +17,12 @@ import { ModalAdminComponent } from './../../components/modal-admin/modal-admin.
 })
 export class MainPageComponent implements AfterViewInit, OnDestroy {
     messages: ChatMessageGlobal[];
+    rankedPlayers: RankedPlayer[];
 
     private onDestroy$: Subject<void>;
 
     constructor(
-        // cprivate readonly clientSocket: ClientSocketService,
+        private readonly clientSocket: ClientSocketService,
         private readonly gameManager: GameManagerService,
         private readonly router: Router,
         private dialog: MatDialog,
@@ -26,6 +30,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
         public welcomeService: WelcomeService,
     ) {
         this.messages = [];
+        this.rankedPlayers = [];
         this.onDestroy$ = new Subject();
     }
 
@@ -36,9 +41,6 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     ngOnDestroy(): void {
         this.onDestroy$.next();
         this.onDestroy$.complete();
-        // if (this.clientSocket.isSocketAlive() !== undefined) {
-        //     this.clientSocket.disconnect();
-        // }
     }
 
     personnalizationpage() {
@@ -50,6 +52,12 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
         //     this.router.navigate(['/login']);
         // }
         this.handleMessages();
+        if (this.clientSocket.isSocketAlive('auth') === undefined) return;
+        this.clientSocket.authSocket.off(AccountEvents.GlobalRanking);
+        this.clientSocket.on('auth', AccountEvents.GlobalRanking, (rankedPlayers: RankedPlayer[]) => {
+            this.rankedPlayers = rankedPlayers.slice(0, 3 + 2);
+        });
+        this.clientSocket.send('auth', AccountEvents.GlobalRanking);
     }
 
     addRightSideMessage(text: string) {

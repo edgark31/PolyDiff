@@ -1,6 +1,7 @@
 import { CreateGameDto } from '@app/model/dto/game/create-game.dto';
 import { GameConstantsDto } from '@app/model/dto/game/game-constants.dto';
 import { GameService } from '@app/services/game/game.service';
+import { RecordManagerService } from '@app/services/record-manager/record-manager.service';
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -8,7 +9,7 @@ import { Response } from 'express';
 @ApiTags('Games')
 @Controller('games')
 export class GameController {
-    constructor(private readonly gameService: GameService) {}
+    constructor(private readonly gameService: GameService, private readonly recordManagerService: RecordManagerService) {}
 
     @Get('/constants')
     async getGameConstants(@Res() response: Response) {
@@ -25,16 +26,6 @@ export class GameController {
         try {
             const gameHistory = await this.gameService.getGamesHistory();
             response.status(HttpStatus.OK).json(gameHistory);
-        } catch (error) {
-            response.status(HttpStatus.NOT_FOUND).send(error.message);
-        }
-    }
-
-    @Get('/records')
-    async getGameRecords(@Res() response: Response) {
-        try {
-            const gameRecords = await this.gameService.getAllGameRecords();
-            response.status(HttpStatus.OK).json(gameRecords);
         } catch (error) {
             response.status(HttpStatus.NOT_FOUND).send(error.message);
         }
@@ -100,16 +91,6 @@ export class GameController {
     async deleteAllGamesHistory(@Res() response: Response) {
         try {
             await this.gameService.deleteAllGamesHistory();
-            response.status(HttpStatus.OK).send();
-        } catch (error) {
-            response.status(HttpStatus.NO_CONTENT).send(error.message);
-        }
-    }
-
-    @Delete('/records')
-    async deleteAllGameRecords(@Res() response: Response) {
-        try {
-            await this.gameService.deleteAllGameRecords();
             response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.NO_CONTENT).send(error.message);

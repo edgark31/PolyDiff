@@ -13,7 +13,6 @@
         "information": "General informations",
         "username": "Username or email",
         "Password": "choose a password",
-        "confirmPassword": "Configuring a password        ",
         "theme": "current theme",
         "language": "current language",
         "statistic": "statistical",
@@ -26,7 +25,10 @@
         "changePassword": "Change password",
         "confirmPassword": "Confirm password",
         "songDifference": "choose your sound for difference found",
-        "songError": "choose your sound for error"
+        "songError": "choose your sound for error",
+        "nameEnter": "please write your name",
+        "passwordEnter": "please write your password",
+        "confirmPasswordEnter": "please re-write your password"
     },
 
     "button": {
@@ -68,12 +70,15 @@
     "chat": {
         "chatZone": "Chat zone",
         "return": "return",
-        "foundDifférence": "{{name}} found a difference!",
-        "error": "{{name}} made a mistake!"
+        "foundDifférence": " found a difference!",
+        "error": " made a mistake!",
+        "endParty": "end of party",
+        "endPractice": "end of the Practice"
     },
     "creationGame": {
         "differenceImage": "Here is the image of the differences",
         "hasYou": "There is:",
+        "differences": "differences",
         "enterNameGame": "Please enter a game name",
         "gameExisted": "Warning: if the game name already exists, the game will not be created",
         "emptyName": "The name cannot be empty",
@@ -95,9 +100,9 @@
     },
     "friendInfo": {
         "friendList": "friend list of",
-        "allFriends": "All friends",
+        "allFriends": "See all friends",
         "commonFriendList": "list of common friends between you and",
-        "commonFriends": "common friends",
+        "commonFriends": "See common friends",
         "close": "close"
     },
 
@@ -185,11 +190,23 @@
         "deleteGames": "Delete All Games"
     },
 
+    "configDialog": {
+        "initialTime": "Initial countdown time",
+        "beetweenTime": "Initial countdown time",
+        "penaltyIndexTime": "Penalty time for using a clue",
+        "beetweenTimePenalty": "The penalty time value must be between 0 and 10",
+        "winTime": "Time gained from discovering a difference",
+        "beetweenTimeWin": "The time gained value must be between 0 and 10",
+        "save": "Save",
+        "reset": "Reset"
+    },
+
     "createRoom": {
         "time": "Time",
         "cheatMode": "Cheat Mode",
         "password": "Password",
-        "createRoom": "Create Room"
+        "createRoom": "Create Room",
+        "passwordKey": "Please enter your password"
     },
 
     "creationPage": {
@@ -210,6 +227,12 @@
         "allListAccount": "Account List",
         "friendsofFriends": "friends",
         "cancel": "cancel"
+    },
+    "AccountDialog": {
+        "confirmChange": "Are you sure you want to confirm your changes?",
+        "deleteFriends": "Are you sure you want to delete this friend?",
+        "yes": "Yes",
+        "no": "No"
     },
 
     "waitingPage": {
