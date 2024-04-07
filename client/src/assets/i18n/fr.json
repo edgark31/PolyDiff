@@ -75,7 +75,9 @@
         "foundDifférence": " a trouvé une différence !",
         "error": " s'est trompé !",
         "endParty": "fin de la partie",
-        "endPractice": "fin de la pratique"
+        "endPractice": "fin de la pratique",
+        "partyAbandon": "Êtes-vous certain de vouloir abandonner la partie ? ",
+        "abandonParty": " a abandonné la partie !"
     },
 
     "creationGame": {

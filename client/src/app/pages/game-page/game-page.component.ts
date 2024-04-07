@@ -130,6 +130,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
                 } else if (message.raw.includes("s'est trompé")) {
                     const username = message.raw.split(' ').shift();
                     message.raw = username + this.translateCharacter('error');
+                } else if (message.raw.includes('a abandonné')) {
+                    const username = message.raw.split(' ').shift();
+                    message.raw = username + this.translateCharacter('abandonParty');
                 }
                 if (message.name === this.welcome.account.credentials.username && message.name) message.tag = MessageTag.Sent;
                 else if (message.name !== this.welcome.account.credentials.username && message.name) message.tag = MessageTag.Received;
@@ -255,6 +258,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         } else if (chat.raw.includes("s'est trompé")) {
             const username = chat.raw.split(' ').shift();
             chat.raw = username + this.translateCharacter('error');
+        } else if (chat.raw.includes('a abandonné')) {
+            const username = chat.raw.split(' ').shift();
+            chat.raw = username + this.translateCharacter('abandonParty');
         }
         this.messages.push(chat);
     }
@@ -281,7 +287,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     showAbandonDialog(): void {
         this.isAbandon = true;
         this.matDialog.open(GamePageDialogComponent, {
-            data: { action: GamePageEvent.Abandon, message: 'Êtes-vous certain de vouloir abandonner la partie ? ', lobby: this.lobby },
+            data: { action: GamePageEvent.Abandon, message: this.translateCharacter('partyAbandon'), lobby: this.lobby },
             disableClose: true,
             panelClass: 'dialog',
         });
