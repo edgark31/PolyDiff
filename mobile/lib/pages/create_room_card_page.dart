@@ -157,8 +157,8 @@ class _CreateRoomCardPageState extends State<CreateRoomCardPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Positioned(
-              top: 1,
+            Container(
+              margin: EdgeInsets.only(top: 1),
               child: Column(
                 children: [
                   Text(card.name),
