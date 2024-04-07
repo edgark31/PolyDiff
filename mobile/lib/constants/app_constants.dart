@@ -53,6 +53,14 @@ GameRecord DEFAULT_GAME_RECORD = GameRecord(
   gameEvents: [],
 );
 
+// Replay speeds
+const int SPEED_X1 = 1;
+const int SPEED_X2 = 2;
+const int SPEED_X4 = 4;
+
+const REPLAY_SPEEDS = [SPEED_X1, SPEED_X2, SPEED_X4];
+const REPLAY_LIMITER = 1000;
+
 // Colors
 const kDark = Colors.black;
 const kLight = Color(0xFFFFFFFF);
