@@ -62,7 +62,6 @@ export class FriendService {
         this.clientSocket.send('auth', FriendEvents.SendRequest, { potentialFriendId: accountId });
     }
     shareScore(accountId: string, score: number): void {
-        console.log('friensbd' + accountId + score);
         this.clientSocket.send('auth', FriendEvents.ShareScore, { friendId: accountId, score });
     }
     sendFavorite(accountId: string, isFavorite: boolean): void {
@@ -70,7 +69,6 @@ export class FriendService {
     }
 
     sendFriendPending(accountId: string, isOpt: boolean): void {
-        console.log('yooooooooooooooooooo' + accountId);
         this.clientSocket.send('auth', FriendEvents.OptRequest, { senderFriendId: accountId, isOpt });
     }
 
@@ -78,17 +76,14 @@ export class FriendService {
         this.clientSocket.send('auth', FriendEvents.CancelRequest, { potentialFriendId: accountId });
     }
     recuperateFriendofFriends(accountId: string): void {
-        console.log(accountId);
         this.clientSocket.send('auth', FriendEvents.UpdateFoFs, { friendId: accountId });
     }
 
     recuperateCommonFriends(accountId: string): void {
-        console.log(accountId);
         this.clientSocket.send('auth', FriendEvents.UpdateCommonFriends, { friendId: accountId });
     }
 
     sendFriendDelete(accountId: string): void {
-        console.log('delete' + accountId);
         this.clientSocket.send('auth', FriendEvents.DeleteFriend, { friendId: accountId });
     }
     manageSocket(): void {
@@ -112,7 +107,6 @@ export class FriendService {
         });
 
         this.clientSocket.on('auth', FriendEvents.UpdateSentFriends, (friends: Friend[]) => {
-            console.log('allez' + friends.length);
             this.friendsSendSubject.next(friends);
         });
 

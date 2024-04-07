@@ -6,10 +6,10 @@ import { Account, Theme } from '@common/game-interfaces';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
 // eslint-disable-next-line no-restricted-imports
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { AccountEvents } from '@common/enums';
 import { Subject } from 'rxjs';
-import { ClientSocketService } from '../client-socket-service/client-socket.service';
 @Injectable({
     providedIn: 'root',
 })

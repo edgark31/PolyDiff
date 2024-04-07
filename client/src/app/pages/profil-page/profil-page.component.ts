@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,7 +20,7 @@ import { Subscription } from 'rxjs';
     templateUrl: './profil-page.component.html',
     styleUrls: ['./profil-page.component.scss'],
 })
-export class ProfilPageComponent implements AfterViewInit, OnInit, OnDestroy {
+export class ProfilPageComponent implements AfterViewInit, OnDestroy {
     selectedValue: string;
     language = LANGUAGES;
     showTable = false;
@@ -41,13 +41,13 @@ export class ProfilPageComponent implements AfterViewInit, OnInit, OnDestroy {
         private readonly matDialog: MatDialog,
     ) {}
 
-    ngOnInit() {
-        // this.welcomeService.updateAccountObservable();
-        // this.accountSubscription = this.welcomeService.accountObservable$.subscribe((account: Account) => {
-        //     this.welcomeService.account = account;
-        // });
-        // this.clientSocket.send('auth', AccountEvents.RefreshAccount);
-    }
+    // ngOnInit() {
+    //     // this.welcomeService.updateAccountObservable();
+    //     // this.accountSubscription = this.welcomeService.accountObservable$.subscribe((account: Account) => {
+    //     //     this.welcomeService.account = account;
+    //     // });
+    //     // this.clientSocket.send('auth', AccountEvents.RefreshAccount);
+    // }
 
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;

@@ -79,7 +79,6 @@ export class CommunicationService {
         );
     }
     chooseAvatar(username: string, newAvatar: string): Observable<void> {
-        console.log(newAvatar);
         return this.http.put<void>(`${this.accountUrl}/avatar/choose`, { username, id: newAvatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {

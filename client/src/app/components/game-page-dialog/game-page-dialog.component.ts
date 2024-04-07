@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ShareModalComponent } from '@app/components/share-modal/share-modal.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
@@ -8,7 +9,6 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 import { GamePageEvent } from '@common/enums';
 import { Lobby, Player } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
-import { ShareModalComponent } from '../share-modal/share-modal.component';
 @Component({
     selector: 'app-game-page-dialog',
     templateUrl: './game-page-dialog.component.html',
@@ -39,7 +39,6 @@ export class GamePageDialogComponent {
     }
 
     openShareScoreFriend(showShareFriend: boolean): void {
-        this.data.players.forEach((player) => console.log('plddddddddddddddddddddddd' + player.count + player.name));
         this.dialog.open(ShareModalComponent, {
             data: { showShareFriend, players: this.data.players },
             disableClose: true,

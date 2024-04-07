@@ -22,9 +22,7 @@ export class ShareModalComponent {
         public welcome: WelcomeService,
         public friendService: FriendService,
         public translate: TranslateService, // private clientSocket: ClientSocketService,
-    ) {
-        console.log('ataille' + this.welcome.account.profile.friends.length);
-    }
+    ) {}
 
     onShare(friendId: string): void {
         const playerAccount = this.data.players.find((player) => player.accountId === this.welcome.account.id);
