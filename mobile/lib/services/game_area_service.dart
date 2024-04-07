@@ -18,10 +18,12 @@ class GameAreaService extends ChangeNotifier {
     ..style = PaintingStyle.fill;
   bool isCheatMode = false;
   bool isClickDisabled = false;
+  bool _isAnimationPaused = false;
   Function? onCheatModeDeactivated;
 
   // Pour animer, il y a trois options SPEED_X1, SPEED_X2 ET SPEED_X3
-  // Par défaut la vitesse c'est SPEED_X1
+  // Par défaut la vitesse c'est SPEED_X1 si tu call showDifferenceFound
+  // avec seulement des coordonnées, même logique pour toggleCheatMode et showDifferenceNotFound
   void showDifferenceFound(List<Coordinate> newCoordinates,
       [int flashingSpeed = SPEED_X1]) {
     soundService.playCorrectSound();
@@ -82,8 +84,14 @@ class GameAreaService extends ChangeNotifier {
     const int timeToBlinkMs = 100;
 
     for (int i = 0; i < 3; i++) {
+      while (_isAnimationPaused) {
+        await Future.delayed(Duration(milliseconds: 100));
+      }
       await showDifferenceColor(
           blinkingPath, (timeToBlinkMs / flashingSpeed).floor(), Colors.green);
+      while (_isAnimationPaused) {
+        await Future.delayed(Duration(milliseconds: 100));
+      }
       await showDifferenceColor(
           blinkingPath, (timeToBlinkMs / flashingSpeed).floor(), Colors.yellow);
     }
@@ -117,7 +125,8 @@ class GameAreaService extends ChangeNotifier {
     cheatBlinkingDifference = cheatPath;
   }
 
-  Future<void> toggleCheatMode(List<Coordinate> coords, [int flashingSpeed = SPEED_X1]) async {
+  Future<void> toggleCheatMode(List<Coordinate> coords,
+      [int flashingSpeed = SPEED_X1]) async {
     isCheatMode = !isCheatMode;
     if (isCheatMode) {
       initCheatPath(coords);
@@ -126,10 +135,21 @@ class GameAreaService extends ChangeNotifier {
       final Path blinkingCheatPath = cheatBlinkingDifference!;
       const int timeToBlinkMs = 150;
       const int cheatModeWaitMs = 250;
-
       while (isCheatMode) {
-        await blinkCheatDifference(blinkingCheatPath, (timeToBlinkMs/flashingSpeed).floor());
-        await blinkCheatDifference(null, (cheatModeWaitMs/flashingSpeed).floor());
+        while (_isAnimationPaused) {
+          await Future.delayed(Duration(milliseconds: 100));
+        }
+
+        await blinkCheatDifference(
+            blinkingCheatPath, (timeToBlinkMs / flashingSpeed).floor());
+
+        while (_isAnimationPaused) {
+          await Future.delayed(Duration(milliseconds: 100));
+        }
+
+        await blinkCheatDifference(
+            null, (cheatModeWaitMs / flashingSpeed).floor());
+
         if (!isCheatMode) {
           break;
         }
@@ -150,6 +170,15 @@ class GameAreaService extends ChangeNotifier {
 
   void resetCheatBlinkingDifference() {
     cheatBlinkingDifference = null;
+    notifyListeners();
+  }
+
+  void pauseAnimation() {
+    _isAnimationPaused = true;
+  }
+
+  void resumeAnimation() {
+    _isAnimationPaused = false;
     notifyListeners();
   }
 }
