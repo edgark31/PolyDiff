@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/troika-2');
+
 form {
     max-width: 400px;
     padding: 16px 16px 24px;
@@ -227,6 +229,18 @@ body {
     text-shadow: 2px 2px 4px #000000;
     -webkit-text-stroke: 0.1px #000000;
     margin-top: -90px;
+    text-transform: uppercase;
+    width: 340px;
+}
+
+.profil-replay {
+    color: #ffa500;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #000000;
+    -webkit-text-stroke: 0.1px #000000;
+    margin-top: 10px;
     text-transform: uppercase;
     width: 340px;
 }
