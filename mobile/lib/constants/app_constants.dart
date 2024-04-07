@@ -77,8 +77,3 @@ const Color kMidOrange = Color.fromRGBO(239, 108, 0, 1);
 const Color kDarkOrange = Color.fromRGBO(230, 81, 0, 1);
 
 const Color kMidPink = Color.fromRGBO(255, 105, 180, 1);
-
-// Replay Speed
-const int SPEED_X1 = 1;
-const int SPEED_X2 = 2;
-const int SPEED_X4 = 4;
