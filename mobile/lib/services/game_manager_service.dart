@@ -169,9 +169,9 @@ class GameManagerService extends ChangeNotifier {
       Coordinate currentCoord =
           Coordinate.fromJson(data as Map<String, dynamic>);
       if (isLeftCanvas) {
-        gameAreaService.showDifferenceNotFoundLeft(currentCoord);
+        gameAreaService.showDifferenceNotFound(currentCoord, true);
       } else {
-        gameAreaService.showDifferenceNotFoundRight(currentCoord);
+        gameAreaService.showDifferenceNotFound(currentCoord, false);
       }
     });
 

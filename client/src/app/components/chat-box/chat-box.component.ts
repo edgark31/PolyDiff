@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NavigationService } from '@app/services/navigation-service/navigation.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Chat } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-chat-box',
@@ -17,7 +18,12 @@ export class ChatBoxComponent {
     @Output() private addLobby: EventEmitter<string>;
     @Output() private addGame: EventEmitter<string>;
 
-    constructor(public router: Router, public welcome: WelcomeService, public navigationService: NavigationService) {
+    constructor(
+        public router: Router,
+        public welcome: WelcomeService,
+        public navigationService: NavigationService,
+        public translate: TranslateService,
+    ) {
         // this.messages = [];
         this.add = new EventEmitter<string>();
         this.addLobby = new EventEmitter<string>();

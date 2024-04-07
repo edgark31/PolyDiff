@@ -4,6 +4,7 @@ import { CanvasPosition } from '@app/enum/canvas-position';
 import { ForegroundService } from '@app/services/foreground-service/foreground.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { ValidationService } from '@app/services/validation-service/validation.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-canvas-under-buttons',
@@ -24,6 +25,7 @@ export class CanvasUnderButtonsComponent {
         private readonly foregroundService: ForegroundService,
         private readonly validationService: ValidationService,
         private readonly matDialog: MatDialog,
+        public translate: TranslateService,
     ) {
         this.canvasPosition = CanvasPosition;
     }
@@ -40,6 +42,10 @@ export class CanvasUnderButtonsComponent {
                 this.matDialog.open(this.invalidImageDialog);
             }
         }
+    }
+
+    translateCharacter(character: string): string {
+        return this.translate.instant(`canvasUnder.${character}`);
     }
 
     resetBackground(): void {

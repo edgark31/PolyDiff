@@ -1,16 +1,16 @@
 <div class="modal">
     <div class="modal-content">
-<h2 mat-dialog-title class="title">Mot de passe administrateur</h2>
+<h2 mat-dialog-title class="title">{{'accesModal.adminPassword' | translate }}</h2>
 <mat-dialog-content>
   <mat-form-field>
-    <mat-label>Mot de passe</mat-label>
+    <mat-label>{{'accesModal.password' | translate }}</mat-label>
     <input matInput class="title" type="password"  (keyup.enter)="onSubmit()" [(ngModel)]="password">
   </mat-form-field>
-  <div *ngIf="isPasswordWrong" class="error-message">Mot de passe incorrect. Veuillez réessayer.</div>
+  <div *ngIf="isPasswordWrong" class="error-message">{{'accesModal.incorrectPassword' | translate }}.</div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button class="submit-button" type="submit" (click)="onCancel()">Annuler</button>
-  <button mat-button class="submit-button" type="submit" (click)="onSubmit()">Confirmer</button>
+  <button mat-button class="submit-button" type="submit" (click)="onCancel()">{{'accesModal.cancel' | translate }}</button>
+  <button mat-button class="submit-button" type="submit" (click)="onSubmit()">{{'accesModal.confirm' | translate }}</button>
 </mat-dialog-actions>
 </div>
 </div>

@@ -8,7 +8,7 @@
         <div class="button-container">
             <button class="create_button" mat-button [routerLink]="createRoute"></button>
             <img src="./assets/icon/CreationPageButton.png" alt="createButton" />
-            <div class="centered-create">Création de jeu</div>
+            <div class="centered-create">{{'pageConfig.createGame' | translate }}</div>
         </div>
     </div>
 
@@ -24,7 +24,7 @@
         <div class="button-container">
             <button mat-raised-button class="reset_button" (click)="openConfirmationDialog(actions.ResetAllTopTimes)"></button>
             <img src="./assets/icon/ResetButton.png" alt="resetButton" />
-            <div class="centered-reset">Réinitialiser les meilleurs temps</div>
+            <div class="centered-reset">{{'pageConfig.resetTimes' | translate }}</div>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
         <div class="button-container">
             <button mat-raised-button class="delete_button" (click)="openConfirmationDialog(actions.DeleteAllGames)"></button>
             <img src="./assets/icon/DeleteAll.png" alt="deleteAll" />
-            <div class="centered-delete">Supprimer tous les jeux</div>
+            <div class="centered-delete">{{'pageConfig.deleteGames' | translate }}</div>
         </div>
     </div>
 </div>
