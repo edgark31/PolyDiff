@@ -41,7 +41,6 @@ export class AccountDialogComponent {
     }
 
     onSubmitDeleteFriend() {
-        console.log('delete' + this.data.accountId);
         this.friendService.sendFriendDelete(this.data.accountId);
     }
 }
