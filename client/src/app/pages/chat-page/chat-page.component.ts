@@ -2,7 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GlobalChatService } from '@app/services/global-chat-service/global-chat.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Chat } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -18,6 +20,8 @@ export class ChatPageComponent implements OnInit, OnDestroy {
         private readonly clientSocketService: ClientSocketService,
         private readonly globalChatService: GlobalChatService,
         private readonly router: Router,
+        public welcome: WelcomeService,
+        public translate: TranslateService,
     ) {}
 
     ngOnInit(): void {

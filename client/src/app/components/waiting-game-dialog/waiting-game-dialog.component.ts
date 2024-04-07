@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Lobby } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-waiting-game-dialog',
@@ -10,5 +11,5 @@ import { Lobby } from '@common/game-interfaces';
 export class WaitingGameDialogComponent {
     countdown: number;
     refusedMessage: string;
-    constructor(@Inject(MAT_DIALOG_DATA) public data: { lobby: Lobby }) {}
+    constructor(public translate: TranslateService, @Inject(MAT_DIALOG_DATA) public data: { lobby: Lobby }) {}
 }

@@ -13,6 +13,7 @@ import {
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GameConfigConst } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -29,6 +30,7 @@ export class ConfigDialogComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private readonly communicationService: CommunicationService,
         private readonly roomManagerService: RoomManagerService,
+        public translate: TranslateService,
     ) {
         this.configConstants = { countdownTime: DEFAULT_COUNTDOWN_VALUE, penaltyTime: DEFAULT_PENALTY_VALUE, bonusTime: DEFAULT_BONUS_VALUE };
         this.configForm = this.formBuilder.group({
