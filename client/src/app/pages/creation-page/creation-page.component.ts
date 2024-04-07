@@ -11,6 +11,8 @@ import { CommunicationService } from '@app/services/communication-service/commun
 import { ForegroundService } from '@app/services/foreground-service/foreground.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-root',
@@ -34,6 +36,8 @@ export class CreationPageComponent implements AfterViewInit {
         private readonly communicationService: CommunicationService,
         private readonly router: Router,
         private readonly roomManagerService: RoomManagerService,
+        public translate: TranslateService,
+        public welcome: WelcomeService,
     ) {
         this.radiusSizes = RADIUS_SIZES;
         this.radius = DEFAULT_RADIUS;

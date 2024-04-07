@@ -12,9 +12,9 @@
             <div class="game-feedback">
                 <h1>Mode : {{ translateGameMode(lobby.mode) }}</h1>
                 &nbsp;
-                <h1>Différences trouvées : {{ nDifferencesFound }}</h1>
+                <h1>{{'game.foundDifference' | translate }} : {{ nDifferencesFound }}</h1>
                 &nbsp;
-                <h1 *ngIf="this.getMode() !== '/practice'">Temps écoulé : {{ timer * 1000 | date: 'mm:ss' }}</h1>
+                <h1 *ngIf="this.getMode() !== '/practice'">{{'game.timerOver' | translate }} : {{ timer * 1000 | date: 'mm:ss' }}</h1>
                 &nbsp;
                 <div *ngIf="lobby.players.length > 0" id="players">
                     <h1 *ngFor="let player of lobby.players">
@@ -60,7 +60,7 @@
         </div>
     </div>
     <button *ngIf="!isReplayAvailable" class="importantButton justified" (click)="showAbandonDialog()">
-        <span id="abandon">Abandonner la partie</span>
+        <span id="abandon">{{'game.abandon' | translate }}</span>
     </button>
 </div>
 <div *ngIf="!welcome.onChatGame">
@@ -69,7 +69,8 @@
 <div *ngIf="welcome.onChatGame">
     <app-chat-box (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
 </div>
- <img id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
+<img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
+<img *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/game_background_dark.png" alt="background"/>
 <div>
     <!-- <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages" [isReplaying]="isReplayAvailable" [gameMode]="game.mode"></app-chat-box> -->
     <app-replay-buttons [isReplayAvailable]="isReplayAvailable"></app-replay-buttons>

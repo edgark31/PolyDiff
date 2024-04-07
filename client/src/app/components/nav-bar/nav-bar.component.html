@@ -1,8 +1,8 @@
 <ul class="navBar">
-    <li class="navElement"><a [routerLink]="homeRoute"> <mat-icon>home</mat-icon>&nbsp;Accueil</a></li>
-    <li class="navElement"><a [routerLink]="chatRoute"><mat-icon>chat icon</mat-icon>&nbsp;Clavardage</a></li>
+    <li class="navElement"><a [routerLink]="homeRoute"> <mat-icon>home</mat-icon>&nbsp;{{'navBar.home' | translate }}</a></li>
+    <li class="navElement"><a [routerLink]="chatRoute"><mat-icon>chat icon</mat-icon>&nbsp;{{'navBar.messageChannel' | translate }}</a></li>
     <li class="navElement"><a (click)="goProfile()"><mat-icon>person</mat-icon>&nbsp;Profile</a></li>
-    <li class="navElement"><a [routerLink]="friendsRoute"><mat-icon>people</mat-icon>&nbsp;Amis</a></li>
+    <li class="navElement"><a [routerLink]="friendsRoute"><mat-icon>diversity_3</mat-icon>&nbsp;{{'navBar.friends' | translate }}</a></li>
     <mat-menu #menu="matMenu" class="custom-menu">
         <button mat-menu-item (click)="goProfile()">Profile</button>
         <button mat-menu-item routerLink="/personalization">{{'button.Settings' | translate }}</button>

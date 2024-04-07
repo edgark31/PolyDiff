@@ -1,15 +1,14 @@
 export enum ReplayActions {
     StartGame = 'StartGame',
-    ClickFound = 'ClickFound',
-    ClickError = 'ClickError',
+    Found = 'Found',
     CaptureMessage = 'CaptureMessage',
-    ActivateCheat = 'ActivateCheat',
-    DeactivateCheat = 'DeactivateCheat',
-    UseHint = 'UseHint',
+    // SEPARATION
     TimerUpdate = 'TimerUpdate',
-    DifferenceFoundUpdate = 'DifferenceFoundUpdate',
-    OpponentDifferencesFoundUpdate = 'OpponentDifferencesFoundUpdate',
+    NotFound = 'NotFound',
+    NextGame = 'NextGame',
+    AbandonGame = 'AbandonGame',
     EndGame = 'EndGame',
-    ActivateThirdHint = 'ActivateThirdHint',
-    DeactivateThirdHint = 'DeactivateThirdHint',
+    Spectate = 'Spectate',
+    CheatActivated = 'CheatActivated',
+    CheatDeactivated = 'CheatDeactivated',
 }

@@ -1,7 +1,7 @@
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
@@ -16,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
     templateUrl: './login-page.component.html',
     styleUrls: ['./login-page.component.scss'],
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
     loginForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
         password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]),
@@ -35,8 +35,17 @@ export class LoginPageComponent {
         this.feedback = '';
     }
 
-    onSubmit() {
+    ngOnInit() {
+        this.welcomeservice.onChatGame = false;
+        this.welcomeservice.onChatLobby = false;
         this.welcomeservice.account = {} as Account;
+        this.welcomeservice.selectLocal = '';
+        this.welcomeservice.selectAvatar = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
+        this.welcomeservice.selectAvatarRegister = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
+        // this.welcomeservice.chooseImage = false;
+    }
+
+    onSubmit() {
         if (this.loginForm.value.username && this.loginForm.value.password) {
             this.creds = {
                 username: this.loginForm.value.username,
@@ -49,7 +58,7 @@ export class LoginPageComponent {
                     this.gameManager.username = account.credentials.username;
                     this.translate.setDefaultLang(this.welcomeservice.account.profile.language);
                     this.translate.use(this.welcomeservice.account.profile.language);
-                    this.welcomeservice.account.profile.avatar = `http://localhost:3000/avatar/${this.gameManager.username}.png`;
+                    this.welcomeservice.account.profile.avatar = `http://localhost:3000/avatar/${this.welcomeservice.account.id}.png`;
                     this.router.navigate(['/home']);
                 },
                 error: (error: HttpErrorResponse) => {

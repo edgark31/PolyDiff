@@ -1,4 +1,5 @@
-<img id="background" src="./assets/background/MenuBackground.jpg" alt="background" />
+<img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
+<img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
 <div class="main">
     <div class="nav-bar-container">
         <app-nav-bar id="nav-bar"></app-nav-bar>
@@ -10,21 +11,21 @@
         </div>
         <div class="player-part">
             <div class="player-count"> 
-                <p> {{ getPlayers().length }}/4 joueurs présents </p> 
+                <p> {{ getPlayers().length }}/4 {{'waitingPage.waitingPlayers' | translate }} </p> 
             </div>
             <div class="waiting-text">
-                <p> Joueur(s) en attente : </p>
+                <p> {{'waitingPage.waitingPlayers' | translate }} : </p>
             </div>
             <div class="players">
                 <div class="player" *ngFor="let player of getPlayers()">
                     <img src="{{'http://localhost:3000/avatar/' + player.accountId + '.png'}}" >
-                    <p>Joueur: {{ player.name }}</p>
+                    <p>{{'waitingPage.player' | translate }}: {{ player.name }}</p>
                 </div>
             </div>
         </div>
     </div>
     <div class="button-container">
-        <button (click)="onStart()" *ngIf="roomManagerService.isOrganizer && getPlayers().length>=2" type="submit">Commencer la partie</button>
-        <button (click)="onQuit()" type="submit">Quitter</button>
+        <button (click)="onStart()" *ngIf="roomManagerService.isOrganizer && getPlayers().length>=2" type="submit">{{'waitingPage.start' | translate }}</button>
+        <button (click)="onQuit()" type="submit">{{'waitingPage.quit' | translate }}</button>
     </div>
 </div>

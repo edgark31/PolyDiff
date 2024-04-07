@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Actions } from '@app/enum/delete-reset-actions';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-delete-reset-confirmation-dialog',
@@ -15,6 +16,7 @@ export class DeleteResetConfirmationDialogComponent {
         @Inject(MAT_DIALOG_DATA) public data: { actions: Actions; gameId: string },
         private readonly roomManagerService: RoomManagerService,
         private readonly communicationService: CommunicationService,
+        public translate: TranslateService,
     ) {
         this.actions = Actions;
     }

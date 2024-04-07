@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/replay/game_record_details_widget.dart';
-import 'package:mobile/services/game_manager_service.dart';
-import 'package:mobile/widgets/customs/custom_btn.dart';
+import 'package:provider/provider.dart';
 
 class WatchRecordedGame extends StatefulWidget {
   const WatchRecordedGame({super.key});
@@ -22,16 +22,31 @@ class WatchRecordedGame extends StatefulWidget {
 }
 
 class _WatchRecordedGameState extends State<WatchRecordedGame> {
-  final GameManagerService gameManagerService = Get.find();
+  final GameRecordProvider gameRecordProvider = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+    gameRecordProvider.getAll();
+    print('Getting all game records');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('Watch Recorded Game'),
-        GameRecordDetails(gameRecord: gameManagerService.gameRecord),
-        // TODO: implement save account id in the game record
-        CustomButton(text: 'Sauvegarder la reprise vidéo', press: () {}),
-      ],
-    );
+    final gameRecordProvider = Provider.of<GameRecordProvider>(context);
+
+    if (gameRecordProvider.gameRecords.isNotEmpty) {
+      Future.delayed(Duration.zero, () {
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) {
+              return GameRecordDetails();
+            });
+      });
+    } else {
+      return const Center(child: Text("nothing to show"));
+    }
+    return const Center(child: Text("nothing to show"));
   }
 }

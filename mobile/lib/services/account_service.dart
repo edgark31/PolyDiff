@@ -24,7 +24,7 @@ class AccountService {
       );
       if (response.statusCode == 200) {
         print('Modified successfully ');
-        return "Modified profile successfully";
+        return null;
       }
     } catch (error) {
       return 'Error: $error';
