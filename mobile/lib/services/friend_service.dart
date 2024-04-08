@@ -25,6 +25,7 @@ class FriendService extends ChangeNotifier {
   List<Friend> get commonFriend => _commonFriends;
 
   void updateUsersList(List<User> allUsers) {
+    allUsers.sort((a, b) => a.name.compareTo(b.name));
     _users = allUsers;
     notifyListeners();
   }
