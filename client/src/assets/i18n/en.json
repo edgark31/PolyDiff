@@ -147,7 +147,8 @@
     "navBar": {
         "home": "Home",
         "messageChannel": "Chat",
-        "friends": "Friends"
+        "friends": "Friends",
+        "account": "Account"
     },
     "adminModal": {
         "adminPassword": "Administrator Password",

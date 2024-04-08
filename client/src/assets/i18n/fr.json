@@ -150,7 +150,8 @@
     "navBar": {
         "home": "Accueil",
         "messageChannel": "Clavardage",
-        "friends": "amis"
+        "friends": "Amis",
+        "account": "Compte"
     },
 
     "adminModal": {
