@@ -9,6 +9,7 @@ import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/edit_profile_page.dart';
 import 'package:mobile/pages/friends_page.dart';
 import 'package:mobile/pages/game_page.dart';
+import 'package:mobile/pages/game_record_selection_page.dart';
 import 'package:mobile/pages/history_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
@@ -44,7 +45,7 @@ const String PROFILE_ROUTE = '/profile';
 const String EDIT_PROFILE_ROUTE = '$PROFILE_ROUTE/edit';
 const String STATISTICS_ROUTE = '$PROFILE_ROUTE/statistics';
 const String HISTORY_ROUTE = '$PROFILE_ROUTE/history';
-const String VIDEOS_ROUTE = '$PROFILE_ROUTE/videos';
+const String REPLAYS_SELECTION_ROUTE = '$PROFILE_ROUTE/replays';
 
 // FRIENDS
 const String FRIENDS_ROUTE = '/friends';
@@ -107,6 +108,9 @@ class AppRouter {
 
       case GamePage.routeName:
         return GamePage.route();
+
+      case GameRecordSelectionPage.routeName:
+        return GameRecordSelectionPage.route();
 
       case ReplayGamePage.routeName:
         return ReplayGamePage.route();
