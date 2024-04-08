@@ -274,5 +274,10 @@
         "twoAreas": "pour les deux zones",
         "backgrounds": "les arrières-plans",
         "background": "l'arrière-plan"
+    },
+
+    "ranking": {
+        "loading": "Chargement...",
+        "global": "Classement Global"
     }
 }

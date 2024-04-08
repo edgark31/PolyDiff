@@ -267,5 +267,10 @@
         "twoAreas": "for both areas",
         "backgrounds": "the backgrounds",
         "background": "background"
+    },
+
+    "ranking": {
+        "loading": "Loading...",
+        "global": "Global Ranking"
     }
 }
