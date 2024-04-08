@@ -27,6 +27,7 @@ export class FriendManagerService {
         potentialFriendAccount.profile.friendRequests.push(senderFriendId);
         await potentialFriendAccount.save();
         this.accountManager.users.get(potentialFriendId).profile.friendRequests.push(senderFriendId);
+        await this.accountManager.fetchUsers();
     }
 
     async cancelRequest(senderFriendId: string, potentialFriendId: string): Promise<void> {
