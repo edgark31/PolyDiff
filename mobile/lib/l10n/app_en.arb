@@ -75,6 +75,8 @@
     "edit_profile_cancel": "CANCEL",
     "edit_profile_save": "SAVE",
     "dashboard_welcomeText": "Welcome",
+    "dashboard_gameModes": "Play",
+    "gamemodes_chooseText": "Choose your game mode",
     "friend_pageTitle": "Friends Page",
     "friend_allFriendsButton": "All Friends",
     "friend_pendingButton": "Pending",
