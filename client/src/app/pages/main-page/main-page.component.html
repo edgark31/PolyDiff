@@ -1,12 +1,10 @@
 <div class="container flex-column">
-    <div>
-        <app-nav-bar> </app-nav-bar>
-    </div>
+    <app-nav-bar> </app-nav-bar>
     <header class="header">
         <h1 class="header-item flex-column">{{'mainPage.welcome' | translate }}</h1>
     </header>
     <img *ngIf="welcomeService.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
-    <img  *ngIf="welcomeService.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
+    <img *ngIf="welcomeService.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
     <div class="flex-column">
         <button class="button" routerLink="/game-mode">
             <span id = "limited">{{'mainPage.gameMode' | translate }}</span>
