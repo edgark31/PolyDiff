@@ -10,6 +10,7 @@ import 'package:mobile/replay/replay_service.dart';
 import 'package:mobile/services/services.dart';
 import 'package:mobile/widgets/canvas.dart';
 import 'package:mobile/widgets/game_loading.dart';
+import 'package:mobile/widgets/timeline_widget.dart';
 import 'package:provider/provider.dart';
 // Import other required packages
 
@@ -60,8 +61,12 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
 
   @override
   Widget build(BuildContext context) {
+    final gameManagerService = context.watch<GameManagerService>();
     final gameRecordProvider = context.watch<GameRecordProvider>();
     final infoService = context.watch<InfoService>();
+    int timer = gameManagerService.time;
+    String formattedTime =
+        "${(timer ~/ 60).toString().padLeft(2, '0')}:${(timer % 60).toString().padLeft(2, '0')}";
 
     String gameMode = AppLocalizations.of(context)!.classicMode;
 
@@ -115,7 +120,7 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
                   ] else
                     SizedBox(width: 50),
                   SizedBox(
-                    width: 100,
+                    width: 200,
                     height: 1000,
                     child: SizedBox(
                       width: 100,
@@ -132,6 +137,15 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
                                 textAlign: TextAlign.center,
                               ),
                               SizedBox(width: 100),
+                              Text(
+                                '${AppLocalizations.of(context)!.gameInfos_timeTitle} : $formattedTime',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             ],
                           ),
                           Text(
@@ -190,6 +204,16 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
                                 return CircularProgressIndicator();
                               }
                             },
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: TimelineWidget(
+                                replayDuration:
+                                    gameRecordProvider.record.duration),
                           ),
                         ],
                       ),

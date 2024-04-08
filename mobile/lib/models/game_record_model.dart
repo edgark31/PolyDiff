@@ -108,8 +108,10 @@ class GameRecordCard {
 
   // Conversion from GameRecord to GameRecordPreview
   factory GameRecordCard.fromGameRecord(GameRecord record) {
-    final durationFormatted =
-        "${(record.duration ~/ 3600).toString().padLeft(2, '0')}:${((record.duration % 3600) ~/ 60).toString().padLeft(2, '0')}:${(record.duration % 60).toString().padLeft(2, '0')}";
+    final durationInSeconds = record.duration ~/ 1000;
+    final minutes = (durationInSeconds ~/ 60).toString().padLeft(2, '0');
+    final seconds = (durationInSeconds % 60).toString().padLeft(2, '0');
+    final durationFormatted = "$minutes:$seconds";
 
     return GameRecordCard(
       gameName: record.game.name,

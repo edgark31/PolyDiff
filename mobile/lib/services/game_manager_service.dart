@@ -185,6 +185,7 @@ class GameManagerService extends ChangeNotifier {
     });
 
     socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
+      lobbyService.lobby.nDifferences = 0;
       setEndGameMessage(data as String?);
       disconnectSockets();
     });

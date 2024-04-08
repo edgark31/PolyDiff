@@ -43,6 +43,9 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
           final gameRecord = gameRecordProvider.record;
           return GameRecordCardWidget(
               gameRecordCard: GameRecordCard.fromGameRecord(gameRecord),
+              onReplay: () {
+                Navigator.pushNamed(context, REPLAY_ROUTE);
+              },
               onDelete: () =>
                   gameRecordProvider.deleteAccountIdByDate(gameRecord.date));
         },

@@ -14,10 +14,9 @@ class GameRecordProvider extends ChangeNotifier {
 
   GameRecord _record = DEFAULT_GAME_RECORD;
 
-  List<GameRecord> _gameRecords = [];
   List<GameRecordCard> _gameRecordCards = [];
 
-  List<GameRecord> get gameRecords => _gameRecords;
+  List<GameRecordCard> get gameRecordCards => _gameRecordCards;
   GameRecord get record => _record;
 
   GameRecordProvider();
@@ -74,7 +73,8 @@ class GameRecordProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> getAll() async {
+  // get all accounts game record cards save in the database
+  Future<String?> getAllSaved() async {
     final accountId = _infoService.id;
     final url = Uri.parse('$baseUrl?accountId=$accountId');
 
@@ -82,13 +82,9 @@ class GameRecordProvider extends ChangeNotifier {
       final response = await http.get(url);
       final List<dynamic> decodedJson = json.decode(response.body);
 
-      _gameRecords = decodedJson
-          .map((gameRecord) => GameRecord.fromJson(gameRecord))
-          .toList();
-
-      // To previewing the game records in the profile page
-      _gameRecordCards = _gameRecords
-          .map((gameRecord) => GameRecordCard.fromGameRecord(gameRecord))
+      _gameRecordCards = decodedJson
+          .map((gameRecord) =>
+              GameRecordCard.fromGameRecord(GameRecord.fromJson(gameRecord)))
           .toList();
 
       print("GameRecords fetched for ${_infoService.username}");
@@ -140,10 +136,5 @@ class GameRecordProvider extends ChangeNotifier {
       print('Error fetching game record: $error');
       return 'Error: $error';
     }
-  }
-
-  setGameRecordByDate(String date) {
-    _record = _gameRecords.firstWhere((gameRecord) => gameRecord.date == date);
-    notifyListeners();
   }
 }

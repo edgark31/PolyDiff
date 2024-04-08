@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/game_record_model.dart';
-import 'package:mobile/providers/game_record_provider.dart';
-import 'package:provider/provider.dart';
 
 class GameRecordCardWidget extends StatelessWidget {
   final GameRecordCard gameRecordCard;
   final VoidCallback onDelete;
+  final VoidCallback onReplay;
 
   const GameRecordCardWidget(
-      {super.key, required this.gameRecordCard, required this.onDelete});
+      {super.key,
+      required this.gameRecordCard,
+      required this.onReplay,
+      required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
-    final GameRecordProvider gameRecordProvider =
-        context.watch<GameRecordProvider>();
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -32,10 +31,7 @@ class GameRecordCardWidget extends StatelessWidget {
               TextButton(
                 // TODO: ajuster avec la translation
                 child: const Text('REJOUER'),
-                onPressed: () {
-                  gameRecordProvider.setGameRecordByDate(gameRecordCard.date);
-                  Navigator.pushNamed(context, REPLAY_ROUTE);
-                },
+                onPressed: onReplay,
               ),
               const SizedBox(width: 8),
               IconButton(
