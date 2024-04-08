@@ -20,6 +20,7 @@ import { WelcomeService } from './../../services/welcome-service/welcome.service
 })
 export class WaitingRoomComponent implements OnInit, OnDestroy {
     lobby: Lobby;
+    isAbandonGame: boolean = false;
     lobbies: Lobby[] = [];
     messages: Chat[] = [];
     messageGlobal: Chat[] = [];
@@ -77,7 +78,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.dialog.closeAll();
         });
         this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {
-            this.router.navigate(['/game-mode']);
+            this.router.navigate(['/home']);
         });
 
         this.clientSocketService.on('lobby', LobbyEvents.Start, () => {
@@ -104,6 +105,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     }
 
     onQuit(): void {
+        this.isAbandonGame = true;
         this.roomManagerService.onQuit(this.lobby);
     }
 
@@ -137,7 +139,10 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         if (this.clientSocketService.isSocketAlive('lobby')) {
-            // this.clientSocketService.disconnect('lobby');
+            if (this.isAbandonGame) {
+                this.clientSocketService.disconnect('lobby');
+                this.roomManagerService.off();
+            }
             this.lobbySubscription?.unsubscribe();
             this.chatSubscription?.unsubscribe();
             this.requestSubscription?.unsubscribe();
