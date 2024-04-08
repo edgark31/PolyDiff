@@ -37,6 +37,7 @@ class FriendService extends ChangeNotifier {
   }
 
   void updateSentFriends(List<Friend> friends) {
+    friends.sort((a, b) => a.name.compareTo(b.name));
     _sentFriends = friends;
     notifyListeners();
   }
