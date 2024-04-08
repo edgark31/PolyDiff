@@ -26,8 +26,8 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
   @override
   Widget build(BuildContext context) {
     final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
-    final InfoService infoService = context.read<InfoService>();
-    final SocketService socketService = context.read<SocketService>();
+    final InfoService infoService = context.watch<InfoService>();
+    final SocketService socketService = context.watch<SocketService>();
 
     return Drawer(
       child: ListView(

@@ -49,7 +49,7 @@ class _ChatBoxState extends State<ChatBox> {
 
   void _setInitialChatMode() {
     final routeName = ModalRoute.of(context)?.settings.name;
-    final lobbyService = context.read<LobbyService>();
+    final lobbyService = context.watch<LobbyService>();
 
     setState(() {
       bool canPageShowLobbyMessages =
