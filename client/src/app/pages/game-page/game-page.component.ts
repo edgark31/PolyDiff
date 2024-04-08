@@ -148,7 +148,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.setUpGame();
         });
         this.clientSocket.on('game', GameEvents.AbandonGame, () => {
-            this.router.navigate(['/game-mode']);
+            this.router.navigate(['/home']);
             this.clientSocket.disconnect('lobby');
             this.clientSocket.disconnect('game');
         });

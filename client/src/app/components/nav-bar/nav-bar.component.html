@@ -1,12 +1,12 @@
 <ul class="navBar">
-    <li class="navElement"><a [routerLink]="homeRoute"> <mat-icon>home</mat-icon>&nbsp;{{'navBar.home' | translate }}</a></li>
-    <li class="navElement"><a [routerLink]="chatRoute"><mat-icon>chat icon</mat-icon>&nbsp;{{'navBar.messageChannel' | translate }}</a></li>
+    <li class="navElement"><a (click)="onSubmitHome()"> <mat-icon>home</mat-icon>&nbsp;{{'navBar.home' | translate }}</a></li>
+    <li class="navElement"><a (click)="onSubmitChat()"><mat-icon>chat icon</mat-icon>&nbsp;{{'navBar.messageChannel' | translate }}</a></li>
     <li class="navElement"><a (click)="goProfile()"><mat-icon>person</mat-icon>&nbsp;Profile</a></li>
-    <li class="navElement"><a [routerLink]="friendsRoute"><mat-icon>diversity_3</mat-icon>&nbsp;{{'navBar.friends' | translate }}</a></li>
+    <li class="navElement"><a (click)="onSubmitFriends()"><mat-icon>diversity_3</mat-icon>&nbsp;{{'navBar.friends' | translate }}</a></li>
     <mat-menu #menu="matMenu" class="custom-menu">
         <button mat-menu-item (click)="goProfile()">Profile</button>
-        <button mat-menu-item routerLink="/personalization">{{'button.Settings' | translate }}</button>
-        <button mat-menu-item (click)="onSubmitHome()">{{'button.deconnexion' | translate }}</button>
+        <button mat-menu-item (click)="onSubmitSettings()">{{'button.Settings' | translate }}</button>
+        <button mat-menu-item (click)="onSubmitLogin()">{{'button.deconnexion' | translate }}</button>
       </mat-menu>
 
       <button mat-icon-button [matMenuTriggerFor]="menu" class="button-back" >
