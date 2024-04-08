@@ -194,7 +194,7 @@ class _GamePageState extends State<GamePage> {
                       ),
                     ),
                   ] else
-                    SizedBox(width: 50),
+                    SizedBox(width: 120),
                   SizedBox(
                     height: 200,
                     width: 1000,
