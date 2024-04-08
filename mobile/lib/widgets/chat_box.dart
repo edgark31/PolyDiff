@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/services/chat_service.dart';
@@ -129,7 +130,7 @@ class _ChatBoxState extends State<ChatBox> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "ZONE DE CLAVARDAGE",
+                  AppLocalizations.of(context)!.chat_box_title,
                 ),
                 Row(
                   mainAxisAlignment: canDisplayLobbyMessages
@@ -137,14 +138,18 @@ class _ChatBoxState extends State<ChatBox> {
                       : MainAxisAlignment.center,
                   children: [
                     Text(
-                      isGlobalChat ? "Chat Global" : "Chat",
+                      isGlobalChat
+                          ? AppLocalizations.of(context)!.chat_box_globalChat
+                          : "Chat",
                     ),
                     canDisplayLobbyMessages
                         ? ElevatedButton(
                             onPressed: _switchChatMode,
                             child: Text(isGlobalChat
-                                ? "Retour au Chat"
-                                : "Changer pour le Chat Global"),
+                                ? AppLocalizations.of(context)!
+                                    .chat_box_goBackChat
+                                : AppLocalizations.of(context)!
+                                    .chat_box_changeGlobalChat),
                           )
                         : Container(),
                   ],
@@ -170,7 +175,7 @@ class _ChatBoxState extends State<ChatBox> {
                         margin: EdgeInsets.symmetric(vertical: 5),
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: ThemeData.dark().primaryColor,
+                          color: ThemeData.light().primaryColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(message.raw,
@@ -241,7 +246,7 @@ class _ChatBoxState extends State<ChatBox> {
                       });
                     },
                     decoration: InputDecoration(
-                      hintText: "Entrez un message...",
+                      hintText: AppLocalizations.of(context)!.chat_box_textHint,
                       border: OutlineInputBorder(),
                       filled: true,
                     ),

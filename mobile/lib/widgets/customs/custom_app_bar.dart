@@ -44,8 +44,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
           child: IconButton(
-            icon: const Icon(Icons.diversity_3),
-            onPressed: () => Navigator.pushNamed(context, FRIENDS_ROUTE),
+            icon: const Icon(Icons.person),
+            onPressed: () => Navigator.pushNamed(context, PROFILE_ROUTE),
           ),
         ),
         Padding(
@@ -53,6 +53,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
           child: IconButton(
             icon: const Icon(Icons.message_rounded),
             onPressed: () => Navigator.pushNamed(context, CHAT_ROUTE),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: IconButton(
+            icon: const Icon(Icons.diversity_3),
+            onPressed: () => Navigator.pushNamed(context, FRIENDS_ROUTE),
           ),
         ),
         Padding(
