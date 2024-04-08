@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ChatPage extends StatelessWidget {
   static const routeName = CHAT_ROUTE;
@@ -17,7 +19,7 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: CustomMenuDrawer(),
-      appBar: CustomAppBar(title: 'C L A V A R D A G E'),
+      appBar: CustomAppBar(title: AppLocalizations.of(context)!.chat_title),
       body: BackgroundContainer(
         child: Column(
           children: [

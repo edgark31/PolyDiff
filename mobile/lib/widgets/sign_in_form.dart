@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/constants/enums.dart';
@@ -7,6 +8,7 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/form_service.dart';
+import 'package:mobile/services/friend_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/utils/credentials_validation.dart';
@@ -84,6 +86,7 @@ class _SignInFormState extends State<SignInForm> {
     final infoService = context.watch<InfoService>();
     final chatService = context.watch<ChatService>();
     final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
+    final FriendService friendService = Get.find();
     return Stack(
       children: [
         SingleChildScrollView(
@@ -146,6 +149,7 @@ class _SignInFormState extends State<SignInForm> {
                       });
                       if (serverErrorMessage == null) {
                         socketService.setup(SocketType.Auth, infoService.id);
+                        friendService.setListeners();
                         chatService.setupGlobalChat();
                         avatarProvider.setAccountAvatarUrl();
                         Navigator.pushNamed(context, DASHBOARD_ROUTE);
@@ -164,23 +168,17 @@ class _SignInFormState extends State<SignInForm> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                Align(
-                  alignment: Alignment.center,
-                  child: TextButton(
-                    onPressed: () {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return PasswordResetPopup();
-                        },
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: Theme.of(context).colorScheme.onSurface,
-                    ),
-                    child: Text(FORGOT_PASSWORD_TXT),
-                  ),
+                CustomButton(
+                  press: () {
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return PasswordResetPopup();
+                      },
+                    );
+                  },
+                  text: FORGOT_PASSWORD_TXT,
                 ),
                 CustomButton(
                   text: SIGN_UP_BTN_TXT,

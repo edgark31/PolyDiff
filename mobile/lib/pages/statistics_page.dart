@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
@@ -30,30 +31,38 @@ class StatisticsPage extends StatelessWidget {
         "${(averageTime ~/ 60).toString().padLeft(2, '0')}:${(averageTime % 60).toString().padLeft(2, '0')}";
     final List<StatisticItem> statistics = [
       StatisticItem(
-          title: "Nombre de parties jouées",
+          title: AppLocalizations.of(context)!.statistics_nGamesPlayers,
           value: infoService.statistics.gamesPlayed.toString(),
           icon: Icons.games_rounded),
       StatisticItem(
-          title: "Nombre de parties gagnées",
+          title: AppLocalizations.of(context)!.statistics_nGamesWon,
           value: infoService.statistics.gameWon.toString(),
           icon: Icons.emoji_events),
       StatisticItem(
-          title: "Moyenne de différences trouvées par partie",
-          value: infoService.statistics.averageDifferences.toString(),
+          title:
+              AppLocalizations.of(context)!.statistics_averageDifferenceFound,
+          value: infoService.statistics.averageDifferences.toString().length > 5
+              ? infoService.statistics.averageDifferences
+                  .toString()
+                  .substring(0, 5)
+              : infoService.statistics.averageDifferences.toString(),
           icon: Icons.photo_library_outlined),
       StatisticItem(
-        title: "Temps moyen par partie",
-        value: formattedAverageTime,
+        title: AppLocalizations.of(context)!.statistics_averageTime,
+        value: formattedAverageTime.substring(0, 5),
         icon: Icons.timer,
       ),
     ];
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: CustomAppBar(
-        title: "Statistiques de $username",
+        title: "${AppLocalizations.of(context)!.statistics_title} $username",
       ),
       body: BackgroundContainer(
-        backgroundImagePath: SELECTION_BACKGROUND_PATH,
+        backgroundImagePath: infoService.isThemeLight
+            ? MENU_BACKGROUND_PATH
+            : MENU_BACKGROUND_PATH_DARK,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -94,7 +103,12 @@ class StatisticCard extends StatelessWidget {
       child: ListTile(
         leading: Icon(statistic.icon),
         title: Text(statistic.title),
-        trailing: Text(statistic.value),
+        trailing: Text(
+          statistic.value,
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
       ),
     );
   }

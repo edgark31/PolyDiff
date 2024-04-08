@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
@@ -8,7 +9,6 @@ import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/models/account.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
-import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/account_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/sound_service.dart';
@@ -58,7 +58,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   late final CredentialsValidator _validator;
 
-  String usernameFormat = NO;
+  String usernameFormat = '';
 
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmationController = TextEditingController();
@@ -66,6 +66,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String passwordStrength = '';
   String passwordConfirmation = '';
   String newPassword = '';
+
+  String avatarFeedback = '';
+  String passwordFeedback = '';
+  String usernameFeedback = '';
+  String languageFeedback = '';
+  String themeFeedback = '';
+  String errorSoundFeedback = '';
+  String differenceFoundSoundFeedback = '';
 
   Queue<String> _snackBarQueue = Queue<String>();
   bool _isSnackBarActive = false;
@@ -75,6 +83,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     print('init State');
     _validator = CredentialsValidator(onStateChanged: _forceRebuild);
+
     usernameController.addListener(_onUsernameChanged);
     passwordController.addListener(validatePassword);
     confirmationController.addListener(validatePasswordConfirmation);
@@ -111,7 +120,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       usernameFormat = _validator.states['username'] == ValidatorState.isEmpty
           ? ''
           : _validator.states['username'] == ValidatorState.isInvalid
-              ? "invalide"
+              ? AppLocalizations.of(context)!.edit_profile_invalid
               : '';
     });
   }
@@ -119,10 +128,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void updateValidatorStates() {
     setState(() {
       passwordStrength = _validator.passwordStrength;
+      switch (passwordStrength) {
+        case WEAK_PASSWORD:
+          passwordStrength =
+              AppLocalizations.of(context)!.edit_profile_passwordWeak;
+          break;
+        case AVERAGE_PASSWORD:
+          passwordStrength =
+              AppLocalizations.of(context)!.edit_profile_passwordAverage;
+          break;
+        case STRONG_PASSWORD:
+          passwordStrength =
+              AppLocalizations.of(context)!.edit_profile_passwordStrong;
+          break;
+      }
       passwordConfirmation =
           _validator.states['passwordConfirmation'] == ValidatorState.isValid
-              ? YES
-              : NO;
+              ? AppLocalizations.of(context)!.confirmation_yes
+              : AppLocalizations.of(context)!.confirmation_no;
     });
   }
 
@@ -172,7 +195,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         print("response : $response");
         if (response == null) {
           _avatarProvider.setAccountAvatarUrl();
-          showFeedback("Avatar updated successfully.");
+          showFeedback(avatarFeedback);
         } else {
           throw Exception(response);
         }
@@ -185,20 +208,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
             avatarBody, AvatarType.camera);
 
         if (response == null) {
-          showFeedback("Avatar updated successfully.");
+          showFeedback(avatarFeedback);
         } else {
           throw Exception(response);
         }
       }
 
       // Password changes
-      if (passwordConfirmation == YES &&
+      if ((passwordConfirmation == "Yes" || passwordConfirmation == "Oui") &&
           passwordController.text.trim() != newPassword) {
         String? response = await accountService.updatePassword(
             _infoService.username, passwordController.text.trim());
         if (response == null) {
           newPassword = passwordController.text.trim();
-          showFeedback("Password updated successfully.");
+          showFeedback(passwordFeedback);
         } else {
           throw Exception(response);
         }
@@ -210,7 +233,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _infoService.username, usernameController.text.trim());
         if (response == null) {
           _infoService.setUsername(usernameController.text.trim());
-          showFeedback("Username updated successfully.");
+          showFeedback(usernameFeedback);
         } else {
           throw Exception(response);
         }
@@ -222,7 +245,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _infoService.username, currentSettings!.language);
         if (response == null) {
           _infoService.setLanguage(currentSettings!.language);
-          showFeedback("Language updated successfully.");
+          showFeedback(languageFeedback);
         } else {
           throw Exception(response);
         }
@@ -234,7 +257,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _infoService.username, currentSettings!.theme);
         if (response == null) {
           _infoService.setTheme(currentSettings!.theme);
-          showFeedback("Theme updated successfully.");
+          showFeedback(themeFeedback);
         } else {
           throw Exception(response);
         }
@@ -246,7 +269,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _infoService.username, currentSettings!.onErrorSound);
         if (response == null) {
           _infoService.setOnErrorSound(currentSettings!.onErrorSound);
-          showFeedback("Sound onError updated successfully.");
+          showFeedback(errorSoundFeedback);
         } else {
           throw Exception(response);
         }
@@ -257,7 +280,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             _infoService.username, currentSettings!.onCorrectSound);
         if (response == null) {
           _infoService.setOnCorrectSound(currentSettings!.onCorrectSound);
-          showFeedback("Correct sound updated successfully.");
+          showFeedback(differenceFoundSoundFeedback);
         } else {
           throw Exception(response);
         }
@@ -278,137 +301,208 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        drawer: CustomMenuDrawer(),
-        appBar: CustomAppBar(title: "Personnalisation du profil"),
-        body: Container(
-            padding: EdgeInsets.only(left: 15, top: 20, right: 15),
-            child: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: ListView(
-                  children: [
-                    Row(
-                      children: [
-                        buildSelectedAvatar(),
-                        SizedBox(width: 100),
-                        buildAvatarPicker(),
-                      ],
-                    ),
-                    SizedBox(height: 30),
-                    buildUsernameField(),
-                    SizedBox(height: 30),
-                    buildPasswordField(),
-                    buildPasswordConfirmationField(),
-                    SizedBox(height: 30),
-                    DropdownButtonFormField<Sound>(
-                      value: currentSettings?.onErrorSound,
-                      onChanged: (newValue) {
-                        if (newValue != null) {
-                          soundService.playOnErrorSound(newValue);
-                          currentSettings =
-                              currentSettings!.copyWith(onErrorSound: newValue);
-                        }
-                      },
-                      items: ERROR_SOUND_LIST.map((sound) {
-                        return DropdownMenuItem(
-                            value: sound, child: Text(sound.name));
-                      }).toList(),
-                      decoration: InputDecoration(labelText: "Son d'erreur"),
-                    ),
-                    DropdownButtonFormField<Sound>(
-                      value: currentSettings?.onCorrectSound,
-                      onChanged: (Sound? newValue) {
-                        if (newValue != null) {
-                          soundService.playOnCorrectSound(newValue);
-                          currentSettings = currentSettings!
-                              .copyWith(onCorrectSound: newValue);
-                        }
-                      },
-                      items: CORRECT_SOUND_LIST.map((sound) {
-                        return DropdownMenuItem(
-                            value: sound, child: Text(sound.name));
-                      }).toList(),
-                      decoration: InputDecoration(
-                          labelText: "Son de différence trouvée"),
-                    ),
-                    // Choisir le thème de l'application
-                    DropdownButtonFormField<String>(
-                      value: currentSettings!.theme,
-                      items:
-                          themes.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          currentSettings =
-                              currentSettings!.copyWith(theme: newValue);
-                        }
-                        setState(() {
-                          final themeProvider = Provider.of<ThemeProvider>(
-                              context,
-                              listen: false);
-                          themeProvider.toggleTheme(newValue == 'dark');
-                        });
-                      },
-                      decoration: InputDecoration(labelText: 'Theme'),
-                    ),
-                    // Choisir la langue de l'application
-                    DropdownButtonFormField<String>(
-                      value: currentSettings!.language,
-                      items: languages
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        if (newValue != null) {
-                          currentSettings =
-                              currentSettings!.copyWith(language: newValue);
-                        }
-                      },
-                      decoration: InputDecoration(labelText: "Langue"),
-                    ),
-                    Row(
-                      children: [
-                        OutlinedButton(
-                          onPressed: () {},
-                          style: OutlinedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(horizontal: 50),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20))),
-                          child: Text(CANCEL_BTN_TXT,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.red,
-                                letterSpacing: 2,
-                              )),
+    final infoService = context.watch<InfoService>();
+
+    avatarFeedback = AppLocalizations.of(context)!.edit_profile_avatarFeedback;
+    passwordFeedback =
+        AppLocalizations.of(context)!.edit_profile_passwordFeedback;
+    usernameFeedback =
+        AppLocalizations.of(context)!.edit_profile_usernameFeedback;
+    languageFeedback =
+        AppLocalizations.of(context)!.edit_profile_languageFeedback;
+    themeFeedback = AppLocalizations.of(context)!.edit_profile_themeFeedback;
+    errorSoundFeedback =
+        AppLocalizations.of(context)!.edit_profile_errorSoundFeedback;
+    differenceFoundSoundFeedback =
+        AppLocalizations.of(context)!.edit_profile_differenceFoundSoundFeedback;
+
+    return BackgroundContainer(
+      backgroundImagePath: infoService.isThemeLight
+          ? MENU_BACKGROUND_PATH
+          : MENU_BACKGROUND_PATH_DARK,
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          drawer: CustomMenuDrawer(),
+          appBar: CustomAppBar(
+              title: AppLocalizations.of(context)!.edit_profile_title),
+          body: Container(
+              padding: EdgeInsets.only(left: 15, top: 20, right: 15),
+              child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: ListView(
+                    children: [
+                      Row(
+                        children: [
+                          buildSelectedAvatar(),
+                          SizedBox(width: 100),
+                          buildAvatarPicker(),
+                        ],
+                      ),
+                      SizedBox(height: 30),
+                      buildUsernameField(),
+                      SizedBox(height: 30),
+                      buildPasswordField(),
+                      buildPasswordConfirmationField(),
+                      SizedBox(height: 30),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        SizedBox(width: 125),
-                        ElevatedButton(
-                          onPressed: () => saveChanges(),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: kMidOrange,
-                              padding: EdgeInsets.symmetric(horizontal: 50),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20))),
-                          child: Text(SAVE_BTN_TXT,
-                              style: TextStyle(
-                                fontSize: 15,
-                                letterSpacing: 2,
-                                color: kLight,
-                              )),
+                        child: DropdownButtonFormField<Sound>(
+                          value: currentSettings?.onErrorSound,
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              soundService.playOnErrorSound(newValue);
+                              currentSettings = currentSettings!
+                                  .copyWith(onErrorSound: newValue);
+                            }
+                          },
+                          items: ERROR_SOUND_LIST.map((sound) {
+                            return DropdownMenuItem(
+                                value: sound, child: Text(sound.name));
+                          }).toList(),
+                          decoration: InputDecoration(
+                              labelText: AppLocalizations.of(context)!
+                                  .edit_profile_errorSound),
                         ),
-                      ],
-                    )
-                  ],
-                ))));
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: DropdownButtonFormField<Sound>(
+                          value: currentSettings?.onCorrectSound,
+                          onChanged: (Sound? newValue) {
+                            if (newValue != null) {
+                              soundService.playOnCorrectSound(newValue);
+                              currentSettings = currentSettings!
+                                  .copyWith(onCorrectSound: newValue);
+                            }
+                          },
+                          items: CORRECT_SOUND_LIST.map((sound) {
+                            return DropdownMenuItem(
+                                value: sound, child: Text(sound.name));
+                          }).toList(),
+                          decoration: InputDecoration(
+                              labelText: AppLocalizations.of(context)!
+                                  .edit_profile_differenceFoundSound),
+                        ),
+                      ),
+                      // Choisir le thème de l'application
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: DropdownButtonFormField<String>(
+                          value: currentSettings!.theme,
+                          items: themes
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              currentSettings =
+                                  currentSettings!.copyWith(theme: newValue);
+                            }
+                            setState(() {
+                              // final themeProvider = Provider.of<ThemeProvider>(
+                              //     context,
+                              //     listen: false);
+                              // themeProvider.toggleTheme(newValue == 'dark');
+                            });
+                          },
+                          decoration: InputDecoration(labelText: 'Theme'),
+                        ),
+                      ),
+                      // Choisir la langue de l'application
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: DropdownButtonFormField<String>(
+                          value: currentSettings!.language,
+                          items: languages
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              currentSettings =
+                                  currentSettings!.copyWith(language: newValue);
+                            }
+                          },
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!
+                                .edit_profile_language,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, PROFILE_ROUTE);
+                            },
+                            style: OutlinedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                padding: EdgeInsets.symmetric(horizontal: 50),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20))),
+                            child: Text(
+                                AppLocalizations.of(context)!
+                                    .edit_profile_cancel,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.red,
+                                  letterSpacing: 2,
+                                )),
+                          ),
+                          SizedBox(width: 125),
+                          ElevatedButton(
+                            onPressed: () => saveChanges(),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: kMidOrange,
+                                padding: EdgeInsets.symmetric(horizontal: 50),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20))),
+                            child: Text(
+                                AppLocalizations.of(context)!.edit_profile_save,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  letterSpacing: 2,
+                                  color: kLight,
+                                )),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: 125),
+                    ],
+                  )))),
+    );
   }
 
   Widget buildUsernameField() {
@@ -416,10 +510,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextInputField(
-          label: "Nom d'utilisateur",
+          label: AppLocalizations.of(context)!.edit_profile_username,
           controller: usernameController,
-          hint: "Entrez votre nom d'utilisateur",
-          helperText: 'Non vide: $usernameFormat',
+          hint: AppLocalizations.of(context)!.edit_profile_usernameHint,
+          helperText:
+              '${AppLocalizations.of(context)!.edit_profile_usernameHelper}: $usernameFormat',
           maxLength: 20,
         ),
         SizedBox(height: 10),
@@ -432,12 +527,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextInputField(
-          label: "Mot de passe",
+          label: AppLocalizations.of(context)!.edit_profile_password,
           controller: passwordController,
-          hint: "Entrez votre mot de passe",
-          helperText: 'Force du mot de passe: $passwordStrength',
+          hint: AppLocalizations.of(context)!.edit_profile_passwordHint,
+          helperText:
+              '${AppLocalizations.of(context)!.edit_profile_passwordStrength}: $passwordStrength',
           errorText: _validator.states['password'] == ValidatorState.isEmpty
-              ? "Mot de passe requis"
+              ? AppLocalizations.of(context)!.edit_profile_passwordCondition
               : null,
           maxLength: 20,
           isPassword: true,
@@ -452,18 +548,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextInputField(
-          label: "Confirmation du mot de passe",
+          label:
+              AppLocalizations.of(context)!.edit_profile_passwordConfirmation,
           controller: confirmationController,
-          hint: "Confirmez votre mot de passe",
+          hint: AppLocalizations.of(context)!
+              .edit_profile_passwordConfirmationHint,
           helperText:
-              'Doit correspondre au mot de passe: $passwordConfirmation',
+              '${AppLocalizations.of(context)!.edit_profile_passwordConfirmationHelper}: $passwordConfirmation',
           maxLength: 20,
           errorText: _validator.states['passwordConfirmation'] ==
                   ValidatorState.isEmpty
-              ? "Veuillez confirmer votre mot de passe"
+              ? AppLocalizations.of(context)!
+                  .edit_profile_passwordConfirmationCondition
               : _validator.states['passwordConfirmation'] ==
                       ValidatorState.isInvalid
-                  ? "Les mots de passes doivent être identiques"
+                  ? AppLocalizations.of(context)!
+                      .edit_profile_passwordConfirmationMatch
                   : null,
           isPassword: true,
         ),

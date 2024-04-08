@@ -40,10 +40,10 @@ class ForegroundPtModified extends CustomPainter {
     if (gameAreaService.rightErrorCoord.isNotEmpty) {
       final textPainter = TextPainter(
         text: TextSpan(
-          text: 'ERREUR',
+          text: 'X',
           style: TextStyle(
             color: Colors.red,
-            fontSize: 30.0,
+            fontSize: 60.0,
           ),
         ),
         textDirection: TextDirection.ltr,
@@ -51,7 +51,7 @@ class ForegroundPtModified extends CustomPainter {
       textPainter.layout();
       textPainter.paint(
         canvas,
-        Offset((gameAreaService.rightErrorCoord[0].x - 40).toDouble(),
+        Offset((gameAreaService.rightErrorCoord[0].x).toDouble(),
             (gameAreaService.rightErrorCoord[0].y).toDouble()),
       );
       gameAreaService.rightErrorCoord = [];

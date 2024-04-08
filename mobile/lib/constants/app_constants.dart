@@ -7,10 +7,22 @@ import 'package:mobile/models/game_record_model.dart';
 
 // Background image paths
 const String EMPTY_BACKGROUND_PATH = 'assets/images/empty_background.jpg';
+const String EMPTY_BACKGROUND_PATH_DARK =
+    'assets/images/empty_background_dark.png';
 const String MENU_BACKGROUND_PATH = 'assets/images/menu_background.jpg';
+const String MENU_BACKGROUND_PATH_DARK =
+    'assets/images/menu_background_dark.png';
 const String SELECTION_BACKGROUND_PATH =
     'assets/images/selection_background.jpg';
+const String SELECTION_BACKGROUND_PATH_DARK =
+    'assets/images/selection_background_dark.jpg';
 const String GAME_BACKGROUND_PATH = 'assets/images/game_background.jpg';
+const String GAME_BACKGROUND_PATH_DARK =
+    'assets/images/game_background_dark.png';
+const String LIMITED_TIME_BACKGROUND_PATH =
+    'assets/images/LimitedTimeBackground.jpg';
+const String LIMITED_TIME_BACKGROUND_PATH_DARK =
+    'assets/images/LimitedTimeBackground_dark.jpg';
 
 // Default sounds
 
@@ -57,3 +69,8 @@ const Color kMidOrange = Color.fromRGBO(239, 108, 0, 1);
 const Color kDarkOrange = Color.fromRGBO(230, 81, 0, 1);
 
 const Color kMidPink = Color.fromRGBO(255, 105, 180, 1);
+
+// Replay Speed
+const int SPEED_X1 = 1;
+const int SPEED_X2 = 2;
+const int SPEED_X4 = 4;
