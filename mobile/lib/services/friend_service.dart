@@ -93,7 +93,7 @@ class FriendService extends ChangeNotifier {
   }
 
   void cancelInvite(String potentialFriendId) {
-    print("Cancenlling invite with id: $potentialFriendId");
+    print("Cancelling invite with id: $potentialFriendId");
     socketService.send(SocketType.Auth, FriendEvents.CancelRequest.name,
         {'potentialFriendId': potentialFriendId});
   }
@@ -106,6 +106,11 @@ class FriendService extends ChangeNotifier {
   removeFriend(String friendId) {
     socketService.send(SocketType.Auth, FriendEvents.DeleteFriend.name,
         {'friendId': friendId});
+  }
+
+  void toggleFavorite(String friendId, bool isFavorite) {
+    socketService.send(SocketType.Auth, FriendEvents.OptFavorite.name,
+        {'friendId': friendId, 'isFavorite': isFavorite});
   }
 
   void setListeners() {
@@ -139,6 +144,7 @@ class FriendService extends ChangeNotifier {
     socketService.on(SocketType.Auth, FriendEvents.UpdateFriends.name, (data) {
       print("UPDATING FRIENDS");
       List<dynamic> receivedData = data as List<dynamic>;
+      print('Received friends: $receivedData');
       List<Friend> allFriends = receivedData
           .map<Friend>((friend) => Friend.fromJson(friend))
           .toList();

@@ -4,7 +4,7 @@ class Friend {
   List<Friend?> friends;
   List<Friend?> commonFriends;
   bool? isOnline;
-  bool? isFavorite;
+  bool isFavorite;
 
   Friend({
     required this.name,
@@ -23,6 +23,15 @@ class Friend {
     if (json['commonFriends'] == [] || json['commonFriends'] == null) {
       json['commonFriends'] = List<Friend>.empty();
     }
+
+    if (json['isOnline'] == null) {
+      json['isOnline'] = false;
+    }
+
+    if (json['isFavorite'] == null) {
+      json['isFavorite'] = false;
+    }
+
     return Friend(
       name: json['name'],
       accountId: json['accountId'],

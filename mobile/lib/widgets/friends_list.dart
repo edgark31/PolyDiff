@@ -66,21 +66,22 @@ class _FriendsListState extends State<FriendsList> {
                   children: [
                     Text(friend.name, style: TextStyle(fontSize: 25)),
                     SizedBox(width: 5),
-                    // IconButton(
-                    //   icon: Icon(
-                    //     friend.isFavorite
-                    //         ? Icons.favorite
-                    //         : Icons.favorite_border,
-                    //     //color: friend.isFavorite ? Colors.red : null,
-                    //     size: 35,
-                    //   ),
-                    //   onPressed: () {
-                    //     setState(() {
-                    //       //friend.isFavorite = !friend.isFavorite;
-                    //     });
-                    //     // TODO: notify the server
-                    //   },
-                    // ),
+                    IconButton(
+                      icon: Icon(
+                        friend.isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: friend.isFavorite ? Colors.red : null,
+                        size: 35,
+                      ),
+                      onPressed: () {
+                        if (friend.isFavorite) {
+                          friendService.toggleFavorite(friend.accountId, false);
+                        } else {
+                          friendService.toggleFavorite(friend.accountId, true);
+                        }
+                      },
+                    ),
                     SizedBox(width: 20),
                     TextButton(
                       onPressed: () {
@@ -101,7 +102,9 @@ class _FriendsListState extends State<FriendsList> {
                         backgroundColor: kLightGreen,
                         disabledForegroundColor: Colors.grey.withOpacity(0.38),
                       ),
-                      child: Text(AppLocalizations.of(context)!.friendList_friendButton, style: TextStyle(fontSize: 18)),
+                      child: Text(
+                          AppLocalizations.of(context)!.friendList_friendButton,
+                          style: TextStyle(fontSize: 18)),
                     ),
                   ],
                 ),
