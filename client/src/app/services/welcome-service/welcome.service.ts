@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, LANGUAGES, THEME_PERSONALIZATION } from '@common/constants';
-import { Account, Sound, Theme } from '@common/game-interfaces';
+import { Account, Theme } from '@common/game-interfaces';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
@@ -41,25 +41,6 @@ export class WelcomeService {
     constructor(private communication: CommunicationService, private sound: SoundService, private clientSocket: ClientSocketService) {
         this.currentLangageTranslate = new Subject<string>();
         this.accountObservable = new Subject<Account>();
-        this.account = {
-            credentials: {
-                username: '',
-                password: '',
-                email: '',
-            },
-            profile: {
-                avatar: '',
-                sessions: [],
-                connections: [],
-                stats: {} as never,
-                desktopTheme: { name: 'Light' } as Theme,
-                language: 'en',
-                onCorrectSound: {} as Sound,
-                onErrorSound: {} as Sound,
-                friendRequests: [],
-                friends: [],
-            },
-        };
     }
     get accountObservable$() {
         return this.accountObservable.asObservable();
