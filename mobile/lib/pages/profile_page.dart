@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/providers/avatar_provider.dart';
+import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
@@ -28,9 +30,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final GameRecordProvider gameRecordProvider = Get.find<GameRecordProvider>();
   @override
   void initState() {
     super.initState();
+    gameRecordProvider.getDefault();
   }
 
   @override
@@ -180,7 +184,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             AppLocalizations.of(context)!.profile_videoReplay,
                         icon: Icons.video_collection,
                         onPress: () {
-                          Navigator.pushNamed(context, VIDEOS_ROUTE);
+                          Navigator.pushNamed(context, REPLAY_ROUTE);
                         }),
 
                     Divider(),

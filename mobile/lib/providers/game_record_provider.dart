@@ -25,6 +25,30 @@ class GameRecordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String?> getDefault() async {
+    final url = Uri.parse('$baseUrl/2024-04-07T23:53:19.447+00:00');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        _record = GameRecord.fromJson(jsonDecode(response.body));
+        print("Default GameRecord fetched gamerecord ${_record.game.name}");
+
+        print("Default GameRecord fetched for ${_infoService.username}");
+
+        notifyListeners();
+      } else {
+        print('Server error: ${response.statusCode}');
+        return 'Server error: ${response.statusCode}';
+      }
+      return null;
+    } catch (error) {
+      print('Error fetching game record: $error');
+      return 'Error: $error';
+    }
+  }
+
   // Returns the selected replay from profile page
   Future<String?> getByDate(DateTime date) async {
     final url = Uri.parse('$baseUrl/$date');

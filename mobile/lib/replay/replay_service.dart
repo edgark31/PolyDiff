@@ -55,12 +55,16 @@ class ReplayService extends ChangeNotifier {
 
   void setUpGameReplay() {
     _gameManagerService.setIsReplay(true);
+    // TODO: get rid of
+    _gameRecordProvider.getDefault();
+
     _gameManagerService.setGame(_gameRecordProvider.record.game);
     _gameManagerService.setTime(_gameRecordProvider.record.timeLimit);
-    _gameManagerService.setEndGameMessage(null);
+
     _isReplaying = true;
     _gameEventsData = _gameRecordProvider.record.gameEvents;
-
+    _currentReplayIndex = 0;
+    _playersDataProvider.setPlayersData(_gameRecordProvider.record.players);
     notifyListeners();
   }
 
@@ -243,6 +247,7 @@ class ReplayService extends ChangeNotifier {
     if (recordedEventData.remainingDifferenceIndex != null &&
         recordedEventData.remainingDifferenceIndex!.isNotEmpty) {
       for (int index in recordedEventData.remainingDifferenceIndex!) {
+        print("Index: $index");
         List<Coordinate> differencesAtIndex =
             _gameRecordProvider.record.game.differences![index];
 
