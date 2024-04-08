@@ -3,7 +3,7 @@ class Friend {
   String accountId;
   List<Friend?> friends;
   List<Friend?> commonFriends;
-  bool? isOnline;
+  bool isOnline;
   bool isFavorite;
 
   Friend({

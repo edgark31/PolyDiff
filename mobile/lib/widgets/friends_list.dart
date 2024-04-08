@@ -42,23 +42,22 @@ class _FriendsListState extends State<FriendsList> {
                       backgroundColor: Colors.grey[200],
                       backgroundImage: NetworkImage(avatarURL),
                     ),
-                    // Positioned(
-                    //   right: 0,
-                    //   bottom: 0,
-                    //   child: Container(
-                    //     padding: EdgeInsets.all(1),
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       shape: BoxShape.circle,
-                    //     ),
-                    //     child: Icon(
-                    //       Icons.circle,
-                    //       color:
-                    //           friend.isOnline ? Colors.green : Colors.red,
-                    //       size: 20,
-                    //     ),
-                    //   ),
-                    // ),
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(1),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.circle,
+                          color: friend.isOnline ? Colors.green : Colors.red,
+                          size: 20,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 title: Row(
@@ -108,7 +107,9 @@ class _FriendsListState extends State<FriendsList> {
                     ),
                   ],
                 ),
-                //subtitle: Text(friend.isOnline ? friendList_isOnline : 'friendList_isOffline'),
+                subtitle: Text(friend.isOnline
+                    ? AppLocalizations.of(context)!.friendList_isOnline
+                    : AppLocalizations.of(context)!.friendList_isOffline),
                 trailing: IconButton(
                   iconSize: 40,
                   icon: Icon(Icons.person_remove),
