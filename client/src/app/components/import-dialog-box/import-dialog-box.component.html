@@ -16,6 +16,8 @@
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-button (click)="onCancel()">Annuler</button>
-    <button mat-button (click)="onImport()">Importer</button>
+    <button mat-button *ngIf="!welcomeService.account" (click)="onCancel()">Annuler</button>
+    <button mat-button *ngIf="!welcomeService.account" (click)="onImport()">Importer</button>
+    <button mat-button *ngIf="welcomeService.account" (click)="onCancel()">{{'dialogImport.cancel' | translate }}</button>
+    <button mat-button *ngIf="welcomeService.account" (click)="onImport()">{{'dialogImport.import' | translate }}</button>
   </mat-dialog-actions>

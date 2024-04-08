@@ -7,6 +7,7 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { LobbyEvents } from '@common/enums';
 import { Lobby } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-modal-access-match',
@@ -23,6 +24,7 @@ export class ModalAccessMatchComponent implements OnInit {
     // eslint-disable-next-line max-params
     constructor(
         // private welcomeService: WelcomeService,
+        public translate: TranslateService,
         private router: Router,
         public dialog: MatDialog,
         public dialogRef: MatDialogRef<ModalAccessMatchComponent>,

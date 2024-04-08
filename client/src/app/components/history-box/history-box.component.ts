@@ -5,6 +5,7 @@ import { Actions } from '@app/enum/delete-reset-actions';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { GameHistory } from '@common/game-interfaces';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -19,6 +20,7 @@ export class HistoryBoxComponent implements OnInit, OnDestroy {
         private readonly roomManagerService: RoomManagerService,
         private readonly communicationService: CommunicationService,
         private readonly dialog: MatDialog,
+        public translate: TranslateService,
     ) {
         this.gameHistory = [];
     }

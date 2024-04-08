@@ -38,7 +38,7 @@ export class WelcomeService {
     currentLangageTranslate: Subject<string>;
     private accountObservable: Subject<Account>;
 
-    constructor(private communication: CommunicationService, private sound: SoundService, private readonly clientSocket: ClientSocketService) {
+    constructor(private communication: CommunicationService, private sound: SoundService, private clientSocket: ClientSocketService) {
         this.currentLangageTranslate = new Subject<string>();
         this.accountObservable = new Subject<Account>();
     }

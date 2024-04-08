@@ -1,9 +1,9 @@
 <div class="infos-container" >
-    <p id = "waiting" *ngIf="!refusedMessage"> En attente d’un joueur....</p>
+    <p id = "waiting" *ngIf="!refusedMessage"> {{'waitingPlayers.playerWaiting' | translate }}</p>
 </div>
 <div class = "players-list">
     <div *ngIf="!refusedMessage">
-        <p class = "waiting-text"> Joueur en attente : </p>
+        <p class = "waiting-text"> {{'waitingPlayers.waitingPlayers' | translate }} </p>
         <div class = "player-container">
             <div class = "players">
                 <p class = "player"><span class = "player-name">{{ this.playerName }}</span></p>
@@ -17,14 +17,14 @@
     <div class="button-container">
         <button class = "cancel" mat-button  mat-dialog-close></button>
         <img src="./assets/icon/CreateButton.png" alt="cancelButton">
-        <div class="centered-yes">Annuler</div>
+        <div class="centered-yes">{{'waitingPlayers.cancel' | translate }}</div>
     </div>
 </div>
 <div *ngIf="refusedMessage" class = "button2">
     <div class="button-container">
         <button class = "cancel" mat-button  mat-dialog-close></button>
         <img src="./assets/icon/CreateButton.png" alt="cancelButton">
-        <div class="centered-yes">Annuler</div>
+        <div class="centered-yes">{{'waitingPlayers.cancel' | translate }}</div>
     </div>
 </div>
 <img *ngIf="!refusedMessage" src="./assets/gameSheet.png" class="dialog-image" alt="popup">

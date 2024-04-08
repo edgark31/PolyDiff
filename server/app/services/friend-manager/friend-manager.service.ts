@@ -8,8 +8,8 @@ import { Injectable } from '@nestjs/common';
 export class FriendManagerService {
     constructor(private readonly accountManager: AccountManagerService) {}
 
-    async queryUsers(): Promise<User[]> {
-        await this.accountManager.fetchUsers();
+    queryUsers(): User[] {
+        this.accountManager.fetchUsers();
         const users: User[] = [];
         this.accountManager.users.forEach((value, key) => {
             users.push({

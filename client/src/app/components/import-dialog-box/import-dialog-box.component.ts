@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-import-dialog-box',
@@ -15,6 +16,7 @@ export class ImportDialogComponent {
         public welcomeService: WelcomeService,
         private dialogRef: MatDialogRef<ImportDialogComponent>,
         private clientSocket: ClientSocketService,
+        public translate: TranslateService,
     ) {}
 
     async onFileSelected(event: Event): Promise<void> {

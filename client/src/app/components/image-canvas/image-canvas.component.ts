@@ -6,6 +6,7 @@ import { CanvasMeasurements } from '@app/interfaces/game-interfaces';
 import { DrawService } from '@app/services/draw-service/draw.service';
 import { ForegroundService } from '@app/services/foreground-service/foreground.service';
 import { ImageService } from '@app/services/image-service/image.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-image-canvas',
@@ -23,6 +24,7 @@ export class ImageCanvasComponent implements AfterViewInit {
         private readonly imageService: ImageService,
         private readonly drawService: DrawService,
         private readonly foregroundService: ForegroundService,
+        public translate: TranslateService,
     ) {
         this.canvasSizes = { width: IMG_WIDTH, height: IMG_HEIGHT };
     }
