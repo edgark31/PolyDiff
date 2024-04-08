@@ -94,6 +94,7 @@ class _LobbyPageState extends State<LobbyPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   lobbyButton(context),
+                  SizedBox(width: 20),
                   CustomButton(
                     text: AppLocalizations.of(context)!.lobby_quit,
                     press: () {

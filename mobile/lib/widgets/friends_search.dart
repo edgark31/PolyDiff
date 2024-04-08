@@ -146,7 +146,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
                             .friendSearch_searchBarTitle,
                         border: OutlineInputBorder(),
                         filled: true,
-                        fillColor: Colors.black,
+                        fillColor: Colors.white,
                       ),
                     ),
                   ),
