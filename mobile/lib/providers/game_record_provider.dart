@@ -15,6 +15,8 @@ class GameRecordProvider extends ChangeNotifier {
   GameRecord _record = DEFAULT_GAME_RECORD;
 
   List<GameRecord> _gameRecords = [];
+  List<GameRecordCard> _gameRecordCards = [];
+
   List<GameRecord> get gameRecords => _gameRecords;
   GameRecord get record => _record;
 
@@ -50,7 +52,7 @@ class GameRecordProvider extends ChangeNotifier {
   }
 
   // Returns the selected replay from profile page
-  Future<String?> getByDate(DateTime date) async {
+  Future<String?> getByDate(String date) async {
     final url = Uri.parse('$baseUrl/$date');
 
     try {
@@ -84,6 +86,11 @@ class GameRecordProvider extends ChangeNotifier {
           .map((gameRecord) => GameRecord.fromJson(gameRecord))
           .toList();
 
+      // To previewing the game records in the profile page
+      _gameRecordCards = _gameRecords
+          .map((gameRecord) => GameRecordCard.fromGameRecord(gameRecord))
+          .toList();
+
       print("GameRecords fetched for ${_infoService.username}");
       notifyListeners();
       return null;
@@ -114,7 +121,7 @@ class GameRecordProvider extends ChangeNotifier {
   }
 
   // deletes the selected game record from profile page
-  Future<String?> deleteAccountIdByDate(DateTime date) async {
+  Future<String?> deleteAccountIdByDate(String date) async {
     final accountId = _infoService.id;
     final url = Uri.parse('$baseUrl/$date?accountId=$accountId');
 
@@ -133,5 +140,10 @@ class GameRecordProvider extends ChangeNotifier {
       print('Error fetching game record: $error');
       return 'Error: $error';
     }
+  }
+
+  setGameRecordByDate(String date) {
+    _record = _gameRecords.firstWhere((gameRecord) => gameRecord.date == date);
+    notifyListeners();
   }
 }

@@ -91,14 +91,14 @@ class GameEventData {
   }
 }
 
-class GameRecordPreview {
+class GameRecordCard {
   final String gameName;
   final String gameOriginalImage;
   final List<String?> playerNames;
   final String durationFormatted;
   final String date;
 
-  GameRecordPreview({
+  GameRecordCard({
     required this.gameName,
     required this.gameOriginalImage,
     required this.playerNames,
@@ -107,11 +107,11 @@ class GameRecordPreview {
   });
 
   // Conversion from GameRecord to GameRecordPreview
-  factory GameRecordPreview.fromGameRecord(GameRecord record) {
+  factory GameRecordCard.fromGameRecord(GameRecord record) {
     final durationFormatted =
         "${(record.duration ~/ 3600).toString().padLeft(2, '0')}:${((record.duration % 3600) ~/ 60).toString().padLeft(2, '0')}:${(record.duration % 60).toString().padLeft(2, '0')}";
 
-    return GameRecordPreview(
+    return GameRecordCard(
       gameName: record.game.name,
       gameOriginalImage: record.game.original,
       playerNames: record.players.map((player) => player.name).toList(),
