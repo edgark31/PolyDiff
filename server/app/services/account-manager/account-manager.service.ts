@@ -122,7 +122,7 @@ export class AccountManagerService implements OnModuleInit {
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');
 
-            accountFound.profile.avatar = avatar;
+            accountFound.profile.avatar = avatar.replace(/^data:image\/\w+;base64,/, '');
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
@@ -323,7 +323,7 @@ export class AccountManagerService implements OnModuleInit {
     }
 
     showProfiles(): void {
-        this.logger.verbose('Connected profiles: ');
+        this.logger.verbose(' -------- Connected account: -------- ');
         this.connectedUsers.forEach((value, key) => {
             this.logger.verbose(`${key}`);
         });
@@ -331,7 +331,6 @@ export class AccountManagerService implements OnModuleInit {
 
     disconnection(id: string): void {
         this.connectedUsers.delete(id);
-        this.logger.log(`Account ${id} has been disconnected`);
         this.showProfiles();
     }
 
