@@ -90,3 +90,33 @@ class GameEventData {
     );
   }
 }
+
+class GameRecordPreview {
+  final String gameName;
+  final String gameOriginalImage;
+  final List<String?> playerNames;
+  final String durationFormatted;
+  final String date;
+
+  GameRecordPreview({
+    required this.gameName,
+    required this.gameOriginalImage,
+    required this.playerNames,
+    required this.durationFormatted,
+    required this.date,
+  });
+
+  // Conversion from GameRecord to GameRecordPreview
+  factory GameRecordPreview.fromGameRecord(GameRecord record) {
+    final durationFormatted =
+        "${(record.duration ~/ 3600).toString().padLeft(2, '0')}:${((record.duration % 3600) ~/ 60).toString().padLeft(2, '0')}:${(record.duration % 60).toString().padLeft(2, '0')}";
+
+    return GameRecordPreview(
+      gameName: record.game.name,
+      gameOriginalImage: record.game.original,
+      playerNames: record.players.map((player) => player.name).toList(),
+      durationFormatted: durationFormatted,
+      date: record.date,
+    );
+  }
+}
