@@ -26,10 +26,22 @@ export class ImportDialogComponent {
             const fileReader = new FileReader();
             fileReader.onload = () => {
                 const imageBase64 = fileReader.result as string;
-                this.imageData = imageBase64;
+                const imageFormat = imageBase64.split(';')[0].split(':')[1];
+
+                const image = new Image();
+                image.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = 128;
+                    canvas.height = 128;
+                    ctx?.drawImage(image, 0, 0, canvas.width, canvas.height);
+                    const resizedImageBase64 = canvas.toDataURL(imageFormat);
+                    this.imageData = resizedImageBase64;
+                    this.clientSocket.send('auth', 'send-img', resizedImageBase64);
+                };
+                image.src = imageBase64;
             };
             fileReader.readAsDataURL(selectedFile);
-            this.clientSocket.send('auth', 'send-img', fileReader.result);
         }
     }
 
