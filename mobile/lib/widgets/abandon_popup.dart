@@ -15,43 +15,45 @@ class AbandonPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
     final gameManagerService = context.watch<GameManagerService>();
-    return Center(
-      child: SizedBox(
-        width: 600.0,
-        height: 500.0,
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/woodenPopUp.png"),
-              fit: BoxFit.cover,
+    return Scaffold(
+      body: Center(
+        child: SizedBox(
+          width: 600.0,
+          height: 500.0,
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/woodenPopUp.png"),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                AppLocalizations.of(context)!.abandonGame_questionTitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              CustomButton(
-                text: AppLocalizations.of(context)!.confirmation_yes,
-                press: () {
-                  gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
-                  Navigator.pushNamed(context, DASHBOARD_ROUTE);
-                },
-              ),
-              SizedBox(height: 10),
-              CustomButton(
-                text: AppLocalizations.of(context)!.confirmation_no,
-                press: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  AppLocalizations.of(context)!.abandonGame_questionTitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                CustomButton(
+                  text: AppLocalizations.of(context)!.confirmation_yes,
+                  press: () {
+                    gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
+                    Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                  },
+                ),
+                SizedBox(height: 10),
+                CustomButton(
+                  text: AppLocalizations.of(context)!.confirmation_no,
+                  press: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
