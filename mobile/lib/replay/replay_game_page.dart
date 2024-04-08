@@ -63,8 +63,9 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
   Widget build(BuildContext context) {
     final gameManagerService = context.watch<GameManagerService>();
     final gameRecordProvider = context.watch<GameRecordProvider>();
+    final replayService = context.watch<ReplayService>();
     final infoService = context.watch<InfoService>();
-    int timer = gameManagerService.time;
+    int timer = replayService.currentTime;
     String formattedTime =
         "${(timer ~/ 60).toString().padLeft(2, '0')}:${(timer % 60).toString().padLeft(2, '0')}";
 

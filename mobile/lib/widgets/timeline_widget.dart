@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile/replay/replay_service.dart';
 
 class TimelineWidget extends StatefulWidget {
   final int replayDuration;
@@ -11,9 +13,11 @@ class TimelineWidget extends StatefulWidget {
 }
 
 class _TimelineWidgetState extends State<TimelineWidget> {
+  final ReplayService _replayService = Get.find();
+
   bool _isPlaying = true;
   double _currentTime = 0.0;
-  double gameLength = 0.0;
+  double gameDuration = 0.0;
 
   int _selectedSpeed = 1;
   Timer? _timer;
@@ -23,16 +27,17 @@ class _TimelineWidgetState extends State<TimelineWidget> {
       _isPlaying = !_isPlaying;
     });
     if (_isPlaying) {
-      _startReplay();
+      _replayService.resume();
     } else {
       _timer?.cancel();
+      _replayService.pause();
     }
   }
 
   @override
   void initState() {
     super.initState();
-    gameLength = widget.replayDuration / 1000; // covert to seconds
+    gameDuration = widget.replayDuration / 1000; // covert to seconds
 
     if (_isPlaying) {
       _startReplay();
@@ -49,8 +54,8 @@ class _TimelineWidgetState extends State<TimelineWidget> {
     _timer = Timer.periodic(Duration(milliseconds: 100), (Timer timer) {
       setState(() {
         _currentTime += _selectedSpeed / 10;
-        if (_currentTime >= gameLength) {
-          _currentTime = gameLength;
+        if (_currentTime >= gameDuration) {
+          _currentTime = gameDuration;
           _timer?.cancel();
           _isPlaying = false;
         }
@@ -62,6 +67,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
     setState(() {
       _currentTime = 0.0;
       _isPlaying = true;
+      _replayService.restart();
     });
     _timer?.cancel();
     if (_isPlaying) {
@@ -78,6 +84,8 @@ class _TimelineWidgetState extends State<TimelineWidget> {
       _selectedSpeed = speed;
       if (_isPlaying) {
         _timer?.cancel();
+        _replayService.pause();
+        _replayService.setSpeed(speed);
         _startReplay();
       }
     });
@@ -114,8 +122,8 @@ class _TimelineWidgetState extends State<TimelineWidget> {
           child: Slider(
             value: _currentTime,
             min: 0.0,
-            max: gameLength,
-            divisions: gameLength.floor(),
+            max: gameDuration,
+            divisions: gameDuration.floor(),
             label: formattedTime,
             onChanged: (double newValue) {
               setState(() {
