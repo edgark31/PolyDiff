@@ -37,11 +37,45 @@ export class NavBarComponent {
     }
 
     goProfile(): void {
-        // this.clientsocket.send('auth', AccountEvents.RefreshAccount);
+        if (this.clientSocket.isSocketAlive('lobby')) {
+            this.clientSocket.disconnect('lobby');
+        }
         this.router.navigate(['/profil']);
     }
 
     onSubmitHome(): void {
+        if (this.clientSocket.isSocketAlive('lobby')) {
+            this.clientSocket.disconnect('lobby');
+        }
+
+        this.router.navigate(['/home']);
+    }
+
+    onSubmitFriends(): void {
+        if (this.clientSocket.isSocketAlive('lobby')) {
+            this.clientSocket.disconnect('lobby');
+        }
+
+        this.router.navigate(['/friend']);
+    }
+
+    onSubmitSettings(): void {
+        if (this.clientSocket.isSocketAlive('lobby')) {
+            this.clientSocket.disconnect('lobby');
+        }
+
+        this.router.navigate(['/personalization']);
+    }
+
+    onSubmitChat(): void {
+        if (this.clientSocket.isSocketAlive('lobby')) {
+            this.clientSocket.disconnect('lobby');
+        }
+
+        this.router.navigate(['/chat']);
+    }
+
+    onSubmitLogin(): void {
         this.clientSocket.disconnect('auth');
         if (this.clientSocket.isSocketAlive('lobby')) {
             this.clientSocket.disconnect('lobby');
