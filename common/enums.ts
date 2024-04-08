@@ -175,6 +175,7 @@ export enum GameState {
     InGame = 'GameInGame',
     Abandoned = 'GameHasAbandoned',
     Spectate = 'GameSpectate',
+    GameOver = 'GameOver',
 }
 
 export enum ChannelEvents {
