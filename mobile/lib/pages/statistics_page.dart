@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
@@ -39,12 +39,17 @@ class StatisticsPage extends StatelessWidget {
           value: infoService.statistics.gameWon.toString(),
           icon: Icons.emoji_events),
       StatisticItem(
-          title: AppLocalizations.of(context)!.statistics_averageDifferenceFound,
-          value: infoService.statistics.averageDifferences.toString(),
+          title:
+              AppLocalizations.of(context)!.statistics_averageDifferenceFound,
+          value: infoService.statistics.averageDifferences.toString().length > 5
+              ? infoService.statistics.averageDifferences
+                  .toString()
+                  .substring(0, 5)
+              : infoService.statistics.averageDifferences.toString(),
           icon: Icons.photo_library_outlined),
       StatisticItem(
         title: AppLocalizations.of(context)!.statistics_averageTime,
-        value: formattedAverageTime,
+        value: formattedAverageTime.substring(0, 5),
         icon: Icons.timer,
       ),
     ];
@@ -98,7 +103,12 @@ class StatisticCard extends StatelessWidget {
       child: ListTile(
         leading: Icon(statistic.icon),
         title: Text(statistic.title),
-        trailing: Text(statistic.value),
+        trailing: Text(
+          statistic.value,
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
       ),
     );
   }

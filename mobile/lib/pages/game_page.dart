@@ -121,7 +121,9 @@ class _GamePageState extends State<GamePage> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(GAME_BACKGROUND_PATH),
+                image: AssetImage(infoService.isThemeLight
+                    ? GAME_BACKGROUND_PATH
+                    : GAME_BACKGROUND_PATH_DARK),
                 fit: BoxFit.cover,
               ),
             ),
@@ -192,7 +194,7 @@ class _GamePageState extends State<GamePage> {
                       ),
                     ),
                   ] else
-                    SizedBox(width: 50),
+                    SizedBox(width: 120),
                   SizedBox(
                     height: 200,
                     width: 1000,
