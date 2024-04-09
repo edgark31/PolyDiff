@@ -47,6 +47,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         this.roomManagerService.wait = true;
+        // if (!this.welcome.onChatLobby) this.welcome.changeThemeChat = true;
 
         if (this.lobbySubscription) {
             this.lobbySubscription?.unsubscribe();

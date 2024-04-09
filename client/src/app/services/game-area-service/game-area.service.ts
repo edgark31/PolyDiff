@@ -7,7 +7,6 @@ import {
     LEFT_BUTTON,
     RED_FLASH_TIME,
     WAITING_TIME,
-    X_CENTERING_DISTANCE,
     YELLOW_FLASH_TIME,
 } from '@app/constants/constants';
 import { IMG_HEIGHT, IMG_WIDTH } from '@app/constants/image';
@@ -61,7 +60,7 @@ export class GameAreaService {
         frontContext.fillStyle = 'red';
         this.isClickDisabled = true;
         frontContext.font = 'bold 30px Arial, Helvetica, sans-serif';
-        frontContext.fillText('ERREUR', errorCoordinate.x - X_CENTERING_DISTANCE, errorCoordinate.y);
+        frontContext.fillText('X', errorCoordinate.x, errorCoordinate.y);
         setTimeout(() => {
             frontContext.clearRect(0, 0, IMG_WIDTH, IMG_HEIGHT);
             this.isClickDisabled = false;
