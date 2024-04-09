@@ -51,10 +51,8 @@ export class GamePageDialogComponent {
         this.clientSocket.disconnect('lobby');
         this.clientSocket.disconnect('game');
         if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
-        else {
-            this.dialog.closeAll();
-            this.router.navigate(['/home']);
-        }
+        this.dialog.closeAll();
+        this.router.navigate(['/home']);
     }
 
     replay() {
