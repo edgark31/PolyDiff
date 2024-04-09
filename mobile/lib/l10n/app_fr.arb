@@ -119,6 +119,10 @@
     "confirmation_no": "Non",
     "endGame_homeButton": "Accueil",
     "endGame_videoReplayButton": "Reprise Vidéo",
+    "endGameMessage_timesUp": "Temps écoulé, match nul !",
+    "endGameMessage_playerWon": "won !",
+    "endGameMessage_draw": "Draw !",
+    "endGameMessage_endPractice": "End of practice !",
     "classicMode": "Classique",
     "limitedMode": "Temps limité",
     "practiceMode": "Pratique"
