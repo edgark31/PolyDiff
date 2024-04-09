@@ -346,6 +346,7 @@ export class GameGateway implements OnGatewayConnection {
     abandonGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         const username = this.accountManager.users.get(socket.data.accountId).credentials.username;
         const accountId = socket.data.accountId;
+        // eslint-disable-next-line no-unused-vars
         const players = this.roomsManager.lobbies.get(lobbyId).players;
 
         this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
