@@ -16,6 +16,7 @@ class AbandonPopup extends StatelessWidget {
     final lobbyService = context.watch<LobbyService>();
     final gameManagerService = context.watch<GameManagerService>();
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Center(
         child: SizedBox(
           width: 600.0,

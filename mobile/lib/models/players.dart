@@ -44,7 +44,7 @@ class PlayerData {
         gameId: json['gameId'],
         gameMode: GameModes.values.firstWhere((e) =>
             e.toString() ==
-            'GameModes.${json['GameModes']}'), // TODO : confirm this logic of iterate enums
+            'GameModes.${json['GameModes']}'),
       );
 
   Map<String, dynamic> toJson() => {
