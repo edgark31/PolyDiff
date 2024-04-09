@@ -77,7 +77,10 @@
         "endParty": "fin de la partie",
         "endPractice": "fin de la pratique",
         "partyAbandon": "Êtes-vous certain de vouloir abandonner la partie ? ",
-        "abandonParty": " a abandonné la partie !"
+        "abandonParty": " a abandonné !",
+        "winGame": " a gagné !",
+        "tie": "Match nul",
+        "expiredTime": "Temps écoulé, match nul "
     },
 
     "creationGame": {
@@ -127,7 +130,7 @@
         "yes": "oui",
         "no": "Non",
         "scoreShare": "Partage votre score",
-        "quitGame": "quitter la game"
+        "quitGame": "quitter"
     },
 
     "gameSheet": {

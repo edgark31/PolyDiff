@@ -1,5 +1,5 @@
 import { GameModes } from './enums';
-import { ConnectionLog, PlayerTime, Sound, Theme } from './game-interfaces';
+import { ConnectionLog, PlayerTime, Sound } from './game-interfaces';
 
 export const DEFAULT_COUNTDOWN_VALUE = 30;
 export const DEFAULT_HINT_PENALTY = 5;
@@ -22,10 +22,7 @@ export const ELEMENT_DATA: ConnectionLog[] = [
     },
 ];
 
-export const THEME_PERSONALIZATION: Theme[] = [
-    { name: 'Light', color: '', buttonColor: 'black', backgroundColor: 'white' },
-    { name: 'Dark', color: '', buttonColor: 'Orange', backgroundColor: 'YellowOrange' },
-];
+export const THEME_PERSONALIZATION: string[] = ['light', 'dark'];
 
 export const CORRECT_SOUND_LIST: Sound[] = [
     { name: 'TOO GOOD 1', path: 'assets/sound/correct1.mp3' },
