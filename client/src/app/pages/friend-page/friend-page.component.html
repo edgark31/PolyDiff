@@ -3,9 +3,9 @@
         <app-nav-bar id ="nav-bar"></app-nav-bar>
     </div>
     <div class="icon-container">
-        <button class="icon" (click)="onSubmit('friendUpdate')">{{'friendPage.friends' | translate }}</button>
-        <button class="icon" (click)="onSubmit('friendWait')">{{'friendPage.friendsRequests' | translate }} </button>
-        <button class="icon" (click)="onSubmit('accountUser')">{{'friendPage.allAccount' | translate }}</button>
+        <button [class.select]="pageFriendupdate === 'friendUpdate'" class="icon" (click)="onSubmit('friendUpdate')">{{'friendPage.friends' | translate }}</button>
+        <button [class.select]="pageFriendupdate === 'friendWait'" class="icon" (click)="onSubmit('friendWait')">{{'friendPage.friendsRequests' | translate }} </button>
+        <button [class.select]="pageFriendupdate === 'accountUser'" class="icon" (click)="onSubmit('accountUser')">{{'friendPage.allAccount' | translate }}</button>
     </div>
 
     <section class="friends-container">
