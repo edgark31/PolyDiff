@@ -5,8 +5,8 @@
   <div class="header">
   <app-nav-bar id ="nav-bar"></app-nav-bar>
   </div>
-  <img *ngIf="welcomeService.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
-  <img  *ngIf="welcomeService.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
+  <img *ngIf="welcomeService.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+  <img *ngIf="welcomeService.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
   <div class="container-information">
     <div class="information">{{'profil.information' | translate }}</div>
   </div>

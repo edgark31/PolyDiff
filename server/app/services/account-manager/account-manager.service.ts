@@ -4,9 +4,9 @@
 /* eslint-disable max-params */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-lines */
-import { Account, AccountDocument, Credentials, Sound, Theme } from '@app/model/database/account';
+import { Account, AccountDocument, Credentials, Sound } from '@app/model/database/account';
 import { ImageManagerService } from '@app/services/image-manager/image-manager.service';
-import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, THEME_PERSONALIZATION } from '@common/constants';
+import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST } from '@common/constants';
 import { RankedPlayer } from '@common/game-interfaces';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -50,7 +50,6 @@ export class AccountManagerService implements OnModuleInit {
                     friends: [],
                     friendRequests: [],
                     language: 'en',
-                    desktopTheme: THEME_PERSONALIZATION[0],
                     mobileTheme: 'light',
                     onCorrectSound: CORRECT_SOUND_LIST[0],
                     onErrorSound: ERROR_SOUND_LIST[0],
@@ -208,22 +207,22 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async updateDesktopTheme(username: string, newTheme: Theme): Promise<void> {
-        try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+    // async updateDesktopTheme(username: string, newTheme: Theme): Promise<void> {
+    //     try {
+    //         const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
 
-            if (!accountFound) throw new Error('Account not found');
+    //         if (!accountFound) throw new Error('Account not found');
 
-            accountFound.profile.desktopTheme = newTheme;
+    //         accountFound.profile.desktopTheme = newTheme;
 
-            await accountFound.save();
-            this.logger.verbose('Desktop theme change');
-            return Promise.resolve();
-        } catch (error) {
-            this.logger.error(`Failed to change desktop theme --> ${error.message}`);
-            return Promise.reject(`${error}`);
-        }
-    }
+    //         await accountFound.save();
+    //         this.logger.verbose('Desktop theme change');
+    //         return Promise.resolve();
+    //     } catch (error) {
+    //         this.logger.error(`Failed to change desktop theme --> ${error.message}`);
+    //         return Promise.reject(`${error}`);
+    //     }
+    // }
 
     async updateMobileTheme(username: string, newTheme: string): Promise<void> {
         try {
