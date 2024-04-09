@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/services/friend_service.dart';
+import 'package:mobile/widgets/friends_delete_popup.dart';
 import 'package:mobile/widgets/friends_popup.dart';
 import 'package:provider/provider.dart';
 
@@ -114,7 +115,14 @@ class _FriendsListState extends State<FriendsList> {
                   iconSize: 40,
                   icon: Icon(Icons.person_remove),
                   onPressed: () {
-                    friendService.removeFriend(friend.accountId);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return FriendsDeletePopup(
+                          accountId: friend.accountId,
+                        );
+                      },
+                    );
                   },
                 ),
               ),
