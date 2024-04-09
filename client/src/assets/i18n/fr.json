@@ -150,7 +150,8 @@
     "navBar": {
         "home": "Accueil",
         "messageChannel": "Clavardage",
-        "friends": "amis"
+        "friends": "Amis",
+        "account": "Compte"
     },
 
     "adminModal": {
@@ -275,5 +276,10 @@
         "twoAreas": "pour les deux zones",
         "backgrounds": "les arrières-plans",
         "background": "l'arrière-plan"
+    },
+
+    "ranking": {
+        "loading": "Chargement...",
+        "global": "Classement Global"
     }
 }
