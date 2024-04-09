@@ -19,6 +19,7 @@ export class WelcomeService {
     isLoggedIn = localStorage.getItem('isLogged') === 'true';
     songListDifference = CORRECT_SOUND_LIST;
     songListError = ERROR_SOUND_LIST;
+    isLogin = false;
     account: Account;
     selectLocal: string;
     selectAvatar: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
