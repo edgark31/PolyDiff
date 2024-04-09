@@ -37,7 +37,7 @@
     "history_connectionHistory": "Connection history",
     "history_gameHistory": "Games History",
     "history_connection": "Connection",
-    "history_disconnection": "Disconnection",
+    "history_disconnection": "Logout",
     "history_wonGame": "Won",
     "history_lostGame": "Lost",
     "profile_title": "P R O F I L E",
