@@ -36,7 +36,7 @@
         <!-- WAITING - PENDING AND SENT FRIENDS -->
         <div *ngIf="pageFriendupdate==='friendWait'" class="card-container">
             <h1 class="information">{{'friendPage.pendingFriendsList' | translate }}</h1>
-            <div class="cards">
+            <div class="cards pending-sent">
                 <div class="friend-card" *ngFor="let friend of friendPendingList">
                     <div class="show">
                         <img class="avatar" [src]="'http://localhost:3000/avatar/' + friend.accountId + '.png'" alt="Image">
@@ -57,7 +57,7 @@
         </div>
         <div *ngIf="pageFriendupdate==='friendWait'" class="card-container">
             <h1 class="informationPending"> {{'friendPage.requestFriendsSendList' | translate }}</h1>
-            <div class="cards">
+            <div class="cards pending-sent">
                 <div class="friend-card" *ngFor="let friend of friendSentList">
                     <div class="show">
                         <img class="avatar" [src]="'http://localhost:3000/avatar/' + friend.accountId + '.png'" alt="Image">
