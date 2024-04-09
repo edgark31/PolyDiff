@@ -31,8 +31,14 @@
                             <div class="name">
                                 <span>{{ record.game.name }}</span>
                             </div>
+                            <div class="play">
+                                <button><mat-icon>play_arrow</mat-icon></button>
+                            </div>
                             <div class="date">
-                                <span>{{ record.date }}</span>
+                                <span>{{ record.date| date: 'longDate' }} at {{ record.date | date: 'shortTime' }}</span>
+                            </div>
+                            <div class="delete">
+                                <button><mat-icon>delete</mat-icon></button>
                             </div>
                         </mat-card-title>
                     </mat-card-header>

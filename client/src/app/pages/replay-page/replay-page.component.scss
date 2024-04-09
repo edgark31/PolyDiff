@@ -430,6 +430,35 @@ body {
     text-overflow: ellipsis;
 }
 
+.play {
+    position: relative;
+    font-weight: bold;
+    font-size: 20px;
+    // color: #3f51b5;
+    margin-left: 220px;
+    width: 80px;
+    overflow-wrap: break-word;
+    top: 30px;
+    display: inline-block;
+    -webkit-text-stroke: 0.2px black;
+    font-family: 'Troika', sans-serif;
+    text-transform: uppercase;
+}
+
+.delete {
+    position: relative;
+    font-weight: bold;
+    font-size: 20px;
+    // color: #3f51b5;
+    margin-left: 220px;
+    width: 80px;
+    overflow-wrap: break-word;
+    top: 30px;
+    display: inline-block;
+    -webkit-text-stroke: 0.2px black;
+    font-family: 'Troika', sans-serif;
+    text-transform: uppercase;
+}
 .search-form {
     display: flex;
     align-items: center;
