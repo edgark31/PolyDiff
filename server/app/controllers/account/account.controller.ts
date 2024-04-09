@@ -42,6 +42,13 @@ export class AccountController {
             this.auth.server.fetchSockets().then((sockets) => {
                 sockets.forEach((socket) => {
                     this.auth.updateIsOnline(socket as any);
+                    if (
+                        accountFound.profile.friends.find((friend) => {
+                            return friend.accountId === socket.data.accountId;
+                        })
+                    ) {
+                        this.auth.handleOnlineMessage(socket as any, 'est en ligne !', accountFound.credentials.username);
+                    }
                 });
             });
         } catch (error) {

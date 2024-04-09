@@ -223,6 +223,11 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.logger.log(`DEAUTH de ${socket.data.accountId}`);
     }
 
+    handleOnlineMessage(socket: Socket, message: string, userOnline: string) {
+        const chat: Chat = this.messageManager.createMessage(userOnline, message);
+        socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Common });
+    }
+
     updateIsOnline(socket: Socket) {
         const friends = this.accountManager.users.get(socket.data.accountId).profile.friends;
         this.accountManager.connectedUsers.forEach((value, key) => {
