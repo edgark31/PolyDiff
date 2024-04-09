@@ -24,26 +24,17 @@
 }
 
 .container {
-    min-height: 100vh;
-    height: auto;
+    height: 100vh;
     color: rgb(0, 0, 0);
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-nav {
-    background-color: #5cbf99;
-    position: absolute;
-    width: 100%;
-    z-index: 1;
+    overflow: hidden;
 }
 
 app-nav-bar {
-    position: absolute;
     font-family: 'Troika', sans-serif;
     font-size: 20px;
-    margin-right: 20px;
 }
 
 h1 {
@@ -54,7 +45,7 @@ h1 {
     line-height: 44px;
     text-align: center;
     display: inline-block;
-    color: #e8a430;
+    color: #ffffff;
     animation: titleFadeIn 0.5s ease-in-out;
     -webkit-text-stroke: 2px black;
 }
@@ -80,20 +71,19 @@ h1 {
     font-family: 'Troika', sans-serif;
     font-size: 60px;
     width: 40vw;
-    height: 80px;
     margin-bottom: 20px;
     text-transform: uppercase;
     transition: 0.5s;
-    color: rgba(253, 250, 151, 255);
-    border: none;
+    color: black;
+    border: 4px black solid;
     border-radius: 25px;
-    background-color: #e8a430;
+    background-color: #ffffff;
     animation: titleFadeIn 1.5s ease-in-out;
     z-index: 1;
 }
 
 button:hover {
-    background-color: #db9110;
+    background-color: #ffffff;
     color: black;
     transform: scale(1.05);
 }
@@ -154,7 +144,7 @@ button:hover {
 
 .ranking-title {
     font-family: 'Troika', sans-serif;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: bold;
     color: white;
     margin-right: 30px;
@@ -182,7 +172,7 @@ button:hover {
     margin: 0;
 }
 .rankedPlayer span {
-    font-size: 15px;
+    font-size: 20px;
 }
 
 .rankedPlayer img {
