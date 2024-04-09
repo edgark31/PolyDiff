@@ -159,10 +159,18 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.timer = timer;
         });
         this.endMessageSubscription = this.gameManager.endMessage$.subscribe((endMessage: string) => {
-            if (endMessage.includes('partie')) {
-                this.endMessage = this.translateCharacter('endParty');
+            if (endMessage.includes('a gagné')) {
+                const username = endMessage.split(' ').shift();
+                this.endMessage = username + this.translateCharacter('winGame');
             } else if (endMessage.includes('pratique')) {
                 this.endMessage = this.translateCharacter('endPractice');
+            } else if (endMessage.includes('Match nul')) {
+                this.endMessage = this.translateCharacter('tie');
+            } else if (endMessage.includes('Temps écoulé')) {
+                this.endMessage = this.translateCharacter('expiredTime');
+            } else if (endMessage.includes('a abandonné')) {
+                const username = endMessage.split(' ').shift();
+                this.endMessage = username + this.translateCharacter('abandonParty');
             }
             this.showEndGameDialog(this.endMessage);
             this.welcome.onChatGame = false;
@@ -297,7 +305,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.gameManager.setIsLeftCanvas(isLeft);
         this.gameManager.requestVerification(this.lobby.lobbyId as string, this.gameAreaService.getMousePosition());
     }
-
     setUpGame(): void {
         this.gameAreaService.setOriginalContext(
             this.originalCanvas.nativeElement.getContext('2d', {
@@ -324,7 +331,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.imageService.loadImage(this.gameAreaService.getModifiedContext(), this.gameLobby.modified);
         this.gameAreaService.setAllData();
     }
-
     private setUpReplay(): void {
         this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
             this.timer = replayTimer;
