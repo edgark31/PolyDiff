@@ -1,12 +1,10 @@
 <div class="container flex-column">
-    <div>
-        <app-nav-bar> </app-nav-bar>
-    </div>
+    <app-nav-bar> </app-nav-bar>
     <header class="header">
         <h1 class="header-item flex-column">{{'mainPage.welcome' | translate }}</h1>
     </header>
     <img *ngIf="welcomeService.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
-    <img  *ngIf="welcomeService.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
+    <img *ngIf="welcomeService.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
     <div class="flex-column">
         <button class="button" routerLink="/game-mode">
             <span id = "limited">{{'mainPage.gameMode' | translate }}</span>
@@ -22,7 +20,7 @@
     <footer class="footer flex-column">
         <div *ngIf="rankedPlayers.length > 0" class="ranking">
             <div class="scroll-container">
-                <p class="ranking-title">{{'mainPage.globalClassement' | translate }} :</p>
+                <p class="ranking-title">{{'ranking.global' | translate }} :</p>
                 <div class="rankedPlayer" *ngFor="let rankedPlayer of rankedPlayers">
                     <p>{{rankedPlayer.rank}}. {{rankedPlayer.name}}</p>
                     <img src="{{'http://localhost:3000/avatar/' + rankedPlayer.accountId + '.png'}}">
@@ -32,7 +30,7 @@
         </div>
         <div class="ranking" *ngIf="rankedPlayers.length <= 0" >
             <div class="loading">
-                <p>Loading ...</p>
+                <p>{{'ranking.loading' | translate }}</p>
             </div>
         </div>
     </footer>
