@@ -171,6 +171,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.remainingDifference = remainingDifference;
         });
         this.clientSocket.on('game', GameEvents.GameRecord, (record: GameRecord) => {
+            this.replayService.lobby = this.lobby;
             this.replayService.setReplay(record);
             this.timer = record.timeLimit;
             this.resetGameStats();
