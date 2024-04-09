@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/services/form_service.dart';
+import 'package:mobile/widgets/change_password_popup.dart';
 
 class PasswordResetPopup extends StatefulWidget {
   @override
@@ -11,7 +11,15 @@ class PasswordResetPopup extends StatefulWidget {
 class _PasswordResetPopupState extends State<PasswordResetPopup> {
   final FormService formService = FormService();
   TextEditingController emailController = TextEditingController();
+
   String errorMessage = "";
+  bool isCodeAsked = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -70,7 +78,7 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                 Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Text(
-                    "Courriel",
+                    isCodeAsked ? "Entrer le code" : "Courriel",
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
@@ -111,33 +119,9 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
                   child: SizedBox(
                     width: 430,
                     height: 40,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        String? serverErrorMessage =
-                            await formService.sendMail(emailController.text);
-
-                        if (serverErrorMessage == null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => SignInPage(),
-                            ),
-                          );
-                        } else {
-                          setState(() {
-                            errorMessage =
-                                "Il n'y a pas de compte associé à cet email";
-                          });
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                        backgroundColor: Color.fromARGB(255, 31, 150, 104),
-                        foregroundColor: Colors.white,
-                      ),
-                      child: Text("Recevoir un code"),
-                    ),
+                    child: isCodeAsked
+                        ? codeButton(context)
+                        : emailButton(context),
                   ),
                 ),
                 Text(
@@ -162,6 +146,82 @@ class _PasswordResetPopupState extends State<PasswordResetPopup> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget codeButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        print('text is ${emailController.text}');
+        try {
+          print('trying to parse the int');
+          int.parse(emailController.text);
+        } catch (e) {
+          print('catch entered');
+          setState(() {
+            emailController.text = "";
+            errorMessage = "Le code doit être un nombre à 4 chiffres";
+          });
+        }
+        print('try-catch passed code is ${int.parse(emailController.text)}');
+        if (formService.checkCode(int.parse(emailController.text))) {
+          print('Code valide');
+          setState(() {
+            emailController.text = "";
+            Navigator.of(context).pop();
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return ChangePasswordPopup();
+              },
+            );
+          });
+        } else {
+          setState(() {
+            emailController.text = "";
+            errorMessage = "Code invalide";
+          });
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0),
+        ),
+        backgroundColor: Color.fromARGB(255, 31, 150, 104),
+        foregroundColor: Colors.white,
+      ),
+      child: Text("Valider mon code"),
+    );
+  }
+
+  Widget emailButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () async {
+        String? serverErrorMessage =
+            await formService.sendMail(emailController.text);
+
+        if (serverErrorMessage == null) {
+          setState(() {
+            emailController.text = "";
+            isCodeAsked = true;
+          });
+        } else {
+          print('Erreur serveur');
+          print(serverErrorMessage);
+          setState(() {
+            errorMessage = "Il n'y a pas de compte associé à cet email";
+          });
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0),
+        ),
+        backgroundColor: Color.fromARGB(255, 31, 150, 104),
+        foregroundColor: Colors.white,
+      ),
+      child: Text("Recevoir un code"),
     );
   }
 }

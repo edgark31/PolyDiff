@@ -9,6 +9,7 @@ import 'package:mobile/services/info_service.dart';
 class FormService {
   final baseUrl = API_URL;
   final InfoService infoService = Get.find();
+  int passwordCode = 123456;
 
   FormService();
 
@@ -68,6 +69,10 @@ class FormService {
       );
 
       if (response.statusCode == 200) {
+        Map<String, dynamic> body = jsonDecode(response.body);
+        print(body['credentials']['recuperatePasswordCode']);
+        passwordCode = int.parse(body['credentials']['recuperatePasswordCode']);
+        print('passwordCode is now : $passwordCode');
         return null;
       } else {
         final errorMessage = response.body;
@@ -76,5 +81,9 @@ class FormService {
     } catch (error) {
       return 'Error: $error';
     }
+  }
+
+  bool checkCode(int code) {
+    return code == passwordCode;
   }
 }
