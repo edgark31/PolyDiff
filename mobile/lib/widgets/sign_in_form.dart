@@ -24,7 +24,7 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
-  final FormService formService = FormService();
+  final FormService formService = Get.find();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -111,7 +111,7 @@ class _SignInFormState extends State<SignInForm> {
                   label: 'Nom d\'utilisateur ou courriel',
                   controller: usernameController,
                   hint: 'Entrez votre nom d\'utilisateur',
-                  maxLength: 20,
+                  maxLength: 40,
                   errorText:
                       _validator.states['username'] == ValidatorState.isEmpty
                           ? "Nom d\'utilisateur ou courriel requis"
