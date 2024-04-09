@@ -36,6 +36,9 @@ export class GlobalChatService {
         });
 
         this.clientSocketService.on('auth', ChannelEvents.GlobalMessage, (chat: Chat) => {
+            if (chat.tag === MessageTag.Common) {
+                chat = { raw: chat.raw, tag: MessageTag.Common } as Chat;
+            }
             this.message.next(chat);
         });
 

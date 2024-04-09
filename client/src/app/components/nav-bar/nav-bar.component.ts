@@ -92,6 +92,7 @@ export class NavBarComponent {
         this.welcomeService.selectLanguage = '';
         this.sound.correctSoundEffect = {} as Sound;
         this.sound.incorrectSoundEffect = {} as Sound;
+        this.welcomeService.isLogin = false;
         this.router.navigate(['/login']);
     }
     onManageGames(): void {

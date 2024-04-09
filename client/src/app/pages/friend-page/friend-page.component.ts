@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 /* eslint-disable no-unreachable */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/member-ordering */
@@ -34,65 +35,65 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
     friendSendListSubscription: Subscription;
     friendPendingListSubscription: Subscription;
 
-    friends: Friend[] = [
-        {
-            name: 'ami',
-            accountId: '660dc4cd856bbec8c9b1aa2e',
-            // friends: ["l'ami de mon ami"],
-            // commonFriends: ['mon ami en commun'],
-            isFavorite: true,
-            isOnline: true,
-        },
+    friends: Friend[] = [];
+    //     {
+    //         name: 'ami',
+    //         accountId: '660dc4cd856bbec8c9b1aa2e',
+    //         // friends: ["l'ami de mon ami"],
+    //         // commonFriends: ['mon ami en commun'],
+    //         isFavorite: true,
+    //         isOnline: true,
+    //     },
 
-        {
-            name: 'ami2',
-            accountId: '660d543daa0ee7bb51f628cf',
-            // friends: ["l'ami de mon ami"],
-            // commonFriends: ['mon ami en commun'],
-            isFavorite: true,
-            isOnline: true,
-        },
-        {
-            name: 'ami3',
-            accountId: '660c39b6edfe9d58baa631ef',
-            // friends: ["l'ami de mon ami"],
-            // commonFriends: ['mon ami en commun'],
-            isFavorite: true,
-            isOnline: true,
-        },
-        {
-            name: 'ami3',
-            accountId: '660c39b6edfe9d58baa631ef',
-            // friends: ["l'ami de mon ami"],
-            // commonFriends: ['mon ami en commun'],
-            isFavorite: true,
-            isOnline: true,
-        },
-        {
-            name: 'ami3',
-            accountId: '660c39b6edfe9d58baa631ef',
-            // friends: ["l'ami de mon ami"],
-            // commonFriends: ['mon ami en commun'],
-            isFavorite: true,
-            isOnline: true,
-        },
-        {
-            name: 'ami3',
-            accountId: '660c39b6edfe9d58baa631ef',
-            // friends: ["l'ami de mon ami"],
-            // commonFriends: ['mon ami en commun'],
-            isFavorite: true,
-            isOnline: true,
-        },
-        {
-            name: 'ami3',
-            accountId: '660c39b6edfe9d58baa631ef',
-            // friends: ["l'ami de mon ami"],
-            // commonFriends: ['mon ami en commun'],
-            isFavorite: true,
-            isOnline: true,
-        },
-    ];
+    //     {
+    //         name: 'ami2',
+    //         accountId: '660d543daa0ee7bb51f628cf',
+    //         // friends: ["l'ami de mon ami"],
+    //         // commonFriends: ['mon ami en commun'],
+    //         isFavorite: true,
+    //         isOnline: true,
+    //     },
+    //     {
+    //         name: 'ami3',
+    //         accountId: '660c39b6edfe9d58baa631ef',
+    //         // friends: ["l'ami de mon ami"],
+    //         // commonFriends: ['mon ami en commun'],
+    //         isFavorite: true,
+    //         isOnline: true,
+    //     },
+    //     {
+    //         name: 'ami3',
+    //         accountId: '660c39b6edfe9d58baa631ef',
+    //         // friends: ["l'ami de mon ami"],
+    //         // commonFriends: ['mon ami en commun'],
+    //         isFavorite: true,
+    //         isOnline: true,
+    //     },
+    //     {
+    //         name: 'ami3',
+    //         accountId: '660c39b6edfe9d58baa631ef',
+    //         // friends: ["l'ami de mon ami"],
+    //         // commonFriends: ['mon ami en commun'],
+    //         isFavorite: true,
+    //         isOnline: true,
+    //     },
+    //     {
+    //         name: 'ami3',
+    //         accountId: '660c39b6edfe9d58baa631ef',
+    //         // friends: ["l'ami de mon ami"],
+    //         // commonFriends: ['mon ami en commun'],
+    //         isFavorite: true,
+    //         isOnline: true,
+    //     },
+    //     {
+    //         name: 'ami3',
+    //         accountId: '660c39b6edfe9d58baa631ef',
+    //         // friends: ["l'ami de mon ami"],
+    //         // commonFriends: ['mon ami en commun'],
+    //         isFavorite: true,
+    //         isOnline: true,
+    //     },
+    // ];
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
     constructor(
         public clientSocket: ClientSocketService,
@@ -119,7 +120,6 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
     }
 
     ngOnInit(): void {
-        return;
         this.friendService.manageSocket();
         this.welcome.updateAccountObservable();
         this.accountSubscription = this.welcome.accountObservable$.subscribe((account: Account) => {
