@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/widgets/change_password_popup.dart';
 
@@ -9,7 +10,7 @@ class PasswordResetPopup extends StatefulWidget {
 }
 
 class _PasswordResetPopupState extends State<PasswordResetPopup> {
-  final FormService formService = FormService();
+  final FormService formService = Get.find();
   TextEditingController emailController = TextEditingController();
 
   String errorMessage = "";

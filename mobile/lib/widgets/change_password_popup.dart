@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/utils/credentials_validation.dart';
@@ -10,9 +11,11 @@ class ChangePasswordPopup extends StatefulWidget {
 }
 
 class _ChangePasswordPopupState extends State<ChangePasswordPopup> {
-  final FormService formService = FormService();
+  final FormService formService = Get.find();
 
   String errorMessage = "";
+
+  bool isPasswordChanged = false;
 
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmationController = TextEditingController();
@@ -77,7 +80,7 @@ class _ChangePasswordPopupState extends State<ChangePasswordPopup> {
                 image: AssetImage('assets/images/password-raccoon.jpg'),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.55),
+                  Colors.black.withOpacity(0.80),
                   BlendMode.dstATop,
                 ),
               ),
@@ -101,20 +104,65 @@ class _ChangePasswordPopupState extends State<ChangePasswordPopup> {
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 21),
                   child: SizedBox(
-                    width: 430,
-                    height: 40,
-                    child: Column(children: [
-                      buildPasswordField(),
-                      buildPasswordConfirmationField(),
-                      changePasswordButton(context),
-                    ]),
+                    width: 500,
+                    height: 400,
+                    child: SingleChildScrollView(
+                      child: isPasswordChanged
+                          ? Column(children: [
+                              Container(
+                                padding: EdgeInsets.all(16.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 2,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  "Mot de passe changé avec succès",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0),
+                                  ),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 31, 150, 104),
+                                  foregroundColor: Colors.white,
+                                ),
+                                child: Text("Fermer"),
+                              ),
+                            ])
+                          : Column(children: [
+                              buildPasswordField(),
+                              buildPasswordConfirmationField(),
+                              (passwordConfirmation == YES
+                                  ? changePasswordButton(context)
+                                  : SizedBox()),
+                            ]),
+                    ),
                   ),
                 ),
                 Text(
@@ -189,7 +237,23 @@ class _ChangePasswordPopupState extends State<ChangePasswordPopup> {
 
   Widget changePasswordButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () async {
+        String? serverErrorMessage =
+            await formService.changePassword(passwordController.text);
+        if (serverErrorMessage == null) {
+          setState(() {
+            passwordController.text = "";
+            confirmationController.text = "";
+            isPasswordChanged = true;
+          });
+        } else {
+          print('Erreur serveur');
+          print(serverErrorMessage);
+          setState(() {
+            errorMessage = serverErrorMessage;
+          });
+        }
+      },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(0),

@@ -158,6 +158,8 @@ export class AccountManagerService implements OnModuleInit {
 
     async updatePassword(username: string, newPassword: string): Promise<void> {
         try {
+            console.log(username);
+            console.log(newPassword);
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');
 
@@ -169,7 +171,7 @@ export class AccountManagerService implements OnModuleInit {
             this.logger.verbose(`${username} has changed his password`);
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to change pseudo --> ${error.message}`);
+            this.logger.error(`Failed to change password --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
