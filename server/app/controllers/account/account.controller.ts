@@ -47,7 +47,7 @@ export class AccountController {
                             return friend.accountId === socket.data.accountId;
                         })
                     ) {
-                        this.auth.handleOnlineMessage(socket as any, 'est en ligne !', accountFound.credentials.username);
+                        this.auth.handleOnlineMessage(socket as any, accountFound.credentials.username);
                     }
                 });
             });
