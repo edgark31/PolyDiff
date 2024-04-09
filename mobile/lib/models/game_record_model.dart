@@ -50,6 +50,7 @@ class GameEventData {
   final String? accountId;
   final String? username;
   final int? timestamp;
+  final String? modified;
   final List<Player>? players;
   final String gameEvent;
   final Coordinate? coordClic;
@@ -59,9 +60,10 @@ class GameEventData {
   final int? time;
 
   GameEventData({
-    this.timestamp,
-    this.username,
     this.accountId,
+    this.username,
+    this.timestamp,
+    this.modified,
     this.players,
     required this.gameEvent,
     this.coordClic,
@@ -72,9 +74,10 @@ class GameEventData {
 
   factory GameEventData.fromJson(Map<String, dynamic> json) {
     return GameEventData(
-      timestamp: json['timestamp'] ?? 0,
-      username: json['username'] ?? '',
       accountId: json['accountId'] ?? '',
+      username: json['username'] ?? '',
+      timestamp: json['timestamp'] ?? 0,
+      modified: json['modified'] ?? '',
       players: json['players'] != null
           ? List<Player>.from(json['players'].map((x) => Player.fromJson(x)))
           : null,
