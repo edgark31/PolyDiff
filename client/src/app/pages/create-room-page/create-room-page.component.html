@@ -8,13 +8,13 @@
         <button class="settings">
             <span id = "classic">{{'createRoom.time' | translate }} : </span>
             <mat-slider color="warn" [displayWith]="formatLabelTime.bind(this)" tickInterval="1" min="30" max="120"></mat-slider>
-            <span class="time">{{time}}</span>
+            <span class="time">{{time}} sec</span>
         </button>
         <div *ngIf="!onVerifyClassic()">
             <button class="settings">
                 <span id = "classic">Bonus : </span>
                 <mat-slider color="warn" [displayWith]="formatLabelBonusTime.bind(this)" tickInterval="1" min="10" max="20"></mat-slider>
-                <span class="time">{{bonusTime}}</span>
+                <span class="time">{{bonusTime}} sec</span>
             </button>
         </div>
         <button class="settings">
