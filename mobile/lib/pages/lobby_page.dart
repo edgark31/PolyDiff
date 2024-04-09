@@ -135,8 +135,6 @@ class _LobbyPageState extends State<LobbyPage> {
         press: () {
           print('Starting the lobby');
           lobbyService.startLobby();
-          // TODO: Add loading message for creator
-          // Navigator.pushNamed(context, GAME_ROUTE);
         },
       );
     } else {

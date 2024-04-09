@@ -6,7 +6,6 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game.dart';
-import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
@@ -40,7 +39,6 @@ class _GamePageState extends State<GamePage> {
   final ImageConverterService imageConverterService = ImageConverterService();
   final GameAreaService gameAreaService = Get.find();
   final GameManagerService gameManagerService = Get.find();
-  final tempGameManager = CoordinateConversionService();
 
   late Future<CanvasModel> imagesFuture;
   bool isChatBoxVisible = false;
