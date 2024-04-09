@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
@@ -22,7 +23,7 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final FormService formService = FormService();
+  final FormService formService = Get.find();
 
   ImageProvider _selectedAvatar = NetworkImage(getDefaultAvatarUrl('1'));
   String _selectedAvatarId = '1';

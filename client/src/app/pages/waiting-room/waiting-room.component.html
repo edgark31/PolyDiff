@@ -19,7 +19,7 @@
             <div class="players">
                 <div class="player" *ngFor="let player of getPlayers()">
                     <img src="{{'http://localhost:3000/avatar/' + player.accountId + '.png'}}" >
-                    <p>{{'waitingPage.player' | translate }}: {{ player.name }}</p>
+                    <p>{{ player.name }}</p>
                 </div>
             </div>
         </div>
