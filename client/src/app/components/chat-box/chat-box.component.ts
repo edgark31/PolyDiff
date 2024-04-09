@@ -34,6 +34,10 @@ export class ChatBoxComponent {
         return this.navigationService.getPreviousUrl();
     }
 
+    onChangeTheme(): void {
+        this.welcome.changeThemeChat = !this.welcome.changeThemeChat;
+    }
+
     goPageChatGame(): void {
         this.welcome.onChatGame = !this.welcome.onChatGame;
     }

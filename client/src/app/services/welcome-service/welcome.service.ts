@@ -14,6 +14,7 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class WelcomeService {
+    changeThemeChat: boolean = true;
     onChatGame: boolean = false;
     onChatLobby: boolean = false;
     isLoggedIn = localStorage.getItem('isLogged') === 'true';
