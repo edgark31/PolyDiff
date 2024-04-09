@@ -55,7 +55,8 @@ export class ReplayPageComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.communication.getGameRecords().subscribe((records: GameRecord[]) => {
+        const date: Date = new Date('2024-04-08T00:03:34.607+00:00');
+        this.communication.getGameRecords(date).subscribe((records: GameRecord[]) => {
             this.records = records;
             console.log(this.records);
         });
