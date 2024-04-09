@@ -34,6 +34,16 @@ export class ChatBoxComponent {
         return this.navigationService.getPreviousUrl();
     }
 
+    getChatBox(): boolean {
+        if (
+            this.welcome.changeThemeChat ||
+            (!this.welcome.onChatLobby && this.router.url === '/waiting-room') ||
+            (!this.welcome.onChatLobby && this.router.url === '/game')
+        )
+            return true;
+        else if (!this.welcome.changeThemeChat && (this.router.url === '/chat' || this.welcome.onChatGame || this.welcome.onChatLobby)) return false;
+        return false;
+    }
     onChangeTheme(): void {
         this.welcome.changeThemeChat = !this.welcome.changeThemeChat;
     }

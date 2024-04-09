@@ -1,5 +1,5 @@
-<div [attr.id]="welcome.changeThemeChat ? 'chat-box' : ((router.url === '/chat' || welcome.onChatGame || welcome.onChatLobby ) ? 'chat-box-dark' : 'chat-box')">
-    <div  [ngClass]="{'content': welcome.changeThemeChat , 'content-dark': !welcome.changeThemeChat && ((router.url === '/chat' || welcome.onChatGame || welcome.onChatLobby ))}">
+<div [attr.id]="getChatBox() ? 'chat-box' : 'chat-box-dark' ">
+    <div  [ngClass]="{'content': welcome.changeThemeChat || !welcome.onChatGame || !welcome.onChatLobby, 'content-dark': !welcome.changeThemeChat && ((router.url === '/chat' || welcome.onChatGame || welcome.onChatLobby ))}">
         <div class="contact-profile">
             <p class="chat">{{'chat.chatZone' | translate }}</p>
             <span class="button-container">
