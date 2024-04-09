@@ -60,4 +60,8 @@ export class ReplayPageComponent implements OnInit {
             this.records = records;
         });
     }
+
+    deleteRecord(recordToRemove: GameRecord): void {
+        this.records = this.records.filter((record) => record === recordToRemove);
+    }
 }

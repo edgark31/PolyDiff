@@ -22,7 +22,7 @@
                 </button>
             </form> -->
             <div class="card-container">
-                <mat-card class="friend-card"  *ngFor="let record of records">
+                <mat-card class="friend-card" *ngFor="let record of records">
                     <mat-card-header>
                         <mat-card-title class="username">
                             <div class="form-avatar">
@@ -38,12 +38,10 @@
                                 <span>{{ record.date| date: 'longDate' }} at {{ record.date | date: 'shortTime' }}</span>
                             </div>
                             <div class="delete">
-                                <button><mat-icon>delete</mat-icon></button>
+                                <button (click)="deleteRecord(record)"><mat-icon>delete</mat-icon></button>
                             </div>
                         </mat-card-title>
                     </mat-card-header>
-                    <mat-card-content>
-                    </mat-card-content>
                 </mat-card>
             </div>
 <img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
