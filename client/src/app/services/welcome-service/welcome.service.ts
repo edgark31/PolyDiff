@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, LANGUAGES, THEME_PERSONALIZATION } from '@common/constants';
-import { Account, Theme } from '@common/game-interfaces';
+import { Account } from '@common/game-interfaces';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 // eslint-disable-next-line import/no-unresolved, no-restricted-imports
@@ -28,7 +28,7 @@ export class WelcomeService {
     chooseImage: boolean;
     feedback: string;
     selectName: string;
-    selectTheme: Theme;
+    selectTheme: string;
     selectPassword: string;
     selectPasswordConfirm: string;
     isLinkValid: boolean;
@@ -149,9 +149,10 @@ export class WelcomeService {
     }
 
     onModifyTheme() {
+        console.log('yooooooooooooooooooooooo');
         this.communication.modifyTheme(this.account.credentials.username, this.selectTheme).subscribe({
             next: () => {
-                this.account.profile.desktopTheme = this.selectTheme;
+                this.account.profile.mobileTheme = this.selectTheme;
             },
             error: (error: HttpErrorResponse) => {
                 this.feedback = error.error || 'An unexpected error occurred. Please try again.';

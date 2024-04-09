@@ -195,6 +195,7 @@ export interface Profile {
     friends: Friend[];
     friendRequests: string[];
     desktopTheme: Theme;
+    mobileTheme: string;
     language: string;
     onCorrectSound: Sound;
     onErrorSound: Sound;

@@ -2,8 +2,8 @@
     <div>
         <app-nav-bar> </app-nav-bar>
     </div>
-    <img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
-    <img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
+    <img *ngIf="welcome.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
+    <img  *ngIf="welcome.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
     <div class="flex-column">
         <button class="settings">
             <span id = "classic">{{'createRoom.time' | translate }} : </span>
