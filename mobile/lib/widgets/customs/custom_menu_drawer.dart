@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/constants/app_text_constants.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
@@ -25,8 +25,8 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
   @override
   Widget build(BuildContext context) {
     final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
-    final InfoService infoService = context.read<InfoService>();
-    final SocketService socketService = context.read<SocketService>();
+    final InfoService infoService = context.watch<InfoService>();
+    final SocketService socketService = context.watch<SocketService>();
 
     return Drawer(
       child: ListView(
@@ -36,38 +36,43 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
             accountEmail: Text(infoService.email),
             currentAccountPicture: CustomCircleAvatar(
               key: ValueKey(avatarProvider.currentAvatarUrl),
-
               imageUrl: avatarProvider.currentAvatarUrl,
             ),
           ),
           ListTile(
               tileColor: Colors.transparent,
               leading: Icon(Icons.home),
-              title: Text('Accueil'),
+              title: Text(AppLocalizations.of(context)!.customMenuDrawer_home),
               onTap: () => Navigator.pushNamed(context, DASHBOARD_ROUTE)),
           SizedBox(height: 10),
           ListTile(
               tileColor: Colors.transparent,
               leading: Icon(Icons.account_circle),
-              title: Text('Profil'),
+              title: Text(
+                AppLocalizations.of(context)!.customMenuDrawer_profile,
+              ),
               onTap: () => Navigator.pushNamed(context, PROFILE_ROUTE)),
           SizedBox(height: 10),
           ListTile(
               tileColor: Colors.transparent,
               leading: Icon(Icons.message_rounded),
-              title: Text('Message'),
+              title: Text('Chat'),
               onTap: () => Navigator.pushNamed(context, CHAT_ROUTE)),
           SizedBox(height: 10),
           ListTile(
               tileColor: Colors.transparent,
               leading: Icon(Icons.line_axis),
-              title: Text('Statistiques'),
+              title: Text(
+                AppLocalizations.of(context)!.customMenuDrawer_statistics,
+              ),
               onTap: () => Navigator.pushNamed(context, STATISTICS_ROUTE)),
           SizedBox(height: 10),
           ListTile(
               tileColor: Colors.transparent,
               leading: Icon(Icons.settings),
-              title: Text('Réglages'),
+              title: Text(
+                AppLocalizations.of(context)!.customMenuDrawer_settings,
+              ),
               onTap: () => Navigator.pushNamed(context, EDIT_PROFILE_ROUTE)),
           SizedBox(height: 10),
           Divider(),
@@ -90,9 +95,9 @@ class _CustomMenuDrawerState extends State<CustomMenuDrawer> {
               leading: Icon(
                 Icons.logout,
               ),
-              title: Text(SIGN_OUT_BTN_TXT),
+              title: Text(AppLocalizations.of(context)!.history_disconnection),
               onTap: () {
-                print(SIGN_OUT_BTN_TXT);
+                print("Disconnecting from hamburger menu");
                 socketService.disconnect(SocketType.Auth);
                 Navigator.pushNamed(context, HOME_ROUTE);
               }),

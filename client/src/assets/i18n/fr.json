@@ -33,7 +33,7 @@
     },
     "button": {
         "deconnexion": "Déconnexion",
-        "returnProfil": "revenir au profil",
+        "returnProfil": "Enregistrer vos modifications",
         "GoReglage": "Aller dans réglage",
         "Settings": "Réglages",
         "previous": "précédent",
@@ -193,7 +193,9 @@
 
     "mainPage": {
         "gameMode": "Modes de jeu",
-        "welcome": "Bienvenue"
+        "welcome": "Bienvenue",
+        "globalClassement": "Classement global",
+        "winGame": "parties gagnées"
     },
 
     "pageConfig": {

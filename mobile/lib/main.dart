@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
@@ -9,6 +10,7 @@ import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/friend_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_card_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
@@ -73,12 +75,19 @@ void main() async {
       GameCardService gameCardService = Get.find();
       return gameCardService;
     }),
+    ChangeNotifierProvider(create: (context) {
+      FriendService friendService = Get.find();
+      return friendService;
+    }),
     // Avatar
     ChangeNotifierProvider(create: (context) {
       AvatarProvider avatarProvider = Get.find();
       return avatarProvider;
     }),
-    ChangeNotifierProvider(create: (context) => ThemeProvider()),
+    ChangeNotifierProvider(create: (context) {
+      ThemeProvider themeProvider = Get.find();
+      return themeProvider;
+    })
   ], child: const MyApp()));
 }
 
@@ -93,6 +102,7 @@ void initializeServices() {
   Get.put(GameManagerService());
   Get.put(ChatService());
   Get.put(GameCardService());
+  Get.put(FriendService());
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
   Get.put(ThemeProvider());
@@ -103,9 +113,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    final ThemeProvider themeProvider = Get.find();
 
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: APP_NAME_TXT,
       themeMode: themeProvider.themeMode,
@@ -113,6 +123,8 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeClass.darkTheme,
       onGenerateRoute: AppRouter.onGenerateRoute,
       initialRoute: SignInPage.routeName,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

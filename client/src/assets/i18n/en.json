@@ -35,7 +35,7 @@
 
     "button": {
         "deconnexion": "Disconnect",
-        "returnProfil": "return to profile",
+        "returnProfil": "Save your changes",
         "GoReglage": "Go to settings",
         "Settings": "Settings",
         "previous": "previous",
@@ -186,7 +186,9 @@
 
     "mainPage": {
         "gameMode": "game Modes",
-        "welcome": "welcome"
+        "welcome": "welcome",
+        "globalClassement": "Overall ranking",
+        "winGame": "games won"
     },
 
     "pageConfig": {
