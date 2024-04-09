@@ -1,34 +1,31 @@
-<div class="header">
-    <app-nav-bar id="nav-bar"></app-nav-bar>
-</div>
-<div class="selectionComponent">
-    <img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
-    <img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
+<img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
+<img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
+<div class="main">
+    <div class="nav-bar-container">
+        <app-nav-bar id="nav-bar"></app-nav-bar>
+    </div>
     <div class="container">
-        <div class="left">
-            <div *ngIf="!welcome.onChatLobby">
-            <app-chat-box (addLobby)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
+        <div class="chat-part">
+            <app-chat-box *ngIf="!welcome.onChatLobby" (addLobby)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
+            <app-chat-box *ngIf="welcome.onChatLobby" class="chat-box" (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
         </div>
-            <div *ngIf="welcome.onChatLobby">
-                <app-chat-box class="chat-box" (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
+        <div class="player-part">
+            <div class="player-count"> 
+                <p> {{ getPlayers().length }}/4 {{'waitingPage.waitingPlayers' | translate }} </p> 
             </div>
-        </div>
-        <div class="right">
-            <div class="player-count"> {{ getPlayers().length }}/4 {{'waitingPage.currentPlayers' | translate }}</div>
-            <div class="element">
-                <div class="players-list">
-                    <p class="waiting-text"> {{'waitingPage.waitingPlayers' | translate }} : </p>
-                    <div class="player-container">
-                        <div class="players" *ngFor="let playerName of getPlayers()">
-                            <p class="player">{{'waitingPage.player' | translate }}: <span class="player-name">{{ playerName.name }}</span></p>
-                        </div>
-                    </div>
+            <div class="waiting-text">
+                <p> {{'waitingPage.waitingPlayers' | translate }} : </p>
+            </div>
+            <div class="players">
+                <div class="player" *ngFor="let player of getPlayers()">
+                    <img src="{{'http://localhost:3000/avatar/' + player.accountId + '.png'}}" >
+                    <p>{{ player.name }}</p>
                 </div>
             </div>
         </div>
-        <div class="button-container">
-            <button (click)="onStart()" *ngIf="roomManagerService.isOrganizer && getPlayers().length>=2" type="submit">{{'waitingPage.start' | translate }}</button>
-            <button (click)="onQuit()" type="submit">{{'waitingPage.quit' | translate }}</button>
-        </div>
+    </div>
+    <div class="button-container">
+        <button class="start" (click)="onStart()" *ngIf="roomManagerService.isOrganizer && getPlayers().length>=2" type="submit">{{'waitingPage.start' | translate }}</button>
+        <button (click)="onQuit()" type="submit">{{'waitingPage.quit' | translate }}</button>
     </div>
 </div>

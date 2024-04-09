@@ -10,6 +10,7 @@ import 'package:mobile/pages/edit_profile_page.dart';
 import 'package:mobile/pages/friends_page.dart';
 import 'package:mobile/pages/game_page.dart';
 import 'package:mobile/pages/game_record_selection_page.dart';
+import 'package:mobile/pages/gamemodes_page.dart';
 import 'package:mobile/pages/history_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
 import 'package:mobile/pages/lobby_selection_page.dart';
@@ -38,6 +39,7 @@ const String SIGN_UP_ROUTE = '/signup';
 const String LOGOUT_ROUTE = '/';
 const String DASHBOARD_ROUTE = '/dashboard';
 const String CHAT_ROUTE = '/chat';
+const String GAME_MODES_ROUTE = '/gamemodes';
 
 // ACCOUNT/PROFILE
 const String ADMIN_ROUTE = '/admin';
@@ -117,6 +119,9 @@ class AppRouter {
 
       case FriendsPage.routeName:
         return FriendsPage.route();
+
+      case GameModesPage.routeName:
+        return GameModesPage.route();
 
       default:
         return _errorRoute();

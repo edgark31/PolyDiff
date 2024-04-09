@@ -12,6 +12,7 @@ import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/replay/player_data_provider.dart';
 import 'package:mobile/replay/replay_service.dart';
 import 'package:mobile/services/chat_service.dart';
+import 'package:mobile/services/form_service.dart';
 import 'package:mobile/services/friend_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_card_service.dart';
@@ -43,6 +44,10 @@ void main() async {
     ChangeNotifierProvider(create: (context) {
       InfoService infoService = Get.find();
       return infoService;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      FormService formService = Get.find();
+      return formService;
     }),
     ChangeNotifierProvider(create: (context) {
       SoundService soundService = Get.find();
@@ -105,6 +110,7 @@ void main() async {
 void initializeServices() {
   Get.put(SocketService());
   Get.put(InfoService());
+  Get.put(FormService());
   Get.put(SoundService());
   Get.put(GameAreaService());
   Get.put(LobbySelectionService());

@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/troika-2');
+
 form {
     max-width: 400px;
     padding: 16px 16px 24px;
@@ -20,19 +22,10 @@ form {
 .mat-header-cell {
     font-weight: bold;
 }
-// #nav-bar {
-//     font-family: 'Troika', sans-serif;
-//     z-index: 2;
-// }
 
 app-nav-bar {
-    float: right;
     font-family: 'Troika', sans-serif;
     font-size: 20px;
-    position: relative;
-    right: 80px;
-}
-.mat-cell {
 }
 
 .mat-column-position,
@@ -227,6 +220,18 @@ body {
     text-shadow: 2px 2px 4px #000000;
     -webkit-text-stroke: 0.1px #000000;
     margin-top: -90px;
+    text-transform: uppercase;
+    width: 340px;
+}
+
+.profil-replay {
+    color: #ffa500;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #000000;
+    -webkit-text-stroke: 0.1px #000000;
+    margin-top: 10px;
     text-transform: uppercase;
     width: 340px;
 }

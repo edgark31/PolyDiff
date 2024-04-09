@@ -1,3 +1,5 @@
+/* eslint-disable max-params */
+/* eslint-disable no-unreachable */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
@@ -34,11 +36,9 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
     friendPendingListSubscription: Subscription;
 
     friends: Friend[] = [];
-    // [
-    //     // variable temporaire
     //     {
     //         name: 'ami',
-    //         accountId: '',
+    //         accountId: '660dc4cd856bbec8c9b1aa2e',
     //         // friends: ["l'ami de mon ami"],
     //         // commonFriends: ['mon ami en commun'],
     //         isFavorite: true,
@@ -46,16 +46,48 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
     //     },
 
     //     {
-    //         name: 'ami',
-    //         accountId: '',
+    //         name: 'ami2',
+    //         accountId: '660d543daa0ee7bb51f628cf',
     //         // friends: ["l'ami de mon ami"],
     //         // commonFriends: ['mon ami en commun'],
     //         isFavorite: true,
     //         isOnline: true,
     //     },
     //     {
-    //         name: 'ami',
-    //         accountId: '',
+    //         name: 'ami3',
+    //         accountId: '660c39b6edfe9d58baa631ef',
+    //         // friends: ["l'ami de mon ami"],
+    //         // commonFriends: ['mon ami en commun'],
+    //         isFavorite: true,
+    //         isOnline: true,
+    //     },
+    //     {
+    //         name: 'ami3',
+    //         accountId: '660c39b6edfe9d58baa631ef',
+    //         // friends: ["l'ami de mon ami"],
+    //         // commonFriends: ['mon ami en commun'],
+    //         isFavorite: true,
+    //         isOnline: true,
+    //     },
+    //     {
+    //         name: 'ami3',
+    //         accountId: '660c39b6edfe9d58baa631ef',
+    //         // friends: ["l'ami de mon ami"],
+    //         // commonFriends: ['mon ami en commun'],
+    //         isFavorite: true,
+    //         isOnline: true,
+    //     },
+    //     {
+    //         name: 'ami3',
+    //         accountId: '660c39b6edfe9d58baa631ef',
+    //         // friends: ["l'ami de mon ami"],
+    //         // commonFriends: ['mon ami en commun'],
+    //         isFavorite: true,
+    //         isOnline: true,
+    //     },
+    //     {
+    //         name: 'ami3',
+    //         accountId: '660c39b6edfe9d58baa631ef',
     //         // friends: ["l'ami de mon ami"],
     //         // commonFriends: ['mon ami en commun'],
     //         isFavorite: true,

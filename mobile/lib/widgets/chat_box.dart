@@ -175,7 +175,7 @@ class _ChatBoxState extends State<ChatBox> {
                         margin: EdgeInsets.symmetric(vertical: 5),
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: ThemeData.dark().primaryColor,
+                          color: ThemeData.light().primaryColor,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(message.raw,

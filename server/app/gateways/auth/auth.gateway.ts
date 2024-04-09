@@ -213,7 +213,6 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {
-        this.logger.log(`DEATH de ${socket.data.accountId}`);
         this.accountManager.logConnection(socket.data.accountId, false);
         this.accountManager.disconnection(socket.data.accountId);
         this.server.fetchSockets().then((sockets) => {
@@ -221,6 +220,12 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                 this.updateIsOnline(s as any);
             });
         });
+        this.logger.log(`DEAUTH de ${socket.data.accountId}`);
+    }
+
+    handleOnlineMessage(socket: Socket, message: string, userOnline: string) {
+        const chat: Chat = this.messageManager.createMessage(userOnline, message);
+        socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Common });
     }
 
     updateIsOnline(socket: Socket) {

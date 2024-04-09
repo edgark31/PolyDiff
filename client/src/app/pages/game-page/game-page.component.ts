@@ -148,7 +148,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.setUpGame();
         });
         this.clientSocket.on('game', GameEvents.AbandonGame, () => {
-            this.router.navigate(['/game-mode']);
+            this.router.navigate(['/home']);
             this.clientSocket.disconnect('lobby');
             this.clientSocket.disconnect('game');
         });
@@ -160,11 +160,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         });
         this.endMessageSubscription = this.gameManager.endMessage$.subscribe((endMessage: string) => {
             if (endMessage.includes('partie')) {
-                const username = endMessage.split(' ').shift();
-                this.endMessage = username + this.translateCharacter('endParty');
+                this.endMessage = this.translateCharacter('endParty');
             } else if (endMessage.includes('pratique')) {
-                const username = endMessage.split(' ').shift();
-                this.endMessage = username + this.translateCharacter('endPractice');
+                this.endMessage = this.translateCharacter('endPractice');
             }
             this.showEndGameDialog(this.endMessage);
             this.welcome.onChatGame = false;
@@ -233,11 +231,11 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     translateGameMode(mode: GameModes): string {
         switch (mode) {
             case GameModes.Classic:
-                return 'Classique';
+                return this.translate.instant('game.classic');
             case GameModes.Limited:
-                return 'Temps limité';
+                return this.translate.instant('game.limited');
             case GameModes.Practice:
-                return 'Pratique';
+                return this.translate.instant('game.practice');
             default:
                 return '';
         }

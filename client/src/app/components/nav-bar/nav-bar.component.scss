@@ -1,6 +1,14 @@
+.container {
+    position: absolute;
+    right: 0;
+    overflow: hidden;
+    height: 20vw;
+}
+
 .navBar {
     display: flex;
     flex-direction: row;
+    align-items: center;
     text-transform: uppercase;
     text-decoration: none;
     background-color: transparent;
@@ -13,7 +21,7 @@ ul a {
 }
 
 ::ng-deep .mat-menu-panel {
-    background-color: #fffdd0;
+    background-color: #000000bf;
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 200px;
@@ -23,11 +31,17 @@ ul a {
     color: white;
     -webkit-text-stroke: 0.5px #000000;
     font-family: 'Troika', sans-serif;
-    padding: 8px 16px;
 }
 
 ::ng-deep .mat-menu-item:not(:last-child) {
     border-bottom: 1px solid #ccc;
+}
+
+::ng-deep .mat-menu-item:last-child {
+    background-color: #ff2f2fba;
+}
+::ng-deep .mat-menu-item:last-child:hover {
+    background-color: #a11f1fba;
 }
 
 li:hover {
@@ -35,7 +49,7 @@ li:hover {
 }
 
 .button-back {
-    margin-right: 100px;
+    margin-right: 50px;
 }
 
 .navElement {

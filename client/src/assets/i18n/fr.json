@@ -33,7 +33,7 @@
     },
     "button": {
         "deconnexion": "Déconnexion",
-        "returnProfil": "revenir au profil",
+        "returnProfil": "Enregistrer vos modifications",
         "GoReglage": "Aller dans réglage",
         "Settings": "Réglages",
         "previous": "précédent",
@@ -150,7 +150,8 @@
     "navBar": {
         "home": "Accueil",
         "messageChannel": "Clavardage",
-        "friends": "amis"
+        "friends": "Amis",
+        "account": "Compte"
     },
 
     "adminModal": {
@@ -192,7 +193,9 @@
 
     "mainPage": {
         "gameMode": "Modes de jeu",
-        "welcome": "Bienvenue"
+        "welcome": "Bienvenue",
+        "globalClassement": "Classement global",
+        "winGame": "parties gagnées"
     },
 
     "pageConfig": {
@@ -273,5 +276,10 @@
         "twoAreas": "pour les deux zones",
         "backgrounds": "les arrières-plans",
         "background": "l'arrière-plan"
+    },
+
+    "ranking": {
+        "loading": "Chargement...",
+        "global": "Classement Global"
     }
 }

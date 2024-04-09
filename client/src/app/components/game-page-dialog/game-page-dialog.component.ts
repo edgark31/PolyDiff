@@ -6,7 +6,7 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { GamePageEvent } from '@common/enums';
+import { GameModes, GamePageEvent } from '@common/enums';
 import { Lobby, Player } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
@@ -50,7 +50,11 @@ export class GamePageDialogComponent {
         this.replayService.resetReplay();
         this.clientSocket.disconnect('lobby');
         this.clientSocket.disconnect('game');
-        this.goShare = true;
+        if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
+        else {
+            this.dialog.closeAll();
+            this.router.navigate(['/home']);
+        }
     }
 
     replay() {
