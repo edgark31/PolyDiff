@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-params */
 import { AuthGateway } from '@app/gateways/auth/auth.gateway';
@@ -25,7 +26,9 @@ export class AccountController {
         try {
             await this.accountManager.register(creds, id);
             response.status(HttpStatus.OK).send();
-            this.auth.server.emit(UserEvents.UpdateUsers, await this.friendManager.queryUsers());
+            setTimeout(() => {
+                this.auth.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers());
+            }, 5000);
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
         }
