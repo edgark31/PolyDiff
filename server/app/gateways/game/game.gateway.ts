@@ -378,7 +378,7 @@ export class GameGateway implements OnGatewayConnection {
                 });
             this.server
                 .to(lobbyId)
-                .emit(GameEvents.EndGame, `${this.accountManager.users.get(players[0].accountId).credentials.username} + ' a abandonné !')`);
+                .emit(GameEvents.EndGame, `${this.accountManager.users.get(players[0].accountId).credentials.username}  a abandonné !`);
 
             clearInterval(this.timers.get(lobbyId));
             this.recordManager.post(lobbyId);
