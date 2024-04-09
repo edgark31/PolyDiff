@@ -1,22 +1,21 @@
-.nav-bar-container { /* This should be the direct parent element of your app-nav-bar */
+.nav-bar-container {
     display: flex;
-    justify-content: flex-end; /* Aligns children (app-nav-bar) to the right */
-    align-items: flex-start; /* Aligns children (app-nav-bar) to the top */
-    height: 100vh; /* Optional: If you want the parent container to cover the full viewport height */
-    /* Ensure there is no padding or margin that may affect the positioning */
+    justify-content: flex-end;
+    align-items: flex-start; 
+    height: 100vh; 
 }
 
 app-nav-bar {
     font-family: 'Troika', sans-serif;
     font-size: 20px;
-    margin-top: 12px; /* Or any other value to adjust the distance from the top */
-    margin-right: 12px; /* Or any other value to adjust the distance from the right */
+    margin-top: 12px; 
+    margin-right: 12px; 
 }
 
 .header {
     display: flex;
-    justify-content: center; /* Horizontally center the children */
-    align-items: center; /* Vertically center the children */
+    justify-content: center; 
+    align-items: center; 
     height: 100vh;
 }
 
