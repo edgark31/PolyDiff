@@ -31,7 +31,7 @@
     </div>
     <div class = "button2" *ngIf="data.action === 'SaveGameRecord'">
         <div class="button-container">
-            <button class = "noButton" mat-button *ngIf="data.action === 'SaveGameRecord'" (click)="leaveGame()"></button>
+            <button class = "noButton" mat-button *ngIf="data.action === 'SaveGameRecord'" (click)="deleteRecord()"></button>
                 <img src="./assets/icon/CreateButton.png" alt="notAbandonButton" >
                 <div class="centered-no">{{'dialogGame.no' | translate }}</div>
         </div>

@@ -21,7 +21,7 @@
                     <mat-icon class="icon-search">search</mat-icon>
                 </button>
             </form> -->
-            <div class="card-container">
+            <div class="card-container" *ngIf="records.length !== 0">
                 <mat-card class="friend-card" *ngFor="let record of records">
                     <mat-card-header>
                         <mat-card-title class="username">
@@ -44,5 +44,7 @@
                     </mat-card-header>
                 </mat-card>
             </div>
-<img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
-<img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>
+            <p *ngIf = "records.length === 0" id = "waiting-message">Il n'y a pas de reprises vidéo pour le moment</p>
+            <img *ngIf = "records.length === 0" id = "waiting" src = "./assets/raccoonWaiting.gif" alt = "waiting-image" />
+<img *ngIf="welcomeService.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
+<img  *ngIf="welcomeService.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>
