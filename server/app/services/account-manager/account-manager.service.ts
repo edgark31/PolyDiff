@@ -60,6 +60,8 @@ export class AccountManagerService implements OnModuleInit {
             const account = await this.accountModel.findOne({ 'credentials.username': creds.username });
             account.id = account._id.toString();
             await account.save();
+            this.imageManager.save(account.id, account.profile.avatar);
+            this.imageManager.save(account.credentials.username, account.profile.avatar);
             this.logger.verbose(`Account ${creds.username} has registered successfully`);
             this.fetchUsers();
             return Promise.resolve();
