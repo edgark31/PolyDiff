@@ -60,6 +60,7 @@ export class LoginPageComponent implements OnInit {
                     this.translate.use(this.welcomeservice.account.profile.language);
                     // eslint-disable-next-line max-len
                     this.welcomeservice.account.profile.avatar = `http://localhost:3000/avatar/${this.welcomeservice.account.credentials.username}.png`;
+                    this.welcomeservice.isLogin = true;
                     this.router.navigate(['/home']);
                 },
                 error: (error: HttpErrorResponse) => {

@@ -74,10 +74,13 @@
         "return": "return",
         "foundDifférence": " found a difference!",
         "error": " made a mistake!",
-        "endParty": "end of party",
+        "endParty": "end of game",
         "endPractice": "end of the Practice",
         "partyAbandon": "Are you sure you want to abandon the party?",
-        "abandonParty": " gave up the game !"
+        "abandonParty": " gave up !",
+        "winGame": " win !",
+        "tie": "Tie",
+        "expiredTime": "Time expired,tie"
     },
     "creationGame": {
         "differenceImage": "Here is the image of the differences",
@@ -124,7 +127,7 @@
         "yes": "Yes",
         "no": "No",
         "scoreShare": "Share your score",
-        "quitGame": "Quit the game"
+        "quitGame": "Leave"
     },
 
     "gameSheet": {

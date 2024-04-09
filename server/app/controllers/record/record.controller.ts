@@ -8,14 +8,15 @@ import { ApiTags } from '@nestjs/swagger';
 export class RecordController {
     constructor(private readonly recordManagerService: RecordManagerService) {}
 
+    @Get(':accountId')
+    async findAllByAccountId(@Param('accountId') accountId?: string): Promise<GameRecord[]> {
+        const records = await this.recordManagerService.findAllByAccountId(accountId);
+        return records;
+    }
+
     @Get(':date')
     async findOneByDate(@Param('date') date: Date): Promise<GameRecord> {
         return await this.recordManagerService.findOne(date);
-    }
-
-    @Get()
-    async findAllByAccountId(@Query('accountId') accountId?: string): Promise<GameRecord[]> {
-        return await this.recordManagerService.findAllByAccountId(accountId);
     }
 
     @Put(':date')

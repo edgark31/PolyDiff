@@ -130,9 +130,6 @@ export class Profile {
     @Prop({ required: false })
     language: string;
 
-    @Prop({ type: themeSchema, required: false })
-    desktopTheme: Theme;
-
     @Prop({ type: String, required: false })
     mobileTheme: string;
 

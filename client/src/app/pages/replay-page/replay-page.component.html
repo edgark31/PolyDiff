@@ -21,8 +21,8 @@
                     <mat-icon class="icon-search">search</mat-icon>
                 </button>
             </form> -->
-            <div class="card-container">
-                <mat-card class="friend-card"  *ngFor="let record of records">
+            <div class="card-container" *ngIf="records.length !== 0">
+                <mat-card class="friend-card" *ngFor="let record of records">
                     <mat-card-header>
                         <mat-card-title class="username">
                             <div class="form-avatar">
@@ -31,14 +31,20 @@
                             <div class="name">
                                 <span>{{ record.game.name }}</span>
                             </div>
+                            <div class="play">
+                                <button><mat-icon>play_arrow</mat-icon></button>
+                            </div>
                             <div class="date">
-                                <span>{{ record.date }}</span>
+                                <span>{{ record.date| date: 'longDate' }} at {{ record.date | date: 'shortTime' }}</span>
+                            </div>
+                            <div class="delete">
+                                <button (click)="deleteRecord(record)"><mat-icon>delete</mat-icon></button>
                             </div>
                         </mat-card-title>
                     </mat-card-header>
-                    <mat-card-content>
-                    </mat-card-content>
                 </mat-card>
             </div>
-<img *ngIf="welcome.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
-<img  *ngIf="welcome.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>
+            <p *ngIf = "records.length === 0" id = "waiting-message">Il n'y a pas de reprises vidéo pour le moment</p>
+            <img *ngIf = "records.length === 0" id = "waiting" src = "./assets/raccoonWaiting.gif" alt = "waiting-image" />
+<img *ngIf="welcomeService.account.profile.desktopTheme.name==='Light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
+<img  *ngIf="welcomeService.account.profile.desktopTheme.name==='Dark'" id = "background" src = "./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>

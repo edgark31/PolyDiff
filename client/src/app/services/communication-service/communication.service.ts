@@ -14,7 +14,6 @@ import {
     GameHistory,
     GameRecord,
     Sound,
-    Theme,
 } from './../../../../../common/game-interfaces';
 
 @Injectable({
@@ -110,8 +109,8 @@ export class CommunicationService {
         );
     }
 
-    modifyTheme(username: string, newTheme: Theme): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/desktop/theme`, { username, newTheme }).pipe(
+    modifyTheme(username: string, newTheme: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/mobile/theme`, { username, newTheme }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -189,12 +188,12 @@ export class CommunicationService {
         return this.http.get<Game>(`${this.gameUrl}/${id}`).pipe(catchError(this.handleError<Game>(`getGameById id=${id}`)));
     }
 
-    getGameRecords(date: Date): Observable<GameRecord[]> {
-        return this.http.get<GameRecord[]>(`${environment.serverUrl}/api/records${date}`);
+    findAllByAccountId(accountId: string): Observable<GameRecord[]> {
+        return this.http.get<GameRecord[]>(`${environment.serverUrl}/records/${accountId}`);
     }
 
-    deleteAllGameRecords(date: Date): Observable<void> {
-        return this.http.delete<void>(`${environment.serverUrl}/api/records/${date}`);
+    deleteAccountId(date: string, accountId: string): Observable<void> {
+        return this.http.delete<void>(`${environment.serverUrl}/records/${date}/${accountId}`);
     }
 
     deleteAllGames(): Observable<void> {

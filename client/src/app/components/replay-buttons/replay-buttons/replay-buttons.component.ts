@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSliderChange } from '@angular/material/slider';
+import { GamePageDialogComponent } from '@app/components/game-page-dialog/game-page-dialog.component';
 import { WAITING_TIME } from '@app/constants/constants';
 import { REPLAY_SPEEDS, SPEED_X1 } from '@app/constants/replay';
 import { ReplayService } from '@app/services/replay-service/replay.service';
+import { GamePageEvent } from '@common/enums';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
 @Component({
@@ -20,7 +23,7 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
     replaySpeed: number;
     replayTimerSubscription: Subscription;
     private onDestroy$: Subject<void>;
-    constructor(private readonly replayService: ReplayService, public translate: TranslateService) {
+    constructor(private readonly replayService: ReplayService, public translate: TranslateService, private matDialog: MatDialog) {
         this.timer = 0;
         this.isReplayAvailable = false;
         this.isReplayPaused = false;
@@ -34,6 +37,14 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
             this.formatThumbLabel(this.timer);
         });
         this.replaySpeed = SPEED_X1;
+    }
+
+    showSaveRecordDialog(): void {
+        this.matDialog.open(GamePageDialogComponent, {
+            data: { action: GamePageEvent.SaveGameRecord, message: 'Voulez-vous enregistrer cette reprise vidéo ?', lobby: this.replayService.lobby },
+            disableClose: true,
+            panelClass: 'dialog',
+        });
     }
 
     getTimeLimit(): number {
