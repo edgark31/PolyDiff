@@ -73,7 +73,7 @@ export class GamePageDialogComponent {
         this.clientSocket.disconnect('lobby');
         this.clientSocket.disconnect('game');
         if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
-        this.communicationService.deleteAccountId(this.replayService.record.date.toString(), this.welcomeService.account.id as string);
+        this.communicationService.deleteAccountId(this.replayService.record.date.toString(), this.welcomeService.account.id as string).subscribe();
         this.dialog.closeAll();
         this.router.navigate(['/home']);
     }
