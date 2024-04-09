@@ -20,19 +20,10 @@ form {
 .mat-header-cell {
     font-weight: bold;
 }
-// #nav-bar {
-//     font-family: 'Troika', sans-serif;
-//     z-index: 2;
-// }
 
 app-nav-bar {
-    float: right;
     font-family: 'Troika', sans-serif;
     font-size: 20px;
-    position: relative;
-    right: 80px;
-}
-.mat-cell {
 }
 
 .mat-column-position,

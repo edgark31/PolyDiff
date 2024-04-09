@@ -28,32 +28,24 @@
     text-align: center;
     font-family: 'Troika', sans-serif;
     font-size: 40px;
-    width: auto;
-    height: auto;
-    margin-bottom: 40px;
+    padding: 20px 30px;
     text-transform: uppercase;
     transition: 0.5s;
-    color: rgba(253, 250, 151, 255);
-    border: none;
+    color: black;
+    border: 4px black solid;
     border-radius: 25px;
-    background-color: #e8a430;
+    background-color: #ffffff;
     animation: titleFadeIn 1.5s ease-in-out;
     z-index: 1;
 }
 
 button:hover {
-    background-color: #5cbf99;
-    color: black;
     transform: scale(1.05);
 }
 
 #nav-bar {
-    right: 0;
-    position: absolute;
     font-family: 'Troika', sans-serif;
-    z-index: 1;
-    font-size: 30px;
-    margin-right: 20px;
+    font-size: 20px;
 }
 
 .button-container {
