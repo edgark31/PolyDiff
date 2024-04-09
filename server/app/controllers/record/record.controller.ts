@@ -1,6 +1,6 @@
 import { RecordManagerService } from '@app/services/record-manager/record-manager.service';
 import { GameRecord } from '@common/game-interfaces';
-import { Body, Controller, Delete, Get, Param, Put, Query } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Put, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('GameRecords')
