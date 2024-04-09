@@ -43,16 +43,23 @@ class FriendService extends ChangeNotifier {
   }
 
   void updateFriends(List<Friend> friends) {
+    friends.sort((a, b) {
+      if (a.isFavorite && !b.isFavorite) return -1;
+      if (!a.isFavorite && b.isFavorite) return 1;
+      return a.name.compareTo(b.name);
+    });
     _friends = friends;
     notifyListeners();
   }
 
   void updateCommon(List<Friend> friends) {
+    friends.sort((a, b) => a.name.compareTo(b.name));
     _commonFriends = friends;
     notifyListeners();
   }
 
   void updateFoFs(List<Friend> friends) {
+    friends.sort((a, b) => a.name.compareTo(b.name));
     _friendsOfFriends = friends;
     notifyListeners();
   }
