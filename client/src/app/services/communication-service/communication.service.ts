@@ -14,7 +14,6 @@ import {
     GameHistory,
     GameRecord,
     Sound,
-    Theme,
 } from './../../../../../common/game-interfaces';
 
 @Injectable({
@@ -110,8 +109,8 @@ export class CommunicationService {
         );
     }
 
-    modifyTheme(username: string, newTheme: Theme): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/desktop/theme`, { username, newTheme }).pipe(
+    modifyTheme(username: string, newTheme: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/mobile/theme`, { username, newTheme }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console

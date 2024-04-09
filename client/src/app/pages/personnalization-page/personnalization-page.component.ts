@@ -40,7 +40,7 @@ export class PersonalizationPageComponent implements OnInit {
     ngOnInit() {
         this.welcomeService.selectName = this.gameManager.username;
         this.welcomeService.selectAvatar = this.welcomeService.account.profile.avatar;
-        this.welcomeService.selectTheme = this.welcomeService.account.profile.desktopTheme;
+        this.welcomeService.selectTheme = this.welcomeService.account.profile.mobileTheme;
         this.welcomeService.selectLanguage = this.welcomeService.account.profile.language;
         this.sound.correctSoundEffect = this.welcomeService.account.profile.onCorrectSound;
         this.sound.incorrectSoundEffect = this.welcomeService.account.profile.onErrorSound;
@@ -49,7 +49,7 @@ export class PersonalizationPageComponent implements OnInit {
     onCancel() {
         this.welcomeService.selectName = this.gameManager.username;
         this.welcomeService.selectAvatar = this.welcomeService.account.profile.avatar;
-        this.welcomeService.selectTheme = this.welcomeService.account.profile.desktopTheme;
+        this.welcomeService.selectTheme = this.welcomeService.account.profile.mobileTheme;
         this.welcomeService.selectLanguage = this.welcomeService.account.profile.language;
         this.sound.correctSoundEffect = this.welcomeService.account.profile.onCorrectSound;
         this.sound.incorrectSoundEffect = this.welcomeService.account.profile.onErrorSound;
