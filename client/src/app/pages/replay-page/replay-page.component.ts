@@ -51,7 +51,9 @@ export class ReplayPageComponent implements OnInit {
     };
 
     constructor(public welcome: WelcomeService, public communication: CommunicationService) {
-        this.records = [this.gameRecord1, this.gameRecord1, this.gameRecord1, this.gameRecord1, this.gameRecord1, this.gameRecord1];
+        const gameRecordSpecial = JSON.parse(JSON.stringify(this.gameRecord1));
+        gameRecordSpecial.game.name = 'Special Game';
+        this.records = [this.gameRecord1, this.gameRecord1, gameRecordSpecial, this.gameRecord1, this.gameRecord1, this.gameRecord1];
     }
 
     ngOnInit(): void {
@@ -62,6 +64,6 @@ export class ReplayPageComponent implements OnInit {
     }
 
     deleteRecord(recordToRemove: GameRecord): void {
-        this.records = this.records.filter((record) => record === recordToRemove);
+        this.records = this.records.filter((record) => record !== recordToRemove);
     }
 }
