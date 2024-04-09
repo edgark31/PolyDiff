@@ -85,6 +85,7 @@ export enum MessageTag {
 export enum GamePageEvent {
     EndGame = 'EndGame',
     Abandon = 'Abandon',
+    SaveGameRecord = 'SaveGameRecord',
 }
 
 export enum ConnectionEvents {

@@ -32,7 +32,7 @@ export class AccountDialogComponent {
             this.welcomeService.onChooseAvatar();
         if (this.welcomeService.selectPassword !== this.welcomeService.account.credentials.password && this.welcomeService.selectPassword)
             this.welcomeService.onModifyPassword();
-        if (this.welcomeService.selectTheme !== this.welcomeService.account.profile.desktopTheme) this.welcomeService.onModifyTheme();
+        if (this.welcomeService.selectTheme !== this.welcomeService.account.profile.mobileTheme) this.welcomeService.onModifyTheme();
         if (this.welcomeService.selectLanguage !== this.welcomeService.account.profile.language) this.welcomeService.onModifyLanguage();
         if (this.sound.correctSoundEffect !== this.welcomeService.account.profile.onCorrectSound) this.welcomeService.onUpdateCorrectSound();
         if (this.sound.incorrectSoundEffect !== this.welcomeService.account.profile.onErrorSound) this.welcomeService.onUpdateErrorSound();

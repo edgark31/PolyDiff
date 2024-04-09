@@ -26,8 +26,9 @@ export class RecordManagerService {
                 timestamp: Date.now(),
                 gameEvent: GameEvents.StartGame,
             };
+            const accountIds = players.map((player) => player.accountId);
             const newGameRecord: GameRecord = {
-                accountIds: [],
+                accountIds,
                 game,
                 players,
                 date,
@@ -110,11 +111,11 @@ export class RecordManagerService {
     }
 
     async findAll(): Promise<GameRecord[]> {
-        return await this.gameRecordModel.find().exec();
+        return [...(await this.gameRecordModel.find().exec())];
     }
 
     async findAllByAccountId(accountId: string): Promise<GameRecord[]> {
-        return await this.gameRecordModel.find({ accountIds: accountId }).exec();
+        return [...(await this.gameRecordModel.find({ accountIds: accountId }).exec())];
     }
 
     async addAccountId(date: string, accountId: string): Promise<void> {

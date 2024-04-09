@@ -115,6 +115,7 @@ class GameManagerService extends ChangeNotifier {
     setObserverListener();
     setEndGameMessage(null);
     setGame(Game.initial());
+    gameAreaService.coordinates = [];
     socketService.send(SocketType.Game, GameEvents.Spectate.name, lobbyId);
   }
 
