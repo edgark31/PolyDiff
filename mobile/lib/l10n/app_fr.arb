@@ -121,6 +121,7 @@
     "endGame_videoReplayButton": "Reprise Vidéo",
     "endGameMessage_timesUp": "Temps écoulé, match nul !",
     "endGameMessage_playerWon": "won !",
+    "endGameMessage_playerAbandoned": "abandonned !",
     "endGameMessage_draw": "Draw !",
     "endGameMessage_endPractice": "End of practice !",
     "classicMode": "Classique",

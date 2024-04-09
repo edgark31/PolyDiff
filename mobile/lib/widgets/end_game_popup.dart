@@ -22,10 +22,14 @@ class EndGamePopup extends StatelessWidget {
     } else if (endMessage.endsWith('a gagné !')) {
       endMessageDisplayed = endMessage.replaceFirst(
           'a gagné !', AppLocalizations.of(context)!.endGameMessage_playerWon);
+    } else if (endMessage.endsWith('a abandonné !')) {
+      endMessageDisplayed = endMessage.replaceFirst(
+          'a abandonné !', AppLocalizations.of(context)!.endGameMessage_playerAbandoned);
     } else if (endMessage == "Match nul !") {
       endMessageDisplayed = AppLocalizations.of(context)!.endGameMessage_draw;
     } else if (endMessage == "Fin de la pratique !") {
-      endMessageDisplayed = AppLocalizations.of(context)!.endGameMessage_endPractice;
+      endMessageDisplayed =
+          AppLocalizations.of(context)!.endGameMessage_endPractice;
     } else {
       endMessageDisplayed = endMessage;
     }
