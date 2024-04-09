@@ -305,7 +305,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.gameManager.setIsLeftCanvas(isLeft);
         this.gameManager.requestVerification(this.lobby.lobbyId as string, this.gameAreaService.getMousePosition());
     }
-
     setUpGame(): void {
         this.gameAreaService.setOriginalContext(
             this.originalCanvas.nativeElement.getContext('2d', {
@@ -332,7 +331,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.imageService.loadImage(this.gameAreaService.getModifiedContext(), this.gameLobby.modified);
         this.gameAreaService.setAllData();
     }
-
     private setUpReplay(): void {
         this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
             this.timer = replayTimer;

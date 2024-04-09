@@ -149,7 +149,6 @@ export class WelcomeService {
     }
 
     onModifyTheme() {
-        console.log('yooooooooooooooooooooooo');
         this.communication.modifyTheme(this.account.credentials.username, this.selectTheme).subscribe({
             next: () => {
                 this.account.profile.mobileTheme = this.selectTheme;
