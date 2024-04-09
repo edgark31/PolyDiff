@@ -28,7 +28,7 @@ export class AccountController {
             response.status(HttpStatus.OK).send();
             setTimeout(() => {
                 this.auth.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers());
-            }, 5000);
+            }, 3000);
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
         }
@@ -39,18 +39,20 @@ export class AccountController {
         try {
             const accountFound = await this.accountManager.connection(creds);
             response.status(HttpStatus.OK).json(accountFound);
-            this.auth.server.fetchSockets().then((sockets) => {
-                sockets.forEach((socket) => {
-                    this.auth.updateIsOnline(socket as any);
-                    if (
-                        accountFound.profile.friends.find((friend) => {
-                            return friend.accountId === socket.data.accountId;
-                        })
-                    ) {
-                        this.auth.handleOnlineMessage(socket as any, accountFound.credentials.username);
-                    }
+            setTimeout(() => {
+                this.auth.server.fetchSockets().then((sockets) => {
+                    sockets.forEach((socket) => {
+                        this.auth.updateIsOnline(socket as any);
+                        if (
+                            accountFound.profile.friends.find((friend) => {
+                                return friend.accountId === socket.data.accountId;
+                            })
+                        ) {
+                            this.auth.handleOnlineMessage(socket as any, accountFound.credentials.username);
+                        }
+                    });
                 });
-            });
+            }, 3000);
         } catch (error) {
             response.status(HttpStatus.UNAUTHORIZED).json(error);
         }
