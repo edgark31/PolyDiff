@@ -169,7 +169,7 @@ export class AccountManagerService implements OnModuleInit {
             this.logger.verbose(`${username} has changed his password`);
             return Promise.resolve();
         } catch (error) {
-            this.logger.error(`Failed to change pseudo --> ${error.message}`);
+            this.logger.error(`Failed to change password --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }

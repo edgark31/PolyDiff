@@ -84,6 +84,7 @@
     "friendList_friendButton": "Amis",
     "friendList_isOnline": "En-ligne",
     "friendList_isOffline": "Hors-ligne",
+    "friendList_questionTitle": "Êtes-vous sûr de vouloir supprimer cet ami ?",
     "friendPending_pendingTitle": "Liste de demande d'amis en attente reçues",
     "friendPending_pendingRequestTitle": "Liste de demande d'amis en attente envoyées",
     "friendPending_cancelButton": "Annuler",
