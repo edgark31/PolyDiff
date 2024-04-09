@@ -158,8 +158,6 @@ export class AccountManagerService implements OnModuleInit {
 
     async updatePassword(username: string, newPassword: string): Promise<void> {
         try {
-            console.log(username);
-            console.log(newPassword);
             const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
             if (!accountFound) throw new Error('Account not found');
 
