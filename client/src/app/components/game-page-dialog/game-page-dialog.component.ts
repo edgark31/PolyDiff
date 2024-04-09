@@ -65,6 +65,7 @@ export class GamePageDialogComponent {
         this.clientSocket.disconnect('game');
         if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
         this.dialog.closeAll();
+        console.log('aaaaaaaaaaaaaaa');
         this.router.navigate(['/home']);
     }
 
