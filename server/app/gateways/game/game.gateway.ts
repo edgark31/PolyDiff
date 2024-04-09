@@ -355,10 +355,12 @@ export class GameGateway implements OnGatewayConnection {
             .get(lobbyId)
             .observers.filter((observer) => observer.accountId !== socket.data.accountId);
         socket.leave(lobbyId);
-        socket.emit(GameEvents.AbandonGame, this.roomsManager.lobbies.get(lobbyId));
-        this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
-        this.logger.log(`${socket.data.accountId} abandonned spectating ${lobbyId}`);
-        if (socket.data.state === GameState.Spectate) return;
+        if (socket.data.state === GameState.Spectate) {
+            socket.emit(GameEvents.AbandonGame, this.roomsManager.lobbies.get(lobbyId));
+            this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
+            this.logger.log(`${socket.data.accountId} abandonned spectating ${lobbyId}`);
+            return;
+        }
 
         /* ------------------ Record Abandon Event ------------------ */
         this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.AbandonGame, username, accountId } as GameEventData);
