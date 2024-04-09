@@ -25,31 +25,41 @@ class FriendService extends ChangeNotifier {
   List<Friend> get commonFriend => _commonFriends;
 
   void updateUsersList(List<User> allUsers) {
+    allUsers.sort((a, b) => a.name.compareTo(b.name));
     _users = allUsers;
     notifyListeners();
   }
 
   void updatePendingFriends(List<Friend> friends) {
+    friends.sort((a, b) => a.name.compareTo(b.name));
     _pendingFriends = friends;
     notifyListeners();
   }
 
   void updateSentFriends(List<Friend> friends) {
+    friends.sort((a, b) => a.name.compareTo(b.name));
     _sentFriends = friends;
     notifyListeners();
   }
 
   void updateFriends(List<Friend> friends) {
+    friends.sort((a, b) {
+      if (a.isFavorite && !b.isFavorite) return -1;
+      if (!a.isFavorite && b.isFavorite) return 1;
+      return a.name.compareTo(b.name);
+    });
     _friends = friends;
     notifyListeners();
   }
 
   void updateCommon(List<Friend> friends) {
+    friends.sort((a, b) => a.name.compareTo(b.name));
     _commonFriends = friends;
     notifyListeners();
   }
 
   void updateFoFs(List<Friend> friends) {
+    friends.sort((a, b) => a.name.compareTo(b.name));
     _friendsOfFriends = friends;
     notifyListeners();
   }
@@ -93,7 +103,7 @@ class FriendService extends ChangeNotifier {
   }
 
   void cancelInvite(String potentialFriendId) {
-    print("Cancenlling invite with id: $potentialFriendId");
+    print("Cancelling invite with id: $potentialFriendId");
     socketService.send(SocketType.Auth, FriendEvents.CancelRequest.name,
         {'potentialFriendId': potentialFriendId});
   }
@@ -106,6 +116,11 @@ class FriendService extends ChangeNotifier {
   removeFriend(String friendId) {
     socketService.send(SocketType.Auth, FriendEvents.DeleteFriend.name,
         {'friendId': friendId});
+  }
+
+  void toggleFavorite(String friendId, bool isFavorite) {
+    socketService.send(SocketType.Auth, FriendEvents.OptFavorite.name,
+        {'friendId': friendId, 'isFavorite': isFavorite});
   }
 
   void setListeners() {
@@ -139,6 +154,7 @@ class FriendService extends ChangeNotifier {
     socketService.on(SocketType.Auth, FriendEvents.UpdateFriends.name, (data) {
       print("UPDATING FRIENDS");
       List<dynamic> receivedData = data as List<dynamic>;
+      print('Received friends: $receivedData');
       List<Friend> allFriends = receivedData
           .map<Friend>((friend) => Friend.fromJson(friend))
           .toList();
