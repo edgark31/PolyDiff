@@ -28,6 +28,8 @@
             <img src="./assets/icon/PlayButton.png" alt="returnToMenuButton">
             <div class="centered-yes">{{'dialogGame.yes' | translate }}</div>
         </div>
+    </div>
+    <div class = "button2" *ngIf="data.action === 'SaveGameRecord'">
         <div class="button-container">
             <button class = "noButton" mat-button *ngIf="data.action === 'SaveGameRecord'" (click)="leaveGame()"></button>
                 <img src="./assets/icon/CreateButton.png" alt="notAbandonButton" >
