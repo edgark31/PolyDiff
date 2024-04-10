@@ -26,9 +26,9 @@
         "confirmPassword": "Confirm password",
         "songDifference": "choose your sound for difference found",
         "songError": "choose your sound for error",
-        "nameEnter": "please write your name",
-        "passwordEnter": "please write your password",
-        "confirmPasswordEnter": "please re-write your password",
+        "nameEnter": "please type your name",
+        "passwordEnter": "please type your password",
+        "confirmPasswordEnter": "please confirm your password",
         "cancel": "cancel",
         "returnHome": "Return to home"
     },
@@ -64,23 +64,23 @@
     },
 
     "gameMode": {
-        "classicMode": "Classic mode",
-        "limitedMode": "Limited times mode",
-        "practiceMode": "Practice mode",
+        "classicMode": "Classic",
+        "limitedMode": "Limited time",
+        "practiceMode": "Practice",
         "chooseMode": "Choose your game mode"
     },
     "chat": {
-        "chatZone": "Chat zone",
+        "chatZone": "Chatting zone",
         "return": "return",
         "foundDifférence": " found a difference!",
         "error": " made a mistake!",
-        "endParty": "end of party",
+        "endParty": "end of game",
         "endPractice": "end of the Practice",
-        "partyAbandon": "Are you sure you want to abandon the party?",
+        "partyAbandon": "Are you sure you want to give up the game ?",
         "abandonParty": " gave up !",
-        "winGame": " win !",
-        "tie": "Tie",
-        "expiredTime": "Time expired,tie"
+        "winGame": " Win !",
+        "tie": "Draw",
+        "expiredTime": "Time's up, draw !"
     },
     "creationGame": {
         "differenceImage": "Here is the image of the differences",
@@ -127,7 +127,7 @@
         "yes": "Yes",
         "no": "No",
         "scoreShare": "Share your score",
-        "quitGame": "Quit the game"
+        "quitGame": "Leave"
     },
 
     "gameSheet": {
@@ -144,7 +144,7 @@
         "matchSummary": "Match Summary",
         "win": "Win",
         "loose": "Loss",
-        "closeHistoric": "Fermer l'historique"
+        "closeHistoric": "Close history"
     },
 
     "navBar": {
@@ -178,7 +178,7 @@
 
     "dialogImport": {
         "cancel": "Cancel",
-        "import": "Inport"
+        "import": "Import"
     },
 
     "gameAvailable": {
@@ -188,9 +188,9 @@
     },
 
     "mainPage": {
-        "gameMode": "game Modes",
+        "gameMode": "Play",
         "welcome": "welcome",
-        "globalClassement": "Overall ranking",
+        "globalClassement": "Global ranking",
         "winGame": "games won"
     },
 
@@ -246,7 +246,7 @@
     },
 
     "waitingPage": {
-        "currentPlayers": "current players",
+        "currentPlayers": "current player(s)",
         "waitingPlayers": "Waiting player(s)",
         "player": "Player",
         "start": "Start the game",

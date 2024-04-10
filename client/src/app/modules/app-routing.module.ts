@@ -16,6 +16,7 @@ import { PersonalizationPageComponent } from '@app/pages/personnalization-page/p
 import { ProfilPageComponent } from '@app/pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from '@app/pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from '@app/pages/registration-page/registration-page.component';
+import { ReplayGamePageComponent } from '@app/pages/replay-game-page/replay-game-page.component';
 import { ReplayPageComponent } from '@app/pages/replay-page/replay-page.component';
 import { SelectionPageComponent } from '@app/pages/selection-page/selection-page.component';
 import { WaitingRoomComponent } from '@app/pages/waiting-room/waiting-room.component';
@@ -40,6 +41,7 @@ export const routes: Routes = [
     { path: 'classic', component: ClassicTimePageComponent },
     { path: 'friend', component: FriendPageComponent },
     { path: 'replay', component: ReplayPageComponent },
+    { path: 'replay-game', component: ReplayGamePageComponent },
 
     { path: 'waiting-room', component: WaitingRoomComponent },
     { path: 'admin', component: ConfigPageComponent, canActivate: [AdminGuard] },

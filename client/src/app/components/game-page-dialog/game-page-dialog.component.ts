@@ -3,9 +3,11 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ShareModalComponent } from '@app/components/share-modal/share-modal.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { GameModes, GamePageEvent } from '@common/enums';
 import { Lobby, Player } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
@@ -27,6 +29,8 @@ export class GamePageDialogComponent {
         public router: Router,
         public clientSocket: ClientSocketService,
         public dialog: MatDialog,
+        public communicationService: CommunicationService,
+        public welcomeService: WelcomeService,
     ) {
         this.isReplayPaused = false;
 
@@ -46,11 +50,31 @@ export class GamePageDialogComponent {
         });
     }
 
+    saveRecord(): void {
+        this.replayService.resetReplay();
+        this.clientSocket.disconnect('lobby');
+        this.clientSocket.disconnect('game');
+        if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
+        this.dialog.closeAll();
+        this.router.navigate(['/home']);
+    }
+
     leaveGame(): void {
         this.replayService.resetReplay();
         this.clientSocket.disconnect('lobby');
         this.clientSocket.disconnect('game');
         if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
+        this.dialog.closeAll();
+        console.log('aaaaaaaaaaaaaaa');
+        this.router.navigate(['/home']);
+    }
+
+    deleteRecord(): void {
+        this.replayService.resetReplay();
+        this.clientSocket.disconnect('lobby');
+        this.clientSocket.disconnect('game');
+        if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
+        this.communicationService.deleteAccountId(this.replayService.record.date.toString(), this.welcomeService.account.id as string).subscribe();
         this.dialog.closeAll();
         this.router.navigate(['/home']);
     }
