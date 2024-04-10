@@ -170,6 +170,7 @@ export class GameManagerService {
     }
 
     abandonGame(lobbyId: string): void {
+        this.gameAreaService.resetCheatMode();
         this.clientSocket.send('game', GameEvents.AbandonGame, lobbyId);
     }
 
@@ -261,6 +262,7 @@ export class GameManagerService {
         });
 
         this.clientSocket.on('game', GameEvents.EndGame, (endMessage: string) => {
+            this.gameAreaService.resetCheatMode();
             this.endMessage.next(endMessage);
         });
     }
