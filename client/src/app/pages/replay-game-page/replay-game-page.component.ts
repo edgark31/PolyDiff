@@ -1,11 +1,9 @@
 /* eslint-disable max-lines */
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GamePageDialogComponent } from '@app/components/game-page-dialog/game-page-dialog.component';
-import { INPUT_TAG_NAME } from '@app/constants/constants';
 import { CANVAS_MEASUREMENTS } from '@app/constants/image';
 import { CanvasMeasurements } from '@app/interfaces/game-interfaces';
-import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ImageService } from '@app/services/image-service/image.service';
@@ -14,8 +12,8 @@ import { ReplayService } from '@app/services/replay-service/replay.service';
 import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
-import { GameEvents, GameModes, GamePageEvent } from '@common/enums';
-import { Game, Lobby, Player } from '@common/game-interfaces';
+import { GameModes, GamePageEvent } from '@common/enums';
+import { Game, Lobby, Observer, Player } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
 @Component({
@@ -48,13 +46,13 @@ export class ReplayGamePageComponent implements OnDestroy, OnInit, AfterViewInit
     replayTimerSubscription: Subscription;
     replayPlayerCountSubscription: Subscription;
     replayDifferenceFoundSubscription: Subscription;
+    replayObserverSubscription: Subscription;
     private onDestroy$: Subject<void>;
 
     // Services are needed for the dialog and dialog needs to talk to the parent component
     // eslint-disable-next-line max-params
     constructor(
         private imageService: ImageService,
-        private clientSocket: ClientSocketService,
         private readonly gameAreaService: GameAreaService,
         private readonly gameManager: GameManagerService,
         private readonly replayService: ReplayService,
@@ -77,12 +75,7 @@ export class ReplayGamePageComponent implements OnDestroy, OnInit, AfterViewInit
             gameId: this.replayService.record.game.gameId,
             isAvailable: false,
             players: this.replayService.record.players,
-            observers: [
-                {
-                    accountId: 'O789',
-                    name: 'ObserverOne',
-                },
-            ], // a envoyer
+            observers: [],
             isCheatEnabled: false, // a envoyer
             mode: GameModes.Classic,
             password: '',
@@ -102,9 +95,6 @@ export class ReplayGamePageComponent implements OnDestroy, OnInit, AfterViewInit
 
     ngOnInit(): void {
         this.remainingDifference = this.gameLobby.differences as Coordinate[][];
-        this.timeSubscription = this.gameManager.timerLobby$.subscribe((timer: number) => {
-            this.timer = timer;
-        });
         this.welcome.onChatGame = false;
         this.remainingDifference = this.replayService.record.game.differences as Coordinate[][];
         this.replayService.lobby = this.lobby;
@@ -120,6 +110,10 @@ export class ReplayGamePageComponent implements OnDestroy, OnInit, AfterViewInit
     ngOnDestroy(): void {
         this.onDestroy$.next();
         this.onDestroy$.complete();
+        this.replayDifferenceFoundSubscription.unsubscribe();
+        this.replayPlayerCountSubscription.unsubscribe();
+        this.replayTimerSubscription.unsubscribe();
+        this.replayObserverSubscription.unsubscribe();
     }
 
     resetGameStats(): void {
@@ -213,6 +207,9 @@ export class ReplayGamePageComponent implements OnDestroy, OnInit, AfterViewInit
         });
         this.replayDifferenceFoundSubscription = this.replayService.replayDifferenceFound$.subscribe((nDifferencesFound: number) => {
             this.nDifferencesFound = nDifferencesFound;
+        });
+        this.replayObserverSubscription = this.replayService.replayObservers$.subscribe((observers: Observer[]) => {
+            this.lobby.observers = observers;
         });
     }
 }
