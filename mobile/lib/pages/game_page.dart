@@ -163,34 +163,34 @@ class _GamePageState extends State<GamePage> {
                     ),
 
                     // TODO: Get rid of this after you understand how I pause an animation
-                    ElevatedButton(
-                      onPressed: () {
-                        if (isAnimationPaused) {
-                          gameAreaService.resumeAnimation();
-                        } else {
-                          gameAreaService.pauseAnimation();
-                        }
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     if (isAnimationPaused) {
+                    //       gameAreaService.resumeAnimation();
+                    //     } else {
+                    //       gameAreaService.pauseAnimation();
+                    //     }
 
-                        setState(() {
-                          isAnimationPaused = !isAnimationPaused;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Color(0xFFEF6151),
-                        backgroundColor: Color(0xFF2D1E16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      ),
-                      child: Text(
-                        isAnimationPaused
-                            ? 'Resume Animation'
-                            : 'Pause Animation',
-                        style: TextStyle(fontSize: 30),
-                      ),
-                    ),
+                    //     setState(() {
+                    //       isAnimationPaused = !isAnimationPaused;
+                    //     });
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     foregroundColor: Color(0xFFEF6151),
+                    //     backgroundColor: Color(0xFF2D1E16),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(18.0),
+                    //     ),
+                    //     padding:
+                    //         EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    //   ),
+                    //   child: Text(
+                    //     isAnimationPaused
+                    //         ? 'Resume Animation'
+                    //         : 'Pause Animation',
+                    //     style: TextStyle(fontSize: 30),
+                    //   ),
+                    // ),
                   ] else
                     SizedBox(width: 120),
                   SizedBox(
