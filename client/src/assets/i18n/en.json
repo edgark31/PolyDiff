@@ -26,9 +26,9 @@
         "confirmPassword": "Confirm password",
         "songDifference": "choose your sound for difference found",
         "songError": "choose your sound for error",
-        "nameEnter": "please write your name",
-        "passwordEnter": "please write your password",
-        "confirmPasswordEnter": "please re-write your password",
+        "nameEnter": "please type your name",
+        "passwordEnter": "please type your password",
+        "confirmPasswordEnter": "please confirm your password",
         "cancel": "cancel",
         "returnHome": "Return to home"
     },
@@ -80,7 +80,7 @@
         "abandonParty": " gave up !",
         "winGame": " Win !",
         "tie": "Draw",
-        "expiredTime": "Times up, draw !"
+        "expiredTime": "Time's up, draw !"
     },
     "creationGame": {
         "differenceImage": "Here is the image of the differences",
@@ -144,7 +144,7 @@
         "matchSummary": "Match Summary",
         "win": "Win",
         "loose": "Loss",
-        "closeHistoric": "Fermer l'historique"
+        "closeHistoric": "Close history"
     },
 
     "navBar": {
@@ -246,7 +246,7 @@
     },
 
     "waitingPage": {
-        "currentPlayers": "current players",
+        "currentPlayers": "current player(s)",
         "waitingPlayers": "Waiting player(s)",
         "player": "Player",
         "start": "Start the game",
