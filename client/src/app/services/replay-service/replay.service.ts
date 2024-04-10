@@ -208,6 +208,7 @@ export class ReplayService implements OnDestroy {
                 this.replayTimerUpdate(replayData);
                 break;
             case ReplayActions.Spectate:
+                console.log('replayData', replayData);
                 this.replaySpectate(replayData);
                 break;
         }
