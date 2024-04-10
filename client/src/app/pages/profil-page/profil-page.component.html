@@ -1,7 +1,4 @@
 <div>
-
-  <!-- [ngStyle]="{'background-color': (welcomeService.chooseTheme.BackgroundColor), 'color': (welcomeService.chooseTheme.ButtonColor)}" -->
-  <!-- <app-menu></app-menu> -->
   <div class="header">
   <app-nav-bar id ="nav-bar"></app-nav-bar>
   </div>
@@ -23,7 +20,6 @@
         <span class="status-indicator"></span>
       </div>
 
-
       <div class="form-control">
         <div  class="profil">{{'profil.theme' | translate }}</div>
         <div>{{ welcomeService.account.profile.desktopTheme.name }}</div>
@@ -44,7 +40,6 @@
         <div>{{ translateCharacter(welcomeService.account.profile.language) }}</div>
       </div>
     </div>
-
     <div class="right">
       <div class="section">
         <h1  class="profil">{{'profil.statistic' | translate }}</h1>
@@ -65,9 +60,8 @@
         <div  class="profil">{{'profil.gameAverageTime' | translate }}: </div>
         <p>{{welcomeService.account.profile.stats.averageTime }}</p>
       </div>
-
-
     </div>
+
   </div>
   <div class="container">
     <div class="left">
@@ -94,5 +88,3 @@
     <button routerLink="/home">{{'profil.returnHome' | translate }}</button>
   </div>
 </div>
-
-<!-- <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>    -->
