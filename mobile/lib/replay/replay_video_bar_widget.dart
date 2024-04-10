@@ -13,7 +13,7 @@ class _ReplayTimelinePlayerState extends State<ReplayTimelinePlayer> {
 
   @override
   Widget build(BuildContext context) {
-    final replayService = Provider.of<ReplayService>(context);
+    final replayService = context.watch<ReplayService>();
 
     int totalDurationMs =
         replayService.record.duration; // Duration in milliseconds
@@ -23,14 +23,14 @@ class _ReplayTimelinePlayerState extends State<ReplayTimelinePlayer> {
         Slider(
           min: 0,
           max: totalDurationMs.toDouble(),
-          value: _currentSliderValue,
+          value: replayService.replayTimer.toDouble(),
           divisions: 10,
-          label: '${(_currentSliderValue / 1000).round()} seconds',
+          label: '${(replayService.replayTimer / 1000).round()} seconds',
           onChanged: (value) {
             setState(() {
-              _currentSliderValue = value;
+              replayService.replayTimer = value.toInt();
             });
-            replayService.fallBack((_currentSliderValue / 1000).round());
+            replayService.fallBack((replayService.replayTimer / 1000).round());
           },
         ),
         Row(

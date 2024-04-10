@@ -66,8 +66,6 @@ class ReplayInterval extends ChangeNotifier implements ReplayPlayer {
   @override
   void pause() {
     if (_timer?.isActive ?? false) {
-      _isReplaying = false;
-
       _timer?.cancel();
 
       _pauseTime = DateTime.now();

@@ -72,7 +72,7 @@ class ReplayImagesProvider extends ChangeNotifier {
     ui.decodeImageFromList(bytes, (ui.Image img) {
       return completer.complete(img);
     });
-    return completer.future;
+    return Future.value(completer.future);
   }
 
   Future<void> updateCanvasState(String base64String, String eventIndex) async {
