@@ -117,17 +117,79 @@ class SocketService extends ChangeNotifier {
     print("Disconnecting socket $type");
     switch (type) {
       case SocketType.Auth:
-        authSocket!.disconnect();
-        authSocket!.clearListeners();
+        if (authSocket != null && authSocket!.connected) {
+          authSocket!.disconnect();
+          authSocket!.clearListeners();
+          print("Auth socket disconnected");
+        }
+        if (lobbySocket != null && lobbySocket!.connected) {
+          lobbySocket!.disconnect();
+          lobbySocket!.clearListeners();
+          print("Lobby socket disconnected due to Auth disconnection");
+        }
+        if (gameSocket != null && gameSocket!.connected) {
+          gameSocket!.disconnect();
+          gameSocket!.clearListeners();
+          print("Game socket disconnected due to Auth disconnection");
+        }
         break;
       case SocketType.Lobby:
-        lobbySocket!.disconnect();
-        lobbySocket!.clearListeners();
+        if (lobbySocket != null && lobbySocket!.connected) {
+          lobbySocket!.disconnect();
+          lobbySocket!.clearListeners();
+          print("Lobby socket disconnected");
+        }
+        // When disconnecting Lobby, also disconnect Game if it is active
+        if (gameSocket != null && gameSocket!.connected) {
+          gameSocket!.disconnect();
+          gameSocket!.clearListeners();
+          print("Game socket disconnected due to Lobby disconnection");
+        }
         break;
       case SocketType.Game:
-        gameSocket!.disconnect();
-        gameSocket!.clearListeners();
+        if (gameSocket != null && gameSocket!.connected) {
+          gameSocket!.disconnect();
+          gameSocket!.clearListeners();
+          print("Game socket disconnected");
+        }
         break;
+    }
+  }
+
+  void killAllAliveSockets() {
+    print("Kill all alive sockets protocole engaged");
+    if (authSocket != null && authSocket!.connected) {
+      authSocket!.disconnect();
+      authSocket!.clearListeners();
+      print("Auth socket disconnected from killAllAliveSockets");
+    }
+    if (lobbySocket != null && lobbySocket!.connected) {
+      lobbySocket!.disconnect();
+      lobbySocket!.clearListeners();
+      print("Lobby socket disconnected from killAllAliveSockets");
+    }
+    if (gameSocket != null && gameSocket!.connected) {
+      gameSocket!.disconnect();
+      gameSocket!.clearListeners();
+      print("Game socket disconnected from killAllAliveSockets");
+    }
+  }
+
+  void onlyAuthSocketShouldBeConnected(String pageName) {
+    if (lobbySocket != null && lobbySocket!.connected) {
+      lobbySocket!.disconnect();
+      lobbySocket!.clearListeners();
+      print("Lobby socket disconnected (Should not be connected in $pageName)");
+    }
+
+    killGameSocketIfConnected(pageName);
+  }
+
+  void killGameSocketIfConnected(String pageName) {
+    if (gameSocket != null && gameSocket!.connected) {
+      gameSocket!.disconnect();
+      gameSocket!.clearListeners();
+      print("Game socket disconnected (Should not be connected in $pageName)");
     }
   }
 }
