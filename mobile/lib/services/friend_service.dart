@@ -28,6 +28,7 @@ class FriendService extends ChangeNotifier {
   bool isCancelDisabled = false;
   bool isResponseDisabled = false;
   bool isDeleteDisabled = false;
+  bool isFavoriteDisabled = false;
 
   void updateUsersList(List<User> allUsers) {
     allUsers.sort((a, b) => a.name.compareTo(b.name));
@@ -132,6 +133,7 @@ class FriendService extends ChangeNotifier {
   }
 
   removeFriend(String friendId) {
+    print("Removing friend");
     isDeleteDisabled = true;
     socketService.send(SocketType.Auth, FriendEvents.DeleteFriend.name,
         {'friendId': friendId});
@@ -141,8 +143,13 @@ class FriendService extends ChangeNotifier {
   }
 
   void toggleFavorite(String friendId, bool isFavorite) {
+    print("Toggle favorite");
+    isFavoriteDisabled = true;
     socketService.send(SocketType.Auth, FriendEvents.OptFavorite.name,
         {'friendId': friendId, 'isFavorite': isFavorite});
+    Future.delayed(Duration(seconds: (3)), () {
+      isFavoriteDisabled = false;
+    });
   }
 
   void setListeners() {
