@@ -9,7 +9,8 @@ import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
-import 'package:mobile/replay/player_data_provider.dart';
+import 'package:mobile/replay/replay_images_provider.dart';
+import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/replay/replay_service.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/form_service.dart';
@@ -97,9 +98,15 @@ void main() async {
     }),
 
     ChangeNotifierProvider(create: (context) {
-      PlayersDataProvider playersDataProvider = Get.find();
-      return playersDataProvider;
+      ReplayImagesProvider replayImagesProvider = Get.find();
+      return replayImagesProvider;
     }),
+
+    ChangeNotifierProvider(create: (context) {
+      ReplayPlayerProvider replayPlayerProvider = Get.find();
+      return replayPlayerProvider;
+    }),
+
     ChangeNotifierProvider(create: (context) {
       ReplayService replayService = Get.find();
       return replayService;
@@ -123,7 +130,8 @@ void initializeServices() {
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
   Get.put(ThemeProvider());
-  Get.put(PlayersDataProvider());
+  Get.put(ReplayPlayerProvider());
+  Get.put(ReplayImagesProvider());
   Get.put(ReplayService());
 }
 

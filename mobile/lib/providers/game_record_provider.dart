@@ -14,9 +14,9 @@ class GameRecordProvider extends ChangeNotifier {
 
   GameRecord _record = DEFAULT_GAME_RECORD;
 
-  List<GameRecordCard> _gameRecordCards = [];
+  List<GameRecord> _gameRecords = [];
 
-  List<GameRecordCard> get gameRecordCards => _gameRecordCards;
+  List<GameRecord> get gameRecords => _gameRecords;
   GameRecord get record => _record;
 
   GameRecordProvider();
@@ -27,7 +27,7 @@ class GameRecordProvider extends ChangeNotifier {
   }
 
   Future<String?> getDefault() async {
-    final url = Uri.parse('$baseUrl/2024-04-07T23:53:19.447+00:00');
+    final url = Uri.parse('$baseUrl/2024-04-09T20:59:41.696+00:00');
 
     try {
       final response = await http.get(url);
@@ -82,9 +82,8 @@ class GameRecordProvider extends ChangeNotifier {
       final response = await http.get(url);
       final List<dynamic> decodedJson = json.decode(response.body);
 
-      _gameRecordCards = decodedJson
-          .map((gameRecord) =>
-              GameRecordCard.fromGameRecord(GameRecord.fromJson(gameRecord)))
+      _gameRecords = decodedJson
+          .map((gameRecord) => GameRecord.fromJson(gameRecord))
           .toList();
 
       print("GameRecords fetched for ${_infoService.username}");

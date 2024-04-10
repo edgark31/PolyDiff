@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
@@ -5,41 +7,52 @@ import 'package:mobile/models/game.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/models/players.dart';
 import 'package:mobile/providers/game_record_provider.dart';
-import 'package:mobile/replay/player_data_provider.dart';
+import 'package:mobile/replay/display_image_memory_util.dart';
+import 'package:mobile/replay/replay_images_provider.dart';
+import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/replay/replay_player_util.dart';
 import 'package:mobile/services/services.dart';
 
 class ReplayService extends ChangeNotifier {
   final GameRecordProvider _gameRecordProvider = Get.find();
-  final GameManagerService _gameManagerService = Get.find();
-  final PlayersDataProvider _playersDataProvider = Get.find();
+  final ReplayPlayerProvider _replayPlayerProvider = Get.find();
   final GameAreaService _gameAreaService = Get.find();
   final SoundService _soundService = Get.find();
+  final ReplayImagesProvider _replayImagesProvider = Get.find();
 
-  bool _isReplaying = false;
+  late GameRecord _record;
+  late ReplayInterval _replayInterval;
+
   bool _isCheatMode = false;
   bool _isDifferenceFound = false;
+  bool _isLoadingImages = true;
 
   int _replaySpeed = SPEED_X1;
-  int _currentReplayIndex = 0;
-  int _numberOfFoundDifferences = 0;
+  int _numberOfFoundDifferencesFound = 0;
+  int _replayDifferenceFound = 0;
   int _replayTimer = 0;
+
+  GameRecord get record => _record;
+  ReplayInterval get replayInterval => _replayInterval;
 
   List<GameEventData> _gameEventsData = [];
   List<Coordinate> _currentDifference = [];
 
-  bool get isReplaying => _isReplaying;
   bool get isCheatMode => _isCheatMode;
   bool get isDifferenceFound => _isDifferenceFound;
+  bool get isLoadingImages => _isLoadingImages;
 
   int get replaySpeed => _replaySpeed;
-  int get currentReplayIndex => _currentReplayIndex;
-  int get numberOfFoundDifferences => _numberOfFoundDifferences;
+  int get numberOfFoundDifferences => _numberOfFoundDifferencesFound;
+  int get replayDifferenceFound => _replayDifferenceFound;
 
   List<GameEventData> get gameEventsData => _gameEventsData;
   List<Coordinate> get currentDifference => _currentDifference;
 
   int get replayTimer => _replayTimer;
+
+  bool get isPlaying => _replayInterval.isReplaying;
+  int get currentReplayIndex => _replayInterval.currentIndex;
 
   @override
   void dispose() {
@@ -48,80 +61,153 @@ class ReplayService extends ChangeNotifier {
     super.dispose();
   }
 
-  void setCurrentGameRecord(GameRecord gameRecord) {
-    _gameManagerService.setGameRecord(gameRecord);
-    print("Replay : Game Record: ${_gameRecordProvider.record}");
-  }
-
-  void setUpGameReplay() {
-    _gameManagerService.setIsReplay(true);
-    // TODO: get rid of
-    _gameRecordProvider.getDefault();
-
-    _gameManagerService.setGame(_gameRecordProvider.record.game);
-    _gameManagerService.setTime(_gameRecordProvider.record.timeLimit);
-
-    _isReplaying = true;
+  void setReplay(GameRecord gameRecord) {
+    _record = _gameRecordProvider.record;
     _gameEventsData = _gameRecordProvider.record.gameEvents;
-    _currentReplayIndex = 0;
-    _playersDataProvider.setPlayersData(_gameRecordProvider.record.players);
+    _replayTimer = _gameRecordProvider.record.timeLimit;
+    _replayPlayerProvider.setPlayersData(_gameRecordProvider.record.players);
+    _replayInterval = getReplayInterval();
     notifyListeners();
   }
 
-  void start() {
-    if (_gameEventsData.isEmpty) return;
-    _isReplaying = true;
+  // Use to preload the images of the game events
+  Future<void> preloadGameEventImages(BuildContext context) async {
+    _isLoadingImages = true;
+    notifyListeners();
 
-    ReplayInterval replayInterval = _replayInterval();
-    replayInterval.start();
+    for (int i = 0; i < _record.gameEvents.length; i++) {
+      final event = _record.gameEvents[i];
+      if (event.modified != null) {
+        print("Preloading image for event $i");
+        int positionComma = event.modified!.indexOf(',');
+        _replayImagesProvider.eventIndexToBase64[i] =
+            (event.modified!).substring(positionComma + 1);
+
+        // preload each canvas image state
+        await preCacheImageFromBase64(
+            context, (event.modified!).substring(positionComma + 1));
+      }
+    }
+
+    _isLoadingImages = false;
+    notifyListeners();
+  }
+
+  // Manage the playback of the replay
+  void fallBack(int time) {
+    _replayInterval.pause();
+    final gameEventsFiltered = _record.gameEvents
+        .where((event) =>
+            event.gameEvent == "Found" || event.gameEvent == "StartGame")
+        .toList();
+
+    // Find closest timestamp
+    GameEventData? closestEvent;
+
+    for (GameEventData event in gameEventsFiltered.reversed) {
+      // Iterate in reverse to find the closest prior event
+      if (event.timestamp != null &&
+          event.timestamp! - _record.startTime <= time * 1000) {
+        closestEvent = event;
+
+        print(
+            "**** closest event found with timestamp: ${closestEvent.timestamp} ****");
+        break;
+      }
+    }
+
+    if (closestEvent == null) return;
+
+    // Find the index of the closest event
+    final int closestEventIndex = _record.gameEvents.indexOf(closestEvent);
+    print("**** FOUND ****");
+    print("closest event found with index: $closestEventIndex");
+
+    // Calculate the index from the found timestamp
+    if (closestEventIndex != -1) {
+      setIndex(closestEventIndex);
+
+      // Actions based on the event type
+      if (closestEvent.gameEvent == "StartGame") {
+        _handleGameStartEvent();
+        _replayPlayerProvider.resetScore();
+        _replayDifferenceFound = 0;
+      } else {
+        for (Player player in _record.players) {
+          player.count = closestEvent.players
+                  ?.firstWhere((p) => p.name == player.name)
+                  .count ??
+              0;
+          _replayPlayerProvider.updatePlayerData(player);
+          print("Player ${player.name} found ${player.count} differences");
+        }
+
+        _replayImagesProvider.setCurrentCanvasImage(closestEventIndex);
+        print(
+            "Set in ReplayService Current canvas event with index : $closestEventIndex");
+      }
+      print("new time limit: ${_record.timeLimit - time}");
+      setReplayTimer(_record.timeLimit - time);
+      _replayInterval.resume();
+    }
+  }
+
+  void start() {
+    setReplay(_gameRecordProvider.record);
+
+    _replayInterval.start();
+    notifyListeners();
   }
 
   void pause() {
-    _replayInterval().pause();
+    // _toggleFlashing(true);
+    _replayInterval.pause();
+    notifyListeners();
+  }
+
+  void resume() {
+    // _toggleFlashing(false);
+    _replayInterval.resume();
+    notifyListeners();
+  }
+
+  void cancel() {
+    _replayInterval.cancel();
 
     notifyListeners();
   }
 
   void restart() {
-    _currentReplayIndex = 0;
+    cancel();
 
-    _replayInterval().resume();
+    _replayInterval.start();
 
     notifyListeners();
   }
 
-  void restartTimer() {
-    _replayTimer = 0;
-    _numberOfFoundDifferences = 0;
+  void reset() {
+    cancel();
 
-    for (Player player in _gameRecordProvider.record.players) {
-      player.count = 0;
-      _playersDataProvider.updatePlayerData(player);
-    }
-    _replayInterval().start();
-  }
-
-  void resetReplay() {
     _replaySpeed = SPEED_X1;
     _gameEventsData.clear();
-    _currentReplayIndex = 0;
-    _isReplaying = false;
-
+    _currentDifference.clear();
     notifyListeners();
   }
 
-  void setReplaySpeed(int speed) {
+  void resetTimer() {
+    _replayTimer = 0;
+    _numberOfFoundDifferencesFound = 0;
+    _replayDifferenceFound = 0;
+    _replayPlayerProvider.resetScore();
+  }
+
+  void setSpeed(int speed) {
     _replaySpeed = speed;
     notifyListeners();
   }
 
-  void setReplayTimer(int timer) {
-    _replayTimer = timer;
-    notifyListeners();
-  }
-
-  void setReplayIndex(int index) {
-    _currentReplayIndex = index;
+  void setIndex(int index) {
+    _replayInterval.setCurrentReplayIndex(index);
     notifyListeners();
   }
 
@@ -141,12 +227,12 @@ class ReplayService extends ChangeNotifier {
     }
     if (_isDifferenceFound && _currentDifference.isNotEmpty) {
       _gameAreaService.startBlinking(_currentDifference, _replaySpeed);
-      // TODO: maybe it will create a bug
-      if (isPaused) {
-        _gameAreaService.pauseAnimation();
-      } else {
-        _gameAreaService.resumeAnimation();
-      }
+      // // TODO: maybe it will create a bug
+      // if (isPaused) {
+      //   _gameAreaService.pauseAnimation();
+      // } else {
+      //   _gameAreaService.resumeAnimation();
+      // }
     }
   }
 
@@ -170,7 +256,6 @@ class ReplayService extends ChangeNotifier {
       case "TimerUpdate":
         _handleUpdateTimerEvent(recordedEventData);
     }
-    _currentReplayIndex++;
   }
 
   int _getNextInterval(GameEventData recordedEventData) {
@@ -190,15 +275,16 @@ class ReplayService extends ChangeNotifier {
     return nextInterval;
   }
 
-  ReplayInterval _replayInterval() {
+  ReplayInterval getReplayInterval() {
     return ReplayInterval(
         _gameEventsData,
-        (eventData) => _handleGameEvent(_gameEventsData[_currentReplayIndex]),
+        (eventData) => _handleGameEvent(_gameEventsData[currentReplayIndex]),
         _getNextInterval);
   }
 
   void _handleGameStartEvent() {
-    _gameManagerService.startGame(_gameRecordProvider.record.game.lobbyId);
+    _gameAreaService.coordinates = [];
+    notifyListeners();
   }
 
   void _handleClickFoundEvent(GameEventData recordedEventData) {
@@ -217,12 +303,14 @@ class ReplayService extends ChangeNotifier {
     _soundService.playCorrectSound();
 
     if (recordedEventData.players != null) {
-      // TODO: Add player notifier to update counter
-      _gameManagerService.updateRemainingDifferences(
-          _gameRecordProvider.record.game.differences);
+      for (Player player in recordedEventData.players!) {
+        _replayPlayerProvider.updatePlayerData(player);
+      }
+      _handleUpdateRemainingDifference(
+          _gameRecordProvider.record.game.differences!);
     }
 
-    _numberOfFoundDifferences++;
+    _numberOfFoundDifferencesFound++;
     _handleRemainingDifferenceIndex(recordedEventData);
   }
 
@@ -233,10 +321,12 @@ class ReplayService extends ChangeNotifier {
 
   void _handleActivateCheatEvent(GameEventData recordedEventData) {
     _isCheatMode = true;
+    notifyListeners();
   }
 
   void _handleDeactivateCheatEvent(GameEventData recordedEventData) {
     _isCheatMode = false;
+    notifyListeners();
   }
 
   void _handleRemainingDifferenceIndex(GameEventData recordedEventData) {
@@ -254,12 +344,21 @@ class ReplayService extends ChangeNotifier {
         remainingCoordinates.add(differencesAtIndex);
       }
 
-      _gameManagerService.updateRemainingDifferences(remainingCoordinates);
+      _handleUpdateRemainingDifference(remainingCoordinates);
     }
+  }
+
+  void _handleUpdateRemainingDifference(List<List<Coordinate>> remaining) {
+    notifyListeners();
+  }
+
+  void setReplayTimer(int newTime) {
+    _replayTimer = newTime;
+    notifyListeners();
   }
 
   void _handleUpdateTimerEvent(GameEventData recordedEventData) {
     _replayTimer = recordedEventData.time!;
-    _gameManagerService.setTime(recordedEventData.time!);
+    notifyListeners();
   }
 }
