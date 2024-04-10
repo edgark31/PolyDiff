@@ -346,6 +346,7 @@ export class GameGateway implements OnGatewayConnection {
     abandonGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         const username = this.accountManager.users.get(socket.data.accountId).credentials.username;
         const accountId = socket.data.accountId;
+        // eslint-disable-next-line no-unused-vars
         const players = this.roomsManager.lobbies.get(lobbyId).players;
 
         this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
@@ -355,7 +356,12 @@ export class GameGateway implements OnGatewayConnection {
             .get(lobbyId)
             .observers.filter((observer) => observer.accountId !== socket.data.accountId);
         socket.leave(lobbyId);
-        if (socket.data.state === GameState.Spectate) return;
+        if (socket.data.state === GameState.Spectate) {
+            socket.emit(GameEvents.AbandonGame, this.roomsManager.lobbies.get(lobbyId));
+            this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
+            this.logger.log(`${socket.data.accountId} abandonned spectating ${lobbyId}`);
+            return;
+        }
 
         /* ------------------ Record Abandon Event ------------------ */
         this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.AbandonGame, username, accountId } as GameEventData);
@@ -378,7 +384,7 @@ export class GameGateway implements OnGatewayConnection {
                 });
             this.server
                 .to(lobbyId)
-                .emit(GameEvents.EndGame, `${this.accountManager.users.get(players[0].accountId).credentials.username} a abandonné !`);
+                .emit(GameEvents.EndGame, `${this.accountManager.users.get(socket.data.accountId).credentials.username} a abandonné !`);
 
             clearInterval(this.timers.get(lobbyId));
             this.recordManager.post(lobbyId);

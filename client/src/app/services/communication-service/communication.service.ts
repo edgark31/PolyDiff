@@ -188,12 +188,12 @@ export class CommunicationService {
         return this.http.get<Game>(`${this.gameUrl}/${id}`).pipe(catchError(this.handleError<Game>(`getGameById id=${id}`)));
     }
 
-    getGameRecords(date: Date): Observable<GameRecord[]> {
-        return this.http.get<GameRecord[]>(`${environment.serverUrl}/api/records${date}`);
+    findAllByAccountId(accountId: string): Observable<GameRecord[]> {
+        return this.http.get<GameRecord[]>(`${environment.serverUrl}/records/${accountId}`);
     }
 
-    deleteAllGameRecords(date: Date): Observable<void> {
-        return this.http.delete<void>(`${environment.serverUrl}/api/records/${date}`);
+    deleteAccountId(date: string, accountId: string): Observable<void> {
+        return this.http.delete<void>(`${environment.serverUrl}/records/${date}/${accountId}`);
     }
 
     deleteAllGames(): Observable<void> {

@@ -7,7 +7,6 @@ import 'package:mobile/painters/background_pt_modified.dart';
 import 'package:mobile/painters/background_pt_original.dart';
 import 'package:mobile/painters/foreground_pt_modified.dart';
 import 'package:mobile/painters/foreground_pt_original.dart';
-import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/lobby_service.dart';
@@ -22,7 +21,6 @@ class OriginalCanvas extends GameCanvas {
   ) : super(images);
   final String gameId;
   final bool canPlayerInteract;
-  final tempGameManager = CoordinateConversionService();
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();
   final GameManagerService gameManagerService = Get.find();
@@ -86,7 +84,6 @@ class ModifiedCanvas extends GameCanvas {
   @override
   Widget build(BuildContext context) {
     final lobbyService = context.watch<LobbyService>();
-    final tempGameManager = CoordinateConversionService();
     final GameAreaService gameAreaService =
         Provider.of<GameAreaService>(context);
     return Column(

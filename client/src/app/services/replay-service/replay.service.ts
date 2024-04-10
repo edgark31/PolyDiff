@@ -9,13 +9,14 @@ import { GameManagerService } from '@app/services/game-manager-service/game-mana
 import { ImageService } from '@app/services/image-service/image.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { Coordinate, GameEventData, GameRecord, Player } from '@common/game-interfaces';
+import { Coordinate, GameEventData, GameRecord, Lobby, Player } from '@common/game-interfaces';
 import { Subject, Subscription } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ReplayService implements OnDestroy {
+    lobby: Lobby;
     isReplaying: boolean;
     record: GameRecord;
     private replayEvents: GameEventData[];

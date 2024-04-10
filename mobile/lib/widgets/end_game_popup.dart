@@ -35,6 +35,7 @@ class EndGamePopup extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Center(
         child: SizedBox(
           width: 400.0,
