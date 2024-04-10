@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
 import 'package:mobile/services/socket_service.dart';
 
@@ -10,6 +11,7 @@ class ChatService extends ChangeNotifier {
   static final List<Chat> _lobbyMessages = [];
   final SocketService socketService = Get.find();
   final LobbyService lobbyService = Get.find();
+  final InfoService infoService = Get.find();
 
   List<Chat> get globalMessages => List.unmodifiable(_globalMessages);
   List<Chat> get lobbyMessages => List.unmodifiable(_lobbyMessages);
@@ -104,7 +106,23 @@ class ChatService extends ChangeNotifier {
 
   void setGameChatListeners() {
     socketService.on(SocketType.Game, ChannelEvents.GameMessage.name, (data) {
-      addLobbyMessage(Chat.fromJson(data as Map<String, dynamic>));
+      Chat gameMessageReceived = Chat.fromJson(data as Map<String, dynamic>);
+      if (infoService.language == 'en') {
+        const String differenceFoundFR = 'a trouvé une différence !';
+        const String mistakeFR = "s'est trompé !";
+        const String abandonFR = "a abandonné la partie !";
+        if (gameMessageReceived.raw.endsWith(differenceFoundFR)) {
+          gameMessageReceived.raw = gameMessageReceived.raw
+              .replaceFirst(differenceFoundFR, 'found a difference!');
+        } else if (gameMessageReceived.raw.endsWith(mistakeFR)) {
+          gameMessageReceived.raw = gameMessageReceived.raw
+              .replaceFirst(mistakeFR, " made a mistake!");
+        } else if (gameMessageReceived.raw.endsWith(abandonFR)) {
+          gameMessageReceived.raw = gameMessageReceived.raw
+              .replaceFirst(abandonFR, " gave up !");
+        }
+      }
+      addLobbyMessage(gameMessageReceived);
     });
   }
 }
