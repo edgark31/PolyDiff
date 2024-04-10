@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-params */
 import { AuthGateway } from '@app/gateways/auth/auth.gateway';
-import { Credentials, Sound, Theme } from '@app/model/database/account';
+import { Credentials, Sound } from '@app/model/database/account';
 import { AccountManagerService } from '@app/services/account-manager/account-manager.service';
 import { FriendManagerService } from '@app/services/friend-manager/friend-manager.service';
 import { MailService } from '@app/services/mail-service/mail-service';
@@ -28,7 +28,7 @@ export class AccountController {
             response.status(HttpStatus.OK).send();
             setTimeout(() => {
                 this.auth.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers());
-            }, 5000);
+            }, 3000);
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
         }
@@ -39,18 +39,20 @@ export class AccountController {
         try {
             const accountFound = await this.accountManager.connection(creds);
             response.status(HttpStatus.OK).json(accountFound);
-            this.auth.server.fetchSockets().then((sockets) => {
-                sockets.forEach((socket) => {
-                    this.auth.updateIsOnline(socket as any);
-                    if (
-                        accountFound.profile.friends.find((friend) => {
-                            return friend.accountId === socket.data.accountId;
-                        })
-                    ) {
-                        this.auth.handleOnlineMessage(socket as any, 'est en ligne !', accountFound.credentials.username);
-                    }
+            setTimeout(() => {
+                this.auth.server.fetchSockets().then((sockets) => {
+                    sockets.forEach((socket) => {
+                        this.auth.updateIsOnline(socket as any);
+                        if (
+                            accountFound.profile.friends.find((friend) => {
+                                return friend.accountId === socket.data.accountId;
+                            })
+                        ) {
+                            this.auth.handleOnlineMessage(socket as any, accountFound.credentials.username);
+                        }
+                    });
                 });
-            });
+            }, 3000);
         } catch (error) {
             response.status(HttpStatus.UNAUTHORIZED).json(error);
         }
@@ -136,20 +138,21 @@ export class AccountController {
         }
     }
 
-    @Put('desktop/theme')
-    async updateDesktopTheme(@Body('username') username: string, @Body('newTheme') newTheme: Theme, @Res() response: Response) {
-        try {
-            await this.accountManager.updateDesktopTheme(username, newTheme);
-            response.status(HttpStatus.OK).send();
-        } catch (error) {
-            response.status(HttpStatus.CONFLICT).json(error);
-        }
-    }
+    // @Put('desktop/theme')
+    // async updateDesktopTheme(@Body('username') username: string, @Body('newTheme') newTheme: Theme, @Res() response: Response) {
+    //     try {
+    //         await this.accountManager.updateDesktopTheme(username, newTheme);
+    //         response.status(HttpStatus.OK).send();
+    //     } catch (error) {
+    //         response.status(HttpStatus.CONFLICT).json(error);
+    //     }
+    // }
 
     @Put('mobile/theme')
     async updateMobileTheme(@Body('username') username: string, @Body('newTheme') newTheme: string, @Res() response: Response) {
         try {
             await this.accountManager.updateMobileTheme(username, newTheme);
+            response.status(HttpStatus.OK).send();
         } catch (error) {
             response.status(HttpStatus.CONFLICT).json(error);
         }

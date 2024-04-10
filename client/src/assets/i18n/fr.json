@@ -63,9 +63,9 @@
     },
 
     "gameMode": {
-        "classicMode": "Mode classique",
-        "limitedMode": "Mode temps limité",
-        "practiceMode": "Mode pratique",
+        "classicMode": "Classique",
+        "limitedMode": "Temps limité",
+        "practiceMode": "Pratique",
         "chooseMode": "Choisis ton mode de jeu"
     },
 
@@ -77,7 +77,10 @@
         "endParty": "fin de la partie",
         "endPractice": "fin de la pratique",
         "partyAbandon": "Êtes-vous certain de vouloir abandonner la partie ? ",
-        "abandonParty": " a abandonné la partie !"
+        "abandonParty": " a abandonné !",
+        "winGame": " a gagné !",
+        "tie": "Match nul",
+        "expiredTime": "Temps écoulé, match nul "
     },
 
     "creationGame": {
@@ -127,7 +130,7 @@
         "yes": "oui",
         "no": "Non",
         "scoreShare": "Partage votre score",
-        "quitGame": "quitter la game"
+        "quitGame": "quitter"
     },
 
     "gameSheet": {
@@ -144,7 +147,7 @@
         "matchSummary": "Bilan de match",
         "win": "Victoire",
         "loose": "Défaite",
-        "closeHistoric": "close historic"
+        "closeHistoric": "Fermer l'historique"
     },
 
     "navBar": {
@@ -182,7 +185,7 @@
 
     "dialogImport": {
         "cancel": "Annuler",
-        "import": "Inporter"
+        "import": "Importer"
     },
 
     "gameAvailable": {
@@ -192,7 +195,7 @@
     },
 
     "mainPage": {
-        "gameMode": "Modes de jeu",
+        "gameMode": "Jouer",
         "welcome": "Bienvenue",
         "globalClassement": "Classement global",
         "winGame": "parties gagnées"

@@ -4,7 +4,7 @@ import { ClientSocketService } from '@app/services/client-socket-service/client-
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { Sound, Theme } from '@common/game-interfaces';
+import { Sound } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -88,10 +88,11 @@ export class NavBarComponent {
         this.welcomeService.selectName = '';
         this.welcomeService.selectAvatar = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
         this.welcomeService.selectAvatarRegister = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
-        this.welcomeService.selectTheme = {} as Theme;
+        this.welcomeService.selectTheme = '';
         this.welcomeService.selectLanguage = '';
         this.sound.correctSoundEffect = {} as Sound;
         this.sound.incorrectSoundEffect = {} as Sound;
+        this.welcomeService.isLogin = false;
         this.router.navigate(['/login']);
     }
     onManageGames(): void {
