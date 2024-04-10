@@ -175,17 +175,17 @@ class SocketService extends ChangeNotifier {
     }
   }
 
-  void onlyAuthSocketShouldBeConnected(String pageName) {
+  void onlyAuthSocketShouldBeConnected({String pageName = 'Unspecified page'}) {
     if (lobbySocket != null && lobbySocket!.connected) {
       lobbySocket!.disconnect();
       lobbySocket!.clearListeners();
       print("Lobby socket disconnected (Should not be connected in $pageName)");
     }
 
-    killGameSocketIfConnected(pageName);
+    killGameSocketIfConnected(pageName: pageName);
   }
 
-  void killGameSocketIfConnected(String pageName) {
+  void killGameSocketIfConnected({String pageName = 'Unspecified page'}) {
     if (gameSocket != null && gameSocket!.connected) {
       gameSocket!.disconnect();
       gameSocket!.clearListeners();
