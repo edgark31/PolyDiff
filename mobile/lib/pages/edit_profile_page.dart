@@ -45,6 +45,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   ImageProvider? _selectedAvatar;
   String? _selectedAvatarId;
   String? _selectedAvatarBase64;
+  String? _newSelectedAvatarId = 'id';
+  String? _newSelectedAvatarBase64 = 'base64';
 
   final AccountService accountService = AccountService();
   AccountSettings? initialSettings;
@@ -185,7 +187,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> saveChanges() async {
     try {
-      if (_selectedAvatarId != null) {
+      if (_selectedAvatarId != null &&
+          _selectedAvatarId != _newSelectedAvatarId) {
         UploadAvatarBody predefinedAvatarBody = UploadAvatarBody(
             username: _infoService.username, id: _selectedAvatarId);
         String? response = await _registerProvider.putAvatarData(
@@ -195,11 +198,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
         print("response : $response");
         if (response == null) {
           _avatarProvider.setAccountAvatarUrl();
+          _newSelectedAvatarId = _selectedAvatarId!;
           showFeedback(avatarFeedback);
         } else {
           throw Exception(response);
         }
-      } else if (_selectedAvatarBase64 != null) {
+      } else if (_selectedAvatarBase64 != null &&
+          _selectedAvatarBase64 != _newSelectedAvatarBase64) {
         print("HERE AVATAR CHANGED WRONG");
         UploadAvatarBody avatarBody = UploadAvatarBody(
             username: _infoService.username,
@@ -208,6 +213,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
             avatarBody, AvatarType.camera);
 
         if (response == null) {
+          _avatarProvider.setAccountAvatarUrl();
+          _newSelectedAvatarBase64 = _selectedAvatarBase64!;
           showFeedback(avatarFeedback);
         } else {
           throw Exception(response);

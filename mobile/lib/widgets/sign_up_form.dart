@@ -137,20 +137,28 @@ class _SignUpFormState extends State<SignUpForm> {
     await registerProvider.postCredentialsData(credentialsBody);
 
     if (registerProvider.isBack) {
-      UploadAvatarBody predefinedAvatarBody =
-          UploadAvatarBody(username: username, id: _selectedAvatarId);
-      await registerProvider.putAvatarData(
-          predefinedAvatarBody, AvatarType.predefined);
+      if (_selectedAvatarBase64 != null) {
+        UploadAvatarBody avatarBody = UploadAvatarBody(
+            username: username, base64Avatar: _selectedAvatarBase64!);
+
+        await registerProvider.putAvatarData(avatarBody, AvatarType.camera);
+      } else {
+        UploadAvatarBody predefinedAvatarBody =
+            UploadAvatarBody(username: username, id: _selectedAvatarId);
+        await registerProvider.putAvatarData(
+            predefinedAvatarBody, AvatarType.predefined);
+      }
 
       if (registerProvider.isBack) {
         Navigator.pushNamed(context, SIGN_IN_ROUTE);
       }
-    } else if (_selectedAvatarBase64 != null) {
-      UploadAvatarBody avatarBody = UploadAvatarBody(
-          username: username, base64Avatar: _selectedAvatarBase64!);
-
-      await registerProvider.putAvatarData(avatarBody, AvatarType.camera);
     }
+    //  else if (_selectedAvatarBase64 != null) {
+    //   UploadAvatarBody avatarBody = UploadAvatarBody(
+    //       username: username, base64Avatar: _selectedAvatarBase64!);
+
+    //   await registerProvider.putAvatarData(avatarBody, AvatarType.camera);
+    // }
   }
 
   @override
