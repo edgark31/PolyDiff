@@ -69,44 +69,26 @@ export class ReplayGamePageComponent implements OnDestroy, OnInit, AfterViewInit
         this.timer = 0;
         this.canvasSize = CANVAS_MEASUREMENTS;
         this.isReplayAvailable = true;
+        this.replayService.isInReplayGamePage = true;
         this.gameMode = GameModes;
         this.onDestroy$ = new Subject();
         this.lobby = {
-            lobbyId: 'L123456789',
-            gameId: 'G987654321',
-            isAvailable: true,
-            players: [
-                {
-                    accountId: 'A123',
-                    name: 'PlayerOne',
-                    differenceData: {
-                        currentDifference: [],
-                        differencesFound: 0,
-                    },
-                    count: 0,
-                },
-                {
-                    accountId: 'A456',
-                    name: 'PlayerTwo',
-                    differenceData: {
-                        currentDifference: [],
-                        differencesFound: 0,
-                    },
-                    count: 0,
-                },
-            ],
+            lobbyId: '', // a envoyer
+            gameId: this.replayService.record.game.gameId,
+            isAvailable: false,
+            players: this.replayService.record.players,
             observers: [
                 {
                     accountId: 'O789',
                     name: 'ObserverOne',
                 },
-            ],
-            isCheatEnabled: false,
+            ], // a envoyer
+            isCheatEnabled: false, // a envoyer
             mode: GameModes.Classic,
-            password: 'SecretPass123',
-            timeLimit: 300,
+            password: '',
+            timeLimit: this.replayService.record.timeLimit,
             timePlayed: 0,
-            nDifferences: 5,
+            nDifferences: this.replayService.record.game.differences ? this.replayService.record.game.differences.length : 0,
         };
     }
 
