@@ -26,8 +26,10 @@ class GameAreaService extends ChangeNotifier {
   // avec seulement des coordonnées, même logique pour toggleCheatMode et showDifferenceNotFound
   void showDifferenceFound(List<Coordinate> newCoordinates,
       [int flashingSpeed = SPEED_X1]) {
-    soundService.playCorrectSound();
-    coordinates.addAll(newCoordinates);
+    if (newCoordinates.isNotEmpty) {
+      soundService.playCorrectSound();
+      coordinates.addAll(newCoordinates);
+    }
     if (isCheatMode) {
       onCheatModeDeactivated?.call();
     }

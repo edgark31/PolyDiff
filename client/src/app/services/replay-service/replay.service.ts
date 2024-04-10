@@ -16,6 +16,7 @@ import { Subject, Subscription } from 'rxjs';
     providedIn: 'root',
 })
 export class ReplayService implements OnDestroy {
+    isInReplayGamePage: boolean;
     lobby: Lobby;
     isReplaying: boolean;
     record: GameRecord;

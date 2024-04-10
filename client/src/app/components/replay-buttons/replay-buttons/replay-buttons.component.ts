@@ -2,6 +2,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSliderChange } from '@angular/material/slider';
+import { Router } from '@angular/router';
 import { GamePageDialogComponent } from '@app/components/game-page-dialog/game-page-dialog.component';
 import { WAITING_TIME } from '@app/constants/constants';
 import { REPLAY_SPEEDS, SPEED_X1 } from '@app/constants/replay';
@@ -17,15 +18,22 @@ import { Subject, Subscription } from 'rxjs';
 export class ReplayButtonsComponent implements OnInit, OnDestroy {
     @Input() isReplayAvailable: boolean;
     timer: number;
+    isInReplayGamePage: boolean;
     isReplayButtonDisabled: boolean;
     isReplayPaused: boolean;
     replaySpeeds: number[];
     replaySpeed: number;
     replayTimerSubscription: Subscription;
     private onDestroy$: Subject<void>;
-    constructor(private readonly replayService: ReplayService, public translate: TranslateService, private matDialog: MatDialog) {
+    constructor(
+        private readonly replayService: ReplayService,
+        public translate: TranslateService,
+        private matDialog: MatDialog,
+        private router: Router,
+    ) {
         this.timer = 0;
         this.isReplayAvailable = false;
+        this.isInReplayGamePage = this.replayService.isInReplayGamePage;
         this.isReplayPaused = false;
         this.replaySpeeds = REPLAY_SPEEDS;
         this.onDestroy$ = new Subject();
@@ -92,6 +100,7 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
 
     quit() {
         this.replayService.resetReplay();
+        this.router.navigate(['/replay']);
     }
 
     isReplaying(): boolean {

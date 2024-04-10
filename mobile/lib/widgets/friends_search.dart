@@ -42,6 +42,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
     final friendService = context.watch<FriendService>();
     bool isFriend = friendService.friends
         .any((friend) => friend.accountId == user.accountId);
+
     if (isFriend) {
       return Text(AppLocalizations.of(context)!.friendSearch_friendTitle,
           style: TextStyle(fontSize: 18));
@@ -51,7 +52,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
       if (isRequest) {
         return TextButton(
           onPressed: () {
-            friendService.cancelInvite(user.accountId);
+            if (!friendService.isCancelDisabled) {
+              friendService.cancelInvite(user.accountId);
+            }
           },
           style: TextButton.styleFrom(
             foregroundColor: Colors.white,
@@ -73,7 +76,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
                 iconSize: 40,
                 icon: Icon(Icons.person_add),
                 onPressed: () {
-                  friendService.respondToInvite(user.accountId, true);
+                  if (!friendService.isResponseDisabled) {
+                    friendService.respondToInvite(user.accountId, true);
+                  }
                 },
               ),
               SizedBox(width: 50),
@@ -82,7 +87,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
                 iconSize: 40,
                 icon: Icon(Icons.person_remove),
                 onPressed: () {
-                  friendService.respondToInvite(user.accountId, false);
+                  if (!friendService.isResponseDisabled) {
+                    friendService.respondToInvite(user.accountId, false);
+                  }
                 },
               ),
             ],
@@ -94,7 +101,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
           } else {
             return TextButton(
               onPressed: () {
-                friendService.sendInvite(user.accountId);
+                if (!friendService.isInviteDisabled) {
+                  friendService.sendInvite(user.accountId);
+                }
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
