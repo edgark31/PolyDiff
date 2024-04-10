@@ -64,23 +64,23 @@
     },
 
     "gameMode": {
-        "classicMode": "Classic mode",
-        "limitedMode": "Limited times mode",
-        "practiceMode": "Practice mode",
+        "classicMode": "Classic",
+        "limitedMode": "Limited time",
+        "practiceMode": "Practice",
         "chooseMode": "Choose your game mode"
     },
     "chat": {
-        "chatZone": "Chat zone",
+        "chatZone": "Chatting zone",
         "return": "return",
         "foundDifférence": " found a difference!",
         "error": " made a mistake!",
         "endParty": "end of game",
         "endPractice": "end of the Practice",
-        "partyAbandon": "Are you sure you want to abandon the party?",
+        "partyAbandon": "Are you sure you want to give up the game ?",
         "abandonParty": " gave up !",
-        "winGame": " win !",
-        "tie": "Tie",
-        "expiredTime": "Time expired,tie"
+        "winGame": " Win !",
+        "tie": "Draw",
+        "expiredTime": "Times up, draw !"
     },
     "creationGame": {
         "differenceImage": "Here is the image of the differences",
@@ -178,7 +178,7 @@
 
     "dialogImport": {
         "cancel": "Cancel",
-        "import": "Inport"
+        "import": "Import"
     },
 
     "gameAvailable": {
@@ -188,9 +188,9 @@
     },
 
     "mainPage": {
-        "gameMode": "game Modes",
+        "gameMode": "Play",
         "welcome": "welcome",
-        "globalClassement": "Overall ranking",
+        "globalClassement": "Global ranking",
         "winGame": "games won"
     },
 

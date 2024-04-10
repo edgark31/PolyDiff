@@ -63,9 +63,9 @@
     },
 
     "gameMode": {
-        "classicMode": "Mode classique",
-        "limitedMode": "Mode temps limité",
-        "practiceMode": "Mode pratique",
+        "classicMode": "Classique",
+        "limitedMode": "Temps limité",
+        "practiceMode": "Pratique",
         "chooseMode": "Choisis ton mode de jeu"
     },
 
@@ -185,7 +185,7 @@
 
     "dialogImport": {
         "cancel": "Annuler",
-        "import": "Inporter"
+        "import": "Importer"
     },
 
     "gameAvailable": {
@@ -195,7 +195,7 @@
     },
 
     "mainPage": {
-        "gameMode": "Modes de jeu",
+        "gameMode": "Jouer",
         "welcome": "Bienvenue",
         "globalClassement": "Classement global",
         "winGame": "parties gagnées"
