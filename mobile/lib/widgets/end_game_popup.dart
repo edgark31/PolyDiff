@@ -14,6 +14,28 @@ class EndGamePopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String endMessageDisplayed = '';
+    const String wonMessageFr = 'a gagné !';
+    const String abandonMessageFr = 'a abandonné !';
+
+    if (endMessage == 'Temps écoulé, match nul !') {
+      endMessageDisplayed =
+          AppLocalizations.of(context)!.endGameMessage_timesUp;
+    } else if (endMessage.endsWith(wonMessageFr)) {
+      endMessageDisplayed = endMessage.replaceFirst(
+          wonMessageFr, AppLocalizations.of(context)!.endGameMessage_playerWon);
+    } else if (endMessage.endsWith(abandonMessageFr)) {
+      endMessageDisplayed = endMessage.replaceFirst(abandonMessageFr,
+          AppLocalizations.of(context)!.endGameMessage_playerAbandoned);
+    } else if (endMessage == "Match nul !") {
+      endMessageDisplayed = AppLocalizations.of(context)!.endGameMessage_draw;
+    } else if (endMessage == "Fin de la pratique !") {
+      endMessageDisplayed =
+          AppLocalizations.of(context)!.endGameMessage_endPractice;
+    } else {
+      endMessageDisplayed = endMessage;
+    }
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
@@ -31,7 +53,7 @@ class EndGamePopup extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  endMessage,
+                  endMessageDisplayed,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),

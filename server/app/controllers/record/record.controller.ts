@@ -24,9 +24,9 @@ export class RecordController {
         this.recordManagerService.addAccountId(date, accountId);
     }
 
-    @Delete(':date')
-    deleteAccountId(@Param('date') date: string, @Query('accountId') accountId: string): void {
-        this.recordManagerService.deleteAccountId(date, accountId);
+    @Delete(':accountId')
+    deleteAccountId(@Param('accountId') accountId, @Query('date') date: string): void {
+        this.recordManagerService.deleteAccountId(accountId, date);
     }
 
     @Delete() // delete all records
