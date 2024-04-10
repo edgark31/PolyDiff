@@ -92,22 +92,6 @@ export class ReplayGamePageComponent implements OnDestroy, OnInit, AfterViewInit
         };
     }
 
-    @HostListener('window:keydown', ['$event'])
-    keyboardEvent(event: KeyboardEvent) {
-        const eventHTMLElement = event.target as HTMLElement;
-        if (eventHTMLElement.tagName !== INPUT_TAG_NAME) {
-            if (event.key === 't' && this.lobby.isCheatEnabled && this.lobby.mode !== this.gameMode.Practice) {
-                if (this.gameAreaService.isCheatModeActivated) {
-                    this.clientSocket.send('game', GameEvents.CheatDeactivated, this.lobby.lobbyId);
-                } else {
-                    this.clientSocket.send('game', GameEvents.CheatActivated, this.lobby.lobbyId);
-                }
-                const differencesCoordinates = this.gameLobby?.differences ? ([] as Coordinate[]).concat(...this.remainingDifference) : [];
-                this.gameAreaService.toggleCheatMode(differencesCoordinates);
-            }
-        }
-    }
-
     translateCharacter(character: string): string {
         return this.translate.instant(`chat.${character}`);
     }
