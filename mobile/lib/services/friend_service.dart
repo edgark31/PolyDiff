@@ -24,6 +24,9 @@ class FriendService extends ChangeNotifier {
   List<Friend> get friendsOfFriends => _friendsOfFriends;
   List<Friend> get commonFriend => _commonFriends;
 
+  bool isInviteDisabled = false;
+  bool isCancelDisabled = false;
+
   void updateUsersList(List<User> allUsers) {
     allUsers.sort((a, b) => a.name.compareTo(b.name));
     _users = allUsers;
@@ -98,14 +101,22 @@ class FriendService extends ChangeNotifier {
 
   void sendInvite(String potentialFriendId) {
     print("Sending $potentialFriendId");
+    isInviteDisabled = true;
     socketService.send(SocketType.Auth, FriendEvents.SendRequest.name,
         {'potentialFriendId': potentialFriendId});
+    Future.delayed(Duration(seconds: (3)), () {
+      isInviteDisabled = false;
+    });
   }
 
   void cancelInvite(String potentialFriendId) {
     print("Cancelling invite with id: $potentialFriendId");
+    isCancelDisabled = true;
     socketService.send(SocketType.Auth, FriendEvents.CancelRequest.name,
         {'potentialFriendId': potentialFriendId});
+    Future.delayed(Duration(seconds: (3)), () {
+      isCancelDisabled = false;
+    });
   }
 
   respondToInvite(String userId, bool isAccept) {
