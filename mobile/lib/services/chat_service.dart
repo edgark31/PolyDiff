@@ -116,10 +116,10 @@ class ChatService extends ChangeNotifier {
               .replaceFirst(differenceFoundFR, 'found a difference!');
         } else if (gameMessageReceived.raw.endsWith(mistakeFR)) {
           gameMessageReceived.raw = gameMessageReceived.raw
-              .replaceFirst(mistakeFR, " made a mistake!");
+              .replaceFirst(mistakeFR, "made a mistake!");
         } else if (gameMessageReceived.raw.endsWith(abandonFR)) {
           gameMessageReceived.raw = gameMessageReceived.raw
-              .replaceFirst(abandonFR, " gave up !");
+              .replaceFirst(abandonFR, "gave up !");
         }
       }
       addLobbyMessage(gameMessageReceived);
