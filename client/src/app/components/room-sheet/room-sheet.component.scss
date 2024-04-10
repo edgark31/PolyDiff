@@ -1,5 +1,5 @@
 #background-image {
-    position: relative;
+    position: absolute;
     // top: 220px;
     // left: 50.7%;
     // transform: translateX(-50%);
@@ -20,7 +20,7 @@
     font-style: italic;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     font-size: 1.2rem;
-    margin-top: 4px;
+    margin-top: 44px;
     margin-bottom: 0;
     transform: scale(1.05);
     z-index: 1;
@@ -36,14 +36,14 @@ span {
 }
 
 .join-button:hover {
-    background-color: #db9110;
-    color: black;
+    background-color: #000000;
+    color: rgba(0, 0, 0, 0);
     transform: scale(1.05);
 }
 
 .player-count {
-    bottom: 920px;
-    left: 250px;
+    top: -136px;
+    left: 245px;
     font-weight: bold;
     position: relative;
     text-align: center;
@@ -55,12 +55,25 @@ span {
     -webkit-text-stroke: 1px black;
 }
 
+.game-mode-image {
+    position: absolute;
+    right: 360px;
+    top: 170px;
+
+    //     width: 1px;
+    //     height: 1px;
+    //     z-index: 2;
+    //     object-fit: cover;
+}
+
 .game-mode-image-classic img {
     position: relative;
-    right: 120px;
-    bottom: 520px;
-    width: 180px;
-    height: 135px;
+    border: 4px black solid;
+    border-radius: 25px;
+    right: 229px;
+    top: 225px;
+    width: 100px;
+    height: 100px;
     z-index: 2;
     object-fit: cover;
 }
@@ -77,37 +90,38 @@ span {
     margin-bottom: 40px;
     text-transform: uppercase;
     transition: 0.5s;
-    color: rgba(253, 250, 151, 255);
+    color: white;
     border: none;
     border-radius: 25px;
-    background-color: #e8a430;
+    background-color: #000000;
     animation: titleFadeIn 1.5s ease-in-out;
     z-index: 1;
 }
 
 .join-button {
-    bottom: 700px;
-    left: 130px;
+    top: 90px;
+    left: 23px;
     cursor: pointer;
     position: relative;
     text-align: center;
     font-family: 'Troika', sans-serif;
-    font-size: 25px;
-    width: 140px;
-    height: 140px;
+    font-size: 20px;
+    width: 100px;
+    height: 100px;
     margin-bottom: 40px;
     text-transform: uppercase;
     transition: 0.5s;
-    color: rgba(253, 250, 151, 255);
+    color: white;
     border: none;
-    border-radius: 5px;
-    background-color: #e8a430;
+    border-radius: 25px;
+    background-color: #000000;
     animation: titleFadeIn 1.5s ease-in-out;
     z-index: 1;
 }
 
 .difference-number {
-    bottom: 720px;
+    top: 65px;
+    left: 13px;
     font-weight: bold;
     position: relative;
     text-align: center;
@@ -120,8 +134,8 @@ span {
 }
 
 .game-mode {
-    bottom: 560px;
-    right: 230px;
+    top: 197px;
+    right: 255px;
     font-weight: bold;
     position: relative;
     text-align: center;
@@ -134,8 +148,9 @@ span {
 }
 
 .player-container {
-    bottom: 900px;
-    left: 250px;
+    // bottom: 20px;
+    top: -107px;
+    left: 245px;
     font-weight: bold;
     position: relative;
     text-align: center;
@@ -148,19 +163,44 @@ span {
 }
 
 .eye-icon {
+    position: relative;
+    left: -250px;
+    top: 160px;
     font-size: 10px;
-    margin-top: 10px;
     color: red;
+    z-index: 1;
+    transform: scale(4);
 }
 
 .eye-open {
-    transform: translate(-140px, -1058px) scale(4) rotate(0deg);
+    transform: scale(4) rotate(0deg);
 }
-
 .eye-closed {
-    transform: translate(-140px, -1058px) scale(4) rotate(180deg);
+    transform: scale(4) rotate(180deg);
 }
 
 .player {
     padding: 7.5px;
+}
+
+.all {
+    position: absolute;
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Troika', sans-serif;
+    margin-top: 185px;
+    transform: translateX(-258px);
+    font-size: 20px;
+    // padding: 20px 30px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: black;
+    border: 4px black solid;
+    border-radius: 25px;
+    background-color: #ffffff;
+    animation: titleFadeIn 1.5s ease-in-out;
+
+    width: 700px;
+    height: 250px;
+    display: block;
 }

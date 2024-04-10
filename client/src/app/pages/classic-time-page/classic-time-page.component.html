@@ -6,11 +6,13 @@
         <button mat-raised-button class="create-button" routerLink="/selection">
             <span>{{'roomSheet.createRoom' | translate }}</span>
         </button>
+        <div class="container-lobby">
         <div *ngFor="let lobby of pagedLobbies">
             <div *ngIf="lobby.mode === gameModes.Classic">
                 <app-room-sheet [lobby]="lobby"></app-room-sheet>
             </div>
         </div>
+    </div>
         <div class="button-container">
             <button (click)="previousPage()" *ngIf="currentPage > 0">{{'button.previous' | translate }}</button>
             <button (click)="nextPage()" *ngIf="(lobbies.length / pageSize) - 1 > currentPage ">{{'button.following' | translate }}</button>

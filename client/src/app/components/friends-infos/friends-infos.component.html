@@ -18,7 +18,7 @@
 <div *ngFor="let friend of  friends; let last = last" class="separator">
      <!-- <mat-form-field class="full-width-field"> -->
         <div class="form-avatar">
-            <img [src]="'http://34.118.163.79:3000:3000/avatar/' + friend.accountId + '.png'" alt="Image" class="profile-image">
+            <img [src]="'http://localhost:3000:3000/avatar/' + friend.accountId + '.png'" alt="Image" class="profile-image">
           </div>
             <span class="name">{{ friend.name }}</span>
 
@@ -32,7 +32,7 @@
     <div *ngFor="let friend of  data.user.friends; let last = last" class="separator">
          <!-- <mat-form-field class="full-width-field"> -->
             <div class="form-avatar">
-                <img [src]="'http://34.118.163.79:3000:3000/avatar/' + friend.accountId + '.png'" alt="Image" class="profile-image">
+                <img [src]="'http://localhost:3000:3000/avatar/' + friend.accountId + '.png'" alt="Image" class="profile-image">
               </div>
                 <span class="name">{{ friend.name }}</span>
 
@@ -46,7 +46,7 @@
 <div *ngFor="let friend of  friendsCommon; let last = last" class="separator">
     <!-- <mat-form-field class="full-width-field"> -->
        <div class="form-avatar">
-           <img [src]="'http://34.118.163.79:3000:3000/avatar/' + friend.accountId + '.png'" alt="Image" class="profile-image">
+           <img [src]="'http://localhost:3000:3000/avatar/' + friend.accountId + '.png'" alt="Image" class="profile-image">
          </div>
            <span class="name">{{ friend.name }}</span>
 

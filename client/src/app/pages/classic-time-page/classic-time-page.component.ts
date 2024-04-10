@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs';
 })
 export class ClassicTimePageComponent implements OnDestroy, OnInit {
     lobbies: Lobby[];
-    pageSize = 2;
+    pageSize = 10;
     currentPage = 0;
     pagedLobbies: Lobby[] = [];
     gameModes: typeof GameModes;
