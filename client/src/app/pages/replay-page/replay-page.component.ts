@@ -64,6 +64,6 @@ export class ReplayPageComponent implements OnInit {
 
     deleteRecord(recordToRemove: GameRecord): void {
         this.records = this.records.filter((record) => record !== recordToRemove);
-        this.communication.deleteAccountId(recordToRemove.date.toString(), this.welcomeService.account.id as string);
+        this.communication.deleteAccountId(recordToRemove.date.toString(), this.welcomeService.account.id as string).subscribe();
     }
 }

@@ -346,6 +346,7 @@ export class GameGateway implements OnGatewayConnection {
     abandonGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
         const username = this.accountManager.users.get(socket.data.accountId).credentials.username;
         const accountId = socket.data.accountId;
+        // eslint-disable-next-line no-unused-vars
         const players = this.roomsManager.lobbies.get(lobbyId).players;
 
         this.roomsManager.lobbies.get(lobbyId).players = this.roomsManager.lobbies
@@ -383,7 +384,7 @@ export class GameGateway implements OnGatewayConnection {
                 });
             this.server
                 .to(lobbyId)
-                .emit(GameEvents.EndGame, `${this.accountManager.users.get(players[0].accountId).credentials.username} a abandonné !`);
+                .emit(GameEvents.EndGame, `${this.accountManager.users.get(socket.data.accountId).credentials.username} a abandonné !`);
 
             clearInterval(this.timers.get(lobbyId));
             this.recordManager.post(lobbyId);
