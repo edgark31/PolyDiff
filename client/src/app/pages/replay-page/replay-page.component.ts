@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
 import { ReplayService } from '@app/services/replay-service/replay.service';
+import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { GameRecord } from '@common/game-interfaces';
 
@@ -20,6 +21,7 @@ export class ReplayPageComponent implements OnInit {
         public communicationService: CommunicationService,
         public replayService: ReplayService,
         public router: Router,
+        public roomManagerService: RoomManagerService,
     ) {
         this.records = [];
     }
@@ -32,9 +34,9 @@ export class ReplayPageComponent implements OnInit {
 
     playRecord(recordToPlay: GameRecord): void {
         this.replayService.setReplay(recordToPlay);
-        this.router.navigate(['/game']);
         this.replayService.startReplay();
         this.replayService.restartTimer();
+        this.router.navigate(['/replay-game']);
     }
 
     deleteRecord(recordToRemove: GameRecord): void {
