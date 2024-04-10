@@ -41,7 +41,6 @@
                 (click)="!roomManager.isObserver ? mouseClickOnCanvas($event, true): ''"
             ></canvas>
         </div>
-        <app-chat-box class="chat-box" (addGame)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
         <div class="game-canvas">
             <canvas
                 id="modifiedFG"
@@ -72,7 +71,6 @@
 <img *ngIf="welcome.account.profile.mobileTheme==='light'" id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
 <img *ngIf="welcome.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/game_background_dark.png" alt="background"/>
 <div>
-    <!-- <app-chat-box (add)="addRightSideMessage($event)" [messages]="messages" [isReplaying]="isReplayAvailable" [gameMode]="game.mode"></app-chat-box> -->
     <app-replay-buttons [isReplayAvailable]="isReplayAvailable"></app-replay-buttons>
 </div>
 

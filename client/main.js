@@ -19,6 +19,24 @@ function initWindow() {
 
     appWindow.setMenuBarVisibility(false)
 
+    // Disable zoom shortcuts
+    appWindow.webContents.on('did-finish-load', () => {
+        appWindow.webContents.setZoomFactor(1.0); // Disables zoom
+        const js = `
+                    document.addEventListener('keydown', (e) => {
+                        if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=' || e.key === '0')) {
+                            e.preventDefault();
+                        }
+                    });
+                    document.addEventListener('wheel', (e) => {
+                        if (e.ctrlKey || e.metaKey) {
+                            e.preventDefault();
+                        }
+                    }, { passive: false });
+`;
+        appWindow.webContents.executeJavaScript(js);
+    });
+
     // Initialize the DevTools.
     // appWindow.webContents.openDevTools()
 
