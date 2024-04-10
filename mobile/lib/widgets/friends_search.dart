@@ -76,7 +76,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
                 iconSize: 40,
                 icon: Icon(Icons.person_add),
                 onPressed: () {
-                  friendService.respondToInvite(user.accountId, true);
+                  if (!friendService.isResponseDisabled) {
+                    friendService.respondToInvite(user.accountId, true);
+                  }
                 },
               ),
               SizedBox(width: 50),
@@ -85,7 +87,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
                 iconSize: 40,
                 icon: Icon(Icons.person_remove),
                 onPressed: () {
-                  friendService.respondToInvite(user.accountId, false);
+                  if (!friendService.isResponseDisabled) {
+                    friendService.respondToInvite(user.accountId, false);
+                  }
                 },
               ),
             ],

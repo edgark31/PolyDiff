@@ -26,6 +26,7 @@ class FriendService extends ChangeNotifier {
 
   bool isInviteDisabled = false;
   bool isCancelDisabled = false;
+  bool isResponseDisabled = false;
 
   void updateUsersList(List<User> allUsers) {
     allUsers.sort((a, b) => a.name.compareTo(b.name));
@@ -120,8 +121,13 @@ class FriendService extends ChangeNotifier {
   }
 
   respondToInvite(String userId, bool isAccept) {
+    print("Responding to invite with $isAccept");
+    isResponseDisabled = true;
     socketService.send(SocketType.Auth, FriendEvents.OptRequest.name,
         {'senderFriendId': userId, 'isOpt': isAccept});
+    Future.delayed(Duration(seconds: (3)), () {
+      isResponseDisabled = false;
+    });
   }
 
   removeFriend(String friendId) {
