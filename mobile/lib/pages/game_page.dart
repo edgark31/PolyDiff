@@ -37,7 +37,6 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  final ImageConverterService imageConverterService = ImageConverterService();
   final GameAreaService gameAreaService = Get.find();
   final GameManagerService gameManagerService = Get.find();
   final tempGameManager = CoordinateConversionService();
@@ -67,7 +66,7 @@ class _GamePageState extends State<GamePage> {
     String originalImage,
     String modifiedImage,
   ) async {
-    return imageConverterService.fromImagesBase64(originalImage, modifiedImage);
+    return ImageConverterService.fromImagesBase64(originalImage, modifiedImage);
   }
 
   @override

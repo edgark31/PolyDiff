@@ -3,23 +3,25 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/models/players.dart';
 import 'package:mobile/providers/game_record_provider.dart';
-import 'package:mobile/replay/display_image_memory_util.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/replay/replay_player_util.dart';
 import 'package:mobile/services/services.dart';
 
 class ReplayService extends ChangeNotifier {
+  // Services
   final GameRecordProvider _gameRecordProvider = Get.find();
   final ReplayPlayerProvider _replayPlayerProvider = Get.find();
   final GameAreaService _gameAreaService = Get.find();
   final SoundService _soundService = Get.find();
   final ReplayImagesProvider _replayImagesProvider = Get.find();
 
+  // Variables
   late GameRecord _record;
   late ReplayInterval _replayInterval;
 
@@ -40,9 +42,11 @@ class ReplayService extends ChangeNotifier {
 
   bool get isCheatMode => _isCheatMode;
   bool get isDifferenceFound => _isDifferenceFound;
+  // For precaching ui.Images
   bool get isLoadingImages => _isLoadingImages;
 
   int get replaySpeed => _replaySpeed;
+  // TODO: See where this is called
   int get numberOfFoundDifferences => _numberOfFoundDifferencesFound;
   int get replayDifferenceFound => _replayDifferenceFound;
 
@@ -58,39 +62,93 @@ class ReplayService extends ChangeNotifier {
   void dispose() {
     _gameEventsData.clear();
     _currentDifference.clear();
+    _replayPlayerProvider.resetScore();
+    _replayInterval.cancel();
+    ImageCacheService().clearCache();
     super.dispose();
   }
 
-  void setReplay(GameRecord gameRecord) {
-    _record = _gameRecordProvider.record;
-    _gameEventsData = _gameRecordProvider.record.gameEvents;
-    _replayTimer = _gameRecordProvider.record.timeLimit;
+  set replay(GameRecord gameRecord) {
+    record = _gameRecordProvider.record;
+    gameEventsData = _gameRecordProvider.record.gameEvents;
+    replayTimer = _gameRecordProvider.record.timeLimit;
     _replayPlayerProvider.setPlayersData(_gameRecordProvider.record.players);
     _replayInterval = getReplayInterval();
+
     notifyListeners();
   }
 
-  // Use to preload the images of the game events
+  set record(GameRecord record) {
+    _record = record;
+    notifyListeners();
+  }
+
+  set replayTimer(int newTime) {
+    _replayTimer = newTime;
+    notifyListeners();
+  }
+
+  set isLoadingImages(bool isLoading) {
+    _isLoadingImages = isLoading;
+    notifyListeners();
+  }
+
+  set index(int index) {
+    _replayInterval.currentIndex = index;
+    notifyListeners();
+  }
+
+  set speed(int speed) {
+    _replaySpeed = speed;
+    notifyListeners();
+  }
+
+  set gameEventsData(List<GameEventData> gameEventsData) {
+    _gameEventsData = gameEventsData;
+    notifyListeners();
+  }
+
+  set currentCoordinates(List<Coordinate> currentDifference) {
+    _currentDifference = currentDifference;
+    notifyListeners();
+  }
+
+  Future<void> loadInitialCanvas(BuildContext context) async {
+    Future<CanvasModel> initialImages = ImageConverterService.fromImagesBase64(
+        _record.game.original, _record.game.modified);
+    _replayImagesProvider.currentCanvas = initialImages;
+  }
+
   Future<void> preloadGameEventImages(BuildContext context) async {
     _isLoadingImages = true;
-    notifyListeners();
+
+    List<Future> preloadFutures = [];
 
     for (int i = 0; i < _record.gameEvents.length; i++) {
       final event = _record.gameEvents[i];
-      if (event.modified != null) {
-        print("Preloading image for event $i");
-        int positionComma = event.modified!.indexOf(',');
-        _replayImagesProvider.eventIndexToBase64[i] =
-            (event.modified!).substring(positionComma + 1);
+      if (event.modified != null &&
+          event.modified!.isNotEmpty &&
+          event.gameEvent == "Found") {
+        String base64Data =
+            ReplayImagesProvider.extractBase64Data(event.modified!) ?? "";
+        if (base64Data.isNotEmpty) {
+          // Prepare and cache image without awaiting
+          _replayImagesProvider.convertToImageState(
+              i, base64Data, event.isMainCanvas ?? false);
 
-        // preload each canvas image state
-        await preCacheImageFromBase64(
-            context, (event.modified!).substring(positionComma + 1));
+          String cacheKey = i.toString();
+          print("**** Preloading image with cache key $cacheKey ****");
+
+          preloadFutures.add(ImageCacheService()
+              .decodeAndCacheBase64Image(base64Data, cacheKey));
+        }
       }
     }
 
+    // Wait for all futures to complete
+    await Future.wait(preloadFutures);
+
     _isLoadingImages = false;
-    notifyListeners();
   }
 
   // Manage the playback of the replay
@@ -125,35 +183,38 @@ class ReplayService extends ChangeNotifier {
 
     // Calculate the index from the found timestamp
     if (closestEventIndex != -1) {
-      setIndex(closestEventIndex);
+      index = closestEventIndex;
 
       // Actions based on the event type
       if (closestEvent.gameEvent == "StartGame") {
         _handleGameStartEvent();
         _replayPlayerProvider.resetScore();
         _replayDifferenceFound = 0;
-      } else {
+      } else if (closestEvent.gameEvent == "Found") {
+        // Update player scores
         for (Player player in _record.players) {
           player.count = closestEvent.players
                   ?.firstWhere((p) => p.name == player.name)
                   .count ??
               0;
+
           _replayPlayerProvider.updatePlayerData(player);
           print("Player ${player.name} found ${player.count} differences");
         }
-
-        _replayImagesProvider.setCurrentCanvasImage(closestEventIndex);
+        // Update the remaining differences with the base64 data
+        // _replayImagesProvider.updateCanvasState(closestEvent.modified!,
+        //     closestEventIndex.toString(), closestEvent.isMainCanvas!);
         print(
-            "Set in ReplayService Current canvas event with index : $closestEventIndex");
+            "Set in ReplayService Current canvas event with index : $closestEventIndex, isMainCanvas: ${closestEvent.isMainCanvas}, modified: ${closestEvent.modified}");
       }
-      print("new time limit: ${_record.timeLimit - time}");
-      setReplayTimer(_record.timeLimit - time);
+      print("Updated time to: ${_record.timeLimit - time}");
+      replayTimer = _record.timeLimit - time;
       _replayInterval.resume();
     }
   }
 
   void start() {
-    setReplay(_gameRecordProvider.record);
+    replay = _gameRecordProvider.record;
 
     _replayInterval.start();
     notifyListeners();
@@ -173,7 +234,6 @@ class ReplayService extends ChangeNotifier {
 
   void cancel() {
     _replayInterval.cancel();
-
     notifyListeners();
   }
 
@@ -181,7 +241,6 @@ class ReplayService extends ChangeNotifier {
     cancel();
 
     _replayInterval.start();
-
     notifyListeners();
   }
 
@@ -191,6 +250,7 @@ class ReplayService extends ChangeNotifier {
     _replaySpeed = SPEED_X1;
     _gameEventsData.clear();
     _currentDifference.clear();
+    _replayPlayerProvider.resetScore();
     notifyListeners();
   }
 
@@ -199,26 +259,6 @@ class ReplayService extends ChangeNotifier {
     _numberOfFoundDifferencesFound = 0;
     _replayDifferenceFound = 0;
     _replayPlayerProvider.resetScore();
-  }
-
-  void setSpeed(int speed) {
-    _replaySpeed = speed;
-    notifyListeners();
-  }
-
-  void setIndex(int index) {
-    _replayInterval.setCurrentReplayIndex(index);
-    notifyListeners();
-  }
-
-  void setGameEventsData(List<GameEventData> gameEventsData) {
-    _gameEventsData = gameEventsData;
-    notifyListeners();
-  }
-
-  void setCurrentCoordinates(List<Coordinate> currentDifference) {
-    _currentDifference = currentDifference;
-    notifyListeners();
   }
 
   void _toggleFlashing(bool isPaused) {
@@ -349,11 +389,6 @@ class ReplayService extends ChangeNotifier {
   }
 
   void _handleUpdateRemainingDifference(List<List<Coordinate>> remaining) {
-    notifyListeners();
-  }
-
-  void setReplayTimer(int newTime) {
-    _replayTimer = newTime;
     notifyListeners();
   }
 

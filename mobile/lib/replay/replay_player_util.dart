@@ -30,7 +30,7 @@ class ReplayInterval extends ChangeNotifier implements ReplayPlayer {
 
   ReplayInterval(this._replayEvents, this._callback, this._getNextInterval);
 
-  void setCurrentReplayIndex(int index) {
+  set currentIndex(int index) {
     _currentIndex = index;
     notifyListeners();
   }

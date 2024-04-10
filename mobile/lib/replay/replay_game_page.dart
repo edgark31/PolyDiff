@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
-import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/players.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
@@ -13,14 +12,14 @@ import 'package:provider/provider.dart';
 // Import other required packages
 
 class ReplayGamePage extends StatefulWidget {
-  static const routeName = REPLAY_ROUTE;
+  // static const routeName = REPLAY_ROUTE;
 
-  static Route route() {
-    return MaterialPageRoute(
-      settings: const RouteSettings(name: routeName),
-      builder: (_) => ReplayGamePage(),
-    );
-  }
+  // static Route route() {
+  //   return MaterialPageRoute(
+  //     settings: const RouteSettings(name: routeName),
+  //     builder: (_) => ReplayGamePage(),
+  //   );
+  // }
 
   @override
   State<ReplayGamePage> createState() => _ReplayGamePageState();
