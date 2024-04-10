@@ -2,34 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
+import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/players.dart';
 import 'package:mobile/providers/game_record_provider.dart';
+import 'package:mobile/replay/replay_canvas_widget.dart';
+import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/replay/replay_service.dart';
 import 'package:mobile/replay/replay_video_bar_widget.dart';
-import 'package:mobile/services/services.dart';
 import 'package:provider/provider.dart';
-// Import other required packages
 
 class ReplayGamePage extends StatefulWidget {
-  // static const routeName = REPLAY_ROUTE;
+  static const routeName = REPLAY_ROUTE;
 
-  // static Route route() {
-  //   return MaterialPageRoute(
-  //     settings: const RouteSettings(name: routeName),
-  //     builder: (_) => ReplayGamePage(),
-  //   );
-  // }
+  static Route route() {
+    return MaterialPageRoute(
+      settings: const RouteSettings(name: routeName),
+      builder: (_) => ReplayGamePage(),
+    );
+  }
 
   @override
   State<ReplayGamePage> createState() => _ReplayGamePageState();
 }
 
 class _ReplayGamePageState extends State<ReplayGamePage> {
+  // Services
   final ReplayService replayService = Get.find<ReplayService>();
-
-  final ImageConverterService imageConverterService = ImageConverterService();
   final GameRecordProvider gameRecordProvider = Get.find<GameRecordProvider>();
+  final ReplayImagesProvider replayImagesProvider =
+      Get.find<ReplayImagesProvider>();
 
   @override
   void initState() {
@@ -38,6 +41,7 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
     gameRecordProvider.getDefault();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       preloadImages();
+      loadImage();
     });
     replayService.start();
   }
@@ -48,11 +52,19 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
     await replayService.preloadGameEventImages(context);
   }
 
+  void loadImage() async {
+    final ReplayService replayService =
+        Provider.of<ReplayService>(context, listen: false);
+    await replayService.loadInitialCanvas(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final ReplayService replayService = context.watch<ReplayService>();
     final ReplayPlayerProvider replayPlayerProvider =
         context.watch<ReplayPlayerProvider>();
+    ReplayImagesProvider replayImagesProvider =
+        context.watch<ReplayImagesProvider>();
 
     int timer = replayService.replayTimer;
 
@@ -169,6 +181,26 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                FutureBuilder<CanvasModel>(
+                  future: replayImagesProvider.currentCanvas,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ReplayOriginalCanvas(snapshot.data),
+                          SizedBox(width: 50),
+                          ReplayModifiedCanvas(snapshot.data),
+                        ],
+                      );
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  },
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,

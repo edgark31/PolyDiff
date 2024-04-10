@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'replay_service.dart'; // Ensure correct import path
+import 'replay_service.dart';
 
 class ReplayTimelinePlayer extends StatefulWidget {
   @override
-  _ReplayTimelinePlayerState createState() => _ReplayTimelinePlayerState();
+  State<ReplayTimelinePlayer> createState() => _ReplayTimelinePlayerState();
 }
 
 class _ReplayTimelinePlayerState extends State<ReplayTimelinePlayer> {
@@ -14,9 +14,9 @@ class _ReplayTimelinePlayerState extends State<ReplayTimelinePlayer> {
   @override
   Widget build(BuildContext context) {
     final replayService = Provider.of<ReplayService>(context);
-    // Assuming 'duration' is in seconds, and converting it to milliseconds for the slider
+
     int totalDurationMs =
-        replayService.record.duration; // Duration is already in milliseconds
+        replayService.record.duration; // Duration in milliseconds
 
     return Column(
       children: [
@@ -51,8 +51,8 @@ class _ReplayTimelinePlayerState extends State<ReplayTimelinePlayer> {
                 setState(() {
                   _currentSliderValue = 0; // Reset slider
                 });
-                replayService
-                    .restart(); // This should reset and start the replay
+                replayService.fallBack((_currentSliderValue).round());
+                replayService.restart(); // reset and start the replay
               },
             ),
           ],

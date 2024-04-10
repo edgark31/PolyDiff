@@ -136,6 +136,9 @@ class ReplayService extends ChangeNotifier {
           _replayImagesProvider.convertToImageState(
               i, base64Data, event.isMainCanvas ?? false);
 
+          print(
+              "----- Preloading image GAME EVENT : CANVAS :${event.isMainCanvas}  & EVENT ${event.gameEvent} -----");
+
           String cacheKey = i.toString();
           print("**** Preloading image with cache key $cacheKey ****");
 
@@ -202,8 +205,8 @@ class ReplayService extends ChangeNotifier {
           print("Player ${player.name} found ${player.count} differences");
         }
         // Update the remaining differences with the base64 data
-        // _replayImagesProvider.updateCanvasState(closestEvent.modified!,
-        //     closestEventIndex.toString(), closestEvent.isMainCanvas!);
+        _replayImagesProvider.updateCanvasState(
+            closestEvent.modified!, closestEventIndex.toString());
         print(
             "Set in ReplayService Current canvas event with index : $closestEventIndex, isMainCanvas: ${closestEvent.isMainCanvas}, modified: ${closestEvent.modified}");
       }
@@ -221,13 +224,13 @@ class ReplayService extends ChangeNotifier {
   }
 
   void pause() {
-    // _toggleFlashing(true);
+    _toggleFlashing(true);
     _replayInterval.pause();
     notifyListeners();
   }
 
   void resume() {
-    // _toggleFlashing(false);
+    _toggleFlashing(false);
     _replayInterval.resume();
     notifyListeners();
   }
@@ -238,7 +241,7 @@ class ReplayService extends ChangeNotifier {
   }
 
   void restart() {
-    cancel();
+    reset();
 
     _replayInterval.start();
     notifyListeners();
@@ -267,12 +270,12 @@ class ReplayService extends ChangeNotifier {
     }
     if (_isDifferenceFound && _currentDifference.isNotEmpty) {
       _gameAreaService.startBlinking(_currentDifference, _replaySpeed);
-      // // TODO: maybe it will create a bug
-      // if (isPaused) {
-      //   _gameAreaService.pauseAnimation();
-      // } else {
-      //   _gameAreaService.resumeAnimation();
-      // }
+      // TODO: maybe it will create a bug
+      if (isPaused) {
+        _gameAreaService.pauseAnimation();
+      } else {
+        _gameAreaService.resumeAnimation();
+      }
     }
   }
 

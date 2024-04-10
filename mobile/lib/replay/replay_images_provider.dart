@@ -33,15 +33,8 @@ class ReplayImagesProvider extends ChangeNotifier {
   List<ImageState> _canvasStates = [];
   late Future<CanvasModel> _currentCanvas;
 
-  // The fist image is should be at index 0, but the images are directly on the record
-  // so we need to add the starting image to the list with index null
-  late CurrentImageState _currentMainImageState;
-  late CurrentImageState _currentModifiedImageState;
-
-  CurrentImageState get currentMainImageState => _currentMainImageState;
-  CurrentImageState get currentModifiedImageState => _currentModifiedImageState;
-
   List<ImageState> get canvasStates => _canvasStates;
+
   Future<CanvasModel> get currentCanvas => _currentCanvas;
 
   set canvasStates(List<ImageState> replayImagesState) {
@@ -51,16 +44,6 @@ class ReplayImagesProvider extends ChangeNotifier {
 
   set currentCanvas(Future<CanvasModel> canvas) {
     _currentCanvas = canvas;
-    notifyListeners();
-  }
-
-  set mainImageState(CurrentImageState imageState) {
-    _currentMainImageState = imageState;
-    notifyListeners();
-  }
-
-  set modifiedImageState(CurrentImageState imageState) {
-    _currentModifiedImageState = imageState;
     notifyListeners();
   }
 
@@ -83,6 +66,7 @@ class ReplayImagesProvider extends ChangeNotifier {
 
   // Decode images at the beginning of the replay
   Future<ui.Image> decodeBase64Image(String base64String) async {
+    print("On update empty ?");
     final Uint8List bytes = base64.decode(base64String);
     final Completer<ui.Image> completer = Completer();
     ui.decodeImageFromList(bytes, (ui.Image img) {
@@ -91,25 +75,21 @@ class ReplayImagesProvider extends ChangeNotifier {
     return completer.future;
   }
 
-  // // Use the cache key as the gameEvent index
-  // Future<void> updateCanvasState(
-  //     String base64String, String eventIndex, bool isMainCanvas) async {
-  //   final ImageCacheService cacheService = ImageCacheService();
-  //   ui.Image image = cacheService.getImage(eventIndex) ??
-  //       await decodeBase64Image(base64String);
+  Future<void> updateCanvasState(String base64String, String eventIndex) async {
+    final ImageCacheService cacheService = ImageCacheService();
+    ui.Image newModifiedImage = cacheService.getImage(eventIndex) ??
+        await decodeBase64Image(base64String);
 
-  //   if (isMainCanvas) {
-  //     mainImageState = CurrentImageState(
-  //         eventIndex: int.parse(eventIndex),
-  //         image: image,
-  //         isMainCanvas: isMainCanvas);
-  //   } else {
-  //     modifiedImageState = CurrentImageState(
-  //         eventIndex: int.parse(eventIndex),
-  //         image: image,
-  //         isMainCanvas: isMainCanvas);
-  //   }
-  // }
+    CanvasModel currentCanvasModel = await _currentCanvas;
+    ui.Image originalImage = currentCanvasModel.original;
+
+    _currentCanvas = Future<CanvasModel>.value(CanvasModel(
+      original: originalImage,
+      modified: newModifiedImage,
+    ));
+    print("here");
+    notifyListeners();
+  }
 
   static String? extractBase64Data(String dataUri) {
     final int commaIndex = dataUri.indexOf(',');
