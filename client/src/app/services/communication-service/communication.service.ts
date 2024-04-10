@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameDetails } from '@app/interfaces/game-interfaces';
 import { Observable, of } from 'rxjs';
@@ -192,8 +192,9 @@ export class CommunicationService {
         return this.http.get<GameRecord[]>(`${environment.serverUrl}/records/${accountId}`);
     }
 
-    deleteAccountId(date: string, accountId: string): Observable<void> {
-        return this.http.delete<void>(`${environment.serverUrl}/records/${date}/${accountId}`);
+    deleteAccountId(accountId: string, date: string): Observable<void> {
+        const params = new HttpParams().set('date', date);
+        return this.http.delete<void>(`${environment.serverUrl}/records/${accountId}`, { params });
     }
 
     deleteAllGames(): Observable<void> {
