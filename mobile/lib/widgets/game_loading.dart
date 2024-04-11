@@ -5,12 +5,14 @@ class GameLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Center(
         child: SizedBox(
           width: 900.0,
           height: 500.0,
           child: Container(
             decoration: BoxDecoration(
+              color: Colors.transparent,
               image: DecorationImage(
                 image: AssetImage("assets/images/gameSheet.png"),
                 fit: BoxFit.cover,

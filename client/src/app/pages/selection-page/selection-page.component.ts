@@ -18,6 +18,7 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
     configRoute: string;
     private index: number;
     private reloadSubscription: Subscription;
+    // eslint-disable-next-line max-params
     constructor(
         private readonly communicationService: CommunicationService,
         public router: Router,

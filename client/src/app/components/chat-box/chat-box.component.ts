@@ -18,6 +18,7 @@ export class ChatBoxComponent {
     @Output() private addLobby: EventEmitter<string>;
     @Output() private addGame: EventEmitter<string>;
 
+    // eslint-disable-next-line max-params
     constructor(
         public router: Router,
         public welcome: WelcomeService,

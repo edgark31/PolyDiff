@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
@@ -28,8 +29,16 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final SocketService socketService = Get.find();
+
   @override
   void initState() {
+    Future.delayed(Duration.zero, () {
+      if (ModalRoute.of(context)?.isCurrent ?? false) {
+        socketService.onlyAuthSocketShouldBeConnected(
+            pageName: PROFILE_ROUTE);
+      }
+    });
     super.initState();
   }
 

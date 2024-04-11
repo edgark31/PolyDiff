@@ -27,7 +27,8 @@ class SoundService extends ChangeNotifier {
   }
 
   playOnCorrectSound(Sound sound) async {
-    final AssetSource soundSource = AssetSource(sound.path.substring(6));
+    final AssetSource soundSource =
+        AssetSource(sound.path.replaceFirst('assets/', ''));
     try {
       await audioPlayer.stop();
       await audioPlayer.play(soundSource);
@@ -38,7 +39,8 @@ class SoundService extends ChangeNotifier {
   }
 
   playOnErrorSound(Sound sound) async {
-    final AssetSource soundSource = AssetSource(sound.path.substring(6));
+    final AssetSource soundSource =
+        AssetSource(sound.path.replaceFirst('assets/', ''));
     try {
       await audioPlayer.stop();
       await audioPlayer.play(soundSource);
