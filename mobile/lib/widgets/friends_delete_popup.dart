@@ -41,8 +41,10 @@ class FriendsDeletePopup extends StatelessWidget {
               CustomButton(
                 text: AppLocalizations.of(context)!.confirmation_yes,
                 press: () {
+                  if(!friendService.isDeleteDisabled) {
                   friendService.removeFriend(accountId);
                   Navigator.pop(context);
+                  }
                 },
               ),
               SizedBox(height: 10),

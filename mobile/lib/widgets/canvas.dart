@@ -41,7 +41,6 @@ class OriginalCanvas extends GameCanvas {
           child: GestureDetector(
             onTapUp: (details) {
               if (!canPlayerInteract) return;
-              print('original canvas tapped');
               x.value = details.localPosition.dx.toDouble() /
                   GameCanvas.tabletScalingRatio;
               y.value = details.localPosition.dy.toDouble() /
