@@ -1,15 +1,15 @@
-/* eslint-disable max-lines */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Injectable, OnDestroy } from '@angular/core';
 import { REPLAY_LIMITER, SPEED_X1 } from '@app/constants/replay';
 import { ReplayActions } from '@app/enum/replay-actions';
+// import { ClickErrorData, ReplayEvent, ReplayPayload } from '@app/interfaces/replay-actions';
 import { ReplayInterval } from '@app/interfaces/replay-interval';
 import { GameAreaService } from '@app/services/game-area-service/game-area.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { ImageService } from '@app/services/image-service/image.service';
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { Coordinate, GameEventData, GameRecord, Lobby, Observer, Player } from '@common/game-interfaces';
+import { Coordinate, GameEventData, GameRecord, Lobby, Player } from '@common/game-interfaces';
 import { Subject, Subscription } from 'rxjs';
 
 @Injectable({
@@ -32,7 +32,6 @@ export class ReplayService implements OnDestroy {
     private replayTimerSubject: Subject<number>;
     private replayPlayerCount: Subject<Player>;
     private replayDifferenceFound: Subject<number>;
-    private replayObservers: Subject<Observer[]>;
     private replayEventsSubjectSubscription: Subscription;
 
     // Replay needs to communicate with all services
@@ -55,7 +54,6 @@ export class ReplayService implements OnDestroy {
         this.replayTimerSubject = new Subject<number>();
         this.replayPlayerCount = new Subject<Player>();
         this.replayDifferenceFound = new Subject<number>();
-        this.replayObservers = new Subject<Observer[]>();
         this.nDifferencesFound = 0;
         this.record = {} as GameRecord;
         this.record.timeLimit = 0;
@@ -71,10 +69,6 @@ export class ReplayService implements OnDestroy {
 
     get replayTimerSubject$() {
         return this.replayTimerSubject.asObservable();
-    }
-
-    get replayObservers$() {
-        return this.replayObservers.asObservable();
     }
 
     get replayPlayerCount$() {
@@ -206,10 +200,6 @@ export class ReplayService implements OnDestroy {
                 break;
             case ReplayActions.TimerUpdate:
                 this.replayTimerUpdate(replayData);
-                break;
-            case ReplayActions.Spectate:
-                console.log('replayData', replayData);
-                this.replaySpectate(replayData);
                 break;
         }
         this.currentReplayIndex++;
@@ -354,9 +344,5 @@ export class ReplayService implements OnDestroy {
     private replayTimerUpdate(replayData: GameEventData): void {
         this.replayTimer = replayData.time as number;
         this.replayTimerSubject.next(this.replayTimer);
-    }
-
-    private replaySpectate(replayData: GameEventData): void {
-        this.replayObservers.next(replayData.observers as Observer[]);
     }
 }
