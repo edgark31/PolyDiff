@@ -210,8 +210,6 @@ export class ReplayGamePageComponent implements OnDestroy, OnInit, AfterViewInit
         });
         this.replayObserverSubscription = this.replayService.replayObservers$.subscribe((observers: Observer[]) => {
             this.lobby.observers = observers;
-            console.log('observers', this.lobby.observers);
-            console.log('observers.length', this.lobby.observers.length);
         });
     }
 }
