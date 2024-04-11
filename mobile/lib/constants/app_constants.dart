@@ -43,6 +43,7 @@ List<Sound> CORRECT_SOUND_LIST = [
 GameRecord DEFAULT_GAME_RECORD = GameRecord(
   game: Game.initial(),
   players: [],
+  observers: [],
   accountIds: [],
   date: DateTime.now().toUtc().toString(),
   startTime: 0,

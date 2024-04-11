@@ -1,11 +1,11 @@
-import 'package:mobile/models/game.dart';
-import 'package:mobile/models/players.dart';
+import 'package:mobile/models/models.dart';
 
 class GameRecord {
   final String date;
   final Game game;
   final List<Player> players;
-  final List<String>? accountIds;
+  final List<dynamic>? accountIds;
+  final List<dynamic> observers;
   final int startTime;
   final int endTime;
   final int duration;
@@ -18,6 +18,7 @@ class GameRecord {
     this.accountIds,
     required this.game,
     required this.players,
+    required this.observers,
     required this.startTime,
     required this.endTime,
     required this.duration,
@@ -35,6 +36,7 @@ class GameRecord {
       game: Game.fromJson(json['game']),
       players:
           List<Player>.from(json['players'].map((x) => Player.fromJson(x))),
+      observers: List<Observer>.from(json['observers']),
       startTime: json['startTime'],
       endTime: json['endTime'],
       duration: json['duration'],

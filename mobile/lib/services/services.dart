@@ -2,7 +2,6 @@
 export 'account_service.dart';
 export 'avatar_service.dart';
 export 'chat_service.dart';
-export 'coordinate_conversion_service.dart';
 export 'form_service.dart';
 export 'friend_service.dart';
 export 'game_area_service.dart';
