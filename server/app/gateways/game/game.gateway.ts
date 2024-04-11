@@ -140,6 +140,13 @@ export class GameGateway implements OnGatewayConnection {
                 lobby: this.roomsManager.lobbies.get(lobbyId),
                 game,
             });
+            /* --------- Record Difference Spectate Event -------- */
+            this.recordManager.addGameEvent(lobbyId, {
+                accountId: socket.data.accountId,
+                gameEvent: GameEvents.Spectate,
+                players: structuredClone(this.roomsManager.lobbies.get(lobbyId).players),
+                observers: structuredClone(this.roomsManager.lobbies.get(lobbyId).observers),
+            } as GameEventData);
             return;
         }
         socket.emit(GameEvents.Spectate, {
@@ -360,6 +367,13 @@ export class GameGateway implements OnGatewayConnection {
             socket.emit(GameEvents.AbandonGame, this.roomsManager.lobbies.get(lobbyId));
             this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
             this.logger.log(`${socket.data.accountId} abandonned spectating ${lobbyId}`);
+            /* --------- Record Difference Spectate (due to abandon) Event -------- */
+            this.recordManager.addGameEvent(lobbyId, {
+                accountId: socket.data.accountId,
+                gameEvent: GameEvents.Spectate,
+                players: structuredClone(this.roomsManager.lobbies.get(lobbyId).players),
+                observers: structuredClone(this.roomsManager.lobbies.get(lobbyId).observers),
+            } as GameEventData);
             return;
         }
 
