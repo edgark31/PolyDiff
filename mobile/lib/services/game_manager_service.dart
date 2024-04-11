@@ -6,7 +6,7 @@ import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/models/lobby_model.dart';
-import 'package:mobile/replay/replay_service.dart';
+import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
@@ -16,14 +16,13 @@ class GameManagerService extends ChangeNotifier {
   static Game _game = Game.initial();
   static int _time = 0;
   static String? _endGameMessage;
-  static bool _isReplay = false;
 
   // Services
   final SocketService socketService = Get.find();
+  final InfoService infoService = Get.find();
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();
-  final InfoService infoService = Get.find();
-  final ReplayService replayService = Get.find();
+  final GameRecordProvider gameRecordProvider = Get.find();
 
   bool isLeftCanvas = true;
   VoidCallback? onGameChange;
@@ -60,17 +59,11 @@ class GameManagerService extends ChangeNotifier {
     isLeftCanvas = isLeft;
   }
 
-  void setIsReplay(bool isReplay) {
-    _isReplay = isReplay;
-  }
-
   void startGame(String? lobbyId) {
     print("Calling gamemanager start game");
     gameAreaService.coordinates = [];
 
-    if (!_isReplay) {
-      socketService.send(SocketType.Game, GameEvents.StartGame.name, lobbyId);
-    }
+    socketService.send(SocketType.Game, GameEvents.StartGame.name, lobbyId);
   }
 
   void setupGame() {
@@ -82,7 +75,8 @@ class GameManagerService extends ChangeNotifier {
 
   set gameRecord(GameRecord record) {
     print('Setting game record');
-    replayService.record = record;
+    gameRecordProvider.currentGameRecord = record;
+
     notifyListeners();
   }
 
@@ -213,7 +207,6 @@ class GameManagerService extends ChangeNotifier {
       print('GameRecord received');
       if (record is Map<String, dynamic>) {
         gameRecord = (GameRecord.fromJson(record));
-        replayService.isInReplayGamePage = true;
 
         return;
       } else if (record is String) {

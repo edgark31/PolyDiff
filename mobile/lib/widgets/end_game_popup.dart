@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/replay/replay_service.dart';
 import 'package:mobile/widgets/customs/custom_btn.dart';
-import 'package:provider/provider.dart';
 
 class EndGamePopup extends StatelessWidget {
   const EndGamePopup({
@@ -16,9 +14,6 @@ class EndGamePopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ReplayService replayService = context.watch<ReplayService>();
-    replayService.isReplayFromGame = true;
-
     String endMessageDisplayed = '';
     const String wonMessageFr = 'a gagné !';
     const String abandonMessageFr = 'a abandonné !';

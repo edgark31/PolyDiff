@@ -11,11 +11,10 @@ import 'package:mobile/services/info_service.dart';
 class GameRecordProvider extends ChangeNotifier {
   final InfoService _infoService = Get.find();
 
-  final String baseUrl = "$API_URL/records/";
-
-  GameRecord _record = DEFAULT_GAME_RECORD;
+  final String baseUrl = "$API_URL/records";
 
   List<GameRecord> _gameRecords = [];
+  GameRecord _record = DEFAULT_GAME_RECORD;
 
   List<GameRecord> get gameRecords => _gameRecords;
   GameRecord get record => _record;
@@ -24,13 +23,15 @@ class GameRecordProvider extends ChangeNotifier {
 
   set currentGameRecord(GameRecord gameRecord) {
     _record = gameRecord;
+    print(
+        'GameRecord set by default : ${gameRecord.date} for ${gameRecord.game.name}');
     notifyListeners();
   }
 
   Future<String?> findAllByAccountId() async {
     final accountId = _infoService.id;
     try {
-      final uri = Uri.parse('$baseUrl/records/$accountId');
+      final uri = Uri.parse('$baseUrl/$accountId');
       final response = await http.get(uri);
 
       if (response.statusCode == 200) {
@@ -41,6 +42,7 @@ class GameRecordProvider extends ChangeNotifier {
         // Sets the first one by default as the current game record
         if (_gameRecords.isNotEmpty) {
           _record = _gameRecords.first;
+
           print(
               'GameRecord set by default after fetching all game records : $accountId');
         }

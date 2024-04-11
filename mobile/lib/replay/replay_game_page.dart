@@ -1,375 +1,374 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get/get.dart';
-import 'package:mobile/constants/app_constants.dart';
-import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/models/canvas_model.dart';
-import 'package:mobile/models/players.dart';
-import 'package:mobile/replay/replay_canvas_widget.dart';
-import 'package:mobile/replay/replay_images_provider.dart';
-import 'package:mobile/replay/replay_player_provider.dart';
-import 'package:mobile/replay/replay_service.dart';
-import 'package:mobile/replay/replay_video_bar_widget.dart';
-import 'package:mobile/widgets/customs/custom_btn.dart';
-import 'package:provider/provider.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:get/get.dart';
+// import 'package:mobile/constants/app_constants.dart';
+// import 'package:mobile/constants/app_routes.dart';
+// import 'package:mobile/models/canvas_model.dart';
+// import 'package:mobile/models/players.dart';
+// import 'package:mobile/replay/replay_canvas_widget.dart';
+// import 'package:mobile/replay/replay_images_provider.dart';
+// import 'package:mobile/replay/replay_player_provider.dart';
+// import 'package:mobile/replay/replay_service.dart';
+// import 'package:mobile/widgets/customs/custom_btn.dart';
+// import 'package:provider/provider.dart';
 
-class ReplayGamePage extends StatefulWidget {
-  static const routeName = REPLAY_ROUTE;
+// class ReplayGamePage extends StatefulWidget {
+//   static const routeName = REPLAY_ROUTE;
 
-  static Route route() {
-    return MaterialPageRoute(
-      settings: const RouteSettings(name: routeName),
-      builder: (_) => ReplayGamePage(),
-    );
-  }
+//   static Route route() {
+//     return MaterialPageRoute(
+//       settings: const RouteSettings(name: routeName),
+//       builder: (_) => ReplayGamePage(),
+//     );
+//   }
 
-  @override
-  State<ReplayGamePage> createState() => _ReplayGamePageState();
-}
+//   @override
+//   State<ReplayGamePage> createState() => _ReplayGamePageState();
+// }
 
-class _ReplayGamePageState extends State<ReplayGamePage> {
-  // Services
-  final ReplayService replayService = Get.find<ReplayService>();
-  final ReplayImagesProvider replayImagesProvider =
-      Get.find<ReplayImagesProvider>();
+// class _ReplayGamePageState extends State<ReplayGamePage> {
+//   // Services
+//   final ReplayService replayService = Get.find<ReplayService>();
+//   final ReplayImagesProvider replayImagesProvider =
+//       Get.find<ReplayImagesProvider>();
 
-  @override
-  void initState() {
-    super.initState();
+//   @override
+//   void initState() {
+//     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      preloadImages();
-      loadImage();
-    });
+//     WidgetsBinding.instance.addPostFrameCallback((_) {
+//       preloadImages();
+//       loadImage();
+//     });
 
-    replayService.startReplay;
-  }
+//     replayService.startReplay;
+//   }
 
-  void preloadImages() async {
-    final ReplayService replayService =
-        Provider.of<ReplayService>(context, listen: false);
-    await replayService.preloadGameEventImages(context);
-  }
+//   void preloadImages() async {
+//     final ReplayService replayService =
+//         Provider.of<ReplayService>(context, listen: false);
+//     await replayService.preloadGameEventImages(context);
+//   }
 
-  void loadImage() async {
-    final ReplayService replayService =
-        Provider.of<ReplayService>(context, listen: false);
-    await replayService.loadInitialCanvas(context);
-  }
+//   void loadImage() async {
+//     final ReplayService replayService =
+//         Provider.of<ReplayService>(context, listen: false);
+//     await replayService.loadInitialCanvas(context);
+//   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Check if the replay has ended and if it's triggered by a game's end.
-    if (replayService.isEndGame && replayService.isReplayFromGame) {
-      Future.microtask(() => showCompletionPopup(context));
-    } else if (replayService.isEndGame && !replayService.isReplayFromGame) {
-      Future.microtask(() => showCompletionPopup(context));
-    }
-  }
+//   @override
+//   void didChangeDependencies() {
+//     super.didChangeDependencies();
+//     // Check if the replay has ended and if it's triggered by a game's end.
+//     if (replayService.isEndGame && replayService.isReplayFromGame) {
+//       Future.microtask(() => showCompletionPopup(context));
+//     } else if (replayService.isEndGame && !replayService.isReplayFromGame) {
+//       Future.microtask(() => showCompletionPopup(context));
+//     }
+//   }
 
-  void showCompletionPopup(BuildContext context) {
-    if (replayService.isReplayFromGame) {
-      // Show pop-up for post-game replay
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Replay Finished"),
-            content: Text("Choose an option"),
-            actions: <Widget>[
-              CustomButton(
-                text: "Replay Again",
-                press: () {
-                  replayService.isReplayFromGame = true;
-                  replayService.restartReplay;
-                  Navigator.of(context).pop();
-                },
-              ),
-              CustomButton(
-                text: "Go back Home",
-                press: () {
-                  // Navigate back to the dashboard or home route
-                  Navigator.of(context).pushNamed(DASHBOARD_ROUTE);
-                },
-              ),
-              CustomButton(
-                text: "Save Replay",
-                press: () {
-                  Navigator.of(context).pushNamed(DASHBOARD_ROUTE);
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      // Show pop-up for replay from account
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Replay Finished"),
-            content: Text("Do you want to replay again?"),
-            actions: <Widget>[
-              CustomButton(
-                text: "Yes",
-                press: () {
-                  // Logic to restart the replay
-                  Navigator.of(context).pop();
-                },
-              ),
-              CustomButton(
-                text: "NO",
-                press: () {
-                  // Logic to go back or do nothing
-                  Navigator.of(context).popAndPushNamed(DASHBOARD_ROUTE);
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
+//   void showCompletionPopup(BuildContext context) {
+//     if (replayService.isReplayFromGame) {
+//       // Show pop-up for post-game replay
+//       showDialog(
+//         context: context,
+//         builder: (BuildContext context) {
+//           return AlertDialog(
+//             title: Text("Replay Finished"),
+//             content: Text("Choose an option"),
+//             actions: <Widget>[
+//               CustomButton(
+//                 text: "Replay Again",
+//                 press: () {
+//                   replayService.isReplayFromGame = true;
+//                   replayService.restartReplay;
+//                   Navigator.of(context).pop();
+//                 },
+//               ),
+//               CustomButton(
+//                 text: "Go back Home",
+//                 press: () {
+//                   // Navigate back to the dashboard or home route
+//                   Navigator.of(context).pushNamed(DASHBOARD_ROUTE);
+//                 },
+//               ),
+//               CustomButton(
+//                 text: "Save Replay",
+//                 press: () {
+//                   Navigator.of(context).pushNamed(DASHBOARD_ROUTE);
+//                 },
+//               ),
+//             ],
+//           );
+//         },
+//       );
+//     } else {
+//       // Show pop-up for replay from account
+//       showDialog(
+//         context: context,
+//         builder: (BuildContext context) {
+//           return AlertDialog(
+//             title: Text("Replay Finished"),
+//             content: Text("Do you want to replay again?"),
+//             actions: <Widget>[
+//               CustomButton(
+//                 text: "Yes",
+//                 press: () {
+//                   // Logic to restart the replay
+//                   Navigator.of(context).pop();
+//                 },
+//               ),
+//               CustomButton(
+//                 text: "NO",
+//                 press: () {
+//                   // Logic to go back or do nothing
+//                   Navigator.of(context).popAndPushNamed(DASHBOARD_ROUTE);
+//                 },
+//               ),
+//             ],
+//           );
+//         },
+//       );
+//     }
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    final ReplayService replayService = context.watch<ReplayService>();
-    final ReplayPlayerProvider replayPlayerProvider =
-        context.watch<ReplayPlayerProvider>();
-    ReplayImagesProvider replayImagesProvider =
-        context.watch<ReplayImagesProvider>();
+//   @override
+//   Widget build(BuildContext context) {
+//     final ReplayService replayService = context.watch<ReplayService>();
+//     final ReplayPlayerProvider replayPlayerProvider =
+//         context.watch<ReplayPlayerProvider>();
+//     ReplayImagesProvider replayImagesProvider =
+//         context.watch<ReplayImagesProvider>();
 
-    int timer = replayService.replayTimer;
+//     int timer = replayService.timer;
 
-    String formattedTime =
-        "${(timer ~/ 60).toString().padLeft(2, '0')}:${(timer % 60).toString().padLeft(2, '0')}";
-    String gameMode = AppLocalizations.of(context)!.classicMode;
+//     String formattedTime =
+//         "${(timer ~/ 60).toString().padLeft(2, '0')}:${(timer % 60).toString().padLeft(2, '0')}";
+//     String gameMode = AppLocalizations.of(context)!.classicMode;
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(GAME_BACKGROUND_PATH),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    if (replayService.record.isCheatEnabled) ...[
-                      ElevatedButton(
-                        onPressed: null,
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Color(0xFFEF6151),
-                          backgroundColor: Color(0xFF2D1E16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.gamePage_cheatButton,
-                          style: TextStyle(fontSize: 30),
-                        ),
-                      ),
-                    ] else
-                      SizedBox(width: 50),
-                    SizedBox(
-                      width: 200,
-                      height: 500,
-                      child: SizedBox(
-                        width: 100,
-                        height: 50,
-                        child: Column(
-                          children: [
-                            SizedBox(height: 20),
-                            Row(
-                              children: [
-                                SizedBox(width: 380),
-                                Text(
-                                  '${AppLocalizations.of(context)!.gameInfos_gameModeTitle} : $gameMode',
-                                  style: _textStyle(),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(width: 100),
-                                Text(
-                                  '${AppLocalizations.of(context)!.gameInfos_timeTitle} : $formattedTime',
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                            Text(
-                              '${AppLocalizations.of(context)!.gameInfos_differencesPresentTitle} : ${replayService.record.game.nDifferences}',
-                              style: _textStyle(),
-                              textAlign: TextAlign.center,
-                            ),
-                            Row(
-                              children: [
-                                if (replayService
-                                    .record.players.isNotEmpty) ...[
-                                  _playerInfo(
-                                      replayPlayerProvider.getPlayer(0)),
-                                ],
-                                SizedBox(
-                                  width: 130,
-                                ),
-                                if (replayService.record.players.length >
-                                    1) ...[
-                                  _playerInfo(
-                                      replayPlayerProvider.getPlayer(1)),
-                                ],
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                if (replayService.record.players.length >=
-                                    3) ...[
-                                  _playerInfo(
-                                      replayPlayerProvider.getPlayer(2)),
-                                ],
-                                if (replayService.record.players.length >=
-                                    4) ...[
-                                  SizedBox(
-                                    width: 130,
-                                  ),
-                                  _playerInfo(
-                                      replayPlayerProvider.getPlayer(3)),
-                                ],
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                FutureBuilder<CanvasModel>(
-                  future: replayImagesProvider.currentCanvas,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ReplayOriginalCanvas(snapshot.data),
-                          SizedBox(width: 50),
-                          ReplayModifiedCanvas(snapshot.data),
-                        ],
-                      );
-                    } else {
-                      return CircularProgressIndicator();
-                    }
-                  },
-                ),
-                if (replayService.record.observers != null &&
-                    replayService.record.observers!.isNotEmpty) ...[
-                  _observerInfos(replayService.record.observers!.length),
-                ],
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child:
-                      ReplayTimelinePlayer(), // Always accessible at the bottom
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           Container(
+//             decoration: BoxDecoration(
+//               image: DecorationImage(
+//                 image: AssetImage(GAME_BACKGROUND_PATH),
+//                 fit: BoxFit.cover,
+//               ),
+//             ),
+//           ),
+//           SingleChildScrollView(
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.start,
+//               children: [
+//                 Row(
+//                   children: [
+//                     if (replayService.record.isCheatEnabled) ...[
+//                       ElevatedButton(
+//                         onPressed: null,
+//                         style: ElevatedButton.styleFrom(
+//                           foregroundColor: Color(0xFFEF6151),
+//                           backgroundColor: Color(0xFF2D1E16),
+//                           shape: RoundedRectangleBorder(
+//                             borderRadius: BorderRadius.circular(18.0),
+//                           ),
+//                           padding: EdgeInsets.symmetric(
+//                               horizontal: 10, vertical: 10),
+//                         ),
+//                         child: Text(
+//                           AppLocalizations.of(context)!.gamePage_cheatButton,
+//                           style: TextStyle(fontSize: 30),
+//                         ),
+//                       ),
+//                     ] else
+//                       SizedBox(width: 50),
+//                     SizedBox(
+//                       width: 200,
+//                       height: 500,
+//                       child: SizedBox(
+//                         width: 100,
+//                         height: 50,
+//                         child: Column(
+//                           children: [
+//                             SizedBox(height: 20),
+//                             Row(
+//                               children: [
+//                                 SizedBox(width: 380),
+//                                 Text(
+//                                   '${AppLocalizations.of(context)!.gameInfos_gameModeTitle} : $gameMode',
+//                                   style: _textStyle(),
+//                                   textAlign: TextAlign.center,
+//                                 ),
+//                                 SizedBox(width: 100),
+//                                 Text(
+//                                   '${AppLocalizations.of(context)!.gameInfos_timeTitle} : $formattedTime',
+//                                   style: TextStyle(
+//                                     fontSize: 30,
+//                                     fontWeight: FontWeight.bold,
+//                                     color: Colors.black,
+//                                   ),
+//                                   textAlign: TextAlign.center,
+//                                 ),
+//                               ],
+//                             ),
+//                             Text(
+//                               '${AppLocalizations.of(context)!.gameInfos_differencesPresentTitle} : ${replayService.record.game.nDifferences}',
+//                               style: _textStyle(),
+//                               textAlign: TextAlign.center,
+//                             ),
+//                             Row(
+//                               children: [
+//                                 if (replayService
+//                                     .record.players.isNotEmpty) ...[
+//                                   _playerInfo(
+//                                       replayPlayerProvider.getPlayer(0)),
+//                                 ],
+//                                 SizedBox(
+//                                   width: 130,
+//                                 ),
+//                                 if (replayService.record.players.length >
+//                                     1) ...[
+//                                   _playerInfo(
+//                                       replayPlayerProvider.getPlayer(1)),
+//                                 ],
+//                               ],
+//                             ),
+//                             Row(
+//                               children: [
+//                                 if (replayService.record.players.length >=
+//                                     3) ...[
+//                                   _playerInfo(
+//                                       replayPlayerProvider.getPlayer(2)),
+//                                 ],
+//                                 if (replayService.record.players.length >=
+//                                     4) ...[
+//                                   SizedBox(
+//                                     width: 130,
+//                                   ),
+//                                   _playerInfo(
+//                                       replayPlayerProvider.getPlayer(3)),
+//                                 ],
+//                               ],
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//                 SizedBox(
+//                   height: 20,
+//                 ),
+//                 FutureBuilder<CanvasModel>(
+//                   future: replayImagesProvider.currentCanvas,
+//                   builder: (context, snapshot) {
+//                     if (snapshot.connectionState == ConnectionState.done) {
+//                       return Row(
+//                         mainAxisAlignment: MainAxisAlignment.center,
+//                         children: [
+//                           ReplayOriginalCanvas(snapshot.data),
+//                           SizedBox(width: 50),
+//                           ReplayModifiedCanvas(snapshot.data),
+//                         ],
+//                       );
+//                     } else {
+//                       return CircularProgressIndicator();
+//                     }
+//                   },
+//                 ),
+//                 if (replayService.record.observers != null &&
+//                     replayService.record.observers!.isNotEmpty) ...[
+//                   _observerInfos(replayService.record.observers!.length),
+//                 ],
+//                 // Align(
+//                 //   alignment: Alignment.bottomCenter,
+//                 //   child:
+//                 //       ReplayTimelinePlayer(), // Always accessible at the bottom
+//                 // ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 
-  Widget _playerInfo(Player player) {
-    return Row(
-      children: [
-        Icon(
-          Icons.person,
-          color: Colors.black,
-          size: 30,
-        ),
-        Text(
-          player.name!,
-          style: _textStyle(),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        Text(
-          '${AppLocalizations.of(context)!.gameInfos_differencesFoundTitle} : ${player.count}',
-          style: _textStyle(),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
+//   Widget _playerInfo(Player player) {
+//     return Row(
+//       children: [
+//         Icon(
+//           Icons.person,
+//           color: Colors.black,
+//           size: 30,
+//         ),
+//         Text(
+//           player.name!,
+//           style: _textStyle(),
+//           textAlign: TextAlign.center,
+//         ),
+//         SizedBox(
+//           width: 30,
+//         ),
+//         Text(
+//           '${AppLocalizations.of(context)!.gameInfos_differencesFoundTitle} : ${player.count}',
+//           style: _textStyle(),
+//           textAlign: TextAlign.center,
+//         ),
+//       ],
+//     );
+//   }
 
-  Widget _observerInfos(int nObservers) {
-    if (nObservers == 0) {
-      return Positioned(
-        right: 8.0,
-        bottom: 8.0,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [Icon(Icons.visibility_off, color: Colors.white)],
-          ),
-        ),
-      );
-    }
+//   Widget _observerInfos(int nObservers) {
+//     if (nObservers == 0) {
+//       return Positioned(
+//         right: 8.0,
+//         bottom: 8.0,
+//         child: Container(
+//           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+//           decoration: BoxDecoration(
+//             color: Colors.black.withOpacity(0.5),
+//             borderRadius: BorderRadius.circular(15),
+//           ),
+//           child: Row(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [Icon(Icons.visibility_off, color: Colors.white)],
+//           ),
+//         ),
+//       );
+//     }
 
-    return Positioned(
-      right: 8.0,
-      bottom: 8.0,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.remove_red_eye, color: Colors.white),
-            SizedBox(width: 8),
-            Text(
-              nObservers.toString(),
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+//     return Positioned(
+//       right: 8.0,
+//       bottom: 8.0,
+//       child: Container(
+//         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+//         decoration: BoxDecoration(
+//           color: Colors.black.withOpacity(0.5),
+//           borderRadius: BorderRadius.circular(15),
+//         ),
+//         child: Row(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             Icon(Icons.remove_red_eye, color: Colors.white),
+//             SizedBox(width: 8),
+//             Text(
+//               nObservers.toString(),
+//               style: TextStyle(
+//                 color: Colors.white,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
 
-  TextStyle _textStyle() {
-    return TextStyle(
-      fontSize: 25,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    );
-  }
-}
+//   TextStyle _textStyle() {
+//     return TextStyle(
+//       fontSize: 25,
+//       fontWeight: FontWeight.bold,
+//       color: Colors.black,
+//     );
+//   }
+// }

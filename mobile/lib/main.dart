@@ -3,16 +3,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/app_text_constants.dart';
-import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
+import 'package:mobile/replay/game_playback_page.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
-import 'package:mobile/replay/replay_service.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/services/friend_service.dart';
@@ -69,12 +68,16 @@ void main() async {
       return lobbyService;
     }),
     ChangeNotifierProvider(create: (context) {
-      GameManagerService gameManagerService = Get.find();
-      return gameManagerService;
-    }),
-    ChangeNotifierProvider(create: (context) {
       GameRecordProvider gameRecordProvider = Get.find();
       return gameRecordProvider;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      ReplayImagesProvider replayImagesProvider = Get.find();
+      return replayImagesProvider;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      GameManagerService gameManagerService = Get.find();
+      return gameManagerService;
     }),
     ChangeNotifierProvider(create: (context) {
       ChatService chatService = Get.find();
@@ -99,19 +102,14 @@ void main() async {
     }),
 
     ChangeNotifierProvider(create: (context) {
-      ReplayImagesProvider replayImagesProvider = Get.find();
-      return replayImagesProvider;
-    }),
-
-    ChangeNotifierProvider(create: (context) {
       ReplayPlayerProvider replayPlayerProvider = Get.find();
       return replayPlayerProvider;
     }),
 
-    ChangeNotifierProvider(create: (context) {
-      ReplayService replayService = Get.find();
-      return replayService;
-    }),
+    // ChangeNotifierProvider(create: (context) {
+    // ReplayService replayService = Get.find();
+    // return replayService;
+//    }),
   ], child: const MyApp()));
 }
 
@@ -124,6 +122,9 @@ void initializeServices() {
   Get.put(LobbySelectionService());
   Get.put(LobbyService());
   Get.put(GameRecordProvider());
+  Get.put(ReplayPlayerProvider());
+  Get.put(ReplayImagesProvider());
+  // Get.put(ReplayService());
   Get.put(GameManagerService());
   Get.put(ChatService());
   Get.put(GameCardService());
@@ -131,9 +132,6 @@ void initializeServices() {
   Get.put(AvatarProvider());
   Get.put(RegisterProvider());
   Get.put(ThemeProvider());
-  Get.put(ReplayPlayerProvider());
-  Get.put(ReplayImagesProvider());
-  Get.put(ReplayService());
 }
 
 class MyApp extends StatelessWidget {
@@ -150,7 +148,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeClass.lightTheme,
       darkTheme: ThemeClass.darkTheme,
       onGenerateRoute: AppRouter.onGenerateRoute,
-      initialRoute: ProfilePage.routeName,
+      initialRoute: GameEventPlaybackScreen.routeName,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
     );

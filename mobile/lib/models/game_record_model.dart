@@ -6,8 +6,8 @@ class GameRecord {
   final List<String> accountIds;
   final List<Player> players;
   final List<Observer>? observers;
-  final int startTime;
-  final int endTime;
+  final DateTime startTime;
+  final DateTime endTime;
   final int duration;
   final bool isCheatEnabled;
   final int timeLimit;
@@ -28,6 +28,10 @@ class GameRecord {
   });
 
   factory GameRecord.fromJson(Map<String, dynamic> json) {
+    final DateTime startTime =
+        DateTime.fromMillisecondsSinceEpoch(json['startTime']);
+    final DateTime endTime =
+        DateTime.fromMillisecondsSinceEpoch(json['endTime']);
     return GameRecord(
       date: json['date'],
       accountIds: List<String>.from(json['accountIds'].map((x) => x)),
@@ -38,8 +42,8 @@ class GameRecord {
           ? List<Observer>.from(
               json['observers'].map((x) => Observer.fromJson(x)))
           : null,
-      startTime: json['startTime'],
-      endTime: json['endTime'],
+      startTime: startTime,
+      endTime: endTime,
       duration: json['duration'],
       isCheatEnabled: json['isCheatEnabled'],
       timeLimit: json['timeLimit'],
@@ -52,7 +56,7 @@ class GameRecord {
 class GameEventData {
   final String? accountId;
   final String? username;
-  final int? timestamp;
+  final DateTime timestamp;
   final String? modified;
   final List<Player>? players;
   final List<Observer>? observers;
@@ -66,7 +70,7 @@ class GameEventData {
   GameEventData({
     this.accountId,
     this.username,
-    this.timestamp,
+    required this.timestamp,
     this.modified,
     this.players,
     this.observers,
@@ -78,10 +82,12 @@ class GameEventData {
   });
 
   factory GameEventData.fromJson(Map<String, dynamic> json) {
+    final DateTime timestamp =
+        DateTime.fromMillisecondsSinceEpoch(json['timestamp']);
     return GameEventData(
       accountId: json['accountId'] ?? '',
       username: json['username'] ?? '',
-      timestamp: json['timestamp'] ?? 0,
+      timestamp: timestamp,
       modified: json['modified'] ?? '',
       players: json['players'] != null
           ? List<Player>.from(json['players'].map((x) => Player.fromJson(x)))
@@ -119,13 +125,12 @@ class GameRecordCard {
   });
 
   factory GameRecordCard.fromGameRecord(GameRecord record) {
-    final durationFormatted =
-        "${(record.duration ~/ 3600).toString().padLeft(2, '0')}:${((record.duration % 3600) ~/ 60).toString().padLeft(2, '0')}:${(record.duration % 60).toString().padLeft(2, '0')}";
+    Duration duration = record.endTime.difference(record.startTime);
     return GameRecordCard(
       gameName: record.game.name,
       gameOriginalImage: record.game.original,
       playerNames: record.players.map((player) => player.name).toList(),
-      durationFormatted: durationFormatted,
+      durationFormatted: duration.inSeconds.toString(),
       date: record.date,
     );
   }
