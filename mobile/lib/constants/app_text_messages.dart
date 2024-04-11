@@ -1,1 +1,0 @@
-// TODO : transfer all the displayed message throughout the app here !

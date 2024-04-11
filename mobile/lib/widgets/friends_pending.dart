@@ -68,8 +68,10 @@ class _FriendsPending extends State<FriendsPending> {
                             iconSize: 40,
                             icon: Icon(Icons.person_add),
                             onPressed: () {
-                              friendService.respondToInvite(
-                                  friend.accountId, true);
+                              if (!friendService.isResponseDisabled) {
+                                friendService.respondToInvite(
+                                    friend.accountId, true);
+                              }
                             },
                           ),
                           SizedBox(width: 50),
@@ -78,8 +80,10 @@ class _FriendsPending extends State<FriendsPending> {
                             iconSize: 40,
                             icon: Icon(Icons.person_remove),
                             onPressed: () {
-                              friendService.respondToInvite(
-                                  friend.accountId, false);
+                              if (!friendService.isResponseDisabled) {
+                                friendService.respondToInvite(
+                                    friend.accountId, false);
+                              }
                             },
                           ),
                         ],
@@ -93,14 +97,12 @@ class _FriendsPending extends State<FriendsPending> {
         ),
         Padding(
           padding: EdgeInsets.all(10),
-          child: Container(
-            child: Text(
-              AppLocalizations.of(context)!.friendPending_pendingRequestTitle,
-              style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
+          child: Text(
+            AppLocalizations.of(context)!.friendPending_pendingRequestTitle,
+            style: TextStyle(
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black),
           ),
         ),
         Expanded(
@@ -129,7 +131,9 @@ class _FriendsPending extends State<FriendsPending> {
                       ),
                       trailing: TextButton(
                         onPressed: () {
-                          friendService.cancelInvite(friend.accountId);
+                          if (!friendService.isCancelDisabled) {
+                            friendService.cancelInvite(friend.accountId);
+                          }
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -137,7 +141,10 @@ class _FriendsPending extends State<FriendsPending> {
                           disabledForegroundColor:
                               Colors.grey.withOpacity(0.38),
                         ),
-                        child: Text(AppLocalizations.of(context)!.friendPending_cancelButton, style: TextStyle(fontSize: 18)),
+                        child: Text(
+                            AppLocalizations.of(context)!
+                                .friendPending_cancelButton,
+                            style: TextStyle(fontSize: 18)),
                       ),
                     ),
                   ),

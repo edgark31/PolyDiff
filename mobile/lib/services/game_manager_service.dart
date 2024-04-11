@@ -103,6 +103,7 @@ class GameManagerService extends ChangeNotifier {
 
   void abandonGame(String? lobbyId) {
     print('AbandonGame called with id: $lobbyId');
+    gameAreaService.showDifferenceFound([]);
     socketService.send(SocketType.Game, GameEvents.AbandonGame.name, lobbyId);
   }
 
@@ -112,6 +113,7 @@ class GameManagerService extends ChangeNotifier {
     setObserverListener();
     setEndGameMessage(null);
     setGame(Game.initial());
+    gameAreaService.coordinates = [];
     socketService.send(SocketType.Game, GameEvents.Spectate.name, lobbyId);
   }
 
@@ -187,6 +189,7 @@ class GameManagerService extends ChangeNotifier {
     socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
       lobbyService.lobby.nDifferences = 0;
       setEndGameMessage(data as String?);
+      gameAreaService.showDifferenceFound([]);
       disconnectSockets();
     });
 

@@ -115,7 +115,7 @@ class _ChatBoxState extends State<ChatBox> {
           Container(
             height: 80,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondary,
+              color: Colors.grey[300],
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(

@@ -6,7 +6,6 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game.dart';
-import 'package:mobile/services/coordinate_conversion_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/game_manager_service.dart';
 import 'package:mobile/services/image_converter_service.dart';
@@ -39,7 +38,6 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   final GameAreaService gameAreaService = Get.find();
   final GameManagerService gameManagerService = Get.find();
-  final tempGameManager = CoordinateConversionService();
 
   late Future<CanvasModel> imagesFuture;
   bool isChatBoxVisible = false;
@@ -164,34 +162,34 @@ class _GamePageState extends State<GamePage> {
                     ),
 
                     // TODO: Get rid of this after you understand how I pause an animation
-                    ElevatedButton(
-                      onPressed: () {
-                        if (isAnimationPaused) {
-                          gameAreaService.resumeAnimation();
-                        } else {
-                          gameAreaService.pauseAnimation();
-                        }
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     if (isAnimationPaused) {
+                    //       gameAreaService.resumeAnimation();
+                    //     } else {
+                    //       gameAreaService.pauseAnimation();
+                    //     }
 
-                        setState(() {
-                          isAnimationPaused = !isAnimationPaused;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Color(0xFFEF6151),
-                        backgroundColor: Color(0xFF2D1E16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      ),
-                      child: Text(
-                        isAnimationPaused
-                            ? 'Resume Animation'
-                            : 'Pause Animation',
-                        style: TextStyle(fontSize: 30),
-                      ),
-                    ),
+                    //     setState(() {
+                    //       isAnimationPaused = !isAnimationPaused;
+                    //     });
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     foregroundColor: Color(0xFFEF6151),
+                    //     backgroundColor: Color(0xFF2D1E16),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(18.0),
+                    //     ),
+                    //     padding:
+                    //         EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    //   ),
+                    //   child: Text(
+                    //     isAnimationPaused
+                    //         ? 'Resume Animation'
+                    //         : 'Pause Animation',
+                    //     style: TextStyle(fontSize: 30),
+                    //   ),
+                    // ),
                   ] else
                     SizedBox(width: 120),
                   SizedBox(
