@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 export class ChatPageComponent implements OnInit, OnDestroy {
     chatSubscription: Subscription;
     messages: Chat[] = [];
-
+    // eslint-disable-next-line max-params
     constructor(
         private readonly clientSocketService: ClientSocketService,
         private readonly globalChatService: GlobalChatService,
