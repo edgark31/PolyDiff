@@ -3,9 +3,9 @@ import 'package:mobile/models/models.dart';
 class GameRecord {
   final String date;
   final Game game;
+  final List<String> accountIds;
   final List<Player> players;
-  final List<dynamic>? accountIds;
-  final List<dynamic> observers;
+  final List<Observer>? observers;
   final int startTime;
   final int endTime;
   final int duration;
@@ -15,7 +15,7 @@ class GameRecord {
 
   GameRecord({
     required this.date,
-    this.accountIds,
+    required this.accountIds,
     required this.game,
     required this.players,
     required this.observers,
@@ -30,13 +30,14 @@ class GameRecord {
   factory GameRecord.fromJson(Map<String, dynamic> json) {
     return GameRecord(
       date: json['date'],
-      accountIds: json['accountIds'] != null
-          ? List<String>.from(json['accountIds'].map((x) => x))
-          : null,
+      accountIds: List<String>.from(json['accountIds'].map((x) => x)),
       game: Game.fromJson(json['game']),
       players:
           List<Player>.from(json['players'].map((x) => Player.fromJson(x))),
-      observers: List<Observer>.from(json['observers']),
+      observers: json["observers"] != null
+          ? List<Observer>.from(
+              json['observers'].map((x) => Observer.fromJson(x)))
+          : null,
       startTime: json['startTime'],
       endTime: json['endTime'],
       duration: json['duration'],
@@ -54,6 +55,7 @@ class GameEventData {
   final int? timestamp;
   final String? modified;
   final List<Player>? players;
+  final List<Observer>? observers;
   final String gameEvent;
   final Coordinate? coordClic;
   final List<int>?
@@ -67,6 +69,7 @@ class GameEventData {
     this.timestamp,
     this.modified,
     this.players,
+    this.observers,
     required this.gameEvent,
     this.coordClic,
     this.remainingDifferenceIndex,
@@ -82,6 +85,10 @@ class GameEventData {
       modified: json['modified'] ?? '',
       players: json['players'] != null
           ? List<Player>.from(json['players'].map((x) => Player.fromJson(x)))
+          : null,
+      observers: json['observers'] != null
+          ? List<Observer>.from(
+              json['observers'].map((x) => Observer.fromJson(x)))
           : null,
       gameEvent: json['gameEvent'],
       coordClic: json['coordClic'] != null
