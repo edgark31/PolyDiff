@@ -1,8 +1,7 @@
 typedef VoidCallback = void Function();
 typedef IntCallback = int Function();
-typedef BoolCallback = bool Function();
 
-// Replay control mechanisms for the replay functionality.
+// Replay control mechanisms
 class ReplayControl {
   VoidCallback start;
   VoidCallback pause;

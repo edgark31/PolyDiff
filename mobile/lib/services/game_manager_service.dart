@@ -6,7 +6,7 @@ import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/game.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/models/lobby_model.dart';
-import 'package:mobile/providers/game_record_provider.dart';
+import 'package:mobile/replay/replay_service.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/lobby_service.dart';
@@ -23,7 +23,7 @@ class GameManagerService extends ChangeNotifier {
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();
   final InfoService infoService = Get.find();
-  final GameRecordProvider gameRecordProvider = Get.find();
+  final ReplayService replayService = Get.find();
 
   bool isLeftCanvas = true;
   VoidCallback? onGameChange;
@@ -80,9 +80,9 @@ class GameManagerService extends ChangeNotifier {
     startGame(lobbyService.lobby.lobbyId);
   }
 
-  void setGameRecord(GameRecord record) {
+  set gameRecord(GameRecord record) {
     print('Setting game record');
-    gameRecordProvider.currentGameRecord = record;
+    replayService.record = record;
     notifyListeners();
   }
 
@@ -212,11 +212,13 @@ class GameManagerService extends ChangeNotifier {
     socketService.on(SocketType.Game, GameEvents.GameRecord.name, (record) {
       print('GameRecord received');
       if (record is Map<String, dynamic>) {
-        setGameRecord(GameRecord.fromJson(record));
+        gameRecord = (GameRecord.fromJson(record));
+        replayService.isInReplayGamePage = true;
+
         return;
       } else if (record is String) {
         final Map<String, dynamic> parsedRecord = jsonDecode(record);
-        setGameRecord(GameRecord.fromJson(parsedRecord));
+        gameRecord = (GameRecord.fromJson(parsedRecord));
       } else {
         print('Unexpected data format received: ${record.runtimeType}');
       }

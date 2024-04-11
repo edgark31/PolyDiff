@@ -5,12 +5,12 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/players.dart';
-import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/replay/replay_canvas_widget.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/replay/replay_service.dart';
 import 'package:mobile/replay/replay_video_bar_widget.dart';
+import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
 
 class ReplayGamePage extends StatefulWidget {
@@ -30,7 +30,6 @@ class ReplayGamePage extends StatefulWidget {
 class _ReplayGamePageState extends State<ReplayGamePage> {
   // Services
   final ReplayService replayService = Get.find<ReplayService>();
-  final GameRecordProvider gameRecordProvider = Get.find<GameRecordProvider>();
   final ReplayImagesProvider replayImagesProvider =
       Get.find<ReplayImagesProvider>();
 
@@ -38,11 +37,11 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
   void initState() {
     super.initState();
 
-    gameRecordProvider.getAllSaved();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       preloadImages();
       loadImage();
     });
+
     replayService.startReplay;
   }
 
@@ -56,6 +55,82 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
     final ReplayService replayService =
         Provider.of<ReplayService>(context, listen: false);
     await replayService.loadInitialCanvas(context);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if the replay has ended and if it's triggered by a game's end.
+    if (replayService.isEndGame && replayService.isReplayFromGame) {
+      Future.microtask(() => showCompletionPopup(context));
+    } else if (replayService.isEndGame && !replayService.isReplayFromGame) {
+      Future.microtask(() => showCompletionPopup(context));
+    }
+  }
+
+  void showCompletionPopup(BuildContext context) {
+    if (replayService.isReplayFromGame) {
+      // Show pop-up for post-game replay
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Replay Finished"),
+            content: Text("Choose an option"),
+            actions: <Widget>[
+              CustomButton(
+                text: "Replay Again",
+                press: () {
+                  replayService.isReplayFromGame = true;
+                  replayService.restartReplay;
+                  Navigator.of(context).pop();
+                },
+              ),
+              CustomButton(
+                text: "Go back Home",
+                press: () {
+                  // Navigate back to the dashboard or home route
+                  Navigator.of(context).pushNamed(DASHBOARD_ROUTE);
+                },
+              ),
+              CustomButton(
+                text: "Save Replay",
+                press: () {
+                  Navigator.of(context).pushNamed(DASHBOARD_ROUTE);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // Show pop-up for replay from account
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Replay Finished"),
+            content: Text("Do you want to replay again?"),
+            actions: <Widget>[
+              CustomButton(
+                text: "Yes",
+                press: () {
+                  // Logic to restart the replay
+                  Navigator.of(context).pop();
+                },
+              ),
+              CustomButton(
+                text: "NO",
+                press: () {
+                  // Logic to go back or do nothing
+                  Navigator.of(context).popAndPushNamed(DASHBOARD_ROUTE);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -202,6 +277,10 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
                     }
                   },
                 ),
+                if (replayService.record.observers != null &&
+                    replayService.record.observers!.isNotEmpty) ...[
+                  _observerInfos(replayService.record.observers!.length),
+                ],
                 Align(
                   alignment: Alignment.bottomCenter,
                   child:
@@ -237,6 +316,52 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
           textAlign: TextAlign.center,
         ),
       ],
+    );
+  }
+
+  Widget _observerInfos(int nObservers) {
+    if (nObservers == 0) {
+      return Positioned(
+        right: 8.0,
+        bottom: 8.0,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [Icon(Icons.visibility_off, color: Colors.white)],
+          ),
+        ),
+      );
+    }
+
+    return Positioned(
+      right: 8.0,
+      bottom: 8.0,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.remove_red_eye, color: Colors.white),
+            SizedBox(width: 8),
+            Text(
+              nObservers.toString(),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

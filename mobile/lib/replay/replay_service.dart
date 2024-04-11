@@ -31,6 +31,9 @@ class ReplayService extends ChangeNotifier {
   bool _isLoadingImages = true;
   bool _isInReplayGamePage = false;
   bool _isReplaying = false;
+  // For pop up handling
+  bool _isReplayFromGame = false;
+  bool _isEndGame = false;
 
   int _replaySpeed = SPEED_X1;
   int _nDifferencesFound = 0;
@@ -49,6 +52,8 @@ class ReplayService extends ChangeNotifier {
   bool get isInReplayGamePage => _isInReplayGamePage;
   bool get isReplaying => _isReplaying;
   bool get isLoadingImages => _isLoadingImages;
+  bool get isReplayFromGame => _isReplayFromGame;
+  bool get isEndGame => _isEndGame;
 
   int get replaySpeed => _replaySpeed;
   // TODO: See where this is called
@@ -76,6 +81,7 @@ class ReplayService extends ChangeNotifier {
     _gameEventsData = _gameRecordProvider.record.gameEvents;
     _replayTimer = _gameRecordProvider.record.timeLimit;
     _replayPlayerProvider.setPlayersData(_gameRecordProvider.record.players);
+    _isEndGame = false;
 
     notifyListeners();
   }
@@ -120,6 +126,21 @@ class ReplayService extends ChangeNotifier {
 
   set currentCoordinates(List<Coordinate> currentDifference) {
     _currentDifference = currentDifference;
+    notifyListeners();
+  }
+
+  set isInReplayGamePage(bool isInReplayGamePage) {
+    _isInReplayGamePage = isInReplayGamePage;
+    notifyListeners();
+  }
+
+  set isReplayFromGame(bool value) {
+    _isReplayFromGame = value;
+    notifyListeners();
+  }
+
+  set isEndGame(bool value) {
+    _isEndGame = value;
     notifyListeners();
   }
 
@@ -294,6 +315,10 @@ class ReplayService extends ChangeNotifier {
     }
   }
 
+  void delete() {
+    _gameRecordProvider.deleteAccountId(_record.date);
+  }
+
   int _getNextInterval() {
     int nextActionIndex = _currentReplayIndex + 1;
     _isDifferenceFound = false;
@@ -388,6 +413,9 @@ class ReplayService extends ChangeNotifier {
       case "TimerUpdate":
         _handleUpdateTimerEvent(recordedEventData);
 
+      case "EndGame":
+        _handleEnGameEvent(recordedEventData);
+
       case "Spectatate":
         break;
     }
@@ -471,6 +499,12 @@ class ReplayService extends ChangeNotifier {
 
   // TODO: implement create a ObserverManager
   void _handleObserversEvent(GameEventData recordedEventData) {
+    notifyListeners();
+  }
+
+  void _handleEnGameEvent(GameEventData recordedEventData) {
+    _isEndGame = true;
+
     notifyListeners();
   }
 }

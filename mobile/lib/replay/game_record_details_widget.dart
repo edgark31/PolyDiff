@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/game_record_provider.dart';
-import 'package:mobile/widgets/customs/custom_btn.dart';
 import 'package:provider/provider.dart';
 
 class GameRecordDetails extends StatefulWidget {
@@ -49,12 +48,6 @@ class _GameRecordDetailsState extends State<GameRecordDetails> {
                           : null,
                     ))
                 .toList(),
-            CustomButton(
-                text: 'sauvegarder la reprise',
-                press: () {
-                  gameRecordProvider
-                      .addAccountIdByDate(gameRecordProvider.record.date);
-                }) // Ensure .toList() is called
           ],
         ),
       ),

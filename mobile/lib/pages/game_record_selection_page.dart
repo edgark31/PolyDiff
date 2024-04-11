@@ -28,7 +28,7 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
   @override
   void initState() {
     super.initState();
-    _gameRecordProvider.getAllSaved();
+    _gameRecordProvider.findAllByAccountId();
   }
 
   @override
@@ -47,7 +47,7 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
                 Navigator.pushNamed(context, REPLAY_ROUTE);
               },
               onDelete: () =>
-                  gameRecordProvider.deleteAccountIdByDate(gameRecord.date));
+                  gameRecordProvider.deleteAccountId(gameRecord.date));
         },
       ),
     );
