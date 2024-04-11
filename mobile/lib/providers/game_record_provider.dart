@@ -52,7 +52,7 @@ class GameRecordProvider extends ChangeNotifier {
   // get all accounts game record cards save in the database
   Future<String?> getAllSaved() async {
     final accountId = _infoService.id;
-    final url = Uri.parse('$baseUrl?accountId=$accountId');
+    final url = Uri.parse('$baseUrl/$accountId');
 
     try {
       final response = await http.get(url);
@@ -72,8 +72,7 @@ class GameRecordProvider extends ChangeNotifier {
   }
 
   Future<String?> addAccountIdByDate(String date) async {
-    final accountId = _infoService.id;
-    final url = Uri.parse('$baseUrl/$date?accountId=$accountId');
+    final url = Uri.parse('$baseUrl/$date');
 
     try {
       final response = await http.put(url);
