@@ -26,6 +26,7 @@ export class ConfigDialogComponent implements OnInit, OnDestroy {
     configConstants: GameConfigConst;
     communicationSubscription: Subscription;
     private isReloadNeededSubscription: Subscription;
+    // eslint-disable-next-line max-params
     constructor(
         private formBuilder: FormBuilder,
         private readonly communicationService: CommunicationService,

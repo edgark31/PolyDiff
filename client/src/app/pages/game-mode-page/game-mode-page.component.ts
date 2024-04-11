@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
     styleUrls: ['./game-mode-page.component.scss'],
 })
 export class GameModePageComponent implements OnInit, OnDestroy {
+    // eslint-disable-next-line max-params
     constructor(
         private readonly navigationService: NavigationService,
         private readonly clientSocketService: ClientSocketService,

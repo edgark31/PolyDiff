@@ -16,7 +16,7 @@ import { GameRecord } from '@common/game-interfaces';
 })
 export class ReplayPageComponent implements OnInit {
     records: GameRecord[];
-
+    // eslint-disable-next-line max-params
     constructor(
         public welcomeService: WelcomeService,
         public communicationService: CommunicationService,

@@ -25,6 +25,7 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   final FormService formService = Get.find();
+  final SocketService socketService = Get.find();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -47,6 +48,7 @@ class _SignInFormState extends State<SignInForm> {
     );
     usernameController.addListener(validateUsername);
     passwordController.addListener(validatePassword);
+    socketService.killAllAliveSockets();
   }
 
   void updateValidatorStates() {
