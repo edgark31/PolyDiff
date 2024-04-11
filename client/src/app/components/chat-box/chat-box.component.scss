@@ -119,6 +119,7 @@
 #chat-box .content .messages ul li.Sent p {
     display: inline-block;
     padding: 10px 15px;
+    // font-family: sans-serif;
     border-style: solid #1778f2;
     color: white;
     border-radius: 20px;
@@ -186,7 +187,7 @@
     position: relative;
 }
 #chat-box .content .message-input .wrap input {
-    font-family: sans-serif;
+    // font-family: sans-serif;
     float: left;
     border: none;
     width: calc(100% - 105px);
@@ -240,8 +241,8 @@
 }
 
 #chat-box .content .chat {
-    font-family: 'Troika', sans-serif;
     font-size: 30px;
+    color: white;
     -webkit-text-stroke: 2px black;
 }
 
@@ -347,27 +348,29 @@
 #chat-box-dark .content-dark .messages ul li.Sent p {
     display: inline-block;
     padding: 10px 15px;
-    border-style: solid #1778f2;
+    font-family: 'Troika', sans-serif;
+    border-style: solid #f21717;
     color: white;
     border-radius: 20px;
     max-width: 200px;
     line-height: 130%;
     overflow-wrap: break-word;
     font-size: 25px;
-    background-color: #1778f2;
+    background-color: #f21717;
 }
 
 #chat-box-dark .content-dark .messages ul li.Received p {
     display: inline-block;
     padding: 10px 15px;
-    border-style: solid white;
+    font-family: 'Troika', sans-serif;
+    border-style: solid rgb(19, 200, 22);
     color: black;
     border-radius: 20px;
     max-width: 200px;
     line-height: 130%;
     font-size: 25px;
     overflow-wrap: break-word;
-    background-color: white;
+    background-color: rgb(19, 200, 22);
 }
 
 #chat-box-dark .content-dark .messages ul li.Common p {

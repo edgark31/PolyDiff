@@ -5,19 +5,19 @@ let appWindow;
 function initWindow() {
     appWindow = new BrowserWindow({
         // fullscreen: true,
-        height: 800,
-        width: 1000,
+        height: 1080,
+        width: 1920,
         webPreferences: {
             nodeIntegration: true,
         },
-        icon: './src/assets/gros-ratata.bmp'
+        icon: './src/assets/gros-ratata.bmp',
     });
 
     // Electron Build Path
     const path = `file://${__dirname}/dist/client/index.html`;
     appWindow.loadURL(path);
 
-    appWindow.setMenuBarVisibility(false)
+    appWindow.setMenuBarVisibility(false);
 
     // Disable zoom shortcuts
     appWindow.webContents.on('did-finish-load', () => {
