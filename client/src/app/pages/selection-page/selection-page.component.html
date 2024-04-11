@@ -17,8 +17,8 @@
             <img id = "next_button" alt="nextButton" *ngIf="gameCarrousel.hasNext" (click)="nextCarrousel()" src = "./assets/icon/next_button.png"/>
         </div>
     </div>
-    <img *ngIf="welcome.account.profile.mobileTheme==='Light'" id = "selection" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
-    <img  *ngIf="welcome.account.profile.mobileTheme==='Dark'" id = "selection" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
+    <img *ngIf="welcome.account.profile.mobileTheme==='light'" id = "selection" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
+    <img  *ngIf="welcome.account.profile.mobileTheme==='dark'" id = "selection" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
 </div>
 <p *ngIf = "!gameCarrousel.gameCards.length" id = "waiting-message">{{'selectionPage.noGameAvailable' | translate }}</p>
 <img *ngIf = "!gameCarrousel.gameCards.length" id = "waiting" src = "./assets/raccoonWaiting.gif" alt = "waiting-image" />
