@@ -28,7 +28,7 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
   @override
   void initState() {
     super.initState();
-    _gameRecordProvider.getDefault();
+    _gameRecordProvider.getAllSaved();
   }
 
   @override

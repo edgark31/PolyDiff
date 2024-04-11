@@ -30,7 +30,6 @@ class GameManagerService extends ChangeNotifier {
   Game get game => _game;
   int get time => _time;
   String? get endGameMessage => _endGameMessage;
-  static bool get isReplay => _isReplay;
 
   void setGame(Game newGame) {
     print('new Game has been setted $game');
@@ -83,7 +82,7 @@ class GameManagerService extends ChangeNotifier {
 
   void setGameRecord(GameRecord record) {
     print('Setting game record');
-    gameRecordProvider.setCurrentGameRecord(record);
+    gameRecordProvider.currentGameRecord = record;
     notifyListeners();
   }
 

@@ -38,12 +38,14 @@ class _ReplayTimelinePlayerState extends State<ReplayTimelinePlayer> {
           children: [
             IconButton(
               icon: Icon(Icons.play_arrow),
-              onPressed: replayService.isPlaying ? null : replayService.resume,
+              onPressed:
+                  replayService.isReplaying ? null : replayService.resumeReplay,
             ),
             IconButton(
               icon: Icon(Icons.pause),
-              onPressed:
-                  !replayService.isPlaying ? null : () => replayService.pause(),
+              onPressed: !replayService.isReplaying
+                  ? null
+                  : () => replayService.pauseReplay,
             ),
             IconButton(
               icon: Icon(Icons.refresh),
@@ -52,7 +54,7 @@ class _ReplayTimelinePlayerState extends State<ReplayTimelinePlayer> {
                   _currentSliderValue = 0; // Reset slider
                 });
                 replayService.fallBack((_currentSliderValue).round());
-                replayService.restart(); // reset and start the replay
+                replayService.restartReplay; // reset and start the replay
               },
             ),
           ],

@@ -38,12 +38,12 @@ class _ReplayGamePageState extends State<ReplayGamePage> {
   void initState() {
     super.initState();
 
-    gameRecordProvider.getDefault();
+    gameRecordProvider.getAllSaved();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       preloadImages();
       loadImage();
     });
-    replayService.start();
+    replayService.startReplay;
   }
 
   void preloadImages() async {

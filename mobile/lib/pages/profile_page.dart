@@ -34,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    gameRecordProvider.getDefault();
+    gameRecordProvider.getAllSaved();
   }
 
   @override
