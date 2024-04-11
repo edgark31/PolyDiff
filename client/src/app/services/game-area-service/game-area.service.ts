@@ -84,6 +84,19 @@ export class GameAreaService {
         this.flashPixels(differenceCoord, flashingSpeed, isPaused);
     }
 
+    replayReplaceDifference(differenceCoord: Coordinate[], lobbyId: string, flashingSpeed: number = SPEED_X1, isPaused: boolean = false): void {
+        const imageDataIndex = this.convert2DCoordToPixelIndex(differenceCoord);
+        for (const index of imageDataIndex) {
+            for (let i = 0; i < N_PIXEL_ATTRIBUTE; i++) {
+                this.modifiedPixelData.data[index + i] = this.originalPixelData.data[index + i];
+            }
+        }
+        this.modifiedContext.putImageData(this.modifiedPixelData, 0, 0);
+        this.resetCheatMode();
+        // this.captureService.saveReplayEvent(ReplayActions.ClickFound, differenceCoord);
+        this.flashPixels(differenceCoord, flashingSpeed, isPaused);
+    }
+
     flashPixels(differenceCoord: Coordinate[], flashingSpeed: number = SPEED_X1, isPaused: boolean = false): void {
         const imageDataIndexes = this.convert2DCoordToPixelIndex(differenceCoord);
         const firstInterval = setInterval(() => {

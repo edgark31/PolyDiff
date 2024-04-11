@@ -201,6 +201,9 @@ export class ReplayService implements OnDestroy {
             case ReplayActions.TimerUpdate:
                 this.replayTimerUpdate(replayData);
                 break;
+            case ReplayActions.Spectate:
+                this.replaySpectate(replayData);
+                break;
         }
         this.currentReplayIndex++;
     }
@@ -302,7 +305,7 @@ export class ReplayService implements OnDestroy {
             this.replayDifferenceFound.next(this.nDifferencesFound);
         }
         this.gameAreaService.setAllData();
-        this.gameAreaService.replaceDifference(this.currentCoords, '', this.replaySpeed);
+        this.gameAreaService.replayReplaceDifference(this.currentCoords, '', this.replaySpeed);
     }
 
     private replayClickError(replayData: GameEventData): void {
