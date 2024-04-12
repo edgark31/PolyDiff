@@ -38,7 +38,10 @@ class _CustomTextInputFieldState extends State<CustomTextInputField> {
           obscureText: widget.isPassword,
           maxLength: widget.maxLength,
           onChanged: widget.onInputTextChanged,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Roboto'),
           decoration: InputDecoration(
             labelText: widget.label,
             labelStyle:

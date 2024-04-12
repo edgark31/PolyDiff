@@ -19,7 +19,7 @@ export class ImageCanvasComponent implements AfterViewInit {
     @ViewChild('foregroundCanvas') foregroundCanvas: ElementRef;
     @ViewChild('frontCanvas') frontCanvas: ElementRef;
     readonly canvasSizes: CanvasMeasurements;
-
+    // eslint-disable-next-line max-params
     constructor(
         private readonly imageService: ImageService,
         private readonly drawService: DrawService,

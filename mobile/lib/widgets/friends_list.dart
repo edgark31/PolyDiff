@@ -75,10 +75,14 @@ class _FriendsListState extends State<FriendsList> {
                         size: 35,
                       ),
                       onPressed: () {
-                        if (friend.isFavorite) {
-                          friendService.toggleFavorite(friend.accountId, false);
-                        } else {
-                          friendService.toggleFavorite(friend.accountId, true);
+                        if (!friendService.isFavoriteDisabled) {
+                          if (friend.isFavorite) {
+                            friendService.toggleFavorite(
+                                friend.accountId, false);
+                          } else {
+                            friendService.toggleFavorite(
+                                friend.accountId, true);
+                          }
                         }
                       },
                     ),

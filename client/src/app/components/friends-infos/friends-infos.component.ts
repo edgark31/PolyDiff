@@ -48,6 +48,7 @@ export class FriendsInfosComponent implements OnInit, OnDestroy {
     //     },
     // ];
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
+    // eslint-disable-next-line max-params
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: { friend: Friend; showCommonFriend: boolean; user: User },
         public dialogRef: MatDialogRef<FriendsInfosComponent>,

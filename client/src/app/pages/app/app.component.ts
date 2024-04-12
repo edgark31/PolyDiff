@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
+    // eslint-disable-next-line max-params
     constructor(
         private translate: TranslateService,
         public welcome: WelcomeService,

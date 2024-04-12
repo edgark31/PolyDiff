@@ -21,6 +21,7 @@ export class CreateRoomPageComponent implements AfterViewInit {
     nDifferences: number;
     gameId: string;
     lobby: Lobby;
+    // eslint-disable-next-line max-params
     constructor(
         private readonly roomManagerService: RoomManagerService,
         private readonly navigationService: NavigationService,

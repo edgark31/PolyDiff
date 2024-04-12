@@ -17,6 +17,7 @@ export class ShareModalComponent {
     // eslint-disable-next-line max-params
     accountSubscription: Subscription;
     friends: Friend[];
+    // eslint-disable-next-line max-params
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: { showShareFriend: boolean; players: Player[] },
         public welcome: WelcomeService,

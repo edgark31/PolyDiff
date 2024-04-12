@@ -11,6 +11,7 @@ import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/services/account_service.dart';
 import 'package:mobile/services/info_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/services/sound_service.dart';
 import 'package:mobile/utils/credentials_validation.dart';
 import 'package:mobile/widgets/avatar_picker.dart';
@@ -40,11 +41,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
   InfoService _infoService = Get.find();
   RegisterProvider _registerProvider = Get.find();
   SoundService soundService = Get.find();
+  final SocketService socketService = Get.find();
 
   // Same logic when signing up : avatar
   ImageProvider? _selectedAvatar;
   String? _selectedAvatarId;
   String? _selectedAvatarBase64;
+  String? _newSelectedAvatarId = 'id';
+  String? _newSelectedAvatarBase64 = 'base64';
 
   final AccountService accountService = AccountService();
   AccountSettings? initialSettings;
@@ -80,6 +84,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   void initState() {
+    Future.delayed(Duration.zero, () {
+      if (ModalRoute.of(context)?.isCurrent ?? false) {
+        socketService.onlyAuthSocketShouldBeConnected(
+            pageName: EDIT_PROFILE_ROUTE);
+      }
+    });
     super.initState();
     print('init State');
     _validator = CredentialsValidator(onStateChanged: _forceRebuild);
@@ -185,7 +195,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> saveChanges() async {
     try {
-      if (_selectedAvatarId != null) {
+      if (_selectedAvatarId != null &&
+          _selectedAvatarId != _newSelectedAvatarId) {
         UploadAvatarBody predefinedAvatarBody = UploadAvatarBody(
             username: _infoService.username, id: _selectedAvatarId);
         String? response = await _registerProvider.putAvatarData(
@@ -195,11 +206,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
         print("response : $response");
         if (response == null) {
           _avatarProvider.setAccountAvatarUrl();
+          _newSelectedAvatarId = _selectedAvatarId!;
           showFeedback(avatarFeedback);
         } else {
           throw Exception(response);
         }
-      } else if (_selectedAvatarBase64 != null) {
+      } else if (_selectedAvatarBase64 != null &&
+          _selectedAvatarBase64 != _newSelectedAvatarBase64) {
         print("HERE AVATAR CHANGED WRONG");
         UploadAvatarBody avatarBody = UploadAvatarBody(
             username: _infoService.username,
@@ -208,6 +221,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
             avatarBody, AvatarType.camera);
 
         if (response == null) {
+          _avatarProvider.setAccountAvatarUrl();
+          _newSelectedAvatarBase64 = _selectedAvatarBase64!;
           showFeedback(avatarFeedback);
         } else {
           throw Exception(response);

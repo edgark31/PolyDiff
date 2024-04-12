@@ -18,7 +18,6 @@ class _FriendsSearchState extends State<FriendsSearch> {
   TextEditingController usernameController = TextEditingController();
   FocusNode textFocusNode = FocusNode();
   bool isTyping = false;
-  List<User> searchedUsers = [];
 
   @override
   void initState() {
@@ -28,10 +27,22 @@ class _FriendsSearchState extends State<FriendsSearch> {
     friendService.fetchPending();
   }
 
+  List<User> getFilteredUsers(FriendService friendService) {
+    if (usernameController.text.isEmpty) {
+      return [];
+    }
+    return friendService.users
+        .where((user) => user.name
+            .toLowerCase()
+            .contains(usernameController.text.toLowerCase()))
+        .toList();
+  }
+
   Widget _state(String myId, User user) {
     final friendService = context.watch<FriendService>();
     bool isFriend = friendService.friends
         .any((friend) => friend.accountId == user.accountId);
+
     if (isFriend) {
       return Text(AppLocalizations.of(context)!.friendSearch_friendTitle,
           style: TextStyle(fontSize: 18));
@@ -41,7 +52,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
       if (isRequest) {
         return TextButton(
           onPressed: () {
-            friendService.cancelInvite(user.accountId);
+            if (!friendService.isCancelDisabled) {
+              friendService.cancelInvite(user.accountId);
+            }
           },
           style: TextButton.styleFrom(
             foregroundColor: Colors.white,
@@ -63,7 +76,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
                 iconSize: 40,
                 icon: Icon(Icons.person_add),
                 onPressed: () {
-                  friendService.respondToInvite(user.accountId, true);
+                  if (!friendService.isResponseDisabled) {
+                    friendService.respondToInvite(user.accountId, true);
+                  }
                 },
               ),
               SizedBox(width: 50),
@@ -72,7 +87,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
                 iconSize: 40,
                 icon: Icon(Icons.person_remove),
                 onPressed: () {
-                  friendService.respondToInvite(user.accountId, false);
+                  if (!friendService.isResponseDisabled) {
+                    friendService.respondToInvite(user.accountId, false);
+                  }
                 },
               ),
             ],
@@ -84,7 +101,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
           } else {
             return TextButton(
               onPressed: () {
-                friendService.sendInvite(user.accountId);
+                if (!friendService.isInviteDisabled) {
+                  friendService.sendInvite(user.accountId);
+                }
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
@@ -105,6 +124,8 @@ class _FriendsSearchState extends State<FriendsSearch> {
   Widget build(BuildContext context) {
     final friendService = context.watch<FriendService>();
     final infoService = context.watch<InfoService>();
+    List<User> filteredUsers = getFilteredUsers(friendService);
+
     return Column(
       children: [
         Padding(
@@ -120,26 +141,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
                       focusNode: textFocusNode,
                       controller: usernameController,
                       onChanged: (text) {
-                        setState(() {
-                          isTyping = text.isNotEmpty;
-                          friendService.fetchUsers();
-                          if (usernameController.text.isNotEmpty &&
-                              usernameController.text.trim().isNotEmpty) {
-                            setState(() {
-                              searchedUsers = (friendService.users)
-                                  .where((user) => user.name
-                                      .toLowerCase()
-                                      .contains(usernameController.text
-                                          .toLowerCase()))
-                                  .toList();
-                            });
-                            FocusScope.of(context).requestFocus(textFocusNode);
-                          } else {
-                            setState(() {
-                              searchedUsers = [];
-                            });
-                          }
-                        });
+                        setState(() {});
                       },
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(context)!
@@ -157,9 +159,9 @@ class _FriendsSearchState extends State<FriendsSearch> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: searchedUsers.length,
+            itemCount: filteredUsers.length,
             itemBuilder: (BuildContext context, int index) {
-              final user = searchedUsers[index];
+              final user = filteredUsers[index];
               String avatarURL = '$BASE_URL/avatar/${user.accountId}.png';
               return Container(
                 alignment: Alignment.center,

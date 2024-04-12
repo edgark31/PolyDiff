@@ -85,19 +85,7 @@ class AccountService {
 
   // Language
   Future<String?> updateLanguage(String username, String newLanguage) async {
-    String newLanguageFormatted;
-    switch (newLanguage) {
-      case 'Français':
-      case 'French':
-        newLanguageFormatted = 'fr';
-
-      case 'Anglais':
-      case 'English':
-        newLanguageFormatted = 'en';
-
-      default:
-        newLanguageFormatted = 'fr';
-    }
+    print('$username is updating language to $newLanguage');
 
     try {
       final response = await http.put(
@@ -107,11 +95,11 @@ class AccountService {
         },
         body: jsonEncode({
           'username': username,
-          'newLanguage': newLanguageFormatted,
+          'newLanguage': newLanguage,
         }),
       );
       if (response.statusCode == 200) {
-        print("Language updated to $newLanguageFormatted ");
+        print("Language updated to $newLanguage ");
         return null;
       }
     } catch (error) {

@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class ImportDialogComponent {
     imageData: string;
     choice: string;
+    // eslint-disable-next-line max-params
     constructor(
         public welcomeService: WelcomeService,
         private dialogRef: MatDialogRef<ImportDialogComponent>,

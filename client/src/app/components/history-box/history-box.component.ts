@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 export class HistoryBoxComponent implements OnInit, OnDestroy {
     gameHistory: GameHistory[];
     private isGameHistoryReloadNeededSubscription: Subscription;
+    // eslint-disable-next-line max-params
     constructor(
         private readonly roomManagerService: RoomManagerService,
         private readonly communicationService: CommunicationService,
