@@ -6,6 +6,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/models/canvas_model.dart';
+import 'package:mobile/models/game_record_model.dart';
+import 'package:mobile/services/image_converter_service.dart';
 
 class ImageState {
   int? eventIndex;
@@ -101,12 +103,50 @@ class ReplayImagesProvider extends ChangeNotifier {
 
     return dataUri.substring(commaIndex + 1);
   }
+
+  Future<void> loadInitialCanvas(
+      BuildContext context, GameRecord record) async {
+    Future<CanvasModel> initialImages = ImageConverterService.fromImagesBase64(
+        record.game.original, record.game.modified);
+    _currentCanvas = initialImages;
+  }
+
+  Future<void> preloadGameEventImages(
+      BuildContext context, GameRecord record) async {
+    List<Future> preloadFutures = [];
+
+    for (int i = 0; i < record.gameEvents.length; i++) {
+      final event = record.gameEvents[i];
+      if (event.modified != null &&
+          event.modified!.isNotEmpty &&
+          event.gameEvent == "Found") {
+        String base64Data =
+            ReplayImagesProvider.extractBase64Data(event.modified!) ?? "";
+        if (base64Data.isNotEmpty) {
+          // Prepare and cache image without awaiting
+          convertToImageState(i, base64Data, event.isMainCanvas ?? false);
+
+          print(
+              "----- Preloading image GAME EVENT : CANVAS :${event.isMainCanvas}  & EVENT ${event.gameEvent} -----");
+
+          String cacheKey = i.toString();
+          print("**** Preloading image with cache key $cacheKey ****");
+
+          preloadFutures.add(ImageCacheService.decodeAndCacheBase64Image(
+              base64Data, cacheKey));
+        }
+      }
+    }
+
+    // Wait for all futures to complete
+    await Future.wait(preloadFutures);
+  }
 }
 
 class ImageCacheService {
-  final Map<String, ui.Image> _cache = {};
+  static final Map<String, ui.Image> _cache = {};
 
-  Future<ui.Image> decodeAndCacheBase64Image(String base64String,
+  static Future<ui.Image> decodeAndCacheBase64Image(String base64String,
       [String? cacheKey]) async {
     final Uint8List bytes = base64.decode(base64String);
     final Completer<ui.Image> completer = Completer();
@@ -114,7 +154,7 @@ class ImageCacheService {
       completer.complete(img);
     });
     final ui.Image image = await completer.future;
-    // Use a unique cache key for each image; using the base64 string itself, or a hash, etc.
+    // unique cache key for each image; using the base64 string itself, or a hash, etc.
     final String key = cacheKey ?? base64String;
     _cache[key] = image;
     return image;

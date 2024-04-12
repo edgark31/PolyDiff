@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/replay/game_event_playback_manager.dart';
 import 'package:mobile/replay/game_events_services.dart';
-import 'package:mobile/services/services.dart';
 
 class GameEventSlider extends StatefulWidget {
   final GameEventPlaybackService playbackService;
@@ -25,22 +24,18 @@ class _GameEventSliderState extends State<GameEventSlider> {
   late StreamSubscription<GameEventData> _eventsSubscription;
   String _currentEvent = "";
   String _currentTime = "";
-  String? _currentImage = "";
 
   @override
   void initState() {
     super.initState();
     // Subscribe to the event stream
     widget.playbackService.eventsStream.listen((GameEventData event) {
-      // Calculate the new slider value based on the event index
       int eventIndex = widget.playbackService.events.indexOf(event);
       double newSliderValue =
           eventIndex / (widget.playbackService.events.length - 1).toDouble();
 
       if (mounted) {
         setState(() {
-          // Check if we're dealing with the first event after a restart and adjust if necessary.
-          // This could be refined based on your application's logic and event handling.
           if (eventIndex == 0) {
             _sliderValue = 0; // Reset slider for the first event after restart.
           } else {
@@ -48,7 +43,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
           }
           _currentEvent = event.gameEvent;
           _currentTime = event.time.toString();
-          _currentImage = event.modified ?? "";
         });
       }
     });
@@ -56,7 +50,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
 
   @override
   void dispose() {
-    // Make sure to cancel your event stream subscription when the widget is disposed
     _eventsSubscription?.cancel();
     super.dispose();
   }
@@ -97,20 +90,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
             });
           },
         ),
-
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.memory(
-                ImageConverterService.uint8listFromBase64String(
-                    _currentImage ?? ""),
-              ),
-              SizedBox(height: 10),
-            ],
-          ),
-        ),
-
         // Display the gameEvent of the selected event
         Text("Current Event: $_currentEvent"),
         // This displays the slider's value; it's optional and can be removed if not needed
@@ -123,13 +102,14 @@ class _GameEventSliderState extends State<GameEventSlider> {
             IconButton(
               icon: Icon(Icons.play_arrow),
               onPressed: () {
-                widget.playbackService.resume(); // Use the play method
+                widget.playbackService.resume();
               },
             ),
+            // Restart button
             IconButton(
               icon: Icon(Icons.pause),
               onPressed: () {
-                widget.playbackService.pause(); // Use the pause method
+                widget.playbackService.pause();
               },
             ),
             // Restart button
@@ -137,7 +117,7 @@ class _GameEventSliderState extends State<GameEventSlider> {
               icon: Icon(Icons.restart_alt),
               onPressed: () {
                 widget.playbackService.restart();
-                // Also, reset the slider to the start
+                // Reset the slider to the start
                 setState(() {
                   _sliderValue = 0;
                 });

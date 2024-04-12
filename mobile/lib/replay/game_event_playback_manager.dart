@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/game_record_provider.dart';
+import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/sound_service.dart';
@@ -12,6 +13,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   final GameAreaService _gameAreaService = Get.find();
   final SoundService _soundService = Get.find();
   final ReplayPlayerProvider _replayPlayerProvider = Get.find();
+  final ReplayImagesProvider _replayImagesProvider = Get.find();
 
   bool _isEndGame = false;
   bool _isDifferenceFound = false;
@@ -115,6 +117,11 @@ class GameEventPlaybackManager extends ChangeNotifier {
     }
 
     _nDifferencesFound++;
+    print(
+        "Difference found from GameEventPlaybackManager at index: $currentIndex");
+    _replayImagesProvider.updateCanvasState(
+        recordedEventData.modified!, currentIndex.toString());
+
     _handleRemainingDifferenceIndex(recordedEventData);
   }
 

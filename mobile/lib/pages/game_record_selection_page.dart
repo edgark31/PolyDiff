@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/providers/game_record_provider.dart';
@@ -23,31 +22,30 @@ class GameRecordSelectionPage extends StatefulWidget {
 }
 
 class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
-  final GameRecordProvider _gameRecordProvider = Get.find();
-
   @override
   void initState() {
     super.initState();
-    _gameRecordProvider.findAllByAccountId();
   }
 
   @override
   Widget build(BuildContext context) {
     final GameRecordProvider gameRecordProvider =
         context.watch<GameRecordProvider>();
+
     return Scaffold(
       appBar: CustomAppBar(title: 'Replays'),
       body: ListView.builder(
         itemCount: 1,
         itemBuilder: (context, index) {
-          final gameRecord = gameRecordProvider.record;
           return GameRecordCardWidget(
-              gameRecordCard: GameRecordCard.fromGameRecord(gameRecord),
+              gameRecordCard:
+                  GameRecordCard.fromGameRecord(gameRecordProvider.record),
               onReplay: () {
-                Navigator.pushNamed(context, REPLAY_ROUTE);
+                Navigator.pushNamed(context, REPLAY_ROUTE,
+                    arguments: gameRecordProvider.record);
               },
-              onDelete: () =>
-                  gameRecordProvider.deleteAccountId(gameRecord.date));
+              onDelete: () => gameRecordProvider
+                  .deleteAccountId(gameRecordProvider.record.date));
         },
       ),
     );

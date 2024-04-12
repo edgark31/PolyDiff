@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/pages/admin_page.dart';
 import 'package:mobile/pages/chat_page.dart';
 import 'package:mobile/pages/create_room_card_page.dart';
@@ -115,7 +116,11 @@ class AppRouter {
         return GameRecordSelectionPage.route();
 
       case GameEventPlaybackScreen.routeName:
-        return GameEventPlaybackScreen.route();
+        final args = settings.arguments;
+        if (args is GameRecord) {
+          return GameEventPlaybackScreen.route(args);
+        }
+        return _errorRoute();
 
       case FriendsPage.routeName:
         return FriendsPage.route();
