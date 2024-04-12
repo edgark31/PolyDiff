@@ -416,7 +416,7 @@ export class GameGateway implements OnGatewayConnection {
 
         /* ------------------ Record Event ------------------ */
         this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.CheatActivated, username, accountId, players } as GameEventData);
-        this.logger.log(`${username}(${this.getFormattedInfos(socket.data.accountId)}) activated cheat in ${lobbyId}`);
+        this.logger.log(`${this.getFormattedInfos(socket.data.accountId)} activated cheat in ${lobbyId}`);
     }
 
     @SubscribeMessage(GameEvents.CheatDeactivated)
@@ -426,7 +426,7 @@ export class GameGateway implements OnGatewayConnection {
 
         /* ------------------ Record Event ------------------ */
         this.recordManager.addGameEvent(lobbyId, { gameEvent: GameEvents.CheatDeactivated, username, accountId } as GameEventData);
-        this.logger.log(`${username}(${this.getFormattedInfos(socket.data.accountId)}) deactivated cheat in ${lobbyId}`);
+        this.logger.log(`${this.getFormattedInfos(socket.data.accountId)} deactivated cheat in ${lobbyId}`);
     }
 
     @SubscribeMessage(ChannelEvents.SendGameMessage)
