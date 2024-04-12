@@ -1,55 +1,52 @@
 <div class="mat-elevation-z8">
-    <table  *ngIf="welcome.isHistoryLogin" mat-table [dataSource]="dataSourceLogin">
+  <div class="table-container" *ngIf="welcome.isHistoryLogin">
+      <table mat-table [dataSource]="dataSourceLogin" class="mat-elevation-z8">
+          <!-- Timestamp Column -->
+          <ng-container matColumnDef="timestamp">
+              <th mat-header-cell *matHeaderCellDef>{{ 'historyLogin.timeStamps' | translate }}</th>
+              <td mat-cell *matCellDef="let element">{{ element.timestamp }}</td>
+          </ng-container>
 
-      <!-- Position Column -->
-      <ng-container matColumnDef="timestamp">
-        <th mat-header-cell *matHeaderCellDef> {{'historyLogin.timeStamps' | translate }} </th>
-        <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
-      </ng-container>
+          <!-- Connection Column -->
+          <ng-container matColumnDef="connection">
+              <th mat-header-cell *matHeaderCellDef>{{ 'historyLogin.connection' | translate }}</th>
+              <td mat-cell *matCellDef="let element">
+                  <span *ngIf="element.isConnection">{{ 'historyLogin.connection' | translate }}</span>
+                  <span *ngIf="!element.isConnection">{{ 'historyLogin.disconnection' | translate }}</span>
+              </td>
+          </ng-container>
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="connection">
-        <th mat-header-cell *matHeaderCellDef> {{'historyLogin.connection' | translate }} </th>
-        <td mat-cell *matCellDef="let element"> <span *ngIf="element.isConnection">{{'historyLogin.connection' | translate }}
-        </span> <span *ngIf="!element.isConnection">{{'historyLogin.disconnection' | translate }}
-        </span> </td>
-      </ng-container>
-
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumnsLogin"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumnsLogin;"></tr>
-    </table>
-
-
-    <table  *ngIf="!welcome.isHistoryLogin" mat-table [dataSource]="dataSourceGame">
-
-        <!-- Position Column -->
-        <ng-container matColumnDef="timestamp">
-          <th mat-header-cell *matHeaderCellDef> {{'historyLogin.timeStamps' | translate }} </th>
-          <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
-        </ng-container>
-
-        <!-- Name Column -->
-        <ng-container matColumnDef="Session">
-          <th mat-header-cell *matHeaderCellDef> {{'historyLogin.matchSummary' | translate }} </th>
-          <td mat-cell *matCellDef="let element"> <span *ngIf="element.isWinner">{{'historyLogin.win' | translate }}
-          </span> <span *ngIf="!element.isWinner">{{'historyLogin.loose' | translate }}
-          </span> </td>
-        </ng-container>
-
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumnsGame"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumnsGame;"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsLogin"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsLogin;"></tr>
       </table>
-
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                   showFirstLastButtons>
-    </mat-paginator>
-
-    <div>
-        <button mat-raised-button class="close-button" (click)="closeDialog()" aria-label="close history">
-            <mat-icon>close</mat-icon>
-            {{'historyLogin.closeHistoric' | translate }}
-        </button>
-    </div>
   </div>
+
+  <div class="table-container" *ngIf="!welcome.isHistoryLogin">
+      <table mat-table [dataSource]="dataSourceGame" class="mat-elevation-z8">
+          <!-- Timestamp Column -->
+          <ng-container matColumnDef="timestamp">
+              <th mat-header-cell *matHeaderCellDef>{{ 'historyLogin.timeStamps' | translate }}</th>
+              <td mat-cell *matCellDef="let element">{{ element.timestamp }}</td>
+          </ng-container>
+
+          <!-- Session Column -->
+          <ng-container matColumnDef="Session">
+              <th mat-header-cell *matHeaderCellDef>{{ 'historyLogin.matchSummary' | translate }}</th>
+              <td mat-cell *matCellDef="let element">
+                  <span *ngIf="element.isWinner">{{ 'historyLogin.win' | translate }}</span>
+                  <span *ngIf="!element.isWinner">{{ 'historyLogin.loose' | translate }}</span>
+              </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsGame"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsGame;"></tr>
+      </table>
+  </div>
+
+  <div class="close-button-container">
+      <button mat-raised-button class="close-button" (click)="closeDialog()">
+          <mat-icon>close</mat-icon>
+          {{ 'historyLogin.closeHistoric' | translate }}
+      </button>
+  </div>
+</div>

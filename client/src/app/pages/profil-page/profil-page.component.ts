@@ -67,9 +67,11 @@ export class ProfilPageComponent implements AfterViewInit, OnDestroy {
         this.welcomeService.isHistoryLogin = false;
         this.matDialog.open(HistoryLoginComponent);
     }
+
     translateCharacter(character: string): string {
         return this.translate.instant(`button.${character}`);
     }
+
     onSubmitHome() {
         this.clientSocket.disconnect('auth');
         this.router.navigate(['/login']);
