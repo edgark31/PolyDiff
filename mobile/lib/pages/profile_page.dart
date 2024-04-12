@@ -183,14 +183,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPress: () {
                           Navigator.pushNamed(context, STATISTICS_ROUTE);
                         }),
-                    SizedBox(height: 10),
-                    ProfileMenuWidget(
-                        title:
-                            AppLocalizations.of(context)!.profile_videoReplay,
-                        icon: Icons.video_collection,
-                        onPress: () {
-                          Navigator.pushNamed(context, VIDEOS_ROUTE);
-                        }),
+                    // SizedBox(height: 10), // TODO: Add if replay is back
+                    // ProfileMenuWidget(
+                    //     title:
+                    //         AppLocalizations.of(context)!.profile_videoReplay,
+                    //     icon: Icons.video_collection,
+                    //     onPress: () {
+                    //       Navigator.pushNamed(context, VIDEOS_ROUTE);
+                    //     }),
 
                     Divider(),
                     SizedBox(height: 20),
