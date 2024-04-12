@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/replay/game_event_playback_manager.dart';
 import 'package:mobile/replay/game_events_services.dart';
+import 'package:mobile/replay/replay_images_provider.dart';
 
 class GameEventSlider extends StatefulWidget {
   final GameEventPlaybackService playbackService;
   final GameEventPlaybackManager playbackManager;
+  final ReplayImagesProvider replayImagesProvider;
 
   GameEventSlider({
     super.key,
     required this.playbackService,
     required this.playbackManager,
+    required this.replayImagesProvider,
   });
 
   @override
@@ -96,6 +99,7 @@ class _GameEventSliderState extends State<GameEventSlider> {
         Text("Slider Value: ${_sliderValue.toStringAsFixed(2)}"),
         // Display the current time associated with the game event, if any
         Text("Current time: ${_currentTime.toString()}"),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

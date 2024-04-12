@@ -37,7 +37,7 @@ class ReplayImagesProvider extends ChangeNotifier {
 
   List<ImageState> get canvasStates => _canvasStates;
 
-  Future<CanvasModel> get currentCanvas => _currentCanvas;
+  Future<CanvasModel> get currentCanvasModel => _currentCanvas;
 
   set canvasStates(List<ImageState> replayImagesState) {
     _canvasStates = replayImagesState;
@@ -78,6 +78,7 @@ class ReplayImagesProvider extends ChangeNotifier {
   }
 
   Future<void> updateCanvasState(String base64String, String eventIndex) async {
+    print("Updating canvas state for event index $eventIndex");
     final ImageCacheService cacheService = ImageCacheService();
     ui.Image newModifiedImage = cacheService.getImage(eventIndex) ??
         await decodeBase64Image(base64String);
@@ -89,8 +90,8 @@ class ReplayImagesProvider extends ChangeNotifier {
       original: originalImage,
       modified: newModifiedImage,
     ));
-    print("here");
-    notifyListeners();
+
+    notifyListeners(); // This is crucial for updating the UI
   }
 
   static String? extractBase64Data(String dataUri) {
@@ -109,6 +110,7 @@ class ReplayImagesProvider extends ChangeNotifier {
     Future<CanvasModel> initialImages = ImageConverterService.fromImagesBase64(
         record.game.original, record.game.modified);
     _currentCanvas = initialImages;
+    notifyListeners();
   }
 
   Future<void> preloadGameEventImages(

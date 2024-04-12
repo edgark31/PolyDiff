@@ -2,13 +2,6 @@ import 'dart:async';
 
 import 'package:mobile/models/game_record_model.dart';
 
-class GameEvent {
-  final DateTime timestamp;
-  final String eventData;
-
-  GameEvent(this.timestamp, this.eventData);
-}
-
 class GameEventPlaybackService {
   late final StreamController<GameEventData> _eventsController;
 
@@ -21,8 +14,11 @@ class GameEventPlaybackService {
   Stream<GameEventData> get eventsStream => _eventsController.stream;
   List<GameEventData> get events => _events;
   DateTime get lastEventTime => _lastEventTime!;
+  int get currentIndex => _currentIndex;
 
-  GameEventPlaybackService(this._events) {
+  GameEventPlaybackService(
+    this._events,
+  ) {
     _eventsController = StreamController<GameEventData>.broadcast(
       onListen: () {
         if (!_isPaused && _events.isNotEmpty) {

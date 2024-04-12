@@ -45,6 +45,9 @@ class GameEventPlaybackManager extends ChangeNotifier {
       GameEventData recordedEventData =
           _gameRecordProvider.record.gameEvents[eventIndex];
 
+      print(
+          "called handleSliderChangeValue ! : ${recordedEventData.gameEvent}");
+
       _handleGameEvent(recordedEventData);
     }
 
@@ -56,7 +59,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
     _handleGameEvent(events[eventIndexToSeek]);
 
-    print("called seekToEvent ! : ${events[eventIndexToSeek]}");
+    print("called seekToEvent ! : ${events[eventIndexToSeek].gameEvent}");
   }
 
   // Event Handlers
@@ -66,6 +69,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
         _handleGameStartEvent();
 
       case "Found":
+        print("Found event");
         _handleClickFoundEvent(recordedEventData);
 
       case "NotFound":
@@ -94,8 +98,8 @@ class GameEventPlaybackManager extends ChangeNotifier {
   }
 
   void _handleClickFoundEvent(GameEventData recordedEventData) {
-    if (_gameRecordProvider.record.game.differences == null) return;
-    if (recordedEventData.coordClic == null) return;
+    // if (_gameRecordProvider.record.game.differences == null) return;
+    // if (recordedEventData.coordClic == null) return;
 
     final int currentIndex = _gameRecordProvider.record.game.differences!
         .indexWhere((difference) => difference.any((coord) =>
@@ -112,6 +116,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
       for (Player player in recordedEventData.players!) {
         _replayPlayerProvider.updatePlayerData(player);
       }
+
       _handleUpdateRemainingDifference(
           _gameRecordProvider.record.game.differences!);
     }
@@ -128,6 +133,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   void _handleClickErrorEvent(GameEventData recordedEventData) {
     _gameAreaService.showDifferenceNotFound(recordedEventData.coordClic!,
         recordedEventData.isMainCanvas!, _replaySpeed);
+    notifyListeners();
   }
 
   void _handleActivateCheatEvent(GameEventData recordedEventData) {
@@ -155,6 +161,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
       _handleUpdateRemainingDifference(remainingCoordinates);
     }
+    notifyListeners();
   }
 
   void _handleUpdateRemainingDifference(List<List<Coordinate>> remaining) {
