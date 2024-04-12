@@ -15,6 +15,7 @@
     background-color: #67a28b;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 .canvas-container {
@@ -146,16 +147,16 @@ canvas {
 
 app-chat-box {
     position: absolute;
-    left: 35.75%;
+    left: 34.5%;
     bottom: 15%;
-    z-index: 2;
+    z-index: 10;
     transform: scale(0.7);
 }
 
 app-replay-buttons {
     position: absolute;
-    bottom: 65px;
-    z-index: 2;
+    bottom: 20px;
+    z-index: 10;
 }
 
 #background {
