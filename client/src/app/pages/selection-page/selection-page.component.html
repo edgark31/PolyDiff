@@ -1,25 +1,18 @@
-<div class="selectionComponent">
+<div class="container">
+    <app-nav-bar id ="nav-bar"></app-nav-bar>
     <div class="header">
         <h1 *ngIf="router.url === '/selection'">{{'selectionPage.selectGame' | translate }}</h1>
-        <h1 *ngIf="router.url === '/admin'">>{{'selectionPage.configureGame' | translate }}</h1>
-        <app-nav-bar id ="nav-bar"></app-nav-bar>
+        <h1 *ngIf="router.url === '/admin'">{{'selectionPage.configureGame' | translate }}</h1>
     </div>
-    <div class="gameCarrouselContainer">
-        <mat-grid-list class="gameCarrousel" cols="4">
-            <ng-container  *ngIf="gameCarrousel.gameCards">
-                <mat-grid-tile *ngFor="let game of gameCarrousel.gameCards" class="section">
-                    <app-game-sheet  [game]="game"></app-game-sheet>
-                </mat-grid-tile>
-            </ng-container>
-        </mat-grid-list>
-        <div class="buttonContainer">
-            <img id = "previous_button" alt="previousButton" *ngIf="gameCarrousel.hasPrevious" (click)="previousCarrousel()" src = "./assets/icon/previous_button.png"/>
-            <img id = "next_button" alt="nextButton" *ngIf="gameCarrousel.hasNext" (click)="nextCarrousel()" src = "./assets/icon/next_button.png"/>
-        </div>
+    <div *ngIf="gameCarrousel.gameCards"  class="gameCarrouselContainer">
+        <app-game-sheet *ngFor="let game of gameCarrousel.gameCards"  [game]="game"></app-game-sheet>
     </div>
-    <img *ngIf="welcome.account.profile.mobileTheme==='light'" id = "selection" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
-    <img  *ngIf="welcome.account.profile.mobileTheme==='dark'" id = "selection" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
+    <img *ngIf="welcome.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
+    <img  *ngIf="welcome.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
 </div>
-<p *ngIf = "!gameCarrousel.gameCards.length" id = "waiting-message">{{'selectionPage.noGameAvailable' | translate }}</p>
-<img *ngIf = "!gameCarrousel.gameCards.length" id = "waiting" src = "./assets/raccoonWaiting.gif" alt = "waiting-image" />
-<div *ngIf="router.url === '/selection'" class="footer"></div>
+<div class="buttonContainer">
+    <img id = "previous_button" alt="previousButton" *ngIf="gameCarrousel.hasPrevious" (click)="previousCarrousel()" src = "./assets/icon/previous_button.png"/>
+    <img id = "next_button" alt="nextButton" *ngIf="gameCarrousel.hasNext" (click)="nextCarrousel()" src = "./assets/icon/next_button.png"/>
+</div>
+<p *ngIf="!gameCarrousel.gameCards.length" id="waiting-message">{{'selectionPage.noGameAvailable' | translate }}</p>
+<img *ngIf="!gameCarrousel.gameCards.length" id="waiting" src="./assets/raccoonWaiting.gif" alt="waiting-image" />

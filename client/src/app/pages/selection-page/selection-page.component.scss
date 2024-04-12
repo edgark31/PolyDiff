@@ -4,65 +4,85 @@
     font-size: 20px;
 }
 
-*:not(#selection) {
+#background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+*:not(#background) {
     z-index: 1;
 }
 
-.selectionComponent {
-    background-color: (#67a28b);
+.container {
+    height: 100%;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     z-index: 1;
 }
 
 .header {
+    width: 100vw;
+    height: 10%;
     display: flex;
     flex-direction: row;
-    background-color: (#67a28b);
     justify-content: center;
-    padding: 10px;
+    align-items: center;
     z-index: 1;
+    padding: 10px;
     font-size: 30px;
     -webkit-text-stroke: 2px black;
 }
 
 h1 {
-    margin: auto;
-    padding-left: 500px;
     text-align: center;
     font-family: 'Troika', sans-serif;
     color: white;
-    font-size: 40px;
+    font-size: 60px;
+    -webkit-text-stroke: 2px black;
 }
 
-h2 {
-    font-size: 40px;
+app-nav-bar {
+    z-index: 1;
     font-family: 'Troika', sans-serif;
+    height: 10%;
 }
 
-#nav-bar {
-    font-family: 'Troika', sans-serif;
-}
-
-.button {
-    z-index: 999;
+mat-grid-tile {
+    height: 100%;
+    width: 100%;
+    margin: 0;
 }
 
 .gameCarrouselContainer {
     position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 80%;
+    width: 80%;
 }
 
-.gameCarrousel {
-    margin-left: 80px;
-    margin-right: 80px;
-    top: 230px;
+app-game-sheet {
+    width: 25%;
+    height: 75%;
 }
 
 #previous_button {
-    position: absolute;
-    top: 95%;
-    transform: translateY(-50%);
-    left: 0;
-    min-width: 100px;
     z-index: 1;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    min-width: 100px;
     transition: all 0.3s ease;
 }
 
@@ -73,9 +93,9 @@ h2 {
 
 #next_button {
     position: absolute;
-    top: 95%;
-    transform: translateY(-50%);
+    top: 50%;
     right: 0;
+    transform: translateY(-50%);
     min-width: 100px;
     z-index: 1;
     transition: all 0.3s ease;
@@ -84,130 +104,6 @@ h2 {
 #next_button:hover {
     cursor: pointer;
     filter: drop-shadow(10px 10px 10px black);
-}
-
-.menu_button {
-    font-size: 20px;
-    width: 600px;
-    height: 100px;
-    z-index: 1;
-}
-
-.track {
-    width: 250px;
-    height: 250px;
-}
-
-.footerPreview {
-    color: white;
-    position: absolute;
-    height: 40%;
-    width: 95%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    top: 50%;
-    left: 1%;
-}
-
-.section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.project-logo {
-    width: 150px;
-    height: 150px;
-    border-radius: 60%;
-    margin: 0 auto;
-    background-color: white;
-    border-width: 5px;
-    border-color: rgb(0, 0, 0);
-}
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 2rem;
-    background: rgb(23, 15, 46);
-    font-weight: 500;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.2rem;
-    z-index: 1;
-    font-family: 'Troika', sans-serif;
-}
-
-.buttonCreate {
-    margin-top: 20px;
-    z-index: 1;
-}
-
-.buttonCreate a {
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 15px 15px rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 30px;
-    padding: 10px;
-    color: white;
-    letter-spacing: 1px;
-    text-decoration: none;
-    overflow: hidden;
-    font-weight: 400px;
-    transition: 0.5s;
-    z-index: 1;
-}
-
-.buttonCreate:hover a {
-    letter-spacing: 3px;
-}
-.buttonCreate a::before {
-    background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
-    transform: skewX(45deg) translate(0);
-    transition: 0.5s;
-}
-.buttonCreate::before {
-    bottom: -5px;
-    width: 30px;
-    height: 10px;
-    border-radius: 10px;
-    transition: 0.5s;
-    transition-delay: 0.5;
-}
-
-.buttonCreate::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -5px;
-    width: 30px;
-    height: 10px;
-    border-radius: 10px;
-    transition: 0.5s;
-    transition-delay: 0.5;
-}
-
-#selection {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-#wood {
-    left: 200px;
-    position: absolute;
-    width: 80%;
 }
 
 p {
