@@ -5,7 +5,7 @@
     </header>
     <img *ngIf="welcomeService.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
     <img *ngIf="welcomeService.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
-    <div class="flex-column">
+    <div class="buttons flex-column">
         <button class="button" routerLink="/game-mode">
             <span id = "limited">{{'mainPage.gameMode' | translate }}</span>
         </button>

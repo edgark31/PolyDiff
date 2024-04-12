@@ -1,3 +1,100 @@
+.main {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+app-nav-bar {
+    font-family: 'Troika', sans-serif;
+    font-size: 20px;
+    height: 10vh;
+}
+
+.container-information {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.85);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 10vh;
+}
+
+.information {
+    color: #ffa500;
+    padding: 10px;
+    text-align: center;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+    font-size: 38px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.container {
+    color: black;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+    margin: 20px;
+    height: 80vh;
+}
+
+.button-container {
+    position: fixed;
+    width: 100vw;
+    bottom: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 0vh;
+}
+
+.button-container button {
+    width: 130px;
+    font-size: 16px;
+    font-family: 'Troika', sans-serif;
+    color: rgba(253, 250, 151, 255);
+    text-transform: uppercase;
+    border: 1px solid black;
+    border-radius: 5%;
+    background-color: #e8a430;
+    transition: background-color 0.3s ease;
+    margin: 0 30px;
+}
+
+.button-container button:hover {
+    background: rgb(136, 15, 15);
+}
+
+button {
+    margin-bottom: 10px;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #e8a430;
+    padding: 8px 24px;
+    border-radius: 4px;
+    border: 1px solid #000000;
+    width: 100%;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background: rgb(136, 15, 15);
+}
+
 form {
     max-width: 400px;
     padding: 16px 16px 24px;
@@ -15,31 +112,12 @@ form {
     text-transform: uppercase;
 }
 .error-message {
-    color: red;
-}
-.information {
-    color: #ffa500;
-    font-weight: bold;
-    display: inline-block;
-    text-align: left;
-    font-size: 32px;
-    font-weight: bold;
-    padding: 10px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    padding-right: 14px;
-    width: 500px;
-    height: 50px;
-}
-
-.header {
-    display: flex;
-    justify-content: flex-end;
-}
-
-app-nav-bar {
+    -webkit-text-stroke: 1px #000000;
     font-family: 'Troika', sans-serif;
-    font-size: 20px;
+    font-weight: bold;
+    color: red;
+    font-size: larger;
+    margin-top: 10px;
 }
 
 h1 {
@@ -57,7 +135,7 @@ h1 {
     margin-bottom: 50px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     text-align: left;
 }
 
@@ -119,28 +197,11 @@ h1 {
 }
 
 .form-control input:hover {
-    border-color: #0bf286;
+    border-color: #ffffff;
 }
 
-button:hover {
-    background: rgb(136, 15, 15);
-}
 .option-icon {
     margin-right: 8px;
-}
-button {
-    margin-bottom: 10px;
-    color: rgba(253, 250, 151, 255);
-    -webkit-text-stroke: 0.2px black;
-    border: none;
-    // border-radius: 25px;
-    background-color: #e8a430;
-    padding: 8px 24px;
-    border-radius: 4px;
-    border: 1px solid #000000;
-    width: 100%;
-    font-size: 1.2rem;
-    cursor: pointer;
 }
 
 #background {
@@ -151,6 +212,11 @@ button {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-fit: cover;
+}
+
+.mat-select {
+    background-color: #ffffff;
 }
 
 .mat-form-field,
@@ -158,66 +224,50 @@ button {
 .mat-select {
     font-size: 1em;
     margin-bottom: 1px;
+    font-weight: none;
+    color: black;
 }
 .mat-form-field.mat-form-field {
     font-size: 18px;
     width: 500px;
+    font-weight: none;
+    color: black;
 }
 
 .mat-form-field.mat-form-field-appearance-legacy .mat-form-field-underline {
     height: 10px;
+    font-weight: none;
+    color: black;
+}
+
+::ng-deep .mat-form-field-type-mat-input .mat-input-element::placeholder {
+    color: black !important;
+}
+
+::ng-deep .mat-input-element::placeholder {
+    color: black !important;
+}
+
+::ng-deep .mat-form-field-label {
+    color: black !important;
 }
 
 .form-control.section {
     display: flex;
     flex-direction: column;
+    font-weight: none;
+    color: black;
 }
 
 .mat-option {
     font-size: 1em;
     line-height: 3;
+    font-weight: none;
+    color: black;
 }
 
 .section {
     margin-bottom: 20px;
-}
-
-.button-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.button-container button {
-    font-size: 16px;
-    margin-left: 10px;
-    font-family: 'Troika', sans-serif;
-    color: rgba(253, 250, 151, 255);
-    // -webkit-text-stroke: 0.2px black;
-    text-transform: uppercase;
-    border: none;
-    background-color: #e8a430;
-}
-
-.information {
-    color: #ffa500;
-    -webkit-text-stroke: 1px #000000;
-    font-family: 'Troika', sans-serif;
-    font-weight: bold;
-    display: inline-block;
-    text-align: left;
-    font-size: 38px;
-    font-weight: bold;
-    padding: 10px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    padding-right: 14px;
-    width: 500px;
-    height: 50px;
 }
 
 .personalisation {
@@ -227,13 +277,11 @@ button {
     padding: 10px;
     margin-bottom: 10px;
     margin-top: 20px;
-    color: white;
 }
 
 .left {
     flex: 1;
     padding-right: 10px;
-    color: white;
     -webkit-text-stroke: 1px #000000;
     font-family: 'Troika', sans-serif;
     font-weight: bold;
@@ -250,26 +298,6 @@ body {
     margin-top: -40px;
 }
 
-.container-information {
-    text-transform: uppercase;
-    color: rgba(0, 0, 0, 0.85);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-.container {
-    color: white;
-    -webkit-text-stroke: 1px #000000;
-    font-family: 'Troika', sans-serif;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: space-between;
-    margin: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 .form-stat div {
     margin-bottom: 4px;
 }
