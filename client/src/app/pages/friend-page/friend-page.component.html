@@ -15,7 +15,7 @@
             <div class="cards">
                 <div class="friend-card" *ngFor="let friend of friends">
                     <div class="show">
-                        <img class="avatar" [src]="'http://34.118.163.79:3000/avatar/' + friend.accountId + '.png'" alt="Image">
+                        <img class="avatar" [src]="'http://localhost:3000/avatar/' + friend.accountId + '.png'" alt="Image">
                         <span class="name">{{ friend.name }}</span>
                     </div>
                     <div class="details">
@@ -39,7 +39,7 @@
             <div class="cards pending-sent">
                 <div class="friend-card" *ngFor="let friend of friendPendingList">
                     <div class="show">
-                        <img class="avatar" [src]="'http://34.118.163.79:3000/avatar/' + friend.accountId + '.png'" alt="Image">
+                        <img class="avatar" [src]="'http://localhost:3000/avatar/' + friend.accountId + '.png'" alt="Image">
                         <span class="name">{{ friend.name }}</span>
                     </div>
                     <div class="details">
@@ -60,7 +60,7 @@
             <div class="cards pending-sent">
                 <div class="friend-card" *ngFor="let friend of friendSentList">
                     <div class="show">
-                        <img class="avatar" [src]="'http://34.118.163.79:3000/avatar/' + friend.accountId + '.png'" alt="Image">
+                        <img class="avatar" [src]="'http://localhost:3000/avatar/' + friend.accountId + '.png'" alt="Image">
                         <span class="name">{{ friend.name }}</span>
                     </div>
                     <div class="details">
@@ -83,7 +83,7 @@
             <div class="cards">
                 <div class="friend-card" *ngFor="let user of userList">
                     <div class="show">
-                        <img class="avatar" [src]="'http://34.118.163.79:3000/avatar/' + user.accountId + '.png'" alt="Image">
+                        <img class="avatar" [src]="'http://localhost:3000/avatar/' + user.accountId + '.png'" alt="Image">
                         <span class="name">{{ user.name }}</span>
                     </div>
                     <div *ngIf="stateUser(user.name)==='friendUpdate'" class="details">

@@ -179,7 +179,7 @@
         "startParty": "La partie va commencer sous peu..."
     },
 
-    " selectionPage": {
+    "selectionPage": {
         "selectGame": "Selectionne ton jeu",
         "configureGame": "Configure ton jeu",
         "noGameAvailable": "Il n'y a pas de jeux disponibles pour le moment"
