@@ -26,6 +26,7 @@ class _AdminPopupState extends State<AdminPopup> {
 
   void handleSubmission(String password) {
     if (password == "admin") {
+      passwordController.text = "";
       Navigator.pushNamed(context, ADMIN_ROUTE);
     } else {
       setState(() {

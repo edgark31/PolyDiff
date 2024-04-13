@@ -32,6 +32,7 @@ export class RegistrationPageComponent {
     confirmedPassword: string;
     email: string;
     username: string;
+    isRequestPending: boolean = false;
 
     constructor(
         private readonly communication: CommunicationService,
@@ -57,14 +58,21 @@ export class RegistrationPageComponent {
                 email: this.registrationForm.value.email,
                 password: this.registrationForm.value.password,
             };
-            this.communication.createUser(this.creds, this.welcomeService.selectLocal).subscribe({
+            this.communication.createUser(this.creds, this.welcomeService.chooseImage ? this.welcomeService.selectLocal : '1').subscribe({
                 next: () => {
-                    this.router.navigate(['/login']);
+                    if (this.welcomeService.chooseImage) this.router.navigate(['/login']);
                 },
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';
                 },
             });
+            this.isRequestPending = true;
+            if (!this.welcomeService.chooseImage)
+                setTimeout(() => {
+                    this.isRequestPending = false;
+                    this.welcomeService.onUpdateAvatar(this.creds.username);
+                    this.router.navigate(['/login']);
+                }, 1000);
         }
     }
 

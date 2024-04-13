@@ -57,6 +57,7 @@
     "game": {
         "foundDifference": "Différences trouvées ",
         "timerOver": "Temps écoulé",
+        "time": "Temps",
         "classic": "classique",
         "limited": "limité",
         "practice": "pratique",
@@ -286,5 +287,14 @@
     "ranking": {
         "loading": "Chargement...",
         "global": "Classement Global"
+    },
+
+    "saveRecordDialog": {
+        "saveRecord": "Voulez-vous enregistrer cette reprise vidéo ?"
+    },
+
+    "replayPage": {
+        "noReplayAvailable": "Aucune reprise vidéo disponible pour le moment",
+        "replayLoading": "Chargement des reprises vidéo..."
     }
 }

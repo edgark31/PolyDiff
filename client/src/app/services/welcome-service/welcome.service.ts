@@ -116,15 +116,25 @@ export class WelcomeService {
         });
     }
 
-    onUpdateAvatar() {
-        this.communication.updateAvatar(this.account.credentials.username, this.selectAvatar).subscribe({
-            next: () => {
-                this.account.profile.avatar = this.selectAvatar;
-            },
-            error: (error: HttpErrorResponse) => {
-                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
-            },
-        });
+    onUpdateAvatar(name?: string) {
+        if (this.isLogin)
+            this.communication.updateAvatar(this.account.credentials.username, this.selectAvatar).subscribe({
+                next: () => {
+                    this.account.profile.avatar = this.selectAvatar;
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+                },
+            });
+        else
+            this.communication.updateAvatar(name ?? '', this.selectAvatarRegister).subscribe({
+                next: () => {
+                    // empty
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+                },
+            });
     }
 
     onChooseAvatar() {
