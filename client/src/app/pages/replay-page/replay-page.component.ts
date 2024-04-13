@@ -16,6 +16,7 @@ import { GameRecord } from '@common/game-interfaces';
 })
 export class ReplayPageComponent implements OnInit {
     records: GameRecord[];
+    isRetrievingRecords: boolean;
     // eslint-disable-next-line max-params
     constructor(
         public welcomeService: WelcomeService,
@@ -26,12 +27,21 @@ export class ReplayPageComponent implements OnInit {
         public gameAreaService: GameAreaService,
     ) {
         this.records = [];
+        this.isRetrievingRecords = false;
     }
 
     ngOnInit(): void {
         this.communicationService.findAllByAccountId(this.welcomeService.account.id as string).subscribe((records) => {
+            this.isRetrievingRecords = true;
             this.records = records;
         });
+    }
+
+    isEmpty(): boolean {
+        if (this.records.length === 0) {
+            this.isRetrievingRecords = false;
+        }
+        return this.isRetrievingRecords;
     }
 
     playRecord(recordToPlay: GameRecord): void {

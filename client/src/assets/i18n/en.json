@@ -282,5 +282,10 @@
 
     "saveRecordDialog": {
         "saveRecord": "Do you want to save this game record ?"
+    },
+
+    "replayPage": {
+        "noReplayAvailable": "No game records available for now",
+        "replayLoading": "Retrieving game records..."
     }
 }

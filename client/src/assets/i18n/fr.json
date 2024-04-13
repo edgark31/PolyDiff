@@ -290,5 +290,10 @@
 
     "saveRecordDialog": {
         "saveRecord": "Voulez-vous enregistrer cette reprise vidéo ?"
+    },
+
+    "replayPage": {
+        "noReplayAvailable": "Aucune reprise vidéo disponible pour le moment",
+        "replayLoading": "Chargement des reprises vidéo..."
     }
 }
