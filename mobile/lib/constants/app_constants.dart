@@ -137,9 +137,9 @@ List<Player> defaultPlayers = [
 ];
 
 // Replay speeds
-const int SPEED_X1 = 1;
-const int SPEED_X2 = 2;
-const int SPEED_X4 = 4;
+const double SPEED_X1 = 1.0;
+const double SPEED_X2 = 2.0;
+const double SPEED_X4 = 4.0;
 
 const REPLAY_SPEEDS = [SPEED_X1, SPEED_X2, SPEED_X4];
 const int REPLAY_LIMITER = 1000;

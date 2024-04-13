@@ -62,21 +62,21 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   }
 
   void setupPeriodicUpdates() {
-    timer = Timer.periodic(Duration(seconds: 1), (_) {
+    timer = Timer.periodic(Duration(milliseconds: 1000), (_) {
       setState(() {
-        formattedTime = calculateFormattedTime(playbackService.lastEventTime ??
-            DateTime.fromMillisecondsSinceEpoch(0));
+        formattedTime = calculateFormattedTime(
+            (playbackService.lastEventTime) ??
+                DateTime.fromMillisecondsSinceEpoch(0));
       });
     });
   }
 
   void loadInitialCanvas() async {
     try {
-      // Assuming loadInitialCanvas in ReplayImagesProvider takes GameRecord and returns Future<void>
       await replayImagesProvider.loadInitialCanvas(widget.record);
     } catch (e) {
       print("Failed to load initial canvas: $e");
-      // Optionally, show an error message to the user or retry the loading
+
       showErrorDialog("Failed to load game data. Please try again.");
     }
   }
@@ -111,10 +111,11 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   }
 
   String calculateFormattedTime(DateTime timestamp) {
-    // Calculate elapsed time since the start of the playback
     Duration elapsedTime =
         timestamp.difference(playbackService.events.first.timestamp);
-    // Calculate minutes and seconds from the elapsed time
+    if (elapsedTime.isNegative) {
+      return "00:00";
+    }
     int minutes = elapsedTime.inMinutes;
     int seconds = elapsedTime.inSeconds % 60;
     return '$minutes:${seconds.toString().padLeft(2, '0')}';
@@ -253,6 +254,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
             Center(
               child: GameEventSlider(
                 playbackService: playbackService,
+                playbackManager: GameEventPlaybackManager(playbackService),
               ),
             ),
           ],

@@ -8,17 +8,16 @@ class GameEventPlaybackService {
 
   final List<GameEventData> _events;
   bool _isPaused = false;
-  bool _isPlayingBack = false;
   DateTime? _lastEventTime;
   Timer? _timer;
   int _currentIndex = 0;
-  int _speed = SPEED_X1;
+  double _speed = SPEED_X1;
 
   Stream<GameEventData> get eventsStream => _eventsController.stream;
   List<GameEventData> get events => _events;
   DateTime? get lastEventTime => _lastEventTime;
   int get currentIndex => _currentIndex;
-  int get speed => _speed;
+  double get speed => _speed;
 
   GameEventPlaybackService(
     this._events,
@@ -55,11 +54,12 @@ class GameEventPlaybackService {
   void restart() {
     pause();
     _currentIndex = 0;
+    _speed = SPEED_X1;
     _lastEventTime = null;
     _playbackEvents();
   }
 
-  void setSpeed(int speed) {
+  void setSpeed(double speed) {
     _speed = speed;
     if (!_isPaused) {
       pause();
@@ -68,12 +68,8 @@ class GameEventPlaybackService {
   }
 
   void _playbackEvents() async {
-    if (_isPlayingBack) return;
-    _isPlayingBack = true;
-
     if (_events.isEmpty || _isPaused) {
       print("No events to play or playback is paused.");
-      _isPlayingBack = false;
       return;
     }
 
@@ -84,14 +80,16 @@ class GameEventPlaybackService {
       final int durationSinceLastEvent =
           event.timestamp.difference(previousEventTime).inMilliseconds;
 
+      // Adjust playback speed
+      int adjustedPlaybackSpeed = (durationSinceLastEvent / _speed).floor();
+
       if (durationSinceLastEvent > 0) {
-        await Future.delayed(Duration(milliseconds: durationSinceLastEvent));
+        await Future.delayed(Duration(milliseconds: adjustedPlaybackSpeed));
       }
 
       if (_isPaused) {
         print("Playback was paused during the delay.");
         _currentIndex = i;
-        _isPlayingBack = false;
         return;
       }
 
@@ -106,11 +104,14 @@ class GameEventPlaybackService {
       print("All events have been played.");
       _currentIndex = 0;
     }
-    _isPlayingBack = false;
   }
 
   void _stopPlayback() {
     print("Stopping playback.");
+    _currentIndex = 0;
+    _lastEventTime = null;
+    _speed = SPEED_X1;
+
     _isPaused = true;
     _timer?.cancel();
   }

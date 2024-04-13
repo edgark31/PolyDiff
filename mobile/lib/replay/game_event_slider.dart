@@ -3,14 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game_record_model.dart';
+import 'package:mobile/replay/game_event_playback_manager.dart';
 import 'package:mobile/replay/game_events_services.dart';
 
 class GameEventSlider extends StatefulWidget {
   final GameEventPlaybackService playbackService;
+  final GameEventPlaybackManager playbackManager;
 
   GameEventSlider({
     super.key,
     required this.playbackService,
+    required this.playbackManager,
   });
 
   @override
@@ -115,15 +118,21 @@ class _GameEventSliderState extends State<GameEventSlider> {
             // Speed buttons
             IconButton(
               icon: Text('1x'),
-              onPressed: () => widget.playbackService.setSpeed(SPEED_X1),
+              onPressed: () {
+                widget.playbackService.setSpeed(SPEED_X1);
+              },
             ),
             IconButton(
               icon: Text('2x'),
-              onPressed: () => widget.playbackService.setSpeed(SPEED_X2),
+              onPressed: () {
+                widget.playbackManager.setSpeed(SPEED_X2);
+              },
             ),
             IconButton(
               icon: Text('4x'),
-              onPressed: () => widget.playbackService.setSpeed(SPEED_X4),
+              onPressed: () {
+                widget.playbackManager.setSpeed(SPEED_X4);
+              },
             ),
           ],
         ),

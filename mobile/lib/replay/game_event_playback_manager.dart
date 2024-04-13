@@ -21,14 +21,14 @@ class GameEventPlaybackManager extends ChangeNotifier {
   bool _hasCheatModeEnabled = false;
 
   int _nDifferencesFound = 0;
-  int _replaySpeed = SPEED_X1;
+  double _replaySpeed = SPEED_X1;
 
   bool get isEndGame => _isEndGame;
   bool get isDifferenceFound => _isDifferenceFound;
   bool get isCheatMode => _isCheatMode;
   bool get hasCheatModeEnabled => _hasCheatModeEnabled;
   int get nDifferencesFound => _nDifferencesFound;
-  int get replaySpeed => _replaySpeed;
+  double get replaySpeed => _replaySpeed;
 
   GameEventPlaybackManager(playbackService) {
     playbackService.eventsStream.listen((event) {
@@ -61,6 +61,12 @@ class GameEventPlaybackManager extends ChangeNotifier {
     print("called seekToEvent ! : ${events[eventIndexToSeek].gameEvent}");
   }
 
+  void setSpeed(double speed) {
+    _replaySpeed = speed;
+    "MANAGER Speed changed to: $speed";
+    notifyListeners();
+  }
+
   // Event Handlers
   void _handleGameEvent(GameEventData recordedEventData) {
     print("Called Handling Game Event: ${recordedEventData.gameEvent}");
@@ -68,7 +74,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
       case "StartGame":
         _handleGameStartEvent();
         break;
-
       case "Found":
         _handleClickFoundEvent(recordedEventData);
         break;
@@ -127,7 +132,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
         currentIndex--;
       }
 
-      if (previousEvent != null) {
+      if (previousEvent != null && previousEvent.modified != null) {
         replayImagesProvider
             .updateCanvasState(previousEvent.modified!)
             .then((_) {
@@ -143,7 +148,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
           print("Error loading initial canvas: $error");
         });
       }
-      notifyListeners();
     }
 
     notifyListeners();

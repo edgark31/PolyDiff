@@ -9,6 +9,7 @@ import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
+import 'package:mobile/replay/game_event_playback_manager.dart';
 import 'package:mobile/replay/game_playback_page.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
@@ -104,6 +105,11 @@ void main() async {
     ChangeNotifierProvider(create: (context) {
       ReplayPlayerProvider replayPlayerProvider = Get.find();
       return replayPlayerProvider;
+    }),
+
+    ChangeNotifierProvider(create: (context) {
+      GameEventPlaybackManager playbackManager = Get.find();
+      return playbackManager;
     }),
 
     // ChangeNotifierProvider(create: (context) {

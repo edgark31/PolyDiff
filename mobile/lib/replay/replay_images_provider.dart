@@ -33,8 +33,17 @@ class ReplayImagesProvider extends ChangeNotifier {
       // Decode the new modified image
       ui.Image modifiedImage =
           await ImageConverterService.imageFromBase64String(base64String);
-      return CanvasModel(
-          original: currentCanvas.original, modified: modifiedImage);
+
+      // If the current canvas state has already been updated, return it and don't rerender the same
+      if (currentCanvas.modified == modifiedImage) {
+        print('Updating canvas state with new modified image.');
+
+        return currentCanvasFuture;
+      } else {
+        print('Updating canvas state with new modified image.');
+        return CanvasModel(
+            original: currentCanvas.original, modified: modifiedImage);
+      }
     }).catchError((error) {
       print('Error updating canvas state: $error');
 
