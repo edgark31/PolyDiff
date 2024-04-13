@@ -57,6 +57,7 @@
     "game": {
         "foundDifference": "Differences found",
         "timerOver": "Time's up",
+        "time": "Time",
         "classic": "classic",
         "limited": "limited",
         "practice": "practice",
