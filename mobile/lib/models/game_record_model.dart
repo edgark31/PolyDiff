@@ -30,8 +30,10 @@ class GameRecord {
   factory GameRecord.fromJson(Map<String, dynamic> json) {
     final DateTime startTime =
         DateTime.fromMillisecondsSinceEpoch(json['startTime']);
-    final DateTime endTime =
-        DateTime.fromMillisecondsSinceEpoch(json['endTime']);
+    final DateTime endTime = json["endTime"] != null
+        ? DateTime.fromMillisecondsSinceEpoch(json['endTime'])
+        : DateTime.fromMillisecondsSinceEpoch(0); // TODO: Pretty fix 
+    DateTime.fromMillisecondsSinceEpoch(json['endTime']);
     return GameRecord(
       date: json['date'],
       accountIds: List<String>.from(json['accountIds'].map((x) => x)),
