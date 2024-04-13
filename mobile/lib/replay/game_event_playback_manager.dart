@@ -28,10 +28,10 @@ class GameEventPlaybackManager extends ChangeNotifier {
   bool get isCheatMode => _isCheatMode;
   bool get hasCheatModeEnabled => _hasCheatModeEnabled;
   int get nDifferencesFound => _nDifferencesFound;
-  double get replaySpeed => _replaySpeed;
 
   GameEventPlaybackManager(playbackService) {
     playbackService.eventsStream.listen((event) {
+      _replaySpeed = playbackService.replaySpeed;
       _handleGameEvent(event);
     });
   }
@@ -59,12 +59,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
     _handleGameEvent(events[eventIndexToSeek]);
 
     print("called seekToEvent ! : ${events[eventIndexToSeek].gameEvent}");
-  }
-
-  void setSpeed(double speed) {
-    _replaySpeed = speed;
-    "MANAGER Speed changed to: $speed";
-    notifyListeners();
   }
 
   // Event Handlers
@@ -169,7 +163,8 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
     _isDifferenceFound = true;
     _gameAreaService.showDifferenceFound(
-        _gameRecordProvider.record.game.differences![currentIndex]);
+        _gameRecordProvider.record.game.differences![currentIndex],
+        _replaySpeed);
 
     _soundService.playCorrectSound();
 

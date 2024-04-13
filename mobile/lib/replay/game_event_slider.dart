@@ -125,13 +125,13 @@ class _GameEventSliderState extends State<GameEventSlider> {
             IconButton(
               icon: Text('2x'),
               onPressed: () {
-                widget.playbackManager.setSpeed(SPEED_X2);
+                widget.playbackService.setSpeed(SPEED_X2);
               },
             ),
             IconButton(
               icon: Text('4x'),
               onPressed: () {
-                widget.playbackManager.setSpeed(SPEED_X4);
+                widget.playbackService.setSpeed(SPEED_X4);
               },
             ),
           ],
