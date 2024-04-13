@@ -26,7 +26,7 @@ import 'package:mobile/replay/watch_recorded_game_page.dart';
 
 // Change this URL to your local machine's IP address when testing on tablet
 // const String BASE_URL = 'http://192.168.0.100:3000'; // Testing on tablet
-const String BASE_URL = 'http://34.118.163.79:3000'; // Testing on real server
+const String BASE_URL = 'http://34.95.3.182:3000'; // Testing on real server
 // const String BASE_URL = 'http://localhost:3000'; // Testing on chrome
 const String API_URL = '$BASE_URL/api';
 
