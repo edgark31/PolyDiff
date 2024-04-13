@@ -115,6 +115,7 @@ export enum LobbyState {
     Waiting = 'LobbyWaiting',
     InGame = 'LobbyInGame',
     Spectate = 'LobbySpectate',
+    
 }
 
 export enum AccountEvents {

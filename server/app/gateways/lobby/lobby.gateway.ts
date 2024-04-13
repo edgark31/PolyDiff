@@ -115,6 +115,7 @@ export class LobbyGateway implements OnGatewayConnection {
         if (!this.roomsManager.lobbies.get(data.lobbyId)) return;
         const { lobbyId, password } = data;
         if (this.roomsManager.lobbies.get(lobbyId).password && this.roomsManager.lobbies.get(lobbyId).password !== password) return;
+        if (this.roomsManager.lobbies.get(lobbyId).players.find((p) => p.accountId === socket.data.accountId)) return;
 
         socket.data.state = LobbyState.Waiting;
         socket.join(lobbyId);
@@ -212,7 +213,7 @@ export class LobbyGateway implements OnGatewayConnection {
         socket.broadcast.to(lobbyId).emit(ChannelEvents.LobbyMessage, { ...chat, tag: MessageTag.Received });
 
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
-        this.logger.log(`${this.accountManager.users.get(socket.data.accountId).credentials.username} envoie un message`);
+        this.logger.log(`${this.getFormattedInfos(socket.data.account)} envoie un message : ${message}`);
     }
 
     @SubscribeMessage(LobbyEvents.UpdateLobbys)
@@ -258,7 +259,7 @@ export class LobbyGateway implements OnGatewayConnection {
         });
     }
 
-    private getFormattedInfos(socketId: string) {
-        return `${this.accountManager.users.get(socketId).credentials.username} (${socketId})`;
+    private getFormattedInfos(accountId: string) {
+        return `${this.accountManager.users.get(accountId).credentials.username} (${accountId})`;
     }
 }
