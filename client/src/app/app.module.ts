@@ -1,3 +1,4 @@
+import { WaitingGameComponent } from '@app/components/waiting-game/waiting-game.component';
 /* eslint-disable import/no-unresolved */
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -75,9 +76,9 @@ import { PersonalizationPageComponent } from './pages/personnalization-page/pers
 import { ProfilPageComponent } from './pages/profil-page/profil-page.component';
 import { RecoverPasswordPageComponent } from './pages/recover-password-page/recover-password-page.component';
 import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
-import { WaitingRoomComponent } from './pages/waiting-room/waiting-room.component';
-import { ReplayPageComponent } from './pages/replay-page/replay-page.component';
 import { ReplayGamePageComponent } from './pages/replay-game-page/replay-game-page.component';
+import { ReplayPageComponent } from './pages/replay-page/replay-page.component';
+import { WaitingRoomComponent } from './pages/waiting-room/waiting-room.component';
 /**
  * Main module that is used in main.ts.
  * All automatically generated components will appear in this module.
@@ -141,6 +142,7 @@ export const createTranslateLoader = (http: HttpClient) => {
         JoinedPlayerDialogComponent,
         ReplayPageComponent,
         ReplayGamePageComponent,
+        WaitingGameComponent,
     ],
     imports: [
         AppMaterialModule,

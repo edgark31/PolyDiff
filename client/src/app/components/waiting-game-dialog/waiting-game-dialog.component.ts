@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Lobby } from '@common/game-interfaces';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-waiting-game-dialog',
@@ -11,5 +11,15 @@ import { TranslateService } from '@ngx-translate/core';
 export class WaitingGameDialogComponent {
     countdown: number;
     refusedMessage: string;
-    constructor(public translate: TranslateService, @Inject(MAT_DIALOG_DATA) public data: { lobby: Lobby }) {}
+    wait: string;
+    constructor(public welcome: WelcomeService, @Inject(MAT_DIALOG_DATA) public data: { lobby: Lobby }) {
+        if (this.welcome.account.profile.language === 'en') this.wait = 'La partie va commencer sous peu...';
+        else this.wait = 'The game will start shortly....';
+    }
+
+    getLangage(): string {
+        console.log('yo');
+        if (this.welcome.account.profile.language === 'en') return 'La partie va commencer sous peu...';
+        else return 'The game will start shortly....';
+    }
 }
