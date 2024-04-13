@@ -35,7 +35,10 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     }
 
     manageGames(): void {
-        this.dialog.open(ModalAdminComponent);
+        const dialogRef = this.dialog.open(ModalAdminComponent);
+        dialogRef.afterOpened().subscribe(() => {
+            document.querySelector('html')?.classList.remove('cdk-global-scrollblock');
+        });
     }
 
     ngOnDestroy(): void {

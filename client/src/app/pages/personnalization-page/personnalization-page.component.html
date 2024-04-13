@@ -1,118 +1,88 @@
-<body>
-  <!--     [ngStyle]="{'background-color': (welcomeService.chooseTheme.BackgroundColor), 'color': (welcomeService.chooseTheme.ButtonColor)}"> -->
-  <div class="header">
-    <app-nav-bar id ="nav-bar"></app-nav-bar>
-    </div>
-    <img *ngIf="welcomeService.selectTheme==='light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
-    <img  *ngIf="welcomeService.selectTheme==='dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
-  <!-- <app-menu></app-menu> -->
+<div class="main">
+  <img *ngIf="welcomeService.selectTheme==='light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+  <img *ngIf="welcomeService.selectTheme==='dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
+  <app-nav-bar id ="nav-bar"></app-nav-bar>
   <div class="container-information">
-    <div class="information">{{'profil.information' | translate }}</div>
+    <p class="information">{{'profil.information' | translate }}</p>
   </div>
   <div class="container">
     <div class="left">
       <div class="form-control">
         <div class="profil">{{'profil.username' | translate }}</div>
         <mat-form-field>
-          <mat-label>Name</mat-label>
+          <mat-label></mat-label>
           <input matInput placeholder="{{ 'profil.nameEnter' | translate }}" [(ngModel)]="welcomeService.selectName" required>
         </mat-form-field>
-        <!-- <input type="text" formControlName="username" id="username"/> -->
       </div>
 
       <div class="form-control">
         <div class="profil"> {{'profil.changePassword' | translate }}</div>
         <mat-form-field>
-          <mat-label>Mot de passe</mat-label>
-          <input matInput type="password" placeholder="{{ 'profil.passwordEnter' | translate }}" [(ngModel)]="welcomeService.selectPassword" required>
+          <mat-label></mat-label>
+          <input matInput placeholder="{{ 'profil.passwordEnter' | translate }}" [(ngModel)]="welcomeService.selectPassword" required>
         </mat-form-field>
-        <!-- <input type="text" formControlName="username" id="username"/> -->
       </div>
 
       <div class="form-control">
         <div class="profil"> {{'profil.confirmPassword' | translate }}</div>
         <mat-form-field>
-          <mat-label>Mot de passe</mat-label>
+          <mat-label></mat-label>
           <input matInput type="password" placeholder="{{ 'profil.confirmPasswordEnter' | translate }}" [(ngModel)]="welcomeService.selectPasswordConfirm"
             required>
-            <div class="error-message" *ngIf="welcomeService.selectPasswordConfirm!==welcomeService.selectPassword"> mettez un mot de passe identique</div>
+            <div class="error-message" *ngIf="welcomeService.selectPasswordConfirm!==welcomeService.selectPassword"> Mettez un mot de passe identique</div>
         </mat-form-field>
-        <!-- <input type="text" formControlName="username" id="username"/> -->
       </div>
-
 
       <div class="form-avatar">
         <div class="profil">Avatar</div>
-        <img [src]="welcomeService.selectAvatar" alt="Image" style="width: 100px; height: 100px;">
-        <div style="display: flex; justify-content: space-between;">
+        <img [src]="welcomeService.selectAvatar" alt="Image" style="width: 100px; height: 100px; border: 4px solid black; border-radius: 5%;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
           <button mat-icon-button (click)="importDialog(true)"
-            style="width: 50px; height: 50px;"><mat-icon>photo_library</mat-icon></button>
+            style="width: 50px; height: 50px; margin: 0 3px"><mat-icon>photo_library</mat-icon></button>
           <button mat-icon-button (click)="importDialog(false)" aria-label="Import game"
-            style="width: 50px; height: 50px;">
+            style="width: 50px; height: 50px; margin: 0 3px">
             <mat-icon>file_upload</mat-icon>
           </button>
         </div>
-        <!-- <input id='image' type="file" name="image" accept="image/*" style="width: 100px; height: 100px;" autofocus required><br> -->
       </div>
-
-
-      <div class="form-control">
-
-
-
-      </div>
-
-
     </div>
 
     <div class="right">
-        <div class="form-control section">
-            <div class="profil">{{'profil.theme' | translate }}</div>
-            <mat-form-field>
-              <mat-label>{{'profil.theme' | translate }}</mat-label>
-              <mat-select [(value)]="welcomeService.selectTheme">
-                  <mat-select-trigger>
-                      {{ welcomeService.selectTheme }}
-                    </mat-select-trigger>
-                  <mat-option *ngFor="let theme of welcomeService.themePersonalization" [value]="theme">
-                    {{ theme }}
-                  </mat-option>
-                </mat-select>
-            </mat-form-field>
-          </div>
-
-
-          <div class="form-control section"> <div class="profil"> {{'profil.language' | translate }}</div>
-            <mat-form-field>
-              <mat-label>{{'profil.language' | translate }}</mat-label>
-              <mat-select [(value)]="welcomeService.selectLanguage" (valueChange)="useLanguage(welcomeService.selectLanguage)">
-                <mat-option [value]="welcomeService.language[0]">{{'button.fr' | translate }}</mat-option>
-                <mat-option [value]="welcomeService.language[1]">{{'button.en' | translate }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-       <div class="form-control section"> <div class="profil"> {{'profil.songDifference' | translate }}</div>
+      <div class="form-control section">
+        <div class="profil">{{'profil.theme' | translate }}</div>
         <mat-form-field>
-          <mat-label>{{'profil.songDifference' | translate }}</mat-label>
+          <mat-label></mat-label>
+          <mat-select [(value)]="welcomeService.selectTheme">
+            <mat-select-trigger>{{ welcomeService.selectTheme }}</mat-select-trigger>
+            <mat-option *ngFor="let theme of welcomeService.themePersonalization" [value]="theme">{{ theme }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-control section"> <div class="profil"> {{'profil.language' | translate }}</div>
+        <mat-form-field>
+          <mat-label></mat-label>
+          <mat-select [(value)]="welcomeService.selectLanguage" (valueChange)="useLanguage(welcomeService.selectLanguage)">
+            <mat-option [value]="welcomeService.language[0]">{{'button.fr' | translate }}</mat-option>
+            <mat-option [value]="welcomeService.language[1]">{{'button.en' | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form-control section"> <div class="profil"> {{'profil.songDifference' | translate }}</div>
+        <mat-form-field>
+          <mat-label>{{this.sound.correctSoundEffect.name}}</mat-label>
           <mat-select [(value)]="sound.correctSoundEffect">
-            <mat-select-trigger>
-                {{ sound.correctSoundEffect.name }}
-              </mat-select-trigger>
+            <mat-select-trigger>{{ sound.correctSoundEffect.name }}</mat-select-trigger>
             <mat-option [value]="welcomeService.songListDifference[0]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[0])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[0])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[0].name }}</mat-option>
             <mat-option [value]="welcomeService.songListDifference[1]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[1])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[1])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[1].name }}</mat-option>
             <mat-option [value]="welcomeService.songListDifference[2]"><mat-icon (mouseover)="sound.playCorrectSoundDifference(welcomeService.songListDifference[2])" (mouseleave)="sound.stopCorrectSound(welcomeService.songListDifference[2])" class="option-icon">headset</mat-icon>{{welcomeService.songListDifference[2].name }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-
-
       <div class="form-control section"> <div class="profil"> {{'profil.songError' | translate }}</div>
         <mat-form-field>
-          <mat-label>{{'profil.songError' | translate }}</mat-label>
+          <mat-label>{{sound.incorrectSoundEffect.name }}</mat-label>
           <mat-select [(value)]="sound.incorrectSoundEffect">
-            <mat-select-trigger>
-                {{sound.incorrectSoundEffect.name }}
-              </mat-select-trigger>
+            <mat-select-trigger>{{sound.incorrectSoundEffect.name }}</mat-select-trigger>
             <mat-option [value]="welcomeService.songListError[0]">
                 <mat-icon (mouseover)="sound.playIncorrectSound(welcomeService.songListError[0])" (mouseleave)="sound.stopIncorrectSound(welcomeService.songListError[0])" class="option-icon">headset</mat-icon>
                 {{ welcomeService.songListError[0].name }}
@@ -130,12 +100,8 @@
       </div>
     </div>
   </div>
-
-
-
   <div class="button-container">
-    <button type="submit" (click)="onSubmitProfile()">{{'button.returnProfil' | translate }}</button>
     <button (click)="onCancel()">{{'profil.cancel' | translate }}</button>
+    <button type="submit" (click)="onSubmitProfile()">{{'button.returnProfil' | translate }}</button>
   </div>
-
-</body>
+</div>

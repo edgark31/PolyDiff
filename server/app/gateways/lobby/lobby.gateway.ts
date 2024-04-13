@@ -217,11 +217,11 @@ export class LobbyGateway implements OnGatewayConnection {
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
         socket.data.state = LobbyState.Idle;
-        this.logger.log(`LOBBY IN de ${socket.data.accountId}`);
+        this.logger.log(`LOBBY IN de ${this.getFormattedInfos(socket.data.accountId)}`);
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
 
         socket.on('disconnecting', () => {
-            let logMessage = `LOBBY OUT de ${socket.data.accountId} | `;
+            let logMessage = `LOBBY OUT de ${this.getFormattedInfos(socket.data.accountId)} | `;
             const lobbyId = Array.from(socket.rooms).find((id) => id !== socket.id)
                 ? ` in lobby(${Array.from(socket.rooms).find((id) => id !== socket.id)})`
                 : '';
@@ -249,5 +249,9 @@ export class LobbyGateway implements OnGatewayConnection {
             this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
             this.logger.debug(logMessage + lobbyId);
         });
+    }
+
+    private getFormattedInfos(socketId: string) {
+        return `${this.accountManager.users.get(socketId).credentials.username} (${socketId})`;
     }
 }

@@ -77,22 +77,6 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
     //         isFavorite: true,
     //         isOnline: true,
     //     },
-    //     {
-    //         name: 'ami3',
-    //         accountId: '660c39b6edfe9d58baa631ef',
-    //         // friends: ["l'ami de mon ami"],
-    //         // commonFriends: ['mon ami en commun'],
-    //         isFavorite: true,
-    //         isOnline: true,
-    //     },
-    //     {
-    //         name: 'ami3',
-    //         accountId: '660c39b6edfe9d58baa631ef',
-    //         // friends: ["l'ami de mon ami"],
-    //         // commonFriends: ['mon ami en commun'],
-    //         isFavorite: true,
-    //         isOnline: true,
-    //     },
     // ];
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
     constructor(

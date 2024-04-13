@@ -1,29 +1,18 @@
 <div class="modal">
-    <div class="modal-content">
-<h2 mat-dialog-title class="title">{{'adminModal.adminPassword' | translate }}</h2>
-<mat-dialog-content>
-  <mat-form-field>
-    <mat-label>{{'adminModal.password' | translate }}</mat-label>
-    <input matInput class="title" type="password"  (keyup.enter)="onSubmit()" [(ngModel)]="password">
-  </mat-form-field>
-  <div *ngIf="isPasswordWrong" class="error-message">{{'adminModal.incorrectPassword' | translate }}.</div>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button class="submit-button" type="submit" (click)="onCancel()">{{'adminModal.cancel' | translate }}</button>
-  <button mat-button class="submit-button" type="submit" (click)="onSubmit()">{{'adminModal.confirm' | translate }}</button>
-</mat-dialog-actions>
-</div>
+      <div class="modal-content">
+        <h2 mat-dialog-title class="title">{{'adminModal.adminPassword' | translate }}</h2>
+        <mat-dialog-content>
+          <mat-form-field>
+            <mat-label>{{'adminModal.password' | translate }}</mat-label>
+            <input matInput (keyup.enter)="onSubmit()" [(ngModel)]="password" style="color: black">
+          </mat-form-field>
+          <div *ngIf="isPasswordWrong" class="error-message">{{'adminModal.incorrectPassword' | translate }}.</div>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+          <button mat-button class="submit-button" type="submit" (click)="onCancel()"><p class="title">{{'adminModal.cancel' | translate }}</p></button>
+          <button mat-button class="submit-button" type="submit" (click)="onSubmit()"><p class="title">{{'adminModal.confirm' | translate }}</p></button>
+        </mat-dialog-actions>
+  </div>
 </div>
 
-<!-- <div class="modal">
-    <div class="modal-content">
-        <h2>Entrer le mot de passe d'administration</h2>
-        <mat-form-field appearance="fill">
-            <mat-label>Mot de passe</mat-label>
-            <input matInput type="password" placeholder="1234" [(ngModel)]="password" name="password" />
-        </mat-form-field>
-        <button mat-raised-button class="submit-button" type="submit" (click)="onSubmit()">Connexion</button>
-        <div *ngIf="isPasswordWrong" class="error-message">Mot de passe incorrect. Veuillez réessayer.</div>
-    </div>
-</div> -->
 
