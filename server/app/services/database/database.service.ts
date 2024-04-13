@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 // Id comes from database to allow _id
@@ -164,7 +165,6 @@ export class DatabaseService implements OnModuleInit {
             this.gameIds = this.gameIds.filter((gameId) => gameId !== id);
             await this.gameModel.findByIdAndDelete(id).exec();
             const gameName = (await this.gameCardModel.findByIdAndDelete(id).exec()).name;
-            this.deleteGameAssetsByName(gameName);
             await this.rebuildGameCarousel();
         } catch (error) {
             return Promise.reject(`Failed to delete game with id : ${id} --> ${error}`);
@@ -176,9 +176,6 @@ export class DatabaseService implements OnModuleInit {
             this.gameIds = [];
             this.gameListManager.buildGameCarousel([]);
             const gamesName = (await this.gameModel.find().select('-_id name').exec()).map((game) => game.name);
-            for (const gameName of gamesName) {
-                this.deleteGameAssetsByName(gameName);
-            }
             await this.gameModel.deleteMany({}).exec();
             await this.gameCardModel.deleteMany({}).exec();
         } catch (error) {

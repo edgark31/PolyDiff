@@ -59,7 +59,7 @@ export class LoginPageComponent implements OnInit {
                     this.translate.setDefaultLang(this.welcomeservice.account.profile.language);
                     this.translate.use(this.welcomeservice.account.profile.language);
                     // eslint-disable-next-line max-len
-                    this.welcomeservice.account.profile.avatar = `http://34.118.163.79:3000/avatar/${this.welcomeservice.account.credentials.username}.png`;
+                    this.welcomeservice.account.profile.avatar = `http://34.95.3.182:3000/avatar/${this.welcomeservice.account.credentials.username}.png`;
                     this.welcomeservice.isLogin = true;
                     this.router.navigate(['/home']);
                 },
