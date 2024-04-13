@@ -11,7 +11,7 @@
     "mdp": "Mot de passe",
     "profil": {
         "information": "Informations générales",
-        "username": "Nom d'utilisateur/pseudonyme",
+        "username": "Nom d'utilisateur/Pseudonyme",
         "theme": "Thème actuel",
         "language": "Language actuel",
         "statistic": "Statistique",
@@ -19,27 +19,29 @@
         "gameWin": "nombre de parties gagnés",
         "gameAverage": "moyenne de différences trouvées par partie",
         "gameAverageTime": "temps moyen par partie",
-        "Connexion": "Relevé de connexion",
-        "gameHistoric": "historique de parties",
+        "Connexion": "Historique de connexion",
+        "gameHistoric": "Historique de jeu",
         "changePassword": "Changer le mot de passe",
         "confirmPassword": "Confirmer le mot de passe",
         "songError": "choisissez votre son pour erreur",
         "songDifference": "choisissez votre son pour différence trouvé",
         "nameEnter": "veuillez écrire votre nom",
         "passwordEnter": "veuillez écrire votre mot de passe",
-        "confirmPasswordEnter": "veuillez ré-écrire votre mot de passe",
+        "confirmPasswordEnter": "euillez ré-écrire votre mot de passe",
         "cancel": "annuler",
-        "returnHome": "Retour à l'accueil"
+        "returnHome": "Retour à l'accueil",
+        "replay": "Reprises vidéos"
     },
+
     "button": {
         "deconnexion": "Déconnexion",
-        "returnProfil": "Enregistrer vos modifications",
-        "GoReglage": "Aller dans réglage",
+        "returnProfil": "Enregistrer",
+        "GoReglage": "Réglages",
         "Settings": "Réglages",
-        "previous": "précédent",
-        "following": "suivant",
-        "fr": "français",
-        "en": "anglais"
+        "previous": "Précédent",
+        "following": "Suivant",
+        "fr": "Français",
+        "en": "Anglais"
     },
 
     "roomSheet": {
@@ -177,7 +179,7 @@
         "startParty": "La partie va commencer sous peu..."
     },
 
-    " selectionPage": {
+    "selectionPage": {
         "selectGame": "Selectionne ton jeu",
         "configureGame": "Configure ton jeu",
         "noGameAvailable": "Il n'y a pas de jeux disponibles pour le moment"
