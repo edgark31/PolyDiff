@@ -38,6 +38,8 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   late ReplayPlayerProvider replayPlayerProvider;
   late GameEventData gameEvent;
   late GameRecordProvider gameRecordProvider;
+   bool isCheatActivated = false;
+  bool isAnimationPaused = false;
   String formattedTime = "00:00";
 
   @override
@@ -53,6 +55,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     replayPlayerProvider = Get.find();
     replayPlayerProvider.setPlayersData(gameRecordProvider.record.players);
     formattedTime = calculateFormattedTime(playbackManager.timer);
+    replayPlayerProvider.setNumberOfObservers(gameRecordProvider.record.observers);
 
     loadInitialCanvas();
 
@@ -114,15 +117,17 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String gameMode = AppLocalizations.of(context)!.classicMode;
-
+  
     // Providers
+    final GameRecordProvider gameRecordProvider = context.read<GameRecordProvider>();
+    final GameAreaService gameAreaService = Provider.of<GameAreaService>(context);
     final ReplayPlayerProvider replayPlayerProvider =
         context.watch<ReplayPlayerProvider>();
-    
-
-    ReplayImagesProvider replayImagesProvider =
+    final ReplayImagesProvider replayImagesProvider =
         context.watch<ReplayImagesProvider>();
+
+    String gameMode = AppLocalizations.of(context)!.classicMode;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Game Event Playback"),
@@ -247,6 +252,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
                 }
               },
             ),
+            _observerInfos(replayPlayerProvider.nObservers),
             Center(
               child: GameEventSlider(
                 playbackService: playbackService,

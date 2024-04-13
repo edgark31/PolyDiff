@@ -78,7 +78,8 @@ class GameEventPlaybackManager extends ChangeNotifier {
         _handleEnGameEvent(recordedEventData);
         break;
 
-      case "Spectatate":
+      case "Spectate":
+        _handle
         break;
 
       default:
@@ -223,8 +224,8 @@ class GameEventPlaybackManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  // TODO: implement create a ObserverManager
   void _handleObserversEvent(GameEventData recordedEventData) {
+    _replayPlayerProvider.updateNumberOfObservers(recordedData.observers.length);
     notifyListeners();
   }
 
