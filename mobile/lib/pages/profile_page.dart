@@ -35,8 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     Future.delayed(Duration.zero, () {
       if (ModalRoute.of(context)?.isCurrent ?? false) {
-        socketService.onlyAuthSocketShouldBeConnected(
-            pageName: PROFILE_ROUTE);
+        socketService.onlyAuthSocketShouldBeConnected(pageName: PROFILE_ROUTE);
       }
     });
     super.initState();
@@ -189,9 +188,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             AppLocalizations.of(context)!.profile_videoReplay,
                         icon: Icons.video_collection,
                         onPress: () {
-                          Navigator.pushNamed(context, VIDEOS_ROUTE);
+                          // TODO: Add if replay is back
+                          // Navigator.pushNamed(context, VIDEOS_ROUTE);
                         }),
-
                     Divider(),
                     SizedBox(height: 20),
                     ProfileMenuWidget(
