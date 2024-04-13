@@ -286,5 +286,9 @@
     "ranking": {
         "loading": "Chargement...",
         "global": "Classement Global"
+    },
+
+    "saveRecordDialog": {
+        "saveRecord": "Voulez-vous enregistrer cette reprise vidéo ?"
     }
 }

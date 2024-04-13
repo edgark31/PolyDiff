@@ -278,5 +278,9 @@
     "ranking": {
         "loading": "Loading...",
         "global": "Global Ranking"
+    },
+
+    "saveRecordDialog": {
+        "saveRecord": "Do you want to save this game record ?"
     }
 }
