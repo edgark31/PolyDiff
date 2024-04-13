@@ -163,7 +163,6 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(FriendEvents.ShareScore)
     shareScore(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string, @MessageBody('score') score: number) {
-        // console.log('friensbd' + friendId + score);
         this.server.fetchSockets().then((sockets) => {
             const friendSocket = sockets.find((s) => s.data.accountId === friendId);
             if (friendSocket) {
