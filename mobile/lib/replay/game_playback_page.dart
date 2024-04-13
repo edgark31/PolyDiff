@@ -38,7 +38,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   late ReplayPlayerProvider replayPlayerProvider;
   late GameEventData gameEvent;
   late GameRecordProvider gameRecordProvider;
-   bool isCheatActivated = false;
+  bool isCheatActivated = false;
   bool isAnimationPaused = false;
   String formattedTime = "00:00";
 
@@ -50,12 +50,13 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     // Initialize services and providers
     playbackService =
         GameEventPlaybackService(gameRecordProvider.record.gameEvents);
-    playbackManager = GameEventPlaybackManager(playbackService);
+    playbackManager = GameEventPlaybackManager();
     replayImagesProvider = Get.find();
     replayPlayerProvider = Get.find();
     replayPlayerProvider.setPlayersData(gameRecordProvider.record.players);
     formattedTime = calculateFormattedTime(playbackManager.timer);
-    replayPlayerProvider.setNumberOfObservers(gameRecordProvider.record.observers);
+    replayPlayerProvider
+        .setNumberOfObservers(gameRecordProvider.record.observers);
 
     loadInitialCanvas();
 
@@ -117,16 +118,17 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
 
   @override
   Widget build(BuildContext context) {
-  
     // Providers
-    final GameRecordProvider gameRecordProvider = context.read<GameRecordProvider>();
-   
+    final GameRecordProvider gameRecordProvider =
+        context.read<GameRecordProvider>();
+
     final ReplayPlayerProvider replayPlayerProvider =
         context.watch<ReplayPlayerProvider>();
     final ReplayImagesProvider replayImagesProvider =
         context.watch<ReplayImagesProvider>();
 
-    final GameEventPlaybackManager playbackManager = context.watch<GameEventPlaybackManager>();
+    final GameEventPlaybackManager playbackManager =
+        context.watch<GameEventPlaybackManager>();
 
     String gameMode = AppLocalizations.of(context)!.classicMode;
 
@@ -258,7 +260,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
             Center(
               child: GameEventSlider(
                 playbackService: playbackService,
-                playbackManager: GameEventPlaybackManager(playbackService),
+                playbackManager: playbackManager,
               ),
             ),
           ],

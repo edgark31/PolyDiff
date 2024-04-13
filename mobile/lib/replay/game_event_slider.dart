@@ -33,14 +33,7 @@ class _GameEventSliderState extends State<GameEventSlider> {
     if (widget.playbackService.events.isNotEmpty) {
       _eventsSubscription =
           widget.playbackService.eventsStream.listen((GameEventData event) {
-        int eventIndex = widget.playbackService.events.indexOf(event);
-        if (eventIndex != -1 && mounted) {
-          setState(() {
-            _sliderValue = eventIndex /
-                (widget.playbackService.events.length - 1).toDouble();
-            _currentEvent = event.gameEvent;
-          });
-        }
+        updateSliderValue(event);
       }, onError: (error) {
         print("Error occurred in event subscription: $error");
       }, onDone: () {
@@ -65,6 +58,24 @@ class _GameEventSliderState extends State<GameEventSlider> {
         widget.playbackService.seekToEvent(eventIndex);
       });
     });
+  }
+
+  void updateSliderValue(GameEventData event) {
+    int eventIndex = widget.playbackService.events.indexOf(event);
+    if (eventIndex != -1 && mounted) {
+      setState(() {
+        _sliderValue = calculateSpeedAdjustedSliderValue(eventIndex);
+        _currentEvent = event.gameEvent;
+      });
+    }
+  }
+
+  double calculateSpeedAdjustedSliderValue(int eventIndex) {
+    double baseValue =
+        eventIndex / (widget.playbackService.events.length - 1).toDouble();
+    // Adjust baseValue based on the current playback speed.
+    double speedAdjustment = widget.playbackService.speed / SPEED_X1;
+    return baseValue * speedAdjustment;
   }
 
   @override

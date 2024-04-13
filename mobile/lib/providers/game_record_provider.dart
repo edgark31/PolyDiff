@@ -112,6 +112,7 @@ class GameRecordProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         print(
             "GameRecord removed from saved for accountId : $accountId and username :  ${_infoService.username}");
+        _gameRecords.removeWhere((element) => element.date == date);
         notifyListeners();
       } else {
         print('Server error: ${response.statusCode}');

@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/services/game_area_service.dart';
 
-class GameEventPlaybackService {
+class GameEventPlaybackService extends ChangeNotifier {
   final GameAreaService _gameAreaService = Get.find();
   late final StreamController<GameEventData> _eventsController;
 

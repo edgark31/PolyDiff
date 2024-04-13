@@ -87,8 +87,10 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
                 Navigator.of(context).pushNamed(REPLAY_ROUTE);
               },
               onDelete: () {
-                // gameRecordProvider
-                //   .deleteAccountId(gameRecordProvider.record.date);
+                gameRecordProvider.currentGameRecord =
+                    gameRecordsFromServer[index];
+                gameRecordProvider
+                    .deleteAccountId(gameRecordProvider.record.date);
               },
             );
           },

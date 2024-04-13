@@ -15,6 +15,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   final ReplayPlayerProvider _replayPlayerProvider = Get.find();
   final ReplayImagesProvider replayImagesProvider = Get.find();
   final InfoService _infoService = Get.find();
+  final GameEventPlaybackService _playbackService = Get.find();
 
   bool _isEndGame = false;
   bool _isDifferenceFound = false;
@@ -39,10 +40,10 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
   List<Coordinate> get remainingCoordinates => _remainingCoordinates;
 
-  GameEventPlaybackManager(GameEventPlaybackService playbackService) {
-    playbackService.eventsStream.listen((event) {
-      _replaySpeed = playbackService.speed;
-
+  GameEventPlaybackManager() {
+    _playbackService.eventsStream.listen((event) {
+      _replaySpeed = _playbackService.speed;
+      print("Handling Game Event: ${event.gameEvent}");
       _handleGameEvent(event);
     });
   }
@@ -79,7 +80,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
         break;
 
       case "Spectate":
-        _handleObserversEvent(recordedEventData); 
+        _handleObserversEvent(recordedEventData);
         break;
 
       default:
@@ -225,7 +226,8 @@ class GameEventPlaybackManager extends ChangeNotifier {
   }
 
   void _handleObserversEvent(GameEventData recordedEventData) {
-    _replayPlayerProvider.updateNumberOfObservers(recordedEventData.observers!.length);
+    _replayPlayerProvider
+        .updateNumberOfObservers(recordedEventData.observers!.length);
     notifyListeners();
   }
 
