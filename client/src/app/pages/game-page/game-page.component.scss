@@ -196,11 +196,11 @@ app-replay-buttons {
 }
 // translate(-600px, -118px)
 .eye-open {
-    transform: translate(-800px, 50px) scale(4) rotate(0deg);
+    transform: translate(-600px, 50px) scale(4) rotate(0deg);
 }
 
 .eye-closed {
-    transform: translate(-800px, 0px) scale(4) rotate(180deg);
+    transform: translate(-600px, 0px) scale(4) rotate(180deg);
 }
 
 #title {
@@ -210,5 +210,5 @@ app-replay-buttons {
 #length {
     right: 100px;
     font-size: 70px;
-    transform: translateX(-700px);
+    transform: translateX(-500px);
 }
