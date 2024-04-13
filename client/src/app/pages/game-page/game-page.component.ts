@@ -335,6 +335,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.gameAreaService.setAllData();
     }
     private setUpReplay(): void {
+        this.replayService.lobby = this.lobby;
         this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
             this.timer = replayTimer;
             this.messages = [];

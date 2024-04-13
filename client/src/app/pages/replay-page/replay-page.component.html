@@ -27,7 +27,7 @@
                     </mat-card-header>
                 </mat-card>
             </div>
-            <p *ngIf = "records.length === 0" id = "waiting-message">Il n'y a pas de reprises vidéo pour le moment</p>
-            <img *ngIf = "records.length === 0" id = "waiting" src = "./assets/raccoonWaiting.gif" alt = "waiting-image" />
-<img *ngIf="welcomeService.account.profile.mobileTheme==='Light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
-<img  *ngIf="welcomeService.account.profile.mobileTheme==='Dark'" id = "background" src = "./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>
+            <p *ngIf="records.length === 0" id = "waiting-message">{{'replayPage.noReplayAvailable' | translate }}</p>
+            <img *ngIf="records.length === 0" id = "waiting" src = "./assets/raccoonWaiting.gif" alt = "waiting-image" />
+<img *ngIf="welcomeService.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
+<img  *ngIf="welcomeService.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>
