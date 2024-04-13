@@ -38,6 +38,10 @@ export class GamePageDialogComponent {
         this.roomManager.isObserver = false;
     }
 
+    isObserver(): boolean {
+        return this.roomManager.isObserver;
+    }
+
     abandonGame(): void {
         this.gameManager.abandonGame(this.data.lobby.lobbyId as string);
     }
