@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
@@ -29,6 +31,8 @@ class _AdminPageState extends State<AdminPage> {
   bool _isFetchingGameCards = false;
   String errorMessage = "";
   final GameCardService gameCardService = Get.find();
+  Timer? _timer;
+  bool isFirstLoading = true;
 
   @override
   void didChangeDependencies() {
@@ -36,11 +40,27 @@ class _AdminPageState extends State<AdminPage> {
     if (!_isFetchingGameCards) {
       _isFetchingGameCards = true;
       _fetchGameCards();
+      _startTimer();
     }
   }
 
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      _fetchGameCards();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   Future<void> _fetchGameCards() async {
-    setState(() => isLoading = true);
+    if (isFirstLoading) {
+      setState(() => isLoading = true);
+      isFirstLoading = false;
+    }
     final gameCardService =
         Provider.of<GameCardService>(context, listen: false);
     String? serverErrorMessage = await gameCardService.getGameCards();
