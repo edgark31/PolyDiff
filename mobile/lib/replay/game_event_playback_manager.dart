@@ -3,15 +3,14 @@ import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/game_record_provider.dart';
+import 'package:mobile/replay/game_events_services.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/game_area_service.dart';
-import 'package:mobile/services/sound_service.dart';
 
 class GameEventPlaybackManager extends ChangeNotifier {
   final GameRecordProvider _gameRecordProvider = Get.find();
   final GameAreaService _gameAreaService = Get.find();
-  final SoundService _soundService = Get.find();
   final ReplayPlayerProvider _replayPlayerProvider = Get.find();
   final ReplayImagesProvider replayImagesProvider = Get.find();
 
@@ -21,6 +20,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   bool _hasCheatModeEnabled = false;
 
   int _nDifferencesFound = 0;
+  int _timer = 0;
   double _replaySpeed = SPEED_X1;
 
   bool get isEndGame => _isEndGame;
@@ -28,37 +28,16 @@ class GameEventPlaybackManager extends ChangeNotifier {
   bool get isCheatMode => _isCheatMode;
   bool get hasCheatModeEnabled => _hasCheatModeEnabled;
   int get nDifferencesFound => _nDifferencesFound;
+  int get timer => _timer;
 
-  GameEventPlaybackManager(playbackService) {
+  List<GameEventData> get events => _gameRecordProvider.record.gameEvents;
+
+  GameEventPlaybackManager(GameEventPlaybackService playbackService) {
     playbackService.eventsStream.listen((event) {
-      _replaySpeed = playbackService.replaySpeed;
+      _replaySpeed = playbackService.speed;
+
       _handleGameEvent(event);
     });
-  }
-
-  void handleSliderChangeValue(double sliderValue) {
-    int eventIndex = sliderValue.round();
-
-    if (eventIndex >= 0 &&
-        eventIndex < _gameRecordProvider.record.gameEvents.length) {
-      GameEventData recordedEventData =
-          _gameRecordProvider.record.gameEvents[eventIndex];
-
-      print(
-          "called handleSliderChangeValue ! : ${recordedEventData.gameEvent}");
-
-      _handleGameEvent(recordedEventData);
-    }
-
-    notifyListeners();
-  }
-
-  void seekToEvent(int eventIndexToSeek, List<GameEventData> events) {
-    if (events.isEmpty) return;
-
-    _handleGameEvent(events[eventIndexToSeek]);
-
-    print("called seekToEvent ! : ${events[eventIndexToSeek].gameEvent}");
   }
 
   // Event Handlers
@@ -98,7 +77,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
       default:
         print("Unknown event type: ${recordedEventData.gameEvent}");
     }
-    _handleCurrentCanvasImages(recordedEventData);
   }
 
   void _handleCurrentCanvasImages(GameEventData event) {
@@ -166,8 +144,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
         _gameRecordProvider.record.game.differences![currentIndex],
         _replaySpeed);
 
-    _soundService.playCorrectSound();
-
     if (recordedEventData.players != null) {
       for (Player player in recordedEventData.players!) {
         _replayPlayerProvider.updatePlayerData(player);
@@ -225,7 +201,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   }
 
   void _handleUpdateTimerEvent(GameEventData recordedEventData) {
-    print("Timer Update Event : ${recordedEventData.time}");
+    _timer = recordedEventData.time!;
     notifyListeners();
   }
 

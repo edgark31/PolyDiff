@@ -69,8 +69,7 @@ class EndGamePopup extends StatelessWidget {
                     text:
                         AppLocalizations.of(context)!.endGame_videoReplayButton,
                     press: () {
-                      // TODO: Add if replay is back
-                      // Navigator.pushNamed(context, REPLAY_ROUTE);
+                      Navigator.pushNamed(context, REPLAY_ROUTE);
                     },
                   ),
                 ],

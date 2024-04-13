@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game_record_model.dart';
+import 'package:mobile/services/game_area_service.dart';
 
 class GameEventPlaybackService {
+  final GameAreaService _gameAreaService = Get.find();
   late final StreamController<GameEventData> _eventsController;
 
   final List<GameEventData> _events;
@@ -17,6 +20,7 @@ class GameEventPlaybackService {
   List<GameEventData> get events => _events;
   DateTime? get lastEventTime => _lastEventTime;
   int get currentIndex => _currentIndex;
+  bool get isPaused => _isPaused;
   double get speed => _speed;
 
   GameEventPlaybackService(
@@ -41,11 +45,13 @@ class GameEventPlaybackService {
   void pause() {
     print("Playback paused.");
     _isPaused = true;
+    _gameAreaService.pauseAnimation();
     _timer?.cancel();
   }
 
   void resume() {
     if (!_isPaused) return;
+    _gameAreaService.resumeAnimation();
     _isPaused = false;
     print("Resuming playback.");
     _playbackEvents();
@@ -55,7 +61,8 @@ class GameEventPlaybackService {
     pause();
     _currentIndex = 0;
     _speed = SPEED_X1;
-    _lastEventTime = null;
+    _lastEventTime = _events.first.timestamp;
+    _isPaused = false;
     _playbackEvents();
   }
 
@@ -106,10 +113,19 @@ class GameEventPlaybackService {
     }
   }
 
+  // Modify the GameEventPlaybackService to handle seeking
+  void seekToEvent(int eventIndex) {
+    if (events.isEmpty || eventIndex >= events.length) return;
+    _currentIndex = eventIndex; // Update the current index
+    pause();
+    resume();
+  }
+
   void _stopPlayback() {
     print("Stopping playback.");
     _currentIndex = 0;
     _lastEventTime = null;
+
     _speed = SPEED_X1;
 
     _isPaused = true;

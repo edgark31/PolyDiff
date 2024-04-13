@@ -10,8 +10,7 @@ class ReplayImagesProvider extends ChangeNotifier {
 
   Future<CanvasModel>? get currentCanvas => _currentCanvas;
 
-  // Load initial canvas state with a future that notifies listeners upon completion
-  // Method to load the initial canvas from the game record
+  // Load the initial canvas state from the game record
   Future<void> loadInitialCanvas(GameRecord record) async {
     try {
       CanvasModel initialCanvas = await ImageConverterService.fromImagesBase64(
@@ -26,7 +25,6 @@ class ReplayImagesProvider extends ChangeNotifier {
 
   // Update the canvas state when a new event with a modified image is found
   Future<void> updateCanvasState(String base64String) async {
-    // Temporarily hold a reference to the current canvas future
     var currentCanvasFuture = _currentCanvas;
 
     _currentCanvas = currentCanvasFuture!.then((currentCanvas) async {
@@ -34,7 +32,7 @@ class ReplayImagesProvider extends ChangeNotifier {
       ui.Image modifiedImage =
           await ImageConverterService.imageFromBase64String(base64String);
 
-      // If the current canvas state has already been updated, return it and don't rerender the same
+  
       if (currentCanvas.modified == modifiedImage) {
         print('Updating canvas state with new modified image.');
 

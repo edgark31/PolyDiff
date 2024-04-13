@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
@@ -7,6 +5,7 @@ import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/models/players.dart';
+import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/replay/game_event_playback_manager.dart';
 import 'package:mobile/replay/game_event_slider.dart';
 import 'package:mobile/replay/game_events_services.dart';
@@ -17,14 +16,13 @@ import 'package:provider/provider.dart';
 
 class GameEventPlaybackScreen extends StatefulWidget {
   static const String routeName = REPLAY_ROUTE;
-  final GameRecord record;
 
-  GameEventPlaybackScreen({required this.record});
+  GameEventPlaybackScreen();
 
-  static Route route(GameRecord record) {
+  static Route route() {
     return MaterialPageRoute(
       settings: const RouteSettings(name: routeName),
-      builder: (_) => GameEventPlaybackScreen(record: record),
+      builder: (_) => GameEventPlaybackScreen(),
     );
   }
 
@@ -39,41 +37,31 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   late ReplayImagesProvider replayImagesProvider;
   late ReplayPlayerProvider replayPlayerProvider;
   late GameEventData gameEvent;
-
-  late Timer timer;
+  late GameRecordProvider gameRecordProvider;
   String formattedTime = "00:00";
 
   @override
   void initState() {
     super.initState();
 
+    gameRecordProvider = Get.find();
     // Initialize services and providers
-    playbackService = GameEventPlaybackService(widget.record.gameEvents);
+    playbackService =
+        GameEventPlaybackService(gameRecordProvider.record.gameEvents);
     playbackManager = GameEventPlaybackManager(playbackService);
     replayImagesProvider = Get.find();
     replayPlayerProvider = Get.find();
-    replayPlayerProvider.setPlayersData(widget.record.players);
+    replayPlayerProvider.setPlayersData(gameRecordProvider.record.players);
+    formattedTime = calculateFormattedTime(playbackManager.timer);
 
     loadInitialCanvas();
-
-    setupPeriodicUpdates();
 
     subscribeToEvents();
   }
 
-  void setupPeriodicUpdates() {
-    timer = Timer.periodic(Duration(milliseconds: 1000), (_) {
-      setState(() {
-        formattedTime = calculateFormattedTime(
-            (playbackService.lastEventTime) ??
-                DateTime.fromMillisecondsSinceEpoch(0));
-      });
-    });
-  }
-
   void loadInitialCanvas() async {
     try {
-      await replayImagesProvider.loadInitialCanvas(widget.record);
+      await replayImagesProvider.loadInitialCanvas(gameRecordProvider.record);
     } catch (e) {
       print("Failed to load initial canvas: $e");
 
@@ -110,14 +98,17 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     );
   }
 
-  String calculateFormattedTime(DateTime timestamp) {
-    Duration elapsedTime =
-        timestamp.difference(playbackService.events.first.timestamp);
+  String calculateFormattedTime(int timeInSeconds) {
+    int elapsedTime =
+        (gameRecordProvider.record.duration * 1000) - timeInSeconds;
+
+    Duration duration = Duration(milliseconds: elapsedTime);
+
     if (elapsedTime.isNegative) {
       return "00:00";
     }
-    int minutes = elapsedTime.inMinutes;
-    int seconds = elapsedTime.inSeconds % 60;
+    int minutes = duration.inMinutes;
+    int seconds = duration.inSeconds % 60;
     return '$minutes:${seconds.toString().padLeft(2, '0')}';
   }
 
@@ -128,6 +119,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     // Providers
     final ReplayPlayerProvider replayPlayerProvider =
         context.watch<ReplayPlayerProvider>();
+    
 
     ReplayImagesProvider replayImagesProvider =
         context.watch<ReplayImagesProvider>();
@@ -140,7 +132,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
           children: [
             Row(
               children: [
-                if (widget.record.isCheatEnabled) ...[
+                if (gameRecordProvider.record.isCheatEnabled) ...[
                   ElevatedButton(
                     onPressed: null,
                     style: ElevatedButton.styleFrom(
@@ -189,29 +181,33 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
                           ],
                         ),
                         Text(
-                          '${AppLocalizations.of(context)!.gameInfos_differencesPresentTitle} : ${widget.record.game.nDifferences}',
+                          '${AppLocalizations.of(context)!.gameInfos_differencesPresentTitle} : ${gameRecordProvider.record.game.nDifferences}',
                           style: _textStyle(),
                           textAlign: TextAlign.center,
                         ),
                         Row(
                           children: [
-                            if (widget.record.players.isNotEmpty) ...[
+                            if (gameRecordProvider
+                                .record.players.isNotEmpty) ...[
                               _playerInfo(replayPlayerProvider.getPlayer(0)),
                             ],
                             SizedBox(
                               width: 130,
                             ),
-                            if (widget.record.players.length > 1) ...[
+                            if (gameRecordProvider.record.players.length >
+                                1) ...[
                               _playerInfo(replayPlayerProvider.getPlayer(1)),
                             ],
                           ],
                         ),
                         Row(
                           children: [
-                            if (widget.record.players.length >= 3) ...[
+                            if (gameRecordProvider.record.players.length >=
+                                3) ...[
                               _playerInfo(replayPlayerProvider.getPlayer(2)),
                             ],
-                            if (widget.record.players.length >= 4) ...[
+                            if (gameRecordProvider.record.players.length >=
+                                4) ...[
                               SizedBox(
                                 width: 130,
                               ),
@@ -265,7 +261,8 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
 
   @override
   void dispose() {
-    timer.cancel();
+    replayImagesProvider.dispose();
+    playbackManager.dispose();
     playbackService.dispose();
     super.dispose();
   }

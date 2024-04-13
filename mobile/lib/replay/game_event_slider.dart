@@ -21,6 +21,7 @@ class GameEventSlider extends StatefulWidget {
 }
 
 class _GameEventSliderState extends State<GameEventSlider> {
+  Timer? _debounceTimer;
   double _sliderValue = 0;
   late StreamSubscription<GameEventData> _eventsSubscription;
   String _currentEvent = "";
@@ -33,15 +34,12 @@ class _GameEventSliderState extends State<GameEventSlider> {
       _eventsSubscription =
           widget.playbackService.eventsStream.listen((GameEventData event) {
         int eventIndex = widget.playbackService.events.indexOf(event);
-        if (eventIndex != -1) {
-          double newSliderValue = eventIndex /
-              (widget.playbackService.events.length - 1).toDouble();
-          if (mounted) {
-            setState(() {
-              _sliderValue = newSliderValue;
-              _currentEvent = event.gameEvent;
-            });
-          }
+        if (eventIndex != -1 && mounted) {
+          setState(() {
+            _sliderValue = eventIndex /
+                (widget.playbackService.events.length - 1).toDouble();
+            _currentEvent = event.gameEvent;
+          });
         }
       }, onError: (error) {
         print("Error occurred in event subscription: $error");
@@ -57,6 +55,18 @@ class _GameEventSliderState extends State<GameEventSlider> {
     super.dispose();
   }
 
+  void _onSliderChanged(double newValue) {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+      setState(() {
+        _sliderValue = newValue;
+        int eventIndex =
+            (_sliderValue * (widget.playbackService.events.length - 1)).round();
+        widget.playbackService.seekToEvent(eventIndex);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Assuming the slider value ranges from 0 to 1, normalized
@@ -64,24 +74,10 @@ class _GameEventSliderState extends State<GameEventSlider> {
       children: [
         Slider(
           min: 0,
-          max: 1, // Slider position is normalized between 0 and 1
+          max: 1,
           value: _sliderValue,
           divisions: widget.playbackService.events.length - 1,
-          onChanged: (newValue) {
-            setState(() {
-              _sliderValue = newValue;
-              // Calculate the event index based on the new slider value
-              int eventIndex =
-                  (_sliderValue * (widget.playbackService.events.length - 1))
-                      .round();
-
-              if (eventIndex >= 0 &&
-                  eventIndex < widget.playbackService.events.length) {
-                _currentEvent =
-                    widget.playbackService.events[eventIndex].gameEvent;
-              }
-            });
-          },
+          onChanged: _onSliderChanged,
         ),
         // Display the gameEvent of the selected event
         Text("Current Event: $_currentEvent"),

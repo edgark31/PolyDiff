@@ -5,7 +5,6 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/constants/enums.dart';
 import 'package:mobile/providers/avatar_provider.dart';
-import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
@@ -40,7 +39,6 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     });
     super.initState();
-    gameRecordProvider.findAllByAccountId();
   }
 
   @override
