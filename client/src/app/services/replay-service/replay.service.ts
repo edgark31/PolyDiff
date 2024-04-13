@@ -107,6 +107,7 @@ export class ReplayService implements OnDestroy {
     }
 
     fallBackReplay(time: number): void {
+        this.isCheatMode = false;
         // filtrer found ou start
         const gameEventsFiltered = this.record.gameEvents.filter(
             (event) => event.gameEvent === ReplayActions.Found || event.gameEvent === ReplayActions.StartGame,
