@@ -70,10 +70,8 @@ export class DatabaseService implements OnModuleInit {
     }
 
     async getGamesCarrousel(): Promise<CarouselPaginator[]> {
-        if (this.gameListManager['carouselGames'].length === 0) {
-            const gameCardsList: GameCard[] = await this.gameCardModel.find().exec();
-            this.gameListManager.buildGameCarousel(gameCardsList);
-        }
+        const gameCardsList: GameCard[] = await this.gameCardModel.find().exec();
+        this.gameListManager.buildGameCarousel(gameCardsList);
         return this.gameListManager.getCarouselGames();
     }
 
