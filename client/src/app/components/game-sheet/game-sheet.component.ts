@@ -12,11 +12,13 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { GameModes, LobbyEvents } from '@common/enums';
 // import { RoomManagerService } from '@app/services/room-manager-service/room-manager.service';
-import { WaitingGameDialogComponent } from '@app/components/waiting-game-dialog/waiting-game-dialog.component';
+
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { GameCard, Lobby } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+// eslint-disable-next-line no-restricted-imports
+import { WaitingGameComponent } from '../waiting-game/waiting-game.component';
 
 @Component({
     selector: 'app-game-sheet',
@@ -68,11 +70,16 @@ export class GameSheetComponent implements OnDestroy, OnInit {
     }
 
     showLoadingDialog(): void {
-        this.dialog.open(WaitingGameDialogComponent, {
+        this.dialog.open(WaitingGameComponent, {
             data: { lobby: this.lobby },
             disableClose: true,
             panelClass: 'dialog',
         });
+        setTimeout(() => {
+            this.dialog.closeAll();
+            this.router.navigate(['/game']);
+            // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+        }, 1000);
     }
 
     setGameId(): void {
@@ -104,7 +111,6 @@ export class GameSheetComponent implements OnDestroy, OnInit {
                 this.gameManagerService.lobbyWaiting = this.lobby;
                 this.showLoadingDialog();
                 this.welcomeService.onChatGame = true;
-                this.router.navigate(['/game']);
                 this.roomManagerService.onStart(this.lobby.lobbyId as string);
             });
             this.roomManagerService.createPracticeRoom(roomPayload);
