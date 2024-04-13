@@ -72,9 +72,10 @@ class GameManagerService extends ChangeNotifier {
     startGame(lobbyService.lobby.lobbyId);
   }
 
-  void setGameRecord(GameRecord record) {
+  set gameRecord(GameRecord record) {
     print('Setting game record');
-    gameRecordProvider.setCurrentGameRecord(record);
+    gameRecordProvider.currentGameRecord = record;
+
     notifyListeners();
   }
 
@@ -215,14 +216,16 @@ class GameManagerService extends ChangeNotifier {
     socketService.on(SocketType.Game, GameEvents.GameRecord.name, (record) {
       print('GameRecord received');
       if (record is Map<String, dynamic>) {
-        setGameRecord(GameRecord.fromJson(record));
+        gameRecord = (GameRecord.fromJson(record));
+
         return;
       } else if (record is String) {
         final Map<String, dynamic> parsedRecord = jsonDecode(record);
-        setGameRecord(GameRecord.fromJson(parsedRecord));
+        gameRecord = (GameRecord.fromJson(parsedRecord));
       } else {
         print('Unexpected data format received: ${record.runtimeType}');
       }
     });
   }
 }
+

@@ -9,37 +9,44 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/info_service.dart';
 
 class GameRecordProvider extends ChangeNotifier {
-  final String baseUrl = "$API_URL/records";
   final InfoService _infoService = Get.find();
 
-  GameRecord _gameRecord = DEFAULT_GAME_RECORD;
+  final String baseUrl = "$API_URL/records";
 
   List<GameRecord> _gameRecords = [];
+  GameRecord _record = DEFAULT_GAME_RECORD;
+
   List<GameRecord> get gameRecords => _gameRecords;
-  GameRecord get gameRecord => _gameRecord;
+  GameRecord get record => _record;
 
   GameRecordProvider();
 
-  setCurrentGameRecord(GameRecord gameRecord) {
-    _gameRecord = gameRecord;
+  set currentGameRecord(GameRecord gameRecord) {
+    _record = gameRecord;
+    print(
+        'GameRecord set by default : ${gameRecord.date} for ${gameRecord.game.name}');
     notifyListeners();
   }
 
-  // Returns the selected replay from profile page
-  Future<String?> getByDate(DateTime date) async {
-    final url = Uri.parse('$baseUrl/$date');
-
+  Future<String?> findAllByAccountId() async {
+    final accountId = _infoService.id;
     try {
-      final response = await http.get(url);
+      final uri = Uri.parse('$baseUrl/$accountId');
+      final response = await http.get(uri);
 
       if (response.statusCode == 200) {
-        _gameRecord = GameRecord.fromJson(jsonDecode(response.body));
+        final List<dynamic> body = json.decode(response.body);
+        _gameRecords =
+            body.map((dynamic item) => GameRecord.fromJson(item)).toList();
 
-        print("GameRecord with $date fetched for ${_infoService.username}");
+        // Sets the first one by default as the current game record
+        if (_gameRecords.isNotEmpty) {
+          _record = _gameRecords.first;
+
+          print(
+              'GameRecord set by default after fetching all game records : $accountId');
+        }
         notifyListeners();
-      } else {
-        print('Server error: ${response.statusCode}');
-        return 'Server error: ${response.statusCode}';
       }
       return null;
     } catch (error) {
@@ -48,66 +55,47 @@ class GameRecordProvider extends ChangeNotifier {
     }
   }
 
-  Future<String?> getAll() async {
+  Future<void> getByDate(String date) async {
     final accountId = _infoService.id;
-    final url = Uri.parse('$baseUrl?accountId=$accountId');
-
     try {
-      final response = await http.get(url);
-      final List<dynamic> decodedJson = json.decode(response.body);
+      final uri = Uri.parse('$baseUrl/$date');
+      final response = await http.get(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
 
-      _gameRecords = decodedJson
-          .map((gameRecord) => GameRecord.fromJson(gameRecord))
-          .toList();
-
-      print("GameRecords fetched for ${_infoService.username}");
-      notifyListeners();
-      return null;
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> body = json.decode(response.body);
+        _record = GameRecord.fromJson(body);
+        print(
+            "GameRecord fetch for accountId : $accountId and record date : $date");
+        notifyListeners();
+      } else {
+        print('Server error: ${response.statusCode}');
+      }
     } catch (error) {
-      print('Error fetching game records: $error');
-      return 'Error: $error';
+      print('Error saving game record: $error');
     }
   }
 
-  Future<String?> addAccountIdByDate(String date) async {
+  Future<void> deleteAccountId(String date) async {
     final accountId = _infoService.id;
-    final url = Uri.parse('$baseUrl/$date?accountId=$accountId');
-
     try {
-      final response = await http.put(url);
-      if (response.statusCode == 200) {
-        print("AccountId added for ${_infoService.username}");
-        notifyListeners();
-        return null;
-      } else {
-        print('Server error: ${response.statusCode}');
-        return "Failed to fetch GameRecord with date : $date";
-      }
-    } catch (error) {
-      print('Error fetching game record: $error');
-      return 'Error: $error';
-    }
-  }
-
-  // deletes the selected game record from profile page
-  Future<String?> deleteAccountIdByDate(DateTime date) async {
-    final accountId = _infoService.id;
-    final url = Uri.parse('$baseUrl/$date?accountId=$accountId');
-
-    try {
-      final response = await http.delete(url);
+      final uri = Uri.parse('$baseUrl/$accountId')
+          .replace(queryParameters: {'date': date});
+      final response = await http.delete(uri);
 
       if (response.statusCode == 200) {
-        print("GameRecord deleted for ${_infoService.username}");
+        print(
+            "GameRecord removed from saved for accountId : $accountId and username :  ${_infoService.username}");
         notifyListeners();
-        return null;
       } else {
         print('Server error: ${response.statusCode}');
-        return "Failed to fetch GameRecord with date : $date response status : ${response.statusCode}";
       }
     } catch (error) {
-      print('Error fetching game record: $error');
-      return 'Error: $error';
+      print('Error deleting game record: $error');
     }
   }
 }
