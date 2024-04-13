@@ -31,10 +31,7 @@ export class GlobalChatService {
         this.message = new Subject<Chat>();
 
         this.clientSocketService.on('auth', FriendEvents.ShareScore, (chat: Chat) => {
-            if (chat.tag === MessageTag.Common) {
-                chat = { raw: chat.raw, tag: MessageTag.Common } as Chat;
-            }
-            console.log(chat.raw);
+            chat = { raw: chat.raw, tag: MessageTag.Common } as Chat;
             this.message.next(chat);
         });
 
