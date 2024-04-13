@@ -168,7 +168,7 @@
         "confirm": "Confirmer"
     },
 
-    "accesModal": {
+    "accessModal": {
         "accessCode": "ENTRER LE CODE D'ACCES",
         "password": "Mot de passe",
         "incorrectPassword": "Mot de passe incorrect. Veuillez réessayer.",

@@ -115,6 +115,7 @@ export class LobbyGateway implements OnGatewayConnection {
         if (!this.roomsManager.lobbies.get(data.lobbyId)) return;
         const { lobbyId, password } = data;
         if (this.roomsManager.lobbies.get(lobbyId).password && this.roomsManager.lobbies.get(lobbyId).password !== password) return;
+        if (this.roomsManager.lobbies.get(lobbyId).players.find((p) => p.accountId === socket.data.accountId)) return;
 
         socket.data.state = LobbyState.Waiting;
         socket.join(lobbyId);
