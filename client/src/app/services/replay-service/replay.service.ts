@@ -289,6 +289,9 @@ export class ReplayService implements OnDestroy {
     }
 
     private replayClickFound(replayData: GameEventData): void {
+        if (this.isCheatMode) {
+            this.replayDeactivateCheat(replayData);
+        }
         if (this.record.game.differences) {
             const currentIndex: number = this.record.game.differences.findIndex((difference) =>
                 difference.some((coord: Coordinate) => coord.x === replayData.coordClic?.x && coord.y === replayData.coordClic?.y),
