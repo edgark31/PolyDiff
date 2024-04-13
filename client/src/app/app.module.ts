@@ -61,7 +61,6 @@ import { NoGameAvailableDialogComponent } from './components/no-game-available-d
 import { ReplayButtonsComponent } from './components/replay-buttons/replay-buttons/replay-buttons.component';
 import { RoomSheetComponent } from './components/room-sheet/room-sheet.component';
 import { ShareModalComponent } from './components/share-modal/share-modal.component';
-import { WaitingGameDialogComponent } from './components/waiting-game-dialog/waiting-game-dialog.component';
 import { WaitingPlayerToJoinComponent } from './components/waiting-player-to-join/waiting-player-to-join.component';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { ClassicTimePageComponent } from './pages/classic-time-page/classic-time-page.component';
@@ -134,7 +133,6 @@ export const createTranslateLoader = (http: HttpClient) => {
         CanvasUnderButtonsComponent,
         RegistrationPageComponent,
         AccountDialogComponent,
-        WaitingGameDialogComponent,
         FriendPageComponent,
         HistoryLoginComponent,
         FriendsInfosComponent,
