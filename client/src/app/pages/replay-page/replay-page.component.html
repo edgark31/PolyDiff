@@ -9,7 +9,7 @@
                     <mat-card-header>
                         <mat-card-title class="username">
                             <div class="form-avatar">
-                                <img src="{{'http://34.118.163.79:3000/' + record.game.gameId + '/original.bmp'}}" alt="Image" style="width: 152px; height: 114px; border-radius: 10px;">
+                                <img src="{{'http://34.95.3.182:3000/' + record.game.gameId + '/original.bmp'}}" alt="Image" style="width: 152px; height: 114px; border-radius: 10px;">
                               </div>
                             <div class="name">
                                 <span>{{ record.game.name }}</span>
@@ -29,5 +29,5 @@
             </div>
             <p *ngIf = "records.length === 0" id = "waiting-message">Il n'y a pas de reprises vidéo pour le moment</p>
             <img *ngIf = "records.length === 0" id = "waiting" src = "./assets/raccoonWaiting.gif" alt = "waiting-image" />
-<img *ngIf="welcomeService.account.profile.mobileTheme==='Light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
-<img  *ngIf="welcomeService.account.profile.mobileTheme==='Dark'" id = "background" src = "./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>
+<img *ngIf="welcomeService.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
+<img  *ngIf="welcomeService.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>
