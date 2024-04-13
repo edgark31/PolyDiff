@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game_record_model.dart';
@@ -40,42 +39,75 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   late ReplayImagesProvider replayImagesProvider;
   late ReplayPlayerProvider replayPlayerProvider;
   late GameEventData gameEvent;
-  late Future<CanvasModel> _currentCanvas;
+
   late Timer timer;
   String formattedTime = "00:00";
 
   @override
   void initState() {
     super.initState();
-    // Initialize the playback service
-    playbackService = GameEventPlaybackService(defaultGameEvents);
-    playbackManager = GameEventPlaybackManager();
+
+    // Initialize services and providers
+    playbackService = GameEventPlaybackService(widget.record.gameEvents);
+    playbackManager = GameEventPlaybackManager(playbackService);
     replayImagesProvider = Get.find();
     replayPlayerProvider = Get.find();
-
-    replayImagesProvider.loadInitialCanvas(context, widget.record);
-    replayImagesProvider.preloadGameEventImages(context, widget.record);
     replayPlayerProvider.setPlayersData(widget.record.players);
-    _currentCanvas = replayImagesProvider.currentCanvasModel;
 
+    loadInitialCanvas();
+
+    setupPeriodicUpdates();
+
+    subscribeToEvents();
+  }
+
+  void setupPeriodicUpdates() {
     timer = Timer.periodic(Duration(seconds: 1), (_) {
       setState(() {
-        formattedTime = formattedTime =
-            calculateFormattedTime(playbackService.lastEventTime);
+        formattedTime = calculateFormattedTime(playbackService.lastEventTime ??
+            DateTime.fromMillisecondsSinceEpoch(0));
       });
     });
+  }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      playbackService.eventsStream.listen((GameEventData event) {
-        print("Event received: ${event.gameEvent}");
-        print("GAME EVENT MODIFIED: ${event.modified}");
+  void loadInitialCanvas() async {
+    try {
+      // Assuming loadInitialCanvas in ReplayImagesProvider takes GameRecord and returns Future<void>
+      await replayImagesProvider.loadInitialCanvas(widget.record);
+    } catch (e) {
+      print("Failed to load initial canvas: $e");
+      // Optionally, show an error message to the user or retry the loading
+      showErrorDialog("Failed to load game data. Please try again.");
+    }
+  }
 
-        gameEvent = event;
-        setState(() {
-          formattedTime = calculateFormattedTime(event.timestamp);
-        });
-      });
+  void subscribeToEvents() {
+    playbackService.eventsStream.listen((GameEventData event) {
+      gameEvent = event;
+    }, onError: (error) {
+      print("Error receiving game event: $error");
+      showErrorDialog("An error occurred while processing game events.");
     });
+  }
+
+  void showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Error"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   String calculateFormattedTime(DateTime timestamp) {
@@ -195,23 +227,19 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
             SizedBox(
               height: 20,
             ),
-
-            // Display the formatted time
-            Text(
-              'Time: $formattedTime',
-              style: TextStyle(fontSize: 18),
-            ),
             FutureBuilder<CanvasModel>(
-              future: _currentCanvas,
+              future: replayImagesProvider.currentCanvas,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.hasData) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ReplayOriginalCanvas(snapshot.data!),
+                      Expanded(
+                        child: ReplayOriginalCanvas(snapshot.data!),
+                      ),
                       SizedBox(width: 50),
-                      ReplayModifiedCanvas(snapshot.data!),
+                      Expanded(child: ReplayModifiedCanvas(snapshot.data!)),
                     ],
                   );
                 } else if (snapshot.connectionState ==
@@ -222,12 +250,9 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
                 }
               },
             ),
-
             Center(
               child: GameEventSlider(
                 playbackService: playbackService,
-                playbackManager: playbackManager,
-                replayImagesProvider: replayImagesProvider,
               ),
             ),
           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/providers/game_record_provider.dart';
@@ -22,9 +23,12 @@ class GameRecordSelectionPage extends StatefulWidget {
 }
 
 class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
+  final GameRecordProvider gameRecordProvider = Get.find();
+
   @override
   void initState() {
     super.initState();
+    gameRecordProvider.getDefault();
   }
 
   @override

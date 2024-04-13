@@ -1,21 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game_record_model.dart';
-import 'package:mobile/replay/game_event_playback_manager.dart';
 import 'package:mobile/replay/game_events_services.dart';
-import 'package:mobile/replay/replay_images_provider.dart';
 
 class GameEventSlider extends StatefulWidget {
   final GameEventPlaybackService playbackService;
-  final GameEventPlaybackManager playbackManager;
-  final ReplayImagesProvider replayImagesProvider;
 
   GameEventSlider({
     super.key,
     required this.playbackService,
-    required this.playbackManager,
-    required this.replayImagesProvider,
   });
 
   @override
@@ -26,38 +21,38 @@ class _GameEventSliderState extends State<GameEventSlider> {
   double _sliderValue = 0;
   late StreamSubscription<GameEventData> _eventsSubscription;
   String _currentEvent = "";
-  String _currentTime = "";
 
   @override
   void initState() {
     super.initState();
     // Subscribe to the event stream
-    widget.playbackService.eventsStream.listen((GameEventData event) {
-      int eventIndex = widget.playbackService.events.indexOf(event);
-      double newSliderValue =
-          eventIndex / (widget.playbackService.events.length - 1).toDouble();
-
-      if (mounted) {
-        setState(() {
-          if (eventIndex == 0) {
-            _sliderValue = 0; // Reset slider for the first event after restart.
-          } else {
-            _sliderValue = newSliderValue;
+    if (widget.playbackService.events.isNotEmpty) {
+      _eventsSubscription =
+          widget.playbackService.eventsStream.listen((GameEventData event) {
+        int eventIndex = widget.playbackService.events.indexOf(event);
+        if (eventIndex != -1) {
+          double newSliderValue = eventIndex /
+              (widget.playbackService.events.length - 1).toDouble();
+          if (mounted) {
+            setState(() {
+              _sliderValue = newSliderValue;
+              _currentEvent = event.gameEvent;
+            });
           }
-          _currentEvent = event.gameEvent;
-          _currentTime = event.time.toString();
-        });
-      }
-    });
+        }
+      }, onError: (error) {
+        print("Error occurred in event subscription: $error");
+      }, onDone: () {
+        print("Event stream is closed");
+      });
+    }
   }
 
   @override
   void dispose() {
-    _eventsSubscription?.cancel();
+    _eventsSubscription.cancel();
     super.dispose();
   }
-
-// To display the current event's time
 
   @override
   Widget build(BuildContext context) {
@@ -76,19 +71,11 @@ class _GameEventSliderState extends State<GameEventSlider> {
               int eventIndex =
                   (_sliderValue * (widget.playbackService.events.length - 1))
                       .round();
-              int eventIndexToSeek = widget.playbackService
-                  .calculateEventIndexFromSliderPosition(
-                      _sliderValue, widget.playbackService.events);
-              // Check if eventIndex falls within the valid range before proceeding
+
               if (eventIndex >= 0 &&
                   eventIndex < widget.playbackService.events.length) {
                 _currentEvent =
                     widget.playbackService.events[eventIndex].gameEvent;
-                _currentTime =
-                    widget.playbackService.events[eventIndex].time!.toString();
-                // Inform the playback manager to handle the event at this index
-                widget.playbackManager.seekToEvent(
-                    eventIndexToSeek, widget.playbackService.events);
               }
             });
           },
@@ -97,8 +84,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
         Text("Current Event: $_currentEvent"),
         // This displays the slider's value; it's optional and can be removed if not needed
         Text("Slider Value: ${_sliderValue.toStringAsFixed(2)}"),
-        // Display the current time associated with the game event, if any
-        Text("Current time: ${_currentTime.toString()}"),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -126,6 +111,19 @@ class _GameEventSliderState extends State<GameEventSlider> {
                   _sliderValue = 0;
                 });
               },
+            ),
+            // Speed buttons
+            IconButton(
+              icon: Text('1x'),
+              onPressed: () => widget.playbackService.setSpeed(SPEED_X1),
+            ),
+            IconButton(
+              icon: Text('2x'),
+              onPressed: () => widget.playbackService.setSpeed(SPEED_X2),
+            ),
+            IconButton(
+              icon: Text('4x'),
+              onPressed: () => widget.playbackService.setSpeed(SPEED_X4),
             ),
           ],
         ),

@@ -13,7 +13,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   final GameAreaService _gameAreaService = Get.find();
   final SoundService _soundService = Get.find();
   final ReplayPlayerProvider _replayPlayerProvider = Get.find();
-  final ReplayImagesProvider _replayImagesProvider = Get.find();
+  final ReplayImagesProvider replayImagesProvider = Get.find();
 
   bool _isEndGame = false;
   bool _isDifferenceFound = false;
@@ -30,12 +30,11 @@ class GameEventPlaybackManager extends ChangeNotifier {
   int get nDifferencesFound => _nDifferencesFound;
   int get replaySpeed => _replaySpeed;
 
-  GameEventPlaybackManager._();
-
-  static final GameEventPlaybackManager _instance =
-      GameEventPlaybackManager._();
-
-  factory GameEventPlaybackManager() => _instance;
+  GameEventPlaybackManager(playbackService) {
+    playbackService.eventsStream.listen((event) {
+      _handleGameEvent(event);
+    });
+  }
 
   void handleSliderChangeValue(double sliderValue) {
     int eventIndex = sliderValue.round();
@@ -64,32 +63,90 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
   // Event Handlers
   void _handleGameEvent(GameEventData recordedEventData) {
+    print("Called Handling Game Event: ${recordedEventData.gameEvent}");
     switch (recordedEventData.gameEvent) {
       case "StartGame":
         _handleGameStartEvent();
+        break;
 
       case "Found":
-        print("Found event");
         _handleClickFoundEvent(recordedEventData);
+        break;
 
       case "NotFound":
         _handleClickErrorEvent(recordedEventData);
+        break;
 
       case "CheatActivated":
         _handleActivateCheatEvent(recordedEventData);
+        break;
 
       case "CheatDeactivated":
         _handleDeactivateCheatEvent(recordedEventData);
+        break;
 
       case "TimerUpdate":
         _handleUpdateTimerEvent(recordedEventData);
+        break;
 
       case "EndGame":
         _handleEnGameEvent(recordedEventData);
+        break;
 
       case "Spectatate":
         break;
+
+      default:
+        print("Unknown event type: ${recordedEventData.gameEvent}");
     }
+    _handleCurrentCanvasImages(recordedEventData);
+  }
+
+  void _handleCurrentCanvasImages(GameEventData event) {
+    if (event.gameEvent == "Found" &&
+        event.modified != null &&
+        event.modified!.isNotEmpty) {
+      replayImagesProvider
+          .updateCanvasState(event.modified!)
+          .then((_) {})
+          .catchError((error) {
+        print("Error updating canvas from game event: $error");
+      });
+    } else {
+      print("No modified image found in the event.");
+      GameEventData? previousEvent;
+      int currentIndex = _gameRecordProvider.record.gameEvents.indexOf(event);
+      while (currentIndex >= 0) {
+        if (_gameRecordProvider.record.gameEvents[currentIndex].modified !=
+                null &&
+            _gameRecordProvider
+                .record.gameEvents[currentIndex].modified!.isNotEmpty) {
+          previousEvent = _gameRecordProvider.record.gameEvents[currentIndex];
+          break;
+        }
+        currentIndex--;
+      }
+
+      if (previousEvent != null) {
+        replayImagesProvider
+            .updateCanvasState(previousEvent.modified!)
+            .then((_) {
+          print("Updated canvas from previous event.");
+        }).catchError((error) {
+          print("Error updating canvas from previous event: $error");
+        });
+      } else {
+        replayImagesProvider
+            .loadInitialCanvas(_gameRecordProvider.record)
+            .then((value) => {print("Initial canvas loaded")})
+            .catchError((error) {
+          print("Error loading initial canvas: $error");
+        });
+      }
+      notifyListeners();
+    }
+
+    notifyListeners();
   }
 
   void _handleGameStartEvent() {
@@ -98,8 +155,8 @@ class GameEventPlaybackManager extends ChangeNotifier {
   }
 
   void _handleClickFoundEvent(GameEventData recordedEventData) {
-    // if (_gameRecordProvider.record.game.differences == null) return;
-    // if (recordedEventData.coordClic == null) return;
+    if (_gameRecordProvider.record.game.differences == null) return;
+    if (recordedEventData.coordClic == null) return;
 
     final int currentIndex = _gameRecordProvider.record.game.differences!
         .indexWhere((difference) => difference.any((coord) =>
@@ -124,13 +181,13 @@ class GameEventPlaybackManager extends ChangeNotifier {
     _nDifferencesFound++;
     print(
         "Difference found from GameEventPlaybackManager at index: $currentIndex");
-    _replayImagesProvider.updateCanvasState(
-        recordedEventData.modified!, currentIndex.toString());
 
     _handleRemainingDifferenceIndex(recordedEventData);
   }
 
   void _handleClickErrorEvent(GameEventData recordedEventData) {
+    if (_gameRecordProvider.record.game.differences == null) return;
+    if (recordedEventData.coordClic == null) return;
     _gameAreaService.showDifferenceNotFound(recordedEventData.coordClic!,
         recordedEventData.isMainCanvas!, _replaySpeed);
     notifyListeners();
