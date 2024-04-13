@@ -119,6 +119,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.clientSocket.send('game', GameEvents.Spectate, this.gameManager.lobbyWaiting.lobbyId);
         }
         this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
+        this.gameManager.playerShare = [] as Player[];
         // this.lobby = this.gameManager.lobbyWaiting;
         this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
             this.lobby = lobby;
