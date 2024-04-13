@@ -66,10 +66,9 @@ export class RegistrationPageComponent {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';
                 },
             });
-            this.isRequestPending = true;
+
             if (!this.welcomeService.chooseImage)
                 setTimeout(() => {
-                    this.isRequestPending = false;
                     this.welcomeService.onUpdateAvatar(this.creds.username);
                     this.router.navigate(['/login']);
                 }, 1000);

@@ -45,7 +45,6 @@ export class JoinedPlayerDialogComponent implements OnInit, OnDestroy {
     private handleRefusedPlayer() {
         this.clientSocketService.authSocket.off(LobbyEvents.NotifyGuest);
         this.clientSocketService.on('lobby', LobbyEvents.NotifyGuest, (isPlayerAccepted: boolean) => {
-            console.log(isPlayerAccepted);
             if (!isPlayerAccepted) {
                 this.countDownBeforeClosing('Vous avez été refusé');
             }
