@@ -7,12 +7,14 @@ import 'package:mobile/replay/game_events_services.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/game_area_service.dart';
+import 'package:mobile/services/info_service.dart';
 
 class GameEventPlaybackManager extends ChangeNotifier {
   final GameRecordProvider _gameRecordProvider = Get.find();
   final GameAreaService _gameAreaService = Get.find();
   final ReplayPlayerProvider _replayPlayerProvider = Get.find();
   final ReplayImagesProvider replayImagesProvider = Get.find();
+  final InfoService _infoService = Get.find();
 
   bool _isEndGame = false;
   bool _isDifferenceFound = false;
@@ -26,11 +28,16 @@ class GameEventPlaybackManager extends ChangeNotifier {
   bool get isEndGame => _isEndGame;
   bool get isDifferenceFound => _isDifferenceFound;
   bool get isCheatMode => _isCheatMode;
+
   bool get hasCheatModeEnabled => _hasCheatModeEnabled;
   int get nDifferencesFound => _nDifferencesFound;
   int get timer => _timer;
 
+  List<Coordinate> _remainingCoordinates = [];
+
   List<GameEventData> get events => _gameRecordProvider.record.gameEvents;
+
+  List<Coordinate> get remainingCoordinates => _remainingCoordinates;
 
   GameEventPlaybackManager(GameEventPlaybackService playbackService) {
     playbackService.eventsStream.listen((event) {
@@ -148,9 +155,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
       for (Player player in recordedEventData.players!) {
         _replayPlayerProvider.updatePlayerData(player);
       }
-
-      _handleUpdateRemainingDifference(
-          _gameRecordProvider.record.game.differences!);
     }
 
     _nDifferencesFound++;
@@ -163,23 +167,31 @@ class GameEventPlaybackManager extends ChangeNotifier {
   void _handleClickErrorEvent(GameEventData recordedEventData) {
     if (_gameRecordProvider.record.game.differences == null) return;
     if (recordedEventData.coordClic == null) return;
+    if (recordedEventData.accountId != _infoService.id) return;
+
     _gameAreaService.showDifferenceNotFound(recordedEventData.coordClic!,
         recordedEventData.isMainCanvas!, _replaySpeed);
     notifyListeners();
   }
 
   void _handleActivateCheatEvent(GameEventData recordedEventData) {
-    _isCheatMode = true;
+    _isCheatMode = false;
+    _handleRemainingDifferenceIndex(recordedEventData);
+    _gameAreaService.isCheatMode = false;
+    _gameAreaService.toggleCheatMode(_remainingCoordinates, _replaySpeed);
     notifyListeners();
   }
 
   void _handleDeactivateCheatEvent(GameEventData recordedEventData) {
-    _isCheatMode = false;
+    _isCheatMode = true;
+    _handleRemainingDifferenceIndex(recordedEventData);
+    _gameAreaService.isCheatMode = true;
+    _gameAreaService.toggleCheatMode(_remainingCoordinates, _replaySpeed);
     notifyListeners();
   }
 
   void _handleRemainingDifferenceIndex(GameEventData recordedEventData) {
-    List<List<Coordinate>> remainingCoordinates = [];
+    List<Coordinate> remainingCoordinates = [];
 
     if (recordedEventData.remainingDifferenceIndex != null &&
         recordedEventData.remainingDifferenceIndex!.isNotEmpty) {
@@ -188,15 +200,21 @@ class GameEventPlaybackManager extends ChangeNotifier {
         List<Coordinate> differencesAtIndex =
             _gameRecordProvider.record.game.differences![index];
 
-        remainingCoordinates.add(differencesAtIndex);
+        remainingCoordinates.addAll(differencesAtIndex);
       }
-
-      _handleUpdateRemainingDifference(remainingCoordinates);
+    } else {
+      remainingCoordinates = _gameRecordProvider.record.game.differences!
+          .expand((element) => element)
+          .toList();
     }
+
+    _handleUpdateRemainingDifference(remainingCoordinates);
+
     notifyListeners();
   }
 
-  void _handleUpdateRemainingDifference(List<List<Coordinate>> remaining) {
+  void _handleUpdateRemainingDifference(List<Coordinate> remaining) {
+    _remainingCoordinates = remaining;
     notifyListeners();
   }
 

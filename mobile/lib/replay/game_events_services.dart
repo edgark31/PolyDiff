@@ -11,6 +11,8 @@ class GameEventPlaybackService {
 
   final List<GameEventData> _events;
   bool _isPaused = false;
+  bool _isPlayback = false;
+
   DateTime? _lastEventTime;
   Timer? _timer;
   int _currentIndex = 0;
@@ -19,9 +21,12 @@ class GameEventPlaybackService {
   Stream<GameEventData> get eventsStream => _eventsController.stream;
   List<GameEventData> get events => _events;
   DateTime? get lastEventTime => _lastEventTime;
-  int get currentIndex => _currentIndex;
-  bool get isPaused => _isPaused;
+
   double get speed => _speed;
+  int get currentIndex => _currentIndex;
+
+  bool get isPaused => _isPaused;
+  bool get isPlayback => _isPlayback;
 
   GameEventPlaybackService(
     this._events,
@@ -44,8 +49,8 @@ class GameEventPlaybackService {
 
   void pause() {
     print("Playback paused.");
-    _isPaused = true;
     _gameAreaService.pauseAnimation();
+    _isPaused = true;
     _timer?.cancel();
   }
 
@@ -53,6 +58,10 @@ class GameEventPlaybackService {
     if (!_isPaused) return;
     _gameAreaService.resumeAnimation();
     _isPaused = false;
+
+    if (_isPlayback && _events.isNotEmpty) {
+      _isPlayback = false;
+    }
     print("Resuming playback.");
     _playbackEvents();
   }
@@ -116,7 +125,8 @@ class GameEventPlaybackService {
   // Modify the GameEventPlaybackService to handle seeking
   void seekToEvent(int eventIndex) {
     if (events.isEmpty || eventIndex >= events.length) return;
-    _currentIndex = eventIndex; // Update the current index
+    _currentIndex = eventIndex;
+    _isPlayback = true;
     pause();
     resume();
   }

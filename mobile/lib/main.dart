@@ -10,7 +10,6 @@ import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/replay/game_event_playback_manager.dart';
-import 'package:mobile/replay/game_playback_page.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/chat_service.dart';
@@ -154,7 +153,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeClass.lightTheme,
       darkTheme: ThemeClass.darkTheme,
       onGenerateRoute: AppRouter.onGenerateRoute,
-      initialRoute: GameEventPlaybackScreen.routeName,
+      initialRoute: SignInPage.routeName,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
     );
