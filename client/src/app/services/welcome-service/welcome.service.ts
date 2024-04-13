@@ -128,7 +128,9 @@ export class WelcomeService {
             });
         else
             this.communication.updateAvatar(name ?? '', this.selectAvatarRegister).subscribe({
-                next: () => {},
+                next: () => {
+                    // empty
+                },
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';
                 },
