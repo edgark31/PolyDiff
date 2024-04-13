@@ -126,6 +126,8 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     final ReplayImagesProvider replayImagesProvider =
         context.watch<ReplayImagesProvider>();
 
+    final GameEventPlaybackManager playbackManager = context.watch<GameEventPlaybackManager>();
+
     String gameMode = AppLocalizations.of(context)!.classicMode;
 
     return Scaffold(
@@ -175,7 +177,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
                             ),
                             SizedBox(width: 100),
                             Text(
-                              '${AppLocalizations.of(context)!.gameInfos_timeTitle} : $formattedTime',
+                              '${AppLocalizations.of(context)!.gameInfos_timeTitle} : ${gamePlaybackManager.time}',
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
