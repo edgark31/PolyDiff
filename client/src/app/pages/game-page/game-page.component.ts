@@ -119,11 +119,12 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.clientSocket.send('game', GameEvents.Spectate, this.gameManager.lobbyWaiting.lobbyId);
         }
         this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
+        this.gameManager.playerShare = [] as Player[];
         // this.lobby = this.gameManager.lobbyWaiting;
         this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
             this.lobby = lobby;
             this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
-
+            this.playerShare = this.lobby.players.map((player) => ({ ...player }));
             this.messages = this.lobby.chatLog?.chat as Chat[];
             this.messages.forEach((message: Chat) => {
                 if (message.raw.includes('a trouvé une différence')) {
@@ -231,7 +232,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     resetGameStats(): void {
-        this.playerShare = this.lobby.players.map((player) => ({ ...player }));
         this.nDifferencesFound = 0;
         for (const player of this.lobby.players) {
             player.count = 0;
@@ -285,7 +285,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
                 message: endingMessage,
                 isReplayMode: this.lobby.mode === this.gameMode.Classic,
                 lobby: this.lobby,
-                players: this.playerShare,
+                players: this.gameManager.playerShare,
             },
             disableClose: true,
             panelClass: 'dialog',
