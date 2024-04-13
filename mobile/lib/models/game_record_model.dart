@@ -28,8 +28,9 @@ class GameRecord {
   });
 
   factory GameRecord.fromJson(Map<String, dynamic> json) {
-    final DateTime startTime =
-        DateTime.fromMillisecondsSinceEpoch(json['startTime']);
+    final DateTime startTime = json["startTime"] != null
+        ? DateTime.fromMillisecondsSinceEpoch(json['startTime'])
+        : DateTime.fromMillisecondsSinceEpoch(123456); // TODO: Pretty fix
     final DateTime endTime = json["endTime"] != null
         ? DateTime.fromMillisecondsSinceEpoch(json['endTime'])
         : DateTime.fromMillisecondsSinceEpoch(123456); // TODO: Pretty fix

@@ -82,6 +82,7 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
               gameRecordCard:
                   GameRecordCard.fromGameRecord(gameRecordsFromServer[index]),
               onReplay: () {
+                
                 // TODO: Add back when replay is implemented
                 // Navigator.pushNamed(context, REPLAY_ROUTE,
                 //     arguments: gameRecordProvider.record);
