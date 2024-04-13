@@ -107,7 +107,10 @@ export class ReplayService implements OnDestroy {
     }
 
     fallBackReplay(time: number): void {
-        this.isCheatMode = false;
+        if (this.isCheatMode) {
+            this.isCheatMode = false;
+            this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
+        }
         // filtrer found ou start
         const gameEventsFiltered = this.record.gameEvents.filter(
             (event) => event.gameEvent === ReplayActions.Found || event.gameEvent === ReplayActions.StartGame,
