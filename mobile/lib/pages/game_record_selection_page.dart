@@ -64,6 +64,8 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
     final GameRecordProvider gameRecordProvider =
         context.watch<GameRecordProvider>();
 
+    final gameRecordsFromServer = gameRecordProvider.gameRecords;
+
     if (isLoading) return CircularProgressIndicator();
 
     return BackgroundContainer(
@@ -74,18 +76,21 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
         backgroundColor: Colors.transparent,
         appBar: CustomAppBar(title: 'Replays'), // TODO: Translate this
         body: ListView.builder(
-          itemCount: 1,
+          itemCount: gameRecordsFromServer.length,
           itemBuilder: (context, index) {
             return GameRecordCardWidget(
-                gameRecordCard:
-                    GameRecordCard.fromGameRecord(gameRecordProvider.record),
-                onReplay: () {
-                  // TODO: Add back when replay is implemented
-                  // Navigator.pushNamed(context, REPLAY_ROUTE,
-                  //     arguments: gameRecordProvider.record);
-                },
-                onDelete: () => gameRecordProvider
-                    .deleteAccountId(gameRecordProvider.record.date));
+              gameRecordCard:
+                  GameRecordCard.fromGameRecord(gameRecordsFromServer[index]),
+              onReplay: () {
+                // TODO: Add back when replay is implemented
+                // Navigator.pushNamed(context, REPLAY_ROUTE,
+                //     arguments: gameRecordProvider.record);
+              },
+              onDelete: () {
+                // gameRecordProvider
+                //   .deleteAccountId(gameRecordProvider.record.date);
+              },
+            );
           },
         ),
       ),

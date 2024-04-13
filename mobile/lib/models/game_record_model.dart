@@ -32,8 +32,7 @@ class GameRecord {
         DateTime.fromMillisecondsSinceEpoch(json['startTime']);
     final DateTime endTime = json["endTime"] != null
         ? DateTime.fromMillisecondsSinceEpoch(json['endTime'])
-        : DateTime.fromMillisecondsSinceEpoch(0); // TODO: Pretty fix 
-    DateTime.fromMillisecondsSinceEpoch(json['endTime']);
+        : DateTime.fromMillisecondsSinceEpoch(123456); // TODO: Pretty fix
     return GameRecord(
       date: json['date'],
       accountIds: List<String>.from(json['accountIds'].map((x) => x)),
