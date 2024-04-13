@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class ImportDialogComponent {
     imageData: string;
     choice: string;
+    // eslint-disable-next-line max-params
     constructor(
         public welcomeService: WelcomeService,
         private dialogRef: MatDialogRef<ImportDialogComponent>,
@@ -50,7 +51,7 @@ export class ImportDialogComponent {
     }
 
     onImport(): void {
-        if (this.welcomeService.chooseImage) this.choice = `http://localhost:3000/avatar/default${this.welcomeService.selectLocal}.png`;
+        if (this.welcomeService.chooseImage) this.choice = `http://34.95.3.182:3000/avatar/default${this.welcomeService.selectLocal}.png`;
         else this.choice = this.imageData;
         this.welcomeService.selectAvatarRegister = this.choice;
         this.dialogRef.close();

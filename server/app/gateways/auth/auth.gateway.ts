@@ -163,7 +163,6 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage(FriendEvents.ShareScore)
     shareScore(@ConnectedSocket() socket: Socket, @MessageBody('friendId') friendId: string, @MessageBody('score') score: number) {
-        // console.log('friensbd' + friendId + score);
         this.server.fetchSockets().then((sockets) => {
             const friendSocket = sockets.find((s) => s.data.accountId === friendId);
             if (friendSocket) {
@@ -209,7 +208,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
         this.accountManager.logConnection(socket.data.accountId, true);
-        this.logger.log(`AUTH de ${socket.data.accountId}`);
+        this.logger.log(`AUTH de ${this.getFormattedInfos(socket.data.accountId)}`);
     }
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {
@@ -220,7 +219,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                 this.updateIsOnline(s as any);
             });
         });
-        this.logger.log(`DEAUTH de ${socket.data.accountId}`);
+        this.logger.log(`DEAUTH de ${this.getFormattedInfos(socket.data.accountId)}`);
     }
 
     handleOnlineMessage(socket: Socket, userOnline: string) {
@@ -236,5 +235,9 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             }
         });
         socket.emit(FriendEvents.UpdateFriends, friends);
+    }
+
+    private getFormattedInfos(socketId: string) {
+        return `${this.accountManager.users.get(socketId).credentials.username} (${socketId})`;
     }
 }

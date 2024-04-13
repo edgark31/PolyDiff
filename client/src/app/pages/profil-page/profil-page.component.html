@@ -1,53 +1,42 @@
-<div>
 
-  <!-- [ngStyle]="{'background-color': (welcomeService.chooseTheme.BackgroundColor), 'color': (welcomeService.chooseTheme.ButtonColor)}" -->
-  <!-- <app-menu></app-menu> -->
-  <div class="header">
-  <app-nav-bar id ="nav-bar"></app-nav-bar>
-  </div>
+<div class="main">
   <img *ngIf="welcomeService.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
   <img *ngIf="welcomeService.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
+  <app-nav-bar id ="nav-bar"></app-nav-bar>
   <div class="container-information">
-    <div class="information">{{'profil.information' | translate }}</div>
+    <p class="information">{{'profil.information' | translate }}</p>
   </div>
-  <div class="container">
+  <div class="middle">
     <div class="left">
-      <div class="form-control">
-        <div class="profil">{{'profil.username' | translate }}</div>
-        <div> {{ welcomeService.account.credentials.username }}</div>
-      </div>
-
       <div class="form-avatar">
-        <div  class="profil">Avatar</div>
-        <img [src]="welcomeService.account.profile.avatar" alt="Image" style="width: 100px; height: 100px;">
+        <div class="profil">Avatar</div>
+        <img [src]="welcomeService.account.profile.avatar" alt="Image" style="width: 100px; height: 100px; border: 4px solid black; border-radius: 5%;">
         <span class="status-indicator"></span>
       </div>
-
-
+      <div class="form-control">
+        <div class="profil">{{'profil.username' | translate }}</div>
+        <p> {{ welcomeService.account.credentials.username }}</p>
+      </div>
       <div class="form-control">
         <div  class="profil">{{'profil.theme' | translate }}</div>
         <div>{{ welcomeService.account.profile.mobileTheme }}</div>
       </div>
-
       <div class="form-control">
-        <div  class="profil">{{'profil.songError' | translate }}</div>
+        <div class="profil">{{'profil.songError' | translate }}</div>
         <div>{{ welcomeService.account.profile.onErrorSound.name }}</div>
       </div>
-
       <div class="form-control">
-        <div  class="profil">{{'profil.songDifference' | translate }}</div>
+        <div class="profil">{{'profil.songDifference' | translate }}</div>
         <div>{{ welcomeService.account.profile.onCorrectSound.name }}</div>
       </div>
-
       <div class="form-control">
-        <div  class="profil">{{'profil.language' | translate }}</div>
+        <div class="profil">{{'profil.language' | translate }}</div>
         <div>{{ translateCharacter(welcomeService.account.profile.language) }}</div>
       </div>
     </div>
-
     <div class="right">
-      <div class="section">
-        <h1  class="profil">{{'profil.statistic' | translate }}</h1>
+      <div>
+        <h1 class="profil">{{'profil.statistic' | translate }}</h1>
       </div>
       <div class="form-control">
         <div  class="profil">{{'profil.gamePlayed' | translate }}: </div>
@@ -65,34 +54,24 @@
         <div  class="profil">{{'profil.gameAverageTime' | translate }}: </div>
         <p>{{welcomeService.account.profile.stats.averageTime }}</p>
       </div>
-
-
     </div>
   </div>
-  <div class="container">
-    <div class="left">
-      <div class="section">
-        <h1  class="profil"> {{'profil.Connexion' | translate }}</h1>
-      </div>
-      <div> <button class="button-plus" (click)="toggleTableLogin()"><mat-icon>history</mat-icon> </button> </div>
+  <div class="low"> 
+    <div class="section">
+      <h1 class="profil">{{'profil.Connexion' | translate }}</h1>
+      <button class="button-plus" (click)="toggleTableLogin()"><mat-icon>history</mat-icon> </button> 
     </div>
-    <div class="right">
-      <div class="section">
-        <h1  class="profil-historic">{{'profil.gameHistoric' | translate }} </h1>
-        <div> <button class="button-plus" (click)="toggleTableSession()"><mat-icon>list</mat-icon> </button> </div>
-      </div>
-      <div class="section">
-        <h1  class="profil-replay">Reprises vidéo des parties </h1>
-        <div> <button class="button-plus" routerLink="/replay"><mat-icon>video_library</mat-icon> </button> </div>
-      </div>
+    <div class="section">
+      <h1 class="profil">{{'profil.gameHistoric' | translate }} </h1>
+      <button class="button-plus" (click)="toggleTableSession()"><mat-icon>list</mat-icon> </button>
     </div>
-
+    <div class="section">
+      <h1 class="profil">{{'profil.replay' | translate }}</h1>
+      <button class="button-plus" routerLink="/replay"><mat-icon>video_library</mat-icon> </button>
+    </div>
   </div>
-
   <div class="button-container">
-    <button type="submit" (click)="onSubmitPersonalization()">{{'button.GoReglage' | translate }}</button>
-    <button routerLink="/home">{{'profil.returnHome' | translate }}</button>
+    <button class="back" routerLink="/home">{{'profil.returnHome' | translate }}</button>
+    <button class="settings" type="submit" (click)="onSubmitPersonalization()">{{'button.GoReglage' | translate }}</button>
   </div>
 </div>
-
-<!-- <img id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>    -->

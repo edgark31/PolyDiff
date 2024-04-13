@@ -1,25 +1,18 @@
 <div *ngIf="game" class="gameSheet">
-    <div class="gameContainer">
-        <img class="background"  alt="background-image" src="./assets/background/gameSheet.png" />
-        <h1 class="title">{{ game.name }}</h1>
-        <img class="thumbnail" [src]="url" alt="track" />
-        <div class="gameInfo">
+    <h1 class="title">{{ game.name }}</h1>
+    <img class="thumbnail" [src]="url" alt="track" />
+    <div class="button-container">
+        <div *ngIf="router.url === '/selection' && getMode() === '/practice'">
+            <img alt="button" src="./assets/icon/PlayButton.png"/>
+            <button class="practice" *ngIf="getMode() === '/practice'" (click)="startGame()">{{'gameSheet.play' | translate }}</button>
         </div>
-        <div class="buttonSection">
-            <div class="button-container">
-                <button mat-raised-button *ngIf="router.url === '/selection'">{{'gameSheet.play' | translate }}</button>
-                <button mat-raised-button *ngIf="router.url === '/admin'" (click)="openConfirmationDialog(actions.DeleteGame)">{{'gameSheet.suppression' | translate }}</button>
-                <div class="deleteText" *ngIf="router.url === '/admin'">{{'gameSheet.suppression' | translate }}</div>
-            </div>
-            <div class="button-container">
-                <button mat-raised-button *ngIf="getMode() !== '/practice'" routerLink="/create-room" (click)="setGameId()">{{'gameSheet.create' | translate }}</button>
-                <button mat-raised-button *ngIf="getMode() === '/practice'" (click)="startGame()">{{'gameSheet.play' | translate }}</button>
-                <button mat-raised-button *ngIf="router.url === '/admin'" (click)="openConfirmationDialog(actions.ResetTopTime)">{{'gameSheet.reset' | translate }}</button>
-                <img class="createButton" alt="button" src="./assets/icon/CreateButton.png"/>
-                <div class="createText" *ngIf="getMode() !== '/practice'">{{'gameSheet.create' | translate }} </div>
-                <div class="createText" *ngIf="getMode() === '/practice'">{{'gameSheet.play' | translate }}</div>
-                <div class="reinitializeText" *ngIf="router.url === '/admin'">{{'gameSheet.reset' | translate }}</div>
-            </div>
+        <div *ngIf="router.url === '/selection' && getMode() !== '/practice'">
+            <img alt="button" src="./assets/icon/PlayButton.png"/>
+            <button class="create" *ngIf="getMode() !== '/practice'" routerLink="/create-room" (click)="setGameId()">{{'gameSheet.create' | translate }}</button>
+        </div>
+        <div *ngIf="router.url === '/admin'">
+            <img alt="button" src="./assets/icon/CreateButton.png"/>
+            <button class="delete" (click)="openConfirmationDialog(actions.DeleteGame)">{{'gameSheet.suppression' | translate }}</button>
         </div>
     </div>
 </div>

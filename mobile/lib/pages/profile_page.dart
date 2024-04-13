@@ -30,9 +30,15 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final GameRecordProvider gameRecordProvider = Get.find<GameRecordProvider>();
+  final SocketService socketService = Get.find();
+
   @override
   void initState() {
+    Future.delayed(Duration.zero, () {
+      if (ModalRoute.of(context)?.isCurrent ?? false) {
+        socketService.onlyAuthSocketShouldBeConnected(pageName: PROFILE_ROUTE);
+      }
+    });
     super.initState();
     gameRecordProvider.findAllByAccountId();
   }
@@ -184,9 +190,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             AppLocalizations.of(context)!.profile_videoReplay,
                         icon: Icons.video_collection,
                         onPress: () {
-                          Navigator.pushNamed(context, REPLAYS_SELECTION_ROUTE);
+                          // TODO: Add if replay is back
+                          // Navigator.pushNamed(context, VIDEOS_ROUTE);
                         }),
-
                     Divider(),
                     SizedBox(height: 20),
                     ProfileMenuWidget(

@@ -11,15 +11,11 @@
     text-align: center;
 }
 
-// .right {
-//     flex: 2;
-//     padding-left: 800px;
-// }
-
 #game-page {
     background-color: #67a28b;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 .canvas-container {
@@ -30,7 +26,7 @@
     height: 100%;
     flex-direction: row;
     top: 0;
-    z-index: 1;
+    z-index: 5;
 }
 
 .game-canvas {
@@ -54,18 +50,18 @@ canvas {
 }
 
 #original {
-    z-index: 1;
+    z-index: 5;
 }
 
 #originalFG {
-    z-index: 2;
+    z-index: 6;
 }
 
 #modified {
-    z-index: 1;
+    z-index: 5;
 }
 #modifiedFG {
-    z-index: 2;
+    z-index: 6;
 }
 
 .background {
@@ -85,7 +81,7 @@ canvas {
     padding-top: 35px;
     margin: 0 20px 0 20px;
     border: solid none;
-    z-index: 1;
+    z-index: 5;
 }
 
 .information-header h1 {
@@ -118,14 +114,14 @@ canvas {
     border-radius: 2em;
     box-sizing: border-box;
     text-decoration: none;
-    z-index: 1;
+    z-index: 5;
     bottom: 2%;
     left: 5%;
 }
 
 #abandon {
     position: absolute;
-    z-index: 2;
+    z-index: 6;
     left: 45px;
     top: 35px;
 }
@@ -151,15 +147,16 @@ canvas {
 
 app-chat-box {
     position: absolute;
-    left: 35.75%;
+    left: 34.5%;
     bottom: 15%;
-    z-index: 1;
+    z-index: 10;
+    transform: scale(0.7);
 }
 
 app-replay-buttons {
     position: absolute;
-    bottom: 65px;
-    z-index: 1;
+    bottom: 20px;
+    z-index: 10;
 }
 
 #background {

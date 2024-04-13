@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommunicationService } from '@app/services/communication-service/communication.service';
@@ -16,8 +18,10 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
     gameCarrousel: CarouselPaginator;
     homeRoute: string;
     configRoute: string;
+    interval: any;
     private index: number;
     private reloadSubscription: Subscription;
+    // eslint-disable-next-line max-params
     constructor(
         private readonly communicationService: CommunicationService,
         public router: Router,
@@ -33,7 +37,7 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this.loadGameCarrousel();
+        this.loadTimed();
         this.handleGameCardsUpdate();
     }
 
@@ -53,6 +57,7 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.reloadSubscription?.unsubscribe();
+        clearInterval(this.interval);
     }
 
     private loadGameCarrousel() {
@@ -61,6 +66,13 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
                 this.gameCarrousel = gameCarrousel;
             }
         });
+    }
+
+    private loadTimed() {
+        clearInterval(this.interval);
+        this.interval = setInterval(() => {
+            this.loadGameCarrousel();
+        }, 2000);
     }
 
     private handleGameCardsUpdate() {

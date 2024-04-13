@@ -20,7 +20,7 @@
         "gameWin": "number of games won",
         "gameAverage": "average of differences found per part",
         "gameAverageTime": "average time per game",
-        "Connexion": "Login statement",
+        "Connexion": "Login history",
         "gameHistoric": "game history",
         "changePassword": "Change password",
         "confirmPassword": "Confirm password",
@@ -30,18 +30,19 @@
         "passwordEnter": "please type your password",
         "confirmPasswordEnter": "please confirm your password",
         "cancel": "cancel",
-        "returnHome": "Return to home"
+        "returnHome": "Return to home",
+        "replay": "Replays"
     },
 
     "button": {
         "deconnexion": "Disconnect",
-        "returnProfil": "Save your changes",
-        "GoReglage": "Go to settings",
+        "returnProfil": "Save",
+        "GoReglage": "Settings",
         "Settings": "Settings",
-        "previous": "previous",
-        "following": "next",
-        "fr": "french",
-        "en": "english"
+        "previous": "Previous",
+        "following": "Next",
+        "fr": "French",
+        "en": "English"
     },
 
     "roomSheet": {

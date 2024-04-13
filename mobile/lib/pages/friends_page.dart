@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/services/info_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_menu_drawer.dart';
 import 'package:mobile/widgets/friends_list.dart';
@@ -26,6 +28,19 @@ class FriendsPage extends StatefulWidget {
 
 class _FriendsPageState extends State<FriendsPage> {
   int _selectedViewIndex = 0;
+
+  final SocketService socketService = Get.find();
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      if (ModalRoute.of(context)?.isCurrent ?? false) {
+        socketService.onlyAuthSocketShouldBeConnected(
+            pageName: FRIENDS_ROUTE);
+      }
+    });
+    super.initState();
+  }
 
   void _selectView(int index) {
     setState(() {

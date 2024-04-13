@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/providers/avatar_provider.dart';
 import 'package:mobile/services/info_service.dart';
+import 'package:mobile/services/socket_service.dart';
 import 'package:mobile/widgets/customs/background_container.dart';
 import 'package:mobile/widgets/customs/custom_app_bar.dart';
 import 'package:mobile/widgets/customs/custom_circle_avatar.dart';
@@ -23,6 +25,14 @@ class StatisticsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SocketService socketService = Get.find();
+
+    Future.delayed(Duration.zero, () {
+      if (ModalRoute.of(context)?.isCurrent ?? false) {
+        socketService.onlyAuthSocketShouldBeConnected(
+            pageName: STATISTICS_ROUTE);
+      }
+    });
     final infoService = context.watch<InfoService>();
     final AvatarProvider avatarProvider = context.watch<AvatarProvider>();
     final username = infoService.username;

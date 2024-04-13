@@ -63,7 +63,8 @@ class _GameInfosState extends State<GameInfos> {
                 ],
               ],
             ),
-            if (lobbyService.lobby.mode == GameModes.Classic) ...[
+            if (lobbyService.lobby.mode == GameModes.Classic ||
+                lobbyService.lobby.mode == GameModes.Practice) ...[
               Text(
                 '${AppLocalizations.of(context)!.gameInfos_differencesPresentTitle} : $nbDifferencesPresent',
                 style: _textStyle(),

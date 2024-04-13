@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class DeleteResetConfirmationDialogComponent {
     actions: typeof Actions;
+    // eslint-disable-next-line max-params
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: { actions: Actions; gameId: string },
         private readonly roomManagerService: RoomManagerService,
@@ -39,7 +40,7 @@ export class DeleteResetConfirmationDialogComponent {
 
     deleteGameCard() {
         this.communicationService.deleteGameById(this.data.gameId).subscribe(() => {
-            this.roomManagerService.notifyGameCardDeleted(this.data.gameId);
+            // this.roomManagerService.notifyGameCardDeleted(this.data.gameId);
         });
     }
 

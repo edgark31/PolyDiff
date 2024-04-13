@@ -4,8 +4,8 @@
 
 export const environment = {
     production: false,
-    serverUrl: 'http://localhost:3000/api',
-    avatarUrl: 'http://localhost:3000/avatar',
+    serverUrl: 'http://34.95.3.182:3000/api',
+    avatarUrl: 'http://34.95.3.182:3000/avatar',
 };
 
 /*

@@ -57,6 +57,7 @@ export class ReplayService implements OnDestroy {
         this.nDifferencesFound = 0;
         this.record = {} as GameRecord;
         this.record.timeLimit = 0;
+        this.lobby = {} as Lobby;
     }
 
     get nDifferencesFound$() {

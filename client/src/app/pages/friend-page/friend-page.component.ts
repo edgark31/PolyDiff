@@ -77,22 +77,6 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
     //         isFavorite: true,
     //         isOnline: true,
     //     },
-    //     {
-    //         name: 'ami3',
-    //         accountId: '660c39b6edfe9d58baa631ef',
-    //         // friends: ["l'ami de mon ami"],
-    //         // commonFriends: ['mon ami en commun'],
-    //         isFavorite: true,
-    //         isOnline: true,
-    //     },
-    //     {
-    //         name: 'ami3',
-    //         accountId: '660c39b6edfe9d58baa631ef',
-    //         // friends: ["l'ami de mon ami"],
-    //         // commonFriends: ['mon ami en commun'],
-    //         isFavorite: true,
-    //         isOnline: true,
-    //     },
     // ];
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
     constructor(
@@ -170,12 +154,10 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
 
     getFriendForUser(accountId: string): Friend {
         const friendFound = this.friends.find((friend) => friend.accountId === accountId);
-        console.log('bbbbbbbbbbbbbbbbbbbbb' + friendFound?.accountId);
         return friendFound ? friendFound : ({} as Friend);
     }
 
     showFriendsOfFriends(friendOfFriend: Friend, showCommonFriend: boolean): void {
-        console.log('aaaaaaaaaaaa' + friendOfFriend.accountId);
         this.matDialog.open(FriendsInfosComponent, {
             data: { friend: friendOfFriend, showCommonFriend, user: null },
         });
@@ -203,7 +185,6 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         setTimeout(() => {
             this.friendService.sendFriendRequest(accountId);
             this.isRequestPending = false;
-            console.log('yoyoy' + accountId);
         }, 1000);
     }
 
@@ -212,10 +193,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         setTimeout(() => {
             this.friendService.sendFriendPending(accountId, true);
             this.isRequestPending = false;
-            console.log('yoyoy' + accountId);
         }, 3000);
-
-        console.log('yoyoyo' + accountId);
     }
 
     sendFriendPendingRefuse(accountId: string): void {
@@ -223,14 +201,10 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         setTimeout(() => {
             this.friendService.sendFriendPending(accountId, false);
             this.isRequestPending = false;
-            console.log('yoyoy' + accountId);
         }, 3000);
-
-        console.log('yoyoyooooooooooooooooooo' + accountId);
     }
 
     sendFriendDelete(accountId: string): void {
-        console.log('delete' + accountId);
         this.dialog.open(AccountDialogComponent, {
             data: { mode: true, accountId },
             disableClose: true,
@@ -246,7 +220,6 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         setTimeout(() => {
             this.friendService.sendFriendCancel(accountId);
             this.isRequestPending = false;
-            console.log('yoyoy' + accountId);
         }, 500);
     }
 }

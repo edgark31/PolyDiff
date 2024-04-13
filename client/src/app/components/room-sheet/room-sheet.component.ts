@@ -17,7 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class RoomSheetComponent {
     @Input() lobby: Lobby;
     gameModes: typeof GameModes = GameModes;
-
+    // eslint-disable-next-line max-params
     constructor(
         public router: Router, // private readonly dialog: MatDialog
         public roomManager: RoomManagerService,

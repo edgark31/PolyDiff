@@ -25,6 +25,7 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
     replaySpeed: number;
     replayTimerSubscription: Subscription;
     private onDestroy$: Subject<void>;
+    // eslint-disable-next-line max-params
     constructor(
         private readonly replayService: ReplayService,
         public translate: TranslateService,
