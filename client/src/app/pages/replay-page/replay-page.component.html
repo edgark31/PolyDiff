@@ -27,7 +27,6 @@
                     </mat-card-header>
                 </mat-card>
             </div>
-            <!-- <p *ngIf="isRetrievingRecords === true" id = "waiting-message">{{'replayPage.replayLoading' | translate }}</p> -->
             <p *ngIf="records.length === 0" id = "waiting-message">{{'replayPage.noReplayAvailable' | translate }}</p>
             <img *ngIf="records.length === 0" id = "waiting" src = "./assets/raccoonWaiting.gif" alt = "waiting-image" />
 <img *ngIf="welcomeService.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>

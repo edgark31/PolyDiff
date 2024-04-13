@@ -285,7 +285,6 @@
     },
 
     "replayPage": {
-        "noReplayAvailable": "No game records available for now",
-        "replayLoading": "Retrieving game records..."
+        "noReplayAvailable": "No game records available for now"
     }
 }
