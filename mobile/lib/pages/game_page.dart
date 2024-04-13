@@ -20,9 +20,9 @@ import 'package:mobile/widgets/game_loading.dart';
 import 'package:provider/provider.dart';
 
 class GamePage extends StatefulWidget {
-  static const routeName = GAME_ROUTE;
-
   GamePage();
+
+  static const routeName = GAME_ROUTE;
 
   @override
   State<GamePage> createState() => _GamePageState();
@@ -38,11 +38,10 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   final GameAreaService gameAreaService = Get.find();
   final GameManagerService gameManagerService = Get.find();
-
   late Future<CanvasModel> imagesFuture;
+  bool isAnimationPaused = false;
   bool isChatBoxVisible = false;
   bool isCheatActivated = false;
-  bool isAnimationPaused = false;
 
   @override
   void initState() {
@@ -65,6 +64,75 @@ class _GamePageState extends State<GamePage> {
     String modifiedImage,
   ) async {
     return ImageConverterService.fromImagesBase64(originalImage, modifiedImage);
+  }
+
+  Widget _actionButton(
+    BuildContext context,
+    String text,
+    VoidCallback onPressed,
+  ) {
+    return Positioned(
+      left: 8.0,
+      bottom: 8.0,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Color(0xFFEF6151),
+          backgroundColor: Color(0xFF2D1E16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        ),
+        child: Text(text, style: TextStyle(fontSize: 20)),
+      ),
+    );
+  }
+
+  Widget _observerInfos(int nObservers) {
+    if (nObservers == 0) {
+      return Positioned(
+        right: 8.0,
+        bottom: 8.0,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [Icon(Icons.visibility_off, color: Colors.white)],
+          ),
+        ),
+      );
+    }
+
+    return Positioned(
+      right: 8.0,
+      bottom: 8.0,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.remove_red_eye, color: Colors.white),
+            SizedBox(width: 8),
+            Text(
+              nObservers.toString(),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -250,75 +318,6 @@ class _GamePageState extends State<GamePage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _actionButton(
-    BuildContext context,
-    String text,
-    VoidCallback onPressed,
-  ) {
-    return Positioned(
-      left: 8.0,
-      bottom: 8.0,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          foregroundColor: Color(0xFFEF6151),
-          backgroundColor: Color(0xFF2D1E16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18.0),
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        ),
-        child: Text(text, style: TextStyle(fontSize: 20)),
-      ),
-    );
-  }
-
-  Widget _observerInfos(int nObservers) {
-    if (nObservers == 0) {
-      return Positioned(
-        right: 8.0,
-        bottom: 8.0,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [Icon(Icons.visibility_off, color: Colors.white)],
-          ),
-        ),
-      );
-    }
-
-    return Positioned(
-      right: 8.0,
-      bottom: 8.0,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.remove_red_eye, color: Colors.white),
-            SizedBox(width: 8),
-            Text(
-              nObservers.toString(),
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

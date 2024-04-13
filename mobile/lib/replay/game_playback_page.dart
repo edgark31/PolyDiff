@@ -120,7 +120,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   
     // Providers
     final GameRecordProvider gameRecordProvider = context.read<GameRecordProvider>();
-    final GameAreaService gameAreaService = Provider.of<GameAreaService>(context);
+   
     final ReplayPlayerProvider replayPlayerProvider =
         context.watch<ReplayPlayerProvider>();
     final ReplayImagesProvider replayImagesProvider =
@@ -177,7 +177,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
                             ),
                             SizedBox(width: 100),
                             Text(
-                              '${AppLocalizations.of(context)!.gameInfos_timeTitle} : ${gamePlaybackManager.time}',
+                              '${AppLocalizations.of(context)!.gameInfos_timeTitle} : ${playbackManager.timer}',
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
