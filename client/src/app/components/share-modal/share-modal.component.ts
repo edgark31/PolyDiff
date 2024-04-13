@@ -26,6 +26,7 @@ export class ShareModalComponent {
     ) {}
 
     onShare(friendId: string): void {
+        this.data.players.forEach((player) => console.log(player.count + 'nommmmmmmmmmm ' + player.name));
         const playerAccount = this.data.players.find((player) => player.accountId === this.welcome.account.id);
         this.friendService.shareScore(friendId, playerAccount?.count ?? 0);
     }

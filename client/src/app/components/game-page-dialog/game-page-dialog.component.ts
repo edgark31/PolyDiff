@@ -43,6 +43,7 @@ export class GamePageDialogComponent {
     }
 
     openShareScoreFriend(showShareFriend: boolean): void {
+        this.data.players.forEach((player) => console.log(player.count + 'nommmmmmmmmmm ' + player.name));
         this.dialog.open(ShareModalComponent, {
             data: { showShareFriend, players: this.data.players },
             disableClose: true,
@@ -64,8 +65,10 @@ export class GamePageDialogComponent {
         this.clientSocket.disconnect('lobby');
         this.clientSocket.disconnect('game');
         if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
-        this.dialog.closeAll();
-        this.router.navigate(['/home']);
+        else {
+            this.dialog.closeAll();
+            this.router.navigate(['/home']);
+        }
     }
 
     deleteRecord(): void {
