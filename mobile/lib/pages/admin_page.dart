@@ -95,18 +95,44 @@ class _AdminPageState extends State<AdminPage> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    for (GameCard gameCard in gameCardsFromServer) {
-                      gameCardService.deleteGameById(gameCard.id);
-                    }
-                    setState(() {
-                      isLoading = true;
-                    });
-                    Future.delayed(Duration(milliseconds: 2000), () {
-                      _fetchGameCards();
-                      Navigator.pushNamed(context, DASHBOARD_ROUTE);
-                    });
-                  });
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(AppLocalizations.of(context)!
+                            .adminPage_confirmDeletion),
+                        content: Text(AppLocalizations.of(context)!
+                            .adminPage_DeleteAllQuestion),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text(
+                                AppLocalizations.of(context)!.confirmation_no),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                          TextButton(
+                            child: Text(
+                                AppLocalizations.of(context)!.confirmation_yes),
+                            onPressed: () {
+                              setState(() {
+                                for (GameCard gameCard in gameCardsFromServer) {
+                                  gameCardService.deleteGameById(gameCard.id);
+                                }
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                Future.delayed(Duration(milliseconds: 2000),
+                                    () {
+                                  _fetchGameCards();
+                                  Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                                });
+                              });
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
                 child: Text(
                     AppLocalizations.of(context)!.adminPage_deleteAllButton),
@@ -175,7 +201,35 @@ class AdminGame extends StatelessWidget {
             fit: BoxFit.cover,
           )),
           IconButton(
-            onPressed: onDelete,
+            onPressed: () {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(AppLocalizations.of(context)!
+                        .adminPage_confirmDeletion),
+                    content: Text(
+                        AppLocalizations.of(context)!.adminPage_deleteQuestion),
+                    actions: <Widget>[
+                      TextButton(
+                        child:
+                            Text(AppLocalizations.of(context)!.confirmation_no),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      TextButton(
+                        child: Text(
+                            AppLocalizations.of(context)!.confirmation_yes),
+                        onPressed: () {
+                          onDelete();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
             icon: Icon(Icons.delete),
           ),
         ],
