@@ -35,7 +35,6 @@ export class GamePageDialogComponent {
         this.isReplayPaused = false;
 
         this.roomManager.isOrganizer = false;
-        this.roomManager.isObserver = false;
     }
 
     isObserver(): boolean {
@@ -65,6 +64,7 @@ export class GamePageDialogComponent {
 
     leaveGame(): void {
         this.replayService.resetReplay();
+        this.roomManager.isObserver = false;
         this.clientSocket.disconnect('lobby');
         this.clientSocket.disconnect('game');
         if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
