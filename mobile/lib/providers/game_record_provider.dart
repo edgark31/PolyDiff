@@ -9,15 +9,17 @@ import 'package:mobile/models/models.dart';
 import 'package:mobile/services/info_service.dart';
 
 class GameRecordProvider extends ChangeNotifier {
-  final String baseUrl = "$API_URL/records";
   final InfoService _infoService = Get.find();
 
-  List<GameRecord> _gameRecords = [];
+  final String baseUrl = "$API_URL/records";
 
+  List<GameRecord> _gameRecords = [];
   GameRecord _record = DEFAULT_GAME_RECORD;
 
   List<GameRecord> get gameRecords => _gameRecords;
   GameRecord get record => _record;
+
+  GameRecordProvider();
 
   set currentGameRecord(GameRecord gameRecord) {
     _record = gameRecord;
@@ -26,43 +28,46 @@ class GameRecordProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String?> getDefault() async {
-    final uri = Uri.parse('$baseUrl/2024-04-11T18:18:37.970+00:00');
-    try {
-      final response = await http.get(uri);
-
-      if (response.statusCode == 200) {
-        final dynamic body = json.decode(response.body);
-        _record = GameRecord.fromJson(body as Map<String, dynamic>);
-
-        notifyListeners();
-      }
-
-      return null;
-    } catch (error) {
-      print('Error record: ${error}');
-      return 'Error: $error';
-    }
-  }
-
   Future<String?> findAllByAccountId() async {
     final accountId = _infoService.id;
+    // try {
+    final uri = Uri.parse('$baseUrl/$accountId');
+    final response = await http.get(uri);
     try {
-      final uri = Uri.parse('$baseUrl/$accountId');
-      final response = await http.get(uri);
-
       if (response.statusCode == 200) {
-        final dynamic body = jsonDecode(response.body);
-        _gameRecords = List<GameRecord>.from(
-            body['gameRecords'].map((x) => GameRecord.fromJson(x)));
+        String gameRecordsServerString = response.body;
+        List<dynamic> gameRecordsJson = jsonDecode(gameRecordsServerString);
+        // for (var i = 0; i < gameRecordsJson.length; i++) {
+        //   print('record $i');
+        //   print('date : ${gameRecordsJson[i]['date']}');
+        //   print('game : ${gameRecordsJson[i]['game']}');
+        //   print('players : ${gameRecordsJson[i]['players']}');
+        //   print('observers : ${gameRecordsJson[i]['observers']}');
+        //   print('startTime : ${gameRecordsJson[i]['startTime']}');
+        //   print('endTime : ${gameRecordsJson[i]['endTime']}');
+        //   print('duration : ${gameRecordsJson[i]['duration']}');
+        //   print('isCheatEnabled : ${gameRecordsJson[i]['isCheatEnabled']}');
+        //   print('timeLimit : ${gameRecordsJson[i]['timeLimit']}');
+        //   print('gameEvents : ${gameRecordsJson[i]['gameEvents']}');
 
-        // Sets the first one by default as the current game record
-        if (_gameRecords.isNotEmpty) {
-          _record = _gameRecords.first;
+        //   GameRecord converted = GameRecord.fromJson(gameRecordsJson[i]);
 
-          print(
-              'GameRecord set by default after fetching all game records : $accountId');
-        }
+        //   print('converted record $i');
+        //   print('date converted : ${converted.date}');
+        //   print('game converted : ${converted.game.toString()}');
+        //   print('players converted : ${converted.players.toString()}');
+        //   print('observers converted : ${converted.observers.toString()}');
+        //   print('startTime converted : ${converted.startTime}');
+        //   print('endTime converted : ${converted.endTime}');
+        //   print('duration converted : ${converted.duration}');
+        //   print('isCheatEnabled converted : ${converted.isCheatEnabled}');
+        //   print('timeLimit converted : ${converted.timeLimit}');
+        //   print('gameEvents converted : ${converted.gameEvents.toString()}');
+        // }
+
+        _gameRecords = gameRecordsJson
+            .map((gameRecordJson) => GameRecord.fromJson(gameRecordJson))
+            .toList();
         notifyListeners();
       }
       return null;
@@ -104,15 +109,12 @@ class GameRecordProvider extends ChangeNotifier {
           .replace(queryParameters: {'date': date});
       final response = await http.delete(uri);
 
-      if (response.body is Map<String, dynamic>) {
-        _record = GameRecord.fromJson(jsonDecode(response.body));
-
-        return;
-      } else if (response.body is String) {
-        final Map<String, dynamic> parsedRecord = jsonDecode(response.body);
-        _record = (GameRecord.fromJson(parsedRecord));
+      if (response.statusCode == 200) {
+        print(
+            "GameRecord removed from saved for accountId : $accountId and username :  ${_infoService.username}");
+        notifyListeners();
       } else {
-        print('Unexpected data format received: ${record.runtimeType}');
+        print('Server error: ${response.statusCode}');
       }
     } catch (error) {
       print('Error deleting game record: $error');

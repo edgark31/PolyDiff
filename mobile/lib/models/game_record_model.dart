@@ -1,10 +1,10 @@
 import 'package:mobile/models/models.dart';
 
 class GameRecord {
+  String date;
   final Game game;
+  final List<String> accountIds;
   final List<Player> players;
-  final List<String>? accountIds;
-  final String date;
   final List<Observer>? observers;
   final DateTime startTime;
   final DateTime endTime;
@@ -15,7 +15,7 @@ class GameRecord {
 
   GameRecord({
     required this.date,
-    this.accountIds,
+    required this.accountIds,
     required this.game,
     required this.players,
     required this.observers,
@@ -28,13 +28,15 @@ class GameRecord {
   });
 
   factory GameRecord.fromJson(Map<String, dynamic> json) {
-    final DateTime startTime =
-        DateTime.fromMillisecondsSinceEpoch((json['startTime']) as int);
-    final DateTime endTime =
-        DateTime.fromMillisecondsSinceEpoch((json['endTime']) as int);
+    final DateTime startTime = json["startTime"] != null
+        ? DateTime.fromMillisecondsSinceEpoch(json['startTime'])
+        : DateTime.fromMillisecondsSinceEpoch(123456); // TODO: Pretty fix
+    final DateTime endTime = json["endTime"] != null
+        ? DateTime.fromMillisecondsSinceEpoch(json['endTime'])
+        : DateTime.fromMillisecondsSinceEpoch(123456); // TODO: Pretty fix
     return GameRecord(
       date: json['date'],
-      accountIds: List<String>.from(json['accountIds'].map((x) => x)) ?? [],
+      accountIds: List<String>.from(json['accountIds'].map((x) => x)),
       game: Game.fromJson(json['game']),
       players:
           List<Player>.from(json['players'].map((x) => Player.fromJson(x))),
@@ -81,7 +83,7 @@ class GameEventData {
     this.time,
   });
 
-  factory GameEventData.fromJson(dynamic json) {
+  factory GameEventData.fromJson(Map<String, dynamic> json) {
     final DateTime timestamp =
         DateTime.fromMillisecondsSinceEpoch(json['timestamp']);
     return GameEventData(

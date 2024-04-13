@@ -190,8 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             AppLocalizations.of(context)!.profile_videoReplay,
                         icon: Icons.video_collection,
                         onPress: () {
-                          // TODO: Add if replay is back
-                          // Navigator.pushNamed(context, VIDEOS_ROUTE);
+                          Navigator.pushNamed(context, REPLAYS_SELECTION_ROUTE);
                         }),
                     Divider(),
                     SizedBox(height: 20),
