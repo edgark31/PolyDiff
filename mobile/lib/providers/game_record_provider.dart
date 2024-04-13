@@ -35,18 +35,21 @@ class GameRecordProvider extends ChangeNotifier {
       final response = await http.get(uri);
 
       if (response.statusCode == 200) {
-        final List<dynamic> body = json.decode(response.body);
-        _gameRecords =
-            body.map((dynamic item) => GameRecord.fromJson(item)).toList();
+        String gameRecordsServerString = response.body;
+        List<dynamic> gameRecordsJson = jsonDecode(gameRecordsServerString);
+        print(gameRecordsJson);
+        // final List<dynamic> body = json.decode(response.body);
+        // _gameRecords =
+        //     body.map((dynamic item) => GameRecord.fromJson(item)).toList();
 
-        // Sets the first one by default as the current game record
-        if (_gameRecords.isNotEmpty) {
-          _record = _gameRecords.first;
+        // // Sets the first one by default as the current game record
+        // if (_gameRecords.isNotEmpty) {
+        //   _record = _gameRecords.first;
 
-          print(
-              'GameRecord set by default after fetching all game records : $accountId');
-        }
-        notifyListeners();
+        //   print(
+        //       'GameRecord set by default after fetching all game records : $accountId');
+        // }
+        // notifyListeners();
       }
       return null;
     } catch (error) {
