@@ -7,7 +7,7 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 import { SoundService } from '@app/services/sound-service/sound.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
-import { Chat, ChatMessageGlobal, Game, GameConfigConst, Lobby, Players } from '@common/game-interfaces';
+import { Chat, ChatMessageGlobal, Game, GameConfigConst, Lobby, Player, Players } from '@common/game-interfaces';
 import { Subject, filter } from 'rxjs';
 @Injectable({
     providedIn: 'root',
@@ -22,6 +22,7 @@ export class GameManagerService {
     timerLobby: Subject<number>;
     endGame: string;
     lobbyWaiting: Lobby;
+    playerShare: Player[];
     private lobbyGame: Subject<Lobby>;
     private timer: Subject<number>;
     private differenceFound: Subject<Coordinate[]>;
@@ -241,6 +242,7 @@ export class GameManagerService {
         });
 
         this.clientSocket.on('game', GameEvents.Found, (data: { lobby: Lobby; difference: Coordinate[] }) => {
+            this.playerShare = data.lobby.players.map((player) => ({ ...player }));
             this.handleFound(data.lobby, data.difference);
         });
 

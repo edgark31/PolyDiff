@@ -68,8 +68,10 @@ export class GamePageDialogComponent {
         this.clientSocket.disconnect('lobby');
         this.clientSocket.disconnect('game');
         if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
-        this.dialog.closeAll();
-        this.router.navigate(['/home']);
+        else {
+            this.dialog.closeAll();
+            this.router.navigate(['/home']);
+        }
     }
 
     deleteRecord(): void {
@@ -77,9 +79,11 @@ export class GamePageDialogComponent {
         this.clientSocket.disconnect('lobby');
         this.clientSocket.disconnect('game');
         if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
+        else {
+            this.dialog.closeAll();
+            this.router.navigate(['/home']);
+        }
         this.communicationService.deleteAccountId(this.replayService.record.date.toString(), this.welcomeService.account.id as string).subscribe();
-        this.dialog.closeAll();
-        this.router.navigate(['/home']);
     }
 
     replay() {
