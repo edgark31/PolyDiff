@@ -25,6 +25,8 @@ class _GameEventSliderState extends State<GameEventSlider> {
   double _sliderValue = 0;
   late StreamSubscription<GameEventData> _eventsSubscription;
   String _currentEvent = "";
+  double _selectedSpeed = SPEED_X1;
+  bool _isPlaying = true;
 
   @override
   void initState() {
@@ -78,6 +80,24 @@ class _GameEventSliderState extends State<GameEventSlider> {
     return baseValue * speedAdjustment;
   }
 
+  void _triggerPlay() {
+    setState(() {
+      _isPlaying = !_isPlaying;
+    });
+    if (_isPlaying) {
+      print("Resuming");
+      widget.playbackService.resume();
+    } else {
+      print("Pausing");
+      widget.playbackService.pause();
+    }
+  }
+
+  void _goHome() {
+    // TODO : Implement home functionality
+    // Implement forward functionality
+  }
+
   @override
   Widget build(BuildContext context) {
     // Assuming the slider value ranges from 0 to 1, normalized
@@ -99,17 +119,12 @@ class _GameEventSliderState extends State<GameEventSlider> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
-              icon: Icon(Icons.play_arrow),
-              onPressed: () {
-                widget.playbackService.resume();
-              },
+              icon: Icon(Icons.home),
+              onPressed: _goHome,
             ),
-            // Restart button
             IconButton(
-              icon: Icon(Icons.pause),
-              onPressed: () {
-                widget.playbackService.pause();
-              },
+              icon: _isPlaying ? Icon(Icons.pause) : Icon(Icons.play_arrow),
+              onPressed: _triggerPlay,
             ),
             // Restart button
             IconButton(
@@ -118,31 +133,42 @@ class _GameEventSliderState extends State<GameEventSlider> {
                 widget.playbackService.restart();
                 // Reset the slider to the start
                 setState(() {
+                  _isPlaying = true;
                   _sliderValue = 0;
                 });
               },
             ),
             // Speed buttons
-            IconButton(
-              icon: Text('1x'),
-              onPressed: () {
-                widget.playbackService.setSpeed(SPEED_X1);
-              },
-            ),
-            IconButton(
-              icon: Text('2x'),
-              onPressed: () {
-                widget.playbackService.setSpeed(SPEED_X2);
-              },
-            ),
-            IconButton(
-              icon: Text('4x'),
-              onPressed: () {
-                widget.playbackService.setSpeed(SPEED_X4);
-              },
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                for (double speed in [SPEED_X1, SPEED_X2, SPEED_X4])
+                  _buildSpeedRadioButton(speed)
+              ],
             ),
           ],
         ),
+      ],
+    );
+  }
+
+  Widget _buildSpeedRadioButton(double speed) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Radio<double>(
+          value: speed,
+          groupValue: _selectedSpeed,
+          onChanged: (double? value) {
+            if (value != null) {
+              setState(() {
+                _selectedSpeed = value;
+                widget.playbackService.setSpeed(value);
+              });
+            }
+          },
+        ),
+        Text('${speed}x'),
       ],
     );
   }
