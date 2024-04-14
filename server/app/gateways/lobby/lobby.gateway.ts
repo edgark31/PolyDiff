@@ -105,6 +105,7 @@ export class LobbyGateway implements OnGatewayConnection {
         this.server.fetchSockets().then((sockets) => {
             const guest = sockets.find((s) => s.data.accountId === joinerId);
             guest.data.state = LobbyState.Idle;
+            guest.data.hostId = null;
             socket.data.otherIds = socket.data.otherIds.filter((id) => id !== guest.data.accountId);
             if (this.roomsManager.lobbies.get(lobbyId) && isPlayerAccepted) {
                 guest.emit(LobbyEvents.NotifyGuest, true);
