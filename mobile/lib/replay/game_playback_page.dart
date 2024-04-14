@@ -16,7 +16,6 @@ import 'package:mobile/replay/game_events_services.dart';
 import 'package:mobile/replay/replay_canvas_widget.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
-import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:mobile/widgets/replay_pop_up_widget.dart';
 import 'package:provider/provider.dart';
@@ -155,7 +154,6 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     // Providers
     final GameRecordProvider gameRecordProvider =
         context.read<GameRecordProvider>();
-    final GameAreaService gameAreaService = context.watch<GameAreaService>();
 
     final ReplayPlayerProvider replayPlayerProvider =
         context.watch<ReplayPlayerProvider>();
@@ -301,21 +299,14 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
           left: 0.0,
           right: 0.0,
           bottom: 8.0,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GameEventSlider(
-                  playbackService: playbackService,
-                  playbackManager: playbackManager,
-                ),
-              ],
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GameEventSlider(
+                playbackService: playbackService,
+                playbackManager: playbackManager,
+              ),
+            ],
           ),
         ),
 

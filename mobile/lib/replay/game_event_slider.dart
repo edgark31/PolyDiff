@@ -112,48 +112,50 @@ class _GameEventSliderState extends State<GameEventSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Slider(
-          min: 0,
-          max: 1,
-          value: _sliderValue,
-          divisions: widget.playbackService.events.length - 1,
-          onChanged: _onSliderChanged,
-        ),
-        Text("Current Event: $_currentEvent"),
-        Text("Slider Value: ${_sliderValue.toStringAsFixed(2)}"),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+        constraints: BoxConstraints(maxWidth: 1200, maxHeight: 150),
+        child: Column(
           children: [
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: _goHome,
+            Slider(
+              min: 0,
+              max: 1,
+              value: _sliderValue,
+              divisions: widget.playbackService.events.length - 1,
+              onChanged: _onSliderChanged,
             ),
-            IconButton(
-              icon: _isPlaying ? Icon(Icons.pause) : Icon(Icons.play_arrow),
-              onPressed: _triggerPlay,
-            ),
-            // Restart button
-            IconButton(
-              icon: Icon(Icons.restart_alt),
-              onPressed: () {
-                _sliderValue = 0;
-                widget.playbackService.restart();
-              },
-            ),
-            // Speed buttons
+            Text("Current Event: $_currentEvent"),
+            Text("Slider Value: ${_sliderValue.toStringAsFixed(2)}"),
             Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                for (double speed in [SPEED_X1, SPEED_X2, SPEED_X4])
-                  _buildSpeedRadioButton(speed)
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.home),
+                  onPressed: _goHome,
+                ),
+                IconButton(
+                  icon: _isPlaying ? Icon(Icons.pause) : Icon(Icons.play_arrow),
+                  onPressed: _triggerPlay,
+                ),
+                // Restart button
+                IconButton(
+                  icon: Icon(Icons.restart_alt),
+                  onPressed: () {
+                    _sliderValue = 0;
+                    widget.playbackService.restart();
+                  },
+                ),
+                // Speed buttons
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    for (double speed in [SPEED_X1, SPEED_X2, SPEED_X4])
+                      _buildSpeedRadioButton(speed)
+                  ],
+                ),
               ],
             ),
           ],
-        ),
-      ],
-    );
+        ));
   }
 
   Widget _buildSpeedRadioButton(double speed) {
