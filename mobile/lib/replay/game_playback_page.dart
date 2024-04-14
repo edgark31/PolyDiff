@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game_record_model.dart';
@@ -12,6 +13,7 @@ import 'package:mobile/replay/game_events_services.dart';
 import 'package:mobile/replay/replay_canvas_widget.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
+import 'package:mobile/services/info_service.dart';
 import 'package:provider/provider.dart';
 
 class GameEventPlaybackScreen extends StatefulWidget {
@@ -130,141 +132,155 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     final GameEventPlaybackManager playbackManager =
         context.watch<GameEventPlaybackManager>();
 
-    String gameMode = AppLocalizations.of(context)!.classicMode;
+    final infoService = context.watch<InfoService>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Game Event Playback"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                if (gameRecordProvider.record.isCheatEnabled) ...[
-                  ElevatedButton(
-                    onPressed: null,
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Color(0xFFEF6151),
-                      backgroundColor: Color(0xFF2D1E16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.gamePage_cheatButton,
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ),
-                ] else
-                  SizedBox(width: 50),
-                SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: SizedBox(
-                    width: 100,
-                    height: 50,
-                    child: Column(
-                      children: [
-                        SizedBox(height: 20),
-                        Row(
-                          children: [
-                            SizedBox(width: 380),
-                            Text(
-                              '${AppLocalizations.of(context)!.gameInfos_gameModeTitle} : $gameMode',
-                              style: _textStyle(),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(width: 100),
-                            Text(
-                              '${AppLocalizations.of(context)!.gameInfos_timeTitle} : ${playbackManager.timer}',
-                              style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          '${AppLocalizations.of(context)!.gameInfos_differencesPresentTitle} : ${gameRecordProvider.record.game.nDifferences}',
-                          style: _textStyle(),
-                          textAlign: TextAlign.center,
-                        ),
-                        Row(
-                          children: [
-                            if (gameRecordProvider
-                                .record.players.isNotEmpty) ...[
-                              _playerInfo(replayPlayerProvider.getPlayer(0)),
-                            ],
-                            SizedBox(
-                              width: 130,
-                            ),
-                            if (gameRecordProvider.record.players.length >
-                                1) ...[
-                              _playerInfo(replayPlayerProvider.getPlayer(1)),
-                            ],
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            if (gameRecordProvider.record.players.length >=
-                                3) ...[
-                              _playerInfo(replayPlayerProvider.getPlayer(2)),
-                            ],
-                            if (gameRecordProvider.record.players.length >=
-                                4) ...[
-                              SizedBox(
-                                width: 130,
-                              ),
-                              _playerInfo(replayPlayerProvider.getPlayer(3)),
-                            ],
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            FutureBuilder<CanvasModel>(
-              future: replayImagesProvider.currentCanvas,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: ReplayOriginalCanvas(snapshot.data!),
-                      ),
-                      SizedBox(width: 50),
-                      Expanded(child: ReplayModifiedCanvas(snapshot.data!)),
-                    ],
-                  );
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else {
-                  return Text("No data available");
-                }
-              },
-            ),
-            _observerInfos(replayPlayerProvider.nObservers),
-            Center(
-              child: GameEventSlider(
-                playbackService: playbackService,
-                playbackManager: playbackManager,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(infoService.isThemeLight
+                    ? GAME_BACKGROUND_PATH
+                    : GAME_BACKGROUND_PATH_DARK),
+                fit: BoxFit.cover,
               ),
             ),
-          ],
-        ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  if (gameRecordProvider.record.isCheatEnabled) ...[
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Color(0xFFEF6151),
+                        backgroundColor: Color(0xFF2D1E16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.gamePage_cheatButton,
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ),
+                  ] else
+                    SizedBox(width: 120),
+                  SizedBox(
+                    height: 200,
+                    width: 1000,
+                    child: _gameInfosReplay(),
+                  ),
+                ],
+              ),
+              FutureBuilder<CanvasModel>(
+                future: replayImagesProvider.currentCanvas,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: ReplayOriginalCanvas(snapshot.data!),
+                        ),
+                        SizedBox(width: 50),
+                        Expanded(child: ReplayModifiedCanvas(snapshot.data!)),
+                      ],
+                    );
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return Text("No data available");
+                  }
+                },
+              ),
+            ],
+          ),
+          // if (isChatBoxVisible)
+          //   Positioned(
+          //     top: 50,
+          //     left: 0,
+          //     right: 0,
+          //     height: 550,
+          //     child: Align(
+          //       alignment: Alignment.topCenter,
+          //       child: AnimatedOpacity(
+          //         opacity: 1.0,
+          //         duration: Duration(milliseconds: 500),
+          //         child: Transform.scale(
+          //           scale: 1.0,
+          //           child: ChatBox(),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // isPlayerAnObserver
+          //     ? _actionButton(
+          //         context,
+          //         AppLocalizations.of(context)!.gamePage_leaveButton,
+          //         () {
+          //           gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
+          //           Navigator.pushNamed(context, DASHBOARD_ROUTE);
+          //         },
+          //       )
+          //     : _actionButton(
+          //         context,
+          //         AppLocalizations.of(context)!.gamePage_giveUpButton,
+          //         () {
+          //           Future.delayed(Duration.zero, () {
+          //             if (ModalRoute.of(context)?.isCurrent ?? false) {
+          //               showDialog(
+          //                 barrierDismissible: false,
+          //                 context: context,
+          //                 builder: (BuildContext context) {
+          //                   return AbandonPopup();
+          //                 },
+          //               );
+          //             }
+          //           });
+          //         },
+          //       ),
+          // _observerInfos(replayPlayerProvider.nObservers),
+          // Align(
+          //   alignment: Alignment.bottomCenter,
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(bottom: 20.0),
+          //     child: IconButton(
+          //       icon: Icon(Icons.chat),
+          //       iconSize: 45.0,
+          //       color: Colors.white,
+          //       onPressed: () {
+          //         setState(() {
+          //           isChatBoxVisible = !isChatBoxVisible;
+          //         });
+          //       },
+          //     ),
+          //   ),
+          // ),
+          Positioned(
+            left: 0.0,
+            right: 0.0,
+            bottom: 8.0,
+            child: Row(
+              children: [
+                Expanded(
+                  child: GameEventSlider(
+                    playbackService: playbackService,
+                    playbackManager: playbackManager,
+                  ),
+                ),
+                _observerInfos(replayPlayerProvider.nObservers),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -354,5 +370,69 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
         ),
       ],
     );
+  }
+
+  Widget _gameInfosReplay() {
+    String gameMode = AppLocalizations.of(context)!.classicMode;
+
+    return SizedBox(
+        width: 100,
+        height: 50,
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            Row(
+              children: [
+                SizedBox(width: 380),
+                Text(
+                  '${AppLocalizations.of(context)!.gameInfos_gameModeTitle} : $gameMode',
+                  style: _textStyle(),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(width: 100),
+                Text(
+                  '${AppLocalizations.of(context)!.gameInfos_timeTitle} : ${playbackManager.timer}',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            Text(
+              '${AppLocalizations.of(context)!.gameInfos_differencesPresentTitle} : ${gameRecordProvider.record.game.nDifferences}',
+              style: _textStyle(),
+              textAlign: TextAlign.center,
+            ),
+            Row(
+              children: [
+                if (gameRecordProvider.record.players.isNotEmpty) ...[
+                  _playerInfo(replayPlayerProvider.getPlayer(0)),
+                ],
+                SizedBox(
+                  width: 130,
+                ),
+                if (gameRecordProvider.record.players.length > 1) ...[
+                  _playerInfo(replayPlayerProvider.getPlayer(1)),
+                ],
+              ],
+            ),
+            Row(
+              children: [
+                if (gameRecordProvider.record.players.length >= 3) ...[
+                  _playerInfo(replayPlayerProvider.getPlayer(2)),
+                ],
+                if (gameRecordProvider.record.players.length >= 4) ...[
+                  SizedBox(
+                    width: 130,
+                  ),
+                  _playerInfo(replayPlayerProvider.getPlayer(3)),
+                ],
+              ],
+            )
+          ],
+        ));
   }
 }
