@@ -82,6 +82,7 @@ class GameEventPlaybackService extends ChangeNotifier {
     _gameAreaService.resetCheatMode();
 
     _isRestart = true;
+    _isPaused = true;
     _currentIndex = 0;
 
     _timer?.cancel();
@@ -92,6 +93,7 @@ class GameEventPlaybackService extends ChangeNotifier {
     print("Restarting playback from start.");
 
     _isUserInteraction = false;
+    _isPaused = false;
     notifyListeners();
 
     _playbackEvents();
