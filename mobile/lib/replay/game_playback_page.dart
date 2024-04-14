@@ -409,6 +409,8 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   }
 
   Widget _gameInfosReplay() {
+    String formattedTime =
+        "${(playbackManager.timer ~/ 60).toString().padLeft(2, '0')}:${(playbackManager.timer % 60).toString().padLeft(2, '0')}";
     String gameMode = AppLocalizations.of(context)!.classicMode;
 
     return SizedBox(
@@ -427,7 +429,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
                 ),
                 SizedBox(width: 100),
                 Text(
-                  '${AppLocalizations.of(context)!.gameInfos_timeTitle} : ${playbackManager.timer}',
+                  '${AppLocalizations.of(context)!.gameInfos_timeTitle} : ${formattedTime}',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
