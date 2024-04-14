@@ -301,18 +301,42 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
           left: 0.0,
           right: 0.0,
           bottom: 8.0,
-          child: Row(
-            children: [
-              Expanded(
-                child: GameEventSlider(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GameEventSlider(
                   playbackService: playbackService,
                   playbackManager: playbackManager,
                 ),
-              ),
-              _observerInfos(replayPlayerProvider.nObservers),
-            ],
+              ],
+            ),
           ),
-        )
+        ),
+
+        // Positioned(
+        //   left: 0.0,
+        //   right: 0.0,
+        //   bottom: 8.0,
+        //   child: Row(
+        //     children: [
+        // Directly place the GameEventSlider without any flex-related wrapper
+        // GameEventSlider(
+        //   playbackService: playbackService,
+        //   playbackManager: playbackManager,
+        // ),
+        // // You can control the space between the slider and the observer info,
+        // // for example using a SizedBox if necessary.
+        // SizedBox(width: 8), // Adjust the width as needed
+        _observerInfos(replayPlayerProvider.nObservers),
+        //     ],
+        //   ),
+        // )
       ],
     ));
   }
@@ -450,7 +474,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
                   _playerInfo(replayPlayerProvider.getPlayer(0)),
                 ],
                 SizedBox(
-                  width: 130,
+                  width: 90,
                 ),
                 if (gameRecordProvider.record.players.length > 1) ...[
                   _playerInfo(replayPlayerProvider.getPlayer(1)),
