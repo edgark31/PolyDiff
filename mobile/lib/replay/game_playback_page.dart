@@ -465,7 +465,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
                   _playerInfo(replayPlayerProvider.getPlayer(0)),
                 ],
                 SizedBox(
-                  width: 90,
+                  width: 20,
                 ),
                 if (gameRecordProvider.record.players.length > 1) ...[
                   _playerInfo(replayPlayerProvider.getPlayer(1)),
@@ -479,7 +479,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
                 ],
                 if (gameRecordProvider.record.players.length >= 4) ...[
                   SizedBox(
-                    width: 130,
+                    width: 20,
                   ),
                   _playerInfo(replayPlayerProvider.getPlayer(3)),
                 ],
