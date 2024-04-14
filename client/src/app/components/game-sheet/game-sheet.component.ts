@@ -118,7 +118,7 @@ export class GameSheetComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy(): void {
-        this.dialog.closeAll();
+        // this.dialog.closeAll();
         this.lobbySubscription?.unsubscribe();
     }
 }
