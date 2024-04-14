@@ -22,8 +22,8 @@ class GameRecordCardWidget extends StatelessWidget {
             leading: Icon(Icons.ondemand_video_rounded),
             title: Text(gameRecordCard.gameName),
             // TODO: ajuster avec la translation
-            subtitle: Text(
-                "Players: ${gameRecordCard.playerNames.join(', ')}\nDuration: ${gameRecordCard.durationFormatted}"),
+            subtitle: Text("Players: ${gameRecordCard.playerNames.join(', ')}\n"
+                "Date: ${gameRecordCard.date}"),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
