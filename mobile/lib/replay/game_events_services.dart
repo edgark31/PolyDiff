@@ -5,13 +5,16 @@ import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/providers/game_record_provider.dart';
+import 'package:mobile/services/game_area_service.dart';
 
 class GameEventPlaybackService extends ChangeNotifier {
   final GameRecordProvider _gameRecordProvider = Get.find();
+  final GameAreaService _gameAreaService = Get.find();
   late final StreamController<GameEventData> _eventsController;
 
   bool _isPaused = false;
   bool _isUserInteraction = false;
+  bool _isRestart = false;
 
   DateTime? _lastEventTime;
   Timer? _timer;
@@ -27,6 +30,7 @@ class GameEventPlaybackService extends ChangeNotifier {
 
   bool get isPaused => _isPaused;
   bool get isUserInteraction => _isUserInteraction;
+  bool get isRestart => _isRestart;
 
   GameEventPlaybackService() {
     _eventsController = StreamController<GameEventData>.broadcast(
@@ -52,36 +56,54 @@ class GameEventPlaybackService extends ChangeNotifier {
   }
 
   void pause() {
+    if (_isPaused) return;
     print("Playback paused.");
+    _gameAreaService.pauseAnimation();
     _isPaused = true;
     _timer?.cancel();
     _isUserInteraction = true;
+
+    notifyListeners();
   }
 
   void resume() {
     if (!_isPaused) return;
+    _gameAreaService.resumeAnimation();
+
     _isUserInteraction = false;
     _isPaused = false;
 
     print("Resuming playback.");
+    notifyListeners();
     _playbackEvents();
   }
 
   void restart() {
+    _isRestart = true;
+    _gameAreaService.resetCheatMode();
+    print("Restarting playback from start.");
     _isUserInteraction = true;
-    pause();
-    _eventsController.addStream(Stream.fromIterable([]));
 
     _currentIndex = 0;
     _speed = SPEED_X1;
-    _lastEventTime = events.first.timestamp;
-    _isPaused = false;
+    _lastEventTime = null;
+    _isPaused = true;
 
+    // Clear any pending state or operations
+    _eventsController.addStream(Stream.empty());
+
+    // Properly manage state and UI update
     Future.delayed(Duration.zero, () {
-      _playbackEvents();
+      _isPaused = false;
+      _playbackEvents(); // Restart playback from the beginning
+      notifyListeners(); // Important to notify after changes
     }).then((_) {
-      _isUserInteraction = false;
+      _isUserInteraction =
+          false; // Reset interaction flag after all async operations
     });
+    _isRestart = false;
+
+    notifyListeners();
   }
 
   void setSpeed(double speed) {
@@ -89,7 +111,10 @@ class GameEventPlaybackService extends ChangeNotifier {
     if (!_isPaused) {
       pause();
       resume();
+    } else if (_isPaused) {
+      resume();
     }
+    notifyListeners();
   }
 
   void _playbackEvents() async {
@@ -98,6 +123,7 @@ class GameEventPlaybackService extends ChangeNotifier {
       return;
     }
 
+    print("Starting playback from index $_currentIndex.");
     for (int i = _currentIndex; i < events.length && !_isPaused; i++) {
       final GameEventData event = events[i];
       final DateTime previousEventTime =
@@ -105,23 +131,22 @@ class GameEventPlaybackService extends ChangeNotifier {
       final int durationSinceLastEvent =
           event.timestamp.difference(previousEventTime).inMilliseconds;
 
-      // Adjust playback speed
-      int adjustedPlaybackSpeed = (durationSinceLastEvent / _speed).floor();
+      if (!_isUserInteraction) {
+        // Only update if no user interaction is happening
+        if (durationSinceLastEvent > 0) {
+          await Future.delayed(Duration(
+              milliseconds: (durationSinceLastEvent / _speed).floor()));
+        }
 
-      if (durationSinceLastEvent > 0) {
-        await Future.delayed(Duration(milliseconds: adjustedPlaybackSpeed));
-      }
+        if (_isPaused) {
+          print("Playback was paused during the delay.");
+          _currentIndex = i;
+          return;
+        }
 
-      if (_isPaused) {
-        print("Playback was paused during the delay.");
-        _currentIndex = i;
-        return;
-      }
-
-      if (!isUserInteraction) {
         _eventsController.sink.add(event);
+        print("Event added to stream: ${event.gameEvent}");
       }
-      print("Event added to stream: ${event.gameEvent}");
 
       _lastEventTime = event.timestamp;
       _currentIndex = i + 1;
@@ -135,14 +160,23 @@ class GameEventPlaybackService extends ChangeNotifier {
 
   // Modify the GameEventPlaybackService to handle seeking
   void seekToEvent(int eventIndex) {
-    _isUserInteraction = true;
+    if (eventIndex < 0 || eventIndex >= events.length) {
+      print("Invalid event index: $eventIndex");
+      return;
+    }
 
-    pause();
+    print("Seeking to event index: $eventIndex");
+    _isUserInteraction = true; // Set user interaction flag
+
+    pause(); // Pause playback before changing the index
     _currentIndex = eventIndex;
 
+    // Resume playback with a slight delay to allow the UI to update
     Future.delayed(Duration(milliseconds: 100), () {
-      resume();
-      _isUserInteraction = false;
+      if (!_isPaused) {
+        resume();
+      }
+      _isUserInteraction = false; // Reset user interaction flag after resuming
     });
   }
 
@@ -150,9 +184,7 @@ class GameEventPlaybackService extends ChangeNotifier {
     print("Stopping playback.");
     _currentIndex = 0;
     _lastEventTime = null;
-
     _speed = SPEED_X1;
-
     _isPaused = true;
     _timer?.cancel();
   }

@@ -22,7 +22,9 @@ class GameEventSlider extends StatefulWidget {
 
 class _GameEventSliderState extends State<GameEventSlider> {
   Timer? _debounceTimer;
+
   double _sliderValue = 0;
+
   late StreamSubscription<GameEventData> _eventsSubscription;
   String _currentEvent = "";
   double _selectedSpeed = SPEED_X1;
@@ -36,7 +38,7 @@ class _GameEventSliderState extends State<GameEventSlider> {
     if (widget.playbackService.events.isNotEmpty) {
       _eventsSubscription =
           widget.playbackService.eventsStream.listen((GameEventData event) {
-        updateSliderValue(event);
+        _updateSliderValue(event);
       }, onError: (error) {
         print("Error occurred in event subscription: $error");
       }, onDone: () {
@@ -48,7 +50,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
   @override
   void dispose() {
     _eventsSubscription.cancel();
-
     _debounceTimer?.cancel();
     _sliderValue = 0;
     super.dispose();
@@ -56,20 +57,19 @@ class _GameEventSliderState extends State<GameEventSlider> {
 
   void _onSliderChanged(double newValue) {
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-    _debounceTimer = Timer(const Duration(milliseconds: 1000), () {
+    _debounceTimer = Timer(const Duration(milliseconds: 100), () {
       isUserInteraction = true;
       setState(() {
-        _sliderValue = newValue;
-
         int eventIndex =
-            (_sliderValue * (widget.playbackService.events.length - 1)).round();
+            (newValue * (widget.playbackService.events.length - 1)).round();
         widget.playbackService.seekToEvent(eventIndex);
         isUserInteraction = false;
+        _sliderValue = newValue;
       });
     });
   }
 
-  void updateSliderValue(GameEventData event) {
+  void _updateSliderValue(GameEventData event) {
     if (!isUserInteraction) {
       // Check the flag here
       int eventIndex = widget.playbackService.events.indexOf(event);
@@ -138,14 +138,10 @@ class _GameEventSliderState extends State<GameEventSlider> {
             IconButton(
               icon: Icon(Icons.restart_alt),
               onPressed: () {
-                isUserInteraction = true;
+                widget.playbackService.pause();
 
                 widget.playbackService.restart();
-                // Reset the slider to the start
-                setState(() {
-                  _isPlaying = true;
-                  _sliderValue = 0;
-                });
+                _triggerPlay();
               },
             ),
             // Speed buttons
