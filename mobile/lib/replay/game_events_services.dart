@@ -126,9 +126,8 @@ class GameEventPlaybackService extends ChangeNotifier {
   // Modify the GameEventPlaybackService to handle seeking
   void seekToEvent(int eventIndex) {
     if (events.isEmpty || eventIndex >= events.length) return;
-    _currentIndex = eventIndex;
-    _isPlayback = true;
     pause();
+    _currentIndex = eventIndex;
     resume();
   }
 
