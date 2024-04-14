@@ -266,7 +266,6 @@ export class RoomManagerService {
             });
         } else {
             this.clientSocket.on('lobby', LobbyEvents.Join, (lobby: Lobby) => {
-                console.log('aaaaaaaaaaaaa');
                 this.lobbyGame = lobby;
                 this.lobby.next(lobby);
             });
