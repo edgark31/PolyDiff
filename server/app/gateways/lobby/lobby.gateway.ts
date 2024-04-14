@@ -105,8 +105,8 @@ export class LobbyGateway implements OnGatewayConnection {
         const { lobbyId, username, isPlayerAccepted } = data;
         const joinerId = Array.from(this.accountManager.users.values()).find((user) => user.credentials.username === username).id;
         this.server.fetchSockets().then((sockets) => {
-            socket.data.guestIds = socket.data.guestIds.filter((id) => id !== guest.data.accountId);
             const guest = sockets.find((s) => s.data.accountId === joinerId);
+            socket.data.guestIds = socket.data.guestIds.filter((id) => id !== guest.data.accountId);
             if (!guest) return;
             guest.data.state = LobbyState.Idle;
             guest.data.hostId = '';
