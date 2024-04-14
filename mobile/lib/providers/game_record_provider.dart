@@ -18,6 +18,8 @@ class GameRecordProvider extends ChangeNotifier {
 
   List<GameRecord> get gameRecords => _gameRecords;
   GameRecord get record => _record;
+  
+  bool isFromProfile = false;
 
   GameRecordProvider();
 
@@ -26,6 +28,10 @@ class GameRecordProvider extends ChangeNotifier {
     print(
         'GameRecord set by default : ${gameRecord.date} for ${gameRecord.game.name}');
     notifyListeners();
+  }
+
+  void setIsFromProfile(bool newIsFromProfile) {
+    isFromProfile = newIsFromProfile;
   }
 
   Future<String?> findAllByAccountId() async {
