@@ -49,8 +49,9 @@ export class ReplayButtonsComponent implements OnInit, OnDestroy {
     }
 
     showSaveRecordDialog(): void {
+        const dialogMessage = this.translate.instant('saveRecordDialog.saveRecord');
         this.matDialog.open(GamePageDialogComponent, {
-            data: { action: GamePageEvent.SaveGameRecord, message: 'Voulez-vous enregistrer cette reprise vidéo ?', lobby: this.replayService.lobby },
+            data: { action: GamePageEvent.SaveGameRecord, message: dialogMessage, lobby: this.replayService.lobby },
             disableClose: true,
             panelClass: 'dialog',
         });

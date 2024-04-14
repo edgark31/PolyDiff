@@ -42,6 +42,7 @@ export class ModalAccessMatchComponent implements OnInit {
                 panelClass: 'dialog',
             });
         });
+        this.clientSocketService.authSocket.off(LobbyEvents.NotifyGuest);
         this.clientSocketService.on('lobby', LobbyEvents.NotifyGuest, (isPlayerAccepted: boolean) => {
             if (isPlayerAccepted) {
                 this.isAccessPassInvalid = false;

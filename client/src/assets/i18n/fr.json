@@ -57,6 +57,7 @@
     "game": {
         "foundDifference": "Différences trouvées ",
         "timerOver": "Temps écoulé",
+        "time": "Temps",
         "classic": "classique",
         "limited": "limité",
         "practice": "pratique",
@@ -167,7 +168,7 @@
         "confirm": "Confirmer"
     },
 
-    "accesModal": {
+    "accessModal": {
         "accessCode": "ENTRER LE CODE D'ACCES",
         "password": "Mot de passe",
         "incorrectPassword": "Mot de passe incorrect. Veuillez réessayer.",
@@ -286,5 +287,14 @@
     "ranking": {
         "loading": "Chargement...",
         "global": "Classement Global"
+    },
+
+    "saveRecordDialog": {
+        "saveRecord": "Voulez-vous enregistrer cette reprise vidéo ?"
+    },
+
+    "replayPage": {
+        "noReplayAvailable": "Aucune reprise vidéo disponible pour le moment",
+        "replayLoading": "Chargement des reprises vidéo..."
     }
 }

@@ -57,6 +57,7 @@
     "game": {
         "foundDifference": "Differences found",
         "timerOver": "Time's up",
+        "time": "Time",
         "classic": "classic",
         "limited": "limited",
         "practice": "practice",
@@ -278,5 +279,13 @@
     "ranking": {
         "loading": "Loading...",
         "global": "Global Ranking"
+    },
+
+    "saveRecordDialog": {
+        "saveRecord": "Do you want to save this game record ?"
+    },
+
+    "replayPage": {
+        "noReplayAvailable": "No game records available for now"
     }
 }
