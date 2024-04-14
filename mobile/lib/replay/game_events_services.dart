@@ -55,62 +55,41 @@ class GameEventPlaybackService extends ChangeNotifier {
     _isUserInteraction = value;
   }
 
-  void pause() {
-    if (_isPaused) return;
-    print("Playback paused.");
-    _gameAreaService.pauseAnimation();
-    _isPaused = true;
-    _timer?.cancel();
-    _isUserInteraction = true;
-
+  void reset() {
+    pause();
+    _currentIndex = 0;
     notifyListeners();
-  }
-
-  void resume() {
-    if (!_isPaused) return;
-    _gameAreaService.resumeAnimation();
-
-    _isUserInteraction = false;
-    _isPaused = false;
-
-    print("Resuming playback.");
-    notifyListeners();
-    _playbackEvents();
+    print("Playback reset to start.");
   }
 
   void restart() {
-    _gameAreaService.resetBlinkingDifference();
-    _isPaused = true;
-    _timer?.cancel();
-    _isUserInteraction = true;
-
-    notifyListeners();
+    pause();
+    _currentIndex = 0;
     _isRestart = true;
-    _isUserInteraction = false;
-    _isPaused = false;
-
-    print("Resuming playback.");
-    notifyListeners();
-    _playbackEvents();
-    _isRestart = false;
-    print("Restarting playback from start.");
-    notifyListeners();
+    print("Restarting playback from start. Current index set to 0.");
+    resume();
+    _isRestart = false; // Reset the restart flag after resuming
   }
 
-  void setSpeed(double speed) {
-    _speed = speed;
-    if (!_isPaused) {
-      pause();
-      resume();
-    } else if (_isPaused) {
-      resume();
-    }
-    notifyListeners();
+  void resume() {
+    print("Resuming playback.");
+    _isPaused = false;
+    _playbackEvents();
+  }
+
+  void pause() {
+    _isPaused = true;
+    print("Playback paused.");
   }
 
   void _playbackEvents() async {
-    if (events.isEmpty || _isPaused) {
-      print("No events to play or playback is paused.");
+    if (events.isEmpty) {
+      print("No events to play.");
+      return;
+    }
+
+    if (_isPaused) {
+      print("Playback is paused, exiting playback loop.");
       return;
     }
 
@@ -123,21 +102,14 @@ class GameEventPlaybackService extends ChangeNotifier {
       final int durationSinceLastEvent =
           event.timestamp.difference(previousEventTime).inMilliseconds;
 
-      if (!_isUserInteraction) {
+      if (!_isUserInteraction && !_isRestart) {
         if (durationSinceLastEvent > 0) {
           await Future.delayed(Duration(
               milliseconds: (durationSinceLastEvent / _speed).floor()));
         }
 
-        if (_isPaused || _isRestart) {
-          if (_isRestart) {
-            _currentIndex = 0; // Ensure we start from the beginning
-            _isRestart = false; // Reset the flag after jumping to the start
-          } else {
-            print("Playback paused or stopped.");
-
-            return;
-          }
+        if (_isPaused) {
+          print("Playback paused during delay at index $_currentIndex.");
           return;
         }
 
@@ -145,7 +117,24 @@ class GameEventPlaybackService extends ChangeNotifier {
         print("Event added to stream: ${event.gameEvent}");
         _currentIndex++;
       }
-      _lastEventTime = event.timestamp;
+
+      if (_isRestart) {
+        print("Restart flag detected during playback at index $_currentIndex.");
+        _currentIndex = 0; // Jump back to the start
+        _isRestart = false;
+        continue; // Continue the loop from the start
+      }
+    }
+
+    print("Playback completed or paused.");
+  }
+
+  void setSpeed(double speed) {
+    _speed = speed;
+    print("Speed set to $_speed. Adjusting playback speed.");
+    if (!_isPaused) {
+      pause();
+      resume();
     }
   }
 
