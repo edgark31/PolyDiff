@@ -20,6 +20,7 @@ export class ModalAccessMatchComponent implements OnInit {
     codeAccess: string;
     isPasswordWrong: boolean = false;
     isAccessPassInvalid: boolean = true;
+    private joinDialogRef: MatDialogRef<JoinedPlayerDialogComponent> | null = null;
 
     // eslint-disable-next-line max-params
     constructor(
@@ -35,6 +36,7 @@ export class ModalAccessMatchComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.clientSocketService.lobbySocket.off(LobbyEvents.RequestAccess);
         this.clientSocketService.on('lobby', LobbyEvents.RequestAccess, () => {
             this.dialog.open(JoinedPlayerDialogComponent, {
                 data: { lobbyId: this.lobby.lobbyId as string, username: this.welcomeService.account.credentials.username },
@@ -42,6 +44,7 @@ export class ModalAccessMatchComponent implements OnInit {
                 panelClass: 'dialog',
             });
         });
+        this.clientSocketService.lobbySocket.off(LobbyEvents.NotifyGuest);
         this.clientSocketService.on('lobby', LobbyEvents.NotifyGuest, (isPlayerAccepted: boolean) => {
             if (isPlayerAccepted) {
                 this.isAccessPassInvalid = false;
@@ -55,11 +58,11 @@ export class ModalAccessMatchComponent implements OnInit {
     onSubmitAccess() {
         if (this.codeAccess === this.lobby.password) {
             this.roomManager.sendRequestToJoinRoom(this.lobby.lobbyId as string, this.lobby.password as string);
-            this.dialogRef.close();
+            this.joinDialogRef?.close();
         }
     }
 
     onCancel(): void {
-        this.dialogRef.close();
+        this.joinDialogRef?.close();
     }
 }

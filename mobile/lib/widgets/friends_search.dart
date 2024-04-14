@@ -166,7 +166,7 @@ class _FriendsSearchState extends State<FriendsSearch> {
               return Container(
                 alignment: Alignment.center,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 600),
+                  constraints: BoxConstraints(maxWidth: 750),
                   child: Card(
                     margin: EdgeInsets.all(8),
                     child: ListTile(

@@ -448,6 +448,7 @@ export class GameGateway implements OnGatewayConnection {
 
         socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent });
         socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received });
+        this.logger.log(`${this.getFormattedInfos(socket.data.accountId)} envoie un message : ${message}`);
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
@@ -592,7 +593,7 @@ export class GameGateway implements OnGatewayConnection {
         this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
     }
 
-    private getFormattedInfos(socketId: string) {
-        return `${this.accountManager.users.get(socketId).credentials.username} (${socketId})`;
+    private getFormattedInfos(accountId: string) {
+        return `${this.accountManager.users.get(accountId).credentials.username} (${accountId})`;
     }
 }
