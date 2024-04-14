@@ -35,40 +35,39 @@ class _GameEventSliderState extends State<GameEventSlider> {
   @override
   void initState() {
     super.initState();
-    if (widget.playbackService.events.isNotEmpty) {
-      _eventsSubscription =
-          widget.playbackService.eventsStream.listen((GameEventData event) {
+
+    _eventsSubscription =
+        widget.playbackService.eventsStream.listen((GameEventData event) {
+      if (!isUserInteraction) {
+        print("Event received: ${event.gameEvent}");
         _updateSliderValue(event);
-      }, onError: (error) {
-        print("Error occurred in event subscription: $error");
-      }, onDone: () {
-        print("Event stream is closed");
-      });
-    }
+      }
+    }, onError: (error) {
+      print("Error occurred in event subscription: $error");
+    }, onDone: () {
+      print("Event stream is closed");
+    });
   }
 
   @override
   void dispose() {
     _eventsSubscription.cancel();
     _debounceTimer?.cancel();
-    _sliderValue = 0;
     super.dispose();
   }
 
   void _onSliderChanged(double newValue) {
     isUserInteraction = true;
-    int eventIndex =
-        (newValue * (widget.playbackService.events.length - 1)).round();
-    widget.playbackService.seekToEvent(eventIndex);
     setState(() {
       _sliderValue = newValue;
     });
-    isUserInteraction = false;
+    int eventIndex =
+        (newValue * (widget.playbackService.events.length - 1)).round();
+    widget.playbackService.seekToEvent(eventIndex);
   }
 
   void _updateSliderValue(GameEventData event) {
     if (!isUserInteraction) {
-      // Check the flag here
       int eventIndex = widget.playbackService.events.indexOf(event);
       if (eventIndex != -1 && mounted) {
         setState(() {
@@ -76,8 +75,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
           _currentEvent = event.gameEvent;
         });
       }
-    } else {
-      isUserInteraction = false;
     }
   }
 
@@ -119,6 +116,9 @@ class _GameEventSliderState extends State<GameEventSlider> {
               value: _sliderValue,
               divisions: widget.playbackService.events.length - 1,
               onChanged: _onSliderChanged,
+              onChangeEnd: (double value) {
+                isUserInteraction = false;
+              },
             ),
             Text("Current Event: $_currentEvent"),
             Text("Slider Value: ${_sliderValue.toStringAsFixed(2)}"),
@@ -137,12 +137,11 @@ class _GameEventSliderState extends State<GameEventSlider> {
                 IconButton(
                   icon: Icon(Icons.restart_alt),
                   onPressed: () {
-                    _isPlaying = false;
+                    widget.playbackService.restart();
                     setState(() {
+                      _isPlaying = true;
                       _sliderValue = 0;
                     });
-                    widget.playbackService.restart();
-                    _isPlaying = true;
                   },
                 ),
                 // Speed buttons

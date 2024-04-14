@@ -55,29 +55,27 @@ class GameEventPlaybackService extends ChangeNotifier {
     _isUserInteraction = value;
   }
 
-  void reset() {
+  void restart() async {
     pause();
-    _currentIndex = 0;
-    notifyListeners();
-    print("Playback reset to start.");
-  }
-
-  void restart() {
-    pause();
-    _currentIndex = 0;
-    _isRestart = true;
-    print("Restarting playback from start. Current index set to 0.");
-    resume();
-    _isRestart = false; // Reset the restart flag after resuming
+    await Future.delayed(Duration(milliseconds: 1000), () {
+      _gameAreaService.resetBlinkingDifference();
+      _currentIndex = 0;
+      _isRestart = true;
+      print("Restarting playback from start. Current index set to 0.");
+      resume();
+      _isRestart = false; // Reset the restart flag after resuming
+    });
   }
 
   void resume() {
     print("Resuming playback.");
+    _gameAreaService.resumeAnimation();
     _isPaused = false;
     _playbackEvents();
   }
 
   void pause() {
+    _gameAreaService.pauseAnimation();
     _isPaused = true;
     print("Playback paused.");
   }
@@ -120,20 +118,22 @@ class GameEventPlaybackService extends ChangeNotifier {
 
       if (_isRestart) {
         print("Restart flag detected during playback at index $_currentIndex.");
-        _currentIndex = 0; // Jump back to the start
+        _currentIndex = 0;
         _isRestart = false;
-        continue; // Continue the loop from the start
+        continue;
       }
     }
 
     print("Playback completed or paused.");
   }
 
-  void setSpeed(double speed) {
+  void setSpeed(double speed) async {
     _speed = speed;
     print("Speed set to $_speed. Adjusting playback speed.");
     if (!_isPaused) {
       pause();
+      await Future.delayed(Duration(milliseconds: 1000));
+
       resume();
     }
   }
@@ -156,7 +156,7 @@ class GameEventPlaybackService extends ChangeNotifier {
       if (!_isPaused) {
         resume();
       }
-      _isUserInteraction = false; // Reset user interaction flag after resuming
+      _isUserInteraction = false;
     });
   }
 
