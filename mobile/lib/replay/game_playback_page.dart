@@ -17,7 +17,6 @@ import 'package:mobile/replay/replay_canvas_widget.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/info_service.dart';
-import 'package:mobile/widgets/replay_pop_up_widget.dart';
 import 'package:provider/provider.dart';
 
 class GameEventPlaybackScreen extends StatefulWidget {
@@ -86,7 +85,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
         gameEvent = event; // Update the current event
         if (event.gameEvent == GameEvents.EndGame.name) {
           print("****** End Game ******");
-          _showReplayPopUp();
+          // _showReplayPopUp();
         } else {
           formattedTime = calculateFormattedTime(event.time!);
         }
@@ -98,22 +97,22 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     });
   }
 
-  void _showReplayPopUp() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return ReplayPopUp(
-          endMessage: 'La partie est terminée',
-          onGoHome: () {
-            Navigator.pushNamed(context, DASHBOARD_ROUTE);
-          },
-          onReplay: () {
-            Navigator.pushNamed(context, REPLAY_ROUTE);
-          },
-        );
-      },
-    );
-  }
+  // void _showReplayPopUp() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return ReplayPopUp(
+  //         endMessage: 'La partie est terminée',
+  //         onGoHome: () {
+  //           Navigator.pushNamed(context, DASHBOARD_ROUTE);
+  //         },
+  //         onReplay: () {
+  //           Navigator.pushNamed(context, REPLAY_ROUTE);
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 
   void showErrorDialog(String message) {
     showDialog(
@@ -147,6 +146,11 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     int minutes = duration.inMinutes;
     int seconds = duration.inSeconds % 60;
     return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  void _leaveReplayPage() {
+    gameRecordProvider.setIsFromProfile(false);
+    Navigator.pushNamed(context, DASHBOARD_ROUTE);
   }
 
   @override
@@ -296,7 +300,58 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
         //   ),
         // ),
         Positioned(
-          left: 0.0,
+          left: 8.0,
+          bottom: 8.0,
+          child: ElevatedButton(
+            onPressed: () {
+              _leaveReplayPage();
+              // TODO : Implement home functionality
+              // if (gameRecordProvider.isFromProfile) {
+              //   _leaveReplayPage();
+              // } else {
+              //   AlertDialog(
+              //     title: Text("Going back to home"),
+              //     content: Text("Do you want to save the replay?"),
+              //     actions: <Widget>[
+              //       TextButton(
+              //         child:
+              //             Text(AppLocalizations.of(context)!.confirmation_no),
+              //         onPressed: () {
+              //           gameRecordProvider
+              //               .deleteAccountId(gameRecordProvider.record.date);
+              //           _leaveReplayPage();
+              //         },
+              //       ),
+              //       TextButton(
+              //         child:
+              //             Text(AppLocalizations.of(context)!.confirmation_yes),
+              //         onPressed: () {
+              //           _leaveReplayPage();
+              //         },
+              //       ),
+              //     ],
+              //   );
+              // }
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            ),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [Icon(Icons.home, color: Colors.white)],
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 10.0,
           right: 0.0,
           bottom: 8.0,
           child: Row(
