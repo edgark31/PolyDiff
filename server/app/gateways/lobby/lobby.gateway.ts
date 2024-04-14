@@ -282,6 +282,7 @@ export class LobbyGateway implements OnGatewayConnection {
                         sockets.forEach((s) => {
                             if (s.data.accountId === socket.data.hostId) {
                                 s.data.otherIds = s.data.otherIds.filter((id) => id !== socket.data.accountId);
+                                s.emit(LobbyEvents.CancelRequestAcessHost);
                             }
                         });
                     });
