@@ -12,12 +12,12 @@ app-nav-bar {
     margin-right: 12px;
 }
 
-.header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+// .header {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     height: 100vh;
+// }
 
 .record-image {
     top: 20px;
@@ -68,35 +68,75 @@ app-nav-bar {
 }
 
 
+// .card-container {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 16px;
+//     width: 1000px;
+//     overflow-y: auto;
+//     max-height: 70vh;
+//     padding: 12px;
+//     border-radius: 8px;
+//     height: 800px;
+//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//     margin-left: auto; /* Centers the card-container horizontally */
+//     margin-right: auto; /* Centers the card-container horizontally */
+// }
+
+// .friend-card {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 12px;
+//     padding: 20px;
+//     background-color: #fff;
+// }
+
+// .record-card {
+//     font-weight: bold;
+//     font-size: 20px;
+//     color: #000000;
+//     margin-left: 8px;
+//     display: inline-block;
+// }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+}
+
 .card-container {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 1000px;
+    flex-direction: column; /* Arrange cards in a row */
+    flex-wrap: wrap; /* Allow wrapping to the next line */
+    gap: 16px; /* Space between the cards */
+    justify-content: space-around; /* Even space distribution */
+    padding: 12px;
+    margin: auto; /* Center container */
     overflow-y: auto;
     max-height: 70vh;
-    padding: 12px;
-    border-radius: 8px;
-    height: 800px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-left: auto; /* Centers the card-container horizontally */
-    margin-right: auto; /* Centers the card-container horizontally */
 }
 
 .friend-card {
+    /* Assuming you want a minimum width for the cards */
+    min-width: 250px; /* Adjust based on actual needs */
+    flex-grow: 1; /* Cards can grow to use available space */
     display: flex;
     flex-direction: column;
-    gap: 12px;
     padding: 20px;
     background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 .record-card {
+    display: flex;
+    justify-content: space-between; /* This will space out the items in each card */
+    // align-items: center;
     font-weight: bold;
     font-size: 20px;
-    color: #000000;
-    margin-left: 8px;
-    display: inline-block;
+    color: #000;
 }
 
 .name {
