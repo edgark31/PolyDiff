@@ -45,7 +45,8 @@ export class LobbyGateway implements OnGatewayConnection {
         const lobbies = Array.from(this.roomsManager.lobbies.values());
         this.server.emit(LobbyEvents.UpdateLobbys, lobbies);
         if (this.roomsManager.lobbies.get(lobby.lobbyId).password) {
-            socket.data.otherIds = [];
+            socket.data.guestIds = [];
+            this.logger.debug(`GuestIds de ${this.getFormattedInfos(socket.data.accountId)}: [${socket.data.guestIds}]`);
             this.logger.log(
                 `${this.accountManager.users.get(socket.data.accountId).credentials.username} crée le lobby ${lobby.lobbyId} avec ce mot de passe : ${
                     this.roomsManager.lobbies.get(lobby.lobbyId).password
@@ -56,7 +57,7 @@ export class LobbyGateway implements OnGatewayConnection {
         this.logger.log(`${this.accountManager.users.get(socket.data.accountId).credentials.username} crée le lobby ${lobby.lobbyId}`);
     }
 
-    // un joueur rentre un mot de passe valide pour rejoindre le lobby
+    // un guest rentre un mot de passe valide pour rejoindre le lobby
     @SubscribeMessage(LobbyEvents.RequestAccess)
     handleRequestAccess(@ConnectedSocket() socket: Socket, @MessageBody() data: { lobbyId: string; password?: string }) {
         if (!this.roomsManager.lobbies.get(data.lobbyId)) return;
@@ -64,9 +65,11 @@ export class LobbyGateway implements OnGatewayConnection {
         if (this.roomsManager.lobbies.get(lobbyId).password && this.roomsManager.lobbies.get(lobbyId).password === password) {
             this.server.fetchSockets().then((sockets) => {
                 const host = sockets.find((s) => s.data.accountId === this.roomsManager.lobbies.get(lobbyId).players[0].accountId);
+                if (host.data.guestIds.find((id) => id === socket.data.accountId)) return;
                 host.emit(LobbyEvents.RequestAccessHost, this.accountManager.users.get(socket.data.accountId).credentials.username);
                 socket.data.state = LobbyState.RequestAccess;
-                host.data.otherIds.push(socket.data.accountId);
+                host.data.guestIds.push(socket.data.accountId);
+                this.logger.debug(`GuestIds de ${this.getFormattedInfos(host.data.accountId)}: [${host.data.guestIds}]`);
                 socket.data.hostId = host.data.accountId;
             });
             socket.emit(LobbyEvents.RequestAccess);
@@ -75,7 +78,7 @@ export class LobbyGateway implements OnGatewayConnection {
         }
     }
 
-    // un joueur annule sa requete pour rejoindre le lobby
+    // un guest annule sa requete pour rejoindre le lobby
     @SubscribeMessage(LobbyEvents.CancelRequestAcess)
     handleCancelRequestAccess(@ConnectedSocket() socket: Socket, @MessageBody() data: { lobbyId: string; username: string }) {
         if (!this.roomsManager.lobbies.get(data.lobbyId)) return;
@@ -83,12 +86,14 @@ export class LobbyGateway implements OnGatewayConnection {
         const joinerId = Array.from(this.accountManager.users.values()).find((user) => user.credentials.username === username).id;
         this.server.fetchSockets().then((sockets) => {
             const guest = sockets.find((s) => s.data.accountId === joinerId);
-            guest.emit(LobbyEvents.CancelRequestAcessHost);
             const host = sockets.find((s) => s.data.accountId === this.roomsManager.lobbies.get(lobbyId).players[0].accountId);
-            host.emit(LobbyEvents.CancelRequestAcessHost);
-            host.data.otherIds = host.data.otherIds.filter((id) => id !== guest.data.accountId);
+            if (host) {
+                host.emit(LobbyEvents.CancelRequestAcessHost, this.accountManager.users.get(guest.data.accountId).credentials.username);
+                host.data.guestIds = host.data.guestIds.filter((id) => id !== guest.data.accountId);
+                this.logger.debug(`GuestIds de ${this.getFormattedInfos(host.data.accountId)}: [${host.data.guestIds}]`);
+            }
             guest.data.state = LobbyState.Idle;
-            guest.data.hostId = null;
+            guest.data.hostId = '';
         });
         this.logger.log(
             `${this.accountManager.users.get(socket.data.accountId).credentials.username} annule sa demande pour rejoindre le lobby ${lobbyId}`,
@@ -104,9 +109,11 @@ export class LobbyGateway implements OnGatewayConnection {
         const joinerId = Array.from(this.accountManager.users.values()).find((user) => user.credentials.username === username).id;
         this.server.fetchSockets().then((sockets) => {
             const guest = sockets.find((s) => s.data.accountId === joinerId);
+            socket.data.guestIds = socket.data.guestIds.filter((id) => id !== guest.data.accountId);
+            this.logger.debug(`GuestIds de ${this.getFormattedInfos(socket.data.accountId)}: [${socket.data.guestIds}]`);
+            if (!guest) return;
             guest.data.state = LobbyState.Idle;
-            guest.data.hostId = null;
-            socket.data.otherIds = socket.data.otherIds.filter((id) => id !== guest.data.accountId);
+            guest.data.hostId = '';
             if (this.roomsManager.lobbies.get(lobbyId) && isPlayerAccepted) {
                 guest.emit(LobbyEvents.NotifyGuest, true);
                 this.logger.log(
@@ -262,14 +269,16 @@ export class LobbyGateway implements OnGatewayConnection {
                         socket,
                         Array.from(socket.rooms).find((id) => id !== socket.id),
                     );
-                    if (socket.data.otherIds && socket.data.otherIds.length > 0) {
-                        socket.data.otherIds.forEach((id) => {
+                    if (socket.data.guestIds && socket.data.guestIds.length > 0) {
+                        socket.data.guestIds.forEach((id) => {
                             this.server.fetchSockets().then((sockets) => {
                                 const guest = sockets.find((s) => s.data.accountId === id);
-                                guest.data.host === socket.data.accountId ? guest.emit(LobbyEvents.NotifyGuest, false) : null;
+                                guest.data.state = LobbyState.Idle;
+                                guest.data.hostId === socket.data.accountId ? guest.emit(LobbyEvents.NotifyGuest, false) : '';
                                 this.logger.log(`${this.getFormattedInfos(id)} a été refusé par ${this.getFormattedInfos(socket.data.accountId)}`);
                             });
                         });
+                        this.logger.debug(`GuestIds de ${this.getFormattedInfos(socket.data.accountId)}: [${socket.data.guestIds}]`);
                     }
                     break;
                 case LobbyState.InGame: // t'es dans deux rooms (1 dans lobby, 1 dans game)
@@ -283,11 +292,12 @@ export class LobbyGateway implements OnGatewayConnection {
                     this.server.fetchSockets().then((sockets) => {
                         sockets.forEach((s) => {
                             if (s.data.accountId === socket.data.hostId) {
-                                s.data.otherIds = s.data.otherIds.filter((id) => id !== socket.data.accountId);
+                                s.data.guestIds = s.data.guestIds.filter((id) => id !== socket.data.accountId);
                                 this.logger.log(
                                     `${this.getFormattedInfos(socket.data.accountId)} a annulé sa demande pour rejoindre le lobby ${lobbyId}`,
                                 );
-                                s.emit(LobbyEvents.CancelRequestAcessHost);
+                                this.logger.debug(`GuestIds de ${this.getFormattedInfos(socket.data.accountId)}: [${socket.data.guestIds}]`);
+                                s.emit(LobbyEvents.CancelRequestAcessHost, this.accountManager.users.get(socket.data.accountId).credentials.username);
                             }
                         });
                     });

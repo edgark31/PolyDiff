@@ -40,10 +40,11 @@ export class JoinedPlayerDialogComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.countdownSubscription?.unsubscribe();
+        // this.clientSocketService.lobbySocket.off(LobbyEvents.NotifyGuest);
     }
 
     private handleRefusedPlayer() {
-        this.clientSocketService.authSocket.off(LobbyEvents.NotifyGuest);
+        //
         this.clientSocketService.on('lobby', LobbyEvents.NotifyGuest, (isPlayerAccepted: boolean) => {
             if (!isPlayerAccepted) {
                 this.countDownBeforeClosing('Vous avez été refusé');
