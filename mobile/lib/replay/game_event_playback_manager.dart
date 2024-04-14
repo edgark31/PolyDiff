@@ -47,7 +47,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   GameEventPlaybackManager() {
     _subscription = _playbackService.eventsStream.listen((event) {
       _replaySpeed = _playbackService.speed;
-      print("***Handling Game Event: ${event.gameEvent}***");
+
       _handleGameEvent(event);
     }, onError: (error) {
       print("Error in stream subscription: $error");
@@ -194,6 +194,10 @@ class GameEventPlaybackManager extends ChangeNotifier {
     _isCheatMode = true;
     _handleRemainingDifferenceIndex(recordedEventData);
     _gameAreaService.isCheatMode = true;
+
+    print(
+        "toggle cheat mode from GameEventPlaybackManager with speed $_replaySpeed");
+
     _gameAreaService.toggleCheatMode(_remainingCoordinates, _replaySpeed);
     notifyListeners();
   }
@@ -227,7 +231,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
   }
 
   void _handleUpdateTimerEvent(GameEventData recordedEventData) {
-    print("UPDARTING TIMER ");
     _timer = recordedEventData.time!;
     notifyListeners();
   }
@@ -240,7 +243,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
   void _handleEnGameEvent(GameEventData recordedEventData) {
     _isEndGame = true;
-
     notifyListeners();
   }
 

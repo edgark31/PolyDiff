@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/models/players.dart';
@@ -15,7 +16,9 @@ import 'package:mobile/replay/game_events_services.dart';
 import 'package:mobile/replay/replay_canvas_widget.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
+import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/info_service.dart';
+import 'package:mobile/widgets/replay_pop_up_widget.dart';
 import 'package:provider/provider.dart';
 
 class GameEventPlaybackScreen extends StatefulWidget {
@@ -81,14 +84,36 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     playbackService.startPlayback();
     _subscription = playbackService.eventsStream.listen((GameEventData event) {
       setState(() {
-        gameEvent = event;
+        gameEvent = event; // Update the current event
+        if (event.gameEvent == GameEvents.EndGame.name) {
+          print("****** End Game ******");
+          _showReplayPopUp();
+        } else {
+          formattedTime = calculateFormattedTime(event.time!);
+        }
         print("****** Set State from screen page ******");
-        formattedTime = calculateFormattedTime(event.time!);
       });
     }, onError: (error) {
       print("Error receiving game event: $error");
       showErrorDialog("An error occurred while processing game events.");
     });
+  }
+
+  void _showReplayPopUp() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ReplayPopUp(
+          endMessage: 'La partie est terminée',
+          onGoHome: () {
+            Navigator.pushNamed(context, DASHBOARD_ROUTE);
+          },
+          onReplay: () {
+            Navigator.pushNamed(context, REPLAY_ROUTE);
+          },
+        );
+      },
+    );
   }
 
   void showErrorDialog(String message) {
@@ -127,9 +152,10 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // // Providers
+    // Providers
     final GameRecordProvider gameRecordProvider =
         context.read<GameRecordProvider>();
+    final GameAreaService gameAreaService = context.watch<GameAreaService>();
 
     final ReplayPlayerProvider replayPlayerProvider =
         context.watch<ReplayPlayerProvider>();

@@ -17,7 +17,7 @@ class ReplayOriginalCanvas extends GameCanvas {
 
   @override
   Widget build(BuildContext context) {
-    final gameAreaService = Provider.of<GameAreaService>(context);
+    final gameAreaService = context.watch<GameAreaService>();
 
     return Column(
       children: <Widget>[
@@ -51,14 +51,14 @@ class ReplayOriginalCanvas extends GameCanvas {
 }
 
 class ReplayModifiedCanvas extends GameCanvas {
+  final GameAreaService gameAreaService = Get.find();
   ReplayModifiedCanvas(
     images,
   ) : super(images);
 
   @override
   Widget build(BuildContext context) {
-    final GameAreaService gameAreaService =
-        Provider.of<GameAreaService>(context);
+    final GameAreaService gameAreaService = context.watch<GameAreaService>();
     return Column(
       children: <Widget>[
         Container(

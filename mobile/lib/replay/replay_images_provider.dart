@@ -28,7 +28,6 @@ class ReplayImagesProvider extends ChangeNotifier {
     var currentCanvasFuture = _currentCanvas;
 
     _currentCanvas = currentCanvasFuture!.then((currentCanvas) async {
-      // Decode the new modified image
       ui.Image modifiedImage =
           await ImageConverterService.imageFromBase64String(base64String);
 
@@ -47,7 +46,6 @@ class ReplayImagesProvider extends ChangeNotifier {
       return currentCanvasFuture;
     });
 
-    // Notify listeners after the future completes
     _currentCanvas!.then((_) {
       notifyListeners();
     });

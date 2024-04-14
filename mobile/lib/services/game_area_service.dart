@@ -21,9 +21,8 @@ class GameAreaService extends ChangeNotifier {
   bool _isAnimationPaused = false;
   Function? onCheatModeDeactivated;
 
-  // Pour animer, il y a trois options SPEED_X1, SPEED_X2 ET SPEED_X3
-  // Par défaut la vitesse c'est SPEED_X1 si tu call showDifferenceFound
-  // avec seulement des coordonnées, même logique pour toggleCheatMode et showDifferenceNotFound
+  bool get isAnimationPaused => _isAnimationPaused;
+
   void showDifferenceFound(List<Coordinate> newCoordinates,
       [double flashingSpeed = SPEED_X1]) {
     if (newCoordinates.isNotEmpty) {
@@ -37,6 +36,12 @@ class GameAreaService extends ChangeNotifier {
     resetCheatBlinkingDifference();
     notifyListeners();
     startBlinking(newCoordinates, flashingSpeed);
+  }
+
+  void resetCheatMode() {
+    isCheatMode = false;
+    resetCheatBlinkingDifference();
+    notifyListeners();
   }
 
   void showDifferenceNotFound(Coordinate currentCoord, bool isLeft,
@@ -177,6 +182,7 @@ class GameAreaService extends ChangeNotifier {
 
   void pauseAnimation() {
     _isAnimationPaused = true;
+    notifyListeners();
   }
 
   void resumeAnimation() {
