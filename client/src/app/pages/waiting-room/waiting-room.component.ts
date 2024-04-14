@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { WaitingGameDialogComponent } from '@app/components/waiting-game-dialog/waiting-game-dialog.component';
+import { WaitingGameComponent } from '@app/components/waiting-game/waiting-game.component';
 import { WaitingPlayerToJoinComponent } from '@app/components/waiting-player-to-join/waiting-player-to-join.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
@@ -29,6 +29,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     lobbiesSubscription: Subscription;
     requestSubscription: Subscription;
     private lobbySubscription: Subscription;
+    private dialogRefs = new Map<string, MatDialogRef<WaitingPlayerToJoinComponent>>();
     // eslint-disable-next-line max-params
     constructor(
         public router: Router,
@@ -40,10 +41,11 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         public globalChatService: GlobalChatService,
         public translate: TranslateService,
         private readonly matDialog: MatDialog,
-    ) {}
+    ) {
+        this.dialogRefs = new Map<string, MatDialogRef<WaitingPlayerToJoinComponent>>();
+    }
 
     ngOnInit(): void {
-        if (this.welcome.onChatGame) this.clientSocketService.connect(this.welcome.account.id as string, 'lobby');
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         this.roomManagerService.wait = true;
@@ -69,23 +71,27 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.receiveMessage(message);
         });
         this.requestSubscription = this.roomManagerService.playerNameRequesting$.subscribe((playerName: string) => {
-            this.dialog.open(WaitingPlayerToJoinComponent, {
+            const dialogRef = this.dialog.open(WaitingPlayerToJoinComponent, {
                 data: { lobby: this.lobby, username: playerName },
                 disableClose: true,
                 panelClass: 'dialog',
             });
+            this.dialogRefs.set(playerName, dialogRef);
         });
-        this.clientSocketService.on('lobby', LobbyEvents.CancelRequestAcessHost, () => {
-            this.dialog.closeAll();
+        this.clientSocketService.on('lobby', LobbyEvents.CancelRequestAcessHost, (leavingPlayerName: string) => {
+            const dialogRef = this.dialogRefs.get(leavingPlayerName);
+            if (dialogRef) {
+                dialogRef.close();
+                this.dialogRefs.delete(leavingPlayerName);
+            }
         });
         this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {
             this.router.navigate(['/home']);
         });
 
         this.clientSocketService.on('lobby', LobbyEvents.Start, () => {
-            this.showLoadingDialog();
             this.welcome.onChatLobby = false;
-            this.router.navigate(['/game']);
+            this.showLoadingDialog();
         });
 
         if (this.clientSocketService.isSocketAlive('auth')) {
@@ -131,11 +137,15 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     }
 
     showLoadingDialog(): void {
-        this.matDialog.open(WaitingGameDialogComponent, {
+        this.matDialog.open(WaitingGameComponent, {
             data: { lobby: this.lobby },
             disableClose: true,
             panelClass: 'dialog',
         });
+        setTimeout(() => {
+            this.dialog.closeAll();
+            this.router.navigate(['/game']);
+        }, 1000);
     }
 
     ngOnDestroy(): void {
