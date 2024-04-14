@@ -266,6 +266,7 @@ export class LobbyGateway implements OnGatewayConnection {
                             this.server.fetchSockets().then((sockets) => {
                                 const guest = sockets.find((s) => s.data.accountId === id);
                                 guest.data.host === socket.data.accountId ? guest.emit(LobbyEvents.NotifyGuest, false) : null;
+                                this.logger.log(`${this.getFormattedInfos(id)} a été refusé par ${this.getFormattedInfos(socket.data.accountId)}`);
                             });
                         });
                     }
@@ -282,6 +283,9 @@ export class LobbyGateway implements OnGatewayConnection {
                         sockets.forEach((s) => {
                             if (s.data.accountId === socket.data.hostId) {
                                 s.data.otherIds = s.data.otherIds.filter((id) => id !== socket.data.accountId);
+                                this.logger.log(
+                                    `${this.getFormattedInfos(socket.data.accountId)} a annulé sa demande pour rejoindre le lobby ${lobbyId}`,
+                                );
                                 s.emit(LobbyEvents.CancelRequestAcessHost);
                             }
                         });
