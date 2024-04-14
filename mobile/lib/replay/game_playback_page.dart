@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
@@ -34,6 +36,7 @@ class GameEventPlaybackScreen extends StatefulWidget {
 }
 
 class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
+  late StreamSubscription<GameEventData> _subscription;
   late GameEventPlaybackService playbackService;
   late GameEventPlaybackManager playbackManager;
   late ReplayImagesProvider replayImagesProvider;
@@ -50,11 +53,10 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
 
     gameRecordProvider = Get.find();
     // Initialize services and providers
-    playbackService =
-        GameEventPlaybackService(gameRecordProvider.record.gameEvents);
-    playbackManager = GameEventPlaybackManager();
+    playbackService = Get.find();
     replayImagesProvider = Get.find();
     replayPlayerProvider = Get.find();
+    playbackManager = Get.find();
     replayPlayerProvider.setPlayersData(gameRecordProvider.record.players);
     formattedTime = calculateFormattedTime(playbackManager.timer);
     replayPlayerProvider
@@ -76,8 +78,13 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   }
 
   void subscribeToEvents() {
-    playbackService.eventsStream.listen((GameEventData event) {
-      gameEvent = event;
+    playbackService.startPlayback();
+    _subscription = playbackService.eventsStream.listen((GameEventData event) {
+      setState(() {
+        gameEvent = event;
+        print("****** Set State from screen page ******");
+        formattedTime = calculateFormattedTime(event.time!);
+      });
     }, onError: (error) {
       print("Error receiving game event: $error");
       showErrorDialog("An error occurred while processing game events.");
@@ -120,7 +127,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Providers
+    // // Providers
     final GameRecordProvider gameRecordProvider =
         context.read<GameRecordProvider>();
 
@@ -132,164 +139,167 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     final GameEventPlaybackManager playbackManager =
         context.watch<GameEventPlaybackManager>();
 
-    final infoService = context.watch<InfoService>();
+    final InfoService infoService = context.watch<InfoService>();
 
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(infoService.isThemeLight
-                    ? GAME_BACKGROUND_PATH
-                    : GAME_BACKGROUND_PATH_DARK),
-                fit: BoxFit.cover,
-              ),
+        body: Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(infoService.isThemeLight
+                  ? GAME_BACKGROUND_PATH
+                  : GAME_BACKGROUND_PATH_DARK),
+              fit: BoxFit.cover,
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  if (gameRecordProvider.record.isCheatEnabled) ...[
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Color(0xFFEF6151),
-                        backgroundColor: Color(0xFF2D1E16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.gamePage_cheatButton,
-                        style: TextStyle(fontSize: 30),
-                      ),
-                    ),
-                  ] else
-                    SizedBox(width: 120),
-                  SizedBox(
-                    height: 200,
-                    width: 1000,
-                    child: _gameInfosReplay(),
-                  ),
-                ],
-              ),
-              FutureBuilder<CanvasModel>(
-                future: replayImagesProvider.currentCanvas,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done &&
-                      snapshot.hasData) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: ReplayOriginalCanvas(snapshot.data!),
-                        ),
-                        SizedBox(width: 50),
-                        Expanded(child: ReplayModifiedCanvas(snapshot.data!)),
-                      ],
-                    );
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else {
-                    return Text("No data available");
-                  }
-                },
-              ),
-            ],
-          ),
-          // if (isChatBoxVisible)
-          //   Positioned(
-          //     top: 50,
-          //     left: 0,
-          //     right: 0,
-          //     height: 550,
-          //     child: Align(
-          //       alignment: Alignment.topCenter,
-          //       child: AnimatedOpacity(
-          //         opacity: 1.0,
-          //         duration: Duration(milliseconds: 500),
-          //         child: Transform.scale(
-          //           scale: 1.0,
-          //           child: ChatBox(),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // isPlayerAnObserver
-          //     ? _actionButton(
-          //         context,
-          //         AppLocalizations.of(context)!.gamePage_leaveButton,
-          //         () {
-          //           gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
-          //           Navigator.pushNamed(context, DASHBOARD_ROUTE);
-          //         },
-          //       )
-          //     : _actionButton(
-          //         context,
-          //         AppLocalizations.of(context)!.gamePage_giveUpButton,
-          //         () {
-          //           Future.delayed(Duration.zero, () {
-          //             if (ModalRoute.of(context)?.isCurrent ?? false) {
-          //               showDialog(
-          //                 barrierDismissible: false,
-          //                 context: context,
-          //                 builder: (BuildContext context) {
-          //                   return AbandonPopup();
-          //                 },
-          //               );
-          //             }
-          //           });
-          //         },
-          //       ),
-          // _observerInfos(replayPlayerProvider.nObservers),
-          // Align(
-          //   alignment: Alignment.bottomCenter,
-          //   child: Padding(
-          //     padding: const EdgeInsets.only(bottom: 20.0),
-          //     child: IconButton(
-          //       icon: Icon(Icons.chat),
-          //       iconSize: 45.0,
-          //       color: Colors.white,
-          //       onPressed: () {
-          //         setState(() {
-          //           isChatBoxVisible = !isChatBoxVisible;
-          //         });
-          //       },
-          //     ),
-          //   ),
-          // ),
-          Positioned(
-            left: 0.0,
-            right: 0.0,
-            bottom: 8.0,
-            child: Row(
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Expanded(
-                  child: GameEventSlider(
-                    playbackService: playbackService,
-                    playbackManager: playbackManager,
+                if (gameRecordProvider.record.isCheatEnabled) ...[
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Color(0xFFEF6151),
+                      backgroundColor: Color(0xFF2D1E16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    ),
+                    child: Text(
+                      AppLocalizations.of(context)!.gamePage_cheatButton,
+                      style: TextStyle(fontSize: 30),
+                    ),
                   ),
+                ] else
+                  SizedBox(width: 120),
+                SizedBox(
+                  height: 200,
+                  width: 1000,
+                  child: _gameInfosReplay(),
                 ),
-                _observerInfos(replayPlayerProvider.nObservers),
               ],
             ),
-          )
-        ],
-      ),
-    );
+            FutureBuilder<CanvasModel>(
+              future: replayImagesProvider.currentCanvas,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ReplayOriginalCanvas(snapshot.data!),
+                      ),
+                      SizedBox(width: 50),
+                      Expanded(child: ReplayModifiedCanvas(snapshot.data!)),
+                    ],
+                  );
+                } else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else {
+                  return Text("No data available");
+                }
+              },
+            ),
+          ],
+        ),
+        // if (isChatBoxVisible)
+        //   Positioned(
+        //     top: 50,
+        //     left: 0,
+        //     right: 0,
+        //     height: 550,
+        //     child: Align(
+        //       alignment: Alignment.topCenter,
+        //       child: AnimatedOpacity(
+        //         opacity: 1.0,
+        //         duration: Duration(milliseconds: 500),
+        //         child: Transform.scale(
+        //           scale: 1.0,
+        //           child: ChatBox(),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // isPlayerAnObserver
+        //     ? _actionButton(
+        //         context,
+        //         AppLocalizations.of(context)!.gamePage_leaveButton,
+        //         () {
+        //           gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
+        //           Navigator.pushNamed(context, DASHBOARD_ROUTE);
+        //         },
+        //       )
+        //     : _actionButton(
+        //         context,
+        //         AppLocalizations.of(context)!.gamePage_giveUpButton,
+        //         () {
+        //           Future.delayed(Duration.zero, () {
+        //             if (ModalRoute.of(context)?.isCurrent ?? false) {
+        //               showDialog(
+        //                 barrierDismissible: false,
+        //                 context: context,
+        //                 builder: (BuildContext context) {
+        //                   return AbandonPopup();
+        //                 },
+        //               );
+        //             }
+        //           });
+        //         },
+        //       ),
+        // _observerInfos(replayPlayerProvider.nObservers),
+        // Align(
+        //   alignment: Alignment.bottomCenter,
+        //   child: Padding(
+        //     padding: const EdgeInsets.only(bottom: 20.0),
+        //     child: IconButton(
+        //       icon: Icon(Icons.chat),
+        //       iconSize: 45.0,
+        //       color: Colors.white,
+        //       onPressed: () {
+        //         setState(() {
+        //           isChatBoxVisible = !isChatBoxVisible;
+        //         });
+        //       },
+        //     ),
+        //   ),
+        // ),
+        Positioned(
+          left: 0.0,
+          right: 0.0,
+          bottom: 8.0,
+          child: Row(
+            children: [
+              Expanded(
+                child: GameEventSlider(
+                  playbackService: playbackService,
+                  playbackManager: playbackManager,
+                ),
+              ),
+              _observerInfos(replayPlayerProvider.nObservers),
+            ],
+          ),
+        )
+      ],
+    ));
   }
 
   @override
   void dispose() {
+    _subscription.cancel();
     replayImagesProvider.dispose();
     playbackManager.dispose();
     playbackService.dispose();
+    gameRecordProvider.dispose();
+    replayPlayerProvider.dispose();
+
     super.dispose();
   }
 

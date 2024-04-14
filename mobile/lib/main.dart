@@ -130,7 +130,7 @@ void initializeServices() {
   Get.put(GameRecordProvider());
   Get.put(ReplayPlayerProvider());
   Get.put(ReplayImagesProvider());
-  Get.put(GameEventPlaybackService([]));
+  Get.put(GameEventPlaybackService());
   Get.put(GameEventPlaybackManager());
   Get.put(GameManagerService());
   Get.put(ChatService());

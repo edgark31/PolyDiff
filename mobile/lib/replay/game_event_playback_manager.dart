@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
@@ -10,6 +12,8 @@ import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/info_service.dart';
 
 class GameEventPlaybackManager extends ChangeNotifier {
+  late StreamSubscription<GameEventData> _subscription;
+
   final GameRecordProvider _gameRecordProvider = Get.find();
   final GameAreaService _gameAreaService = Get.find();
   final ReplayPlayerProvider _replayPlayerProvider = Get.find();
@@ -41,10 +45,12 @@ class GameEventPlaybackManager extends ChangeNotifier {
   List<Coordinate> get remainingCoordinates => _remainingCoordinates;
 
   GameEventPlaybackManager() {
-    _playbackService.eventsStream.listen((event) {
+    _subscription = _playbackService.eventsStream.listen((event) {
       _replaySpeed = _playbackService.speed;
-      print("Handling Game Event: ${event.gameEvent}");
+      print("***Handling Game Event: ${event.gameEvent}***");
       _handleGameEvent(event);
+    }, onError: (error) {
+      print("Error in stream subscription: $error");
     });
   }
 
@@ -221,6 +227,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   }
 
   void _handleUpdateTimerEvent(GameEventData recordedEventData) {
+    print("UPDARTING TIMER ");
     _timer = recordedEventData.time!;
     notifyListeners();
   }
@@ -235,5 +242,21 @@ class GameEventPlaybackManager extends ChangeNotifier {
     _isEndGame = true;
 
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _timer = 0;
+    _isEndGame = false;
+    _isDifferenceFound = false;
+    _isCheatMode = false;
+    _nDifferencesFound = 0;
+    _remainingCoordinates = [];
+    _replaySpeed = SPEED_X1;
+    _gameRecordProvider.dispose();
+    _playbackService.dispose();
+    _gameAreaService.dispose();
+    _subscription.cancel();
+    super.dispose();
   }
 }

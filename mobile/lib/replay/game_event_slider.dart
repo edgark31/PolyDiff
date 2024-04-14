@@ -48,6 +48,9 @@ class _GameEventSliderState extends State<GameEventSlider> {
   @override
   void dispose() {
     _eventsSubscription.cancel();
+
+    _debounceTimer?.cancel();
+    _sliderValue = 0;
     super.dispose();
   }
 

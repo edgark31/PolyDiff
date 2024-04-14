@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game_record_model.dart';
-import 'package:mobile/services/game_area_service.dart';
+import 'package:mobile/providers/game_record_provider.dart';
 
 class GameEventPlaybackService extends ChangeNotifier {
-  final GameAreaService _gameAreaService = Get.find();
+  final GameRecordProvider _gameRecordProvider = Get.find();
   late final StreamController<GameEventData> _eventsController;
 
-  final List<GameEventData> _events;
   bool _isPaused = false;
   bool _isUserInteraction = false;
 
@@ -20,7 +19,7 @@ class GameEventPlaybackService extends ChangeNotifier {
   double _speed = SPEED_X1;
 
   Stream<GameEventData> get eventsStream => _eventsController.stream;
-  List<GameEventData> get events => _events;
+  List<GameEventData> get events => _gameRecordProvider.record.gameEvents;
   DateTime? get lastEventTime => _lastEventTime;
 
   double get speed => _speed;
@@ -29,22 +28,22 @@ class GameEventPlaybackService extends ChangeNotifier {
   bool get isPaused => _isPaused;
   bool get isUserInteraction => _isUserInteraction;
 
-  GameEventPlaybackService(
-    this._events,
-  ) {
+  GameEventPlaybackService() {
     _eventsController = StreamController<GameEventData>.broadcast(
-      onListen: () {
-        if (!_isPaused && _events.isNotEmpty) {
-          _playbackEvents();
-        }
-      },
+      onListen: () {},
       onCancel: _stopPlayback,
     );
 
-    if (_events.isNotEmpty) {
+    if (events.isNotEmpty) {
       Future.delayed(Duration.zero, () {
         _playbackEvents();
       });
+    }
+  }
+
+  void startPlayback() {
+    if (!_isPaused && events.isNotEmpty) {
+      _playbackEvents();
     }
   }
 
@@ -54,7 +53,6 @@ class GameEventPlaybackService extends ChangeNotifier {
 
   void pause() {
     print("Playback paused.");
-    _gameAreaService.pauseAnimation();
     _isPaused = true;
     _timer?.cancel();
     _isUserInteraction = true;
@@ -63,7 +61,6 @@ class GameEventPlaybackService extends ChangeNotifier {
   void resume() {
     if (!_isPaused) return;
     _isUserInteraction = false;
-    _gameAreaService.resumeAnimation();
     _isPaused = false;
 
     print("Resuming playback.");
@@ -77,7 +74,7 @@ class GameEventPlaybackService extends ChangeNotifier {
 
     _currentIndex = 0;
     _speed = SPEED_X1;
-    _lastEventTime = _events.first.timestamp;
+    _lastEventTime = events.first.timestamp;
     _isPaused = false;
 
     Future.delayed(Duration.zero, () {
@@ -96,15 +93,15 @@ class GameEventPlaybackService extends ChangeNotifier {
   }
 
   void _playbackEvents() async {
-    if (_events.isEmpty || _isPaused) {
+    if (events.isEmpty || _isPaused) {
       print("No events to play or playback is paused.");
       return;
     }
 
-    for (int i = _currentIndex; i < _events.length && !_isPaused; i++) {
-      final GameEventData event = _events[i];
+    for (int i = _currentIndex; i < events.length && !_isPaused; i++) {
+      final GameEventData event = events[i];
       final DateTime previousEventTime =
-          i == 0 ? event.timestamp : _events[i - 1].timestamp;
+          i == 0 ? event.timestamp : events[i - 1].timestamp;
       final int durationSinceLastEvent =
           event.timestamp.difference(previousEventTime).inMilliseconds;
 
@@ -130,7 +127,7 @@ class GameEventPlaybackService extends ChangeNotifier {
       _currentIndex = i + 1;
     }
 
-    if (_currentIndex >= _events.length) {
+    if (_currentIndex >= events.length) {
       print("All events have been played.");
       _currentIndex = 0;
     }
@@ -177,8 +174,11 @@ class GameEventPlaybackService extends ChangeNotifier {
     return events.length - 1;
   }
 
+  @override
   void dispose() {
+    _gameRecordProvider.dispose();
     _stopPlayback();
     _eventsController.close();
+    super.dispose();
   }
 }

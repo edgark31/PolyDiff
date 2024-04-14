@@ -37,33 +37,6 @@ class GameRecordProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         String gameRecordsServerString = response.body;
         List<dynamic> gameRecordsJson = jsonDecode(gameRecordsServerString);
-        // for (var i = 0; i < gameRecordsJson.length; i++) {
-        //   print('record $i');
-        //   print('date : ${gameRecordsJson[i]['date']}');
-        //   print('game : ${gameRecordsJson[i]['game']}');
-        //   print('players : ${gameRecordsJson[i]['players']}');
-        //   print('observers : ${gameRecordsJson[i]['observers']}');
-        //   print('startTime : ${gameRecordsJson[i]['startTime']}');
-        //   print('endTime : ${gameRecordsJson[i]['endTime']}');
-        //   print('duration : ${gameRecordsJson[i]['duration']}');
-        //   print('isCheatEnabled : ${gameRecordsJson[i]['isCheatEnabled']}');
-        //   print('timeLimit : ${gameRecordsJson[i]['timeLimit']}');
-        //   print('gameEvents : ${gameRecordsJson[i]['gameEvents']}');
-
-        //   GameRecord converted = GameRecord.fromJson(gameRecordsJson[i]);
-
-        //   print('converted record $i');
-        //   print('date converted : ${converted.date}');
-        //   print('game converted : ${converted.game.toString()}');
-        //   print('players converted : ${converted.players.toString()}');
-        //   print('observers converted : ${converted.observers.toString()}');
-        //   print('startTime converted : ${converted.startTime}');
-        //   print('endTime converted : ${converted.endTime}');
-        //   print('duration converted : ${converted.duration}');
-        //   print('isCheatEnabled converted : ${converted.isCheatEnabled}');
-        //   print('timeLimit converted : ${converted.timeLimit}');
-        //   print('gameEvents converted : ${converted.gameEvents.toString()}');
-        // }
 
         _gameRecords = gameRecordsJson
             .map((gameRecordJson) => GameRecord.fromJson(gameRecordJson))
@@ -72,7 +45,6 @@ class GameRecordProvider extends ChangeNotifier {
       }
       return null;
     } catch (error) {
-      print('COUCOU Error fetching game record: $error');
       return 'Error: $error';
     }
   }
@@ -123,5 +95,11 @@ class GameRecordProvider extends ChangeNotifier {
     } catch (error) {
       print('Error deleting game record: $error');
     }
+  }
+
+  @override
+  void dispose() {
+    _gameRecords = [];
+    super.dispose();
   }
 }

@@ -32,7 +32,6 @@ class ReplayImagesProvider extends ChangeNotifier {
       ui.Image modifiedImage =
           await ImageConverterService.imageFromBase64String(base64String);
 
-  
       if (currentCanvas.modified == modifiedImage) {
         print('Updating canvas state with new modified image.');
 
@@ -52,5 +51,11 @@ class ReplayImagesProvider extends ChangeNotifier {
     _currentCanvas!.then((_) {
       notifyListeners();
     });
+  }
+
+  @override
+  void dispose() {
+    _currentCanvas = null;
+    super.dispose();
   }
 }

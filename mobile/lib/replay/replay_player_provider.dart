@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/models/players.dart';
 import 'package:mobile/models/observers_model.dart';
+import 'package:mobile/models/players.dart';
 
 class ReplayPlayerProvider extends ChangeNotifier {
   // Observers and Players
   List<Player> _playersData = [];
   int _nObservers = 0;
-
 
   // Getters
   List<Player> get players => _playersData;
@@ -28,11 +27,11 @@ class ReplayPlayerProvider extends ChangeNotifier {
   }
 
   void setNumberOfObservers(List<Observer>? observers) {
-    if(observers != null) {
-    _nObservers = observers.length;
+    if (observers != null) {
+      _nObservers = observers.length;
     } else {
       _nObservers = 0;
-}
+    }
     notifyListeners();
   }
 
@@ -47,11 +46,18 @@ class ReplayPlayerProvider extends ChangeNotifier {
   }
 
   void updateNumberOfObservers(int? nObservers) {
-    if(nObservers != null) {
-    _nObservers = nObservers;
+    if (nObservers != null) {
+      _nObservers = nObservers;
     } else {
       _nObservers = 0;
     }
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _playersData = [];
+    _nObservers = 0;
+    super.dispose();
   }
 }
