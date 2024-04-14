@@ -105,18 +105,20 @@ class GameRecordProvider extends ChangeNotifier {
   Future<void> deleteAccountId(String date) async {
     final accountId = _infoService.id;
     try {
+      print('Deleting game record for accountId : $accountId and date : $date');
       final uri = Uri.parse('$baseUrl/$accountId')
           .replace(queryParameters: {'date': date});
-      final response = await http.delete(uri);
+      // TODO: put back when problem is solved 
+      // final response = await http.delete(uri);
 
-      if (response.statusCode == 200) {
-        print(
-            "GameRecord removed from saved for accountId : $accountId and username :  ${_infoService.username}");
-        _gameRecords.removeWhere((element) => element.date == date);
-        notifyListeners();
-      } else {
-        print('Server error: ${response.statusCode}');
-      }
+      // if (response.statusCode == 200) {
+      //   print(
+      //       "GameRecord removed from saved for accountId : $accountId and username :  ${_infoService.username}");
+      //   _gameRecords.removeWhere((element) => element.date == date);
+      //   notifyListeners();
+      // } else {
+      //   print('Server error: ${response.statusCode}');
+      // }
     } catch (error) {
       print('Error deleting game record: $error');
     }
