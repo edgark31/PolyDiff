@@ -77,7 +77,7 @@ class _GameInfosState extends State<GameInfos> {
                   _playerInfo(players[0]),
                 ],
                 SizedBox(
-                  width: 130,
+                  width: 90,
                 ),
                 if (players.length > 1) ...[
                   _playerInfo(players[1]),
