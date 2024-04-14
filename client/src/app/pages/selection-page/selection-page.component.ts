@@ -37,6 +37,7 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
+        this.loadGameCarrousel();
         this.loadTimed();
         this.handleGameCardsUpdate();
     }

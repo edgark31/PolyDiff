@@ -5,9 +5,9 @@
 <mat-dialog-content>
   <mat-form-field>
     <mat-label >{{'accessModal.password' | translate }}</mat-label>
-    <input  class="title" matInput type="password" placeholder="Code d'accès" (keyup.enter)="onSubmitAccess()" [(ngModel)]="codeAccess">
+    <input  class="title" matInput type="password" placeholder="Code d'accès" (keyup.enter)="onSubmitAccess()" [(ngModel)]="codeAccess" (input)="testPassword()" >
   </mat-form-field>
-  <div *ngIf="codeAccess !== lobby.password" class="error-message">{{'accessModal.incorrectPassword' | translate }}.</div>
+  <div *ngIf="codeAccess !== lobby.password && submit" class="error-message">{{'accessModal.incorrectPassword' | translate }}.</div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button class="submit-button" (click)="onCancel()">{{'accessModal.cancel' | translate }}</button>
