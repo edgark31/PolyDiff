@@ -32,8 +32,8 @@ export class AccountManagerService implements OnModuleInit {
         try {
             const userFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
             const emailFound = await this.accountModel.findOne({ 'credentials.email': creds.email });
-            if (userFound) throw new Error('Username already taken');
-            if (emailFound) throw new Error('Email already taken');
+            if (userFound) throw new Error('This username already taken !');
+            if (emailFound) throw new Error('This email is already taken !');
 
             const newAccount: Account = {
                 credentials: creds,
@@ -79,10 +79,10 @@ export class AccountManagerService implements OnModuleInit {
                     { 'credentials.email': creds.username, 'credentials.password': creds.password },
                 ],
             });
-            if (!accountFound) throw new Error('Account not found');
+            if (!accountFound) throw new Error('Your username/email or password is incorrect !');
 
             accountFound.id = accountFound._id.toString();
-            if (this.connectedUsers.has(accountFound.id)) throw new Error('Account already connected');
+            if (this.connectedUsers.has(accountFound.id)) throw new Error('Your account is already connected !');
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
