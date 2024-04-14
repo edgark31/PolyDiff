@@ -56,17 +56,14 @@ class _GameEventSliderState extends State<GameEventSlider> {
   }
 
   void _onSliderChanged(double newValue) {
-    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-    _debounceTimer = Timer(const Duration(milliseconds: 100), () {
-      isUserInteraction = true;
-      setState(() {
-        int eventIndex =
-            (newValue * (widget.playbackService.events.length - 1)).round();
-        widget.playbackService.seekToEvent(eventIndex);
-        isUserInteraction = false;
-        _sliderValue = newValue;
-      });
+    isUserInteraction = true;
+    int eventIndex =
+        (newValue * (widget.playbackService.events.length - 1)).round();
+    widget.playbackService.seekToEvent(eventIndex);
+    setState(() {
+      _sliderValue = newValue;
     });
+    isUserInteraction = false;
   }
 
   void _updateSliderValue(GameEventData event) {
