@@ -129,6 +129,10 @@ class _GameEventSliderState extends State<GameEventSlider> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
+                  icon: Icon(Icons.home),
+                  onPressed: _goHome,
+                ),
+                IconButton(
                   icon: _isPlaying ? Icon(Icons.pause) : Icon(Icons.play_arrow),
                   onPressed: _triggerPlay,
                 ),
@@ -136,7 +140,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
                 IconButton(
                   icon: Icon(Icons.restart_alt),
                   onPressed: () {
-                    _isPlaying = true;
                     _sliderValue = 0;
                     widget.playbackService.restart();
                   },
