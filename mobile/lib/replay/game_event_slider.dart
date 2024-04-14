@@ -66,8 +66,9 @@ class _GameEventSliderState extends State<GameEventSlider> {
     widget.playbackService.seekToEvent(eventIndex);
   }
 
-  void _updateSliderValue(GameEventData event) {
+  void _updateSliderValue(GameEventData event) async {
     if (!isUserInteraction) {
+      await Future.delayed(Duration(milliseconds: 100));
       int eventIndex = widget.playbackService.events.indexOf(event);
       if (eventIndex != -1 && mounted) {
         setState(() {
