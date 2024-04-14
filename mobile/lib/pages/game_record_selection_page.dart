@@ -82,7 +82,6 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
               gameRecordCard:
                   GameRecordCard.fromGameRecord(gameRecordsFromServer[index]),
               onReplay: () {
-                gameRecordProvider.setIsFromProfile(true);
                 gameRecordProvider.currentGameRecord =
                     gameRecordsFromServer[index];
                 Navigator.of(context).pushNamed(REPLAY_ROUTE);
