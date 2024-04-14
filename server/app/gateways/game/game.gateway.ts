@@ -448,7 +448,7 @@ export class GameGateway implements OnGatewayConnection {
 
         socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent });
         socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received });
-        this.logger.log(`${this.getFormattedInfos(socket.data.accountId)} envoie un message : ${message}`);
+        this.logger.log(`${this.getFormattedInfos(socket.data.account)} envoie un message : ${message}`);
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
