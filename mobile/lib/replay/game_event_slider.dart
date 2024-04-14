@@ -66,25 +66,20 @@ class _GameEventSliderState extends State<GameEventSlider> {
     widget.playbackService.seekToEvent(eventIndex);
   }
 
-  void _updateSliderValue(GameEventData event) async {
+  double calculateNormalizedSliderValue(int eventIndex) {
+    return eventIndex / (widget.playbackService.events.length - 1).toDouble();
+  }
+
+  void _updateSliderValue(GameEventData event) {
     if (!isUserInteraction) {
-      await Future.delayed(Duration(milliseconds: 100));
       int eventIndex = widget.playbackService.events.indexOf(event);
       if (eventIndex != -1 && mounted) {
         setState(() {
-          _sliderValue = calculateSpeedAdjustedSliderValue(eventIndex);
+          _sliderValue = calculateNormalizedSliderValue(eventIndex);
           _currentEvent = event.gameEvent;
         });
       }
     }
-  }
-
-  double calculateSpeedAdjustedSliderValue(int eventIndex) {
-    double baseValue =
-        eventIndex / (widget.playbackService.events.length - 1).toDouble();
-    // Adjust baseValue based on the current playback speed.
-    double speedAdjustment = widget.playbackService.speed / SPEED_X1;
-    return baseValue * speedAdjustment;
   }
 
   void _triggerPlay() {

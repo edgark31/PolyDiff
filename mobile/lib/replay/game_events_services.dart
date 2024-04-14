@@ -47,6 +47,14 @@ class GameEventPlaybackService extends ChangeNotifier {
 
   void startPlayback() {
     if (!_isPaused && events.isNotEmpty) {
+      print("Starting playback from the beginning.");
+      _gameAreaService.resetBlinkingDifference();
+      _currentIndex = 0;
+      _isUserInteraction = false;
+      _isRestart = false;
+      _isPaused = false;
+      _speed = SPEED_X1;
+      _lastEventTime = events.first.timestamp;
       _playbackEvents();
     }
   }
@@ -149,10 +157,10 @@ class GameEventPlaybackService extends ChangeNotifier {
     _isUserInteraction = true; // Set user interaction flag
 
     pause(); // Pause playback before changing the index
-    _currentIndex = eventIndex;
 
     // Resume playback with a slight delay to allow the UI to update
-    Future.delayed(Duration(milliseconds: 100), () {
+    Future.delayed(Duration(milliseconds: 1000), () {
+      _currentIndex = eventIndex;
       if (!_isPaused) {
         resume();
       }
@@ -188,7 +196,6 @@ class GameEventPlaybackService extends ChangeNotifier {
 
   @override
   void dispose() {
-    _gameRecordProvider.dispose();
     _stopPlayback();
     _eventsController.close();
     super.dispose();

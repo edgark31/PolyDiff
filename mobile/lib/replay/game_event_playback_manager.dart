@@ -94,54 +94,10 @@ class GameEventPlaybackManager extends ChangeNotifier {
     }
   }
 
-  void _handleCurrentCanvasImages(GameEventData event) {
-    if (event.gameEvent == "Found" &&
-        event.modified != null &&
-        event.modified!.isNotEmpty) {
-      replayImagesProvider
-          .updateCanvasState(event.modified!)
-          .then((_) {})
-          .catchError((error) {
-        print("Error updating canvas from game event: $error");
-      });
-    } else {
-      print("No modified image found in the event.");
-      GameEventData? previousEvent;
-      int currentIndex = _gameRecordProvider.record.gameEvents.indexOf(event);
-      while (currentIndex >= 0) {
-        if (_gameRecordProvider.record.gameEvents[currentIndex].modified !=
-                null &&
-            _gameRecordProvider
-                .record.gameEvents[currentIndex].modified!.isNotEmpty) {
-          previousEvent = _gameRecordProvider.record.gameEvents[currentIndex];
-          break;
-        }
-        currentIndex--;
-      }
-
-      if (previousEvent != null && previousEvent.modified != null) {
-        replayImagesProvider
-            .updateCanvasState(previousEvent.modified!)
-            .then((_) {
-          print("Updated canvas from previous event.");
-        }).catchError((error) {
-          print("Error updating canvas from previous event: $error");
-        });
-      } else {
-        replayImagesProvider
-            .loadInitialCanvas(_gameRecordProvider.record)
-            .then((value) => {print("Initial canvas loaded")})
-            .catchError((error) {
-          print("Error loading initial canvas: $error");
-        });
-      }
-    }
-
-    notifyListeners();
-  }
-
   void _handleGameStartEvent() {
     _gameAreaService.coordinates = [];
+    _replayPlayerProvider.resetScore();
+    _replayPlayerProvider.setPlayersData(_gameRecordProvider.record.players);
     notifyListeners();
   }
 
