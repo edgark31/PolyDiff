@@ -69,7 +69,7 @@ class _FriendsPopupState extends State<FriendsPopup> {
                 showAllFriends
                     ? '${AppLocalizations.of(context)!.friendPopup_friendsOfTitle} ${widget.username}'
                     : '${AppLocalizations.of(context)!.friendPopup_friendsInCommonWithTitle} ${widget.username}',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
             Expanded(
               child: ListView.builder(
                 itemCount: friendsToShow.length,
