@@ -21,6 +21,8 @@ class GameAreaService extends ChangeNotifier {
   bool _isAnimationPaused = false;
   Function? onCheatModeDeactivated;
 
+  bool get isAnimationPaused => _isAnimationPaused;
+
   void showDifferenceFound(List<Coordinate> newCoordinates,
       [double flashingSpeed = SPEED_X1]) {
     if (newCoordinates.isNotEmpty) {
@@ -180,6 +182,7 @@ class GameAreaService extends ChangeNotifier {
 
   void pauseAnimation() {
     _isAnimationPaused = true;
+    notifyListeners();
   }
 
   void resumeAnimation() {
