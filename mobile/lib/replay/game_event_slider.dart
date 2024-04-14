@@ -138,10 +138,8 @@ class _GameEventSliderState extends State<GameEventSlider> {
             IconButton(
               icon: Icon(Icons.restart_alt),
               onPressed: () {
-                widget.playbackService.pause();
-
+                _sliderValue = 0;
                 widget.playbackService.restart();
-                _triggerPlay();
               },
             ),
             // Speed buttons

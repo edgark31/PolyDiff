@@ -79,31 +79,22 @@ class GameEventPlaybackService extends ChangeNotifier {
   }
 
   void restart() {
-    _isRestart = true;
     _gameAreaService.resetCheatMode();
-    print("Restarting playback from start.");
+
+    _isRestart = true;
+    _currentIndex = 0;
+
+    _timer?.cancel();
     _isUserInteraction = true;
 
-    _currentIndex = 0;
     _speed = SPEED_X1;
-    _lastEventTime = null;
-    _isPaused = true;
+    _currentIndex = 0;
+    print("Restarting playback from start.");
 
-    // Clear any pending state or operations
-    _eventsController.addStream(Stream.empty());
-
-    // Properly manage state and UI update
-    Future.delayed(Duration.zero, () {
-      _isPaused = false;
-      _playbackEvents(); // Restart playback from the beginning
-      notifyListeners(); // Important to notify after changes
-    }).then((_) {
-      _isUserInteraction =
-          false; // Reset interaction flag after all async operations
-    });
-    _isRestart = false;
-
+    _isUserInteraction = false;
     notifyListeners();
+
+    _playbackEvents();
   }
 
   void setSpeed(double speed) {
@@ -139,9 +130,12 @@ class GameEventPlaybackService extends ChangeNotifier {
         }
 
         if (_isPaused) {
-          print("Playback was paused during the delay.");
           _currentIndex = i;
-          return;
+        }
+
+        print("Playback was paused during the delay.");
+        if (_isRestart) {
+          _currentIndex = 0;
         }
 
         _eventsController.sink.add(event);
