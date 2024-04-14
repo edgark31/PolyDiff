@@ -331,7 +331,7 @@ export class AccountManagerService implements OnModuleInit {
     showProfiles(): void {
         this.logger.verbose(' -------- Connected account: -------- ');
         this.connectedUsers.forEach((value, key) => {
-            this.logger.verbose(`${key}`);
+            this.logger.verbose(`-- ${value.credentials.username} -- (${key})`);
         });
     }
 

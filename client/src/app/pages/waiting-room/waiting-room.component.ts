@@ -2,7 +2,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { WaitingGameDialogComponent } from '@app/components/waiting-game-dialog/waiting-game-dialog.component';
+import { WaitingGameComponent } from '@app/components/waiting-game/waiting-game.component';
 import { WaitingPlayerToJoinComponent } from '@app/components/waiting-player-to-join/waiting-player-to-join.component';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
@@ -43,7 +43,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-        if (this.welcome.onChatGame) this.clientSocketService.connect(this.welcome.account.id as string, 'lobby');
         this.roomManagerService.handleRoomEvents();
         this.roomManagerService.retrieveLobbies();
         this.roomManagerService.wait = true;
@@ -83,9 +82,8 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         });
 
         this.clientSocketService.on('lobby', LobbyEvents.Start, () => {
-            this.showLoadingDialog();
             this.welcome.onChatLobby = false;
-            this.router.navigate(['/game']);
+            this.showLoadingDialog();
         });
 
         if (this.clientSocketService.isSocketAlive('auth')) {
@@ -131,11 +129,15 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     }
 
     showLoadingDialog(): void {
-        this.matDialog.open(WaitingGameDialogComponent, {
+        this.matDialog.open(WaitingGameComponent, {
             data: { lobby: this.lobby },
             disableClose: true,
             panelClass: 'dialog',
         });
+        setTimeout(() => {
+            this.dialog.closeAll();
+            this.router.navigate(['/game']);
+        }, 1000);
     }
 
     ngOnDestroy(): void {
