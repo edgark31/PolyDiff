@@ -15,11 +15,11 @@ class GameRecordProvider extends ChangeNotifier {
 
   List<GameRecord> _gameRecords = [];
   GameRecord _record = DEFAULT_GAME_RECORD;
-  bool _isFromProfile = false;
 
   List<GameRecord> get gameRecords => _gameRecords;
   GameRecord get record => _record;
-  bool get isFromProfile => _isFromProfile;
+  
+  bool isFromProfile = false;
 
   GameRecordProvider();
 
@@ -31,7 +31,7 @@ class GameRecordProvider extends ChangeNotifier {
   }
 
   void setIsFromProfile(bool newIsFromProfile) {
-    _isFromProfile = newIsFromProfile;
+    isFromProfile = newIsFromProfile;
   }
 
   Future<String?> findAllByAccountId() async {
