@@ -53,13 +53,15 @@ class _GameEventSliderState extends State<GameEventSlider> {
 
   void _onSliderChanged(double newValue) {
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+    _debounceTimer = Timer(const Duration(milliseconds: 1000), () {
+      isUserInteraction = true;
       setState(() {
         _sliderValue = newValue;
-        isUserInteraction = true;
+
         int eventIndex =
             (_sliderValue * (widget.playbackService.events.length - 1)).round();
         widget.playbackService.seekToEvent(eventIndex);
+        isUserInteraction = false;
       });
     });
   }
@@ -133,6 +135,8 @@ class _GameEventSliderState extends State<GameEventSlider> {
             IconButton(
               icon: Icon(Icons.restart_alt),
               onPressed: () {
+                isUserInteraction = true;
+
                 widget.playbackService.restart();
                 // Reset the slider to the start
                 setState(() {

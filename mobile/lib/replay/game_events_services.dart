@@ -12,7 +12,7 @@ class GameEventPlaybackService extends ChangeNotifier {
 
   final List<GameEventData> _events;
   bool _isPaused = false;
-  bool _isPlayback = false;
+  bool _isUserInteraction = false;
 
   DateTime? _lastEventTime;
   Timer? _timer;
@@ -27,7 +27,7 @@ class GameEventPlaybackService extends ChangeNotifier {
   int get currentIndex => _currentIndex;
 
   bool get isPaused => _isPaused;
-  bool get isPlayback => _isPlayback;
+  bool get isUserInteraction => _isUserInteraction;
 
   GameEventPlaybackService(
     this._events,
@@ -48,32 +48,43 @@ class GameEventPlaybackService extends ChangeNotifier {
     }
   }
 
+  void setIsUserInteraction(bool value) {
+    _isUserInteraction = value;
+  }
+
   void pause() {
     print("Playback paused.");
     _gameAreaService.pauseAnimation();
     _isPaused = true;
     _timer?.cancel();
+    _isUserInteraction = true;
   }
 
   void resume() {
     if (!_isPaused) return;
+    _isUserInteraction = false;
     _gameAreaService.resumeAnimation();
     _isPaused = false;
 
-    if (_isPlayback && _events.isNotEmpty) {
-      _isPlayback = false;
-    }
     print("Resuming playback.");
     _playbackEvents();
   }
 
   void restart() {
+    _isUserInteraction = true;
     pause();
+    _eventsController.addStream(Stream.fromIterable([]));
+
     _currentIndex = 0;
     _speed = SPEED_X1;
     _lastEventTime = _events.first.timestamp;
     _isPaused = false;
-    _playbackEvents();
+
+    Future.delayed(Duration.zero, () {
+      _playbackEvents();
+    }).then((_) {
+      _isUserInteraction = false;
+    });
   }
 
   void setSpeed(double speed) {
@@ -110,7 +121,9 @@ class GameEventPlaybackService extends ChangeNotifier {
         return;
       }
 
-      _eventsController.sink.add(event);
+      if (!isUserInteraction) {
+        _eventsController.sink.add(event);
+      }
       print("Event added to stream: ${event.gameEvent}");
 
       _lastEventTime = event.timestamp;
@@ -125,10 +138,15 @@ class GameEventPlaybackService extends ChangeNotifier {
 
   // Modify the GameEventPlaybackService to handle seeking
   void seekToEvent(int eventIndex) {
-    if (events.isEmpty || eventIndex >= events.length) return;
+    _isUserInteraction = true;
+
     pause();
     _currentIndex = eventIndex;
-    resume();
+
+    Future.delayed(Duration(milliseconds: 100), () {
+      resume();
+      _isUserInteraction = false;
+    });
   }
 
   void _stopPlayback() {
