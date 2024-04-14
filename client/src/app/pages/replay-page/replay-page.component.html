@@ -7,8 +7,8 @@
             <div class="card-container" *ngIf="records.length !== 0">
                 <mat-card class="friend-card" *ngFor="let record of records">
                     <mat-card-header>
-                        <mat-card-title class="username">
-                            <div class="form-avatar">
+                        <mat-card-title class="record-card">
+                            <div class="record-image">
                                 <img src="{{'http://34.95.3.182:3000/' + record.game.gameId + '/original.bmp'}}" alt="Image" style="width: 152px; height: 114px; border-radius: 10px;">
                               </div>
                             <div class="name">
