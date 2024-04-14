@@ -78,27 +78,23 @@ class GameEventPlaybackService extends ChangeNotifier {
     _playbackEvents();
   }
 
-  void reset() {
+  void restart() {
+    _gameAreaService.resetBlinkingDifference();
     _isPaused = true;
-    _gameAreaService.resetCheatMode();
-    _isRestart = true;
     _timer?.cancel();
     _isUserInteraction = true;
-    _speed = SPEED_X1;
-    notifyListeners();
-  }
 
-  void restart() {
-    reset();
+    notifyListeners();
+    _isRestart = true;
     _isUserInteraction = false;
-    _isRestart = false;
     _isPaused = false;
 
+    print("Resuming playback.");
     notifyListeners();
-
     _playbackEvents();
-
+    _isRestart = false;
     print("Restarting playback from start.");
+    notifyListeners();
   }
 
   void setSpeed(double speed) {
@@ -119,45 +115,37 @@ class GameEventPlaybackService extends ChangeNotifier {
     }
 
     print("Starting playback from index $_currentIndex.");
-    for (int i = _currentIndex; i < events.length && !_isPaused; i++) {
-      final GameEventData event = events[i];
-      final DateTime previousEventTime =
-          i == 0 ? event.timestamp : events[i - 1].timestamp;
+    while (_currentIndex < events.length && !_isPaused) {
+      final GameEventData event = events[_currentIndex];
+      final DateTime previousEventTime = _currentIndex == 0
+          ? event.timestamp
+          : events[_currentIndex - 1].timestamp;
       final int durationSinceLastEvent =
           event.timestamp.difference(previousEventTime).inMilliseconds;
 
       if (!_isUserInteraction) {
-        // Only update if no user interaction is happening
         if (durationSinceLastEvent > 0) {
           await Future.delayed(Duration(
               milliseconds: (durationSinceLastEvent / _speed).floor()));
         }
 
-        if (_isPaused) {
-          _currentIndex = i;
-          return;
-        }
+        if (_isPaused || _isRestart) {
+          if (_isRestart) {
+            _currentIndex = 0; // Ensure we start from the beginning
+            _isRestart = false; // Reset the flag after jumping to the start
+          } else {
+            print("Playback paused or stopped.");
 
-        print("Playback was paused during the delay.");
-        if (_isRestart) {
-          _currentIndex = 0;
-
-          _eventsController.sink.add(events[0]);
-          print("RESTART Event added to stream: ${events[0].gameEvent}");
+            return;
+          }
           return;
         }
 
         _eventsController.sink.add(event);
         print("Event added to stream: ${event.gameEvent}");
+        _currentIndex++;
       }
-
       _lastEventTime = event.timestamp;
-      _currentIndex = i + 1;
-    }
-
-    if (_currentIndex >= events.length) {
-      print("All events have been played.");
-      _currentIndex = 0;
     }
   }
 
