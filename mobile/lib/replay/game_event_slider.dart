@@ -26,12 +26,13 @@ class _GameEventSliderState extends State<GameEventSlider> {
   late StreamSubscription<GameEventData> _eventsSubscription;
   String _currentEvent = "";
   double _selectedSpeed = SPEED_X1;
+
   bool _isPlaying = true;
+  bool isUserInteraction = false;
 
   @override
   void initState() {
     super.initState();
-    // Subscribe to the event stream
     if (widget.playbackService.events.isNotEmpty) {
       _eventsSubscription =
           widget.playbackService.eventsStream.listen((GameEventData event) {
@@ -55,6 +56,7 @@ class _GameEventSliderState extends State<GameEventSlider> {
     _debounceTimer = Timer(const Duration(milliseconds: 300), () {
       setState(() {
         _sliderValue = newValue;
+        isUserInteraction = true;
         int eventIndex =
             (_sliderValue * (widget.playbackService.events.length - 1)).round();
         widget.playbackService.seekToEvent(eventIndex);
@@ -63,12 +65,17 @@ class _GameEventSliderState extends State<GameEventSlider> {
   }
 
   void updateSliderValue(GameEventData event) {
-    int eventIndex = widget.playbackService.events.indexOf(event);
-    if (eventIndex != -1 && mounted) {
-      setState(() {
-        _sliderValue = calculateSpeedAdjustedSliderValue(eventIndex);
-        _currentEvent = event.gameEvent;
-      });
+    if (!isUserInteraction) {
+      // Check the flag here
+      int eventIndex = widget.playbackService.events.indexOf(event);
+      if (eventIndex != -1 && mounted) {
+        setState(() {
+          _sliderValue = calculateSpeedAdjustedSliderValue(eventIndex);
+          _currentEvent = event.gameEvent;
+        });
+      }
+    } else {
+      isUserInteraction = false;
     }
   }
 
@@ -100,7 +107,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
 
   @override
   Widget build(BuildContext context) {
-    // Assuming the slider value ranges from 0 to 1, normalized
     return Column(
       children: [
         Slider(
@@ -110,11 +116,8 @@ class _GameEventSliderState extends State<GameEventSlider> {
           divisions: widget.playbackService.events.length - 1,
           onChanged: _onSliderChanged,
         ),
-        // Display the gameEvent of the selected event
         Text("Current Event: $_currentEvent"),
-        // This displays the slider's value; it's optional and can be removed if not needed
         Text("Slider Value: ${_sliderValue.toStringAsFixed(2)}"),
-
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
