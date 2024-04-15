@@ -6,6 +6,7 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/replay/game_events_services.dart';
+import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/info_service.dart';
@@ -13,11 +14,11 @@ import 'package:mobile/services/info_service.dart';
 class GameEventPlaybackManager extends ChangeNotifier {
   late StreamSubscription<GameEventData> _subscription;
 
-  final InfoService _infoService = Get.find();
-  final GameAreaService _gameAreaService = Get.find();
   final GameRecordProvider _gameRecordProvider = Get.find();
+  final GameAreaService _gameAreaService = Get.find();
   final ReplayPlayerProvider _replayPlayerProvider = Get.find();
-  // final ReplayImagesProvider replayImagesProvider = Get.find();
+  final ReplayImagesProvider replayImagesProvider = Get.find();
+  final InfoService _infoService = Get.find();
   final GameEventPlaybackService _playbackService = Get.find();
 
   bool _isEndGame = false;
@@ -94,7 +95,12 @@ class GameEventPlaybackManager extends ChangeNotifier {
     }
   }
 
-  void _handleGameStartEvent() {}
+  void _handleGameStartEvent() {
+    _gameAreaService.coordinates = [];
+    _replayPlayerProvider.resetScore();
+    _replayPlayerProvider.setPlayersData(_gameRecordProvider.record.players);
+    notifyListeners();
+  }
 
   void _handleClickFoundEvent(GameEventData recordedEventData) {
     if (_gameRecordProvider.record.game.differences == null) return;
@@ -136,18 +142,18 @@ class GameEventPlaybackManager extends ChangeNotifier {
   void _handleActivateCheatEvent(GameEventData recordedEventData) {
     _isCheatMode = false;
     _handleRemainingDifferenceIndex(recordedEventData);
-
+    _gameAreaService.isCheatMode = false;
     _gameAreaService.toggleCheatMode(_remainingCoordinates, _replaySpeed);
-    print(
-        "toggle cheat mode from GameEventPlaybackManager with speed $_replaySpeed");
     notifyListeners();
   }
 
   void _handleDeactivateCheatEvent(GameEventData recordedEventData) {
     _isCheatMode = true;
     _handleRemainingDifferenceIndex(recordedEventData);
+    _gameAreaService.isCheatMode = true;
+
     print(
-        "toggle deactivate cheat mode from GameEventPlaybackManager with speed $_replaySpeed");
+        "toggle cheat mode from GameEventPlaybackManager with speed $_replaySpeed");
 
     _gameAreaService.toggleCheatMode(_remainingCoordinates, _replaySpeed);
     notifyListeners();
@@ -199,6 +205,16 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
   @override
   void dispose() {
+    _timer = 0;
+    _isEndGame = false;
+    _isDifferenceFound = false;
+    _isCheatMode = false;
+    _nDifferencesFound = 0;
+    _remainingCoordinates = [];
+    _replaySpeed = SPEED_X1;
+    _gameRecordProvider.dispose();
+    _playbackService.dispose();
+    _gameAreaService.dispose();
     _subscription.cancel();
     super.dispose();
   }
