@@ -285,6 +285,7 @@ export interface GameEventData {
     timestamp?: number;
     modified?: string;
     players?: Player[];
+    observers?: Observer[];
     gameEvent: string;
     coordClic?: Coordinate;
     remainingDifferenceIndex?: number[];
@@ -295,6 +296,7 @@ export interface GameEventData {
 export interface GameRecord {
     game: Game;
     players: Player[];
+    observers?: Observer[];
     accountIds: string[];
     date: Date;
     startTime: number;
