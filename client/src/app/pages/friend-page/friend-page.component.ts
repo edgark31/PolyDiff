@@ -123,7 +123,6 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         this.friendService.recuperateFriend();
         this.friendService.recuperateFriendPending();
         this.userSubscription = this.friendService.userList$.subscribe((userList: User[]) => {
-            this.userList = [] as User[];
             if (this.searchQuery)
                 this.userList = userList
                     .filter((user) => user.name.includes(this.searchQuery) && user.accountId !== this.welcome.account.id)
@@ -131,17 +130,14 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         });
 
         this.friendSendListSubscription = this.friendService.friendsSendSubject$.subscribe((friendList: Friend[]) => {
-            this.friendSentList = [] as Friend[];
             this.friendSentList = friendList.sort((a, b) => a.name.localeCompare(b.name));
         });
 
         this.friendListSubscription = this.friendService.friendsSubject$.subscribe((friendList: Friend[]) => {
-            this.friends = [] as Friend[];
             this.friends = friendList.sort((a, b) => (a.isFavorite === b.isFavorite ? a.name.localeCompare(b.name) : a.isFavorite ? -1 : 1));
         });
 
         this.friendPendingListSubscription = this.friendService.friendsPendingSubject$.subscribe((friendList: Friend[]) => {
-            this.friendPendingList = [] as Friend[];
             this.friendPendingList = friendList.sort((a, b) => a.name.localeCompare(b.name));
         });
 
