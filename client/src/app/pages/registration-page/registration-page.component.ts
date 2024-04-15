@@ -69,13 +69,14 @@ export class RegistrationPageComponent {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';
                 },
             });
-
-            if (!this.welcomeService.chooseImage && this.feedback === '')
-                setTimeout(() => {
-                    this.welcomeService.onUpdateAvatar(this.creds.username);
-                    console.log('timeout');
-                    this.router.navigate(['/login']);
-                }, 1000);
+            setTimeout(() => {
+                console.log('this.feedback:', this.feedback);
+                if (!this.welcomeService.chooseImage && this.feedback === '')
+                    setTimeout(() => {
+                        this.welcomeService.onUpdateAvatar(this.creds.username);
+                        this.router.navigate(['/login']);
+                    }, 1000);
+            }, 1000);
         }
     }
 
