@@ -32,8 +32,8 @@ export class AccountManagerService implements OnModuleInit {
         try {
             const userFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
             const emailFound = await this.accountModel.findOne({ 'credentials.email': creds.email });
-            if (userFound) throw new Error('This username already taken !');
-            if (emailFound) throw new Error('This email is already taken !');
+            if (userFound) throw new Error("Ce nom d'utilisateur est déjà pris !");
+            if (emailFound) throw new Error('Cette email est déjà pris !');
 
             const newAccount: Account = {
                 credentials: creds,
@@ -79,10 +79,10 @@ export class AccountManagerService implements OnModuleInit {
                     { 'credentials.email': creds.username, 'credentials.password': creds.password },
                 ],
             });
-            if (!accountFound) throw new Error('Your username/email or password is incorrect !');
+            if (!accountFound) throw new Error("La combinaison du nom d'utilisateur/email et du mot de passe est incorrect !");
 
             accountFound.id = accountFound._id.toString();
-            if (this.connectedUsers.has(accountFound.id)) throw new Error('Your account is already connected !');
+            if (this.connectedUsers.has(accountFound.id)) throw new Error('Votre compte est déjà connecté !');
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
@@ -109,6 +109,11 @@ export class AccountManagerService implements OnModuleInit {
 
             await accountFound.save();
             this.connectedUsers.set(accountFound.id, accountFound);
+            accountFound.profile.friends.forEach(async (friend) => {
+                const friendFound = await this.accountModel.findOne({ 'credentials.username': friend });
+                friendFound.profile.friends.find((f) => f.name === oldUsername).name = newUsername;
+                await friendFound.save();
+            });
             await this.fetchUsers();
 
             return Promise.resolve();
