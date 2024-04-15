@@ -31,6 +31,11 @@ export class ChatBoxComponent {
         this.addGame = new EventEmitter<string>();
     }
 
+    getPlaceholder(): string {
+        if (this.translate.currentLang === 'fr') return 'Entrez un message';
+        else return 'Type a message';
+    }
+
     getMode(): string {
         return this.navigationService.getPreviousUrl();
     }

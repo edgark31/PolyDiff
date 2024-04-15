@@ -40,7 +40,7 @@
         </div>
         <div class="message-input">
             <div class="wrap">
-                <input id="input" type="text" #inputText placeholder="Entrez un message"
+                <input id="input" type="text" #inputText placeholder={{getPlaceholder()}}
                     (keyup.enter)="onAdd(inputText)" maxlength="200" />
                 <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
                 <button mat-button class="submit" (click)="onAdd(inputText)">

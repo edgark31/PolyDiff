@@ -61,18 +61,21 @@ export class RegistrationPageComponent {
             };
             this.communication.createUser(this.creds, this.welcomeService.chooseImage ? this.welcomeService.selectLocal : '1').subscribe({
                 next: () => {
-                    if (this.welcomeService.chooseImage) this.router.navigate(['/login']);
+                    if (this.welcomeService.chooseImage) {
+                        this.router.navigate(['/login']);
+                    }
                 },
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';
                 },
             });
-
-            if (!this.welcomeService.chooseImage)
-                setTimeout(() => {
-                    this.welcomeService.onUpdateAvatar(this.creds.username);
-                    this.router.navigate(['/login']);
-                }, 1000);
+            setTimeout(() => {
+                if (!this.welcomeService.chooseImage && this.feedback === '')
+                    setTimeout(() => {
+                        this.welcomeService.onUpdateAvatar(this.creds.username);
+                        this.router.navigate(['/login']);
+                    }, 1000);
+            }, 1000);
         }
     }
 
