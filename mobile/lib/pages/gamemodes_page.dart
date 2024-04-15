@@ -76,7 +76,6 @@ class _GameModesPageState extends State<GameModesPage> {
           : SELECTION_BACKGROUND_PATH_DARK,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        drawer: CustomMenuDrawer(),
         appBar: CustomAppBar(title: ''),
         body: SingleChildScrollView(
           child: Center(
