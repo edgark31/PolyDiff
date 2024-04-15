@@ -109,6 +109,11 @@ export class AccountManagerService implements OnModuleInit {
 
             await accountFound.save();
             this.connectedUsers.set(accountFound.id, accountFound);
+            accountFound.profile.friends.forEach(async (friend) => {
+                const friendFound = await this.accountModel.findOne({ 'credentials.username': friend });
+                friendFound.profile.friends.find((f) => f.name === oldUsername).name = newUsername;
+                await friendFound.save();
+            });
             await this.fetchUsers();
 
             return Promise.resolve();

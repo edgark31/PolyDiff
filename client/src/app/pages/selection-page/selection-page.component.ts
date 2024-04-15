@@ -70,10 +70,11 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
     }
 
     private loadTimed() {
+        this.loadGameCarrousel();
         clearInterval(this.interval);
         this.interval = setInterval(() => {
             this.loadGameCarrousel();
-        }, 2000);
+        }, 10000);
     }
 
     private handleGameCardsUpdate() {
