@@ -26,13 +26,15 @@
         "confirmPasswordEnter": "Please confirm your password",
         "cancel": "Cancel",
         "returnHome": "Return to home",
-        "replay": "Replays"
+        "replay": "Replays",
+        "samePassword": "Enter the same password"
     },
 
     "button": {
         "deconnexion": "Disconnect",
         "returnProfil": "Save",
         "GoReglage": "Settings",
+        "profile": "Profile",
         "Settings": "Settings",
         "previous": "Previous",
         "following": "Next",
@@ -52,7 +54,7 @@
     "game": {
         "foundDifference": "Differences found",
         "timerOver": "Time's up",
-        "time": "Time",
+        "time": "Time left",
         "classic": "Classic",
         "limited": "Limited",
         "practice": "Practice",
@@ -73,7 +75,7 @@
         "error": " made a mistake!",
         "endParty": "End of game",
         "endPractice": "End of the Practice",
-        "partyAbandon": "Are you sure you want to give up the game ?",
+        "partyAbandon": "Give up the game ?",
         "abandonParty": " gave up !",
         "winGame": " Win !",
         "tie": "Draw",
@@ -94,11 +96,11 @@
         "restartProcess": "There must be between 3 and 9 differences. Please restart the process"
     },
     "deleteReset": {
-        "deleteGames": "Are you sure you want to delete all games",
-        "deleteGame": "Are you sure you want to delete the game",
-        "resetTimes": "Are you sure you want to reset all best times",
-        "resetTime": "Are you sure you want to reset the best time",
-        "deleteHistory": "Are you sure you want to delete the history",
+        "deleteGames": "Delete all games",
+        "deleteGame": "Delete the game",
+        "resetTimes": "Reset all best times",
+        "resetTime": "Reset best time",
+        "deleteHistory": "Delete history",
         "yes": "Yes",
         "no": "No"
     },
@@ -119,7 +121,7 @@
     },
 
     "dialogGame": {
-        "home": "Home",
+        "home": "quit",
         "videoReprise": "Replay",
         "yes": "Yes",
         "no": "No",
@@ -148,7 +150,8 @@
         "home": "Home",
         "messageChannel": "Chat",
         "friends": "Friends",
-        "account": "Account"
+        "account": "Account",
+        "profile": "Profile"
     },
     "adminModal": {
         "adminPassword": "Administrator password",
@@ -224,22 +227,23 @@
     },
 
     "friendPage": {
-        "friends": "Current friends",
+        "friends": "Friends",
         "friendsRequests": "friends waiting",
         "friendsPending": "Received friend requests",
-        "allAccount": "all Account",
-        "friendsList": "Friends List",
+        "allAccount": "Accounts",
+        "friendsList": "Friends",
         "requestFriendsSendList": "Friends requests sent",
         "pendingFriendsList": "Friends requests received",
-        "allListAccount": "Account List",
+        "allListAccount": "Accounts",
         "friendsofFriends": "friends",
         "cancel": "cancel"
     },
     "AccountDialog": {
-        "confirmChange": "Are you sure you want to confirm your changes?",
-        "deleteFriends": "Are you sure you want to delete this friend?",
+        "confirmChange": "Save your changes?",
+        "deleteFriends": "Delete this friend?",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "changeConfirm": "Successfully applied !"
     },
 
     "waitingPage": {

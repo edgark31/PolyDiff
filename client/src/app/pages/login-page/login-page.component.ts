@@ -41,7 +41,7 @@ export class LoginPageComponent implements OnInit {
         this.welcomeservice.account = {} as Account;
         this.welcomeservice.selectLocal = '';
         this.welcomeservice.selectAvatar = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
-        this.welcomeservice.selectAvatarRegister = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
+        this.welcomeservice.selectAvatarRegister = 'http://34.95.3.182:3000/avatar/default1.png';
         // this.welcomeservice.chooseImage = false;
     }
 
@@ -58,8 +58,9 @@ export class LoginPageComponent implements OnInit {
                     this.gameManager.username = account.credentials.username;
                     this.translate.setDefaultLang(this.welcomeservice.account.profile.language);
                     this.translate.use(this.welcomeservice.account.profile.language);
+                    const timeStamp = new Date().getTime();
                     // eslint-disable-next-line max-len
-                    this.welcomeservice.account.profile.avatar = `http://34.95.3.182:3000/avatar/${this.welcomeservice.account.credentials.username}.png`;
+                    this.welcomeservice.account.profile.avatar = `http://34.95.3.182:3000/avatar/${this.welcomeservice.account.id}.png?timeStamp=${timeStamp}`;
                     this.welcomeservice.isLogin = true;
                     this.router.navigate(['/home']);
                 },

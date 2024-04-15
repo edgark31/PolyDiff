@@ -1,13 +1,21 @@
    <div *ngIf="!data.mode">
-   <p  class = "abandon"> {{'AccountDialog.confirmChange' | translate }} </p>
-    <div class = "button1">
+   <p  class = "abandon" *ngIf="!isSubmit"> {{'AccountDialog.confirmChange' | translate }} </p>
+   <p  class = "abandon" *ngIf="isSubmit"> {{'AccountDialog.changeConfirm' | translate }} </p>
+    <div *ngIf="!isSubmit" class = "button1">
         <div class="button-container">
-            <button class = "yesButton" mat-dialog-close (click)="onSubmitProfile()"></button>
+            <button class = "yesButton" (click)="onSubmitProfile()"></button>
             <img src="./assets/icon/PlayButton.png" alt="abandonButton">
             <div class="centered-yes">{{'AccountDialog.yes' | translate }}</div>
         </div>
     </div>
-    <div class = "button2" >
+    <div *ngIf="isSubmit" class = "button1">
+        <div class="button-container">
+            <button class = "yesButton" mat-dialog-close (click)="onSubmitFinal()"></button>
+            <img src="./assets/icon/PlayButton.png" alt="abandonButton">
+            <div class="centered-yes">Ok</div>
+        </div>
+    </div>
+    <div *ngIf="!isSubmit" class = "button2" >
         <div class="button-container">
         <button class = "noButton"  mat-dialog-close></button>
             <img src="./assets/icon/CreateButton.png" alt="notAbandonButton" >
