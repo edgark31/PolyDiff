@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/replay/game_event_playback_manager.dart';
-import 'package:mobile/replay/game_events_services.dart';
+import 'package:mobile/replay/playback_service.dart';
 
 class GameEventSlider extends StatefulWidget {
-  final GameEventPlaybackService playbackService;
+  final PlaybackService playbackService;
   final GameEventPlaybackManager playbackManager;
 
   GameEventSlider({

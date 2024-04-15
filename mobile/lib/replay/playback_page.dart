@@ -11,7 +11,7 @@ import 'package:mobile/models/players.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/replay/game_event_playback_manager.dart';
 import 'package:mobile/replay/game_event_slider.dart';
-import 'package:mobile/replay/game_events_services.dart';
+import 'package:mobile/replay/playback_service.dart';
 import 'package:mobile/replay/replay_canvas_widget.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
@@ -37,7 +37,7 @@ class PlaybackPage extends StatefulWidget {
 class _PlaybackPageState extends State<PlaybackPage> {
   late StreamSubscription<GameEventData> _subscription;
   final GameRecordProvider gameRecordProvider = Get.find();
-  final GameEventPlaybackService playbackService = Get.find();
+  final PlaybackService playbackService = Get.find();
   final GameEventPlaybackManager playbackManager = Get.find();
   final ReplayImagesProvider replayImagesProvider = Get.find();
   late GameEventData gameEvent;

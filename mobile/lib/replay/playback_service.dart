@@ -11,7 +11,7 @@ import 'package:mobile/services/game_area_service.dart';
 typedef ReplayCompletionCallback = void Function();
 typedef GamePlaybackCompletionCallback = void Function();
 
-class GameEventPlaybackService extends ChangeNotifier {
+class PlaybackService extends ChangeNotifier {
   final GameAreaService _gameAreaService = Get.find();
   final GameRecordProvider _gameRecordProvider = Get.find();
   late final StreamController<GameEventData> _eventsController;

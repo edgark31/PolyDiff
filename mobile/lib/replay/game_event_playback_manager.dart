@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/game_record_provider.dart';
-import 'package:mobile/replay/game_events_services.dart';
+import 'package:mobile/replay/playback_service.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/game_area_service.dart';
@@ -18,7 +18,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   final GameAreaService _gameAreaService = Get.find();
   final ReplayPlayerProvider _replayPlayerProvider = Get.find();
   final ReplayImagesProvider _replayImagesProvider = Get.find();
-  final GameEventPlaybackService _playbackService = Get.find();
+  final PlaybackService _playbackService = Get.find();
 
   bool _isEndGame = false;
   bool _isDifferenceFound = false;
@@ -91,7 +91,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
   void _handleGameStartEvent() {
     _gameAreaService.coordinates = [];
-
     print("Game Start Event");
   }
 
