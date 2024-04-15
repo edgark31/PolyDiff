@@ -25,7 +25,7 @@ export class AccountManagerService implements OnModuleInit {
 
     async onModuleInit() {
         await this.loadAllAvatars();
-        this.fetchUsers();
+        await this.fetchUsers();
     }
 
     async register(creds: Credentials, id: string) {
@@ -33,7 +33,7 @@ export class AccountManagerService implements OnModuleInit {
             const userFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
             const emailFound = await this.accountModel.findOne({ 'credentials.email': creds.email });
             if (userFound) throw new Error("Ce nom d'utilisateur est déjà pris !");
-            if (emailFound) throw new Error('Cette email est déjà pris !');
+            if (emailFound) throw new Error('Cet email est déjà pris !');
 
             const newAccount: Account = {
                 credentials: creds,
@@ -62,7 +62,7 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(account.id, account.profile.avatar);
             this.imageManager.save(account.credentials.username, account.profile.avatar);
             this.logger.verbose(`Account ${creds.username} has registered successfully`);
-            this.fetchUsers();
+            await this.fetchUsers();
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to add account --> ${error.message}`);
@@ -82,13 +82,13 @@ export class AccountManagerService implements OnModuleInit {
             if (!accountFound) throw new Error("La combinaison du nom d'utilisateur/email et du mot de passe est incorrect !");
 
             accountFound.id = accountFound._id.toString();
-            if (this.connectedUsers.has(accountFound.id)) throw new Error('Votre compte est déjà connecté !');
+            if (this.connectedUsers.has(accountFound.id)) throw new Error('Ce compte est déjà connecté !');
 
             this.imageManager.save(accountFound.id, accountFound.profile.avatar);
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
             await accountFound.save();
             this.connectedUsers.set(accountFound.id, accountFound);
-            this.fetchUsers();
+            await this.fetchUsers();
             this.logger.log(`${accountFound.credentials.username} has connected with password ${accountFound.credentials.password}`);
             this.showProfiles();
             return Promise.resolve(accountFound);
@@ -109,6 +109,16 @@ export class AccountManagerService implements OnModuleInit {
 
             await accountFound.save();
             await this.fetchUsers();
+
+            for (const friend of accountFound.profile.friends) {
+                const friendAccount = await this.accountModel.findOne({ id: friend.accountId });
+                friendAccount.profile.friends.forEach((f) => {
+                    if (f.accountId === accountFound.id) {
+                        f.name = newUsername;
+                    }
+                });
+                await friendAccount.save();
+            }
 
             return Promise.resolve();
         } catch (error) {
@@ -245,7 +255,7 @@ export class AccountManagerService implements OnModuleInit {
 
             if (!this.connectedUsers.delete(accountFound.id)) throw new Error('Account not connected');
             await this.accountModel.deleteOne({ 'credentials.username': creds.username });
-            this.fetchUsers();
+            await this.fetchUsers();
             this.logger.verbose(`Account ${creds.username} has been deleted`);
             return Promise.resolve();
         } catch (error) {
@@ -268,7 +278,7 @@ export class AccountManagerService implements OnModuleInit {
         await this.accountModel.find().then((accounts) => {
             accounts.forEach((account) => {
                 this.users.set(account._id.toString(), account);
-                this.connectedUsers.get(account.id) ? this.connectedUsers.set(account.id, account) : null;
+                this.connectedUsers.get(account._id.toString()) ? this.connectedUsers.set(account.id, account) : null;
             });
         });
     }

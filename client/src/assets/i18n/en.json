@@ -1,35 +1,30 @@
 {
-    "demo": {
-        "greeting": "Hello {{name}}!",
-        "heading": "App Translation Demo",
-        "paragraph": "<strong>translation</strong>",
-        "text": "This tutorial explains, how you can easily translate your Angular app.",
-        "hello": "salut"
-    },
-    "connexion": "connection",
+    "connexion": "Connection",
     "username": "Username or email",
     "mdp": "Password",
     "profil": {
         "information": "General informations",
         "username": "Username or email",
-        "Password": "choose a password",
-        "theme": "current theme",
-        "language": "current language",
-        "statistic": "statistical",
-        "gamePlayed": "number of games played",
-        "gameWin": "number of games won",
-        "gameAverage": "average of differences found per part",
-        "gameAverageTime": "average time per game",
+        "Password": "Choose a password",
+        "theme": "Current theme",
+        "language": "Current language",
+        "statistic": "Statistics",
+        "gamePlayed": "Number of games played",
+        "gameWin": "Number of games won",
+        "gameAverage": "Average of differences found per game",
+        "gameAverageTime": "Average time per game",
         "Connexion": "Login history",
-        "gameHistoric": "game history",
+        "gameHistoric": "Game history",
         "changePassword": "Change password",
         "confirmPassword": "Confirm password",
-        "songDifference": "choose your sound for difference found",
-        "songError": "choose your sound for error",
-        "nameEnter": "please type your name",
-        "passwordEnter": "please type your password",
-        "confirmPasswordEnter": "please confirm your password",
-        "cancel": "cancel",
+        "songDifference": "Choose your sound for difference found",
+        "songError": "Choose your sound for error",
+        "currentSongDifference": "Current sound for difference found",
+        "currentSongError": "Current sound for error",
+        "nameEnter": "Please type your name",
+        "passwordEnter": "Please type your password",
+        "confirmPasswordEnter": "Please confirm your password",
+        "cancel": "Cancel",
         "returnHome": "Return to home",
         "replay": "Replays"
     },
@@ -50,34 +45,34 @@
         "gameMode": "Game mode",
         "picture": "Image",
         "differenceNumber": "Number of differences",
-        "join": "join",
+        "join": "Join",
         "joinObserver": "Join as observer",
-        "players": "players"
+        "players": "Players"
     },
     "game": {
         "foundDifference": "Differences found",
         "timerOver": "Time's up",
         "time": "Time",
-        "classic": "classic",
-        "limited": "limited",
-        "practice": "practice",
+        "classic": "Classic",
+        "limited": "Limited",
+        "practice": "Practice",
         "abandon": "Abandon the game",
-        "players": "players"
+        "players": "Players"
     },
 
     "gameMode": {
         "classicMode": "Classic",
         "limitedMode": "Limited time",
         "practiceMode": "Practice",
-        "chooseMode": "Choose your game mode"
+        "chooseMode": "Chose your game mode"
     },
     "chat": {
         "chatZone": "Chatting zone",
-        "return": "return",
+        "return": "Return",
         "foundDifférence": " found a difference!",
         "error": " made a mistake!",
-        "endParty": "end of game",
-        "endPractice": "end of the Practice",
+        "endParty": "End of game",
+        "endPractice": "End of the Practice",
         "partyAbandon": "Are you sure you want to give up the game ?",
         "abandonParty": " gave up !",
         "winGame": " Win !",
@@ -87,7 +82,7 @@
     "creationGame": {
         "differenceImage": "Here is the image of the differences",
         "hasYou": "There is:",
-        "differences": "differences",
+        "differences": "Differences",
         "enterNameGame": "Please enter a game name",
         "gameExisted": "Warning: if the game name already exists, the game will not be created",
         "emptyName": "The name cannot be empty",
@@ -95,7 +90,7 @@
         "existName": "This game name already exists",
         "createGame": "Create a game",
         "quit": "Quit",
-        "close": "close",
+        "close": "Close",
         "restartProcess": "There must be between 3 and 9 differences. Please restart the process"
     },
     "deleteReset": {
@@ -104,39 +99,39 @@
         "resetTimes": "Are you sure you want to reset all best times",
         "resetTime": "Are you sure you want to reset the best time",
         "deleteHistory": "Are you sure you want to delete the history",
-        "yes": "yes",
-        "no": "no"
+        "yes": "Yes",
+        "no": "No"
     },
     "friendInfo": {
-        "friendList": "friend list of",
+        "friendList": "Friend list of",
         "allFriends": "See all friends",
-        "commonFriendList": "list of common friends between you and",
+        "commonFriendList": "List of common friends between you and",
         "commonFriends": "See common friends",
-        "close": "close"
+        "close": "Close"
     },
 
     "infoGame": {
         "difficultyLevel": "Difficulty Level",
         "gameMode": "Game Mode",
-        "presentDifference": "Number of present differences",
+        "presentDifference": "Number of differences",
         "winTime": "Winning Time Value",
         "useHint": "Use Hint"
     },
 
     "dialogGame": {
         "home": "Home",
-        "videoReprise": "video replay",
+        "videoReprise": "Replay",
         "yes": "Yes",
         "no": "No",
         "scoreShare": "Share",
-        "quitGame": "Leave"
+        "quitGame": "Home"
     },
 
     "gameSheet": {
         "play": "Play",
         "suppression": "Delete",
         "reset": "Reset",
-        "create": "create"
+        "create": "Create"
     },
 
     "historyLogin": {
@@ -156,21 +151,21 @@
         "account": "Account"
     },
     "adminModal": {
-        "adminPassword": "Administrator Password",
+        "adminPassword": "Administrator password",
         "password": "Password",
         "incorrectPassword": "Incorrect password. Please try again.",
         "cancel": "Cancel",
         "confirm": "Confirm"
     },
     "accessModal": {
-        "accessCode": "ENTER ACCESS CODE",
+        "accessCode": "Enter access code",
         "password": "Password",
         "incorrectPassword": "Incorrect password. Please try again.",
         "cancel": "Cancel",
         "confirm": "Confirm"
     },
     "waitingDialog": {
-        "startParty": "The game will start shortly..."
+        "startParty": "The game will start soon..."
     },
     "selectionPage": {
         "selectGame": "Select your game",
@@ -234,8 +229,8 @@
         "friendsPending": "Received friend requests",
         "allAccount": "all Account",
         "friendsList": "Friends List",
-        "requestFriendsSendList": "Sent Friend Requests List",
-        "pendingFriendsList": "Received Friend Requests List",
+        "requestFriendsSendList": "Friends requests sent",
+        "pendingFriendsList": "Friends requests received",
         "allListAccount": "Account List",
         "friendsofFriends": "friends",
         "cancel": "cancel"

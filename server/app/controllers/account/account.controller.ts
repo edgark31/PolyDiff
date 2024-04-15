@@ -26,6 +26,7 @@ export class AccountController {
         try {
             await this.accountManager.register(creds, defaultId);
             response.status(HttpStatus.OK).send();
+            await this.accountManager.fetchUsers();
             setTimeout(() => {
                 this.auth.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers());
             }, 1000);
@@ -39,6 +40,7 @@ export class AccountController {
         try {
             const accountFound = await this.accountManager.connection(creds);
             response.status(HttpStatus.OK).json(accountFound);
+            await this.accountManager.fetchUsers();
             setTimeout(() => {
                 this.auth.server.fetchSockets().then((sockets) => {
                     sockets.forEach((socket) => {
