@@ -301,7 +301,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
         Icon(
           Icons.person,
           color: Colors.black,
-          size: 30,
+          size: 15,
         ),
         Text(
           player.name!,
@@ -309,7 +309,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
           textAlign: TextAlign.center,
         ),
         SizedBox(
-          width: 30,
+          width: 25,
         ),
         Text(
           '${AppLocalizations.of(context)!.gameInfos_differencesFoundTitle} : ${player.count}',
