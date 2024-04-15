@@ -106,7 +106,6 @@ export class WelcomeService {
     }
 
     onModifyUser() {
-        console.log(this.account.id);
         this.communication.updateUsername(this.account.id ?? '', this.selectName).subscribe({
             next: () => {
                 this.account.credentials.username = this.selectName;

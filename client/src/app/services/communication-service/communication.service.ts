@@ -57,7 +57,6 @@ export class CommunicationService {
     }
 
     updateUsername(accountId: string, newUsername: string): Observable<void> {
-        console.log(accountId);
         return this.http.put<void>(`${this.accountUrl}/username`, { accountId, newUsername }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {

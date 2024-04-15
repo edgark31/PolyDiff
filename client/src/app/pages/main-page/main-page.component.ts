@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { GameManagerService } from '@app/services/game-manager-service/game-manager.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
+import { TIME_MAIN } from '@common/constants';
 import { AccountEvents } from '@common/enums';
 import { ChatMessageGlobal, RankedPlayer } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
@@ -66,7 +67,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
         });
         this.intervalId = setInterval(() => {
             this.clientSocket.send('auth', AccountEvents.GlobalRanking);
-        }, 10000);
+        }, TIME_MAIN);
     }
 
     addRightSideMessage(text: string) {
