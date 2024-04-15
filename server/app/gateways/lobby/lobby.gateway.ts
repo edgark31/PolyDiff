@@ -249,6 +249,7 @@ export class LobbyGateway implements OnGatewayConnection {
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
+        socket.data.guestIds = [];
         socket.data.state = LobbyState.Idle;
         this.logger.log(`LOBBY IN de ${this.getFormattedInfos(socket.data.accountId)}`);
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
