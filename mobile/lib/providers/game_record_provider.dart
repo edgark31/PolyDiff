@@ -47,6 +47,7 @@ class GameRecordProvider extends ChangeNotifier {
 
   set isPlaybackFromProfile(bool newIsFromProfile) {
     _isFromProfile = newIsFromProfile;
+    print("Game provider _isFromProfile set : $_isFromProfile");
     notifyListeners();
   }
 

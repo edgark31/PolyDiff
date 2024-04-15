@@ -74,6 +74,12 @@ class GameManagerService extends ChangeNotifier {
   }
 
   set gameRecord(GameRecord record) {
+    print(
+        "Setting isFromProfile to false : recordProvider : ${gameRecordProvider.isFromProfile}");
+    gameRecordProvider.isPlaybackFromProfile = false;
+    print(
+        "Setting after isFromProfile to false : recordProvider : ${gameRecordProvider.isFromProfile}");
+
     print('Setting game record');
     gameRecordProvider.currentGameRecord = record;
   }

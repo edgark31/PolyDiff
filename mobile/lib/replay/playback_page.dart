@@ -53,6 +53,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
     loadInitialCanvas();
     subscribeToEvents();
     playbackService.setOnPlaybackComplete(_askPlayerToReplay);
+    playbackService.setGamePlaybackComplete(_askPlayerToSaveReplay);
   }
 
   void loadInitialCanvas() async {
@@ -102,7 +103,35 @@ class _PlaybackPageState extends State<PlaybackPage> {
         });
   }
 
+  void _askPlayerToSaveReplay() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            // TODO: traduire
+            title: Text("Playback Finished"),
+            content: Text("Would you like to save?"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                  },
+                  child: Text("Yes")),
+              TextButton(
+                onPressed: () {
+                  gameRecordProvider
+                      .deleteAccountId(gameRecordProvider.record.date);
+                  Navigator.pushNamed(context, DASHBOARD_ROUTE);
+                },
+                child: Text("No"),
+              ),
+            ],
+          );
+        });
+  }
+
   void showErrorDialog(String message) {
+    // TODO: remove or translate
     showDialog(
       context: context,
       builder: (BuildContext context) {

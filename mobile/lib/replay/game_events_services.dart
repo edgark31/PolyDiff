@@ -4,20 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game_record_model.dart';
+import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/services/game_area_service.dart';
 
 typedef ReplayCompletionCallback = void Function();
+typedef GamePlaybackCompletionCallback = void Function();
 
 class GameEventPlaybackService extends ChangeNotifier {
   final GameAreaService _gameAreaService = Get.find();
   final GameRecordProvider _gameRecordProvider = Get.find();
   late final StreamController<GameEventData> _eventsController;
   ReplayCompletionCallback? onPlaybackComplete;
+  GamePlaybackCompletionCallback? onGamePlaybackComplete;
 
   bool _isPaused = false;
   bool _isUserInteraction = false;
   bool _isRestart = false;
+  bool _isFromProfile = false;
 
   DateTime? _lastEventTime;
   Timer? _timer;
@@ -36,6 +40,7 @@ class GameEventPlaybackService extends ChangeNotifier {
   bool get isRestart => _isRestart;
 
   GameEventPlaybackService() {
+    _gameRecordProvider.addListener(_handleProviderUpdate);
     _eventsController = StreamController<GameEventData>.broadcast(
       onListen: () {},
       onCancel: _stopPlayback,
@@ -45,6 +50,13 @@ class GameEventPlaybackService extends ChangeNotifier {
       Future.delayed(Duration.zero, () {
         _playbackEvents();
       });
+    }
+  }
+
+  void _handleProviderUpdate() {
+    if (_gameRecordProvider.isFromProfile != _isFromProfile) {
+      _isFromProfile = _gameRecordProvider.isFromProfile;
+      notifyListeners();
     }
   }
 
@@ -72,9 +84,10 @@ class GameEventPlaybackService extends ChangeNotifier {
       _gameAreaService.reset();
       _currentIndex = 0;
       _isRestart = true;
+      _speed = SPEED_X1;
       print("Restarting playback from start. Current index set to 0.");
       resume();
-      _isRestart = false; // Reset the restart flag after resuming
+      _isRestart = false;
     });
   }
 
@@ -102,7 +115,6 @@ class GameEventPlaybackService extends ChangeNotifier {
       return;
     }
 
-    print("Starting playback from index $_currentIndex.");
     while (_currentIndex < events.length && !_isPaused) {
       final GameEventData event = events[_currentIndex];
       final DateTime previousEventTime = _currentIndex == 0
@@ -136,8 +148,10 @@ class GameEventPlaybackService extends ChangeNotifier {
     }
 
     if (_currentIndex >= events.length && !_isPaused) {
-      if (onPlaybackComplete != null) {
+      if (onPlaybackComplete != null && _isFromProfile) {
         onPlaybackComplete!();
+      } else if (onGamePlaybackComplete != null && _isFromProfile) {
+        onGamePlaybackComplete!();
       } else {
         print("Playback completed or paused.");
       }
@@ -146,6 +160,10 @@ class GameEventPlaybackService extends ChangeNotifier {
 
   void setOnPlaybackComplete(ReplayCompletionCallback callback) {
     onPlaybackComplete = callback;
+  }
+
+  void setGamePlaybackComplete(GamePlaybackCompletionCallback callback) {
+    onGamePlaybackComplete = callback;
   }
 
   void setSpeed(double speed) async {
@@ -157,9 +175,9 @@ class GameEventPlaybackService extends ChangeNotifier {
 
       resume();
     }
+    notifyListeners();
   }
 
-  // Modify the GameEventPlaybackService to handle seeking
   void seekToEvent(int eventIndex) {
     if (eventIndex < 0 || eventIndex >= events.length) {
       print("Invalid event index: $eventIndex");
@@ -167,12 +185,12 @@ class GameEventPlaybackService extends ChangeNotifier {
     }
 
     print("Seeking to event index: $eventIndex");
-    _isUserInteraction = true; // Set user interaction flag
+    _isUserInteraction = true;
 
-    pause(); // Pause playback before changing the index
+    pause();
 
     // Resume playback with a slight delay to allow the UI to update
-    Future.delayed(Duration(milliseconds: 1000), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       _currentIndex = eventIndex;
       if (!_isPaused) {
         resume();
@@ -210,6 +228,7 @@ class GameEventPlaybackService extends ChangeNotifier {
 
   @override
   void dispose() {
+    _gameRecordProvider.removeListener(_handleProviderUpdate);
     _stopPlayback();
     _eventsController.close();
     super.dispose();

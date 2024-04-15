@@ -79,7 +79,9 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
                         onReplay: (GameRecord record) {
                           // Your replay logic here
                           gameRecordProvider.currentGameRecord = record;
+                          gameRecordProvider.isPlaybackFromProfile = true;
                           print('Replaying game: ${record.date}');
+
                           Navigator.pushNamed(context, REPLAY_ROUTE,
                               arguments: record);
                         },
