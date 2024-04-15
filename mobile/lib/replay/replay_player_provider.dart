@@ -1,45 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/models/observers_model.dart';
 import 'package:mobile/models/players.dart';
 
 class ReplayPlayerProvider extends ChangeNotifier {
   // Observers and Players
-  List<Player> _playersData = [];
+  List<Player> _data = [];
   int _nObservers = 0;
 
   // Getters
-  List<Player> get players => _playersData;
+  List<Player> get data => _data;
   int get nObservers => _nObservers;
 
   Player getPlayer(int index) {
-    return _playersData[index];
+    return _data[index];
   }
 
   void resetScore() {
-    for (Player player in _playersData) {
+    for (Player player in _data) {
+      player.count = 0;
+    }
+    notifyListeners();
+  }
+
+  set initialPlayersData(List<Player> playersData) {
+    _data = playersData;
+
+    for (Player player in _data) {
       player.count = 0;
     }
   }
 
-  void setPlayersData(List<Player> playersData) {
-    _playersData = playersData;
-    notifyListeners();
-  }
-
-  void setNumberOfObservers(List<Observer>? observers) {
-    if (observers != null) {
-      _nObservers = observers.length;
-    } else {
-      _nObservers = 0;
-    }
-    notifyListeners();
+  set initialNumberOfObservers(int initialNumberOfObservers) {
+    _nObservers = initialNumberOfObservers;
   }
 
   void updatePlayerData(Player playerData) {
-    final index =
-        _playersData.indexWhere((player) => playerData.name == player.name);
+    final index = _data.indexWhere((player) => playerData.name == player.name);
     if (index != -1) {
-      _playersData[index] = playerData;
+      _data[index] = playerData;
       print("updating player data for ${playerData.name}");
       notifyListeners();
     }
@@ -52,12 +49,5 @@ class ReplayPlayerProvider extends ChangeNotifier {
       _nObservers = 0;
     }
     notifyListeners();
-  }
-
-  @override
-  void dispose() {
-    _playersData = [];
-    _nObservers = 0;
-    super.dispose();
   }
 }

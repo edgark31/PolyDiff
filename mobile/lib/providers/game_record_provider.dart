@@ -6,20 +6,24 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/info_service.dart';
 
 class GameRecordProvider extends ChangeNotifier {
   final InfoService _infoService = Get.find();
+  final ReplayPlayerProvider _players = Get.find();
 
   final String baseUrl = "$API_URL/records";
 
   List<GameRecord> _gameRecords = [];
   GameRecord _record = DEFAULT_GAME_RECORD;
+  bool _isFromProfile = false;
 
   List<GameRecord> get gameRecords => _gameRecords;
   GameRecord get record => _record;
-  
-  bool isFromProfile = false;
+  List<Player> get playersData => _players.data;
+  int get nObservers => _players.nObservers;
+  bool get isFromProfile => _isFromProfile;
 
   GameRecordProvider();
 
@@ -31,7 +35,7 @@ class GameRecordProvider extends ChangeNotifier {
   }
 
   void setIsFromProfile(bool newIsFromProfile) {
-    isFromProfile = newIsFromProfile;
+    _isFromProfile = newIsFromProfile;
   }
 
   Future<String?> findAllByAccountId() async {
@@ -56,7 +60,6 @@ class GameRecordProvider extends ChangeNotifier {
   }
 
   Future<void> getByDate(String date) async {
-    final accountId = _infoService.id;
     try {
       final uri = Uri.parse('$baseUrl/$date');
       final response = await http.get(
@@ -69,8 +72,15 @@ class GameRecordProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final Map<String, dynamic> body = json.decode(response.body);
         _record = GameRecord.fromJson(body);
+        _players.initialPlayersData = _record.players;
+        if (_record.observers != null) {
+          _players.initialNumberOfObservers = _record.observers!.length;
+        } else {
+          _players.initialNumberOfObservers = 0;
+        }
+
         print(
-            "GameRecord fetch for accountId : $accountId and record date : $date");
+            "Players : ${_players.data.map((player) => player.name)} and observers : ${_players.nObservers} for game record : ${_record.date} ");
         notifyListeners();
       } else {
         print('Server error: ${response.statusCode}');
@@ -101,11 +111,5 @@ class GameRecordProvider extends ChangeNotifier {
     } catch (error) {
       print('Error deleting game record: $error');
     }
-  }
-
-  @override
-  void dispose() {
-    _gameRecords = [];
-    super.dispose();
   }
 }

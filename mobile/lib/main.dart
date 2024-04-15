@@ -68,6 +68,11 @@ void main() async {
       LobbyService lobbyService = Get.find();
       return lobbyService;
     }),
+
+    ChangeNotifierProvider(create: (context) {
+      ReplayPlayerProvider replayPlayerProvider = Get.find();
+      return replayPlayerProvider;
+    }),
     ChangeNotifierProvider(create: (context) {
       GameRecordProvider gameRecordProvider = Get.find();
       return gameRecordProvider;
@@ -100,11 +105,6 @@ void main() async {
     ChangeNotifierProvider(create: (context) {
       ThemeProvider themeProvider = Get.find();
       return themeProvider;
-    }),
-
-    ChangeNotifierProvider(create: (context) {
-      ReplayPlayerProvider replayPlayerProvider = Get.find();
-      return replayPlayerProvider;
     }),
 
     ChangeNotifierProvider(create: (context) {
