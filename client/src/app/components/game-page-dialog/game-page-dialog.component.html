@@ -29,7 +29,7 @@
             <div class="centered-yes">{{'dialogGame.yes' | translate }}</div>
         </div>
     </div>
-    <div class = "button2" *ngIf="data.action === 'SaveGameRecord'">
+    <div class = "button2" *ngIf="data.action === 'SaveGameRecord' && !goShare">
         <div class="button-container">
             <button class = "noButton" mat-button *ngIf="data.action === 'SaveGameRecord'" (click)="deleteRecord()"></button>
                 <img src="./assets/icon/CreateButton.png" alt="notAbandonButton" >
@@ -53,7 +53,7 @@
         </div>
     </div>
 
-    <div class = "button2" *ngIf="data.action === 'EndGame' && data.isReplayMode && !goShare ">
+    <div class = "button2" *ngIf="data.action === 'EndGame' && data.isReplayMode && !goShare && !isObserver() ">
         <div class="button-container">
         <button class = "noButton" mat-button *ngIf="data.action === 'EndGame'" mat-dialog-close (click)="replay()"></button>
             <img class = 'replayButton' src="./assets/icon/Replay.png" alt="replayButton">

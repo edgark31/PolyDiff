@@ -1,12 +1,5 @@
 {
-    "demo": {
-        "greeting": "Bonjour {{name}}!",
-        "heading": "Démo de traduction d'applications",
-        "paragraph": "<strong>traduction</strong>",
-        "text": "Ce tutoriel explique comment vous pouvez facilement traduire votre application Angular.",
-        "hello": "salut"
-    },
-    "connexion": "connexion",
+    "connexion": "Connexion",
     "username": "Nom d'utilisateur ou courriel",
     "mdp": "Mot de passe",
     "profil": {
@@ -14,21 +7,23 @@
         "username": "Nom d'utilisateur/Pseudonyme",
         "theme": "Thème actuel",
         "language": "Language actuel",
-        "statistic": "Statistique",
-        "gamePlayed": "nombre de parties joués",
-        "gameWin": "nombre de parties gagnés",
-        "gameAverage": "moyenne de différences trouvées par partie",
-        "gameAverageTime": "temps moyen par partie",
+        "statistic": "Statistiques",
+        "gamePlayed": "Nombre de parties joués",
+        "gameWin": "Nombre de parties gagnés",
+        "gameAverage": "Moyenne de différences trouvées par partie",
+        "gameAverageTime": "Temps moyen par partie",
         "Connexion": "Historique de connexion",
         "gameHistoric": "Historique de jeu",
         "changePassword": "Changer le mot de passe",
         "confirmPassword": "Confirmer le mot de passe",
-        "songError": "choisissez votre son pour erreur",
-        "songDifference": "choisissez votre son pour différence trouvé",
-        "nameEnter": "veuillez écrire votre nom",
-        "passwordEnter": "veuillez écrire votre mot de passe",
-        "confirmPasswordEnter": "euillez ré-écrire votre mot de passe",
-        "cancel": "annuler",
+        "songError": "Choisissez votre son pour erreur",
+        "songDifference": "Choisissez votre son pour différence trouvé",
+        "currentSongDifference": "Son actuel lorsqu'une différence est trouvée",
+        "currentSongError": "Son actuel lorsqu'il y a une erreur",
+        "nameEnter": "Veuillez écrire votre nom",
+        "passwordEnter": "Veuillez écrire votre mot de passe",
+        "confirmPasswordEnter": "Veuillez ré-écrire votre mot de passe",
+        "cancel": "Annuler",
         "returnHome": "Retour à l'accueil",
         "replay": "Reprises vidéos"
     },
@@ -38,6 +33,7 @@
         "returnProfil": "Enregistrer",
         "GoReglage": "Réglages",
         "Settings": "Réglages",
+        "profile": "Profil",
         "previous": "Précédent",
         "following": "Suivant",
         "fr": "Français",
@@ -57,7 +53,7 @@
     "game": {
         "foundDifference": "Différences trouvées ",
         "timerOver": "Temps écoulé",
-        "time": "Temps",
+        "time": "Temps restant",
         "classic": "classique",
         "limited": "limité",
         "practice": "pratique",
@@ -79,7 +75,7 @@
         "error": " s'est trompé !",
         "endParty": "fin de la partie",
         "endPractice": "fin de la pratique",
-        "partyAbandon": "Êtes-vous certain de vouloir abandonner la partie ? ",
+        "partyAbandon": "Abandonner la partie ? ",
         "abandonParty": " a abandonné !",
         "winGame": " a gagné !",
         "tie": "Match nul",
@@ -102,11 +98,11 @@
     },
 
     "deleteReset": {
-        "deleteGames": "Êtes-vous sûr de vouloir supprimer tous les jeux",
-        "deleteGame": "Êtes-vous sûr de vouloir supprimer le jeu",
-        "resetTimes": "Êtes-vous sûr de vouloir réinitialiser tous les meilleurs temps",
-        "resetTime": "Êtes-vous sûr de vouloir réinitialiser le meilleur temps",
-        "deleteHistory": "Êtes-vous sûr de vouloir supprimer l'historique",
+        "deleteGames": "Supprimer tous les jeux",
+        "deleteGame": "Supprimer le jeu",
+        "resetTimes": "Réinitialiser tous les meilleurs temps",
+        "resetTime": "Réinitialiser le meilleur temps",
+        "deleteHistory": "Supprimer l'historique",
         "yes": "oui",
         "no": "non"
     },
@@ -128,12 +124,12 @@
     },
 
     "dialogGame": {
-        "home": "Accueil",
+        "home": "quitter",
         "videoReprise": "reprise Video",
         "yes": "oui",
         "no": "Non",
-        "scoreShare": "Partage votre score",
-        "quitGame": "quitter"
+        "scoreShare": "Partager",
+        "quitGame": "Accueil"
     },
 
     "gameSheet": {
@@ -157,7 +153,8 @@
         "home": "Accueil",
         "messageChannel": "Clavardage",
         "friends": "Amis",
-        "account": "Compte"
+        "account": "Compte",
+        "profile": "Profil"
     },
 
     "adminModal": {
@@ -207,7 +204,7 @@
     "pageConfig": {
         "createGame": "Création de jeu",
         "resetTimes": "Réinitialiser les meilleurs temps",
-        "deleteGames": "Supprimer tous les jeux"
+        "deleteGames": "Supprimer les jeux"
     },
 
     "configDialog": {
@@ -237,26 +234,26 @@
     },
 
     "friendPage": {
-        "friends": "amis actuels",
+        "friends": "Amis",
         "friendsRequests": "amis en attente",
-        "allAccount": "liste de compte",
-        "friendsList": "Liste d'amis",
-        "requestFriendsSendList": "Liste d'amis en attente envoyé",
-        "pendingFriendsList": "Liste d'amis en attente reçu",
-        "allListAccount": "Liste de comptes",
+        "allAccount": "Comptes",
+        "friendsList": "Amis",
+        "requestFriendsSendList": "Demandes d'amis envoyées",
+        "pendingFriendsList": "Demandes d'amis reçues",
+        "allListAccount": "Comptes",
         "friendsofFriends": "amis",
         "cancel": "annuler"
     },
 
     "AccountDialog": {
-        "confirmChange": "Etes-vous sur de vouloir confirmer vos modifications",
-        "deleteFriends": "Etes-vous sur de supprimer cet ami",
+        "confirmChange": "Enregistrer vos modifications ?",
+        "deleteFriends": "Supprimer cet ami ?",
         "yes": "Oui",
         "no": "Non"
     },
 
     "waitingPage": {
-        "currentPlayers": "joueurs présents",
+        "currentPlayers": "joueur(s) présents",
         "waitingPlayers": "Joueur(s) en attente",
         "player": "Joueur",
         "start": "Commencer la partie",

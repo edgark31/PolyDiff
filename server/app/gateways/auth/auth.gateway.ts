@@ -57,8 +57,8 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     // ---------------------- LES GETTERS de friends INITIAUX --------------------------------
     @SubscribeMessage(FriendEvents.UpdateFriends)
-    updateFriends(@ConnectedSocket() socket: Socket) {
-        this.updateIsOnline(socket);
+    async updateFriends(@ConnectedSocket() socket: Socket) {
+        await this.updateIsOnline(socket);
     }
 
     @SubscribeMessage(FriendEvents.UpdateSentFriends)
@@ -227,7 +227,8 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         socket.emit(ChannelEvents.GlobalMessage, { ...chat, tag: MessageTag.Common });
     }
 
-    updateIsOnline(socket: Socket) {
+    async updateIsOnline(socket: Socket) {
+        await this.accountManager.fetchUsers();
         const friends = this.accountManager.users.get(socket.data.accountId).profile.friends;
         this.accountManager.connectedUsers.forEach((value, key) => {
             if (friends.find((f) => f.accountId === key)) {

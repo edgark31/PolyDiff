@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { JoinedPlayerDialogComponent } from '@app/components/joined-player-dialog/joined-player-dialog.component';
@@ -14,13 +14,13 @@ import { TranslateService } from '@ngx-translate/core';
     templateUrl: './modal-access-match.component.html',
     styleUrls: ['./modal-access-match.component.scss'],
 })
-export class ModalAccessMatchComponent implements OnInit {
+export class ModalAccessMatchComponent implements OnInit, OnDestroy {
     @Output() loginEvent = new EventEmitter<string>();
     accept: boolean;
+    submit: boolean;
     codeAccess: string;
     isPasswordWrong: boolean = false;
     isAccessPassInvalid: boolean = true;
-    private joinDialogRef: MatDialogRef<JoinedPlayerDialogComponent> | null = null;
 
     // eslint-disable-next-line max-params
     constructor(
@@ -36,7 +36,7 @@ export class ModalAccessMatchComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.clientSocketService.lobbySocket.off(LobbyEvents.RequestAccess);
+        // this.clientSocketService.lobbySocket.off(LobbyEvents.RequestAccess);
         this.clientSocketService.on('lobby', LobbyEvents.RequestAccess, () => {
             this.dialog.open(JoinedPlayerDialogComponent, {
                 data: { lobbyId: this.lobby.lobbyId as string, username: this.welcomeService.account.credentials.username },
@@ -44,7 +44,7 @@ export class ModalAccessMatchComponent implements OnInit {
                 panelClass: 'dialog',
             });
         });
-        this.clientSocketService.lobbySocket.off(LobbyEvents.NotifyGuest);
+        // this.clientSocketService.lobbySocket.off(LobbyEvents.NotifyGuest);
         this.clientSocketService.on('lobby', LobbyEvents.NotifyGuest, (isPlayerAccepted: boolean) => {
             if (isPlayerAccepted) {
                 this.isAccessPassInvalid = false;
@@ -55,14 +55,22 @@ export class ModalAccessMatchComponent implements OnInit {
         });
     }
 
+    ngOnDestroy(): void {
+        this.clientSocketService.lobbySocket.off(LobbyEvents.RequestAccess);
+
+        this.clientSocketService.lobbySocket.off(LobbyEvents.NotifyGuest);
+    }
+    testPassword() {
+        this.submit = false;
+    }
+
     onSubmitAccess() {
         if (this.codeAccess === this.lobby.password) {
             this.roomManager.sendRequestToJoinRoom(this.lobby.lobbyId as string, this.lobby.password as string);
-            this.joinDialogRef?.close();
-        }
+        } else this.submit = true;
     }
 
     onCancel(): void {
-        this.joinDialogRef?.close();
+        this.dialogRef.close();
     }
 }

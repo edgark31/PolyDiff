@@ -9,6 +9,7 @@ import 'package:mobile/pages/dashboard_page.dart';
 import 'package:mobile/pages/edit_profile_page.dart';
 import 'package:mobile/pages/friends_page.dart';
 import 'package:mobile/pages/game_page.dart';
+import 'package:mobile/pages/game_record_selection_page.dart';
 import 'package:mobile/pages/gamemodes_page.dart';
 import 'package:mobile/pages/history_page.dart';
 import 'package:mobile/pages/lobby_page.dart';
@@ -17,7 +18,7 @@ import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/pages/sign_up_page.dart';
 import 'package:mobile/pages/statistics_page.dart';
-import 'package:mobile/replay/watch_recorded_game_page.dart';
+import 'package:mobile/replay/playback_page.dart';
 
 // Important if testing on a real device with a local server
 // Change the IP address to your local machine's IP address
@@ -46,7 +47,7 @@ const String PROFILE_ROUTE = '/profile';
 const String EDIT_PROFILE_ROUTE = '$PROFILE_ROUTE/edit';
 const String STATISTICS_ROUTE = '$PROFILE_ROUTE/statistics';
 const String HISTORY_ROUTE = '$PROFILE_ROUTE/history';
-const String VIDEOS_ROUTE = '$PROFILE_ROUTE/videos';
+const String REPLAYS_SELECTION_ROUTE = '$PROFILE_ROUTE/replays';
 
 // FRIENDS
 const String FRIENDS_ROUTE = '/friends';
@@ -110,14 +111,17 @@ class AppRouter {
       case GamePage.routeName:
         return GamePage.route();
 
+      case GameRecordSelectionPage.routeName:
+        return GameRecordSelectionPage.route();
+
+      case PlaybackPage.routeName:
+        return PlaybackPage.route();
+
       case FriendsPage.routeName:
         return FriendsPage.route();
 
       case GameModesPage.routeName:
         return GameModesPage.route();
-
-      case WatchRecordedGame.routeName:
-        return WatchRecordedGame.route();
 
       default:
         return _errorRoute();

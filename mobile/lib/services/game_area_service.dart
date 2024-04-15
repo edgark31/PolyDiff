@@ -21,11 +21,10 @@ class GameAreaService extends ChangeNotifier {
   bool _isAnimationPaused = false;
   Function? onCheatModeDeactivated;
 
-  // Pour animer, il y a trois options SPEED_X1, SPEED_X2 ET SPEED_X3
-  // Par défaut la vitesse c'est SPEED_X1 si tu call showDifferenceFound
-  // avec seulement des coordonnées, même logique pour toggleCheatMode et showDifferenceNotFound
+  bool get isAnimationPaused => _isAnimationPaused;
+
   void showDifferenceFound(List<Coordinate> newCoordinates,
-      [int flashingSpeed = SPEED_X1]) {
+      [double flashingSpeed = SPEED_X1]) {
     if (newCoordinates.isNotEmpty) {
       soundService.playCorrectSound();
       coordinates.addAll(newCoordinates);
@@ -39,8 +38,17 @@ class GameAreaService extends ChangeNotifier {
     startBlinking(newCoordinates, flashingSpeed);
   }
 
+  void reset() {
+    coordinates = [];
+    leftErrorCoord = [];
+    rightErrorCoord = [];
+    _isAnimationPaused = false;
+    isCheatMode = false;
+    cheatBlinkingDifference = null;
+  }
+
   void showDifferenceNotFound(Coordinate currentCoord, bool isLeft,
-      [int flashingSpeed = SPEED_X1]) {
+      [double flashingSpeed = SPEED_X1]) {
     if (isLeft) {
       isClickDisabled = true;
       soundService.playErrorSound();
@@ -78,7 +86,7 @@ class GameAreaService extends ChangeNotifier {
   }
 
   Future<void> startBlinking(List<Coordinate> coords,
-      [int flashingSpeed = SPEED_X1]) async {
+      [double flashingSpeed = SPEED_X1]) async {
     initPath(coords);
     if (blinkingDifference == null) return;
 
@@ -128,7 +136,7 @@ class GameAreaService extends ChangeNotifier {
   }
 
   Future<void> toggleCheatMode(List<Coordinate> coords,
-      [int flashingSpeed = SPEED_X1]) async {
+      [double flashingSpeed = SPEED_X1]) async {
     isCheatMode = !isCheatMode;
     if (isCheatMode) {
       initCheatPath(coords);
@@ -177,6 +185,7 @@ class GameAreaService extends ChangeNotifier {
 
   void pauseAnimation() {
     _isAnimationPaused = true;
+    notifyListeners();
   }
 
   void resumeAnimation() {

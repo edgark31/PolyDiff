@@ -42,7 +42,6 @@ export const routes: Routes = [
     { path: 'friend', component: FriendPageComponent },
     { path: 'replay', component: ReplayPageComponent },
     { path: 'replay-game', component: ReplayGamePageComponent },
-
     { path: 'waiting-room', component: WaitingRoomComponent },
     { path: 'admin', component: ConfigPageComponent, canActivate: [AdminGuard] },
     { path: '**', redirectTo: '/login' },

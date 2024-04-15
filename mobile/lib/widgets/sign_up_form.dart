@@ -134,19 +134,24 @@ class _SignUpFormState extends State<SignUpForm> {
     RegisterProvider registerProvider =
         Provider.of<RegisterProvider>(context, listen: false);
 
-    await registerProvider.postCredentialsData(credentialsBody);
+    serverErrorMessage =
+        await registerProvider.postCredentialsData(credentialsBody);
+    setState(() {});
 
     if (registerProvider.isBack) {
       if (_selectedAvatarBase64 != null) {
         UploadAvatarBody avatarBody = UploadAvatarBody(
             username: username, base64Avatar: _selectedAvatarBase64!);
 
-        await registerProvider.putAvatarData(avatarBody, AvatarType.camera);
+        serverErrorMessage =
+            await registerProvider.putAvatarData(avatarBody, AvatarType.camera);
+        setState(() {});
       } else {
         UploadAvatarBody predefinedAvatarBody =
-            UploadAvatarBody(username: username, id: _selectedAvatarId);
-        await registerProvider.putAvatarData(
+            UploadAvatarBody(username: username, defaultId: _selectedAvatarId);
+        serverErrorMessage = await registerProvider.putAvatarData(
             predefinedAvatarBody, AvatarType.predefined);
+        setState(() {});
       }
 
       if (registerProvider.isBack) {

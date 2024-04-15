@@ -19,9 +19,9 @@ class GameManagerService extends ChangeNotifier {
 
   // Services
   final SocketService socketService = Get.find();
+  final InfoService infoService = Get.find();
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();
-  final InfoService infoService = Get.find();
   final GameRecordProvider gameRecordProvider = Get.find();
 
   bool isLeftCanvas = true;
@@ -62,6 +62,7 @@ class GameManagerService extends ChangeNotifier {
   void startGame(String? lobbyId) {
     print("Calling gamemanager start game");
     gameAreaService.coordinates = [];
+
     socketService.send(SocketType.Game, GameEvents.StartGame.name, lobbyId);
   }
 
@@ -72,10 +73,15 @@ class GameManagerService extends ChangeNotifier {
     startGame(lobbyService.lobby.lobbyId);
   }
 
-  void setGameRecord(GameRecord record) {
+  set gameRecord(GameRecord record) {
+    print(
+        "Setting isFromProfile to false : recordProvider : ${gameRecordProvider.isFromProfile}");
+    gameRecordProvider.isPlaybackFromProfile = false;
+    print(
+        "Setting after isFromProfile to false : recordProvider : ${gameRecordProvider.isFromProfile}");
+
     print('Setting game record');
-    gameRecordProvider.setCurrentGameRecord(record);
-    notifyListeners();
+    gameRecordProvider.currentGameRecord = record;
   }
 
   void sendCoord(String? lobbyId, Coordinate coord) {
@@ -96,18 +102,6 @@ class GameManagerService extends ChangeNotifier {
     print('AbandonGame called with id: $lobbyId');
     gameAreaService.showDifferenceFound([]);
     socketService.send(SocketType.Game, GameEvents.AbandonGame.name, lobbyId);
-  }
-
-  void watchRecordedGame(String lobbyId) {
-    print('ReplayCurrentGame called from gameManagerService with id: $lobbyId');
-    socketService.send(
-        SocketType.Game, GameEvents.WatchRecordedGame.name, lobbyId);
-  }
-
-  void saveGameRecord(String lobbyId) {
-    print('SaveRecordedGame called from gameManagerService with id: $lobbyId');
-    socketService.send(
-        SocketType.Game, GameEvents.SaveGameRecord.name, lobbyId);
   }
 
   void spectateLobby(String? lobbyId) {
@@ -190,6 +184,7 @@ class GameManagerService extends ChangeNotifier {
     });
 
     socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
+      lobbyService.lobby.nDifferences = 0;
       setEndGameMessage(data as String?);
       gameAreaService.showDifferenceFound([]);
       disconnectSockets();
@@ -215,11 +210,12 @@ class GameManagerService extends ChangeNotifier {
     socketService.on(SocketType.Game, GameEvents.GameRecord.name, (record) {
       print('GameRecord received');
       if (record is Map<String, dynamic>) {
-        setGameRecord(GameRecord.fromJson(record));
+        gameRecord = (GameRecord.fromJson(record));
+
         return;
       } else if (record is String) {
         final Map<String, dynamic> parsedRecord = jsonDecode(record);
-        setGameRecord(GameRecord.fromJson(parsedRecord));
+        gameRecord = (GameRecord.fromJson(parsedRecord));
       } else {
         print('Unexpected data format received: ${record.runtimeType}');
       }

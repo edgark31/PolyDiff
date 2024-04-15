@@ -142,13 +142,6 @@ export class GameGateway implements OnGatewayConnection {
                 lobby: this.roomsManager.lobbies.get(lobbyId),
                 game,
             });
-            /* --------- Record Difference Spectate Event -------- */
-            this.recordManager.addGameEvent(lobbyId, {
-                accountId: socket.data.accountId,
-                gameEvent: GameEvents.Spectate,
-                players: structuredClone(this.roomsManager.lobbies.get(lobbyId).players),
-                observers: structuredClone(this.roomsManager.lobbies.get(lobbyId).observers),
-            } as GameEventData);
             return;
         }
         socket.emit(GameEvents.Spectate, {
@@ -193,7 +186,7 @@ export class GameGateway implements OnGatewayConnection {
                 /* --------- Record Difference Found Event -------- */
                 this.recordManager.addGameEvent(lobbyId, {
                     accountId: socket.data.accountId,
-                    username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+                    username: this.accountManager.users.get(socket.data.accountId).credentials.username,
                     gameEvent: GameEvents.Found,
                     modified: 'data:image/png;base64,' + (await this.imageManager.observerImage(structuredClone(this.games.get(lobbyId)))),
                     players: structuredClone(this.roomsManager.lobbies.get(lobbyId).players),
