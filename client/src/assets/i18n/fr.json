@@ -234,11 +234,11 @@
     "friendPage": {
         "friends": "amis actuels",
         "friendsRequests": "amis en attente",
-        "allAccount": "liste de compte",
-        "friendsList": "Liste d'amis",
+        "allAccount": "Comptes",
+        "friendsList": "Amis",
         "requestFriendsSendList": "Demandes d'amis envoyées",
         "pendingFriendsList": "Demandes d'amis reçues",
-        "allListAccount": "Liste de comptes",
+        "allListAccount": "Comptes",
         "friendsofFriends": "amis",
         "cancel": "annuler"
     },
