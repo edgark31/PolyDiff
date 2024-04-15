@@ -97,11 +97,11 @@
     },
 
     "deleteReset": {
-        "deleteGames": "Êtes-vous sûr de vouloir supprimer tous les jeux",
-        "deleteGame": "Êtes-vous sûr de vouloir supprimer le jeu",
-        "resetTimes": "Êtes-vous sûr de vouloir réinitialiser tous les meilleurs temps",
-        "resetTime": "Êtes-vous sûr de vouloir réinitialiser le meilleur temps",
-        "deleteHistory": "Êtes-vous sûr de vouloir supprimer l'historique",
+        "deleteGames": "Supprimer tous les jeux",
+        "deleteGame": "Supprimer le jeu",
+        "resetTimes": "Réinitialiser tous les meilleurs temps",
+        "resetTime": "Réinitialiser le meilleur temps",
+        "deleteHistory": "Supprimer l'historique",
         "yes": "oui",
         "no": "non"
     },
@@ -244,14 +244,14 @@
     },
 
     "AccountDialog": {
-        "confirmChange": "Etes-vous sur de vouloir confirmer vos modifications",
-        "deleteFriends": "Etes-vous sur de supprimer cet ami",
+        "confirmChange": "Enregistrer vos modifications ?",
+        "deleteFriends": "Supprimer cet ami ?",
         "yes": "Oui",
         "no": "Non"
     },
 
     "waitingPage": {
-        "currentPlayers": "joueurs présents",
+        "currentPlayers": "joueur(s) présents",
         "waitingPlayers": "Joueur(s) en attente",
         "player": "Joueur",
         "start": "Commencer la partie",

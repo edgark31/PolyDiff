@@ -94,11 +94,11 @@
         "restartProcess": "There must be between 3 and 9 differences. Please restart the process"
     },
     "deleteReset": {
-        "deleteGames": "Are you sure you want to delete all games",
-        "deleteGame": "Are you sure you want to delete the game",
-        "resetTimes": "Are you sure you want to reset all best times",
-        "resetTime": "Are you sure you want to reset the best time",
-        "deleteHistory": "Are you sure you want to delete the history",
+        "deleteGames": "Delete all games",
+        "deleteGame": "Delete the game",
+        "resetTimes": "Reset all best times",
+        "resetTime": "Reset best time",
+        "deleteHistory": "Delete history",
         "yes": "Yes",
         "no": "No"
     },
@@ -236,8 +236,8 @@
         "cancel": "cancel"
     },
     "AccountDialog": {
-        "confirmChange": "Are you sure you want to confirm your changes?",
-        "deleteFriends": "Are you sure you want to delete this friend?",
+        "confirmChange": "Save your changes?",
+        "deleteFriends": "Delete this friend?",
         "yes": "Yes",
         "no": "No"
     },
