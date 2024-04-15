@@ -44,7 +44,7 @@ class AccountService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          'oldUsername': oldUsername,
+          'username': oldUsername,
           'newUsername': newUsername,
         }),
       );

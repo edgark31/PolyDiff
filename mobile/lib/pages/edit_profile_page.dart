@@ -199,7 +199,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       if (_selectedAvatarId != null &&
           _selectedAvatarId != _newSelectedAvatarId) {
         UploadAvatarBody predefinedAvatarBody = UploadAvatarBody(
-            username: _infoService.username, id: _selectedAvatarId);
+            username: _infoService.username, defaultId: _selectedAvatarId);
         String? response = await _registerProvider.putAvatarData(
             predefinedAvatarBody, AvatarType.predefined);
 
@@ -250,7 +250,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             enteredName != usernameController.text.trim()) {
           enteredName = usernameController.text.trim();
           String? response = await accountService.updateUsername(
-              _infoService.username, usernameController.text.trim());
+              _infoService.id, usernameController.text.trim());
           if (response == null) {
             _infoService.setUsername(usernameController.text.trim());
             showFeedback(usernameFeedback);

@@ -141,16 +141,16 @@ class Credentials {
 
 class SignUpCredentialsBody {
   Credentials credentials;
-  String? id;
+  String? defaultId;
   SignUpCredentialsBody({
     required this.credentials,
-    this.id = '1',
+    this.defaultId = '1',
   });
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["creds"] = credentials;
-    data["id"] = id;
+    data["defaultId"] = defaultId;
     return data;
   }
 }
@@ -158,10 +158,10 @@ class SignUpCredentialsBody {
 class UploadAvatarBody {
   String username;
   String? base64Avatar;
-  String? id;
+  String? defaultId;
   UploadAvatarBody({
     required this.username,
-    this.id,
+    this.defaultId,
     this.base64Avatar,
   });
 
@@ -169,7 +169,7 @@ class UploadAvatarBody {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["username"] = username;
     data["avatar"] = base64Avatar;
-    data["id"] = id;
+    data["defaultId"] = defaultId;
     return data;
   }
 }
