@@ -82,22 +82,22 @@ class _PlaybackPageState extends State<PlaybackPage> {
   void _askPlayerToReplay() {
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            // TODO: traduire
-            title: Text("Playback Finished"),
-            content: Text("Would you like to replay?"),
+            title: Text(AppLocalizations.of(context)!.replay_endOfReplay),
+            content: Text(AppLocalizations.of(context)!.replay_wantToReplay),
             actions: [
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                     playbackService.restart();
                   },
-                  child: Text("Yes")),
+                  child: Text(AppLocalizations.of(context)!.confirmation_yes)),
               TextButton(
                   onPressed: () =>
                       Navigator.pushNamed(context, DASHBOARD_ROUTE),
-                  child: Text("No")),
+                  child: Text(AppLocalizations.of(context)!.confirmation_no)),
             ],
           );
         });
@@ -106,24 +106,24 @@ class _PlaybackPageState extends State<PlaybackPage> {
   void _askPlayerToSaveReplay() {
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            // TODO: traduire
-            title: Text("Playback Finished"),
-            content: Text("Would you like to save?"),
+            title: Text(AppLocalizations.of(context)!.replay_endOfReplay),
+            content: Text(AppLocalizations.of(context)!.replay_wantToSave),
             actions: [
               TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, DASHBOARD_ROUTE);
                   },
-                  child: Text("Yes")),
+                  child: Text(AppLocalizations.of(context)!.confirmation_yes)),
               TextButton(
                 onPressed: () {
                   gameRecordProvider
                       .deleteAccountId(gameRecordProvider.record.date);
                   Navigator.pushNamed(context, DASHBOARD_ROUTE);
                 },
-                child: Text("No"),
+                child: Text(AppLocalizations.of(context)!.confirmation_no),
               ),
             ],
           );
@@ -131,12 +131,11 @@ class _PlaybackPageState extends State<PlaybackPage> {
   }
 
   void showErrorDialog(String message) {
-    // TODO: remove or translate
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Error"),
+          title: Text("Aie"),
           content: Text(message),
           actions: <Widget>[
             TextButton(
@@ -184,25 +183,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
           children: [
             Row(
               children: [
-                if (gameRecordProvider.record.isCheatEnabled) ...[
-                  ElevatedButton(
-                    onPressed: null,
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Color(0xFFEF6151),
-                      backgroundColor: Color(0xFF2D1E16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.gamePage_cheatButton,
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ),
-                ] else
-                  SizedBox(width: 120),
+                SizedBox(width: 120),
                 SizedBox(
                   height: 200,
                   width: 1000,
@@ -235,67 +216,6 @@ class _PlaybackPageState extends State<PlaybackPage> {
             ),
           ],
         ),
-        // if (isChatBoxVisible)
-        //   Positioned(
-        //     top: 50,
-        //     left: 0,
-        //     right: 0,
-        //     height: 550,
-        //     child: Align(
-        //       alignment: Alignment.topCenter,
-        //       child: AnimatedOpacity(
-        //         opacity: 1.0,
-        //         duration: Duration(milliseconds: 500),
-        //         child: Transform.scale(
-        //           scale: 1.0,
-        //           child: ChatBox(),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // isPlayerAnObserver
-        //     ? _actionButton(
-        //         context,
-        //         AppLocalizations.of(context)!.gamePage_leaveButton,
-        //         () {
-        //           gameManagerService.abandonGame(lobbyService.lobby.lobbyId);
-        //           Navigator.pushNamed(context, DASHBOARD_ROUTE);
-        //         },
-        //       )
-        //     : _actionButton(
-        //         context,
-        //         AppLocalizations.of(context)!.gamePage_giveUpButton,
-        //         () {
-        //           Future.delayed(Duration.zero, () {
-        //             if (ModalRoute.of(context)?.isCurrent ?? false) {
-        //               showDialog(
-        //                 barrierDismissible: false,
-        //                 context: context,
-        //                 builder: (BuildContext context) {
-        //                   return AbandonPopup();
-        //                 },
-        //               );
-        //             }
-        //           });
-        //         },
-        //       ),
-        // _observerInfos(replayPlayerProvider.nObservers),
-        // Align(
-        //   alignment: Alignment.bottomCenter,
-        //   child: Padding(
-        //     padding: const EdgeInsets.only(bottom: 20.0),
-        //     child: IconButton(
-        //       icon: Icon(Icons.chat),
-        //       iconSize: 45.0,
-        //       color: Colors.white,
-        //       onPressed: () {
-        //         setState(() {
-        //           isChatBoxVisible = !isChatBoxVisible;
-        //         });
-        //       },
-        //     ),
-        //   ),
-        // ),
         Positioned(
           left: 0.0,
           right: 0.0,
@@ -310,25 +230,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
             ],
           ),
         ),
-
-        // Positioned(
-        //   left: 0.0,
-        //   right: 0.0,
-        //   bottom: 8.0,
-        //   child: Row(
-        //     children: [
-        // Directly place the GameEventSlider without any flex-related wrapper
-        // GameEventSlider(
-        //   playbackService: playbackService,
-        //   playbackManager: playbackManager,
-        // ),
-        // // You can control the space between the slider and the observer info,
-        // // for example using a SizedBox if necessary.
-        // SizedBox(width: 8), // Adjust the width as needed
         _observerInfos(replayPlayerProvider.nObservers),
-        //     ],
-        //   ),
-        // )
       ],
     ));
   }

@@ -38,7 +38,7 @@ export class PersonalizationPageComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.welcomeService.selectName = this.gameManager.username;
+        this.welcomeService.selectName = this.welcomeService.account.credentials.username;
         this.welcomeService.selectAvatar = this.welcomeService.account.profile.avatar;
         this.welcomeService.selectTheme = this.welcomeService.account.profile.mobileTheme;
         this.welcomeService.selectLanguage = this.welcomeService.account.profile.language;
@@ -47,7 +47,7 @@ export class PersonalizationPageComponent implements OnInit {
     }
 
     onCancel() {
-        this.welcomeService.selectName = this.gameManager.username;
+        this.welcomeService.selectName = this.welcomeService.account.credentials.username;
         this.welcomeService.selectAvatar = this.welcomeService.account.profile.avatar;
         this.welcomeService.selectTheme = this.welcomeService.account.profile.mobileTheme;
         this.welcomeService.selectLanguage = this.welcomeService.account.profile.language;
