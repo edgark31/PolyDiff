@@ -18,24 +18,23 @@ import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/info_service.dart';
 import 'package:provider/provider.dart';
 
-class GameEventPlaybackScreen extends StatefulWidget {
+class PlaybackPage extends StatefulWidget {
   static const String routeName = REPLAY_ROUTE;
 
-  GameEventPlaybackScreen();
+  PlaybackPage();
 
   static Route route() {
     return MaterialPageRoute(
       settings: const RouteSettings(name: routeName),
-      builder: (_) => GameEventPlaybackScreen(),
+      builder: (_) => PlaybackPage(),
     );
   }
 
   @override
-  State<GameEventPlaybackScreen> createState() =>
-      _GameEventPlaybackScreenState();
+  State<PlaybackPage> createState() => _PlaybackPageState();
 }
 
-class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
+class _PlaybackPageState extends State<PlaybackPage> {
   late StreamSubscription<GameEventData> _subscription;
   final GameRecordProvider gameRecordProvider = Get.find();
   final GameEventPlaybackService playbackService = Get.find();

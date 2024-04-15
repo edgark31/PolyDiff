@@ -18,7 +18,7 @@ import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/pages/sign_up_page.dart';
 import 'package:mobile/pages/statistics_page.dart';
-import 'package:mobile/replay/game_playback_page.dart';
+import 'package:mobile/replay/playback_page.dart';
 
 // Important if testing on a real device with a local server
 // Change the IP address to your local machine's IP address
@@ -27,8 +27,8 @@ import 'package:mobile/replay/game_playback_page.dart';
 
 // Change this URL to your local machine's IP address when testing on tablet
 // const String BASE_URL = 'http://192.168.0.100:3000'; // Testing on tablet
-// const String BASE_URL = 'http://34.95.3.182:3000'; // Testing on real server
-const String BASE_URL = 'http://localhost:3000'; // Testing on chrome
+const String BASE_URL = 'http://34.95.3.182:3000'; // Testing on real server
+// const String BASE_URL = 'http://localhost:3000'; // Testing on chrome
 const String API_URL = '$BASE_URL/api';
 
 // MAIN PAGES
@@ -114,8 +114,8 @@ class AppRouter {
       case GameRecordSelectionPage.routeName:
         return GameRecordSelectionPage.route();
 
-      case GameEventPlaybackScreen.routeName:
-        return GameEventPlaybackScreen.route();
+      case PlaybackPage.routeName:
+        return PlaybackPage.route();
 
       case FriendsPage.routeName:
         return FriendsPage.route();
