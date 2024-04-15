@@ -171,10 +171,10 @@ span {
 }
 
 .eye-open {
-    transform: scale(4) rotate(0deg);
+    transform: scale(4) rotate(0deg) translateY(18px) translateX(10px);
 }
 .eye-closed {
-    transform: scale(4) rotate(180deg);
+    transform: scale(4) rotate(180deg) translateY(-6px) translateX(2px);
 }
 
 .player {
