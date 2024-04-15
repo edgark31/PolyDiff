@@ -65,6 +65,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
             this.rankedPlayers = rankedPlayers.slice(0, 3 + 2);
             this.timeStamp = new Date().getTime();
         });
+        this.clientSocket.send('auth', AccountEvents.GlobalRanking);
         this.intervalId = setInterval(() => {
             this.clientSocket.send('auth', AccountEvents.GlobalRanking);
         }, TIME_MAIN);
