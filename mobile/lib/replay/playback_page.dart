@@ -93,7 +93,8 @@ class _PlaybackPageState extends State<PlaybackPage> {
                   },
                   child: Text("Yes")),
               TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, DASHBOARD_ROUTE),
                   child: Text("No")),
             ],
           );
@@ -156,7 +157,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
               children: [
                 if (gameRecordProvider.record.isCheatEnabled) ...[
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: null,
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Color(0xFFEF6151),
                       backgroundColor: Color(0xFF2D1E16),
