@@ -1,33 +1,31 @@
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-<div>
-    <div class="header">
-        <div class="nav-bar-container">
-            <app-nav-bar id ="nav-bar"></app-nav-bar>
-        </div>
-            <div class="card-container" *ngIf="records.length !== 0">
-                <mat-card class="friend-card" *ngFor="let record of records">
-                    <mat-card-header>
-                        <mat-card-title class="username">
-                            <div class="form-avatar">
-                                <img src="{{'http://34.95.3.182:3000/' + record.game.gameId + '/original.bmp'}}" alt="Image" style="width: 152px; height: 114px; border-radius: 10px;">
-                              </div>
-                            <div class="name">
-                                <span>{{ record.game.name }}</span>
-                            </div>
-                            <div class="play">
-                                <button (click)="playRecord(record)"><mat-icon>play_arrow</mat-icon></button>
-                            </div>
-                            <div class="date">
-                                <span>{{ record.date| date: 'longDate' }} at {{ record.date | date: 'shortTime' }}</span>
-                            </div>
-                            <div class="delete">
-                                <button (click)="deleteRecord(record)"><mat-icon>delete</mat-icon></button>
-                            </div>
-                        </mat-card-title>
-                    </mat-card-header>
-                </mat-card>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="main flex-column">
+    <app-nav-bar ></app-nav-bar>
+    <div class="record-instance flex-column">
+        <div class="record-container flex-column" *ngIf="records.length !== 0">
+            <div class="record flex-row" *ngFor="let record of records">
+                <div class="avatar flex-column">
+                    <img src="{{'http://34.95.3.182:3000/' + record.game.gameId + '/original.bmp'}}" alt="Image" style="width: 152px; height: 114px; border-radius: 10px;">
+                </div>
+                <div class="name flex-column">
+                    <span>{{ record.game.name }}</span>
+                </div>
+                <div class="play flex-column">
+                    <button (click)="playRecord(record)"><mat-icon>play_arrow</mat-icon></button>
+                </div>
+                <div class="date flex-column">
+                    <span>{{ record.date| date: 'longDate' }} at {{ record.date | date: 'shortTime' }}</span>
+                </div>
+                <div class="delete flex-column">
+                    <button (click)="deleteRecord(record)"><mat-icon>delete</mat-icon></button>
+                </div>
             </div>
-            <p *ngIf="records.length === 0" id = "waiting-message">{{'replayPage.noReplayAvailable' | translate }}</p>
-            <img *ngIf="records.length === 0" id = "waiting" src = "./assets/raccoonWaiting.gif" alt = "waiting-image" />
-<img *ngIf="welcomeService.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
-<img  *ngIf="welcomeService.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>
+        </div>
+        <div class="flex-column" *ngIf="records.length === 0">
+            <p id="waiting-message">{{'replayPage.noReplayAvailable' | translate }}</p>
+            <img id="waiting-img" src ="./assets/raccoonWaiting.gif" alt="waiting-image"/>
+        </div>
+    </div>
+</div>
+<img *ngIf="welcomeService.account.profile.mobileTheme==='light'" id="background" src="./assets/background/LimitedTimeBackground.jpg" alt="background"/>
+<img *ngIf="welcomeService.account.profile.mobileTheme==='dark'" id="background" src="./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>
