@@ -83,6 +83,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            // TODO: traduire
             title: Text("Playback Finished"),
             content: Text("Would you like to replay?"),
             actions: [

@@ -69,6 +69,7 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
         body: isLoading
             ? Center(child: CircularProgressIndicator())
             : (gameRecordsFromServer.isEmpty
+                // TODO: translate this
                 ? Center(child: Text("No game records found."))
                 : ListView.builder(
                     itemCount: gameRecordsFromServer.length,
@@ -101,6 +102,7 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        // TODO: translate this
         return AlertDialog(
           title: Text("Error"),
           content: Text(message),

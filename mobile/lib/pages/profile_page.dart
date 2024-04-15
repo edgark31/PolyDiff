@@ -50,7 +50,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: CustomAppBar(title: AppLocalizations.of(context)!.profile_title),
-      drawer: CustomMenuDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
