@@ -3,24 +3,24 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game_record_model.dart';
-import 'package:mobile/replay/game_event_playback_manager.dart';
+import 'package:mobile/replay/playback_manager.dart';
 import 'package:mobile/replay/playback_service.dart';
 
-class GameEventSlider extends StatefulWidget {
+class PlaybackSlider extends StatefulWidget {
   final PlaybackService playbackService;
-  final GameEventPlaybackManager playbackManager;
+  final PlaybackManager playbackManager;
 
-  GameEventSlider({
+  PlaybackSlider({
     super.key,
     required this.playbackService,
     required this.playbackManager,
   });
 
   @override
-  State<GameEventSlider> createState() => _GameEventSliderState();
+  State<PlaybackSlider> createState() => _PlaybackSliderState();
 }
 
-class _GameEventSliderState extends State<GameEventSlider> {
+class _PlaybackSliderState extends State<PlaybackSlider> {
   Timer? _debounceTimer;
 
   double _sliderValue = 0;
@@ -61,7 +61,7 @@ class _GameEventSliderState extends State<GameEventSlider> {
       _sliderValue = newValue;
     });
     int eventIndex =
-        (newValue * (widget.playbackService.events.length - 1)).round();
+        (newValue * (widget.playbackService.events.length - 1)).floor();
     widget.playbackService.seekToEvent(eventIndex);
   }
 
@@ -74,17 +74,16 @@ class _GameEventSliderState extends State<GameEventSlider> {
       int eventIndex = widget.playbackService.events.indexOf(event);
       if (eventIndex != -1 && mounted) {
         setState(() {
-          Future.delayed(Duration(milliseconds: 200), () {
-            int sliderTime = widget.playbackManager.timeLimit - event.time!;
+          int sliderTime = widget.playbackManager.timeLimit - event.time!;
 
-            if (mounted) {
-              if (event.time == 0 || sliderTime < 0 || event.time == null) {
-                return;
-              }
-              _sliderTimer = Duration(seconds: sliderTime);
-              _sliderValue = calculateNormalizedSliderValue(eventIndex);
+          if (mounted) {
+            _sliderValue = calculateNormalizedSliderValue(eventIndex);
+            print("Slider value updated to $_sliderValue");
+            if (event.time == 0 || sliderTime < 0 || event.time == null) {
+              return;
             }
-          });
+            _sliderTimer = Duration(seconds: sliderTime);
+          }
         });
       }
     }
@@ -101,12 +100,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
       print("Pausing");
       widget.playbackService.pause();
     }
-  }
-
-  void _goHome() {
-    // TODO : Implement home functionality
-    // Implement forward functionality
-    // Navigator.pushNamed(context, DASHBOARD_ROUTE);
   }
 
   @override
@@ -128,10 +121,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // IconButton(
-                //   icon: Icon(Icons.home),
-                //   onPressed: _goHome,
-                // ),
                 IconButton(
                   icon: _isPlaying ? Icon(Icons.pause) : Icon(Icons.play_arrow),
                   onPressed: _triggerPlay,

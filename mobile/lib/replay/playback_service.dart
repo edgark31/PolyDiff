@@ -39,7 +39,7 @@ class PlaybackService extends ChangeNotifier {
   bool get isUserInteraction => _isUserInteraction;
   bool get isRestart => _isRestart;
 
-  GameEventPlaybackService() {
+  PlaybackService() {
     _gameRecordProvider.addListener(_handleProviderUpdate);
     _eventsController = StreamController<GameEventData>.broadcast(
       onListen: () {},
@@ -126,7 +126,7 @@ class PlaybackService extends ChangeNotifier {
       if (!_isUserInteraction && !_isRestart) {
         if (durationSinceLastEvent > 0) {
           await Future.delayed(Duration(
-              milliseconds: (durationSinceLastEvent / _speed).floor()));
+              milliseconds: (durationSinceLastEvent / _speed).round()));
         }
 
         if (_isPaused) {
@@ -145,6 +145,10 @@ class PlaybackService extends ChangeNotifier {
         _isRestart = false;
         continue;
       }
+      print("Current index: $_currentIndex");
+      print("Event: ${event.gameEvent}");
+      print("events length: ${events.length}");
+      print("Last event time: ${events.last.gameEvent}");
     }
 
     if (_currentIndex >= events.length && !_isPaused) {
@@ -171,7 +175,7 @@ class PlaybackService extends ChangeNotifier {
     print("Speed set to $_speed. Adjusting playback speed.");
     if (!_isPaused) {
       pause();
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(Duration(milliseconds: 1000));
 
       resume();
     }
@@ -190,7 +194,7 @@ class PlaybackService extends ChangeNotifier {
     pause();
 
     // Resume playback with a slight delay to allow the UI to update
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 1000), () {
       _currentIndex = eventIndex;
       if (!_isPaused) {
         resume();

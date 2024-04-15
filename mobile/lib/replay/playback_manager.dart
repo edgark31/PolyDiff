@@ -10,7 +10,7 @@ import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/game_area_service.dart';
 import 'package:mobile/services/info_service.dart';
 
-class GameEventPlaybackManager extends ChangeNotifier {
+class PlaybackManager extends ChangeNotifier {
   late StreamSubscription<GameEventData> _subscription;
 
   final InfoService _infoService = Get.find();
@@ -41,7 +41,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   List<GameEventData> get events => _gameRecordProvider.record.gameEvents;
   List<Coordinate> get remainingCoordinates => _remainingCoordinates;
 
-  GameEventPlaybackManager() {
+  PlaybackManager() {
     _subscription = _playbackService.eventsStream.listen((event) {
       _handleGameEvent(event);
     }, onError: (error) {
@@ -91,6 +91,8 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
   void _handleGameStartEvent() {
     _gameAreaService.coordinates = [];
+    _replayPlayerProvider.initialPlayersData =
+        _gameRecordProvider.record.players;
     print("Game Start Event");
   }
 

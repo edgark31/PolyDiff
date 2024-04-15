@@ -9,7 +9,7 @@ import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
-import 'package:mobile/replay/game_event_playback_manager.dart';
+import 'package:mobile/replay/playback_manager.dart';
 import 'package:mobile/replay/playback_service.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
@@ -113,7 +113,7 @@ void main() async {
     }),
 
     ChangeNotifierProvider(create: (context) {
-      GameEventPlaybackManager playbackManager = Get.find();
+      PlaybackManager playbackManager = Get.find();
       return playbackManager;
     }),
   ], child: const MyApp()));
@@ -131,7 +131,7 @@ void initializeServices() {
   Get.put(ReplayImagesProvider());
   Get.put(GameRecordProvider());
   Get.put(PlaybackService());
-  Get.put(GameEventPlaybackManager());
+  Get.put(PlaybackManager());
   Get.put(GameManagerService());
   Get.put(ChatService());
   Get.put(GameCardService());
