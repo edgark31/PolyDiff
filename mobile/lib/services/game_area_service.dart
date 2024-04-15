@@ -38,7 +38,11 @@ class GameAreaService extends ChangeNotifier {
     startBlinking(newCoordinates, flashingSpeed);
   }
 
-  void resetCheatMode() {
+  void reset() {
+    coordinates = [];
+    leftErrorCoord = [];
+    rightErrorCoord = [];
+    _isAnimationPaused = false;
     isCheatMode = false;
     resetCheatBlinkingDifference();
   }

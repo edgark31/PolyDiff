@@ -89,8 +89,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    playbackService
-                        .restart(); // Adjust according to your logic to restart
+                    playbackService.restart();
                   },
                   child: Text("Yes")),
               TextButton(

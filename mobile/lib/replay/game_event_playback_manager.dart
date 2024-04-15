@@ -90,6 +90,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   }
 
   void _handleGameStartEvent() {
+    _gameAreaService.coordinates = [];
     print("Game Start Event");
   }
 

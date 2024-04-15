@@ -51,7 +51,7 @@ class GameEventPlaybackService extends ChangeNotifier {
   void startPlayback() {
     if (!_isPaused && events.isNotEmpty) {
       print("Starting playback from the beginning.");
-      _gameAreaService.resetBlinkingDifference();
+      _gameAreaService.reset();
       _currentIndex = 0;
       _isUserInteraction = false;
       _isRestart = false;
@@ -68,8 +68,8 @@ class GameEventPlaybackService extends ChangeNotifier {
 
   void restart() async {
     pause();
-    await Future.delayed(Duration(milliseconds: 1000), () {
-      _gameAreaService.resetBlinkingDifference();
+    await Future.delayed(Duration(milliseconds: 500), () {
+      _gameAreaService.reset();
       _currentIndex = 0;
       _isRestart = true;
       print("Restarting playback from start. Current index set to 0.");
@@ -188,6 +188,7 @@ class GameEventPlaybackService extends ChangeNotifier {
     _speed = SPEED_X1;
     _isPaused = true;
     _timer?.cancel();
+    _gameAreaService.reset();
   }
 
   int calculateEventIndexFromSliderPosition(
