@@ -45,34 +45,34 @@
         "gameMode": "Game mode",
         "picture": "Image",
         "differenceNumber": "Number of differences",
-        "join": "join",
+        "join": "Join",
         "joinObserver": "Join as observer",
-        "players": "players"
+        "players": "Players"
     },
     "game": {
         "foundDifference": "Differences found",
         "timerOver": "Time's up",
         "time": "Time",
-        "classic": "classic",
-        "limited": "limited",
-        "practice": "practice",
+        "classic": "Classic",
+        "limited": "Limited",
+        "practice": "Practice",
         "abandon": "Abandon the game",
-        "players": "players"
+        "players": "Players"
     },
 
     "gameMode": {
         "classicMode": "Classic",
         "limitedMode": "Limited time",
         "practiceMode": "Practice",
-        "chooseMode": "Choose your game mode"
+        "chooseMode": "Chose your game mode"
     },
     "chat": {
         "chatZone": "Chatting zone",
-        "return": "return",
+        "return": "Return",
         "foundDifférence": " found a difference!",
         "error": " made a mistake!",
-        "endParty": "end of game",
-        "endPractice": "end of the Practice",
+        "endParty": "End of game",
+        "endPractice": "End of the Practice",
         "partyAbandon": "Are you sure you want to give up the game ?",
         "abandonParty": " gave up !",
         "winGame": " Win !",
