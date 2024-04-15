@@ -55,6 +55,7 @@ export class GamePageDialogComponent {
 
     saveRecord(): void {
         this.replayService.resetReplay();
+        this.roomManager.isObserver = false;
         this.clientSocket.disconnect('lobby');
         this.clientSocket.disconnect('game');
         if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
@@ -68,10 +69,8 @@ export class GamePageDialogComponent {
         this.clientSocket.disconnect('lobby');
         this.clientSocket.disconnect('game');
         if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
-        else {
-            this.dialog.closeAll();
-            this.router.navigate(['/home']);
-        }
+        this.dialog.closeAll();
+        this.router.navigate(['/home']);
         this.communicationService.deleteAccountId(this.replayService.record.date.toString(), this.welcomeService.account.id as string).subscribe();
     }
 
