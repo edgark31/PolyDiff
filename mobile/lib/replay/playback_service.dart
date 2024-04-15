@@ -84,7 +84,7 @@ class PlaybackService extends ChangeNotifier {
       _gameAreaService.reset();
       _currentIndex = 0;
       _isRestart = true;
-      _speed = SPEED_X1;
+
       print("Restarting playback from start. Current index set to 0.");
       resume();
       _isRestart = false;
