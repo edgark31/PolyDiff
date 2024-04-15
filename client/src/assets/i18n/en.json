@@ -229,8 +229,8 @@
         "friendsPending": "Received friend requests",
         "allAccount": "all Account",
         "friendsList": "Friends List",
-        "requestFriendsSendList": "Sent Friend Requests List",
-        "pendingFriendsList": "Received Friend Requests List",
+        "requestFriendsSendList": "Friends requests sent",
+        "pendingFriendsList": "Friends requests received",
         "allListAccount": "Account List",
         "friendsofFriends": "friends",
         "cancel": "cancel"

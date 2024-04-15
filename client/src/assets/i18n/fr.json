@@ -236,8 +236,8 @@
         "friendsRequests": "amis en attente",
         "allAccount": "liste de compte",
         "friendsList": "Liste d'amis",
-        "requestFriendsSendList": "Liste d'amis en attente envoyé",
-        "pendingFriendsList": "Liste d'amis en attente reçu",
+        "requestFriendsSendList": "Demandes d'amis envoyées",
+        "pendingFriendsList": "Demandes d'amis reçues",
         "allListAccount": "Liste de comptes",
         "friendsofFriends": "amis",
         "cancel": "annuler"
