@@ -57,7 +57,7 @@ export class CommunicationService {
     }
 
     updateUsername(accountId: string, newUsername: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/username`, { accountId, newUsername }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/username`, { username: accountId, newUsername }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -77,7 +77,7 @@ export class CommunicationService {
     }
 
     updateAvatar(accountId: string, avatar: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { accountId, avatar }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { username: accountId, avatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -86,7 +86,7 @@ export class CommunicationService {
         );
     }
     chooseAvatar(accountId: string, newAvatar: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/avatar/choose`, { accountId, defaultId: newAvatar }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/avatar/choose`, { username: accountId, defaultId: newAvatar }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -96,7 +96,7 @@ export class CommunicationService {
     }
 
     modifyPassword(accountId: string, newPassword: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/password`, { accountId, newPassword }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/password`, { username: accountId, newPassword }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -106,7 +106,7 @@ export class CommunicationService {
     }
 
     modifyTheme(accountId: string, newTheme: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/mobile/theme`, { accountId, newTheme }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/mobile/theme`, { username: accountId, newTheme }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -116,7 +116,7 @@ export class CommunicationService {
     }
 
     modifySongError(accountId: string, newErrorSound: Sound): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/sound/error`, { accountId, newSound: newErrorSound }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/sound/error`, { username: accountId, newSound: newErrorSound }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -126,7 +126,7 @@ export class CommunicationService {
     }
 
     modifySongDifference(accountId: string, newCorrectSound: Sound): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/sound/correct`, { accountId, newSound: newCorrectSound }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/sound/correct`, { username: accountId, newSound: newCorrectSound }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console
@@ -136,7 +136,7 @@ export class CommunicationService {
     }
 
     modifyLanguage(accountId: string, newLanguage: string): Observable<void> {
-        return this.http.put<void>(`${this.accountUrl}/language`, { accountId, newLanguage }).pipe(
+        return this.http.put<void>(`${this.accountUrl}/language`, { username: accountId, newLanguage }).pipe(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             tap(() => {
                 // eslint-disable-next-line no-console

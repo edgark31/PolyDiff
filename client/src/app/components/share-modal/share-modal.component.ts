@@ -19,6 +19,8 @@ export class ShareModalComponent implements OnInit, OnDestroy {
     accountSubscription: Subscription;
     friends: Friend[];
     friendListSubscription: Subscription;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    intervalId: any;
     // eslint-disable-next-line max-params
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: { showShareFriend: boolean; players: Player[] },
@@ -39,6 +41,11 @@ export class ShareModalComponent implements OnInit, OnDestroy {
         this.friendListSubscription = this.friendService.friendsSubject$.subscribe((friendList: Friend[]) => {
             this.friends = friendList.sort((a, b) => a.name.localeCompare(b.name));
         });
+
+        this.intervalId = setInterval(() => {
+            this.friendService.recuperateFriend();
+            // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+        }, 10000);
     }
 
     ngOnDestroy(): void {
@@ -46,6 +53,7 @@ export class ShareModalComponent implements OnInit, OnDestroy {
             this.accountSubscription?.unsubscribe();
             this.friendListSubscription?.unsubscribe();
             this.friendService.off();
+            clearInterval(this.intervalId);
         }
     }
     onShare(friendId: string): void {

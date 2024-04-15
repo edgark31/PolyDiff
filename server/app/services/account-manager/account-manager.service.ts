@@ -63,7 +63,7 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(account.credentials.username, account.profile.avatar);
             this.logger.verbose(`Account ${creds.username} has registered successfully`);
             await this.fetchUsers();
-            return Promise.resolve();
+            return Promise.resolve(account);
         } catch (error) {
             this.logger.error(`Failed to add account --> ${error.message}`);
             return Promise.reject(`${error}`);
@@ -100,7 +100,9 @@ export class AccountManagerService implements OnModuleInit {
 
     async updateUsername(accountId: string, newUsername: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ id: accountId });
+            const accountFound = await this.accountModel.findOne({
+                $or: [{ 'credentials.username': accountId }, { id: accountId }],
+            });
             const pseudoFound = await this.accountModel.findOne({ 'credentials.username': newUsername });
             if (!accountFound) throw new Error('Account not found');
             if (pseudoFound) throw new Error('Username already taken');
@@ -129,7 +131,9 @@ export class AccountManagerService implements OnModuleInit {
 
     async updatePassword(accountId: string, newPassword: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ id: accountId });
+            const accountFound = await this.accountModel.findOne({
+                $or: [{ 'credentials.username': accountId }, { id: accountId }],
+            });
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.credentials.password = newPassword;
@@ -147,7 +151,9 @@ export class AccountManagerService implements OnModuleInit {
 
     async uploadAvatar(accountId: string, avatar: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ id: accountId });
+            const accountFound = await this.accountModel.findOne({
+                $or: [{ 'credentials.username': accountId }, { id: accountId }],
+            });
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.avatar = avatar.replace(/^data:image\/\w+;base64,/, '');
@@ -166,7 +172,9 @@ export class AccountManagerService implements OnModuleInit {
 
     async chooseAvatar(accountId: string, id: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ id: accountId });
+            const accountFound = await this.accountModel.findOne({
+                $or: [{ 'credentials.username': accountId }, { id: accountId }],
+            });
             if (!accountFound) throw new Error('Account not found');
 
             const base64 = this.imageManager.convert(`default${id}.png`);
@@ -186,7 +194,9 @@ export class AccountManagerService implements OnModuleInit {
 
     async updateMobileTheme(accountId: string, newTheme: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ id: accountId });
+            const accountFound = await this.accountModel.findOne({
+                $or: [{ 'credentials.username': accountId }, { id: accountId }],
+            });
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.mobileTheme = newTheme;
@@ -202,7 +212,9 @@ export class AccountManagerService implements OnModuleInit {
 
     async modifyLanguage(accountId: string, newLanguage: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ id: accountId });
+            const accountFound = await this.accountModel.findOne({
+                $or: [{ 'credentials.username': accountId }, { id: accountId }],
+            });
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.language = newLanguage;
@@ -218,7 +230,9 @@ export class AccountManagerService implements OnModuleInit {
 
     async updateCorrectSound(accountId: string, newSound: Sound): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ id: accountId });
+            const accountFound = await this.accountModel.findOne({
+                $or: [{ 'credentials.username': accountId }, { id: accountId }],
+            });
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.onCorrectSound = newSound;
@@ -234,7 +248,9 @@ export class AccountManagerService implements OnModuleInit {
 
     async updateErrorSound(accountId: string, newSound: Sound): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ id: accountId });
+            const accountFound = await this.accountModel.findOne({
+                $or: [{ 'credentials.username': accountId }, { id: accountId }],
+            });
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.onErrorSound = newSound;

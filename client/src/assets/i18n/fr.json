@@ -19,7 +19,7 @@
         "songError": "Choisissez votre son pour erreur",
         "songDifference": "Choisissez votre son pour différence trouvé",
         "currentSongDifference": "Son actuel lorsqu'une différence est trouvée",
-        "currentSongError":  "Son actuel lorsqu'il y a une erreur",
+        "currentSongError": "Son actuel lorsqu'il y a une erreur",
         "nameEnter": "Veuillez écrire votre nom",
         "passwordEnter": "Veuillez écrire votre mot de passe",
         "confirmPasswordEnter": "Veuillez ré-écrire votre mot de passe",
@@ -124,7 +124,7 @@
     },
 
     "dialogGame": {
-        "home": "Accueil",
+        "home": "quitter",
         "videoReprise": "reprise Video",
         "yes": "oui",
         "no": "Non",
