@@ -106,12 +106,13 @@ class _GameEventSliderState extends State<GameEventSlider> {
   void _goHome() {
     // TODO : Implement home functionality
     // Implement forward functionality
+    // Navigator.pushNamed(context, DASHBOARD_ROUTE);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        constraints: BoxConstraints(maxWidth: 1200, maxHeight: 150),
+        constraints: BoxConstraints(maxWidth: 1000, maxHeight: 130),
         child: Column(
           children: [
             Slider(
@@ -127,10 +128,10 @@ class _GameEventSliderState extends State<GameEventSlider> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: Icon(Icons.home),
-                  onPressed: _goHome,
-                ),
+                // IconButton(
+                //   icon: Icon(Icons.home),
+                //   onPressed: _goHome,
+                // ),
                 IconButton(
                   icon: _isPlaying ? Icon(Icons.pause) : Icon(Icons.play_arrow),
                   onPressed: _triggerPlay,

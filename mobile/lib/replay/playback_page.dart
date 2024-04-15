@@ -300,7 +300,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
         Positioned(
           left: 0.0,
           right: 0.0,
-          bottom: 8.0,
+          bottom: 3.0,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
