@@ -60,7 +60,7 @@ export class LoginPageComponent implements OnInit {
                     this.translate.use(this.welcomeservice.account.profile.language);
                     const timeStamp = new Date().getTime();
                     // eslint-disable-next-line max-len
-                    this.welcomeservice.account.profile.avatar = `http://localhost:3000/avatar/${this.welcomeservice.account.id}.png?timeStamp=${timeStamp}`;
+                    this.welcomeservice.account.profile.avatar = `http://34.95.3.182:3000/avatar/${this.welcomeservice.account.id}.png?timeStamp=${timeStamp}`;
                     this.welcomeservice.isLogin = true;
                     this.router.navigate(['/home']);
                 },
