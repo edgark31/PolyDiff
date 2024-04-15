@@ -1,7 +1,7 @@
-<div class="list" *ngIf="!data.showCommonFriend">{{'friendInfo.allFriends' | translate }}</div>
+
 <div class="allList" *ngIf="data.showCommonFriend">
     <button class="list" *ngIf="typeFriend==='allFriends'" (click)="onTypeChange('commonFriends')"> {{'friendInfo.commonFriends' | translate }}</button>
-    <button class="list"  *ngIf="typeFriend==='commonFriends'" (click)="onTypeChange('allFriends')"> {{'friendInfo.allFriends' | translate }}</button>
+    <button class="list"  *ngIf="typeFriend==='commonFriends' && data.showCommonFriend" (click)="onTypeChange('allFriends')"> {{'friendInfo.allFriends' | translate }}</button>
     <!-- <mat-radio-group class="all-radio-button" [(ngModel)]="typeFriend" (change)="onTypeChange(typeFriend)">
         <mat-radio-button value="commonFriends"  class="radio-button">{{'friendInfo.commonFriends' | translate }}</mat-radio-button>
         <mat-radio-button value="allFriends">{{'friendInfo.allFriends' | translate }}</mat-radio-button>
