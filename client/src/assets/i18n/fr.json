@@ -25,6 +25,7 @@
         "confirmPasswordEnter": "Veuillez ré-écrire votre mot de passe",
         "cancel": "Annuler",
         "returnHome": "Retour à l'accueil",
+        "samePassword": "Mettez un mot de passe identique",
         "replay": "Reprises vidéos"
     },
 
@@ -247,6 +248,7 @@
 
     "AccountDialog": {
         "confirmChange": "Enregistrer vos modifications ?",
+        "changeConfirm": "Modifications enregistrés !",
         "deleteFriends": "Supprimer cet ami ?",
         "yes": "Oui",
         "no": "Non"

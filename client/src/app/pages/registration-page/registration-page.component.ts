@@ -28,11 +28,11 @@ export class RegistrationPageComponent {
     });
     creds: Credentials;
     feedback: string;
+    isRequestPending: boolean = false;
     password: string;
     confirmedPassword: string;
     email: string;
     username: string;
-    isRequestPending: boolean = false;
 
     constructor(
         private readonly communication: CommunicationService,
@@ -46,6 +46,7 @@ export class RegistrationPageComponent {
     }
 
     onSubmit() {
+        if (!this.welcomeService.selectLocal) this.welcomeService.selectLocal = '1';
         if (
             this.registrationForm.value.username &&
             this.registrationForm.value.email &&
@@ -68,12 +69,15 @@ export class RegistrationPageComponent {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';
                 },
             });
+            this.isRequestPending = true;
             setTimeout(() => {
-                if (!this.welcomeService.chooseImage && this.feedback === '')
+                if (!this.welcomeService.chooseImage && this.feedback === '') {
                     setTimeout(() => {
                         this.welcomeService.onUpdateAvatar(this.creds.username);
                         this.router.navigate(['/login']);
                     }, 1000);
+                }
+                this.isRequestPending = false;
             }, 1000);
         }
     }

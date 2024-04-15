@@ -26,7 +26,8 @@
         "confirmPasswordEnter": "Please confirm your password",
         "cancel": "Cancel",
         "returnHome": "Return to home",
-        "replay": "Replays"
+        "replay": "Replays",
+        "samePassword": "Enter the same password"
     },
 
     "button": {
@@ -241,7 +242,8 @@
         "confirmChange": "Save your changes?",
         "deleteFriends": "Delete this friend?",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "changeConfirm": "Successfully applied !"
     },
 
     "waitingPage": {
