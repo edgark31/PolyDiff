@@ -153,7 +153,7 @@ class GameEventPlaybackService extends ChangeNotifier {
     print("Speed set to $_speed. Adjusting playback speed.");
     if (!_isPaused) {
       pause();
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(Duration(milliseconds: 500));
 
       resume();
     }
@@ -183,12 +183,12 @@ class GameEventPlaybackService extends ChangeNotifier {
 
   void _stopPlayback() {
     print("Stopping playback.");
+    _gameAreaService.reset();
     _currentIndex = 0;
     _lastEventTime = null;
     _speed = SPEED_X1;
     _isPaused = true;
     _timer?.cancel();
-    _gameAreaService.reset();
   }
 
   int calculateEventIndexFromSliderPosition(
