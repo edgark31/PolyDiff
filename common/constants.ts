@@ -43,6 +43,7 @@ export const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0
 export const MAX_TIMES_INDEX = 2;
 export const PADDING_N_DIGITS = 2;
 export const NOT_FOUND = -1;
+export const TIME_MAIN = 10000;
 
 export const SCORE_POSITION = { one: 'première', two: 'deuxième', three: 'troisième' };
 

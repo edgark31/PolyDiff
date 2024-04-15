@@ -23,7 +23,7 @@
                 <p class="ranking-title">{{'ranking.global' | translate }} :</p>
                 <div class="rankedPlayer" *ngFor="let rankedPlayer of rankedPlayers">
                     <p>{{rankedPlayer.rank}}. {{rankedPlayer.name}}</p>
-                    <img src="{{'http://34.95.3.182:3000/avatar/' + rankedPlayer.accountId + '.png'}}">
+                    <img src="{{'http://34.95.3.182:3000/avatar/' + rankedPlayer.accountId + '.png?timeStamp='+ timeStamp}}">
                     <span>{{rankedPlayer.stats.gameWon}} {{'mainPage.winGame' | translate }} !</span>
                 </div>
             </div>
