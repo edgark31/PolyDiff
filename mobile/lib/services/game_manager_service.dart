@@ -19,9 +19,9 @@ class GameManagerService extends ChangeNotifier {
 
   // Services
   final SocketService socketService = Get.find();
+  final InfoService infoService = Get.find();
   final GameAreaService gameAreaService = Get.find();
   final LobbyService lobbyService = Get.find();
-  final InfoService infoService = Get.find();
   final GameRecordProvider gameRecordProvider = Get.find();
 
   bool isLeftCanvas = true;
@@ -62,6 +62,7 @@ class GameManagerService extends ChangeNotifier {
   void startGame(String? lobbyId) {
     print("Calling gamemanager start game");
     gameAreaService.coordinates = [];
+
     socketService.send(SocketType.Game, GameEvents.StartGame.name, lobbyId);
   }
 
@@ -97,18 +98,6 @@ class GameManagerService extends ChangeNotifier {
     print('AbandonGame called with id: $lobbyId');
     gameAreaService.showDifferenceFound([]);
     socketService.send(SocketType.Game, GameEvents.AbandonGame.name, lobbyId);
-  }
-
-  void watchRecordedGame(String lobbyId) {
-    print('ReplayCurrentGame called from gameManagerService with id: $lobbyId');
-    socketService.send(
-        SocketType.Game, GameEvents.WatchRecordedGame.name, lobbyId);
-  }
-
-  void saveGameRecord(String lobbyId) {
-    print('SaveRecordedGame called from gameManagerService with id: $lobbyId');
-    socketService.send(
-        SocketType.Game, GameEvents.SaveGameRecord.name, lobbyId);
   }
 
   void spectateLobby(String? lobbyId) {
@@ -191,6 +180,7 @@ class GameManagerService extends ChangeNotifier {
     });
 
     socketService.on(SocketType.Game, GameEvents.EndGame.name, (data) {
+      lobbyService.lobby.nDifferences = 0;
       setEndGameMessage(data as String?);
       gameAreaService.showDifferenceFound([]);
       disconnectSockets();
