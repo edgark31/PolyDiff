@@ -74,12 +74,12 @@ void main() async {
       return replayPlayerProvider;
     }),
     ChangeNotifierProvider(create: (context) {
-      GameRecordProvider gameRecordProvider = Get.find();
-      return gameRecordProvider;
-    }),
-    ChangeNotifierProvider(create: (context) {
       ReplayImagesProvider replayImagesProvider = Get.find();
       return replayImagesProvider;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      GameRecordProvider gameRecordProvider = Get.find();
+      return gameRecordProvider;
     }),
     ChangeNotifierProvider(create: (context) {
       GameManagerService gameManagerService = Get.find();
@@ -127,9 +127,9 @@ void initializeServices() {
   Get.put(GameAreaService());
   Get.put(LobbySelectionService());
   Get.put(LobbyService());
-  Get.put(GameRecordProvider());
   Get.put(ReplayPlayerProvider());
   Get.put(ReplayImagesProvider());
+  Get.put(GameRecordProvider());
   Get.put(GameEventPlaybackService());
   Get.put(GameEventPlaybackManager());
   Get.put(GameManagerService());

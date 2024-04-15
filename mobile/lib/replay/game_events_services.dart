@@ -7,10 +7,13 @@ import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/services/game_area_service.dart';
 
+typedef ReplayCompletionCallback = void Function();
+
 class GameEventPlaybackService extends ChangeNotifier {
-  final GameRecordProvider _gameRecordProvider = Get.find();
   final GameAreaService _gameAreaService = Get.find();
+  final GameRecordProvider _gameRecordProvider = Get.find();
   late final StreamController<GameEventData> _eventsController;
+  ReplayCompletionCallback? onPlaybackComplete;
 
   bool _isPaused = false;
   bool _isUserInteraction = false;
@@ -54,7 +57,7 @@ class GameEventPlaybackService extends ChangeNotifier {
       _isRestart = false;
       _isPaused = false;
       _speed = SPEED_X1;
-      _lastEventTime = events.first.timestamp;
+      _lastEventTime = null;
       _playbackEvents();
     }
   }
@@ -132,7 +135,17 @@ class GameEventPlaybackService extends ChangeNotifier {
       }
     }
 
-    print("Playback completed or paused.");
+    if (_currentIndex >= events.length && !_isPaused) {
+      if (onPlaybackComplete != null) {
+        onPlaybackComplete!();
+      } else {
+        print("Playback completed or paused.");
+      }
+    }
+  }
+
+  void setOnPlaybackComplete(ReplayCompletionCallback callback) {
+    onPlaybackComplete = callback;
   }
 
   void setSpeed(double speed) async {

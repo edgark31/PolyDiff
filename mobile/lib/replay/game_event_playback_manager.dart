@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/replay/game_events_services.dart';
@@ -14,41 +13,36 @@ import 'package:mobile/services/info_service.dart';
 class GameEventPlaybackManager extends ChangeNotifier {
   late StreamSubscription<GameEventData> _subscription;
 
+  final InfoService _infoService = Get.find();
   final GameRecordProvider _gameRecordProvider = Get.find();
   final GameAreaService _gameAreaService = Get.find();
   final ReplayPlayerProvider _replayPlayerProvider = Get.find();
   final ReplayImagesProvider replayImagesProvider = Get.find();
-  final InfoService _infoService = Get.find();
   final GameEventPlaybackService _playbackService = Get.find();
 
   bool _isEndGame = false;
   bool _isDifferenceFound = false;
-  bool _isCheatMode = false;
-  bool _hasCheatModeEnabled = false;
+  bool _isCheatModeActivated = false;
 
   int _nDifferencesFound = 0;
   int _timer = 0;
-  double _replaySpeed = SPEED_X1;
 
   bool get isEndGame => _isEndGame;
   bool get isDifferenceFound => _isDifferenceFound;
-  bool get isCheatMode => _isCheatMode;
+  bool get isCheatMode => _isCheatModeActivated;
 
-  bool get hasCheatModeEnabled => _hasCheatModeEnabled;
   int get nDifferencesFound => _nDifferencesFound;
   int get timer => _timer;
   int get timeLimit => _gameRecordProvider.record.timeLimit;
+  double get _replaySpeed => _playbackService.speed;
 
   List<Coordinate> _remainingCoordinates = [];
 
   List<GameEventData> get events => _gameRecordProvider.record.gameEvents;
-
   List<Coordinate> get remainingCoordinates => _remainingCoordinates;
 
   GameEventPlaybackManager() {
     _subscription = _playbackService.eventsStream.listen((event) {
-      _replaySpeed = _playbackService.speed;
-
       _handleGameEvent(event);
     }, onError: (error) {
       print("Error in stream subscription: $error");
@@ -96,10 +90,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   }
 
   void _handleGameStartEvent() {
-    _gameAreaService.coordinates = [];
-    _replayPlayerProvider.resetScore();
-    _replayPlayerProvider.setPlayersData(_gameRecordProvider.record.players);
-    notifyListeners();
+    print("Game Start Event");
   }
 
   void _handleClickFoundEvent(GameEventData recordedEventData) {
@@ -136,21 +127,19 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
     _gameAreaService.showDifferenceNotFound(recordedEventData.coordClic!,
         recordedEventData.isMainCanvas!, _replaySpeed);
-    notifyListeners();
   }
 
   void _handleActivateCheatEvent(GameEventData recordedEventData) {
-    _isCheatMode = false;
+    _isCheatModeActivated = false;
     _handleRemainingDifferenceIndex(recordedEventData);
-    _gameAreaService.isCheatMode = false;
+
     _gameAreaService.toggleCheatMode(_remainingCoordinates, _replaySpeed);
     notifyListeners();
   }
 
   void _handleDeactivateCheatEvent(GameEventData recordedEventData) {
-    _isCheatMode = true;
+    _isCheatModeActivated = true;
     _handleRemainingDifferenceIndex(recordedEventData);
-    _gameAreaService.isCheatMode = true;
 
     print(
         "toggle cheat mode from GameEventPlaybackManager with speed $_replaySpeed");
@@ -195,7 +184,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
   void _handleObserversEvent(GameEventData recordedEventData) {
     _replayPlayerProvider
         .updateNumberOfObservers(recordedEventData.observers!.length);
-    notifyListeners();
   }
 
   void _handleEnGameEvent(GameEventData recordedEventData) {
@@ -205,16 +193,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
   @override
   void dispose() {
-    _timer = 0;
-    _isEndGame = false;
-    _isDifferenceFound = false;
-    _isCheatMode = false;
-    _nDifferencesFound = 0;
-    _remainingCoordinates = [];
-    _replaySpeed = SPEED_X1;
-    _gameRecordProvider.dispose();
-    _playbackService.dispose();
-    _gameAreaService.dispose();
     _subscription.cancel();
     super.dispose();
   }

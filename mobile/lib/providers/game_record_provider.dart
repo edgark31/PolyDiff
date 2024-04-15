@@ -26,10 +26,12 @@ class GameRecordProvider extends ChangeNotifier {
   List<GameRecord> get gameRecords => _gameRecords;
   GameRecord get record => _record;
 
-  List<Player> get playersData => _players.data;
   Future<CanvasModel>? get currentCanvas => _imagesProvider.currentCanvas;
+  List<Player> get playersData => _players.data;
   int get nObservers => _players.nObservers;
+  int get timeLimit => _record.timeLimit;
   bool get isFromProfile => _isFromProfile;
+  bool get hasCheatEnabled => _record.isCheatEnabled;
 
   set currentGameRecord(GameRecord gameRecord) {
     _record = gameRecord;

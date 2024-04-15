@@ -5,7 +5,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
-import 'package:mobile/constants/enums.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/models/players.dart';
@@ -17,7 +16,6 @@ import 'package:mobile/replay/replay_canvas_widget.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/info_service.dart';
-import 'package:mobile/widgets/replay_pop_up_widget.dart';
 import 'package:provider/provider.dart';
 
 class GameEventPlaybackScreen extends StatefulWidget {
@@ -39,34 +37,23 @@ class GameEventPlaybackScreen extends StatefulWidget {
 
 class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   late StreamSubscription<GameEventData> _subscription;
-  late GameEventPlaybackService playbackService;
-  late GameEventPlaybackManager playbackManager;
-  late ReplayImagesProvider replayImagesProvider;
-  late ReplayPlayerProvider replayPlayerProvider;
+  final GameRecordProvider gameRecordProvider = Get.find();
+  final GameEventPlaybackService playbackService = Get.find();
+  final GameEventPlaybackManager playbackManager = Get.find();
+  final ReplayImagesProvider replayImagesProvider = Get.find();
   late GameEventData gameEvent;
-  late GameRecordProvider gameRecordProvider;
-  bool isCheatActivated = false;
-  bool isAnimationPaused = false;
-  String formattedTime = "00:00";
+
+  bool get isEndGame => playbackManager.isEndGame;
+  bool get isCheatMode => playbackManager.isCheatMode;
+  bool get hasCheatModeEnabled => gameRecordProvider.hasCheatEnabled;
 
   @override
   void initState() {
     super.initState();
 
-    gameRecordProvider = Get.find();
-    // Initialize services and providers
-    playbackService = Get.find();
-    replayImagesProvider = Get.find();
-    replayPlayerProvider = Get.find();
-    playbackManager = Get.find();
-    replayPlayerProvider.setPlayersData(gameRecordProvider.record.players);
-    formattedTime = calculateFormattedTime(playbackManager.timer);
-    replayPlayerProvider
-        .setNumberOfObservers(gameRecordProvider.record.observers);
-
     loadInitialCanvas();
-
     subscribeToEvents();
+    playbackService.setOnPlaybackComplete(_askPlayerToReplay);
   }
 
   void loadInitialCanvas() async {
@@ -84,13 +71,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     _subscription = playbackService.eventsStream.listen((GameEventData event) {
       setState(() {
         gameEvent = event; // Update the current event
-        if (event.gameEvent == GameEvents.EndGame.name) {
-          print("****** End Game ******");
-          _showReplayPopUp();
-        } else {
-          formattedTime = calculateFormattedTime(event.time!);
-        }
-        print("****** Set State from screen page ******");
+        print("PLAYBACK PAGE --> Received game event: ${event.gameEvent}");
       });
     }, onError: (error) {
       print("Error receiving game event: $error");
@@ -98,21 +79,27 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     });
   }
 
-  void _showReplayPopUp() {
+  void _askPlayerToReplay() {
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return ReplayPopUp(
-          endMessage: 'La partie est terminée',
-          onGoHome: () {
-            Navigator.pushNamed(context, DASHBOARD_ROUTE);
-          },
-          onReplay: () {
-            Navigator.pushNamed(context, REPLAY_ROUTE);
-          },
-        );
-      },
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Playback Finished"),
+            content: Text("Would you like to replay?"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    playbackService
+                        .restart(); // Adjust according to your logic to restart
+                  },
+                  child: Text("Yes")),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text("No")),
+            ],
+          );
+        });
   }
 
   void showErrorDialog(String message) {
@@ -126,27 +113,13 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
             TextButton(
               child: Text("OK"),
               onPressed: () {
-                Navigator.of(context).pop(); // Dismiss the dialog
+                Navigator.of(context).pop();
               },
             ),
           ],
         );
       },
     );
-  }
-
-  String calculateFormattedTime(int timeInSeconds) {
-    int elapsedTime =
-        (gameRecordProvider.record.duration * 1000) - timeInSeconds;
-
-    Duration duration = Duration(milliseconds: elapsedTime);
-
-    if (elapsedTime.isNegative) {
-      return "00:00";
-    }
-    int minutes = duration.inMinutes;
-    int seconds = duration.inSeconds % 60;
-    return '$minutes:${seconds.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -335,12 +308,6 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   @override
   void dispose() {
     _subscription.cancel();
-    replayImagesProvider.dispose();
-    playbackManager.dispose();
-    playbackService.dispose();
-    gameRecordProvider.dispose();
-    replayPlayerProvider.dispose();
-
     super.dispose();
   }
 
@@ -427,6 +394,8 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     String formattedTime =
         "${(playbackManager.timer ~/ 60).toString().padLeft(2, '0')}:${(playbackManager.timer % 60).toString().padLeft(2, '0')}";
     String gameMode = AppLocalizations.of(context)!.classicMode;
+    final List<Player> players = gameRecordProvider.record.players;
+    final ReplayPlayerProvider playerProvider = Get.find();
 
     return SizedBox(
         width: 100,
@@ -444,7 +413,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
                 ),
                 SizedBox(width: 100),
                 Text(
-                  '${AppLocalizations.of(context)!.gameInfos_timeTitle} : ${formattedTime}',
+                  '${AppLocalizations.of(context)!.gameInfos_timeTitle} : $formattedTime',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -461,27 +430,27 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
             ),
             Row(
               children: [
-                if (gameRecordProvider.record.players.isNotEmpty) ...[
-                  _playerInfo(replayPlayerProvider.getPlayer(0)),
+                if (players.isNotEmpty) ...[
+                  _playerInfo(playerProvider.getPlayer(0)),
                 ],
                 SizedBox(
                   width: 20,
                 ),
-                if (gameRecordProvider.record.players.length > 1) ...[
-                  _playerInfo(replayPlayerProvider.getPlayer(1)),
+                if (players.length > 1) ...[
+                  _playerInfo(playerProvider.getPlayer(1)),
                 ],
               ],
             ),
             Row(
               children: [
-                if (gameRecordProvider.record.players.length >= 3) ...[
-                  _playerInfo(replayPlayerProvider.getPlayer(2)),
+                if (players.length >= 3) ...[
+                  _playerInfo(playerProvider.getPlayer(2)),
                 ],
-                if (gameRecordProvider.record.players.length >= 4) ...[
+                if (players.length >= 4) ...[
                   SizedBox(
                     width: 20,
                   ),
-                  _playerInfo(replayPlayerProvider.getPlayer(3)),
+                  _playerInfo(playerProvider.getPlayer(3)),
                 ],
               ],
             )
