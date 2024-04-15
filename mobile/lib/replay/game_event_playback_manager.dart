@@ -212,9 +212,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
     _nDifferencesFound = 0;
     _remainingCoordinates = [];
     _replaySpeed = SPEED_X1;
-    _gameRecordProvider.dispose();
-    _playbackService.dispose();
-    _gameAreaService.dispose();
     _subscription.cancel();
     super.dispose();
   }

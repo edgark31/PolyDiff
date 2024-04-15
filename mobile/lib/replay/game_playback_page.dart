@@ -38,24 +38,24 @@ class GameEventPlaybackScreen extends StatefulWidget {
 }
 
 class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
-  late StreamSubscription<GameEventData> _subscription;
-  late GameEventPlaybackService playbackService;
+  final GameRecordProvider gameRecordProvider = Get.find();
+  final GameEventPlaybackService playbackService = Get.find();
   late GameEventPlaybackManager playbackManager;
   late ReplayImagesProvider replayImagesProvider;
   late ReplayPlayerProvider replayPlayerProvider;
   late GameEventData gameEvent;
-  late GameRecordProvider gameRecordProvider;
+  late StreamSubscription<GameEventData> _subscription;
+
   bool isCheatActivated = false;
   bool isAnimationPaused = false;
+
   String formattedTime = "00:00";
 
   @override
   void initState() {
     super.initState();
-
-    gameRecordProvider = Get.find();
     // Initialize services and providers
-    playbackService = Get.find();
+
     replayImagesProvider = Get.find();
     replayPlayerProvider = Get.find();
     playbackManager = Get.find();
@@ -335,11 +335,6 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   @override
   void dispose() {
     _subscription.cancel();
-    replayImagesProvider.dispose();
-    playbackManager.dispose();
-    playbackService.dispose();
-    gameRecordProvider.dispose();
-    replayPlayerProvider.dispose();
 
     super.dispose();
   }
