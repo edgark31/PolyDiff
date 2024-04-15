@@ -226,7 +226,7 @@
     },
 
     "friendPage": {
-        "friends": "Current friends",
+        "friends": "Friends",
         "friendsRequests": "friends waiting",
         "friendsPending": "Received friend requests",
         "allAccount": "Accounts",
