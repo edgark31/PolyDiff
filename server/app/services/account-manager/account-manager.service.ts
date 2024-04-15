@@ -98,9 +98,9 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async updateUsername(oldUsername: string, newUsername: string): Promise<void> {
+    async updateUsername(accountId: string, newUsername: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': oldUsername });
+            const accountFound = await this.accountModel.findOne({ id: accountId });
             const pseudoFound = await this.accountModel.findOne({ 'credentials.username': newUsername });
             if (!accountFound) throw new Error('Account not found');
             if (pseudoFound) throw new Error('Username already taken');
@@ -108,7 +108,6 @@ export class AccountManagerService implements OnModuleInit {
             accountFound.credentials.username = newUsername;
 
             await accountFound.save();
-            this.connectedUsers.set(accountFound.id, accountFound);
             await this.fetchUsers();
 
             return Promise.resolve();
@@ -118,9 +117,27 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async uploadAvatar(username: string, avatar: string): Promise<void> {
+    async updatePassword(accountId: string, newPassword: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+            const accountFound = await this.accountModel.findOne({ id: accountId });
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.credentials.password = newPassword;
+
+            await accountFound.save();
+            await this.fetchUsers();
+
+            this.logger.verbose(`${accountFound.credentials.username} has changed his password`);
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change password --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async uploadAvatar(accountId: string, avatar: string): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ id: accountId });
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.avatar = avatar.replace(/^data:image\/\w+;base64,/, '');
@@ -129,7 +146,7 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
             await accountFound.save();
-            this.logger.log(`${username} has uploaded his avatar`);
+            this.logger.log(`${accountFound.credentials.username} has uploaded his avatar`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to upload avatar --> ${error.message}`);
@@ -137,9 +154,9 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async chooseAvatar(username: string, id: string): Promise<void> {
+    async chooseAvatar(accountId: string, id: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
+            const accountFound = await this.accountModel.findOne({ id: accountId });
             if (!accountFound) throw new Error('Account not found');
 
             const base64 = this.imageManager.convert(`default${id}.png`);
@@ -149,7 +166,7 @@ export class AccountManagerService implements OnModuleInit {
             this.imageManager.save(accountFound.credentials.username, accountFound.profile.avatar);
 
             await accountFound.save();
-            this.logger.log(`${username} has choose his avatar`);
+            this.logger.log(`${accountFound.credentials.username} has choose his avatar`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to choose avatar --> ${error.message}`);
@@ -157,77 +174,9 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async updatePassword(username: string, newPassword: string): Promise<void> {
+    async updateMobileTheme(accountId: string, newTheme: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
-            if (!accountFound) throw new Error('Account not found');
-
-            accountFound.credentials.password = newPassword;
-
-            await accountFound.save();
-            await this.fetchUsers();
-
-            this.logger.verbose(`${username} has changed his password`);
-            return Promise.resolve();
-        } catch (error) {
-            this.logger.error(`Failed to change password --> ${error.message}`);
-            return Promise.reject(`${error}`);
-        }
-    }
-
-    async updateErrorSound(username: string, newSound: Sound): Promise<void> {
-        try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
-
-            if (!accountFound) throw new Error('Account not found');
-            accountFound.profile.onErrorSound = newSound;
-
-            await accountFound.save();
-            this.logger.verbose(`${username} has changed his error sound effect`);
-            return Promise.resolve();
-        } catch (error) {
-            this.logger.error(`Failed to change sound --> ${error.message}`);
-            return Promise.reject(`${error}`);
-        }
-    }
-
-    async updateCorrectSound(username: string, newSound: Sound): Promise<void> {
-        try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
-            if (!accountFound) throw new Error('Account not found');
-
-            accountFound.profile.onCorrectSound = newSound;
-
-            await accountFound.save();
-            this.logger.verbose(`${username} has changed his difference sound effect`);
-            return Promise.resolve();
-        } catch (error) {
-            this.logger.error(`Failed to change sound --> ${error.message}`);
-            return Promise.reject(`${error}`);
-        }
-    }
-
-    // async updateDesktopTheme(username: string, newTheme: Theme): Promise<void> {
-    //     try {
-    //         const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
-
-    //         if (!accountFound) throw new Error('Account not found');
-
-    //         accountFound.profile.desktopTheme = newTheme;
-
-    //         await accountFound.save();
-    //         this.logger.verbose('Desktop theme change');
-    //         return Promise.resolve();
-    //     } catch (error) {
-    //         this.logger.error(`Failed to change desktop theme --> ${error.message}`);
-    //         return Promise.reject(`${error}`);
-    //     }
-    // }
-
-    async updateMobileTheme(username: string, newTheme: string): Promise<void> {
-        try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
-
+            const accountFound = await this.accountModel.findOne({ id: accountId });
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.mobileTheme = newTheme;
@@ -241,19 +190,50 @@ export class AccountManagerService implements OnModuleInit {
         }
     }
 
-    async modifyLanguage(username: string, newLanguage: string): Promise<void> {
+    async modifyLanguage(accountId: string, newLanguage: string): Promise<void> {
         try {
-            const accountFound = await this.accountModel.findOne({ 'credentials.username': username });
-
+            const accountFound = await this.accountModel.findOne({ id: accountId });
             if (!accountFound) throw new Error('Account not found');
 
             accountFound.profile.language = newLanguage;
 
             await accountFound.save();
-            this.logger.verbose(`${username} has changed his theme`);
+            this.logger.verbose(`${accountFound.credentials.username} has changed his theme`);
             return Promise.resolve();
         } catch (error) {
             this.logger.error(`Failed to change language --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async updateCorrectSound(accountId: string, newSound: Sound): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ id: accountId });
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.onCorrectSound = newSound;
+
+            await accountFound.save();
+            this.logger.verbose(`${accountFound.credentials.username} has changed his difference sound effect`);
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change sound --> ${error.message}`);
+            return Promise.reject(`${error}`);
+        }
+    }
+
+    async updateErrorSound(accountId: string, newSound: Sound): Promise<void> {
+        try {
+            const accountFound = await this.accountModel.findOne({ id: accountId });
+            if (!accountFound) throw new Error('Account not found');
+
+            accountFound.profile.onErrorSound = newSound;
+
+            await accountFound.save();
+            this.logger.verbose(`${accountFound.credentials.username} has changed his error sound effect`);
+            return Promise.resolve();
+        } catch (error) {
+            this.logger.error(`Failed to change sound --> ${error.message}`);
             return Promise.reject(`${error}`);
         }
     }
