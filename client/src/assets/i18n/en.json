@@ -120,7 +120,7 @@
     },
 
     "dialogGame": {
-        "home": "Home",
+        "home": "quit",
         "videoReprise": "Replay",
         "yes": "Yes",
         "no": "No",

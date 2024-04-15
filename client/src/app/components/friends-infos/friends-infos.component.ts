@@ -19,6 +19,8 @@ export class FriendsInfosComponent implements OnInit, OnDestroy {
     friends: Friend[] = [];
     friendsCommon: Friend[] = [];
     actualfriends: Friend[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    intervalId: any;
     // friends: Friend[] = [
     //     // variable temporaire
     //     {
@@ -74,11 +76,18 @@ export class FriendsInfosComponent implements OnInit, OnDestroy {
         this.friendCommonSubscription = this.friendService.friendsCommonSubject$.subscribe((friendList: Friend[]) => {
             this.friendsCommon = friendList.sort((a, b) => (a.isFavorite === b.isFavorite ? 0 : a.isFavorite ? -1 : 1));
         });
+
+        this.intervalId = setInterval(() => {
+            this.friendService.recuperateCommonFriends(this.data.friend.accountId);
+            this.friendService.recuperateFriendofFriends(this.data.friend.accountId);
+            // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+        }, 10000);
     }
 
     ngOnDestroy(): void {
         this.friendListSubscription?.unsubscribe();
         this.friendCommonSubscription?.unsubscribe();
+        clearInterval(this.intervalId);
         // this.friendService?.off();
     }
 }
