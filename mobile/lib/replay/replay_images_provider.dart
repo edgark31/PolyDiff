@@ -6,7 +6,8 @@ import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/services/image_converter_service.dart';
 
 class ReplayImagesProvider extends ChangeNotifier {
-  Future<CanvasModel>? _currentCanvas;
+  // Initialize the current canvas with an empty canvas
+  Future<CanvasModel>? _currentCanvas = CanvasModel.createWithEmptyCanvas(0, 0);
 
   Future<CanvasModel>? get currentCanvas => _currentCanvas;
 
@@ -16,11 +17,12 @@ class ReplayImagesProvider extends ChangeNotifier {
       CanvasModel initialCanvas = await ImageConverterService.fromImagesBase64(
           record.game.original, record.game.modified);
       _currentCanvas = Future.value(initialCanvas);
-      notifyListeners();
     } catch (e) {
       print('Error loading initial canvas: $e');
       rethrow;
     }
+    print('Initial canvas loaded.');
+    notifyListeners();
   }
 
   // Update the canvas state when a new event with a modified image is found
@@ -49,11 +51,5 @@ class ReplayImagesProvider extends ChangeNotifier {
     _currentCanvas!.then((_) {
       notifyListeners();
     });
-  }
-
-  @override
-  void dispose() {
-    _currentCanvas = null;
-    super.dispose();
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -5,13 +6,16 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/replay/replay_images_provider.dart';
 import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/info_service.dart';
 
 class GameRecordProvider extends ChangeNotifier {
   final InfoService _infoService = Get.find();
   final ReplayPlayerProvider _players = Get.find();
+  final ReplayImagesProvider _imagesProvider = Get.find();
 
   final String baseUrl = "$API_URL/records";
 
@@ -21,11 +25,11 @@ class GameRecordProvider extends ChangeNotifier {
 
   List<GameRecord> get gameRecords => _gameRecords;
   GameRecord get record => _record;
+
   List<Player> get playersData => _players.data;
+  Future<CanvasModel>? get currentCanvas => _imagesProvider.currentCanvas;
   int get nObservers => _players.nObservers;
   bool get isFromProfile => _isFromProfile;
-
-  GameRecordProvider();
 
   set currentGameRecord(GameRecord gameRecord) {
     _record = gameRecord;

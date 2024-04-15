@@ -40,29 +40,16 @@ class GameEventPlaybackScreen extends StatefulWidget {
 class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   final GameRecordProvider gameRecordProvider = Get.find();
   final GameEventPlaybackService playbackService = Get.find();
-  late GameEventPlaybackManager playbackManager;
-  late ReplayImagesProvider replayImagesProvider;
-  late ReplayPlayerProvider replayPlayerProvider;
+  final GameEventPlaybackManager playbackManager = Get.find();
+  final ReplayImagesProvider replayImagesProvider = Get.find();
   late GameEventData gameEvent;
   late StreamSubscription<GameEventData> _subscription;
 
-  bool isCheatActivated = false;
-  bool isAnimationPaused = false;
-
-  String formattedTime = "00:00";
+  bool get isCheatActivated => gameRecordProvider.record.isCheatEnabled;
 
   @override
   void initState() {
     super.initState();
-    // Initialize services and providers
-
-    replayImagesProvider = Get.find();
-    replayPlayerProvider = Get.find();
-    playbackManager = Get.find();
-    replayPlayerProvider.setPlayersData(gameRecordProvider.record.players);
-    formattedTime = calculateFormattedTime(playbackManager.timer);
-    replayPlayerProvider
-        .setNumberOfObservers(gameRecordProvider.record.observers);
 
     loadInitialCanvas();
 
@@ -83,14 +70,12 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     playbackService.startPlayback();
     _subscription = playbackService.eventsStream.listen((GameEventData event) {
       setState(() {
-        gameEvent = event; // Update the current event
+        print("PLAYBACK PAGE --> Received game event: ${event.gameEvent}");
+        gameEvent = event;
         if (event.gameEvent == GameEvents.EndGame.name) {
           print("****** End Game ******");
           _showReplayPopUp();
-        } else {
-          formattedTime = calculateFormattedTime(event.time!);
         }
-        print("****** Set State from screen page ******");
       });
     }, onError: (error) {
       print("Error receiving game event: $error");
@@ -135,30 +120,10 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
     );
   }
 
-  String calculateFormattedTime(int timeInSeconds) {
-    int elapsedTime =
-        (gameRecordProvider.record.duration * 1000) - timeInSeconds;
-
-    Duration duration = Duration(milliseconds: elapsedTime);
-
-    if (elapsedTime.isNegative) {
-      return "00:00";
-    }
-    int minutes = duration.inMinutes;
-    int seconds = duration.inSeconds % 60;
-    return '$minutes:${seconds.toString().padLeft(2, '0')}';
-  }
-
   @override
   Widget build(BuildContext context) {
     // Providers
-    final GameRecordProvider gameRecordProvider =
-        context.read<GameRecordProvider>();
-
-    final ReplayPlayerProvider replayPlayerProvider =
-        context.watch<ReplayPlayerProvider>();
-    final ReplayImagesProvider replayImagesProvider =
-        context.watch<ReplayImagesProvider>();
+    final GameRecordProvider record = context.read<GameRecordProvider>();
 
     final GameEventPlaybackManager playbackManager =
         context.watch<GameEventPlaybackManager>();
@@ -324,7 +289,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
         // // You can control the space between the slider and the observer info,
         // // for example using a SizedBox if necessary.
         // SizedBox(width: 8), // Adjust the width as needed
-        _observerInfos(replayPlayerProvider.nObservers),
+        _observerInfos(record.nObservers),
         //     ],
         //   ),
         // )
@@ -419,6 +384,7 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
   }
 
   Widget _gameInfosReplay() {
+    final ReplayPlayerProvider playersProvider = Get.find();
     String formattedTime =
         "${(playbackManager.timer ~/ 60).toString().padLeft(2, '0')}:${(playbackManager.timer % 60).toString().padLeft(2, '0')}";
     String gameMode = AppLocalizations.of(context)!.classicMode;
@@ -457,26 +423,26 @@ class _GameEventPlaybackScreenState extends State<GameEventPlaybackScreen> {
             Row(
               children: [
                 if (gameRecordProvider.record.players.isNotEmpty) ...[
-                  _playerInfo(replayPlayerProvider.getPlayer(0)),
+                  _playerInfo(playersProvider.getPlayer(0)),
                 ],
                 SizedBox(
                   width: 20,
                 ),
                 if (gameRecordProvider.record.players.length > 1) ...[
-                  _playerInfo(replayPlayerProvider.getPlayer(1)),
+                  _playerInfo(playersProvider.getPlayer(1)),
                 ],
               ],
             ),
             Row(
               children: [
                 if (gameRecordProvider.record.players.length >= 3) ...[
-                  _playerInfo(replayPlayerProvider.getPlayer(2)),
+                  _playerInfo(playersProvider.getPlayer(2)),
                 ],
                 if (gameRecordProvider.record.players.length >= 4) ...[
                   SizedBox(
                     width: 20,
                   ),
-                  _playerInfo(replayPlayerProvider.getPlayer(3)),
+                  _playerInfo(playersProvider.getPlayer(3)),
                 ],
               ],
             )
