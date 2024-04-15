@@ -241,18 +241,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
           throw Exception(response);
         }
       }
-      // Username changes
-      if (usernameController.text.trim() != initialSettings?.username &&
-          usernameController.text.trim().isNotEmpty) {
-        String? response = await accountService.updateUsername(
-            _infoService.username, usernameController.text.trim());
-        if (response == null) {
-          _infoService.setUsername(usernameController.text.trim());
-          showFeedback(usernameFeedback);
-        } else {
-          throw Exception(response);
+
+      Future.delayed(Duration(milliseconds: 1000), () async {
+        // Username changes
+        if (usernameController.text.trim() != initialSettings?.username &&
+            usernameController.text.trim().isNotEmpty) {
+          String? response = await accountService.updateUsername(
+              _infoService.username, usernameController.text.trim());
+          if (response == null) {
+            _infoService.setUsername(usernameController.text.trim());
+            showFeedback(usernameFeedback);
+          } else {
+            throw Exception(response);
+          }
         }
-      }
+      });
+
       // Language changes
       if (currentSettings?.language != initialSettings?.language &&
           currentSettings?.language != null) {
