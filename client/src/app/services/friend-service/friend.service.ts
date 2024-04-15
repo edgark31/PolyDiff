@@ -8,7 +8,9 @@ import { Subject } from 'rxjs';
     providedIn: 'root',
 })
 export class FriendService {
+    timeStamp: number;
     private friendsSubject: Subject<Friend[]>;
+
     private friendsoffriendsSubject: Subject<Friend[]>;
     private friendsCommonSubject: Subject<Friend[]>;
     private friendsSendSubject: Subject<Friend[]>;
@@ -96,26 +98,32 @@ export class FriendService {
 
         this.clientSocket.on('auth', FriendEvents.UpdateFriends, (friends: Friend[]) => {
             this.friendsSubject.next(friends);
+            this.timeStamp = new Date().getTime();
         });
 
         this.clientSocket.on('auth', FriendEvents.UpdateFoFs, (friends: Friend[]) => {
             this.friendsoffriendsSubject.next(friends);
+            this.timeStamp = new Date().getTime();
         });
 
         this.clientSocket.on('auth', FriendEvents.UpdateCommonFriends, (friends: Friend[]) => {
             this.friendsCommonSubject.next(friends);
+            this.timeStamp = new Date().getTime();
         });
 
         this.clientSocket.on('auth', FriendEvents.UpdateSentFriends, (friends: Friend[]) => {
             this.friendsSendSubject.next(friends);
+            this.timeStamp = new Date().getTime();
         });
 
         this.clientSocket.on('auth', FriendEvents.UpdatePendingFriends, (friends: Friend[]) => {
             this.friendsPendingSubject.next(friends);
+            this.timeStamp = new Date().getTime();
         });
 
         this.clientSocket.on('auth', UserEvents.UpdateUsers, (users: User[]) => {
             this.userList.next(users);
+            this.timeStamp = new Date().getTime();
         });
     }
 

@@ -25,7 +25,7 @@ export class MailService {
             // template: 'confirmation',
             context: {
                 name: user.credentials.username,
-                // url: `http://localhost:3000:3000/confirm-password?token=${token}`,
+                // url: `http://34.95.3.182:3000:3000/confirm-password?token=${token}`,
             },
         });
     }
