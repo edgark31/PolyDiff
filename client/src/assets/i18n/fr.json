@@ -132,8 +132,8 @@
         "videoReprise": "reprise Video",
         "yes": "oui",
         "no": "Non",
-        "scoreShare": "Partage votre score",
-        "quitGame": "Accueil"
+        "scoreShare": "Partage",
+        "quitGame": "quitter"
     },
 
     "gameSheet": {

@@ -128,8 +128,8 @@
         "videoReprise": "video replay",
         "yes": "Yes",
         "no": "No",
-        "scoreShare": "Share your score",
-        "quitGame": "Home"
+        "scoreShare": "Share",
+        "quitGame": "Leave"
     },
 
     "gameSheet": {
