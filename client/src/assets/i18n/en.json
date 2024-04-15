@@ -148,7 +148,8 @@
         "home": "Home",
         "messageChannel": "Chat",
         "friends": "Friends",
-        "account": "Account"
+        "account": "Account",
+        "profile": "Profile"
     },
     "adminModal": {
         "adminPassword": "Administrator password",

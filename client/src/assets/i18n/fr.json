@@ -152,7 +152,8 @@
         "home": "Accueil",
         "messageChannel": "Clavardage",
         "friends": "Amis",
-        "account": "Compte"
+        "account": "Compte",
+        "profile": "Profil"
     },
 
     "adminModal": {
