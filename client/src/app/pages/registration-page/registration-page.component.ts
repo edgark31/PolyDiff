@@ -53,6 +53,7 @@ export class RegistrationPageComponent {
             this.registrationForm.value.password
         ) {
             this.feedback = '';
+            console.log(this.welcomeService.selectLocal);
             this.creds = {
                 username: this.registrationForm.value.username,
                 email: this.registrationForm.value.email,

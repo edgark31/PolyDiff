@@ -106,7 +106,8 @@ export class WelcomeService {
     }
 
     onModifyUser() {
-        this.communication.updateUsername(this.account.credentials.username, this.selectName).subscribe({
+        console.log(this.account.id);
+        this.communication.updateUsername(this.account.id ?? '', this.selectName).subscribe({
             next: () => {
                 this.account.credentials.username = this.selectName;
             },
@@ -118,7 +119,7 @@ export class WelcomeService {
 
     onUpdateAvatar(name?: string) {
         if (this.isLogin)
-            this.communication.updateAvatar(this.account.credentials.username, this.selectAvatar).subscribe({
+            this.communication.updateAvatar(this.account.id ?? '', this.selectAvatar).subscribe({
                 next: () => {
                     this.account.profile.avatar = this.selectAvatar;
                 },
@@ -138,7 +139,7 @@ export class WelcomeService {
     }
 
     onChooseAvatar() {
-        this.communication.chooseAvatar(this.account.credentials.username, this.selectLocal).subscribe({
+        this.communication.chooseAvatar(this.account.id ?? '', this.selectLocal).subscribe({
             next: () => {
                 this.account.profile.avatar = this.selectAvatar;
             },
@@ -149,7 +150,7 @@ export class WelcomeService {
     }
 
     onModifyPassword() {
-        this.communication.modifyPassword(this.account.credentials.username, this.selectPassword).subscribe({
+        this.communication.modifyPassword(this.account.id ?? '', this.selectPassword).subscribe({
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             next: () => {},
             error: (error: HttpErrorResponse) => {
@@ -159,7 +160,7 @@ export class WelcomeService {
     }
 
     onModifyTheme() {
-        this.communication.modifyTheme(this.account.credentials.username, this.selectTheme).subscribe({
+        this.communication.modifyTheme(this.account.id ?? '', this.selectTheme).subscribe({
             next: () => {
                 this.account.profile.mobileTheme = this.selectTheme;
             },
@@ -170,7 +171,7 @@ export class WelcomeService {
     }
 
     onModifyLanguage() {
-        this.communication.modifyLanguage(this.account.credentials.username, this.selectLanguage).subscribe({
+        this.communication.modifyLanguage(this.account.id ?? '', this.selectLanguage).subscribe({
             next: () => {
                 this.account.profile.language = this.selectLanguage;
             },
@@ -181,7 +182,7 @@ export class WelcomeService {
     }
 
     onUpdateCorrectSound() {
-        this.communication.modifySongDifference(this.account.credentials.username, this.sound.correctSoundEffect).subscribe({
+        this.communication.modifySongDifference(this.account.id ?? '', this.sound.correctSoundEffect).subscribe({
             next: () => {
                 this.account.profile.onCorrectSound = this.sound.correctSoundEffect;
             },
@@ -192,7 +193,7 @@ export class WelcomeService {
     }
 
     onUpdateErrorSound() {
-        this.communication.modifySongError(this.account.credentials.username, this.sound.incorrectSoundEffect).subscribe({
+        this.communication.modifySongError(this.account.id ?? '', this.sound.incorrectSoundEffect).subscribe({
             next: () => {
                 this.account.profile.onErrorSound = this.sound.incorrectSoundEffect;
             },

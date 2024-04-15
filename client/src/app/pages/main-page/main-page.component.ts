@@ -18,7 +18,9 @@ import { ModalAdminComponent } from './../../components/modal-admin/modal-admin.
 export class MainPageComponent implements AfterViewInit, OnDestroy {
     messages: ChatMessageGlobal[];
     rankedPlayers: RankedPlayer[];
-
+    timeStamp: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    intervalId: any;
     private onDestroy$: Subject<void>;
 
     constructor(
@@ -44,6 +46,7 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
     ngOnDestroy(): void {
         this.onDestroy$.next();
         this.onDestroy$.complete();
+        clearInterval(this.intervalId);
     }
 
     personnalizationpage() {
@@ -59,8 +62,11 @@ export class MainPageComponent implements AfterViewInit, OnDestroy {
         this.clientSocket.authSocket.off(AccountEvents.GlobalRanking);
         this.clientSocket.on('auth', AccountEvents.GlobalRanking, (rankedPlayers: RankedPlayer[]) => {
             this.rankedPlayers = rankedPlayers.slice(0, 3 + 2);
+            this.timeStamp = new Date().getTime();
         });
-        this.clientSocket.send('auth', AccountEvents.GlobalRanking);
+        this.intervalId = setInterval(() => {
+            this.clientSocket.send('auth', AccountEvents.GlobalRanking);
+        }, 10000);
     }
 
     addRightSideMessage(text: string) {

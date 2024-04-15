@@ -100,6 +100,7 @@ export class AccountManagerService implements OnModuleInit {
 
     async updateUsername(accountId: string, newUsername: string): Promise<void> {
         try {
+            console.log(accountId);
             const accountFound = await this.accountModel.findOne({ id: accountId });
             const pseudoFound = await this.accountModel.findOne({ 'credentials.username': newUsername });
             if (!accountFound) throw new Error('Account not found');

@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { ChangeDetectorRef, Component, DoCheck, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { AccountDialogComponent } from '@app/components/account-dialog/account-dialog.component';
@@ -34,7 +34,9 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
     friendListSubscription: Subscription;
     friendSendListSubscription: Subscription;
     friendPendingListSubscription: Subscription;
-
+    timeStamp: number = new Date().getTime();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    intervalId: any;
     friends: Friend[] = [];
     //     {
     //         name: 'ami',
@@ -81,12 +83,11 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
     constructor(
         public clientSocket: ClientSocketService,
-        private friendService: FriendService,
+        public friendService: FriendService,
         public welcome: WelcomeService,
         private readonly matDialog: MatDialog,
         public translate: TranslateService,
         public dialog: MatDialog,
-        private cdr: ChangeDetectorRef,
     ) {}
     // eslint-disable-next-line max-params
     onSubmit(pageFriend: string): void {
@@ -102,9 +103,17 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
             this.previousSearchQuery = this.searchQuery;
             this.friendService.sendSearch();
         }
+
+        // setTimeout(() => {
+        //     this.friendService.recuperateFriendSend();
+        //     this.friendService.recuperateFriend();
+        //     this.friendService.recuperateFriendPending();
+        //     this.friendService.sendSearch();
+        // }, 3000);
     }
 
     ngOnInit(): void {
+        this.friends = [] as Friend[];
         this.friendService.manageSocket();
         // this.welcome.updateAccountObservable();
         // this.accountSubscription = this.welcome.accountObservable$.subscribe((account: Account) => {
@@ -114,6 +123,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         this.friendService.recuperateFriend();
         this.friendService.recuperateFriendPending();
         this.userSubscription = this.friendService.userList$.subscribe((userList: User[]) => {
+            this.userList = [] as User[];
             if (this.searchQuery)
                 this.userList = userList
                     .filter((user) => user.name.includes(this.searchQuery) && user.accountId !== this.welcome.account.id)
@@ -121,17 +131,31 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         });
 
         this.friendSendListSubscription = this.friendService.friendsSendSubject$.subscribe((friendList: Friend[]) => {
+            this.friendSentList = [] as Friend[];
             this.friendSentList = friendList.sort((a, b) => a.name.localeCompare(b.name));
         });
 
         this.friendListSubscription = this.friendService.friendsSubject$.subscribe((friendList: Friend[]) => {
+            this.friends = [] as Friend[];
             this.friends = friendList.sort((a, b) => (a.isFavorite === b.isFavorite ? a.name.localeCompare(b.name) : a.isFavorite ? -1 : 1));
-            this.cdr.detectChanges();
         });
 
         this.friendPendingListSubscription = this.friendService.friendsPendingSubject$.subscribe((friendList: Friend[]) => {
+            this.friendPendingList = [] as Friend[];
             this.friendPendingList = friendList.sort((a, b) => a.name.localeCompare(b.name));
         });
+
+        this.intervalId = setInterval(() => {
+            if (this.previousSearchQuery !== this.searchQuery) {
+                this.previousSearchQuery = this.searchQuery;
+                this.friendService.sendSearch();
+            }
+
+            this.friendService.recuperateFriendSend();
+            this.friendService.recuperateFriend();
+            this.friendService.recuperateFriendPending();
+            this.friendService.sendSearch();
+        }, 5000);
     }
 
     ngOnDestroy(): void {
@@ -143,6 +167,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
             this.friendPendingListSubscription?.unsubscribe();
             // this.welcome.off();
             this.friendService.off();
+            clearInterval(this.intervalId);
         }
     }
 

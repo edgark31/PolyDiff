@@ -5,7 +5,7 @@
         <div class="record-container flex-column" *ngIf="records.length !== 0">
             <div class="record flex-row" *ngFor="let record of records">
                 <div class="avatar flex-column">
-                    <img src="{{'http://34.95.3.182:3000/' + record.game.gameId + '/original.bmp'}}" alt="Image" style="width: 152px; height: 114px; border-radius: 10px;">
+                    <img src="{{'http://localhost:3000/' + record.game.gameId + '/original.bmp'}}" alt="Image" style="width: 152px; height: 114px; border-radius: 10px;">
                 </div>
                 <div class="name flex-column">
                     <span>{{ record.game.name }}</span>
