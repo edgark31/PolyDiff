@@ -62,20 +62,9 @@ export class GamePageDialogComponent {
         this.router.navigate(['/home']);
     }
 
-    leaveGame(): void {
-        this.replayService.resetReplay();
-        this.roomManager.isObserver = false;
-        this.clientSocket.disconnect('lobby');
-        this.clientSocket.disconnect('game');
-        if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
-        else {
-            this.dialog.closeAll();
-            this.router.navigate(['/home']);
-        }
-    }
-
     deleteRecord(): void {
         this.replayService.resetReplay();
+        this.roomManager.isObserver = false;
         this.clientSocket.disconnect('lobby');
         this.clientSocket.disconnect('game');
         if (this.data.lobby.mode !== GameModes.Practice) this.goShare = true;
