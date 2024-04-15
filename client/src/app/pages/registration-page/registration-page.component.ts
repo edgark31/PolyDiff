@@ -62,7 +62,6 @@ export class RegistrationPageComponent {
                 next: () => {
                     if (this.welcomeService.chooseImage) {
                         this.router.navigate(['/login']);
-                        console.log('NEXT');
                     }
                 },
                 error: (error: HttpErrorResponse) => {
@@ -70,7 +69,6 @@ export class RegistrationPageComponent {
                 },
             });
             setTimeout(() => {
-                console.log('this.feedback:', this.feedback);
                 if (!this.welcomeService.chooseImage && this.feedback === '')
                     setTimeout(() => {
                         this.welcomeService.onUpdateAvatar(this.creds.username);
