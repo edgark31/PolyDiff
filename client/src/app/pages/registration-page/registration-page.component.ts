@@ -60,14 +60,15 @@ export class RegistrationPageComponent {
             };
             this.communication.createUser(this.creds, this.welcomeService.chooseImage ? this.welcomeService.selectLocal : '1').subscribe({
                 next: () => {
-                    if (this.welcomeService.chooseImage) this.router.navigate(['/login']);
+                    if (this.welcomeService.chooseImage) {
+                        this.router.navigate(['/login']);
+                    }
                 },
                 error: (error: HttpErrorResponse) => {
                     this.feedback = error.error || 'An unexpected error occurred. Please try again.';
                 },
             });
             setTimeout(() => {
-                console.log('this.feedback:', this.feedback);
                 if (!this.welcomeService.chooseImage && this.feedback === '')
                     setTimeout(() => {
                         this.welcomeService.onUpdateAvatar(this.creds.username);
