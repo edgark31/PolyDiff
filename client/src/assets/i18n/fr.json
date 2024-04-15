@@ -1,12 +1,5 @@
 {
-    "demo": {
-        "greeting": "Bonjour {{name}}!",
-        "heading": "Démo de traduction d'applications",
-        "paragraph": "<strong>traduction</strong>",
-        "text": "Ce tutoriel explique comment vous pouvez facilement traduire votre application Angular.",
-        "hello": "salut"
-    },
-    "connexion": "connexion",
+    "connexion": "Connexion",
     "username": "Nom d'utilisateur ou courriel",
     "mdp": "Mot de passe",
     "profil": {
@@ -14,21 +7,23 @@
         "username": "Nom d'utilisateur/Pseudonyme",
         "theme": "Thème actuel",
         "language": "Language actuel",
-        "statistic": "Statistique",
-        "gamePlayed": "nombre de parties joués",
-        "gameWin": "nombre de parties gagnés",
-        "gameAverage": "moyenne de différences trouvées par partie",
-        "gameAverageTime": "temps moyen par partie",
+        "statistic": "Statistiques",
+        "gamePlayed": "Nombre de parties joués",
+        "gameWin": "Nombre de parties gagnés",
+        "gameAverage": "Moyenne de différences trouvées par partie",
+        "gameAverageTime": "Temps moyen par partie",
         "Connexion": "Historique de connexion",
         "gameHistoric": "Historique de jeu",
         "changePassword": "Changer le mot de passe",
         "confirmPassword": "Confirmer le mot de passe",
-        "songError": "choisissez votre son pour erreur",
-        "songDifference": "choisissez votre son pour différence trouvé",
-        "nameEnter": "veuillez écrire votre nom",
-        "passwordEnter": "veuillez écrire votre mot de passe",
-        "confirmPasswordEnter": "euillez ré-écrire votre mot de passe",
-        "cancel": "annuler",
+        "songError": "Choisissez votre son pour erreur",
+        "songDifference": "Choisissez votre son pour différence trouvé",
+        "currentSongDifference": "Son actuel lorsqu'une différence est trouvée",
+        "currentSongError":  "Son actuel lorsqu'il y a une erreur",
+        "nameEnter": "Veuillez écrire votre nom",
+        "passwordEnter": "Veuillez écrire votre mot de passe",
+        "confirmPasswordEnter": "Veuillez ré-écrire votre mot de passe",
+        "cancel": "Annuler",
         "returnHome": "Retour à l'accueil",
         "replay": "Reprises vidéos"
     },
@@ -57,6 +52,7 @@
     "game": {
         "foundDifference": "Différences trouvées ",
         "timerOver": "Temps écoulé",
+        "time": "Temps",
         "classic": "classique",
         "limited": "limité",
         "practice": "pratique",
@@ -131,8 +127,8 @@
         "videoReprise": "reprise Video",
         "yes": "oui",
         "no": "Non",
-        "scoreShare": "Partage votre score",
-        "quitGame": "quitter"
+        "scoreShare": "Partager",
+        "quitGame": "Accueil"
     },
 
     "gameSheet": {
@@ -167,7 +163,7 @@
         "confirm": "Confirmer"
     },
 
-    "accesModal": {
+    "accessModal": {
         "accessCode": "ENTRER LE CODE D'ACCES",
         "password": "Mot de passe",
         "incorrectPassword": "Mot de passe incorrect. Veuillez réessayer.",
@@ -240,8 +236,8 @@
         "friendsRequests": "amis en attente",
         "allAccount": "liste de compte",
         "friendsList": "Liste d'amis",
-        "requestFriendsSendList": "Liste d'amis en attente envoyé",
-        "pendingFriendsList": "Liste d'amis en attente reçu",
+        "requestFriendsSendList": "Demandes d'amis envoyées",
+        "pendingFriendsList": "Demandes d'amis reçues",
         "allListAccount": "Liste de comptes",
         "friendsofFriends": "amis",
         "cancel": "annuler"
@@ -286,5 +282,14 @@
     "ranking": {
         "loading": "Chargement...",
         "global": "Classement Global"
+    },
+
+    "saveRecordDialog": {
+        "saveRecord": "Voulez-vous enregistrer cette reprise vidéo ?"
+    },
+
+    "replayPage": {
+        "noReplayAvailable": "Aucune reprise vidéo disponible pour le moment",
+        "replayLoading": "Chargement des reprises vidéo..."
     }
 }

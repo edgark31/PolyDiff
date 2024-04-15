@@ -43,6 +43,7 @@ export class GameGateway implements OnGatewayConnection {
     // ------------------ CLASSIC MODE && LIMITED MODE ------------------
     @SubscribeMessage(GameEvents.StartGame)
     async startGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        if (!this.roomsManager.lobbies.get(lobbyId)) return;
         socket.join(lobbyId);
         // To start the game at the same time for each player
         if (Array.from(await this.server.in(lobbyId).fetchSockets()).length === this.roomsManager.lobbies.get(lobbyId).players.length) {
@@ -128,6 +129,7 @@ export class GameGateway implements OnGatewayConnection {
 
     @SubscribeMessage(GameEvents.Spectate)
     async spectate(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        if (!this.roomsManager.lobbies.get(lobbyId)) return;
         if (this.roomsManager.lobbies.get(lobbyId).isAvailable) return;
         socket.data.state = GameState.Spectate;
         socket.join(lobbyId);
@@ -162,6 +164,7 @@ export class GameGateway implements OnGatewayConnection {
         @MessageBody('coordClic') coordClic: Coordinate,
         @MessageBody('isMainCanvas') isMainCanvas: boolean,
     ) {
+        if (!this.roomsManager.lobbies.get(lobbyId)) return;
         this.logger.log(`Click event received from ${this.getFormattedInfos(socket.data.accountId)} in lobby ${lobbyId}`);
 
         const index: number = this.games
@@ -190,7 +193,7 @@ export class GameGateway implements OnGatewayConnection {
                 /* --------- Record Difference Found Event -------- */
                 this.recordManager.addGameEvent(lobbyId, {
                     accountId: socket.data.accountId,
-                    username: this.accountManager.connectedUsers.get(socket.data.accountId).credentials.username,
+                    username: this.accountManager.users.get(socket.data.accountId).credentials.username,
                     gameEvent: GameEvents.Found,
                     modified: 'data:image/png;base64,' + (await this.imageManager.observerImage(structuredClone(this.games.get(lobbyId)))),
                     players: structuredClone(this.roomsManager.lobbies.get(lobbyId).players),
@@ -351,6 +354,7 @@ export class GameGateway implements OnGatewayConnection {
 
     @SubscribeMessage(GameEvents.AbandonGame)
     abandonGame(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        if (!this.roomsManager.lobbies.get(lobbyId)) return;
         const username = this.accountManager.users.get(socket.data.accountId).credentials.username;
         const accountId = socket.data.accountId;
         // eslint-disable-next-line no-unused-vars
@@ -410,6 +414,7 @@ export class GameGateway implements OnGatewayConnection {
 
     @SubscribeMessage(GameEvents.CheatActivated)
     cheatActivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        if (!this.roomsManager.lobbies.get(lobbyId)) return;
         const username = this.accountManager.users.get(socket.data.accountId).credentials.username;
         const accountId = socket.data.accountId;
         const players = this.roomsManager.lobbies.get(lobbyId).players;
@@ -421,6 +426,7 @@ export class GameGateway implements OnGatewayConnection {
 
     @SubscribeMessage(GameEvents.CheatDeactivated)
     cheatDeactivated(@ConnectedSocket() socket: Socket, @MessageBody() lobbyId: string) {
+        if (!this.roomsManager.lobbies.get(lobbyId)) return;
         const username = this.accountManager.users.get(socket.data.accountId).credentials.username;
         const accountId = socket.data.accountId;
 
@@ -431,6 +437,7 @@ export class GameGateway implements OnGatewayConnection {
 
     @SubscribeMessage(ChannelEvents.SendGameMessage)
     handleGameMessage(@ConnectedSocket() socket: Socket, @MessageBody('lobbyId') lobbyId: string, @MessageBody('message') message: string) {
+        if (!this.roomsManager.lobbies.get(lobbyId)) return;
         const chat: Chat = this.messageManager.createMessage(
             this.accountManager.users.get(socket.data.accountId).credentials.username,
             message,
@@ -441,6 +448,7 @@ export class GameGateway implements OnGatewayConnection {
 
         socket.emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Sent });
         socket.broadcast.to(lobbyId).emit(ChannelEvents.GameMessage, { ...chat, tag: MessageTag.Received });
+        this.logger.log(`${this.getFormattedInfos(socket.data.accountId)} envoie un message : ${message}`);
     }
 
     handleConnection(@ConnectedSocket() socket: Socket) {
@@ -585,7 +593,7 @@ export class GameGateway implements OnGatewayConnection {
         this.lobbyGateway.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
     }
 
-    private getFormattedInfos(socketId: string) {
-        return `${this.accountManager.users.get(socketId).credentials.username} (${socketId})`;
+    private getFormattedInfos(accountId: string) {
+        return `${this.accountManager.users.get(accountId).credentials.username} (${accountId})`;
     }
 }

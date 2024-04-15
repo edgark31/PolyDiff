@@ -77,7 +77,7 @@ class _GameInfosState extends State<GameInfos> {
                   _playerInfo(players[0]),
                 ],
                 SizedBox(
-                  width: 130,
+                  width: 20,
                 ),
                 if (players.length > 1) ...[
                   _playerInfo(players[1]),
@@ -91,7 +91,7 @@ class _GameInfosState extends State<GameInfos> {
                 ],
                 if (players.length >= 4) ...[
                   SizedBox(
-                    width: 130,
+                    width: 20,
                   ),
                   _playerInfo(players[3]),
                 ],
@@ -107,7 +107,7 @@ class _GameInfosState extends State<GameInfos> {
         Icon(
           Icons.person,
           color: Colors.black,
-          size: 30,
+          size: 15,
         ),
         Text(
           player.name!,
@@ -115,7 +115,7 @@ class _GameInfosState extends State<GameInfos> {
           textAlign: TextAlign.center,
         ),
         SizedBox(
-          width: 30,
+          width: 25,
         ),
         Text(
           '${AppLocalizations.of(context)!.gameInfos_differencesFoundTitle} : ${player.count}',
@@ -128,7 +128,7 @@ class _GameInfosState extends State<GameInfos> {
 
   TextStyle _textStyle() {
     return TextStyle(
-      fontSize: 25,
+      fontSize: 20,
       fontWeight: FontWeight.bold,
       color: Colors.black,
     );

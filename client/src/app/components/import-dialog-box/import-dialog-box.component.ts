@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -16,7 +15,7 @@ export class ImportDialogComponent {
     constructor(
         public welcomeService: WelcomeService,
         private dialogRef: MatDialogRef<ImportDialogComponent>,
-        private clientSocket: ClientSocketService,
+
         public translate: TranslateService,
     ) {}
 
@@ -38,7 +37,6 @@ export class ImportDialogComponent {
                     ctx?.drawImage(image, 0, 0, canvas.width, canvas.height);
                     const resizedImageBase64 = canvas.toDataURL(imageFormat);
                     this.imageData = resizedImageBase64;
-                    this.clientSocket.send('auth', 'send-img', resizedImageBase64);
                 };
                 image.src = imageBase64;
             };

@@ -31,6 +31,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     @ViewChild('originalCanvasFG', { static: false }) originalCanvasForeground!: ElementRef<HTMLCanvasElement>;
     @ViewChild('modifiedCanvasFG', { static: false }) modifiedCanvasForeground!: ElementRef<HTMLCanvasElement>;
 
+    isChatVisible: boolean = false;
     remainingDifference: Coordinate[][];
     timer: number;
     nDifferencesFound: number;
@@ -104,6 +105,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         }
     }
 
+    toggleChatVisibility(): void {
+        this.isChatVisible = !this.isChatVisible;
+    }
+
     translateCharacter(character: string): string {
         return this.translate.instant(`chat.${character}`);
     }
@@ -119,11 +124,12 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.clientSocket.send('game', GameEvents.Spectate, this.gameManager.lobbyWaiting.lobbyId);
         }
         this.clientSocket.send('game', GameEvents.StartGame, this.gameManager.lobbyWaiting.lobbyId);
+        this.gameManager.playerShare = [] as Player[];
         // this.lobby = this.gameManager.lobbyWaiting;
         this.lobbySubscription = this.gameManager.lobbyGame$.subscribe((lobby: Lobby) => {
             this.lobby = lobby;
             this.nDifferencesFound = lobby.players.reduce((acc, player) => acc + (player.count as number), 0);
-
+            this.playerShare = this.lobby.players.map((player) => ({ ...player }));
             this.messages = this.lobby.chatLog?.chat as Chat[];
             this.messages.forEach((message: Chat) => {
                 if (message.raw.includes('a trouvé une différence')) {
@@ -231,7 +237,6 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     resetGameStats(): void {
-        this.playerShare = this.lobby.players.map((player) => ({ ...player }));
         this.nDifferencesFound = 0;
         for (const player of this.lobby.players) {
             player.count = 0;
@@ -279,13 +284,14 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     showEndGameDialog(endingMessage: string): void {
+        this.isChatVisible = false;
         this.matDialog.open(GamePageDialogComponent, {
             data: {
                 action: GamePageEvent.EndGame,
                 message: endingMessage,
                 isReplayMode: this.lobby.mode === this.gameMode.Classic,
                 lobby: this.lobby,
-                players: this.playerShare,
+                players: this.gameManager.playerShare,
             },
             disableClose: true,
             panelClass: 'dialog',
@@ -309,6 +315,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.gameManager.requestVerification(this.lobby.lobbyId as string, this.gameAreaService.getMousePosition());
     }
     setUpGame(): void {
+        this.isChatVisible = false;
         this.gameAreaService.setOriginalContext(
             this.originalCanvas.nativeElement.getContext('2d', {
                 willReadFrequently: true,
@@ -335,6 +342,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.gameAreaService.setAllData();
     }
     private setUpReplay(): void {
+        this.isChatVisible = false;
         this.replayService.lobby = this.lobby;
         this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
             this.timer = replayTimer;

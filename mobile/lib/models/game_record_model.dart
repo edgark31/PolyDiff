@@ -1,7 +1,7 @@
 import 'package:mobile/models/models.dart';
 
 class GameRecord {
-  final String date;
+  String date;
   final Game game;
   final List<String> accountIds;
   final List<Player> players;

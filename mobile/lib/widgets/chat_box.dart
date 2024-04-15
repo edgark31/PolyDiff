@@ -179,7 +179,7 @@ class _ChatBoxState extends State<ChatBox> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(message.raw,
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: Colors.black, fontFamily: 'Roboto'),
                             textAlign: TextAlign.center),
                       ),
                     );
@@ -202,7 +202,7 @@ class _ChatBoxState extends State<ChatBox> {
                         ),
                         Text(
                           messages[index].name!,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.black, fontFamily: 'Roboto'),
                         ),
                         Container(
                           width: 250,
@@ -214,14 +214,14 @@ class _ChatBoxState extends State<ChatBox> {
                           ),
                           child: Text(
                             messages[index].raw,
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: Colors.black, fontFamily: 'Roboto'),
                           ),
                         ),
                         Container(
                           padding: EdgeInsets.only(bottom: 15),
                           child: Text(
                             messages[index].timestamp!,
-                            style: TextStyle(color: Colors.black, fontSize: 12),
+                            style: TextStyle(color: Colors.black, fontSize: 12, fontFamily: 'Roboto'),
                             textAlign: TextAlign.end,
                           ),
                         ),
@@ -251,6 +251,9 @@ class _ChatBoxState extends State<ChatBox> {
                       filled: true,
                     ),
                     onSubmitted: _handleMessageSubmit,
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                    ),
                   ),
                 ),
                 SizedBox(width: 10),

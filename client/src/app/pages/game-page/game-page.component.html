@@ -1,27 +1,14 @@
-<div id="game-page" class="justified">
-    <div  class="game-infos information-header justified">
-        <mat-icon *ngIf="this.lobby.mode !== this.gameMode.Practice"
-        class="eye-icon"
-        [class.eye-open]="lobby.observers.length>0"
-        [class.eye-closed]="lobby.observers.length===0"
-      >
-        {{ lobby.observers.length>0 ? 'visibility' : 'visibility_off' }}
-      </mat-icon>
-      <h1 *ngIf="lobby.observers.length>0" id="length"> {{ lobby.observers.length }} </h1>
-        <h1 id = "title">{{ gameLobby.name }}</h1>
-            <div class="game-feedback">
-                <h1>Mode : {{ translateGameMode(lobby.mode) }}</h1>
-                &nbsp;
-                <h1>{{'game.foundDifference' | translate }} : {{ nDifferencesFound }}</h1>
-                &nbsp;
-                <h1 *ngIf="this.getMode() !== '/practice'">{{'game.timerOver' | translate }} : {{ timer * 1000 | date: 'mm:ss' }}</h1>
-                &nbsp;
-                <div *ngIf="lobby.players.length > 0" id="players">
-                    <h1 *ngFor="let player of lobby.players">
-                        <span> {{player.name}} : {{player.count}}</span>
-                    </h1>
-                </div>
+<div class="main">
+    <div class="game-infos">
+        <h1 id="title">{{ gameLobby.name }}</h1>
+        <div class="game-feedback">
+            <h1>Mode : {{ translateGameMode(lobby.mode) }}</h1>
+            <h1>{{'game.foundDifference' | translate }} : {{ nDifferencesFound }}</h1>
+            <h1 *ngIf="this.getMode() !== '/practice'">{{'game.time' | translate }} : {{ timer * 1000 | date: 'mm:ss' }}</h1>
+            <div *ngIf="lobby.players.length > 0" id="players">
+                <h1 *ngFor="let player of lobby.players">{{player.name}} : {{player.count}}</h1>
             </div>
+        </div>
     </div>
     <div class="canvas-container">
         <div class="game-canvas">
@@ -57,20 +44,21 @@
             ></canvas>
         </div>
     </div>
-    <button *ngIf="!isReplayAvailable" class="importantButton justified" (click)="showAbandonDialog()">
-        <span id="abandon">{{'game.abandon' | translate }}</span>
-    </button>
-</div>
-<div *ngIf="!welcome.onChatGame">
-    <app-chat-box (addGame)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
-</div>
-<div *ngIf="welcome.onChatGame">
-    <app-chat-box (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
-</div>
+    <div class="replay">
+        <app-replay-buttons [isReplayAvailable]="isReplayAvailable"></app-replay-buttons>
+    </div>
+    <div class="qandc">   
+        <button class="abandon" *ngIf="!isReplayAvailable" (click)="showAbandonDialog()">{{'game.abandon' | translate }}</button>
+        <button class="chat" *ngIf="!isReplayAvailable" (click)="toggleChatVisibility()">chat</button>
+    </div>
+    <app-chat-box [hidden]="!isChatVisible" *ngIf="!welcome.onChatGame" (addGame)="this.sendMessage($event)" [messages]="messages"></app-chat-box>
+    <app-chat-box [hidden]="!isChatVisible" *ngIf="welcome.onChatGame" (add)="this.sendMessageGlobal($event)" [messages]="messageGlobal"></app-chat-box>
+    <div class="eye-icon">
+        <h1 *ngIf="lobby.observers.length>0">{{ lobby.observers.length }}</h1>
+        <mat-icon *ngIf="this.lobby.mode !== this.gameMode.Practice" [class.eye-open]="lobby.observers.length>0" [class.eye-closed]="lobby.observers.length===0">{{ lobby.observers.length>0 ? 'visibility' : 'visibility_off' }}</mat-icon>
+    </div>
+  </div>
 <img *ngIf="welcome.account.profile.mobileTheme==='light'" id="background" src="./assets/background/BackgroundImage.jpg" alt="background" />
-<img *ngIf="welcome.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/game_background_dark.png" alt="background"/>
-<div>
-    <app-replay-buttons [isReplayAvailable]="isReplayAvailable"></app-replay-buttons>
-</div>
+<img *ngIf="welcome.account.profile.mobileTheme==='dark'" id="background" src="./assets/background/game_background_dark.png" alt="background"/>
 
 

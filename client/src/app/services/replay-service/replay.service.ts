@@ -107,6 +107,11 @@ export class ReplayService implements OnDestroy {
     }
 
     fallBackReplay(time: number): void {
+        if (this.isCheatMode) {
+            this.isCheatMode = false;
+            this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
+        }
+
         // filtrer found ou start
         const gameEventsFiltered = this.record.gameEvents.filter(
             (event) => event.gameEvent === ReplayActions.Found || event.gameEvent === ReplayActions.StartGame,
@@ -114,8 +119,12 @@ export class ReplayService implements OnDestroy {
         // timestamp le plus proche
         const gameEvent = gameEventsFiltered.filter((event) => event.timestamp && event.timestamp - this.record.startTime <= time * 1000).pop();
         // calculer lindex a partir du timestamp trouve
+        const timerEvents = this.record.gameEvents.filter((event) => event.gameEvent === ReplayActions.TimerUpdate);
+        const timerEvent = timerEvents.filter((event) => event.timestamp && event.timestamp - this.record.startTime <= time * 1000).pop();
+        this.replayTimer = timerEvent?.time as number;
+        this.replayTimerSubject.next(this.replayTimer);
         for (let i = 0; i < this.record.gameEvents.length; i++) {
-            if (this.record.gameEvents[i].timestamp === gameEvent?.timestamp) {
+            if (this.record.gameEvents[i].timestamp === timerEvent?.timestamp) {
                 this.currentReplayIndex = i;
                 break;
             }
@@ -289,6 +298,9 @@ export class ReplayService implements OnDestroy {
     }
 
     private replayClickFound(replayData: GameEventData): void {
+        if (this.isCheatMode) {
+            this.replayDeactivateCheat(replayData);
+        }
         if (this.record.game.differences) {
             const currentIndex: number = this.record.game.differences.findIndex((difference) =>
                 difference.some((coord: Coordinate) => coord.x === replayData.coordClic?.x && coord.y === replayData.coordClic?.y),
@@ -316,38 +328,44 @@ export class ReplayService implements OnDestroy {
     }
 
     private replayClickError(replayData: GameEventData): void {
-        this.soundService.playIncorrectSound(this.welcome.account.profile.onErrorSound);
-        // if (replayData) {
-        //     const commonMessage = `${replayData.username} s'est trompé !`;
-        //     const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
-        //     this.gameManager.setMessage(commonChat);
-        // } snif snif mes messages zabi les gars
-        this.gameAreaService.showError(replayData.isMainCanvas as boolean, replayData.coordClic as Coordinate, this.replaySpeed);
+        if (replayData.username === this.welcome.account.credentials.username) {
+            this.soundService.playIncorrectSound(this.welcome.account.profile.onErrorSound);
+            // if (replayData) {
+            //     const commonMessage = `${replayData.username} s'est trompé !`;
+            //     const commonChat: Chat = { raw: commonMessage, tag: MessageTag.Common };
+            //     this.gameManager.setMessage(commonChat);
+            // } snif snif mes messages zabi les gars
+            this.gameAreaService.showError(replayData.isMainCanvas as boolean, replayData.coordClic as Coordinate, this.replaySpeed);
+        }
     }
 
     private replayActivateCheat(replayData: GameEventData): void {
-        this.isCheatMode = true;
-        this.currentCoords = [];
-        if (replayData.remainingDifferenceIndex) {
-            this.currentCoords = this.currentCoords.concat(
-                replayData.remainingDifferenceIndex.reduce((acc, index) => {
-                    return acc.concat(this.record.game.differences?.[index] as Coordinate[]);
-                }, [] as Coordinate[]),
-            );
-            this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
+        if (replayData.username === this.welcome.account.credentials.username) {
+            this.isCheatMode = true;
+            this.currentCoords = [];
+            if (replayData.remainingDifferenceIndex) {
+                this.currentCoords = this.currentCoords.concat(
+                    replayData.remainingDifferenceIndex.reduce((acc, index) => {
+                        return acc.concat(this.record.game.differences?.[index] as Coordinate[]);
+                    }, [] as Coordinate[]),
+                );
+                this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
+            }
         }
     }
 
     private replayDeactivateCheat(replayData: GameEventData): void {
-        this.isCheatMode = false;
-        this.currentCoords = [];
-        if (replayData.remainingDifferenceIndex) {
-            this.currentCoords = this.currentCoords.concat(
-                replayData.remainingDifferenceIndex.reduce((acc, index) => {
-                    return acc.concat(this.record.game.differences?.[index] as Coordinate[]);
-                }, [] as Coordinate[]),
-            );
-            this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
+        if (replayData.username === this.welcome.account.credentials.username) {
+            this.isCheatMode = false;
+            this.currentCoords = [];
+            if (replayData.remainingDifferenceIndex) {
+                this.currentCoords = this.currentCoords.concat(
+                    replayData.remainingDifferenceIndex.reduce((acc, index) => {
+                        return acc.concat(this.record.game.differences?.[index] as Coordinate[]);
+                    }, [] as Coordinate[]),
+                );
+                this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
+            }
         }
     }
 
