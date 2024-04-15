@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/game_record_model.dart';
@@ -74,7 +75,8 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
           : LIMITED_TIME_BACKGROUND_PATH_DARK,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: CustomAppBar(title: 'Replays'), // TODO: Translate this
+        appBar: CustomAppBar(
+            title: AppLocalizations.of(context)!.profile_videoReplay),
         body: ListView.builder(
           itemCount: gameRecordsFromServer.length,
           itemBuilder: (context, index) {
@@ -82,14 +84,16 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
               gameRecordCard:
                   GameRecordCard.fromGameRecord(gameRecordsFromServer[index]),
               onReplay: () {
-                
-                // TODO: Add back when replay is implemented
-                // Navigator.pushNamed(context, REPLAY_ROUTE,
-                //     arguments: gameRecordProvider.record);
+                // TODO : Add when replay is back
+                // gameRecordProvider.currentGameRecord =
+                //     gameRecordsFromServer[index];
+                // Navigator.of(context).pushNamed(REPLAY_ROUTE);
               },
               onDelete: () {
-                // gameRecordProvider
-                //   .deleteAccountId(gameRecordProvider.record.date);
+                gameRecordProvider.currentGameRecord =
+                    gameRecordsFromServer[index];
+                gameRecordProvider
+                    .deleteAccountId(gameRecordProvider.record.date);
               },
             );
           },

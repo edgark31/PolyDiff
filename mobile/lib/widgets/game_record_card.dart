@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/models/game_record_model.dart';
 
 class GameRecordCardWidget extends StatelessWidget {
@@ -21,16 +22,15 @@ class GameRecordCardWidget extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.ondemand_video_rounded),
             title: Text(gameRecordCard.gameName),
-            // TODO: ajuster avec la translation
             subtitle: Text(
-                "Players: ${gameRecordCard.playerNames.join(', ')}\nDuration: ${gameRecordCard.durationFormatted}"),
+                "${AppLocalizations.of(context)!.lobby_selection_players}: ${gameRecordCard.playerNames.join(', ')}\n"
+                "Date: ${gameRecordCard.date}"),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              TextButton(
-                // TODO: ajuster avec la translation
-                child: const Text('REJOUER'),
+              IconButton(
+                icon: Icon(Icons.slideshow_rounded),
                 onPressed: onReplay,
               ),
               const SizedBox(width: 8),
