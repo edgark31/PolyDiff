@@ -128,7 +128,7 @@
     "endGameMessage_draw": "Tie",
     "endGameMessage_endPractice": "end of the Practice",
     "replay_nothingToShow": "No game records available for now",
-    "replay_endOfReplay":"Playback Finished",
+    "replay_endOfReplay": "Playback Finished",
     "replay_wantToReplay": "Would you like to replay?",
     "replay_wantToSave": "Would you like to save?",
     "classicMode": "Classic",

@@ -128,7 +128,7 @@
     "endGameMessage_draw": "Match nul !",
     "endGameMessage_endPractice": "Fin de la pratique !",
     "replay_nothingToShow": "Aucune reprise vidéo disponible pour le moment",
-    "replay_endOfReplay":"Reprise terminée",
+    "replay_endOfReplay": "Reprise terminée",
     "replay_wantToReplay": "Voulez-vous recommencer la reprise?",
     "replay_wantToSave": "Voulez-vous sauvegarder la reprise?",
     "classicMode": "Classique",
