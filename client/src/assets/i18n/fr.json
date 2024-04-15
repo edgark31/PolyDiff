@@ -248,7 +248,7 @@
 
     "AccountDialog": {
         "confirmChange": "Enregistrer vos modifications ?",
-        "changeConfirm": "Modifications enregistrés !",
+        "changeConfirm": "Modifications enregistrées !",
         "deleteFriends": "Supprimer cet ami ?",
         "yes": "Oui",
         "no": "Non"
