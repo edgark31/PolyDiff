@@ -26,6 +26,8 @@
         "confirmPassword": "Confirm password",
         "songDifference": "choose your sound for difference found",
         "songError": "choose your sound for error",
+        "currentSongDifference": "current sound for difference found",
+        "currentSongError": "current sound for error",
         "nameEnter": "please type your name",
         "passwordEnter": "please type your password",
         "confirmPasswordEnter": "please confirm your password",
@@ -129,7 +131,7 @@
         "yes": "Yes",
         "no": "No",
         "scoreShare": "Share",
-        "quitGame": "Leave"
+        "quitGame": "Home"
     },
 
     "gameSheet": {

@@ -25,6 +25,8 @@
         "confirmPassword": "Confirmer le mot de passe",
         "songError": "choisissez votre son pour erreur",
         "songDifference": "choisissez votre son pour différence trouvé",
+        "currentSongDifference": "Son actuel lorsqu'une différence est trouvée",
+        "currentSongError":  "Son actuel lorsqu'il y a une erreur",
         "nameEnter": "veuillez écrire votre nom",
         "passwordEnter": "veuillez écrire votre mot de passe",
         "confirmPasswordEnter": "euillez ré-écrire votre mot de passe",
@@ -132,8 +134,8 @@
         "videoReprise": "reprise Video",
         "yes": "oui",
         "no": "Non",
-        "scoreShare": "Partage",
-        "quitGame": "quitter"
+        "scoreShare": "Partager",
+        "quitGame": "Accueil"
     },
 
     "gameSheet": {
