@@ -140,7 +140,7 @@ class GameEventPlaybackService extends ChangeNotifier {
     print("Speed set to $_speed. Adjusting playback speed.");
     if (!_isPaused) {
       pause();
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(Duration(milliseconds: 300));
 
       resume();
     }
