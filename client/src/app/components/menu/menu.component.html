@@ -20,7 +20,7 @@
           <!-- <span routerLink="/profil" class="right-profil">profil</span> -->
 
           <mat-menu #menu="matMenu" class="custom-menu">
-            <button mat-menu-item routerLink="/profil">Profil</button>
+            <button mat-menu-item routerLink="/profil">{{'button.profile' | translate }}</button>
             <button mat-menu-item routerLink="/personalization">{{'button.Settings' | translate }}</button>
             <button mat-menu-item (click)="onDeconnexion()">{{'button.deconnexion' | translate }}</button>
             <button mat-menu-item (click)="onManageGames()">Administration</button>

@@ -8,12 +8,14 @@ import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/models.dart';
+import 'package:mobile/replay/replay_images_provider.dart';
+import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/info_service.dart';
 
 class GameRecordProvider extends ChangeNotifier {
   final InfoService _infoService = Get.find();
-  // final ReplayPlayerProvider _players = Get.find();
-  // final ReplayImagesProvider _imagesProvider = Get.find();
+  final ReplayPlayerProvider _players = Get.find();
+  final ReplayImagesProvider _imagesProvider = Get.find();
 
   final String baseUrl = "$API_URL/records";
 
@@ -24,15 +26,28 @@ class GameRecordProvider extends ChangeNotifier {
   List<GameRecord> get gameRecords => _gameRecords;
   GameRecord get record => _record;
 
-  // List<Player> get playersData => _players.data;
-  // Future<CanvasModel>? get currentCanvas => _imagesProvider.currentCanvas;
-  // int get nObservers => _players.nObservers;
+  Future<CanvasModel>? get currentCanvas => _imagesProvider.currentCanvas;
+  List<Player> get playersData => _players.data;
+  int get nObservers => _players.nObservers;
+  int get timeLimit => _record.timeLimit;
   bool get isFromProfile => _isFromProfile;
+  bool get hasCheatEnabled => _record.isCheatEnabled;
 
   set currentGameRecord(GameRecord gameRecord) {
-    _record = gameRecord;
-    print(
-        'GameRecord set by default : ${gameRecord.date} for ${gameRecord.game.name}');
+    try {
+      _record = gameRecord;
+      _players.initialPlayersData = gameRecord.players;
+      _players.initialNumberOfObservers = gameRecord.observers?.length ?? 0;
+      print('GameRecord set: ${gameRecord.date} for ${gameRecord.game.name}');
+    } catch (e) {
+      print('Failed to set game record: $e');
+    }
+    notifyListeners();
+  }
+
+  set isPlaybackFromProfile(bool newIsFromProfile) {
+    _isFromProfile = newIsFromProfile;
+    print("Game provider _isFromProfile set : $_isFromProfile");
     notifyListeners();
   }
 
@@ -53,8 +68,10 @@ class GameRecordProvider extends ChangeNotifier {
         _gameRecords = gameRecordsJson
             .map((gameRecordJson) => GameRecord.fromJson(gameRecordJson))
             .toList();
-        notifyListeners();
       }
+      print(
+          "Fetched all games record : ${_gameRecords.length} for accountId : $accountId");
+      notifyListeners();
       return null;
     } catch (error) {
       return 'Error: $error';
@@ -74,15 +91,15 @@ class GameRecordProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         final Map<String, dynamic> body = json.decode(response.body);
         _record = GameRecord.fromJson(body);
-        // _players.initialPlayersData = _record.players;
-        // if (_record.observers != null) {
-        //   _players.initialNumberOfObservers = _record.observers!.length;
-        // } else {
-        //   _players.initialNumberOfObservers = 0;
-        // }
+        _players.initialPlayersData = _record.players;
+        if (_record.observers != null) {
+          _players.initialNumberOfObservers = _record.observers!.length;
+        } else {
+          _players.initialNumberOfObservers = 0;
+        }
 
-        // print(
-        //     "Players : ${_players.data.map((player) => player.name)} and observers : ${_players.nObservers} for game record : ${_record.date} ");
+        print(
+            "Players : ${_players.data.map((player) => player.name)} and observers : ${_players.nObservers} for game record : ${_record.date} ");
         notifyListeners();
       } else {
         print('Server error: ${response.statusCode}');
@@ -100,11 +117,13 @@ class GameRecordProvider extends ChangeNotifier {
       // Reverted because of a bug in the client DO NOT TOUCH
       final uri = Uri.parse('$baseUrl/$date')
           .replace(queryParameters: {'date': accountId});
+      print('Deleting game record for accountId : $accountId and date : $date');
       final response = await http.delete(uri);
 
       if (response.statusCode == 200) {
         print(
             "GameRecord removed from saved for accountId : $accountId and username :  ${_infoService.username}");
+        _gameRecords.removeWhere((element) => element.date == date);
         _gameRecords.removeWhere((element) => element.date == date);
         notifyListeners();
       } else {

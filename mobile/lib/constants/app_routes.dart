@@ -18,6 +18,7 @@ import 'package:mobile/pages/profile_page.dart';
 import 'package:mobile/pages/sign_in_page.dart';
 import 'package:mobile/pages/sign_up_page.dart';
 import 'package:mobile/pages/statistics_page.dart';
+import 'package:mobile/replay/playback_page.dart';
 
 // Important if testing on a real device with a local server
 // Change the IP address to your local machine's IP address
@@ -113,15 +114,14 @@ class AppRouter {
       case GameRecordSelectionPage.routeName:
         return GameRecordSelectionPage.route();
 
+      case PlaybackPage.routeName:
+        return PlaybackPage.route();
+
       case FriendsPage.routeName:
         return FriendsPage.route();
 
       case GameModesPage.routeName:
         return GameModesPage.route();
-
-      // TODO: Add back when replay is implemented
-      // case WatchRecordedGame.routeName:
-      //   return WatchRecordedGame.route();
 
       default:
         return _errorRoute();

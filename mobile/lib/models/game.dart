@@ -24,8 +24,8 @@ class Game {
       : this(
           '', // lobbyId
           '', // name
-          '', // original
           '', // modified
+          '', // original
           '', // gameId
           '', // difficulty
           [], // differences

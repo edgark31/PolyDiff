@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/models/game_record_model.dart';
 
-class GameRecordCardWidget extends StatelessWidget {
-  final GameRecordCard gameRecordCard;
-  final VoidCallback onDelete;
-  final VoidCallback onReplay;
+typedef OnReplayCallback = void Function(GameRecord gameRecord);
 
-  const GameRecordCardWidget(
-      {super.key,
-      required this.gameRecordCard,
-      required this.onReplay,
-      required this.onDelete});
+class GameRecordCardWidget extends StatelessWidget {
+  final GameRecord gameRecord;
+  final OnReplayCallback onReplay;
+  final VoidCallback onDelete;
+
+  GameRecordCardWidget({
+    super.key,
+    required this.gameRecord,
+    required this.onReplay,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +24,16 @@ class GameRecordCardWidget extends StatelessWidget {
         children: <Widget>[
           ListTile(
             leading: Icon(Icons.ondemand_video_rounded),
-            title: Text(gameRecordCard.gameName),
+            title: Text(gameRecord.game.name),
             subtitle: Text(
-                "${AppLocalizations.of(context)!.lobby_selection_players}: ${gameRecordCard.playerNames.join(', ')}\n"
-                "Date: ${gameRecordCard.date}"),
+                "${AppLocalizations.of(context)!.lobby_selection_players}: ${gameRecord.players.map((player) => player.name).join(', ')}\nDate: ${gameRecord.date}"),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               IconButton(
                 icon: Icon(Icons.slideshow_rounded),
-                onPressed: onReplay,
+                onPressed: () => onReplay(gameRecord),
               ),
               const SizedBox(width: 8),
               IconButton(

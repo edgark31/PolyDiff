@@ -148,7 +148,7 @@ class _SignUpFormState extends State<SignUpForm> {
         setState(() {});
       } else {
         UploadAvatarBody predefinedAvatarBody =
-            UploadAvatarBody(username: username, id: _selectedAvatarId);
+            UploadAvatarBody(username: username, defaultId: _selectedAvatarId);
         serverErrorMessage = await registerProvider.putAvatarData(
             predefinedAvatarBody, AvatarType.predefined);
         setState(() {});
