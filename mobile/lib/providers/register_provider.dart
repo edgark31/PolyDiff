@@ -21,6 +21,8 @@ class RegisterProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         isBack = true;
         print('Successfully posting CredentialsData in register provider');
+      } else {
+        return response.body;
       }
     } catch (error) {
       isLoading = false;
@@ -54,6 +56,8 @@ class RegisterProvider extends ChangeNotifier {
 
             notifyListeners();
             return null;
+          } else {
+            return response.body;
           }
         } catch (e) {
           isLoading = false;
@@ -65,6 +69,8 @@ class RegisterProvider extends ChangeNotifier {
           http.Response response = (await putCameraImageAvatar(body))!;
           if (response.statusCode == 200) {
             isBack = true;
+          } else {
+            return response.body;
           }
         } catch (error) {
           isLoading = false;
