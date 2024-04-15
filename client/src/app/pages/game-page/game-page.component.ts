@@ -31,6 +31,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     @ViewChild('originalCanvasFG', { static: false }) originalCanvasForeground!: ElementRef<HTMLCanvasElement>;
     @ViewChild('modifiedCanvasFG', { static: false }) modifiedCanvasForeground!: ElementRef<HTMLCanvasElement>;
 
+    isChatVisible: boolean = false;
     remainingDifference: Coordinate[][];
     timer: number;
     nDifferencesFound: number;
@@ -101,6 +102,10 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
                 this.gameAreaService.toggleCheatMode(differencesCoordinates);
             }
         }
+    }
+
+    toggleChatVisibility(): void {
+        this.isChatVisible = !this.isChatVisible;
     }
 
     translateCharacter(character: string): string {
@@ -277,6 +282,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     }
 
     showEndGameDialog(endingMessage: string): void {
+        this.isChatVisible = false;
         this.matDialog.open(GamePageDialogComponent, {
             data: {
                 action: GamePageEvent.EndGame,
@@ -307,6 +313,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.gameManager.requestVerification(this.lobby.lobbyId as string, this.gameAreaService.getMousePosition());
     }
     setUpGame(): void {
+        this.isChatVisible = false;
         this.gameAreaService.setOriginalContext(
             this.originalCanvas.nativeElement.getContext('2d', {
                 willReadFrequently: true,
@@ -333,6 +340,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         this.gameAreaService.setAllData();
     }
     private setUpReplay(): void {
+        this.isChatVisible = false;
         this.replayService.lobby = this.lobby;
         this.replayTimerSubscription = this.replayService.replayTimerSubject$.subscribe((replayTimer: number) => {
             this.timer = replayTimer;

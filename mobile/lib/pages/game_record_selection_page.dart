@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
@@ -65,12 +66,13 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
           : LIMITED_TIME_BACKGROUND_PATH_DARK,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: CustomAppBar(title: 'Replays'), // TODO: Translate this
+        appBar: CustomAppBar(
+            title: AppLocalizations.of(context)!.profile_videoReplay),
         body: isLoading
             ? Center(child: CircularProgressIndicator())
             : (gameRecordsFromServer.isEmpty
                 // TODO: translate this
-                ? Center(child: Text("No game records found."))
+                ? Center(child: Text(AppLocalizations.of(context)!.replay_nothingToShow))
                 : ListView.builder(
                     itemCount: gameRecordsFromServer.length,
                     itemBuilder: (context, index) {
@@ -106,7 +108,7 @@ class _GameRecordSelectionPageState extends State<GameRecordSelectionPage> {
       builder: (BuildContext context) {
         // TODO: translate this
         return AlertDialog(
-          title: Text("Error"),
+          title: Text("Stop"),
           content: Text(message),
           actions: <Widget>[
             TextButton(

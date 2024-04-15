@@ -9,6 +9,7 @@ function initWindow() {
         width: 1920,
         webPreferences: {
             nodeIntegration: true,
+            webSecurity: false,
         },
         icon: './src/assets/gros-ratata.bmp',
     });

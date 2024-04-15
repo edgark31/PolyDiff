@@ -105,6 +105,7 @@ export class ReplayService implements OnDestroy {
             this.isCheatMode = false;
             this.gameAreaService.toggleCheatMode(this.currentCoords, this.replaySpeed);
         }
+
         // filtrer found ou start
         const gameEventsFiltered = this.record.gameEvents.filter(
             (event) => event.gameEvent === ReplayActions.Found || event.gameEvent === ReplayActions.StartGame,
@@ -112,8 +113,12 @@ export class ReplayService implements OnDestroy {
         // timestamp le plus proche
         const gameEvent = gameEventsFiltered.filter((event) => event.timestamp && event.timestamp - this.record.startTime <= time * 1000).pop();
         // calculer lindex a partir du timestamp trouve
+        const timerEvents = this.record.gameEvents.filter((event) => event.gameEvent === ReplayActions.TimerUpdate);
+        const timerEvent = timerEvents.filter((event) => event.timestamp && event.timestamp - this.record.startTime <= time * 1000).pop();
+        this.replayTimer = timerEvent?.time as number;
+        this.replayTimerSubject.next(this.replayTimer);
         for (let i = 0; i < this.record.gameEvents.length; i++) {
-            if (this.record.gameEvents[i].timestamp === gameEvent?.timestamp) {
+            if (this.record.gameEvents[i].timestamp === timerEvent?.timestamp) {
                 this.currentReplayIndex = i;
                 break;
             }

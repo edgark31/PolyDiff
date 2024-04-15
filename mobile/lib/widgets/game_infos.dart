@@ -103,7 +103,7 @@ class _GameInfosState extends State<GameInfos> {
         Icon(
           Icons.person,
           color: Colors.black,
-          size: 30,
+          size: 15,
         ),
         Text(
           player.name!,
@@ -111,7 +111,7 @@ class _GameInfosState extends State<GameInfos> {
           textAlign: TextAlign.center,
         ),
         SizedBox(
-          width: 30,
+          width: 25,
         ),
         Text(
           '${AppLocalizations.of(context)!.gameInfos_differencesFoundTitle} : ${player.count}',
@@ -124,7 +124,7 @@ class _GameInfosState extends State<GameInfos> {
 
   TextStyle _textStyle() {
     return TextStyle(
-      fontSize: 25,
+      fontSize: 20,
       fontWeight: FontWeight.bold,
       color: Colors.black,
     );

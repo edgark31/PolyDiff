@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { WaitingGameComponent } from '@app/components/waiting-game/waiting-game.component';
 import { WaitingPlayerToJoinComponent } from '@app/components/waiting-player-to-join/waiting-player-to-join.component';
@@ -29,6 +29,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     lobbiesSubscription: Subscription;
     requestSubscription: Subscription;
     private lobbySubscription: Subscription;
+    private dialogRefs = new Map<string, MatDialogRef<WaitingPlayerToJoinComponent>>();
     // eslint-disable-next-line max-params
     constructor(
         public router: Router,
@@ -40,7 +41,9 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         public globalChatService: GlobalChatService,
         public translate: TranslateService,
         private readonly matDialog: MatDialog,
-    ) {}
+    ) {
+        this.dialogRefs = new Map<string, MatDialogRef<WaitingPlayerToJoinComponent>>();
+    }
 
     ngOnInit(): void {
         this.roomManagerService.handleRoomEvents();
@@ -68,14 +71,19 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.receiveMessage(message);
         });
         this.requestSubscription = this.roomManagerService.playerNameRequesting$.subscribe((playerName: string) => {
-            this.dialog.open(WaitingPlayerToJoinComponent, {
+            const dialogRef = this.dialog.open(WaitingPlayerToJoinComponent, {
                 data: { lobby: this.lobby, username: playerName },
                 disableClose: true,
                 panelClass: 'dialog',
             });
+            this.dialogRefs.set(playerName, dialogRef);
         });
-        this.clientSocketService.on('lobby', LobbyEvents.CancelRequestAcessHost, () => {
-            this.dialog.closeAll();
+        this.clientSocketService.on('lobby', LobbyEvents.CancelRequestAcessHost, (leavingPlayerName: string) => {
+            const dialogRef = this.dialogRefs.get(leavingPlayerName);
+            if (dialogRef) {
+                dialogRef.close();
+                this.dialogRefs.delete(leavingPlayerName);
+            }
         });
         this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {
             this.router.navigate(['/home']);

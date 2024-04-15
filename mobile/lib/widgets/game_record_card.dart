@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mobile/models/game_record_model.dart';
 
 typedef OnReplayCallback = void Function(GameRecord gameRecord);
@@ -25,7 +26,7 @@ class GameRecordCardWidget extends StatelessWidget {
             leading: Icon(Icons.ondemand_video_rounded),
             title: Text(gameRecord.game.name),
             subtitle: Text(
-                "Players: ${gameRecord.players.map((player) => player.name).join(', ')}\nDate: ${gameRecord.date}"),
+                "${AppLocalizations.of(context)!.lobby_selection_players}: ${gameRecord.players.map((player) => player.name).join(', ')}\nDate: ${gameRecord.date}"),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

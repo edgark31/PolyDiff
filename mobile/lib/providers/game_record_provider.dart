@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/constants/app_routes.dart';
+import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/canvas_model.dart';
 import 'package:mobile/models/models.dart';
 import 'package:mobile/replay/replay_images_provider.dart';
@@ -21,6 +23,7 @@ class GameRecordProvider extends ChangeNotifier {
 
   List<GameRecord> _gameRecords = [];
   GameRecord _record = DEFAULT_GAME_RECORD;
+  bool _isFromProfile = false;
   bool _isFromProfile = false;
 
   List<GameRecord> get gameRecords => _gameRecords;
@@ -49,6 +52,10 @@ class GameRecordProvider extends ChangeNotifier {
     _isFromProfile = newIsFromProfile;
     print("Game provider _isFromProfile set : $_isFromProfile");
     notifyListeners();
+  }
+
+  void setIsFromProfile(bool newIsFromProfile) {
+    _isFromProfile = newIsFromProfile;
   }
 
   Future<String?> findAllByAccountId() async {
@@ -113,11 +120,17 @@ class GameRecordProvider extends ChangeNotifier {
       // Reverted because of a bug in the client DO NOT TOUCH
       final uri = Uri.parse('$baseUrl/$date')
           .replace(queryParameters: {'date': accountId});
+      print('Deleting game record for accountId : $accountId and date : $date');
+      // Yes, the date is the accountId and the accountId is the date
+      // Reverted because of a bug in the client DO NOT TOUCH
+      final uri = Uri.parse('$baseUrl/$date')
+          .replace(queryParameters: {'date': accountId});
       final response = await http.delete(uri);
 
       if (response.statusCode == 200) {
         print(
             "GameRecord removed from saved for accountId : $accountId and username :  ${_infoService.username}");
+        _gameRecords.removeWhere((element) => element.date == date);
         _gameRecords.removeWhere((element) => element.date == date);
         notifyListeners();
       } else {

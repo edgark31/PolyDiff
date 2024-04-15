@@ -70,6 +70,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String passwordStrength = '';
   String passwordConfirmation = '';
   String newPassword = '';
+  String enteredName = '';
 
   String avatarFeedback = '';
   String passwordFeedback = '';
@@ -209,7 +210,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           _newSelectedAvatarId = _selectedAvatarId!;
           showFeedback(avatarFeedback);
         } else {
-          throw Exception(response);
+          showFeedback(response);
         }
       } else if (_selectedAvatarBase64 != null &&
           _selectedAvatarBase64 != _newSelectedAvatarBase64) {
@@ -225,7 +226,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           _newSelectedAvatarBase64 = _selectedAvatarBase64!;
           showFeedback(avatarFeedback);
         } else {
-          throw Exception(response);
+          showFeedback(response);
         }
       }
 
@@ -238,21 +239,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
           newPassword = passwordController.text.trim();
           showFeedback(passwordFeedback);
         } else {
-          throw Exception(response);
+          showFeedback(response);
         }
       }
-      // Username changes
-      if (usernameController.text.trim() != initialSettings?.username &&
-          usernameController.text.trim().isNotEmpty) {
-        String? response = await accountService.updateUsername(
-            _infoService.username, usernameController.text.trim());
-        if (response == null) {
-          _infoService.setUsername(usernameController.text.trim());
-          showFeedback(usernameFeedback);
-        } else {
-          throw Exception(response);
+
+      Future.delayed(Duration(milliseconds: 1000), () async {
+        // Username changes
+        if (usernameController.text.trim() != initialSettings?.username &&
+            usernameController.text.trim().isNotEmpty &&
+            enteredName != usernameController.text.trim()) {
+          enteredName = usernameController.text.trim();
+          String? response = await accountService.updateUsername(
+              _infoService.username, usernameController.text.trim());
+          if (response == null) {
+            _infoService.setUsername(usernameController.text.trim());
+            showFeedback(usernameFeedback);
+          } else {
+            showFeedback(response);
+          }
         }
-      }
+      });
+
       // Language changes
       if (currentSettings?.language != initialSettings?.language &&
           currentSettings?.language != null) {
@@ -262,7 +269,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           _infoService.setLanguage(currentSettings!.language);
           showFeedback(languageFeedback);
         } else {
-          throw Exception(response);
+          showFeedback(response);
         }
       }
       // Theme changes
@@ -274,7 +281,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           _infoService.setTheme(currentSettings!.theme);
           showFeedback(themeFeedback);
         } else {
-          throw Exception(response);
+          showFeedback(response);
         }
       }
       // Sound changes
@@ -286,7 +293,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           _infoService.setOnErrorSound(currentSettings!.onErrorSound);
           showFeedback(errorSoundFeedback);
         } else {
-          throw Exception(response);
+          showFeedback(response);
         }
       }
       if (currentSettings?.onCorrectSound != initialSettings?.onCorrectSound &&
@@ -297,7 +304,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           _infoService.setOnCorrectSound(currentSettings!.onCorrectSound);
           showFeedback(differenceFoundSoundFeedback);
         } else {
-          throw Exception(response);
+          showFeedback(response);
         }
       }
 
