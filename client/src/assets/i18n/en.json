@@ -82,7 +82,7 @@
     "creationGame": {
         "differenceImage": "Here is the image of the differences",
         "hasYou": "There is:",
-        "differences": "differences",
+        "differences": "Differences",
         "enterNameGame": "Please enter a game name",
         "gameExisted": "Warning: if the game name already exists, the game will not be created",
         "emptyName": "The name cannot be empty",
@@ -90,7 +90,7 @@
         "existName": "This game name already exists",
         "createGame": "Create a game",
         "quit": "Quit",
-        "close": "close",
+        "close": "Close",
         "restartProcess": "There must be between 3 and 9 differences. Please restart the process"
     },
     "deleteReset": {
@@ -99,28 +99,28 @@
         "resetTimes": "Are you sure you want to reset all best times",
         "resetTime": "Are you sure you want to reset the best time",
         "deleteHistory": "Are you sure you want to delete the history",
-        "yes": "yes",
-        "no": "no"
+        "yes": "Yes",
+        "no": "No"
     },
     "friendInfo": {
-        "friendList": "friend list of",
+        "friendList": "Friend list of",
         "allFriends": "See all friends",
-        "commonFriendList": "list of common friends between you and",
+        "commonFriendList": "List of common friends between you and",
         "commonFriends": "See common friends",
-        "close": "close"
+        "close": "Close"
     },
 
     "infoGame": {
         "difficultyLevel": "Difficulty Level",
         "gameMode": "Game Mode",
-        "presentDifference": "Number of present differences",
+        "presentDifference": "Number of differences",
         "winTime": "Winning Time Value",
         "useHint": "Use Hint"
     },
 
     "dialogGame": {
         "home": "Home",
-        "videoReprise": "video replay",
+        "videoReprise": "Replay",
         "yes": "Yes",
         "no": "No",
         "scoreShare": "Share",
@@ -131,7 +131,7 @@
         "play": "Play",
         "suppression": "Delete",
         "reset": "Reset",
-        "create": "create"
+        "create": "Create"
     },
 
     "historyLogin": {
@@ -151,14 +151,14 @@
         "account": "Account"
     },
     "adminModal": {
-        "adminPassword": "Administrator Password",
+        "adminPassword": "Administrator password",
         "password": "Password",
         "incorrectPassword": "Incorrect password. Please try again.",
         "cancel": "Cancel",
         "confirm": "Confirm"
     },
     "accessModal": {
-        "accessCode": "ENTER ACCESS CODE",
+        "accessCode": "Enter access code",
         "password": "Password",
         "incorrectPassword": "Incorrect password. Please try again.",
         "cancel": "Cancel",
