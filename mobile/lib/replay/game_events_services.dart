@@ -150,7 +150,7 @@ class GameEventPlaybackService extends ChangeNotifier {
     if (_currentIndex >= events.length && !_isPaused) {
       if (onPlaybackComplete != null && _isFromProfile) {
         onPlaybackComplete!();
-      } else if (onGamePlaybackComplete != null && _isFromProfile) {
+      } else if (onGamePlaybackComplete != null && !_isFromProfile) {
         onGamePlaybackComplete!();
       } else {
         print("Playback completed or paused.");

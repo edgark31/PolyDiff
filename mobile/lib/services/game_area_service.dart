@@ -44,7 +44,7 @@ class GameAreaService extends ChangeNotifier {
     rightErrorCoord = [];
     _isAnimationPaused = false;
     isCheatMode = false;
-    resetCheatBlinkingDifference();
+    cheatBlinkingDifference = null;
   }
 
   void showDifferenceNotFound(Coordinate currentCoord, bool isLeft,
