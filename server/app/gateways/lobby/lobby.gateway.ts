@@ -249,6 +249,7 @@ export class LobbyGateway implements OnGatewayConnection {
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
+        socket.data.guestIds = [];
         socket.data.state = LobbyState.Idle;
         this.logger.log(`LOBBY IN de ${this.getFormattedInfos(socket.data.accountId)}`);
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
@@ -291,7 +292,7 @@ export class LobbyGateway implements OnGatewayConnection {
                     logMessage += 'was REQUESTING ACCESS';
                     this.server.fetchSockets().then((sockets) => {
                         sockets.forEach((s) => {
-                            if (s.data.accountId === socket.data.hostId) {
+                            if (s.data.accountId === socket.data.hostId && s.data.guestIds && s.data.guestIds.length === 0) {
                                 s.data.guestIds = s.data.guestIds.filter((id) => id !== socket.data.accountId);
                                 this.logger.log(
                                     `${this.getFormattedInfos(socket.data.accountId)} a annulé sa demande pour rejoindre le lobby ${lobbyId}`,
