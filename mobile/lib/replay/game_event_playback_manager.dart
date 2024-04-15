@@ -17,7 +17,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   final GameRecordProvider _gameRecordProvider = Get.find();
   final GameAreaService _gameAreaService = Get.find();
   final ReplayPlayerProvider _replayPlayerProvider = Get.find();
-  final ReplayImagesProvider replayImagesProvider = Get.find();
+  final ReplayImagesProvider _replayImagesProvider = Get.find();
   final GameEventPlaybackService _playbackService = Get.find();
 
   bool _isEndGame = false;
@@ -119,12 +119,20 @@ class GameEventPlaybackManager extends ChangeNotifier {
         "Difference found from GameEventPlaybackManager at index: $currentIndex");
 
     _handleRemainingDifferenceIndex(recordedEventData);
+    if (recordedEventData.modified != null) {
+      print("Click event FOUND with modified not null");
+      _replayImagesProvider.updateCanvasState(recordedEventData.modified!);
+    } else if (recordedEventData.modified == null) {
+      print("Click event FOUND with modified null");
+    }
   }
 
   void _handleClickErrorEvent(GameEventData recordedEventData) {
     if (_gameRecordProvider.record.game.differences == null) return;
     if (recordedEventData.coordClic == null) return;
     if (recordedEventData.accountId != _infoService.id) return;
+    print("Click Error Event with accountId ${recordedEventData.accountId}");
+    print("Click Error Event played with accountId ${_infoService.id}");
 
     _gameAreaService.showDifferenceNotFound(recordedEventData.coordClic!,
         recordedEventData.isMainCanvas!, _replaySpeed);
