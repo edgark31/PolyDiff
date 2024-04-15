@@ -34,14 +34,20 @@ class GameRecordProvider extends ChangeNotifier {
   bool get hasCheatEnabled => _record.isCheatEnabled;
 
   set currentGameRecord(GameRecord gameRecord) {
-    _record = gameRecord;
-    print(
-        'GameRecord set by default : ${gameRecord.date} for ${gameRecord.game.name}');
+    try {
+      _record = gameRecord;
+      _players.initialPlayersData = gameRecord.players;
+      _players.initialNumberOfObservers = gameRecord.observers?.length ?? 0;
+      print('GameRecord set: ${gameRecord.date} for ${gameRecord.game.name}');
+    } catch (e) {
+      print('Failed to set game record: $e');
+    }
     notifyListeners();
   }
 
-  void setIsFromProfile(bool newIsFromProfile) {
+  set isPlaybackFromProfile(bool newIsFromProfile) {
     _isFromProfile = newIsFromProfile;
+    notifyListeners();
   }
 
   Future<String?> findAllByAccountId() async {
@@ -57,8 +63,10 @@ class GameRecordProvider extends ChangeNotifier {
         _gameRecords = gameRecordsJson
             .map((gameRecordJson) => GameRecord.fromJson(gameRecordJson))
             .toList();
-        notifyListeners();
       }
+      print(
+          "Fetched all games record : ${_gameRecords.length} for accountId : $accountId");
+      notifyListeners();
       return null;
     } catch (error) {
       return 'Error: $error';

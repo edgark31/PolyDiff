@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/game_record_model.dart';
 
-class GameRecordCardWidget extends StatelessWidget {
-  final GameRecordCard gameRecordCard;
-  final VoidCallback onDelete;
-  final VoidCallback onReplay;
+typedef OnReplayCallback = void Function(GameRecord gameRecord);
 
-  const GameRecordCardWidget(
-      {super.key,
-      required this.gameRecordCard,
-      required this.onReplay,
-      required this.onDelete});
+class GameRecordCardWidget extends StatelessWidget {
+  final GameRecord gameRecord;
+  final OnReplayCallback onReplay;
+  final VoidCallback onDelete;
+
+  GameRecordCardWidget({
+    super.key,
+    required this.gameRecord,
+    required this.onReplay,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +23,16 @@ class GameRecordCardWidget extends StatelessWidget {
         children: <Widget>[
           ListTile(
             leading: Icon(Icons.ondemand_video_rounded),
-            title: Text(gameRecordCard.gameName),
-            // TODO: ajuster avec la translation
-            subtitle: Text("Players: ${gameRecordCard.playerNames.join(', ')}\n"
-                "Date: ${gameRecordCard.date}"),
+            title: Text(gameRecord.game.name),
+            subtitle: Text(
+                "Players: ${gameRecord.players.map((player) => player.name).join(', ')}\nDate: ${gameRecord.date}"),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               TextButton(
-                // TODO: ajuster avec la translation
-                child: const Text('REJOUER'),
-                onPressed: onReplay,
+                child: const Text('REPLAY'),
+                onPressed: () => onReplay(gameRecord),
               ),
               const SizedBox(width: 8),
               IconButton(

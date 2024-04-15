@@ -76,8 +76,6 @@ class GameManagerService extends ChangeNotifier {
   set gameRecord(GameRecord record) {
     print('Setting game record');
     gameRecordProvider.currentGameRecord = record;
-
-    notifyListeners();
   }
 
   void sendCoord(String? lobbyId, Coordinate coord) {
@@ -218,4 +216,3 @@ class GameManagerService extends ChangeNotifier {
     });
   }
 }
-

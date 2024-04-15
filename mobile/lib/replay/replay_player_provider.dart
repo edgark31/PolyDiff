@@ -27,10 +27,12 @@ class ReplayPlayerProvider extends ChangeNotifier {
     for (Player player in _data) {
       player.count = 0;
     }
+    notifyListeners();
   }
 
   set initialNumberOfObservers(int initialNumberOfObservers) {
     _nObservers = initialNumberOfObservers;
+    notifyListeners();
   }
 
   void updatePlayerData(Player playerData) {
