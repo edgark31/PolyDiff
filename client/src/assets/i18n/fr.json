@@ -204,7 +204,7 @@
     "pageConfig": {
         "createGame": "Création de jeu",
         "resetTimes": "Réinitialiser les meilleurs temps",
-        "deleteGames": "Supprimer tous les jeux"
+        "deleteGames": "Supprimer les jeux"
     },
 
     "configDialog": {
