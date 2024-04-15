@@ -33,7 +33,7 @@ export class AccountManagerService implements OnModuleInit {
             const userFound = await this.accountModel.findOne({ 'credentials.username': creds.username });
             const emailFound = await this.accountModel.findOne({ 'credentials.email': creds.email });
             if (userFound) throw new Error("Ce nom d'utilisateur est déjà pris !");
-            if (emailFound) throw new Error('Cette email est déjà pris !');
+            if (emailFound) throw new Error('Cet email est déjà pris !');
 
             const newAccount: Account = {
                 credentials: creds,
