@@ -13,13 +13,13 @@ class GameRecordProvider extends ChangeNotifier {
 
   final String baseUrl = "$API_URL/records";
 
+  bool _isFromProfile = false;
   List<GameRecord> _gameRecords = [];
   GameRecord _record = DEFAULT_GAME_RECORD;
 
+  // bool get isFromProfile => _isFromProfile;
   List<GameRecord> get gameRecords => _gameRecords;
   GameRecord get record => _record;
-  
-  bool isFromProfile = false;
 
   GameRecordProvider();
 
@@ -31,7 +31,11 @@ class GameRecordProvider extends ChangeNotifier {
   }
 
   void setIsFromProfile(bool newIsFromProfile) {
-    isFromProfile = newIsFromProfile;
+    _isFromProfile = newIsFromProfile;
+  }
+
+  bool isFromProfile() {
+    return _isFromProfile;
   }
 
   Future<String?> findAllByAccountId() async {

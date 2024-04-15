@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 import 'package:mobile/constants/app_constants.dart';
 import 'package:mobile/models/game_record_model.dart';
 import 'package:mobile/providers/game_record_provider.dart';
+import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/game_area_service.dart';
 
 class GameEventPlaybackService extends ChangeNotifier {
   final GameRecordProvider _gameRecordProvider = Get.find();
   final GameAreaService _gameAreaService = Get.find();
+  final ReplayPlayerProvider _replayPlayerProvider = Get.find();
   late final StreamController<GameEventData> _eventsController;
 
   bool _isPaused = false;
@@ -32,6 +34,8 @@ class GameEventPlaybackService extends ChangeNotifier {
   bool get isUserInteraction => _isUserInteraction;
   bool get isRestart => _isRestart;
 
+  GameRecord get gameRecord => _gameRecordProvider.record;
+
   GameEventPlaybackService() {
     _eventsController = StreamController<GameEventData>.broadcast(
       onListen: () {},
@@ -40,6 +44,9 @@ class GameEventPlaybackService extends ChangeNotifier {
 
     if (events.isNotEmpty) {
       Future.delayed(Duration.zero, () {
+        _replayPlayerProvider.setNumberOfObservers(gameRecord.observers);
+        _replayPlayerProvider.setPlayersData(gameRecord.players);
+        _replayPlayerProvider.resetScore();
         _playbackEvents();
       });
     }
@@ -55,6 +62,10 @@ class GameEventPlaybackService extends ChangeNotifier {
       _isPaused = false;
       _speed = SPEED_X1;
       _lastEventTime = events.first.timestamp;
+      _replayPlayerProvider.resetScore();
+      _replayPlayerProvider.setNumberOfObservers(gameRecord.observers);
+      _replayPlayerProvider.setPlayersData(gameRecord.players);
+
       _playbackEvents();
     }
   }
@@ -64,6 +75,7 @@ class GameEventPlaybackService extends ChangeNotifier {
   }
 
   void restart() async {
+    _replayPlayerProvider.resetScore();
     pause();
     await Future.delayed(Duration(milliseconds: 1000), () {
       _gameAreaService.resetBlinkingDifference();
@@ -174,6 +186,8 @@ class GameEventPlaybackService extends ChangeNotifier {
     _lastEventTime = null;
     _speed = SPEED_X1;
     _isPaused = true;
+    _isUserInteraction = false;
+    _isRestart = false;
     _timer?.cancel();
   }
 

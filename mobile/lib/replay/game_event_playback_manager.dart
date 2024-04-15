@@ -37,6 +37,11 @@ class GameEventPlaybackManager extends ChangeNotifier {
   bool get hasCheatModeEnabled => _hasCheatModeEnabled;
   int get nDifferencesFound => _nDifferencesFound;
   int get timer => _timer;
+  int get timeLimit => _gameRecordProvider.record.timeLimit;
+
+  List<Player> get players => _gameRecordProvider.record.players;
+
+  int get nObservers => _replayPlayerProvider.nObservers;
 
   List<Coordinate> _remainingCoordinates = [];
 
@@ -96,7 +101,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
   void _handleGameStartEvent() {
     _gameAreaService.coordinates = [];
-    _replayPlayerProvider.resetScore();
     _replayPlayerProvider.setPlayersData(_gameRecordProvider.record.players);
     notifyListeners();
   }
@@ -211,9 +215,6 @@ class GameEventPlaybackManager extends ChangeNotifier {
     _nDifferencesFound = 0;
     _remainingCoordinates = [];
     _replaySpeed = SPEED_X1;
-    _gameRecordProvider.dispose();
-    _playbackService.dispose();
-    _gameAreaService.dispose();
     _subscription.cancel();
     super.dispose();
   }
