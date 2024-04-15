@@ -24,8 +24,8 @@ export class AccountController {
     @Post('register')
     async register(@Body('creds') creds: Credentials, @Body('defaultId') defaultId: string, @Res() response: Response) {
         try {
-            await this.accountManager.register(creds, defaultId);
-            response.status(HttpStatus.OK).send();
+            const account = await this.accountManager.register(creds, defaultId);
+            response.status(HttpStatus.OK).send(account);
             await this.accountManager.fetchUsers();
             setTimeout(() => {
                 this.auth.server.emit(UserEvents.UpdateUsers, this.friendManager.queryUsers());
@@ -71,7 +71,7 @@ export class AccountController {
     }
 
     @Put('username')
-    async updateUsername(@Body('accountId') accountId: string, @Body('newUsername') newUsername: string, @Res() response: Response) {
+    async updateUsername(@Body('username') accountId: string, @Body('newUsername') newUsername: string, @Res() response: Response) {
         try {
             await this.accountManager.updateUsername(accountId, newUsername);
             response.status(HttpStatus.OK).send();
@@ -81,7 +81,7 @@ export class AccountController {
     }
 
     @Put('password')
-    async updatePassword(@Body('accountId') accountId: string, @Body('newPassword') newPassword: string, @Res() response: Response) {
+    async updatePassword(@Body('username') accountId: string, @Body('newPassword') newPassword: string, @Res() response: Response) {
         try {
             await this.accountManager.updatePassword(accountId, newPassword);
             response.status(HttpStatus.OK).send();
@@ -91,7 +91,7 @@ export class AccountController {
     }
 
     @Put('avatar/upload')
-    async uploadAvatar(@Body('accountId') accountId: string, @Body('avatar') avatar: string, @Res() response: Response) {
+    async uploadAvatar(@Body('username') accountId: string, @Body('avatar') avatar: string, @Res() response: Response) {
         try {
             await this.accountManager.uploadAvatar(accountId, avatar);
             response.status(HttpStatus.OK).send();
@@ -101,7 +101,7 @@ export class AccountController {
     }
 
     @Put('avatar/choose')
-    async chooseAvatar(@Body('accountId') accountId: string, @Body('defaultId') defaultId: string, @Res() response: Response) {
+    async chooseAvatar(@Body('username') accountId: string, @Body('defaultId') defaultId: string, @Res() response: Response) {
         try {
             await this.accountManager.chooseAvatar(accountId, defaultId);
             response.status(HttpStatus.OK).send();
@@ -111,7 +111,7 @@ export class AccountController {
     }
 
     @Put('mobile/theme')
-    async updateMobileTheme(@Body('accountId') accountId: string, @Body('newTheme') newTheme: string, @Res() response: Response) {
+    async updateMobileTheme(@Body('username') accountId: string, @Body('newTheme') newTheme: string, @Res() response: Response) {
         try {
             await this.accountManager.updateMobileTheme(accountId, newTheme);
             response.status(HttpStatus.OK).send();
@@ -121,7 +121,7 @@ export class AccountController {
     }
 
     @Put('language')
-    async updateLanguage(@Body('accountId') accountId: string, @Body('newLanguage') newLanguage: string, @Res() response: Response) {
+    async updateLanguage(@Body('username') accountId: string, @Body('newLanguage') newLanguage: string, @Res() response: Response) {
         try {
             await this.accountManager.modifyLanguage(accountId, newLanguage);
             response.status(HttpStatus.OK).send();
@@ -131,7 +131,7 @@ export class AccountController {
     }
 
     @Put('sound/correct')
-    async updateCorrectSound(@Body('accountId') accountId: string, @Body('newSound') newSound: Sound, @Res() response: Response) {
+    async updateCorrectSound(@Body('username') accountId: string, @Body('newSound') newSound: Sound, @Res() response: Response) {
         try {
             await this.accountManager.updateCorrectSound(accountId, newSound);
             response.status(HttpStatus.OK).send();
@@ -141,7 +141,7 @@ export class AccountController {
     }
 
     @Put('sound/error')
-    async updateErrorSound(@Body('accountId') accountId: string, @Body('newSound') newSound: Sound, @Res() response: Response) {
+    async updateErrorSound(@Body('username') accountId: string, @Body('newSound') newSound: Sound, @Res() response: Response) {
         try {
             await this.accountManager.updateErrorSound(accountId, newSound);
             response.status(HttpStatus.OK).send();
