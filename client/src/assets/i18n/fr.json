@@ -144,7 +144,7 @@
         "timeStamps": "Horodatage(s)",
         "connection": "Connexion(s)",
         "disconnection": "Deconnexion(s)",
-        "matchSummary": "Bilan de match",
+        "matchSummary": "Bilan(s) de match",
         "win": "Victoire",
         "loose": "Défaite",
         "closeHistoric": "Fermer l'historique"

@@ -140,7 +140,7 @@
         "timeStamps": "Timestamp(s)",
         "connection": "Connection(s)",
         "disconnection": "Disconnection(s)",
-        "matchSummary": "Match Summary",
+        "matchSummary": "Match(es) Summary",
         "win": "Win",
         "loose": "Loss",
         "closeHistoric": "Close history"
