@@ -144,10 +144,9 @@ class _GamePageState extends State<GamePage> {
 
     final isPlayerAnObserver = lobbyService.isObserver;
 
-    final canPlayerInteract =
-        !isPlayerAnObserver; // TODO: Add condition for replay ?
-    bool canPlayerReplay = lobbyService.gameModes == GameModes.Classic &&
-        !isPlayerAnObserver; // TODO: Add condition for replay ?
+    final canPlayerInteract = !isPlayerAnObserver;
+    bool canPlayerReplay =
+        lobbyService.gameModes == GameModes.Classic && !isPlayerAnObserver;
 
     if (gameManagerService.game.gameId == '') {
       return Container(
