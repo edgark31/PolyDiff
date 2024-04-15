@@ -24,11 +24,10 @@ class _GameEventSliderState extends State<GameEventSlider> {
   Timer? _debounceTimer;
 
   double _sliderValue = 0;
+  Duration _sliderTimer = Duration.zero;
 
   late StreamSubscription<GameEventData> _eventsSubscription;
-  String _currentEvent = "";
   double _selectedSpeed = SPEED_X1;
-
   bool _isPlaying = true;
   bool isUserInteraction = false;
 
@@ -39,7 +38,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
     _eventsSubscription =
         widget.playbackService.eventsStream.listen((GameEventData event) {
       if (!isUserInteraction) {
-        print("Event received: ${event.gameEvent}");
         _updateSliderValue(event);
       }
     }, onError: (error) {
@@ -59,6 +57,7 @@ class _GameEventSliderState extends State<GameEventSlider> {
   void _onSliderChanged(double newValue) {
     isUserInteraction = true;
     setState(() {
+      _isPlaying = false;
       _sliderValue = newValue;
     });
     int eventIndex =
@@ -75,8 +74,17 @@ class _GameEventSliderState extends State<GameEventSlider> {
       int eventIndex = widget.playbackService.events.indexOf(event);
       if (eventIndex != -1 && mounted) {
         setState(() {
-          _sliderValue = calculateNormalizedSliderValue(eventIndex);
-          _currentEvent = event.gameEvent;
+          Future.delayed(Duration(milliseconds: 200), () {
+            int sliderTime = widget.playbackManager.timeLimit - event.time!;
+
+            if (mounted) {
+              if (event.time == 0 || sliderTime < 0 || event.time == null) {
+                return;
+              }
+              _sliderTimer = Duration(seconds: sliderTime);
+              _sliderValue = calculateNormalizedSliderValue(eventIndex);
+            }
+          });
         });
       }
     }
@@ -116,8 +124,6 @@ class _GameEventSliderState extends State<GameEventSlider> {
                 isUserInteraction = false;
               },
             ),
-            Text("Current Event: $_currentEvent"),
-            Text("Slider Value: ${_sliderValue.toStringAsFixed(2)}"),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -150,6 +156,7 @@ class _GameEventSliderState extends State<GameEventSlider> {
                 ),
               ],
             ),
+            Text(_sliderTimer.toString().split('.').first),
           ],
         ));
   }

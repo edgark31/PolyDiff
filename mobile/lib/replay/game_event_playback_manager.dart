@@ -37,6 +37,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
   bool get hasCheatModeEnabled => _hasCheatModeEnabled;
   int get nDifferencesFound => _nDifferencesFound;
   int get timer => _timer;
+  int get timeLimit => _gameRecordProvider.record.timeLimit;
 
   List<Coordinate> _remainingCoordinates = [];
 
