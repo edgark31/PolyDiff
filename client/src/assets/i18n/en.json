@@ -33,6 +33,7 @@
         "deconnexion": "Disconnect",
         "returnProfil": "Save",
         "GoReglage": "Settings",
+        "profile": "Profile",
         "Settings": "Settings",
         "previous": "Previous",
         "following": "Next",
@@ -52,7 +53,7 @@
     "game": {
         "foundDifference": "Differences found",
         "timerOver": "Time's up",
-        "time": "Time",
+        "time": "Time left",
         "classic": "Classic",
         "limited": "Limited",
         "practice": "Practice",
@@ -73,7 +74,7 @@
         "error": " made a mistake!",
         "endParty": "End of game",
         "endPractice": "End of the Practice",
-        "partyAbandon": "Are you sure you want to give up the game ?",
+        "partyAbandon": "Give up the game ?",
         "abandonParty": " gave up !",
         "winGame": " Win !",
         "tie": "Draw",
@@ -148,7 +149,8 @@
         "home": "Home",
         "messageChannel": "Chat",
         "friends": "Friends",
-        "account": "Account"
+        "account": "Account",
+        "profile": "Profile"
     },
     "adminModal": {
         "adminPassword": "Administrator password",
@@ -224,7 +226,7 @@
     },
 
     "friendPage": {
-        "friends": "Current friends",
+        "friends": "Friends",
         "friendsRequests": "friends waiting",
         "friendsPending": "Received friend requests",
         "allAccount": "Accounts",

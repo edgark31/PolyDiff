@@ -33,6 +33,7 @@
         "returnProfil": "Enregistrer",
         "GoReglage": "Réglages",
         "Settings": "Réglages",
+        "profile": "Profil",
         "previous": "Précédent",
         "following": "Suivant",
         "fr": "Français",
@@ -52,7 +53,7 @@
     "game": {
         "foundDifference": "Différences trouvées ",
         "timerOver": "Temps écoulé",
-        "time": "Temps",
+        "time": "Temps restant",
         "classic": "classique",
         "limited": "limité",
         "practice": "pratique",
@@ -74,7 +75,7 @@
         "error": " s'est trompé !",
         "endParty": "fin de la partie",
         "endPractice": "fin de la pratique",
-        "partyAbandon": "Êtes-vous certain de vouloir abandonner la partie ? ",
+        "partyAbandon": "Abandonner la partie ? ",
         "abandonParty": " a abandonné !",
         "winGame": " a gagné !",
         "tie": "Match nul",
@@ -152,7 +153,8 @@
         "home": "Accueil",
         "messageChannel": "Clavardage",
         "friends": "Amis",
-        "account": "Compte"
+        "account": "Compte",
+        "profile": "Profil"
     },
 
     "adminModal": {
@@ -202,7 +204,7 @@
     "pageConfig": {
         "createGame": "Création de jeu",
         "resetTimes": "Réinitialiser les meilleurs temps",
-        "deleteGames": "Supprimer tous les jeux"
+        "deleteGames": "Supprimer les jeux"
     },
 
     "configDialog": {
@@ -232,7 +234,7 @@
     },
 
     "friendPage": {
-        "friends": "amis actuels",
+        "friends": "Amis",
         "friendsRequests": "amis en attente",
         "allAccount": "Comptes",
         "friendsList": "Amis",
