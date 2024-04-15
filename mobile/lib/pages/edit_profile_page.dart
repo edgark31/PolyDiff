@@ -337,7 +337,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           : MENU_BACKGROUND_PATH_DARK,
       child: Scaffold(
           backgroundColor: Colors.transparent,
-          drawer: CustomMenuDrawer(),
           appBar: CustomAppBar(
               title: AppLocalizations.of(context)!.edit_profile_title),
           body: Container(
