@@ -121,7 +121,7 @@
     },
 
     "dialogGame": {
-        "home": "quit",
+        "home": "Quit",
         "videoReprise": "Replay",
         "yes": "Yes",
         "no": "No",
@@ -137,9 +137,9 @@
     },
 
     "historyLogin": {
-        "timeStamps": "Timestamps",
-        "connection": "Connection",
-        "disconnection": "Disconnection",
+        "timeStamps": "Timestamp(s)",
+        "connection": "Connection(s)",
+        "disconnection": "Disconnection(s)",
         "matchSummary": "Match Summary",
         "win": "Win",
         "loose": "Loss",
@@ -161,7 +161,7 @@
         "confirm": "Confirm"
     },
     "accessModal": {
-        "accessCode": "Enter access code",
+        "accessCode": "Type password",
         "password": "Password",
         "incorrectPassword": "Incorrect password. Please try again.",
         "cancel": "Cancel",
