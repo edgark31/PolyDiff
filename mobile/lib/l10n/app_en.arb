@@ -127,6 +127,7 @@
     "endGameMessage_playerAbandoned": " gave up !",
     "endGameMessage_draw": "Tie",
     "endGameMessage_endPractice": "end of the Practice",
+    "replay_nothingToShow": "No game records available for now",
     "classicMode": "Classic",
     "limitedMode": "Limited Time",
     "practiceMode": "Practice"

@@ -127,6 +127,7 @@
     "endGameMessage_playerAbandoned": "a abandonné !",
     "endGameMessage_draw": "Match nul !",
     "endGameMessage_endPractice": "Fin de la pratique !",
+    "replay_nothingToShow": "Aucune reprise vidéo disponible pour le moment",
     "classicMode": "Classique",
     "limitedMode": "Temps limité",
     "practiceMode": "Pratique"

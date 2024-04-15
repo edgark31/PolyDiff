@@ -31,8 +31,8 @@ class GameRecordCardWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              TextButton(
-                child: const Text('REPLAY'),
+              IconButton(
+                icon: Icon(Icons.slideshow_rounded),
                 onPressed: () => onReplay(gameRecord),
               ),
               const SizedBox(width: 8),
