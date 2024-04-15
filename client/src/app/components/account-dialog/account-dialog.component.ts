@@ -26,8 +26,12 @@ export class AccountDialogComponent {
     }
 
     onSubmitProfile() {
-        if (this.welcomeService.selectName !== this.welcomeService.account.credentials.username) this.welcomeService.onModifyUser();
-        if (this.welcomeService.selectPassword !== this.welcomeService.account.credentials.password && this.welcomeService.selectPassword)
+        if (this.welcomeService.selectName !== this.welcomeService.account.credentials.username && this.welcomeService.selectName)
+            this.welcomeService.onModifyUser();
+        if (
+            this.welcomeService.selectPassword !== this.welcomeService.account.credentials.password &&
+            this.welcomeService.selectPassword === this.welcomeService.selectPasswordConfirm
+        )
             this.welcomeService.onModifyPassword();
         if (!this.welcomeService.chooseImage && this.welcomeService.account.profile.avatar !== this.welcomeService.selectAvatar)
             this.welcomeService.onUpdateAvatar();
