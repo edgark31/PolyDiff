@@ -1,35 +1,30 @@
 {
-    "demo": {
-        "greeting": "Hello {{name}}!",
-        "heading": "App Translation Demo",
-        "paragraph": "<strong>translation</strong>",
-        "text": "This tutorial explains, how you can easily translate your Angular app.",
-        "hello": "salut"
-    },
-    "connexion": "connection",
+    "connexion": "Connection",
     "username": "Username or email",
     "mdp": "Password",
     "profil": {
         "information": "General informations",
         "username": "Username or email",
-        "Password": "choose a password",
-        "theme": "current theme",
-        "language": "current language",
-        "statistic": "statistical",
-        "gamePlayed": "number of games played",
-        "gameWin": "number of games won",
-        "gameAverage": "average of differences found per part",
-        "gameAverageTime": "average time per game",
+        "Password": "Choose a password",
+        "theme": "Current theme",
+        "language": "Current language",
+        "statistic": "Statistics",
+        "gamePlayed": "Number of games played",
+        "gameWin": "Number of games won",
+        "gameAverage": "Average of differences found per game",
+        "gameAverageTime": "Average time per game",
         "Connexion": "Login history",
-        "gameHistoric": "game history",
+        "gameHistoric": "Game history",
         "changePassword": "Change password",
         "confirmPassword": "Confirm password",
-        "songDifference": "choose your sound for difference found",
-        "songError": "choose your sound for error",
-        "nameEnter": "please type your name",
-        "passwordEnter": "please type your password",
-        "confirmPasswordEnter": "please confirm your password",
-        "cancel": "cancel",
+        "songDifference": "Choose your sound for difference found",
+        "songError": "Choose your sound for error",
+        "currentSongDifference": "Current sound for difference found",
+        "currentSongError": "Current sound for error",
+        "nameEnter": "Please type your name",
+        "passwordEnter": "Please type your password",
+        "confirmPasswordEnter": "Please confirm your password",
+        "cancel": "Cancel",
         "returnHome": "Return to home",
         "replay": "Replays"
     },
@@ -129,7 +124,7 @@
         "yes": "Yes",
         "no": "No",
         "scoreShare": "Share",
-        "quitGame": "Leave"
+        "quitGame": "Home"
     },
 
     "gameSheet": {
@@ -170,7 +165,7 @@
         "confirm": "Confirm"
     },
     "waitingDialog": {
-        "startParty": "The game will start shortly..."
+        "startParty": "The game will start soon..."
     },
     "selectionPage": {
         "selectGame": "Select your game",
