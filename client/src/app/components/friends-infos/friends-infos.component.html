@@ -1,4 +1,3 @@
-
 <div class="allList" *ngIf="data.showCommonFriend">
     <button class="list" *ngIf="typeFriend==='allFriends'" (click)="onTypeChange('commonFriends')"> {{'friendInfo.commonFriends' | translate }}</button>
     <button class="list"  *ngIf="typeFriend==='commonFriends' && data.showCommonFriend" (click)="onTypeChange('allFriends')"> {{'friendInfo.allFriends' | translate }}</button>

@@ -63,7 +63,6 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('Username modified');
             }),
-            catchError(this.handleError<void>('modifyUsername')),
         );
     }
 
@@ -84,7 +83,6 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('avatar update');
             }),
-            catchError(this.handleError<void>('updateAvatar')),
         );
     }
     chooseAvatar(username: string, newAvatar: string): Observable<void> {
@@ -94,7 +92,6 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('avatar choose');
             }),
-            catchError(this.handleError<void>('chooseAvatar')),
         );
     }
 
@@ -105,7 +102,6 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('password modify');
             }),
-            catchError(this.handleError<void>('modifyPassword')),
         );
     }
 
@@ -116,7 +112,6 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('theme modified');
             }),
-            catchError(this.handleError<void>('modifyTheme')),
         );
     }
 
@@ -127,7 +122,6 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('sound on error modified');
             }),
-            catchError(this.handleError<void>('modifySongError')),
         );
     }
 
@@ -138,7 +132,6 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('on correct sound modified');
             }),
-            catchError(this.handleError<void>('modifyCorrectSound')),
         );
     }
 
@@ -149,7 +142,6 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('Language modified');
             }),
-            catchError(this.handleError<void>('Language modified')),
         );
     }
 
@@ -159,7 +151,6 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('Modified password');
             }),
-            catchError(this.handleError<boolean>('Recuperate Password')),
         );
     }
 
@@ -169,7 +160,6 @@ export class CommunicationService {
                 // eslint-disable-next-line no-console
                 console.log('code check');
             }),
-            catchError(this.handleError<boolean>('checkcode')),
         );
     }
     loadConfigConstants(): Observable<GameConfigConst> {

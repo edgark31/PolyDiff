@@ -37,6 +37,7 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit(): void {
+        this.loadGameCarrousel();
         this.loadTimed();
         this.handleGameCardsUpdate();
     }
@@ -69,10 +70,11 @@ export class SelectionPageComponent implements AfterViewInit, OnDestroy {
     }
 
     private loadTimed() {
+        this.loadGameCarrousel();
         clearInterval(this.interval);
         this.interval = setInterval(() => {
             this.loadGameCarrousel();
-        }, 2000);
+        }, 10000);
     }
 
     private handleGameCardsUpdate() {

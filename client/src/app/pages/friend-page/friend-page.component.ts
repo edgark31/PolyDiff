@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { Component, DoCheck, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, DoCheck, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { AccountDialogComponent } from '@app/components/account-dialog/account-dialog.component';
@@ -11,7 +11,7 @@ import { FriendsInfosComponent } from '@app/components/friends-infos/friends-inf
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { FriendService } from '@app/services/friend-service/friend.service';
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
-import { Account, Friend, User } from '@common/game-interfaces';
+import { Friend, User } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
@@ -86,6 +86,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         private readonly matDialog: MatDialog,
         public translate: TranslateService,
         public dialog: MatDialog,
+        private cdr: ChangeDetectorRef,
     ) {}
     // eslint-disable-next-line max-params
     onSubmit(pageFriend: string): void {
@@ -105,10 +106,10 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
 
     ngOnInit(): void {
         this.friendService.manageSocket();
-        this.welcome.updateAccountObservable();
-        this.accountSubscription = this.welcome.accountObservable$.subscribe((account: Account) => {
-            this.welcome.account = account;
-        });
+        // this.welcome.updateAccountObservable();
+        // this.accountSubscription = this.welcome.accountObservable$.subscribe((account: Account) => {
+        //     this.welcome.account = account;
+        // });
         this.friendService.recuperateFriendSend();
         this.friendService.recuperateFriend();
         this.friendService.recuperateFriendPending();
@@ -125,6 +126,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
 
         this.friendListSubscription = this.friendService.friendsSubject$.subscribe((friendList: Friend[]) => {
             this.friends = friendList.sort((a, b) => (a.isFavorite === b.isFavorite ? a.name.localeCompare(b.name) : a.isFavorite ? -1 : 1));
+            this.cdr.detectChanges();
         });
 
         this.friendPendingListSubscription = this.friendService.friendsPendingSubject$.subscribe((friendList: Friend[]) => {
@@ -185,7 +187,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         setTimeout(() => {
             this.friendService.sendFriendRequest(accountId);
             this.isRequestPending = false;
-        }, 1000);
+        }, 500);
     }
 
     sendFriendPendingAccept(accountId: string): void {
@@ -193,7 +195,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         setTimeout(() => {
             this.friendService.sendFriendPending(accountId, true);
             this.isRequestPending = false;
-        }, 3000);
+        }, 500);
     }
 
     sendFriendPendingRefuse(accountId: string): void {
@@ -201,7 +203,7 @@ export class FriendPageComponent implements OnInit, OnDestroy, DoCheck {
         setTimeout(() => {
             this.friendService.sendFriendPending(accountId, false);
             this.isRequestPending = false;
-        }, 3000);
+        }, 500);
     }
 
     sendFriendDelete(accountId: string): void {
