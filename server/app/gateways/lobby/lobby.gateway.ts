@@ -292,7 +292,7 @@ export class LobbyGateway implements OnGatewayConnection {
                     logMessage += 'was REQUESTING ACCESS';
                     this.server.fetchSockets().then((sockets) => {
                         sockets.forEach((s) => {
-                            if (s.data.accountId === socket.data.hostId) {
+                            if (s.data.accountId === socket.data.hostId && s.data.guestIds && s.data.guestIds.length === 0) {
                                 s.data.guestIds = s.data.guestIds.filter((id) => id !== socket.data.accountId);
                                 this.logger.log(
                                     `${this.getFormattedInfos(socket.data.accountId)} a annulé sa demande pour rejoindre le lobby ${lobbyId}`,
