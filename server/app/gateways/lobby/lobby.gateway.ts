@@ -115,10 +115,6 @@ export class LobbyGateway implements OnGatewayConnection {
             if (!guest) return;
             guest.data.state = LobbyState.Idle;
             guest.data.hostId = '';
-            if (this.roomsManager.lobbies.get(data.lobbyId).players.length >= 4) {
-                guest.emit(LobbyEvents.NotifyGuest, false);
-                return;
-            }
             if (this.roomsManager.lobbies.get(lobbyId) && isPlayerAccepted) {
                 guest.emit(LobbyEvents.NotifyGuest, true);
                 this.logger.log(
@@ -126,6 +122,21 @@ export class LobbyGateway implements OnGatewayConnection {
                         this.accountManager.users.get(socket.data.accountId).credentials.username
                     } pour rejoindre le lobby ${lobbyId}`,
                 );
+                if (this.roomsManager.lobbies.get(data.lobbyId).players.length === 3) {
+                    if (socket.data.guestIds && socket.data.guestIds.length > 0) {
+                        socket.data.guestIds.forEach((id) => {
+                            this.server.fetchSockets().then((sockets) => {
+                                const guest = sockets.find((s) => s.data.accountId === id);
+                                guest.data.state = LobbyState.Idle;
+                                guest.data.hostId === socket.data.accountId ? guest.emit(LobbyEvents.NotifyGuest, false) : '';
+                                this.logger.log(`${this.getFormattedInfos(id)} a été refusé par ${this.getFormattedInfos(socket.data.accountId)}`);
+                            });
+                        });
+                        this.logger.debug(`GuestIds de ${this.getFormattedInfos(socket.data.accountId)}: [${socket.data.guestIds}]`);
+                    }
+                    guest.emit(LobbyEvents.NotifyGuest, false);
+                    return;
+                }
                 return;
             } else if (this.roomsManager.lobbies.get(lobbyId) && !isPlayerAccepted) {
                 guest.emit(LobbyEvents.NotifyGuest, false);
