@@ -79,7 +79,6 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             this.roomManagerService.dialogRefs.set(playerName, dialogRef);
         });
         this.clientSocketService.on('lobby', LobbyEvents.CancelRequestAcessHost, (leavingPlayerName: string) => {
-            console.log(this.roomManagerService.dialogRefs.size + 'aaaaaaaaaaaaaaaaa');
             const dialogRef = this.roomManagerService.dialogRefs.get(leavingPlayerName);
             if (dialogRef) {
                 dialogRef.close();
