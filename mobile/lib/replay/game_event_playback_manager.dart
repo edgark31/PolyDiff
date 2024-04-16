@@ -91,7 +91,7 @@ class GameEventPlaybackManager extends ChangeNotifier {
 
   void _handleGameStartEvent() {
     _gameAreaService.coordinates = [];
-
+    _replayPlayerProvider.initialPlayersData = _gameRecordProvider.record.players;
     print("Game Start Event");
   }
 

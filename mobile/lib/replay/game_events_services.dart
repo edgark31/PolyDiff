@@ -84,7 +84,6 @@ class GameEventPlaybackService extends ChangeNotifier {
       _gameAreaService.reset();
       _currentIndex = 0;
       _isRestart = true;
-      _speed = SPEED_X1;
       print("Restarting playback from start. Current index set to 0.");
       resume();
       _isRestart = false;
@@ -126,7 +125,7 @@ class GameEventPlaybackService extends ChangeNotifier {
       if (!_isUserInteraction && !_isRestart) {
         if (durationSinceLastEvent > 0) {
           await Future.delayed(Duration(
-              milliseconds: (durationSinceLastEvent / _speed).floor()));
+              milliseconds: (durationSinceLastEvent / _speed).round()));
         }
 
         if (_isPaused) {
@@ -171,7 +170,7 @@ class GameEventPlaybackService extends ChangeNotifier {
     print("Speed set to $_speed. Adjusting playback speed.");
     if (!_isPaused) {
       pause();
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(Duration(milliseconds: 1000));
 
       resume();
     }
@@ -190,7 +189,7 @@ class GameEventPlaybackService extends ChangeNotifier {
     pause();
 
     // Resume playback with a slight delay to allow the UI to update
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 1000), () {
       _currentIndex = eventIndex;
       if (!_isPaused) {
         resume();
