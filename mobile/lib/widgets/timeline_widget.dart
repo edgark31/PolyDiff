@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class TimelineWidget extends StatefulWidget {
+  final int replayDuration;
+  const TimelineWidget({super.key, required this.replayDuration});
+
   @override
   State<TimelineWidget> createState() => _TimelineWidgetState();
 }
@@ -10,7 +13,6 @@ class TimelineWidget extends StatefulWidget {
 class _TimelineWidgetState extends State<TimelineWidget> {
   bool _isPlaying = true;
   double _currentTime = 0.0;
-  double replayDuration = 13713; // in milliseconds TODO : change this to actual duration
   double gameLength = 0.0;
 
   int _selectedSpeed = 1;
@@ -30,7 +32,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   @override
   void initState() {
     super.initState();
-    gameLength = replayDuration / 1000; // in seconds
+    gameLength = widget.replayDuration / 1000; // covert to seconds
 
     if (_isPlaying) {
       _startReplay();
