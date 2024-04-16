@@ -1,0 +1,11 @@
+<div id="gameInfos">
+    <p><strong>{{'infoGame.difficultyLevel' | translate }} :</strong> {{ game.isHard ? 'difficile' : 'facile' }}</p>
+    <p><strong>{{'infoGame.gameMode' | translate }} :</strong> {{ game.mode }}</p>
+    <p><strong>{{'infoGame.presentDifference' | translate }} :</strong> {{ game.differencesCount }}</p>
+    <div *ngIf="game.mode.includes('Limited')">
+        <p><strong>{{'infoGame.winTime' | translate }} : </strong> {{ gameConstants.bonusTime }} secondes</p>
+    </div>
+    <div *ngIf="game.mode.includes('Solo')">
+        <p><strong>{{'infoGame.useHint' | translate }} : </strong> {{gameConstants.penaltyTime}} secondes </p>
+    </div>
+</div>

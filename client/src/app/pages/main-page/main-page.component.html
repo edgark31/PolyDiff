@@ -1,0 +1,37 @@
+<div class="container flex-column">
+    <app-nav-bar> </app-nav-bar>
+    <header class="header">
+        <h1 class="header-item flex-column">{{'mainPage.welcome' | translate }}</h1>
+    </header>
+    <img *ngIf="welcomeService.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+    <img *ngIf="welcomeService.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
+    <div class="buttons flex-column">
+        <button class="button" routerLink="/game-mode">
+            <span id = "limited">{{'mainPage.gameMode' | translate }}</span>
+        </button>
+        <button class="button" routerLink="/chat">
+            <span id = "classic">Chat</span>
+        </button>
+        <button class="button" (click)="manageGames()">
+            <span id = "config">Admin</span>
+        </button>
+    </div>
+
+    <footer class="footer flex-column">
+        <div *ngIf="rankedPlayers.length > 0" class="ranking">
+            <div class="scroll-container">
+                <p class="ranking-title">{{'ranking.global' | translate }} :</p>
+                <div class="rankedPlayer" *ngFor="let rankedPlayer of rankedPlayers">
+                    <p>{{rankedPlayer.rank}}. {{rankedPlayer.name}}</p>
+                    <img src="{{'http://34.95.3.182:3000/avatar/' + rankedPlayer.accountId + '.png?timeStamp='+ timeStamp}}">
+                    <span>{{rankedPlayer.stats.gameWon}} {{'mainPage.winGame' | translate }} !</span>
+                </div>
+            </div>
+        </div>
+        <div class="ranking" *ngIf="rankedPlayers.length <= 0" >
+            <div class="loading">
+                <p>{{'ranking.loading' | translate }}</p>
+            </div>
+        </div>
+    </footer>
+</div>

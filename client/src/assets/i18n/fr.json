@@ -1,0 +1,299 @@
+{
+    "connexion": "Connexion",
+    "username": "Nom d'utilisateur ou courriel",
+    "mdp": "Mot de passe",
+    "profil": {
+        "information": "Informations générales",
+        "username": "Nom d'utilisateur/Pseudonyme",
+        "theme": "Thème actuel",
+        "language": "Language actuel",
+        "statistic": "Statistiques",
+        "gamePlayed": "Nombre de parties joués",
+        "gameWin": "Nombre de parties gagnés",
+        "gameAverage": "Moyenne de différences trouvées par partie",
+        "gameAverageTime": "Temps moyen par partie",
+        "Connexion": "Historique de connexion",
+        "gameHistoric": "Historique de jeu",
+        "changePassword": "Changer le mot de passe",
+        "confirmPassword": "Confirmer le mot de passe",
+        "songError": "Choisissez votre son pour erreur",
+        "songDifference": "Choisissez votre son pour différence trouvé",
+        "currentSongDifference": "Son actuel lorsqu'une différence est trouvée",
+        "currentSongError": "Son actuel lorsqu'il y a une erreur",
+        "nameEnter": "Veuillez écrire votre nom",
+        "passwordEnter": "Veuillez écrire votre mot de passe",
+        "confirmPasswordEnter": "Veuillez ré-écrire votre mot de passe",
+        "cancel": "Annuler",
+        "returnHome": "Retour à l'accueil",
+        "samePassword": "Mettez un mot de passe identique",
+        "replay": "Reprises vidéos"
+    },
+
+    "button": {
+        "deconnexion": "Déconnexion",
+        "returnProfil": "Enregistrer",
+        "GoReglage": "Réglages",
+        "Settings": "Réglages",
+        "profile": "Profil",
+        "previous": "Précédent",
+        "following": "Suivant",
+        "fr": "Français",
+        "en": "Anglais"
+    },
+
+    "roomSheet": {
+        "createRoom": "Créer une salle",
+        "gameMode": "Mode de jeu",
+        "picture": "Image",
+        "players": "joueurs",
+        "differenceNumber": "Nombre de différences",
+        "join": "rejoindre",
+        "joinObserver": "Rejoindre en observateur"
+    },
+
+    "game": {
+        "foundDifference": "Différences trouvées ",
+        "timerOver": "Temps écoulé",
+        "time": "Temps restant",
+        "classic": "classique",
+        "limited": "limité",
+        "practice": "pratique",
+        "abandon": "Abandonner la partie",
+        "players": "joueurs"
+    },
+
+    "gameMode": {
+        "classicMode": "Classique",
+        "limitedMode": "Temps limité",
+        "practiceMode": "Pratique",
+        "chooseMode": "Choisis ton mode de jeu"
+    },
+
+    "chat": {
+        "chatZone": "Zone de clavardage ",
+        "return": "retour",
+        "foundDifférence": " a trouvé une différence !",
+        "error": " s'est trompé !",
+        "endParty": "fin de la partie",
+        "endPractice": "fin de la pratique",
+        "partyAbandon": "Abandonner la partie ? ",
+        "abandonParty": " a abandonné !",
+        "winGame": " a gagné !",
+        "tie": "Match nul",
+        "expiredTime": "Temps écoulé, match nul "
+    },
+
+    "creationGame": {
+        "differenceImage": "Voici l'image des différences ",
+        "hasYou": "Il y a :",
+        "differences": "différences",
+        "enterNameGame": "Veuillez entrer un nom de jeu",
+        "gameExisted": "Attention : si le nom du jeu existe déjà, le jeu ne sera pas créé",
+        "emptyName": "Le nom ne peut pas être vide",
+        "spaceName": "Le nom ne peut pas contenir d'espaces",
+        "existName": "Ce nom de jeu existe déjà",
+        "createGame": "Créer un jeu",
+        "quit": "Quitter",
+        "close": "fermer",
+        "restartProcess": "Il doit y avoir entre 3 et 9 différences. Veuillez recommencer le processus"
+    },
+
+    "deleteReset": {
+        "deleteGames": "Supprimer tous les jeux",
+        "deleteGame": "Supprimer le jeu",
+        "resetTimes": "Réinitialiser tous les meilleurs temps",
+        "resetTime": "Réinitialiser le meilleur temps",
+        "deleteHistory": "Supprimer l'historique",
+        "yes": "oui",
+        "no": "non"
+    },
+
+    "friendInfo": {
+        "friendList": "liste d'amis de",
+        "allFriends": "Voir tous les amis",
+        "commonFriendList": "liste d'amis en commun entre toi et",
+        "commonFriends": "voir les amis en commun",
+        "close": "fermer"
+    },
+
+    "infoGame": {
+        "difficultyLevel": "Niveau de difficulté",
+        "gameMode": "Mode de jeu",
+        "presentDifference": "Nombre de différences présentes",
+        "winTime": "Valeur du temps gagnée",
+        "useHint": "Fermer"
+    },
+
+    "dialogGame": {
+        "home": "Quitter",
+        "videoReprise": "Reprise Video",
+        "yes": "Oui",
+        "no": "Non",
+        "scoreShare": "Partager",
+        "quitGame": "Accueil"
+    },
+
+    "gameSheet": {
+        "play": "Jouer",
+        "suppression": "Supprimer",
+        "reset": "Réinitialiser",
+        "create": "créer"
+    },
+
+    "historyLogin": {
+        "timeStamps": "Horodatage(s)",
+        "connection": "Connexion(s)",
+        "disconnection": "Deconnexion(s)",
+        "matchSummary": "Bilan(s) de match",
+        "win": "Victoire",
+        "loose": "Défaite",
+        "closeHistoric": "Fermer l'historique"
+    },
+
+    "navBar": {
+        "home": "Accueil",
+        "messageChannel": "Clavardage",
+        "friends": "Amis",
+        "account": "Compte",
+        "profile": "Profil"
+    },
+
+    "adminModal": {
+        "adminPassword": "Mot de passe administrateur",
+        "password": "Mot de passe",
+        "incorrectPassword": "Mot de passe incorrect. Veuillez réessayer.",
+        "cancel": "Annuler",
+        "confirm": "Confirmer"
+    },
+
+    "accessModal": {
+        "accessCode": "Entrer le mot de passe",
+        "password": "Mot de passe",
+        "incorrectPassword": "Mot de passe incorrect. Veuillez réessayer.",
+        "cancel": "Annuler",
+        "confirm": "Confirmer"
+    },
+
+    "waitingDialog": {
+        "startParty": "La partie va commencer sous peu..."
+    },
+
+    "selectionPage": {
+        "selectGame": "Selectionne ton jeu",
+        "configureGame": "Configure ton jeu",
+        "noGameAvailable": "Il n'y a pas de jeux disponibles pour le moment"
+    },
+
+    "dialogImport": {
+        "cancel": "Annuler",
+        "import": "Importer"
+    },
+
+    "gameAvailable": {
+        "noGame": "Nous n'avons pas de jeux disponibles pour le moment. Voulez-vous en créer un ?",
+        "create": "Créer",
+        "quit": "Quitter"
+    },
+
+    "mainPage": {
+        "gameMode": "Jouer",
+        "welcome": "Bienvenue",
+        "globalClassement": "Classement global",
+        "winGame": "parties gagnées"
+    },
+
+    "pageConfig": {
+        "createGame": "Création de jeu",
+        "resetTimes": "Réinitialiser les meilleurs temps",
+        "deleteGames": "Supprimer les jeux"
+    },
+
+    "configDialog": {
+        "initialTime": "Temps initial du compte à rebours",
+        "beetweenTime": "Temps initial du compte à rebours",
+        "penaltyIndexTime": "Temps de pénalité pour l’utilisation d’un indice",
+        "beetweenTimePenalty": "La valeur du temps de pénalité doit être comprise entre 0 et 10",
+        "winTime": "Temps gagné avec la découverte d’une différence",
+        "beetweenTimeWin": "La valeur du temps gagné doit être comprise entre 0 et 10",
+        "save": "Enregistrer",
+        "reset": "Réinitialiser"
+    },
+
+    "createRoom": {
+        "time": "temps",
+        "cheatMode": "mode Triche",
+        "password": "Mot de passe",
+        "createRoom": "créer la salle",
+        "passwordKey": "Veuillez entrer votre mot de passe"
+    },
+
+    "creationPage": {
+        "lengthPicture": "L'image doit être de taille 640x480 et en BMP, PNG, JPEG ou JPG",
+        "enlargementRayon": "Choisissez le rayon d'élargissement",
+        "differenceValid": "Valider les différences",
+        "returnConfigPage": "Retourner à la page de Configuration"
+    },
+
+    "friendPage": {
+        "friends": "Amis",
+        "friendsRequests": "amis en attente",
+        "allAccount": "Comptes",
+        "friendsList": "Amis",
+        "requestFriendsSendList": "Demandes d'amis envoyées",
+        "pendingFriendsList": "Demandes d'amis reçues",
+        "allListAccount": "Comptes",
+        "friendsofFriends": "amis",
+        "cancel": "annuler"
+    },
+
+    "AccountDialog": {
+        "confirmChange": "Enregistrer vos modifications ?",
+        "changeConfirm": "Modifications enregistrées !",
+        "deleteFriends": "Supprimer cet ami ?",
+        "yes": "Oui",
+        "no": "Non"
+    },
+
+    "waitingPage": {
+        "currentPlayers": "joueur(s) présents",
+        "waitingPlayers": "Joueur(s) en attente",
+        "player": "Joueur",
+        "start": "Commencer la partie",
+        "quit": "Quitter"
+    },
+
+    "waitingPlayers": {
+        "playerWaiting": "En attente d’un joueur....",
+        "waitingPlayers": "Joueur en attente",
+        "cancel": "annuler",
+        "waitAccept": "En attente d'etre accepté"
+    },
+
+    "canvasUnder": {
+        "PictureDownload": "Téléverser une image",
+        "reset": "Réinitialiser",
+        "foregroundReset": "Réinitialiser l'avant-plan",
+        "close": "Fermer",
+        "noConformPicture": "Image non conforme !",
+        "respectPictureSpecification": "L'image doit respecter les spécifications suivantes",
+        "pictureType": "Le type d'image doit être en",
+        "pictureLength": "La taille de l'image doit être de",
+        "twoAreas": "pour les deux zones",
+        "backgrounds": "les arrières-plans",
+        "background": "l'arrière-plan"
+    },
+
+    "ranking": {
+        "loading": "Chargement...",
+        "global": "Classement Global"
+    },
+
+    "saveRecordDialog": {
+        "saveRecord": " Enregistrer cette reprise vidéo ?"
+    },
+
+    "replayPage": {
+        "noReplayAvailable": "Aucune reprise vidéo disponible pour le moment",
+        "replayLoading": "Chargement des reprises vidéo..."
+    }
+}

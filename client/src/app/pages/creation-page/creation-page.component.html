@@ -1,0 +1,32 @@
+<div class="users-section">
+    <div id="canvas-top-buttons">
+        <app-canvas-top-buttons></app-canvas-top-buttons>
+    </div>
+    <div id="canvas-zone">
+        <canvas id="combined-canvas" [height]="canvasSizes.height" [width]="canvasSizes.width" #combinedCanvas></canvas>
+        <app-image-canvas [position]="canvasPosition.Left"></app-image-canvas>
+        <app-canvas-middle-buttons id="middle-buttons"></app-canvas-middle-buttons>
+        <app-image-canvas [position]="canvasPosition.Right"></app-image-canvas>
+    </div>
+
+    <p>{{'creationPage.lengthPicture' | translate }}</p>
+    <app-canvas-under-buttons [canvasPositionType]="canvasPosition.Both"></app-canvas-under-buttons>
+
+    <div id="radio-buttons">
+        <div>
+            <p>{{'creationPage.enlargementRayon' | translate }} :</p>
+            <mat-radio-group ngDefaultControl aria-label="Select an option" [(ngModel)]="radius">
+                <mat-radio-button color="primary" *ngFor="let radius of radiusSizes" [value]="radius">{{ radius
+                    }}</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </div>
+    <button mat-raised-button name="validateButton" color="primary" (click)="validateDifferences()">
+        {{'creationPage.differenceValid' | translate }}
+    </button>
+    <button mat-raised-button [routerLink]="configRoute">{{'creationPage.returnConfigPage' | translate }}</button>
+    <img *ngIf="welcome.account.profile.mobileTheme==='light'" id = "creation" src = "./assets/background/CreationBackground.jpg" alt="background"/>
+    <img  *ngIf="welcome.account.profile.mobileTheme==='dark'" id = "creation" src = "./assets/background/CreationBackground_dark.png" alt="background"/>
+    <img id = "run" src = "./assets/icon/RunRight.gif" alt="runningGif"/>
+
+</div>

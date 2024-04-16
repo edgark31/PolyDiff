@@ -1,0 +1,14 @@
+
+<div>
+    <button class="back-button" (click)="back()">{{'chat.return' | translate }}</button>
+    <div class="container flex-column">
+        <div class="nav">
+            <app-nav-bar></app-nav-bar>
+        </div>
+        <div class="chat flex-column">
+            <app-chat-box (add)="sendMessage($event)" [messages]="messages"></app-chat-box>
+            <img *ngIf="welcome.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/MenuBackground.jpg" alt="background"/>
+            <img  *ngIf="welcome.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/menu_background_dark.webp" alt="background"/>
+        </div>
+    </div>
+</div>

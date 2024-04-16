@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Importer une image</h2>
+<mat-grid-list cols="2" rowHeight="200px" gutterSize="20px">
+  <mat-dialog-content *ngIf="!welcomeService.chooseImage">
+    <input type="file" (change)="onFileSelected($event)" />
+  </mat-dialog-content>
+
+  <mat-dialog-content *ngIf="welcomeService.chooseImage">
+
+    <button [style.background-color]="setUpColor('1')" mat-button (click)="chooseImage('1')">
+      <img src="http://34.95.3.182:3000/avatar/default1.png" alt="cuteRaccoon" class="dialog-image">
+    </button>
+    <button [style.background-color]="setUpColor('2')" mat-button (click)="chooseImage('2')">
+      <img src="http://34.95.3.182:3000/avatar/default2.png" alt="hallelujaRaccoon" class="dialog-image">
+    </button>
+    <button [style.background-color]="setUpColor('3')" mat-button (click)="chooseImage('3')">
+        <img src="http://34.95.3.182:3000/avatar/default3.png" alt="hallelujaRaccoon" class="dialog-image">
+      </button>
+      <button [style.background-color]="setUpColor('4')" mat-button (click)="chooseImage('4')">
+        <img src="http://34.95.3.182:3000/avatar/default4.png" alt="hallelujaRaccoon" class="dialog-image">
+      </button>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-button *ngIf="!welcomeService.isLogin" (click)="onCancel()">Annuler</button>
+    <button mat-button *ngIf="!welcomeService.isLogin" (click)="onImport()">Importer</button>
+    <button mat-button *ngIf="welcomeService.isLogin" (click)="onCancel()">{{'dialogImport.cancel' | translate }}</button>
+    <button mat-button *ngIf="welcomeService.isLogin" (click)="onImport()">{{'dialogImport.import' | translate }}</button>
+  </mat-dialog-actions>

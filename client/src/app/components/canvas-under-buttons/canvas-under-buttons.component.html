@@ -1,0 +1,24 @@
+<div id="canvas-action-buttons">
+    <button mat-raised-button color="basic" matTooltip="L'image doit être de taille 640x480 et en BMP, PNG, JPEG ou JPG"
+        (click)="fileUpload.click()">
+        {{'canvasUnder.PictureDownload' | translate }} {{canvasPositionType === canvasPosition.Both ? translateCharacter('twoAreas') : ''}}
+        <mat-icon>attach_file</mat-icon>
+    </button>
+    <input #uploadInput type="file" id="upload-btn" (change)="onSelectFile($event)" #fileUpload />
+    <button mat-raised-button color="primary" (click)="resetBackground()">
+        {{'canvasUnder.reset' | translate }} {{canvasPositionType === canvasPosition.Both ? translateCharacter('backgrounds') : translateCharacter('background')}}
+    </button>
+    <button mat-raised-button color="accent" *ngIf="canvasPositionType !== canvasPosition.Both" (click)="resetForeground()">
+        {{'canvasUnder.foregroundReset' | translate }}
+    </button>
+</div>
+
+<ng-template #invalidImageDialog>
+    <div mat-dialog-content>
+        <button mat-button mat-dialog-close> {{'canvasUnder.close' | translate }}</button>
+        <h1 mat-dialog-title>{{'canvasUnder.noConformPicture' | translate }}</h1>
+        <p>{{'canvasUnder.respectPictureSpecification' | translate }} :</p>
+        <mat-error> {{'canvasUnder.pictureType' | translate }} <strong>BMP</strong>, <strong>PNG</strong>, <strong>JPEG</strong> ou <strong>JPG</strong> </mat-error> <br>
+        <mat-error> {{'canvasUnder.pictureLength' | translate }} <strong>640x480</strong> </mat-error> <br>
+    </div>
+</ng-template>

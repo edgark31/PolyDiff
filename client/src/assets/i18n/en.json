@@ -1,0 +1,290 @@
+{
+    "connexion": "Connection",
+    "username": "Username or email",
+    "mdp": "Password",
+    "profil": {
+        "information": "General informations",
+        "username": "Username or email",
+        "Password": "Choose a password",
+        "theme": "Current theme",
+        "language": "Current language",
+        "statistic": "Statistics",
+        "gamePlayed": "Number of games played",
+        "gameWin": "Number of games won",
+        "gameAverage": "Average of differences found per game",
+        "gameAverageTime": "Average time per game",
+        "Connexion": "Login history",
+        "gameHistoric": "Game history",
+        "changePassword": "Change password",
+        "confirmPassword": "Confirm password",
+        "songDifference": "Choose your sound for difference found",
+        "songError": "Choose your sound for error",
+        "currentSongDifference": "Current sound for difference found",
+        "currentSongError": "Current sound for error",
+        "nameEnter": "Please type your name",
+        "passwordEnter": "Please type your password",
+        "confirmPasswordEnter": "Please confirm your password",
+        "cancel": "Cancel",
+        "returnHome": "Return to home",
+        "replay": "Replays",
+        "samePassword": "Enter the same password"
+    },
+
+    "button": {
+        "deconnexion": "Disconnect",
+        "returnProfil": "Save",
+        "GoReglage": "Settings",
+        "profile": "Profile",
+        "Settings": "Settings",
+        "previous": "Previous",
+        "following": "Next",
+        "fr": "French",
+        "en": "English"
+    },
+
+    "roomSheet": {
+        "createRoom": "Create a room",
+        "gameMode": "Game mode",
+        "picture": "Image",
+        "differenceNumber": "Number of differences",
+        "join": "Join",
+        "joinObserver": "Join as observer",
+        "players": "Players"
+    },
+    "game": {
+        "foundDifference": "Differences found",
+        "timerOver": "Time's up",
+        "time": "Time left",
+        "classic": "Classic",
+        "limited": "Limited",
+        "practice": "Practice",
+        "abandon": "Abandon the game",
+        "players": "Players"
+    },
+
+    "gameMode": {
+        "classicMode": "Classic",
+        "limitedMode": "Limited time",
+        "practiceMode": "Practice",
+        "chooseMode": "Chose your game mode"
+    },
+    "chat": {
+        "chatZone": "Chatting zone",
+        "return": "Return",
+        "foundDifférence": " found a difference!",
+        "error": " made a mistake!",
+        "endParty": "End of game",
+        "endPractice": "End of the Practice",
+        "partyAbandon": "Give up the game ?",
+        "abandonParty": " gave up !",
+        "winGame": " Win !",
+        "tie": "Draw",
+        "expiredTime": "Time's up, draw !"
+    },
+    "creationGame": {
+        "differenceImage": "Here is the image of the differences",
+        "hasYou": "There is:",
+        "differences": "Differences",
+        "enterNameGame": "Please enter a game name",
+        "gameExisted": "Warning: if the game name already exists, the game will not be created",
+        "emptyName": "The name cannot be empty",
+        "spaceName": "The name cannot contain spaces",
+        "existName": "This game name already exists",
+        "createGame": "Create a game",
+        "quit": "Quit",
+        "close": "Close",
+        "restartProcess": "There must be between 3 and 9 differences. Please restart the process"
+    },
+    "deleteReset": {
+        "deleteGames": "Delete all games",
+        "deleteGame": "Delete the game",
+        "resetTimes": "Reset all best times",
+        "resetTime": "Reset best time",
+        "deleteHistory": "Delete history",
+        "yes": "Yes",
+        "no": "No"
+    },
+    "friendInfo": {
+        "friendList": "Friend list of",
+        "allFriends": "See all friends",
+        "commonFriendList": "List of common friends between you and",
+        "commonFriends": "See common friends",
+        "close": "Close"
+    },
+
+    "infoGame": {
+        "difficultyLevel": "Difficulty Level",
+        "gameMode": "Game Mode",
+        "presentDifference": "Number of differences",
+        "winTime": "Winning Time Value",
+        "useHint": "Use Hint"
+    },
+
+    "dialogGame": {
+        "home": "Quit",
+        "videoReprise": "Replay",
+        "yes": "Yes",
+        "no": "No",
+        "scoreShare": "Share",
+        "quitGame": "Home"
+    },
+
+    "gameSheet": {
+        "play": "Play",
+        "suppression": "Delete",
+        "reset": "Reset",
+        "create": "Create"
+    },
+
+    "historyLogin": {
+        "timeStamps": "Timestamp(s)",
+        "connection": "Connection(s)",
+        "disconnection": "Disconnection(s)",
+        "matchSummary": "Match(es) Summary",
+        "win": "Win",
+        "loose": "Loss",
+        "closeHistoric": "Close history"
+    },
+
+    "navBar": {
+        "home": "Home",
+        "messageChannel": "Chat",
+        "friends": "Friends",
+        "account": "Account",
+        "profile": "Profile"
+    },
+    "adminModal": {
+        "adminPassword": "Administrator password",
+        "password": "Password",
+        "incorrectPassword": "Incorrect password. Please try again.",
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+    },
+    "accessModal": {
+        "accessCode": "Type password",
+        "password": "Password",
+        "incorrectPassword": "Incorrect password. Please try again.",
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+    },
+    "waitingDialog": {
+        "startParty": "The game will start soon..."
+    },
+    "selectionPage": {
+        "selectGame": "Select your game",
+        "configureGame": "Configure your game",
+        "noGameAvailable": "There are no games available at the moment"
+    },
+
+    "dialogImport": {
+        "cancel": "Cancel",
+        "import": "Import"
+    },
+
+    "gameAvailable": {
+        "noGame": "We do not have any games available at the moment. Would you like to create one?",
+        "create": "Create",
+        "quit": "Quit"
+    },
+
+    "mainPage": {
+        "gameMode": "Play",
+        "welcome": "welcome",
+        "globalClassement": "Global ranking",
+        "winGame": "games won"
+    },
+
+    "pageConfig": {
+        "createGame": "Game Creation",
+        "resetTimes": "Reset Best Times",
+        "deleteGames": "Delete All Games"
+    },
+
+    "configDialog": {
+        "initialTime": "Initial countdown time",
+        "beetweenTime": "Initial countdown time",
+        "penaltyIndexTime": "Penalty time for using a clue",
+        "beetweenTimePenalty": "The penalty time value must be between 0 and 10",
+        "winTime": "Time gained from discovering a difference",
+        "beetweenTimeWin": "The time gained value must be between 0 and 10",
+        "save": "Save",
+        "reset": "Reset"
+    },
+
+    "createRoom": {
+        "time": "Time",
+        "cheatMode": "Cheat Mode",
+        "password": "Password",
+        "createRoom": "Create Room",
+        "passwordKey": "Please enter your password"
+    },
+
+    "creationPage": {
+        "lengthPicture": "The image must be 640x480 in size and in BMP, PNG, JPEG, or JPG format",
+        "enlargementRayon": "Choose the enlargement radius",
+        "differenceValid": "Validate the differences",
+        "returnConfigPage": "Return to Configuration Page"
+    },
+
+    "friendPage": {
+        "friends": "Friends",
+        "friendsRequests": "friends waiting",
+        "friendsPending": "Received friend requests",
+        "allAccount": "Accounts",
+        "friendsList": "Friends",
+        "requestFriendsSendList": "Friends requests sent",
+        "pendingFriendsList": "Friends requests received",
+        "allListAccount": "Accounts",
+        "friendsofFriends": "friends",
+        "cancel": "cancel"
+    },
+    "AccountDialog": {
+        "confirmChange": "Save your changes?",
+        "deleteFriends": "Delete this friend?",
+        "yes": "Yes",
+        "no": "No",
+        "changeConfirm": "Successfully applied !"
+    },
+
+    "waitingPage": {
+        "currentPlayers": "current player(s)",
+        "waitingPlayers": "Waiting player(s)",
+        "player": "Player",
+        "start": "Start the game",
+        "quit": "Quit"
+    },
+
+    "waitingPlayers": {
+        "playerWaiting": "Waiting for a player...",
+        "waitingPlayers": "Player waiting",
+        "cancel": "Cancel",
+        "waitAccept": "Waiting to be accepted"
+    },
+
+    "canvasUnder": {
+        "PictureDownload": "Upload an image",
+        "reset": "Reset",
+        "foregroundReset": "Reset foreground",
+        "close": "Close",
+        "noConformPicture": "Non-compliant image!",
+        "respectPictureSpecification": "The image must comply with the following specifications:",
+        "pictureType": "Image type must be",
+        "pictureLength": "Image size must be",
+        "twoAreas": "for both areas",
+        "backgrounds": "the backgrounds",
+        "background": "background"
+    },
+
+    "ranking": {
+        "loading": "Loading...",
+        "global": "Global Ranking"
+    },
+
+    "saveRecordDialog": {
+        "saveRecord": "Do you want to save this game record ?"
+    },
+
+    "replayPage": {
+        "noReplayAvailable": "No game records available for now"
+    }
+}

@@ -1,0 +1,321 @@
+@import url('https://fonts.cdnfonts.com/css/troika-2');
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+app-nav-bar {
+    font-family: 'Troika', sans-serif;
+    font-size: 20px;
+    height: 6vh;
+}
+
+.container-information {
+    height: 7vh;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.85);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.information {
+    color: #ffa500;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+    font-weight: bold;
+    display: inline-block;
+    text-align: left;
+    font-size: 38px;
+    padding: 10px;
+    text-align: center;
+}
+
+.middle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    width: 60vw;
+    height: 74vh;
+}
+
+.low {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 80vw;
+    height: 10vh;
+    margin-bottom: 3vh;
+    z-index: 10;
+}
+
+.section {
+    margin: 0 10px;
+}
+
+.section button {
+    width: 100%;
+    margin: 2px 10px;
+}
+
+.profil {
+    color: #ffa500;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #000000;
+    -webkit-text-stroke: 0.1px #000000;
+    text-transform: uppercase;
+    width: 340px;
+}
+
+.left {
+    padding: 0 10px;
+    color: white;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+}
+
+.right {
+    padding: 0 10px;
+    color: white;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+}
+
+.right .section * {
+    text-align: right;
+}
+
+.right .form-control * {
+    text-align: right;
+}
+
+.right div .profil {
+    text-align: right;
+}
+
+.button-container {
+    width: 95vw;
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    bottom: 20px;
+}
+
+.button-container button {
+    width: 100px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: 'Troika', sans-serif;
+    color: rgba(253, 250, 151, 255);
+    text-transform: uppercase;
+    background-color: #e8a430;
+}
+
+.button-container button:hover {
+    background: rgb(136, 15, 15);
+}
+
+button {
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #e8a430;
+    padding: 8px 24px;
+    border-radius: 4px;
+    border: 1px solid #000000;
+    width: 100%;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background: rgb(136, 15, 15);
+}
+
+form {
+    max-width: 400px;
+    padding: 16px 16px 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    margin: auto;
+}
+
+h1 {
+    font-size: 25px;
+    color: #333;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #ccc;
+}
+
+.form-avatar {
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.form-avatar div {
+    margin-bottom: 10px;
+    color: #ffa500;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+
+    div {
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 4px;
+        color: #ffa500;
+        text-transform: uppercase;
+    }
+}
+
+.form-avatar input {
+    height: 35px;
+    border-radius: 4px;
+    width: 95%;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    transition: border-color 0.3s;
+    font-size: 1.2rem;
+    padding: 10px;
+}
+
+.form-control {
+    vertical-align: middle;
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+    margin-bottom: 50px;
+}
+
+.form-control label {
+    margin-bottom: 50px;
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: bold;
+
+    label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 4px;
+        color: black;
+    }
+}
+
+.form-control input {
+    height: 50px;
+    border-radius: 4px;
+    width: 95%;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    transition: border-color 0.3s;
+    font-size: 1.2rem;
+    padding: 10px;
+}
+
+.form-control input:hover {
+    border-color: #0bf286;
+}
+
+#background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.button-plus {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    padding: 10px;
+}
+
+.form-stat div {
+    margin-bottom: 4px;
+}
+
+.form-stat div:not(:empty) {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.form-control img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 10px;
+}
+
+.section h1 {
+    font-size: 1.5rem;
+}
+
+.form-stat div:not(:empty) {
+    font-size: 1.5rem;
+}
+
+#background {
+    background-color: #f5f5f5;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.mat-header-cell,
+.mat-cell {
+    padding: 10px;
+}
+
+.mat-header-cell {
+    font-weight: bold;
+}
+
+.mat-column-position,
+.mat-column-name,
+.mat-column-weight {
+    width: 39.89%;
+}
+
+.mat-paginator {
+    font-size: 14px;
+    padding: 8px;
+    max-width: 300px;
+    margin-top: 10px;
+}
+
+.mat-paginator-page-size,
+.mat-paginator-range-label,
+.mat-paginator-navigation {
+    font-size: 14px;
+}
+
+.mat-paginator-page-size-label {
+}
+
+.mat-form-field,
+.mat-label,
+.mat-select {
+    font-size: 1em;
+}
+
+.mat-option {
+    font-size: 1em;
+    line-height: 3;
+}

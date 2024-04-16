@@ -1,0 +1,209 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { GameDetails } from '@app/interfaces/game-interfaces';
+import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import {
+    Account,
+    CarouselPaginator,
+    Credentials,
+    Game,
+    GameConfigConst,
+    GameHistory,
+    GameRecord,
+    Sound,
+} from './../../../../../common/game-interfaces';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class CommunicationService {
+    private readonly gameUrl: string;
+    private readonly accountUrl: string;
+
+    constructor(private readonly http: HttpClient) {
+        this.gameUrl = environment.serverUrl + '/games';
+        this.accountUrl = environment.serverUrl + '/account';
+    }
+
+    loadGameCarrousel(index: number): Observable<CarouselPaginator> {
+        return this.http.get<CarouselPaginator>(`${this.gameUrl}/carousel/${index}`);
+    }
+
+    postGame(gameData: GameDetails): Observable<void> {
+        return this.http.post<void>(`${this.gameUrl}`, gameData);
+    }
+
+    createUser(credentials: Credentials, idAvatar: string): Observable<void> {
+        return this.http.post<void>(`${this.accountUrl}/register`, { creds: credentials, defaultId: idAvatar }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('User created');
+            }),
+        );
+    }
+
+    login(credentials: Credentials): Observable<Account> {
+        return this.http.post<Account>(`${this.accountUrl}/login`, credentials).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('logged in');
+            }),
+        );
+    }
+
+    updateUsername(accountId: string, newUsername: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/username`, { username: accountId, newUsername }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('Username modified');
+            }),
+        );
+    }
+
+    sendMail(mail: string): Observable<Account> {
+        return this.http.put<Account>(`${this.accountUrl}/mail`, { email: mail }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('mail modify');
+            }),
+        );
+    }
+
+    updateAvatar(accountId: string, avatar: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/avatar/upload`, { username: accountId, avatar }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('avatar update');
+            }),
+        );
+    }
+    chooseAvatar(accountId: string, newAvatar: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/avatar/choose`, { username: accountId, defaultId: newAvatar }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('avatar choose');
+            }),
+        );
+    }
+
+    modifyPassword(accountId: string, newPassword: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/password`, { username: accountId, newPassword }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('password modify');
+            }),
+        );
+    }
+
+    modifyTheme(accountId: string, newTheme: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/mobile/theme`, { username: accountId, newTheme }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('theme modified');
+            }),
+        );
+    }
+
+    modifySongError(accountId: string, newErrorSound: Sound): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/sound/error`, { username: accountId, newSound: newErrorSound }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('sound on error modified');
+            }),
+        );
+    }
+
+    modifySongDifference(accountId: string, newCorrectSound: Sound): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/sound/correct`, { username: accountId, newSound: newCorrectSound }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('on correct sound modified');
+            }),
+        );
+    }
+
+    modifyLanguage(accountId: string, newLanguage: string): Observable<void> {
+        return this.http.put<void>(`${this.accountUrl}/language`, { username: accountId, newLanguage }).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('Language modified');
+            }),
+        );
+    }
+
+    getPassword(password: string): Observable<boolean> {
+        return this.http.post<boolean>(`${this.accountUrl}/admin`, { password }).pipe(
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('Modified password');
+            }),
+        );
+    }
+
+    checkCode(code: string): Observable<boolean> {
+        return this.http.post<boolean>(`${this.gameUrl}/match/check/code`, { Code: code }).pipe(
+            tap(() => {
+                // eslint-disable-next-line no-console
+                console.log('code check');
+            }),
+        );
+    }
+    loadConfigConstants(): Observable<GameConfigConst> {
+        return this.http.get<GameConfigConst>(`${this.gameUrl}/constants`);
+    }
+
+    loadGameHistory(): Observable<GameHistory[]> {
+        return this.http.get<GameHistory[]>(`${this.gameUrl}/history`);
+    }
+
+    deleteGameById(id: string): Observable<void> {
+        return this.http.delete<void>(`${this.gameUrl}/${id}`);
+    }
+
+    getGameById(id: string): Observable<Game> {
+        return this.http.get<Game>(`${this.gameUrl}/${id}`).pipe(catchError(this.handleError<Game>(`getGameById id=${id}`)));
+    }
+
+    findAllByAccountId(accountId: string): Observable<GameRecord[]> {
+        return this.http.get<GameRecord[]>(`${environment.serverUrl}/records/${accountId}`);
+    }
+
+    deleteAccountId(accountId: string, date: string): Observable<void> {
+        const params = new HttpParams().set('date', date);
+        return this.http.delete<void>(`${environment.serverUrl}/records/${accountId}`, { params });
+    }
+
+    deleteAllGames(): Observable<void> {
+        return this.http.delete<void>(`${this.gameUrl}`);
+    }
+
+    deleteAllGamesHistory(): Observable<void> {
+        return this.http.delete<void>(`${this.gameUrl}/history`);
+    }
+
+    verifyIfGameExists(name: string): Observable<boolean> {
+        return this.http.get<boolean>(`${this.gameUrl}/?name=${name}`);
+    }
+
+    updateGameConstants(gameConstants: GameConfigConst): Observable<void> {
+        return this.http.put<void>(`${this.gameUrl}/constants`, gameConstants);
+    }
+
+    private handleError<T>(_request: string, result?: T): (error: Error) => Observable<T> {
+        return () => of(result as T);
+    }
+}

@@ -1,0 +1,52 @@
+<div [attr.id]="getChatBox() ? 'chat-box' : 'chat-box-dark' ">
+    <div  [ngClass]="{'content': welcome.changeThemeChat || !welcome.onChatGame || !welcome.onChatLobby, 'content-dark': !welcome.changeThemeChat && ((router.url === '/chat' || welcome.onChatGame || welcome.onChatLobby ))}">
+        <div class="contact-profile">
+            <p class="chat">{{'chat.chatZone' | translate }}</p>
+            <span class="button-container">
+            <button *ngIf="router.url==='/chat'|| welcome.onChatGame || welcome.onChatLobby" (click)="onChangeTheme()"
+                title="{{ welcome.changeThemeChat ? 'Cliquez pour avoir le thème dark' : 'Cliquez pour passer theme light' }}">
+                <span class="icon-circle">
+                    <mat-icon>palette</mat-icon>
+                </span>
+            </button>
+            <!-- <button (click)="welcome.onChatGame ? goPageChat() : goPageChatLobby()"> -->
+            <button *ngIf="router.url==='/game'" (click)="goPageChatGame()"
+                title="{{ welcome.onChatGame ? 'Cliquez pour passer en chat de la game' : 'Cliquez pour passer en chat global' }}">
+                <span class="icon-circle" *ngIf="getMode() !== '/practice' ">
+                    <mat-icon>{{ welcome.onChatGame ? 'games' : 'chat' }}</mat-icon>
+                </span>
+            </button>
+
+
+            <button *ngIf="router.url==='/waiting-room'" (click)="goPageChatLobby()"
+                title="{{ welcome.onChatLobby ? 'Cliquez pour passer en chat du lobby' : 'Cliquez pour passer en chat global' }}">
+                <span class="icon-circle" *ngIf="getMode() !== '/practice' ">
+                    <mat-icon>{{ welcome.onChatLobby ? 'hourglass_empty' : 'chat' }}</mat-icon>
+                </span>
+            </button>
+        </span>
+    </div>
+        <div class="messages">
+            <ul>
+                <li [class]="message.tag" *ngFor="let message of messages">
+                    <div *ngIf="message.tag !== 'Common'">
+                        <img src="{{'http://34.95.3.182:3000/avatar/' + message.accountId + '.png'}}" alt="avatar" />
+                    </div>
+                    <h4>{{ message.name }}</h4>
+                    <p>{{ message.raw }}</p>
+                    <h4>{{ message.timestamp }}</h4>
+                </li>
+            </ul>
+        </div>
+        <div class="message-input">
+            <div class="wrap">
+                <input id="input" type="text" #inputText placeholder={{getPlaceholder()}}
+                    (keyup.enter)="onAdd(inputText)" maxlength="200" />
+                <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                <button mat-button class="submit" (click)="onAdd(inputText)">
+                    <mat-icon class="small-icon">near_me</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

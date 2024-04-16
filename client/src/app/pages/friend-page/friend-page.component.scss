@@ -1,0 +1,321 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+app-nav-bar {
+    font-family: 'Troika', sans-serif;
+    font-size: 20px;
+    height: 10vh;
+}
+
+.icon-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 5vh;
+}
+
+.icon {
+    font-size: 23px;
+    width: 500px;
+    margin-top: 0px;
+    padding: 5px 20px;
+    z-index: 1;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: 4px solid black;
+    background-color: #ffffff;
+    font-family: 'Troika', sans-serif;
+    transition: 0.3s;
+    color: #000000;
+}
+
+.icon:hover {
+    background-color: rgb(179, 179, 179);
+}
+
+.icon.select {
+    background-color: #ffa20d;
+}
+
+.friends-container {
+    background-color: #dfd40700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 75vh;
+    width: 100vw;
+    padding: 20px;
+}
+
+.card-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 90%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 0 30px;
+}
+
+.informationUpdate {
+    color: #ffffff;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+    font-weight: bold;
+    font-size: 55px;
+    font-weight: bold;
+    margin: 10px 0;
+    height: 50px;
+}
+
+.information {
+    color: #ffffff;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+    font-weight: bold;
+    font-size: 55px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 10px;
+    height: 50px;
+}
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.pending-sent {
+    max-height: 30vh;
+}
+
+.friend-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    max-width: 1100px;
+    min-width: 700px;
+    height: 120px;
+    background-color: #fff;
+    padding: 6px 12px;
+    border: 3px black solid;
+    border-radius: 2%;
+    margin: 8px 12px;
+}
+
+.show {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #000000;
+    font-weight: bold;
+}
+
+.avatar {
+    border: 4px solid black;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin: 0 12px;
+}
+
+.name {
+    font-weight: bold;
+    font-size: 20px;
+    width: 80px;
+    -webkit-text-stroke: 0.5px black;
+    font-family: 'Troika', sans-serif;
+}
+
+.details {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.details button {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    outline: none;
+}
+
+.showFofs {
+    font-size: 20px;
+    background-color: #feab3e;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 15%;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Troika', sans-serif;
+}
+
+.icon-favorite {
+    font-size: 40px;
+    width: 75px;
+    height: 75px;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #e8a830;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.icon-delete {
+    font-size: 40px;
+    width: 75px;
+    height: 75px;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #e8304c;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.icon-add {
+    font-size: 40px;
+    width: 75px;
+    height: 75px;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #27d700;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.icon-close {
+    font-size: 40px;
+    width: 75px;
+    height: 75px;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #ff1414;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+    margin-right: 100px;
+}
+
+.icon-thump {
+    width: 150px;
+    height: 75px;
+    font-size: 40px;
+    font-family: 'Troika', sans-serif;
+    color: rgba(253, 250, 151, 255);
+    -webkit-text-stroke: 0.2px black;
+    border: none;
+    background-color: #e8304c;
+    border-radius: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+    margin-right: 100px;
+}
+
+mat-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-search {
+    font-size: 26px;
+    width: 20px;
+}
+
+.disabled {
+    pointer-events: none;
+}
+
+#background {
+    background-color: #f5f5f5;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    object-fit: cover;
+}
+
+.informationPending {
+    color: #ffa500;
+    -webkit-text-stroke: 1px #000000;
+    font-family: 'Troika', sans-serif;
+    font-weight: bold;
+    display: inline-block;
+    text-align: left;
+    font-size: 55px;
+    margin-left: 180px;
+    margin-top: 40px;
+    width: 900px;
+    height: 50px;
+}
+
+.pending {
+    margin-top: 200px;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.search-input {
+    padding: 12px;
+    font-size: 24px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    width: 700px;
+}
+
+.search-button {
+    padding: 12px 24px;
+    font-size: 36px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    background-color: #ffa500;
+    cursor: pointer;
+}

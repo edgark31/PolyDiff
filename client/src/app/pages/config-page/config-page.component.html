@@ -1,0 +1,16 @@
+<div class="config-view">
+    <div class="upper-list-game">
+        <app-selection-page> </app-selection-page>
+    </div>
+    
+    <div class="options">
+        <div class="button-container">
+            <button class="create_button" mat-button [routerLink]="createRoute"> {{'pageConfig.createGame' | translate }}</button>
+            <img src="./assets/icon/CreationPageButton.png" alt="createButton" />
+        </div>
+        <div class="button-container">
+            <button class="delete_button" mat-button  (click)="openConfirmationDialog(actions.DeleteAllGames)">{{'pageConfig.deleteGames' | translate }}</button>
+            <img src="./assets/icon/DeleteAll.png" alt="deleteAll" />
+        </div>
+    </div>
+</div>

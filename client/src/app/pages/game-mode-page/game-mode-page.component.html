@@ -1,0 +1,24 @@
+<div class="container flex-column">
+    <div>
+        <app-nav-bar> </app-nav-bar>
+    </div>
+    <header class="header">
+        <h1 class="header-item flex-column">{{'gameMode.chooseMode' | translate }}</h1>
+    </header>
+    <img *ngIf="welcomeService.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
+    <img  *ngIf="welcomeService.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
+    <div class="flex-column">
+        <button class="button" routerLink="/classic">
+            <span id = "classic">{{'gameMode.classicMode' | translate }}</span>
+        </button>
+        <button class="button" routerLink="/limited">
+            <span id = "limited">{{'gameMode.limitedMode' | translate }}</span>
+        </button>
+        <button class="button" routerLink="/selection">
+            <span id = "limited">{{'gameMode.practiceMode' | translate }}</span>
+        </button>
+    </div>
+
+    <footer class="footer flex-column">
+    </footer>
+</div>

@@ -1,0 +1,19 @@
+<div *ngIf="game" class="gameSheet">
+    <h1 class="title">{{ game.name }}</h1>
+    <img class="thumbnail" [src]="url" alt="track" />
+    <div class="button-container">
+        <div *ngIf="router.url === '/selection' && getMode() === '/practice'">
+            <img alt="button" src="./assets/icon/PlayButton.png"/>
+            <button class="practice" *ngIf="getMode() === '/practice'" (click)="startGame()">{{'gameSheet.play' | translate }}</button>
+        </div>
+        <div *ngIf="router.url === '/selection' && getMode() !== '/practice'">
+            <img alt="button" src="./assets/icon/PlayButton.png"/>
+            <button class="create" *ngIf="getMode() !== '/practice'" routerLink="/create-room" (click)="setGameId()">{{'gameSheet.create' | translate }}</button>
+        </div>
+        <div *ngIf="router.url === '/admin'">
+            <img alt="button" src="./assets/icon/CreateButton.png"/>
+            <button class="delete" (click)="openConfirmationDialog(actions.DeleteGame)">{{'gameSheet.suppression' | translate }}</button>
+        </div>
+    </div>
+</div>
+

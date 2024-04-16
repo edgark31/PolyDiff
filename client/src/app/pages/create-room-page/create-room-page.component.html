@@ -1,0 +1,34 @@
+<div class="container flex-column">
+    <div>
+        <app-nav-bar> </app-nav-bar>
+    </div>
+    <img *ngIf="welcome.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/SelectionBackground.jpg" alt="background"/>
+    <img  *ngIf="welcome.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/selection_background_dark.jpg" alt="background"/>
+    <div class="flex-column">
+        <button class="settings">
+            <span id = "classic">{{'createRoom.time' | translate }} : </span>
+            <mat-slider color="warn" [displayWith]="formatLabelTime.bind(this)" tickInterval="1" min="30" max="60"></mat-slider>
+            <span class="time">{{time}}</span>
+        </button>
+        <div *ngIf="!onVerifyClassic()">
+            <button class="settings">
+                <span id = "classic">Bonus : </span>
+                <mat-slider color="warn" [displayWith]="formatLabelBonusTime.bind(this)" tickInterval="1" min="10" max="20"></mat-slider>
+                <span class="time">{{bonusTime}}</span>
+            </button>
+        </div>
+        <button class="settings">
+            <span id="classic">{{'createRoom.cheatMode' | translate }} : </span>
+            <mat-checkbox id="config" color="warn" [(ngModel)]="isCheatModeEnabled"></mat-checkbox>
+        </button>
+        <button class="settings">
+            <span id="classic">{{'createRoom.password' | translate }} : </span>
+            <input class="password" matInput placeholder="{{ 'createRoom.passwordKey' | translate }}" [(ngModel)]="password">
+        </button>
+    </div>
+    <footer class="footer flex-column">
+        <button class="settings create">
+            <span id="classic" routerLink="/waiting-room" (click)="onSubmit()">{{'createRoom.createRoom' | translate }}</span>
+        </button>
+    </footer>
+</div>

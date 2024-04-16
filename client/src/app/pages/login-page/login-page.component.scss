@@ -1,0 +1,149 @@
+@import url('https://fonts.cdnfonts.com/css/troika-2');
+
+@keyframes titleFadeIn {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+
+@keyframes popOut {
+    0% {
+        transform: translateY(100%) scale(0);
+    }
+    50% {
+        transform: translateY(-20%) scale(1.2);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+.container {
+    height: 100vh;
+    color: rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    overflow: hidden;
+}
+
+.title {
+    font-family: 'Troika', sans-serif;
+    text-transform: uppercase;
+    font-size: 140px;
+    font-weight: bolder;
+    line-height: 44px;
+    text-align: center;
+    color: #e8a430;
+    animation: titleFadeIn 0.5s ease-in-out;
+    -webkit-text-stroke: 2px black;
+}
+
+form {
+    width: 550px;
+    padding: 10px;
+    animation: titleFadeIn 0.5s ease-in-out;
+    font-family: 'Troika', sans-serif;
+    -webkit-text-stroke: 1px rgb(0, 0, 0);
+    box-shadow: 4px 4px 32px rgba(0, 0, 0, 0.85);
+    background-color: #e8a430;
+    border-radius: 10px;
+
+    h1 {
+        color: #ffffff;
+        padding-bottom: 2px;
+        border-bottom: 1px solid #ccc;
+        font-family: 'Troika', sans-serif;
+        -webkit-text-stroke: 1px rgb(0, 0, 0);
+    }
+}
+
+.test {
+    font-family: 'Troika', sans-serif;
+    font-size: 20px;
+}
+
+.form-control {
+    vertical-align: middle;
+    margin-bottom: 16px;
+    font-family: 'Troika', sans-serif;
+    -webkit-text-stroke: 1px rgb(0, 0, 0);
+    input,
+    label {
+        display: block;
+    }
+
+    label {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-bottom: 4px;
+        color: rgb(255, 255, 255);
+    }
+
+    input {
+        padding: 8px;
+        height: 30px;
+        border-radius: 8px;
+        width: 95%;
+        border: 1px solid #000000;
+        background-color: white;
+    }
+}
+
+button:hover {
+    color: black;
+}
+
+button {
+    font-family: 'Troika', sans-serif;
+    margin-bottom: 10px;
+    background-color: #e8a430;
+    color: #ffffff;
+    padding: 8px 24px;
+    border-radius: 4px;
+    border: 1px solid #000000;
+    width: 100%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+#background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.feedback {
+    font-family: 'Troika', sans-serif;
+    text-align: center;
+    color: red;
+    font-style: italic;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    font-size: 1rem;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+.connect {
+    background-color: #ffa200;
+}
+
+.recover {
+    padding: 4px 24px;
+    background-color: #f3f3f3;
+}
+
+.register {
+    background-color: #ffa200;
+}

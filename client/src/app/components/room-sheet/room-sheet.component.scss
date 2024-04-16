@@ -1,0 +1,203 @@
+#background-image {
+    position: absolute;
+    // top: 220px;
+    // left: 50.7%;
+    // transform: translateX(-50%);
+    transform: rotate(90deg);
+    width: 400px;
+    height: 900px;
+}
+
+.create-button:hover {
+    background-color: #db9110;
+    color: black;
+    transform: scale(1.05);
+}
+
+.feedback {
+    text-align: center;
+    color: red;
+    font-style: italic;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    font-size: 1.2rem;
+    margin-top: 49px;
+    margin-bottom: 0;
+    transform: scale(1.05);
+    z-index: 1;
+}
+
+button,
+.button-container {
+    width: 135px;
+}
+
+span {
+    white-space: normal;
+}
+
+.join-button:hover {
+    background-color: #000000;
+    color: rgba(0, 0, 0, 0);
+    transform: scale(1.05);
+}
+
+.player-count {
+    top: -148px;
+    left: 245px;
+    font-weight: bold;
+    position: relative;
+    text-align: center;
+    z-index: 1;
+    color: white;
+    font-size: 15px;
+    font-family: 'Troika', sans-serif;
+    -webkit-text-stroke: 1px black;
+}
+
+.game-mode-image {
+    position: absolute;
+    right: 360px;
+    top: 170px;
+
+    //     width: 1px;
+    //     height: 1px;
+    //     z-index: 2;
+    //     object-fit: cover;
+}
+
+.game-mode-image-classic img {
+    position: relative;
+    border: 4px black solid;
+    border-radius: 25px;
+    right: 229px;
+    top: 225px;
+    width: 100px;
+    height: 100px;
+    z-index: 2;
+    object-fit: cover;
+}
+
+.create-button {
+    top: 100px;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    font-family: 'Troika', sans-serif;
+    font-size: 20px;
+    width: auto;
+    height: auto;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    background-color: #000000;
+    z-index: 1;
+}
+
+.join-button {
+    top: 90px;
+    left: 23px;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    font-family: 'Troika', sans-serif;
+    font-size: 20px;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    background-color: #000000;
+
+    z-index: 1;
+}
+
+.difference-number {
+    top: 65px;
+    left: 13px;
+    font-weight: bold;
+    position: relative;
+    text-align: center;
+
+    z-index: 1;
+    color: white;
+    font-size: 15px;
+    font-family: 'Troika', sans-serif;
+    -webkit-text-stroke: 0.5px black;
+}
+
+.game-mode {
+    top: 197px;
+    right: 255px;
+    font-weight: bold;
+    position: relative;
+    text-align: center;
+
+    z-index: 1;
+    color: white;
+    font-size: 15px;
+    font-family: 'Troika', sans-serif;
+    -webkit-text-stroke: 0.5px black;
+}
+
+.player-container {
+    // bottom: 20px;
+    top: -119px;
+    left: 245px;
+    font-weight: bold;
+    position: relative;
+    text-align: center;
+
+    z-index: 1;
+    color: white;
+    font-size: 15px;
+    font-family: 'Troika', sans-serif;
+    -webkit-text-stroke: 0.5px black;
+}
+
+.eye-icon {
+    position: relative;
+    left: -250px;
+    top: 160px;
+    font-size: 10px;
+    color: red;
+    z-index: 1;
+    transform: scale(4);
+}
+
+.eye-open {
+    transform: scale(4) rotate(0deg) translateY(18px) translateX(10px);
+}
+.eye-closed {
+    transform: scale(4) rotate(180deg) translateY(-6px) translateX(2px);
+}
+
+.player {
+    padding: 3.5px;
+}
+
+.all {
+    position: absolute;
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Troika', sans-serif;
+    margin-top: 185px;
+    transform: translateX(-275px);
+    font-size: 20px;
+    // padding: 20px 30px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    color: black;
+    border: 4px black solid;
+    border-radius: 25px;
+    background-color: #ffffff;
+
+    width: 700px;
+    height: 250px;
+    display: block;
+}

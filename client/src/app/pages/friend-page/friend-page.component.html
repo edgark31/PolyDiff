@@ -1,0 +1,127 @@
+<div class="container">
+    <div class="header">
+        <app-nav-bar id ="nav-bar"></app-nav-bar>
+    </div>
+    <div class="icon-container">
+        <button [class.select]="pageFriendupdate === 'friendUpdate'" class="icon" (click)="onSubmit('friendUpdate')">{{'friendPage.friends' | translate }}</button>
+        <button [class.select]="pageFriendupdate === 'friendWait'" class="icon" (click)="onSubmit('friendWait')">{{'friendPage.friendsRequests' | translate }} </button>
+        <button [class.select]="pageFriendupdate === 'accountUser'" class="icon" (click)="onSubmit('accountUser')">{{'friendPage.allAccount' | translate }}</button>
+    </div>
+
+    <section class="friends-container">
+        <!-- CURRENT FRIENDS -->
+        <div *ngIf="pageFriendupdate==='friendUpdate'" class="card-container">
+            <h1 class="informationUpdate">{{'friendPage.friendsList' | translate }}</h1>
+            <div class="cards">
+                <div class="friend-card" *ngFor="let friend of friends">
+                    <div class="show">
+                        <img class="avatar" [src]="'http://34.95.3.182:3000/avatar/' + friend.accountId + '.png?timeStamp='+ friendService.timeStamp" alt="Image">
+                        <span class="name">{{ friend.name }}</span>
+                    </div>
+                    <div class="details">
+                        <button mat-icon-button>
+                            <mat-icon *ngIf="friend.isFavorite" (click)="sendUnfavoriteFriend(friend.accountId)" class="icon-favorite">favorite</mat-icon>
+                            <mat-icon *ngIf="!friend.isFavorite" (click)="sendFavoriteFriend(friend.accountId)" class="icon-favorite">favorite_border</mat-icon>
+                        </button>
+                    </div>
+                    <button class ="showFofs" mat-icon-button (click)="showFriendsOfFriends(friend, true)">{{'friendPage.friendsofFriends' | translate }}</button>
+                    <div class="details">
+                        <button [disabled]="isRequestPending"(click)="sendFriendDelete(friend.accountId)"  mat-icon-button >
+                            <mat-icon class="icon-delete">delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- WAITING - PENDING AND SENT FRIENDS -->
+        <div *ngIf="pageFriendupdate==='friendWait'" class="card-container">
+            <h1 class="information">{{'friendPage.pendingFriendsList' | translate }}</h1>
+            <div class="cards pending-sent">
+                <div class="friend-card" *ngFor="let friend of friendPendingList">
+                    <div class="show">
+                        <img class="avatar" [src]="'http://34.95.3.182:3000/avatar/' + friend.accountId + '.png?timeStamp='+ friendService.timeStamp" alt="Image">
+                        <span class="name">{{ friend.name }}</span>
+                    </div>
+                    <div class="details">
+                        <button mat-icon-button [disabled]="isRequestPending" (click)='sendFriendPendingAccept(friend.accountId)' >
+                            <mat-icon class="icon-add">person_add</mat-icon>
+                        </button>
+                    </div>
+                    <div class="details">
+                        <button mat-icon-button [disabled]="isRequestPending" (click)='sendFriendPendingRefuse(friend.accountId)' >
+                            <mat-icon class="icon-close">person_remove</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="pageFriendupdate==='friendWait'" class="card-container">
+            <h1 class="informationPending"> {{'friendPage.requestFriendsSendList' | translate }}</h1>
+            <div class="cards pending-sent">
+                <div class="friend-card" *ngFor="let friend of friendSentList">
+                    <div class="show">
+                        <img class="avatar" [src]="'http://34.95.3.182:3000/avatar/' + friend.accountId + '.png?timeStamp='+ friendService.timeStamp" alt="Image">
+                        <span class="name">{{ friend.name }}</span>
+                    </div>
+                    <div class="details">
+                        <button [disabled]="isRequestPending" (click)="sendFriendCancel(friend.accountId)" mat-icon-button >
+                            <span class="icon-thump">{{'friendPage.cancel' | translate }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SEARCH BAR -->
+        <div *ngIf="pageFriendupdate==='accountUser'" class="card-container">
+            <h1 class="informationUpdate">{{'friendPage.allListAccount' | translate }}</h1>
+            <form class="search-form">
+                <input type="text" placeholder="Rechercher..." [(ngModel)]="searchQuery" name="searchQuery" class="search-input">
+                <button type="submit" (click)="sendSearch()" class="search-button">
+                    <mat-icon class="icon-search">search</mat-icon>
+                </button>
+            </form>
+            <div class="cards">
+                <div class="friend-card" *ngFor="let user of userList">
+                    <div class="show">
+                        <img class="avatar" [src]="'http://34.95.3.182:3000/avatar/' + user.accountId + '.png?timeStamp='+ friendService.timeStamp" alt="Image">
+                        <span class="name">{{ user.name }}</span>
+                    </div>
+                    <div *ngIf="stateUser(user.name)==='friendUpdate'" class="details">
+                        <button mat-icon-button >
+                            <mat-icon *ngIf="getFriendForUser(user.accountId).isFavorite" (click)="sendUnfavoriteFriend(user.accountId)" class="icon-favorite">favorite</mat-icon>
+                            <mat-icon *ngIf="!getFriendForUser(user.accountId).isFavorite" (click)="sendFavoriteFriend(user.accountId)" class="icon-favorite">favorite_border</mat-icon>
+                        </button>
+                    </div>
+                    <div *ngIf="stateUser(user.name)==='accountUser'" class="details">
+                        <button mat-icon-button [disabled]="isRequestPending" (click)="sendFriendRequest(user.accountId)" >
+                            <mat-icon class="icon-add">add</mat-icon>
+                        </button>
+                    </div>
+                    <div *ngIf="stateUser(user.name)==='friendPending'" class="details">
+                        <button mat-icon-button [disabled]="isRequestPending" (click)='sendFriendPendingAccept(user.accountId)' >
+                            <mat-icon class="icon-add">person_add</mat-icon>
+                        </button>
+                    </div>
+                    <button *ngIf="stateUser(user.name)==='friendUpdate' || stateUser(user.name)==='accountUser'" mat-icon-button  (click)="showFriendsOfUser(user, false)" class="showFofs" >{{'friendPage.friendsofFriends' | translate }}</button>
+                    <div (click)="sendFriendDelete(user.accountId)">
+                        <button [disabled]="isRequestPending" *ngIf="stateUser(user.name)==='friendUpdate'"  mat-icon-button >
+                            <mat-icon class="icone-delete">delete</mat-icon>
+                        </button>
+                    </div>
+                    <div class="details">
+                        <button [disabled]="isRequestPending" *ngIf="stateUser(user.name)==='friendPending'" mat-icon-button (click)='sendFriendPendingRefuse(user.accountId)' >
+                            <mat-icon class="icon-close">person_remove</mat-icon>
+                        </button>
+                    </div>
+                    <div *ngIf="stateUser(user.name)==='friendSentList'" class="details">
+                        <button [disabled]="isRequestPending" (click)="sendFriendCancel(user.accountId)"  mat-icon-button >
+                            <span class="icon-thump"> {{'friendPage.cancel' | translate }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <img *ngIf="welcome.account.profile.mobileTheme==='light'" id = "background" src = "./assets/background/LimitedTimeBackground.jpg" alt="background"/>
+    <img *ngIf="welcome.account.profile.mobileTheme==='dark'" id = "background" src = "./assets/background/LimitedTimeBackground_dark.jpg" alt="background"/>
+</div>

@@ -1,0 +1,213 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { CORRECT_SOUND_LIST, ERROR_SOUND_LIST, LANGUAGES, THEME_PERSONALIZATION } from '@common/constants';
+import { Account } from '@common/game-interfaces';
+// eslint-disable-next-line import/no-unresolved, no-restricted-imports
+import { CommunicationService } from '@app/services/communication-service/communication.service';
+// eslint-disable-next-line import/no-unresolved, no-restricted-imports
+// eslint-disable-next-line no-restricted-imports
+import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
+import { SoundService } from '@app/services/sound-service/sound.service';
+import { AccountEvents } from '@common/enums';
+import { Subject } from 'rxjs';
+@Injectable({
+    providedIn: 'root',
+})
+export class WelcomeService {
+    changeThemeChat: boolean = true;
+    onChatGame: boolean = false;
+    onChatLobby: boolean = false;
+    isLoggedIn = localStorage.getItem('isLogged') === 'true';
+    songListDifference = CORRECT_SOUND_LIST;
+    songListError = ERROR_SOUND_LIST;
+    isLogin = false;
+    account: Account;
+    selectLocal: string;
+    selectAvatar: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
+    selectAvatarRegister: string = 'http://34.95.3.182:3000/avatar/default1.png';
+    chooseImage: boolean = true;
+    feedback: string;
+    selectName: string;
+    selectTheme: string;
+    selectPassword: string;
+    selectPasswordConfirm: string;
+    isLinkValid: boolean;
+    selectLanguage: string;
+
+    language = LANGUAGES;
+    isHistoryLogin: boolean;
+    themePersonalization = THEME_PERSONALIZATION;
+    currentLangageTranslate: Subject<string>;
+    private accountObservable: Subject<Account>;
+
+    constructor(private communication: CommunicationService, private sound: SoundService, private clientSocket: ClientSocketService) {
+        this.currentLangageTranslate = new Subject<string>();
+        this.accountObservable = new Subject<Account>();
+    }
+    get accountObservable$() {
+        return this.accountObservable.asObservable();
+    }
+
+    async validate(password: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.communication.getPassword(password).subscribe({
+                next: (success) => {
+                    const response = success;
+                    if (response) {
+                        this.setLoginState(true);
+                    }
+                    resolve(response);
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred';
+                    reject(error);
+                },
+            });
+        });
+    }
+
+    async validateAccess(password: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.communication.checkCode(password).subscribe({
+                // A modifier
+                next: (success) => {
+                    const response = success;
+                    resolve(response);
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred';
+                    reject(error);
+                },
+            });
+        });
+    }
+    updateLangageTranslate() {
+        this.currentLangageTranslate.next(this.account.profile.language);
+    }
+
+    updateAccountObservable() {
+        this.accountObservable = new Subject<Account>();
+        this.clientSocket.on('auth', AccountEvents.RefreshAccount, (account: Account) => {
+            this.accountObservable.next(account);
+        });
+    }
+    off(): void {
+        if (this.accountObservable && !this.accountObservable.closed) {
+            this.accountObservable?.unsubscribe();
+        }
+    }
+    setLoginState(state: boolean): void {
+        localStorage.setItem('isLogged', String(state));
+        this.isLoggedIn = state;
+    }
+
+    getLoginState(): boolean {
+        return this.isLoggedIn;
+    }
+
+    onModifyUser() {
+        this.communication.updateUsername(this.account.id ?? '', this.selectName).subscribe({
+            next: () => {
+                this.account.credentials.username = this.selectName;
+            },
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
+    }
+
+    onUpdateAvatar(name?: string) {
+        if (this.isLogin)
+            this.communication.updateAvatar(this.account.id ?? '', this.selectAvatar).subscribe({
+                next: () => {
+                    this.account.profile.avatar = this.selectAvatar;
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+                },
+            });
+        else
+            this.communication.updateAvatar(name ?? '', this.selectAvatarRegister).subscribe({
+                next: () => {
+                    // empty
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+                },
+            });
+    }
+
+    onChooseAvatar() {
+        this.communication.chooseAvatar(this.account.id ?? '', this.selectLocal).subscribe({
+            next: () => {
+                this.account.profile.avatar = this.selectAvatar;
+            },
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
+    }
+
+    onModifyPassword() {
+        this.communication.modifyPassword(this.account.id ?? '', this.selectPassword).subscribe({
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            next: () => {},
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
+    }
+
+    onModifyTheme() {
+        this.communication.modifyTheme(this.account.id ?? '', this.selectTheme).subscribe({
+            next: () => {
+                this.account.profile.mobileTheme = this.selectTheme;
+            },
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
+    }
+
+    onModifyLanguage() {
+        this.communication.modifyLanguage(this.account.id ?? '', this.selectLanguage).subscribe({
+            next: () => {
+                this.account.profile.language = this.selectLanguage;
+            },
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
+    }
+
+    onUpdateCorrectSound() {
+        this.communication.modifySongDifference(this.account.id ?? '', this.sound.correctSoundEffect).subscribe({
+            next: () => {
+                this.account.profile.onCorrectSound = this.sound.correctSoundEffect;
+            },
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
+    }
+
+    onUpdateErrorSound() {
+        this.communication.modifySongError(this.account.id ?? '', this.sound.incorrectSoundEffect).subscribe({
+            next: () => {
+                this.account.profile.onErrorSound = this.sound.incorrectSoundEffect;
+            },
+            error: (error: HttpErrorResponse) => {
+                this.feedback = error.error || 'An unexpected error occurred. Please try again.';
+            },
+        });
+    }
+    // getlinkValid(name: string): boolean {
+    //     this.isLinkValid = localStorage.getItem(name) === 'true';
+    //     return this.isLinkValid;
+    // }
+
+    // setlinkValid(name: string, value: boolean) {
+    //     localStorage.setItem(name, String(value));
+    //     this.isLinkValid = value;
+    // }
+}
