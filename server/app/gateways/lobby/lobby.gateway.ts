@@ -125,12 +125,10 @@ export class LobbyGateway implements OnGatewayConnection {
                 if (this.roomsManager.lobbies.get(data.lobbyId).players.length === 3) {
                     if (socket.data.guestIds && socket.data.guestIds.length > 0) {
                         socket.data.guestIds.forEach((id) => {
-                            this.server.fetchSockets().then((sockets) => {
-                                const guest = sockets.find((s) => s.data.accountId === id);
-                                guest.data.state = LobbyState.Idle;
-                                guest.data.hostId === socket.data.accountId ? guest.emit(LobbyEvents.NotifyGuest, false) : '';
-                                this.logger.log(`${this.getFormattedInfos(id)} a été refusé par ${this.getFormattedInfos(socket.data.accountId)}`);
-                            });
+                            const g = sockets.find((s) => s.data.accountId === id);
+                            g.data.state = LobbyState.Idle;
+                            g.data.hostId === socket.data.accountId ? guest.emit(LobbyEvents.NotifyGuest, false) : '';
+                            this.logger.log(`${this.getFormattedInfos(id)} a été refusé par ${this.getFormattedInfos(socket.data.accountId)}`);
                         });
                         this.logger.debug(`GuestIds de ${this.getFormattedInfos(socket.data.accountId)}: [${socket.data.guestIds}]`);
                     }
