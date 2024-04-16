@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { WaitingPlayerToJoinComponent } from '@app/components/waiting-player-to-join/waiting-player-to-join.component';
 
 import { ClientSocketService } from '@app/services/client-socket-service/client-socket.service';
 import { ChannelEvents, GameCardEvents, LobbyEvents, PlayerEvents, RoomEvents } from '@common/enums';
@@ -12,9 +14,11 @@ import { Subject } from 'rxjs';
 export class RoomManagerService {
     actualRoomId: string;
     password: string;
+    dialogRefs = new Map<string, MatDialogRef<WaitingPlayerToJoinComponent>>();
     lobbyGame: Lobby;
     isOrganizer: boolean;
     lobby: Subject<Lobby>;
+    lobbyLenght: number;
     wait: boolean;
     game: Game;
     isObserver: boolean;
