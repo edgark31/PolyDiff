@@ -43,15 +43,24 @@ List<Sound> CORRECT_SOUND_LIST = [
 GameRecord DEFAULT_GAME_RECORD = GameRecord(
   game: Game.initial(),
   players: [],
+  observers: [],
   accountIds: [],
   date: DateTime.now().toUtc().toString(),
-  startTime: 0,
-  endTime: 0,
+  startTime: DateTime.fromMillisecondsSinceEpoch(0),
+  endTime: DateTime.fromMillisecondsSinceEpoch(0),
   duration: 0,
   isCheatEnabled: false,
   timeLimit: 0,
   gameEvents: [],
 );
+
+// Replay speeds
+const double SPEED_X1 = 1.0;
+const double SPEED_X2 = 2.0;
+const double SPEED_X4 = 4.0;
+
+const REPLAY_SPEEDS = [SPEED_X1, SPEED_X2, SPEED_X4];
+const int REPLAY_LIMITER = 1000;
 
 // Colors
 const kDark = Colors.black;
@@ -69,8 +78,3 @@ const Color kMidOrange = Color.fromRGBO(239, 108, 0, 1);
 const Color kDarkOrange = Color.fromRGBO(230, 81, 0, 1);
 
 const Color kMidPink = Color.fromRGBO(255, 105, 180, 1);
-
-// Replay Speed
-const int SPEED_X1 = 1;
-const int SPEED_X2 = 2;
-const int SPEED_X4 = 4;

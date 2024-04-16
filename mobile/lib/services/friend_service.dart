@@ -30,6 +30,8 @@ class FriendService extends ChangeNotifier {
   bool isDeleteDisabled = false;
   bool isFavoriteDisabled = false;
 
+  static int _antiSpamDelay = 1;
+
   void updateUsersList(List<User> allUsers) {
     allUsers.sort((a, b) => a.name.compareTo(b.name));
     _users = allUsers;
@@ -107,7 +109,7 @@ class FriendService extends ChangeNotifier {
     isInviteDisabled = true;
     socketService.send(SocketType.Auth, FriendEvents.SendRequest.name,
         {'potentialFriendId': potentialFriendId});
-    Future.delayed(Duration(seconds: (3)), () {
+    Future.delayed(Duration(seconds: (_antiSpamDelay)), () {
       isInviteDisabled = false;
     });
   }
@@ -117,7 +119,7 @@ class FriendService extends ChangeNotifier {
     isCancelDisabled = true;
     socketService.send(SocketType.Auth, FriendEvents.CancelRequest.name,
         {'potentialFriendId': potentialFriendId});
-    Future.delayed(Duration(seconds: (3)), () {
+    Future.delayed(Duration(seconds: (_antiSpamDelay)), () {
       isCancelDisabled = false;
     });
   }
@@ -127,7 +129,7 @@ class FriendService extends ChangeNotifier {
     isResponseDisabled = true;
     socketService.send(SocketType.Auth, FriendEvents.OptRequest.name,
         {'senderFriendId': userId, 'isOpt': isAccept});
-    Future.delayed(Duration(seconds: (3)), () {
+    Future.delayed(Duration(seconds: (_antiSpamDelay)), () {
       isResponseDisabled = false;
     });
   }
@@ -137,7 +139,7 @@ class FriendService extends ChangeNotifier {
     isDeleteDisabled = true;
     socketService.send(SocketType.Auth, FriendEvents.DeleteFriend.name,
         {'friendId': friendId});
-    Future.delayed(Duration(seconds: (3)), () {
+    Future.delayed(Duration(seconds: (_antiSpamDelay)), () {
       isDeleteDisabled = false;
     });
   }
@@ -147,7 +149,7 @@ class FriendService extends ChangeNotifier {
     isFavoriteDisabled = true;
     socketService.send(SocketType.Auth, FriendEvents.OptFavorite.name,
         {'friendId': friendId, 'isFavorite': isFavorite});
-    Future.delayed(Duration(seconds: (3)), () {
+    Future.delayed(Duration(seconds: (_antiSpamDelay)), () {
       isFavoriteDisabled = false;
     });
   }

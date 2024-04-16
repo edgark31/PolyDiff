@@ -25,11 +25,12 @@ class AccountService {
       if (response.statusCode == 200) {
         print('Modified successfully ');
         return null;
+      } else {
+        return response.body;
       }
     } catch (error) {
       return 'Error: $error';
     }
-    return null;
   }
 
   // Password
@@ -43,19 +44,20 @@ class AccountService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          'oldUsername': oldUsername,
+          'username': oldUsername,
           'newUsername': newUsername,
         }),
       );
       if (response.statusCode == 200) {
         print("$oldUsername updated to $newUsername ");
         return null;
+      } else {
+        return response.body;
       }
     } catch (error) {
       print("Failed to update username : $error");
       return 'Error: $error';
     }
-    return null;
   }
 
   // Theme
@@ -75,12 +77,13 @@ class AccountService {
       if (response.statusCode == 200) {
         print("Theme updated to $themeToLowerCase ");
         return null;
+      } else {
+        return response.body;
       }
     } catch (error) {
       print("Error updating theme preference: $error");
       return 'Error: $error';
     }
-    return null;
   }
 
   // Language
@@ -101,12 +104,13 @@ class AccountService {
       if (response.statusCode == 200) {
         print("Language updated to $newLanguage ");
         return null;
+      } else {
+        return response.body;
       }
     } catch (error) {
       print("Error updating language preference: $error");
       return 'Error: $error';
     }
-    return null;
   }
 
   Future<String?> updateCorrectSound(String username, Sound newSound) async {
@@ -120,12 +124,13 @@ class AccountService {
       if (response.statusCode == 200) {
         print("Correct sound updated to $newSound");
         return null;
+      } else {
+        return response.body;
       }
     } catch (error) {
       print("Error updating correct sound preference: $error");
       return 'Error: $error';
     }
-    return null;
   }
 
   Future<String?> updateErrorSound(String username, Sound newSound) async {
@@ -139,12 +144,13 @@ class AccountService {
       if (response.statusCode == 200) {
         print("Failed to update sound preference");
         return null;
+      } else {
+        return response.body;
       }
     } catch (error) {
       // Handle error
       print("Error updating sound preference: $error");
       return 'Error: $error';
     }
-    return null;
   }
 }

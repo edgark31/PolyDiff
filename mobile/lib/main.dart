@@ -9,6 +9,10 @@ import 'package:mobile/providers/camera_image_provider.dart';
 import 'package:mobile/providers/game_record_provider.dart';
 import 'package:mobile/providers/register_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
+import 'package:mobile/replay/game_event_playback_manager.dart';
+import 'package:mobile/replay/game_events_services.dart';
+import 'package:mobile/replay/replay_images_provider.dart';
+import 'package:mobile/replay/replay_player_provider.dart';
 import 'package:mobile/services/chat_service.dart';
 import 'package:mobile/services/form_service.dart';
 import 'package:mobile/services/friend_service.dart';
@@ -64,13 +68,22 @@ void main() async {
       LobbyService lobbyService = Get.find();
       return lobbyService;
     }),
+
     ChangeNotifierProvider(create: (context) {
-      GameManagerService gameManagerService = Get.find();
-      return gameManagerService;
+      ReplayPlayerProvider replayPlayerProvider = Get.find();
+      return replayPlayerProvider;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      ReplayImagesProvider replayImagesProvider = Get.find();
+      return replayImagesProvider;
     }),
     ChangeNotifierProvider(create: (context) {
       GameRecordProvider gameRecordProvider = Get.find();
       return gameRecordProvider;
+    }),
+    ChangeNotifierProvider(create: (context) {
+      GameManagerService gameManagerService = Get.find();
+      return gameManagerService;
     }),
     ChangeNotifierProvider(create: (context) {
       ChatService chatService = Get.find();
@@ -92,7 +105,17 @@ void main() async {
     ChangeNotifierProvider(create: (context) {
       ThemeProvider themeProvider = Get.find();
       return themeProvider;
-    })
+    }),
+
+    ChangeNotifierProvider(create: (context) {
+      GameEventPlaybackService playbackService = Get.find();
+      return playbackService;
+    }),
+
+    ChangeNotifierProvider(create: (context) {
+      GameEventPlaybackManager playbackManager = Get.find();
+      return playbackManager;
+    }),
   ], child: const MyApp()));
 }
 
@@ -104,7 +127,11 @@ void initializeServices() {
   Get.put(GameAreaService());
   Get.put(LobbySelectionService());
   Get.put(LobbyService());
+  Get.put(ReplayPlayerProvider());
+  Get.put(ReplayImagesProvider());
   Get.put(GameRecordProvider());
+  Get.put(GameEventPlaybackService());
+  Get.put(GameEventPlaybackManager());
   Get.put(GameManagerService());
   Get.put(ChatService());
   Get.put(GameCardService());
