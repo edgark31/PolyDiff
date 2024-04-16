@@ -106,7 +106,6 @@ export class LobbyGateway implements OnGatewayConnection {
     @SubscribeMessage(LobbyEvents.OptPlayer)
     handleResponseAccess(@ConnectedSocket() socket: Socket, @MessageBody() data: { lobbyId: string; username: string; isPlayerAccepted: boolean }) {
         if (!this.roomsManager.lobbies.get(data.lobbyId)) return;
-        if (this.roomsManager.lobbies.get(data.lobbyId).players.length >= 4) return;
         const { lobbyId, username, isPlayerAccepted } = data;
         const joinerId = Array.from(this.accountManager.users.values()).find((user) => user.credentials.username === username).id;
         this.server.fetchSockets().then((sockets) => {
@@ -116,6 +115,7 @@ export class LobbyGateway implements OnGatewayConnection {
             if (!guest) return;
             guest.data.state = LobbyState.Idle;
             guest.data.hostId = '';
+            if (this.roomsManager.lobbies.get(data.lobbyId).players.length >= 4) return;
             if (this.roomsManager.lobbies.get(lobbyId) && isPlayerAccepted) {
                 guest.emit(LobbyEvents.NotifyGuest, true);
                 this.logger.log(
