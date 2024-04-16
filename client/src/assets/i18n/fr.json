@@ -25,6 +25,7 @@
         "confirmPasswordEnter": "Veuillez ré-écrire votre mot de passe",
         "cancel": "Annuler",
         "returnHome": "Retour à l'accueil",
+        "samePassword": "Mettez un mot de passe identique",
         "replay": "Reprises vidéos"
     },
 
@@ -119,14 +120,14 @@
         "difficultyLevel": "Niveau de difficulté",
         "gameMode": "Mode de jeu",
         "presentDifference": "Nombre de différences présentes",
-        "winTime": "Valeur du temps gagné",
-        "useHint": "fermer"
+        "winTime": "Valeur du temps gagnée",
+        "useHint": "Fermer"
     },
 
     "dialogGame": {
-        "home": "quitter",
-        "videoReprise": "reprise Video",
-        "yes": "oui",
+        "home": "Quitter",
+        "videoReprise": "Reprise Video",
+        "yes": "Oui",
         "no": "Non",
         "scoreShare": "Partager",
         "quitGame": "Accueil"
@@ -140,10 +141,10 @@
     },
 
     "historyLogin": {
-        "timeStamps": "horodatages",
-        "connection": "connexion",
-        "disconnection": "deconnexion",
-        "matchSummary": "Bilan de match",
+        "timeStamps": "Horodatage(s)",
+        "connection": "Connexion(s)",
+        "disconnection": "Deconnexion(s)",
+        "matchSummary": "Bilan(s) de match",
         "win": "Victoire",
         "loose": "Défaite",
         "closeHistoric": "Fermer l'historique"
@@ -166,7 +167,7 @@
     },
 
     "accessModal": {
-        "accessCode": "ENTRER LE CODE D'ACCES",
+        "accessCode": "Entrer le mot de passe",
         "password": "Mot de passe",
         "incorrectPassword": "Mot de passe incorrect. Veuillez réessayer.",
         "cancel": "Annuler",
@@ -191,7 +192,7 @@
     "gameAvailable": {
         "noGame": "Nous n'avons pas de jeux disponibles pour le moment. Voulez-vous en créer un ?",
         "create": "Créer",
-        "quit": "quit"
+        "quit": "Quitter"
     },
 
     "mainPage": {
@@ -247,6 +248,7 @@
 
     "AccountDialog": {
         "confirmChange": "Enregistrer vos modifications ?",
+        "changeConfirm": "Modifications enregistrées !",
         "deleteFriends": "Supprimer cet ami ?",
         "yes": "Oui",
         "no": "Non"
@@ -287,7 +289,7 @@
     },
 
     "saveRecordDialog": {
-        "saveRecord": "Voulez-vous enregistrer cette reprise vidéo ?"
+        "saveRecord": " Enregistrer cette reprise vidéo ?"
     },
 
     "replayPage": {

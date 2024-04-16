@@ -24,8 +24,8 @@ export class WelcomeService {
     account: Account;
     selectLocal: string;
     selectAvatar: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
-    selectAvatarRegister: string = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
-    chooseImage: boolean;
+    selectAvatarRegister: string = 'http://34.95.3.182:3000/avatar/default1.png';
+    chooseImage: boolean = true;
     feedback: string;
     selectName: string;
     selectTheme: string;

@@ -87,7 +87,7 @@ export class NavBarComponent {
         // this.clientsocket.disconnect('game');
         this.welcomeService.selectName = '';
         this.welcomeService.selectAvatar = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
-        this.welcomeService.selectAvatarRegister = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
+        this.welcomeService.selectAvatarRegister = 'http://34.95.3.182:3000/avatar/default1.png';
         this.welcomeService.selectTheme = '';
         this.welcomeService.selectLanguage = '';
         this.sound.correctSoundEffect = {} as Sound;

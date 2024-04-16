@@ -41,7 +41,7 @@ export class LoginPageComponent implements OnInit {
         this.welcomeservice.account = {} as Account;
         this.welcomeservice.selectLocal = '';
         this.welcomeservice.selectAvatar = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp'; // A changer
-        this.welcomeservice.selectAvatarRegister = 'assets/default-avatar-profile-icon-social-600nw-1677509740.webp';
+        this.welcomeservice.selectAvatarRegister = 'http://34.95.3.182:3000/avatar/default1.png';
         // this.welcomeservice.chooseImage = false;
     }
 

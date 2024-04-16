@@ -219,7 +219,7 @@ export class AuthGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                 this.updateIsOnline(s as any);
             });
         });
-        this.logger.log(`DEAUTH de ${this.getFormattedInfos(socket.data.accountId)}`);
+        this.logger.debug(`DEAUTH de ${this.getFormattedInfos(socket.data.accountId)}`);
     }
 
     handleOnlineMessage(socket: Socket, userOnline: string) {
