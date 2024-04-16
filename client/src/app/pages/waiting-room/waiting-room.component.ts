@@ -29,7 +29,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
     lobbiesSubscription: Subscription;
     requestSubscription: Subscription;
     private lobbySubscription: Subscription;
-    private dialogRefs = new Map<string, MatDialogRef<WaitingPlayerToJoinComponent>>();
+
     // eslint-disable-next-line max-params
     constructor(
         public router: Router,
@@ -42,7 +42,7 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
         public translate: TranslateService,
         private readonly matDialog: MatDialog,
     ) {
-        this.dialogRefs = new Map<string, MatDialogRef<WaitingPlayerToJoinComponent>>();
+        roomManagerService.dialogRefs = new Map<string, MatDialogRef<WaitingPlayerToJoinComponent>>();
     }
 
     ngOnInit(): void {
@@ -76,13 +76,14 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
                 disableClose: true,
                 panelClass: 'dialog',
             });
-            this.dialogRefs.set(playerName, dialogRef);
+            this.roomManagerService.dialogRefs.set(playerName, dialogRef);
         });
         this.clientSocketService.on('lobby', LobbyEvents.CancelRequestAcessHost, (leavingPlayerName: string) => {
-            const dialogRef = this.dialogRefs.get(leavingPlayerName);
+            console.log(this.roomManagerService.dialogRefs.size + 'aaaaaaaaaaaaaaaaa');
+            const dialogRef = this.roomManagerService.dialogRefs.get(leavingPlayerName);
             if (dialogRef) {
                 dialogRef.close();
-                this.dialogRefs.delete(leavingPlayerName);
+                this.roomManagerService.dialogRefs.delete(leavingPlayerName);
             }
         });
         this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {

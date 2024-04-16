@@ -32,12 +32,23 @@ export class WaitingPlayerToJoinComponent implements OnInit, OnDestroy {
         // this.loadPlayerNamesList();
     }
 
+    // ngDoCheck(): void {
+    //     console.log(this.roomManagerService.dialogRefs.size);
+    //     if (this.data.lobby.players.length === 4 && this.roomManagerService.dialogRefs.size !== 0) {
+    //         console.log('aaaaaaaaaaaaaaaa');
+    //         this.roomManagerService.optPlayer(this.data.lobby.lobbyId as string, this.data.username, false);
+    //     }
+    // }
+
     refusePlayer() {
         this.roomManagerService.optPlayer(this.data.lobby.lobbyId as string, this.data.username, false);
+        this.roomManagerService.dialogRefs.delete(this.data.username);
     }
 
     acceptPlayer() {
         this.roomManagerService.optPlayer(this.data.lobby.lobbyId as string, this.data.username, true);
+        this.roomManagerService.dialogRefs.delete(this.data.username);
+        console.log(this.roomManagerService.dialogRefs.size + 'tap' + this.roomManagerService.lobbyLenght);
     }
 
     ngOnDestroy(): void {
