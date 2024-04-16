@@ -123,7 +123,7 @@
     "endGame_homeButton": "Home",
     "endGame_videoReplayButton": "Video replay",
     "endGameMessage_timesUp": "Times up, draw !",
-    "endGameMessage_playerWon": "win !",
+    "endGameMessage_playerWon": "won !",
     "endGameMessage_playerAbandoned": " gave up !",
     "endGameMessage_draw": "Tie",
     "endGameMessage_endPractice": "end of the Practice",
