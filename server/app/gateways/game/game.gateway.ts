@@ -142,6 +142,13 @@ export class GameGateway implements OnGatewayConnection {
                 lobby: this.roomsManager.lobbies.get(lobbyId),
                 game,
             });
+            /* --------- Record Difference Spectate Event -------- */
+            this.recordManager.addGameEvent(lobbyId, {
+                accountId: socket.data.accountId,
+                gameEvent: GameEvents.Spectate,
+                players: structuredClone(this.roomsManager.lobbies.get(lobbyId).players),
+                observers: structuredClone(this.roomsManager.lobbies.get(lobbyId).observers),
+            } as GameEventData);
             return;
         }
         socket.emit(GameEvents.Spectate, {

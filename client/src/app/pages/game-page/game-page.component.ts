@@ -16,7 +16,7 @@ import { RoomManagerService } from '@app/services/room-manager-service/room-mana
 import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 import { Coordinate } from '@common/coordinate';
 import { GameEvents, GameModes, GamePageEvent, MessageTag } from '@common/enums';
-import { Chat, Game, GameRecord, Lobby, Player } from '@common/game-interfaces';
+import { Chat, Game, GameRecord, Lobby, Observer, Player } from '@common/game-interfaces';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
 import { GlobalChatService } from './../../services/global-chat-service/global-chat.service';
@@ -56,6 +56,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
     replayTimerSubscription: Subscription;
     replayPlayerCountSubscription: Subscription;
     replayDifferenceFoundSubscription: Subscription;
+    replayObserverSubscription: Subscription;
     private gameSubscription: Subscription;
     private nextGameSubscription: Subscription;
     private endMessageSubscription: Subscription;
@@ -220,6 +221,7 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
             this.replayTimerSubscription?.unsubscribe();
             this.replayDifferenceFoundSubscription?.unsubscribe();
             this.replayPlayerCountSubscription?.unsubscribe();
+            this.replayObserverSubscription?.unsubscribe();
 
             this.roomManager.off();
             this.gameManager.off();
@@ -355,6 +357,9 @@ export class GamePageComponent implements OnDestroy, OnInit, AfterViewInit {
         });
         this.replayDifferenceFoundSubscription = this.replayService.replayDifferenceFound$.subscribe((nDifferencesFound: number) => {
             this.nDifferencesFound = nDifferencesFound;
+        });
+        this.replayObserverSubscription = this.replayService.replayObservers$.subscribe((observers: Observer[]) => {
+            this.lobby.observers = observers;
         });
     }
 }
