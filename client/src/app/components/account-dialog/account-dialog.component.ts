@@ -12,6 +12,7 @@ import { WelcomeService } from '@app/services/welcome-service/welcome.service';
 })
 export class AccountDialogComponent {
     isReplayPaused: boolean;
+    isSubmit = false;
     // eslint-disable-next-line max-params
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: { mode: boolean; accountId: string },
@@ -25,8 +26,12 @@ export class AccountDialogComponent {
     }
 
     onSubmitProfile() {
-        if (this.welcomeService.selectName !== this.welcomeService.account.credentials.username) this.welcomeService.onModifyUser();
-        if (this.welcomeService.selectPassword !== this.welcomeService.account.credentials.password && this.welcomeService.selectPassword)
+        if (this.welcomeService.selectName !== this.welcomeService.account.credentials.username && this.welcomeService.selectName)
+            this.welcomeService.onModifyUser();
+        if (
+            this.welcomeService.selectPassword !== this.welcomeService.account.credentials.password &&
+            this.welcomeService.selectPassword === this.welcomeService.selectPasswordConfirm
+        )
             this.welcomeService.onModifyPassword();
         if (!this.welcomeService.chooseImage && this.welcomeService.account.profile.avatar !== this.welcomeService.selectAvatar)
             this.welcomeService.onUpdateAvatar();
@@ -36,8 +41,11 @@ export class AccountDialogComponent {
         if (this.welcomeService.selectLanguage !== this.welcomeService.account.profile.language) this.welcomeService.onModifyLanguage();
         if (this.sound.correctSoundEffect !== this.welcomeService.account.profile.onCorrectSound) this.welcomeService.onUpdateCorrectSound();
         if (this.sound.incorrectSoundEffect !== this.welcomeService.account.profile.onErrorSound) this.welcomeService.onUpdateErrorSound();
+        this.isSubmit = true;
+    }
 
-        this.router.navigate(['/profil']);
+    onSubmitFinal() {
+        if (this.isSubmit) this.router.navigate(['/profil']);
     }
 
     onSubmitDeleteFriend() {

@@ -45,7 +45,7 @@ class _FriendsPending extends State<FriendsPending> {
               return Container(
                 alignment: Alignment.center,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 600),
+                  constraints: BoxConstraints(maxWidth: 750),
                   child: Card(
                     margin: EdgeInsets.all(8),
                     child: ListTile(
@@ -114,7 +114,7 @@ class _FriendsPending extends State<FriendsPending> {
               return Container(
                 alignment: Alignment.center,
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 600),
+                  constraints: BoxConstraints(maxWidth: 750),
                   child: Card(
                     margin: EdgeInsets.all(8),
                     child: ListTile(

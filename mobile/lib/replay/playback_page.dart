@@ -365,7 +365,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
                   _playerInfo(playerProvider.getPlayer(0)),
                 ],
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 if (players.length > 1) ...[
                   _playerInfo(playerProvider.getPlayer(1)),
@@ -379,7 +379,7 @@ class _PlaybackPageState extends State<PlaybackPage> {
                 ],
                 if (players.length >= 4) ...[
                   SizedBox(
-                    width: 20,
+                    width: 10,
                   ),
                   _playerInfo(playerProvider.getPlayer(3)),
                 ],

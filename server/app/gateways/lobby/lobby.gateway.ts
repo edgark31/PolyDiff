@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable max-params */
@@ -114,6 +115,10 @@ export class LobbyGateway implements OnGatewayConnection {
             if (!guest) return;
             guest.data.state = LobbyState.Idle;
             guest.data.hostId = '';
+            if (this.roomsManager.lobbies.get(lobbyId).players.length >= 4) {
+                guest.emit(LobbyEvents.NotifyGuest, false);
+                return;
+            }
             if (this.roomsManager.lobbies.get(lobbyId) && isPlayerAccepted) {
                 guest.emit(LobbyEvents.NotifyGuest, true);
                 this.logger.log(
@@ -141,6 +146,7 @@ export class LobbyGateway implements OnGatewayConnection {
         const { lobbyId, password } = data;
         if (this.roomsManager.lobbies.get(lobbyId).password && this.roomsManager.lobbies.get(lobbyId).password !== password) return;
         if (this.roomsManager.lobbies.get(lobbyId).players.find((p) => p.accountId === socket.data.accountId)) return;
+        if (this.roomsManager.lobbies.get(lobbyId).players.length >= 4) return;
 
         socket.data.state = LobbyState.Waiting;
         socket.join(lobbyId);
@@ -249,6 +255,7 @@ export class LobbyGateway implements OnGatewayConnection {
 
     handleConnection(@ConnectedSocket() socket: Socket) {
         socket.data.accountId = socket.handshake.query.id as string;
+        socket.data.guestIds = [];
         socket.data.state = LobbyState.Idle;
         this.logger.log(`LOBBY IN de ${this.getFormattedInfos(socket.data.accountId)}`);
         this.server.emit(LobbyEvents.UpdateLobbys, Array.from(this.roomsManager.lobbies.values()));
@@ -291,7 +298,7 @@ export class LobbyGateway implements OnGatewayConnection {
                     logMessage += 'was REQUESTING ACCESS';
                     this.server.fetchSockets().then((sockets) => {
                         sockets.forEach((s) => {
-                            if (s.data.accountId === socket.data.hostId) {
+                            if (s.data.accountId === socket.data.hostId && s.data.guestIds) {
                                 s.data.guestIds = s.data.guestIds.filter((id) => id !== socket.data.accountId);
                                 this.logger.log(
                                     `${this.getFormattedInfos(socket.data.accountId)} a annulé sa demande pour rejoindre le lobby ${lobbyId}`,
