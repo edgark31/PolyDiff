@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable max-params */
@@ -141,6 +142,7 @@ export class LobbyGateway implements OnGatewayConnection {
         const { lobbyId, password } = data;
         if (this.roomsManager.lobbies.get(lobbyId).password && this.roomsManager.lobbies.get(lobbyId).password !== password) return;
         if (this.roomsManager.lobbies.get(lobbyId).players.find((p) => p.accountId === socket.data.accountId)) return;
+        if (this.roomsManager.lobbies.get(lobbyId).players.length >= 4) return;
 
         socket.data.state = LobbyState.Waiting;
         socket.join(lobbyId);
