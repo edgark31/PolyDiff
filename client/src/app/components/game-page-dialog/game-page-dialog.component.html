@@ -16,7 +16,7 @@
     <p class = "ending" *ngIf="data.action === 'EndGame'">{{ data.message }}</p>
     <div class = "button1" *ngIf="data.action === 'EndGame' && !goShare">
         <div class="button-container">
-            <button class = "yesButton" mat-button *ngIf="data.action === 'EndGame' " (click)="deleteRecord()"></button>
+            <button class = "yesButton" mat-button *ngIf="data.action === 'EndGame' " (click)="leaveGame()"></button>
             <img src="./assets/icon/PlayButton.png" alt="returnToMenuButton">
             <div class="centered-yes">{{'dialogGame.quitGame' | translate }}</div>
         </div>
