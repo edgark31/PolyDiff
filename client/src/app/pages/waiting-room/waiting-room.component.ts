@@ -87,6 +87,10 @@ export class WaitingRoomComponent implements OnInit, OnDestroy {
             }
         });
         this.clientSocketService.on('lobby', LobbyEvents.Leave, () => {
+            if (!this.isAbandonGame) {
+                this.clientSocketService.disconnect('lobby');
+                this.roomManagerService.off();
+            }
             this.router.navigate(['/home']);
         });
 

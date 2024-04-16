@@ -48,7 +48,6 @@ export class WaitingPlayerToJoinComponent implements OnInit, OnDestroy {
     acceptPlayer() {
         this.roomManagerService.optPlayer(this.data.lobby.lobbyId as string, this.data.username, true);
         this.roomManagerService.dialogRefs.delete(this.data.username);
-        console.log(this.roomManagerService.dialogRefs.size + 'tap' + this.roomManagerService.lobbyLenght);
     }
 
     ngOnDestroy(): void {
